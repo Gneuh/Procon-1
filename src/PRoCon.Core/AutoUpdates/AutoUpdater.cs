@@ -206,7 +206,7 @@ namespace PRoCon.Core.AutoUpdates {
 
                 try {
                     if (Directory.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Updates")) == true) {
-                        AssemblyName proconAssemblyName = AssemblyName.GetAssemblyName(String.Format("{0}{1}{2}{3}{4}", AppDomain.CurrentDomain.BaseDirectory, Path.DirectorySeparatorChar, "Updates", Path.DirectorySeparatorChar, "PRoCon.exe"));
+                        AssemblyName proconAssemblyName = AssemblyName.GetAssemblyName(Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Updates"), "PRoCon.exe"));
 
                         // If an update has already been downloaded but not installed..
                         if (new Version(a_strVersionData[0]).CompareTo(proconAssemblyName.Version) >= 0) {
@@ -264,8 +264,8 @@ namespace PRoCon.Core.AutoUpdates {
                             if (lstExtensibilityVersion.Count >= 4 && String.Compare(lstExtensibilityVersion[0], "localization", true) == 0) {
 
                                 try {
-                                    if (File.Exists(String.Format("{0}Localization{1}{2}", AppDomain.CurrentDomain.BaseDirectory, Path.DirectorySeparatorChar, lstExtensibilityVersion[2])) == true) {
-                                        if (String.Compare(lstExtensibilityVersion[1], this.MD5File(String.Format("{0}Localization{1}{2}", AppDomain.CurrentDomain.BaseDirectory, Path.DirectorySeparatorChar, lstExtensibilityVersion[2])), true) != 0) {
+                                    if (File.Exists(Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Localization"), lstExtensibilityVersion[2])) == true) {
+                                        if (String.Compare(lstExtensibilityVersion[1], this.MD5File(Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Localization"), lstExtensibilityVersion[2])), true) != 0) {
                                             // Download new localization file and tell options to reload it once completed.
                                             this.DownloadLocalizationFile(lstExtensibilityVersion[3], lstExtensibilityVersion[2]);
                                             Thread.Sleep(100); // I don't know how many languages there may be later so sleep on it to prevent spam.
@@ -283,9 +283,9 @@ namespace PRoCon.Core.AutoUpdates {
                             // GameConfigs
                             if (lstExtensibilityVersion.Count >= 4 && String.Compare(lstExtensibilityVersion[0], "gameconfig", true) == 0) {
                                 try {
-                                    if (File.Exists(String.Format("{0}Configs{1}{2}", AppDomain.CurrentDomain.BaseDirectory, Path.DirectorySeparatorChar, lstExtensibilityVersion[2])) == true)
+                                    if (File.Exists(Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Configs"), lstExtensibilityVersion[2])) == true)
                                     {
-                                        if (String.Compare(lstExtensibilityVersion[1], this.MD5File(String.Format("{0}Configs{1}{2}", AppDomain.CurrentDomain.BaseDirectory, Path.DirectorySeparatorChar, lstExtensibilityVersion[2])), true) != 0)
+                                        if (String.Compare(lstExtensibilityVersion[1], this.MD5File(Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Configs"), lstExtensibilityVersion[2])), true) != 0)
                                         {
                                             // Download new GameConfig file 
                                             this.DownloadGameConfigFile(lstExtensibilityVersion[3], lstExtensibilityVersion[2]);
@@ -436,11 +436,11 @@ namespace PRoCon.Core.AutoUpdates {
                 AssemblyName proconUpdaterAssemblyName = null;
                 AssemblyName proconUpdaterUpdatesDirAssemblyName = null;
 
-                if (File.Exists(String.Format("{0}{1}{2}", AppDomain.CurrentDomain.BaseDirectory, Path.DirectorySeparatorChar, "PRoConUpdater.exe")) == true) {
-                    proconUpdaterAssemblyName = AssemblyName.GetAssemblyName(String.Format("{0}{1}{2}", AppDomain.CurrentDomain.BaseDirectory, Path.DirectorySeparatorChar, "PRoConUpdater.exe"));
+                if (File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "PRoConUpdater.exe")) == true) {
+                    proconUpdaterAssemblyName = AssemblyName.GetAssemblyName(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "PRoConUpdater.exe"));
                 }
-                if (File.Exists(String.Format("{0}{1}{2}{3}{4}", AppDomain.CurrentDomain.BaseDirectory, Path.DirectorySeparatorChar, "Updates", Path.DirectorySeparatorChar, "PRoConUpdater.exe")) == true) {
-                    proconUpdaterUpdatesDirAssemblyName = AssemblyName.GetAssemblyName(String.Format("{0}{1}{2}{3}{4}", AppDomain.CurrentDomain.BaseDirectory, Path.DirectorySeparatorChar, "Updates", Path.DirectorySeparatorChar, "PRoConUpdater.exe"));
+                if (File.Exists(Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Updates"), "PRoConUpdater.exe")) == true) {
+                    proconUpdaterUpdatesDirAssemblyName = AssemblyName.GetAssemblyName(Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Updates"), "PRoConUpdater.exe"));
                 }
 
                 // If the old updater is.. old =)

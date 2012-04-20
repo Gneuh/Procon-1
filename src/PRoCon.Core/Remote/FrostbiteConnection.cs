@@ -190,13 +190,13 @@ namespace PRoCon.Core.Remote {
                 strOutput += Environment.NewLine;
                 strOutput += stTracer.ToString();
 
-                if (!File.Exists(AppDomain.CurrentDomain.BaseDirectory + "DEBUG.txt")) {
-                    using (StreamWriter sw = File.CreateText(AppDomain.CurrentDomain.BaseDirectory + "DEBUG.txt")) {
+                if (!File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "DEBUG.txt"))) {
+                    using (StreamWriter sw = File.CreateText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "DEBUG.txt"))) {
                         sw.Write(strOutput);
                     }
                 }
                 else {
-                    using (StreamWriter sw = File.AppendText(AppDomain.CurrentDomain.BaseDirectory + "DEBUG.txt")) {
+                    using (StreamWriter sw = File.AppendText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "DEBUG.txt"))) {
                         sw.Write(strOutput);
                     }
                 }

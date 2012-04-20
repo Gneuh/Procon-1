@@ -57,14 +57,14 @@ namespace PRoCon.Core.Logging {
 
                         try {
 
-                            if (Directory.Exists(AppDomain.CurrentDomain.BaseDirectory + "Logs" + Path.DirectorySeparatorChar + this.FileHostNamePort + Path.DirectorySeparatorChar) == false) {
-                                Directory.CreateDirectory(AppDomain.CurrentDomain.BaseDirectory + "Logs" + Path.DirectorySeparatorChar + this.FileHostNamePort + Path.DirectorySeparatorChar);
+                            if (Directory.Exists(Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"Logs"),this.FileHostNamePort)) == false) {
+                                Directory.CreateDirectory(Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Logs"), this.FileHostNamePort));
                             }
 
                             if (this.m_stmFile == null) {
                                 this.m_blLogging = true;
 
-                                if ((this.m_stmFile = new FileStream(String.Format(@"{0}{1}", AppDomain.CurrentDomain.BaseDirectory + "Logs" + Path.DirectorySeparatorChar + this.FileHostNamePort + Path.DirectorySeparatorChar, DateTime.Now.ToString("yyyyMMdd") + "_" + this.FileNameSuffix + ".log"), FileMode.Append)) != null) {
+                                if ((this.m_stmFile = new FileStream(Path.Combine(Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"Logs"),this.FileHostNamePort),DateTime.Now.ToString("yyyyMMdd") + "_" + this.FileNameSuffix + ".log"), FileMode.Append)) != null) {
                                     if ((this.m_stwFileWriter = new StreamWriter(this.m_stmFile, Encoding.Unicode)) != null) {
 
                                         this.WriteLogLine("{0}: {1}", this.LoggingStartedPrefix, DateTime.Now.ToString("dddd, d MMMM yyyy HH:mm:ss"));

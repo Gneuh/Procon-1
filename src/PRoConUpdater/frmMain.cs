@@ -143,25 +143,25 @@ namespace PRoConUpdater {
         private void CreateConfigBackup() {
 
             try {
-                FileVersionInfo currentFv = FileVersionInfo.GetVersionInfo("PRoCon.exe");
-                FileVersionInfo updatedFv = FileVersionInfo.GetVersionInfo("Updates" + Path.DirectorySeparatorChar + "PRoCon.exe");
+                FileVersionInfo currentFv = FileVersionInfo.GetVersionInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "PRoCon.exe"));
+                FileVersionInfo updatedFv = FileVersionInfo.GetVersionInfo(Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Updates"), "PRoCon.exe"));
 
                 string zipFileName = String.Format("{0}_to_{1}_backup.zip", currentFv.FileVersion, updatedFv.FileVersion);
 
                 using (ZipFile zip = new ZipFile()) {
 
-                    DirectoryInfo configsDirectory = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory + "Configs" + Path.DirectorySeparatorChar);
+                    DirectoryInfo configsDirectory = new DirectoryInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Configs"));
                     FileInfo[] configFiles = configsDirectory.GetFiles("*.cfg");
                     
                     foreach (FileInfo config in configFiles) {
                         zip.AddFile(config.FullName, "");
                     }
 
-                    if (Directory.Exists("Configs" + Path.DirectorySeparatorChar + "Backups" + Path.DirectorySeparatorChar) == false) {
-                        Directory.CreateDirectory("Configs" + Path.DirectorySeparatorChar + "Backups" + Path.DirectorySeparatorChar);
+                    if (Directory.Exists(Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Configs"), "Backups")) == false) {
+                        Directory.CreateDirectory(Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Configs"), "Backups"));
                     }
 
-                    zip.Save("Configs" + Path.DirectorySeparatorChar + "Backups" + Path.DirectorySeparatorChar + zipFileName);
+                    zip.Save(Path.Combine(Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Configs"), "Backups"), zipFileName));
                 }
 
                 this.Invoke(new StringParameterHandler(this.ConfigBackupSuccess), zipFileName);

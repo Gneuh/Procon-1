@@ -1021,7 +1021,7 @@ namespace PRoCon.Core {
                 // if it does not exist but they have explicity asked for it, see if we can load it up
                 // this could not be loaded because it is running in lean mode.
                 if (this.Languages.Contains(lstWords[1]) == false) {
-                    this.Languages.LoadLocalizationFile(AppDomain.CurrentDomain.BaseDirectory + "Localization" + Path.DirectorySeparatorChar + lstWords[1], lstWords[1]);
+                    this.Languages.LoadLocalizationFile(Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Localization"), lstWords[1]), lstWords[1]);
                 }
 
                 if (this.Languages.Contains(lstWords[1]) == true) {
@@ -1432,11 +1432,11 @@ namespace PRoCon.Core {
 
                 try {
 
-                    if (Directory.Exists(String.Format("{0}Configs{1}", AppDomain.CurrentDomain.BaseDirectory, Path.DirectorySeparatorChar)) == false) {
-                        Directory.CreateDirectory(String.Format("{0}Configs{1}", AppDomain.CurrentDomain.BaseDirectory, Path.DirectorySeparatorChar));
+                    if (Directory.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"Configs")) == false) {
+                        Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Configs"));
                     }
 
-                    stmProconConfigFile = new FileStream(String.Format("{0}Configs{1}{2}", AppDomain.CurrentDomain.BaseDirectory, Path.DirectorySeparatorChar, "accounts.cfg"), FileMode.Create);
+                    stmProconConfigFile = new FileStream(Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Configs"), "accounts.cfg"), FileMode.Create);
 
                     if (stmProconConfigFile != null) {
                         StreamWriter stwConfig = new StreamWriter(stmProconConfigFile, Encoding.Unicode);

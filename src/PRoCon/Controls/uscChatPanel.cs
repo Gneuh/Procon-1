@@ -72,12 +72,12 @@ namespace PRoCon {
 
                     try {
 
-                        if (Directory.Exists(AppDomain.CurrentDomain.BaseDirectory + "Logs" + Path.DirectorySeparatorChar + this.m_uscParent.BFBC2Connection.FileHostNamePort + Path.DirectorySeparatorChar) == false) {
-                            Directory.CreateDirectory(AppDomain.CurrentDomain.BaseDirectory + "Logs" + Path.DirectorySeparatorChar + this.m_uscParent.BFBC2Connection.FileHostNamePort + Path.DirectorySeparatorChar);
+                        if (Directory.Exists(Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Logs"), this.m_uscParent.BFBC2Connection.FileHostNamePort)) == false) {
+                            Directory.CreateDirectory(Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Logs"), this.m_uscParent.BFBC2Connection.FileHostNamePort));
                         }
 
                         if (this.m_stmChatFile == null) {
-                            if ((this.m_stmChatFile = new FileStream(String.Format(@"{0}{1}", AppDomain.CurrentDomain.BaseDirectory + "Logs" + Path.DirectorySeparatorChar + this.m_uscParent.BFBC2Connection.FileHostNamePort + Path.DirectorySeparatorChar, DateTime.Now.ToString("yyyyMMdd") + "_chat.log"), FileMode.Append)) != null) {
+                            if ((this.m_stmChatFile = new FileStream(Path.Combine(Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Logs"), this.m_uscParent.BFBC2Connection.FileHostNamePort), DateTime.Now.ToString("yyyyMMdd" + "_chat.log")), FileMode.Append) != null) {
                                 if ((this.m_stwChatFile = new StreamWriter(this.m_stmChatFile, Encoding.Unicode)) != null) {
 
                                     this.m_stwChatFile.WriteLine("Chat logging started: {0}", DateTime.Now.ToString("dddd, d MMMM yyyy HH:mm:ss"));

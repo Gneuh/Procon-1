@@ -576,11 +576,11 @@ namespace PRoCon.Core.Remote {
                     FileStream stmConnectionConfigFile = null;
 
                     try {
-                        if (Directory.Exists(String.Format("{0}Configs{1}", AppDomain.CurrentDomain.BaseDirectory, Path.DirectorySeparatorChar)) == false) {
-                            Directory.CreateDirectory(String.Format("{0}Configs{1}", AppDomain.CurrentDomain.BaseDirectory, Path.DirectorySeparatorChar));
+                        if (Directory.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"Configs")) == false) {
+                            Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Configs"));
                         }
 
-                        string strSaveFile = String.Format(@"{0}Configs{1}{2}.cfg", AppDomain.CurrentDomain.BaseDirectory, Path.DirectorySeparatorChar, this.FileHostNamePort);
+                        string strSaveFile = Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Configs"), this.FileHostNamePort + ".cfg");
 
                         stmConnectionConfigFile = new FileStream(strSaveFile + ".temp", FileMode.Create);
 
@@ -664,11 +664,11 @@ namespace PRoCon.Core.Remote {
             //FileStream stmConfigFile = null;
             try {
 
-                if (File.Exists(String.Format("{0}Configs{1}{2}", AppDomain.CurrentDomain.BaseDirectory, Path.DirectorySeparatorChar, strConfigFile)) == true) {
+                if (File.Exists(Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"Configs"),strConfigFile)) == true) {
 
                     //stmConfigFile = new FileStream(String.Format(@"{0}Configs\{1}", AppDomain.CurrentDomain.BaseDirectory, strConfigFile), FileMode.Open);
 
-                    string[] a_strConfigData = File.ReadAllLines(String.Format(@"{0}Configs{1}{2}", AppDomain.CurrentDomain.BaseDirectory, Path.DirectorySeparatorChar, strConfigFile));
+                    string[] a_strConfigData = File.ReadAllLines(Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Configs"), strConfigFile));
 
                     if (a_strConfigData != null) {
 
