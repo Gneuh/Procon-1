@@ -1501,30 +1501,71 @@ namespace PRoCon.Core {
 
         private Version HighestNetFrameworkVersion() {
             Version highest_version = new Version();
-            RegistryKey installed_versions = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\NET Framework Setup\NDP");
+            string str_monoVersion;
 
-            string[] version_keys = installed_versions.GetSubKeyNames();
+            // check for mono
+            Type monoType = Type.GetType("Mono.Runtime");
+            if (monoType != null) {
+                BindingFlags methodFlags = BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.DeclaredOnly | BindingFlags.ExactBinding;
 
-            foreach (string version_key in version_keys) {
-                Match version_match = version_regex.Match(version_key);
+                MethodInfo monoDisplayName = monoType.GetMethod("GetDisplayName", methodFlags, null, Type.EmptyTypes, null);
+                if (monoDisplayName != null)
+                {
+                    str_monoVersion = (string)monoDisplayName.Invoke(null, null);
+                    string[] parts = str_monoVersion.Split('.');
+                    int major = Int32.Parse(parts[0]);
+                    int minor = Int32.Parse(parts[1]);
+                    int revision = Int32.Parse(parts[2].Substring(0, parts[2].IndexOf(' ')));
+                    Version MonoVersion = new Version(major, minor, revision);
 
-                if (version_match.Success == true) {
-                    int service_pack = Convert.ToInt32(installed_versions.OpenSubKey(version_key).GetValue("SP", 0));
+                    highest_version = MonoVersion;
+                }
+            } else {
 
-                    Version version = new Version(
-                        version_match.Groups["major"].Value.Length > 0 ? int.Parse(version_match.Groups["major"].Value) : 0,
-                        version_match.Groups["minor"].Value.Length > 0 ? int.Parse(version_match.Groups["minor"].Value) : 0,
-                        version_match.Groups["build"].Value.Length > 0 ? int.Parse(version_match.Groups["build"].Value) : 0,
-                        service_pack
-                    );
+                // normal .Net check
+                RegistryKey installed_versions = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\NET Framework Setup\NDP");
 
-                    if (version > highest_version) {
-                        highest_version = version;
+                string[] version_keys = installed_versions.GetSubKeyNames();
+
+                foreach (string version_key in version_keys)
+                {
+                    Match version_match = version_regex.Match(version_key);
+
+                    if (version_match.Success == true)
+                    {
+                        int service_pack = Convert.ToInt32(installed_versions.OpenSubKey(version_key).GetValue("SP", 0));
+
+                        Version version = new Version(
+                            version_match.Groups["major"].Value.Length > 0 ? int.Parse(version_match.Groups["major"].Value) : 0,
+                            version_match.Groups["minor"].Value.Length > 0 ? int.Parse(version_match.Groups["minor"].Value) : 0,
+                            version_match.Groups["build"].Value.Length > 0 ? int.Parse(version_match.Groups["build"].Value) : 0,
+                            service_pack
+                        );
+
+                        if (version > highest_version)
+                        {
+                            highest_version = version;
+                        }
                     }
                 }
-            }
+            } // end of mono check
 
             return highest_version;
+        }
+
+        private string GetFrameworkName() {
+            
+            string FrameworkName;
+
+            // check for mono
+            Type monoType = Type.GetType("Mono.Runtime");
+            if (monoType != null) {
+                FrameworkName = "Mono.Runtime";
+            } else {
+                FrameworkName = ".NET";
+            }
+
+            return FrameworkName;
         }
 
         private void SendUsageData() {
@@ -1541,6 +1582,7 @@ namespace PRoCon.Core {
             
             XmlNode environment = document.CreateElement("environment");
             environment.AppendChild(this.CreateNode(document, "platform", "desktop"));
+            environment.AppendChild(this.CreateNode(document, "framework_name", this.GetFrameworkName()));
             environment.AppendChild(this.CreateNode(document, "max_framework_version", this.HighestNetFrameworkVersion().ToString()));
             usage.AppendChild(environment);
             
