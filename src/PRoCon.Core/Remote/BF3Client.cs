@@ -171,8 +171,8 @@ namespace PRoCon.Core.Remote {
 
         public override event FrostbiteClient.PlayerSpawnedHandler PlayerSpawned;
 
-        public override event FrostbiteClient.RawChatHandler Chat;
-        public override event FrostbiteClient.GlobalChatHandler GlobalChat;
+        // public override event FrostbiteClient.RawChatHandler Chat;
+        // public override event FrostbiteClient.GlobalChatHandler GlobalChat;
 
         #region Maplist
 
@@ -559,7 +559,8 @@ namespace PRoCon.Core.Remote {
             //}
         }
 
-        // This can probably be removed once the onChat event is un-lamed.
+        // obsolet since R-21: This can probably be removed once the onChat event is un-lamed.
+        /*
         protected override void DispatchPlayerOnChatRequest(FrostbiteConnection sender, Packet cpRequestPacket) {
             if (cpRequestPacket.Words.Count >= 3) {
                 if (this.GlobalChat != null) {
@@ -572,7 +573,7 @@ namespace PRoCon.Core.Remote {
                 }
             }
         }
-
+        */
 
         #region Map Functions
         /*
