@@ -1257,17 +1257,7 @@ namespace PRoCon.Core.Plugin {
 
                 this.CommandsNeedingConfirmation.Add(new ConfirmationEntry(playerName, message, mtcCommand, capCommand, subset));
 
-                #region BF3 Player -> Squad chat hack
-
-                if (this.m_client.Game is BF3Client && this.m_client.PlayerList.Contains(playerName) == true) {
-                    this.m_client.Game.SendAdminSayPacket(String.Format("Did you mean {0}?", capCommand.ToString()), new CPlayerSubset(CPlayerSubset.PlayerSubsetType.Squad, this.m_client.PlayerList[playerName].TeamID, this.m_client.PlayerList[playerName].SquadID));
-                }
-                else {
-                    this.m_client.Game.SendAdminSayPacket(String.Format("Did you mean {0}?", capCommand.ToString()), new CPlayerSubset(CPlayerSubset.PlayerSubsetType.Player, playerName));
-                }
-                #endregion
-
-                // this.m_prcClient.SendRequest(new List<string>() { "admin.say", String.Format("Did you mean {0}?", capCommand.ToString()), "player", playerName });
+                this.m_client.Game.SendAdminSayPacket(String.Format("Did you mean {0}?", capCommand.ToString()), new CPlayerSubset(CPlayerSubset.PlayerSubsetType.Player, playerName));
             }
             else {
                 this.InvokeOnEnabled(mtcCommand.RegisteredClassname, mtcCommand.RegisteredMethodName, playerName, message, mtcCommand, capCommand, new CPlayerSubset(CPlayerSubset.PlayerSubsetType.All));
