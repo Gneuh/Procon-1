@@ -560,6 +560,14 @@ namespace PRoCon.Core.Plugin {
 
                 this.LoadedClassNames.Add(pluginClassName);
                 */
+
+                List<string> lstPluginEnv = new List<string>( new string[] { Assembly.GetExecutingAssembly().GetName().Version.ToString(), 
+                                                                             this.m_client.GameType, 
+                                                                             this.m_client.CurrentServerInfo.GameMod.ToString(),
+                                                                             this.m_client.VersionNumber
+                                                                            });
+                this.InvokeOnLoaded(pluginClassName, "OnPluginLoadingEnv", lstPluginEnv);
+
                 this.WritePluginConsole("Loading {0}... ^2Loaded", pluginClassName);
 
                 this.InvokeOnLoaded(pluginClassName, "OnPluginLoaded", this.m_client.HostName, this.m_client.Port.ToString(), Assembly.GetExecutingAssembly().GetName().Version.ToString());
