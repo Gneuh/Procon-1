@@ -372,17 +372,19 @@ namespace PRoCon.Core.Options {
 
                         try {
                             Regex rxHostRegex;
+                            string strSocketHost="*";
                             if (trusted.HostWebsite == "*" || trusted.HostWebsite == "*.*.*.*") {
                                 rxHostRegex = new Regex(@".*/.*");
                             } else {
                                 rxHostRegex = new Regex(trusted.HostWebsite.Replace(".", @"\.") + ".*", RegexOptions.IgnoreCase);
+                                strSocketHost = Regex.Replace(trusted.HostWebsite, "^(.*:\\/\\/)", "", RegexOptions.IgnoreCase);
                             }
                             //psetPluginPermissions.AddPermission(new System.Net.WebPermission(System.Net.NetworkAccess.Connect, new Regex(trusted.HostWebsite.Replace(".", @"\.") + ".*", RegexOptions.IgnoreCase)));
                             psetPluginPermissions.AddPermission(new System.Net.WebPermission(System.Net.NetworkAccess.Connect, rxHostRegex));
                             if (trusted.Port == (UInt16)0) {
-                                psetPluginPermissions.AddPermission(new System.Net.SocketPermission(System.Net.NetworkAccess.Connect, System.Net.TransportType.All, trusted.HostWebsite, System.Net.SocketPermission.AllPorts));
+                                psetPluginPermissions.AddPermission(new System.Net.SocketPermission(System.Net.NetworkAccess.Connect, System.Net.TransportType.All, strSocketHost, System.Net.SocketPermission.AllPorts));
                             } else {
-                                psetPluginPermissions.AddPermission(new System.Net.SocketPermission(System.Net.NetworkAccess.Connect, System.Net.TransportType.All, trusted.HostWebsite, trusted.Port));
+                                psetPluginPermissions.AddPermission(new System.Net.SocketPermission(System.Net.NetworkAccess.Connect, System.Net.TransportType.All, strSocketHost, trusted.Port));
                             }
                         }
                         catch (Exception) {
