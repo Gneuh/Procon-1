@@ -179,6 +179,7 @@ namespace PRoCon.Core {
         public Regex RegexMatchPunkbusterBanlist { get; private set; }
         public Regex RegexMatchPunkbusterUnban { get; private set; }
         public Regex RegexMatchPunkbusterBanAdded { get; private set; }
+        public Regex RegexMatchPunkbusterKickBanCmd { get; private set; }
 
         public Regex RegexMatchPunkbusterBeginPlist { get; private set; }
         public Regex RegexMatchPunkbusterEndPlist { get; private set; }
@@ -376,10 +377,12 @@ namespace PRoCon.Core {
             this.SavedWindowBounds = new Rectangle();
 
             this.RegexMatchPunkbusterPlist = new Regex(@":[ ]+?(?<slotid>[0-9]+)[ ]+?(?<guid>[A-Fa-f0-9]+)\(.*?\)[ ]+?(?<ip>[0-9\.:]+).*?\(.*?\)[ ]+?""(?<name>.*?)\""", RegexOptions.IgnoreCase | RegexOptions.Compiled);
-            this.RegexMatchPunkbusterGuidComputed = new Regex(@": Player Guid Computed[ ]+?(?<guid>[A-Fa-f0-9]+)\(.*?\)[ ]+?\(slot #(?<slotid>[0-9]+)\)[ ]+?(?<ip>[0-9\.:]+)[ ]+?(?<name>.*)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+            this.RegexMatchPunkbusterGuidComputed = new Regex(@":[ ]+?Player Guid Computed[ ]+?(?<guid>[A-Fa-f0-9]+)\(.*?\)[ ]+?\(slot #(?<slotid>[0-9]+)\)[ ]+?(?<ip>[0-9\.:]+)[ ]+?(?<name>.*)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
             this.RegexMatchPunkbusterBanlist = new Regex(@":[ ]+?(?<banid>[0-9]+)[ ]+?(?<guid>[A-Fa-f0-9]+)[ ]+?{(?<remaining>[0-9\-]+)/(?<banlength>[0-9\-]+)}[ ]+?""(?<name>.+?)""[ ]+?""(?<ip>.+?)""[ ]+?(?<reason>.*)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
             this.RegexMatchPunkbusterUnban = new Regex(@":[ ]+?Guid[ ]+?(?<guid>[A-Fa-f0-9]+)[ ]+?has been Unbanned", RegexOptions.IgnoreCase | RegexOptions.Compiled);
             this.RegexMatchPunkbusterBanAdded = new Regex(@": Ban Added to Ban List", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+            // PunkBuster Server: Kick/Ban Command Issued (testing) for (slot#1) 195.202.38.2:3659 909b7d255422dea595249a717755af37 PKHawk
+            this.RegexMatchPunkbusterKickBanCmd = new Regex(@": Kick\/Ban Command Issued \((?<reason>.*)\) for \(slot#(?<slotid>[0-9]+)\) (?<ip>[0-9\.:]+) (?<guid>[A-Fa-f0-9]+) (?<name>.*)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
             this.RegexMatchPunkbusterBeginPlist = new Regex(@":[ ]+?Player List: ", RegexOptions.IgnoreCase | RegexOptions.Compiled);
             this.RegexMatchPunkbusterEndPlist = new Regex(@":[ ]+?End of Player List \((?<players>[0-9]+) Players\)", RegexOptions.IgnoreCase | RegexOptions.Compiled);

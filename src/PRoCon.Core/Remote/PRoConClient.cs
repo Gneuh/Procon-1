@@ -3053,7 +3053,6 @@ namespace PRoCon.Core.Remote {
 
             //mMatch = Regex.Match(strPunkbusterMessage, @":[ ]+?(?<banid>[0-9]+)[ ]+?(?<guid>[A-Za-z0-9]+)[ ]+?{(?<remaining>[0-9\-]+)/(?<banlength>[0-9\-]+)}[ ]+?""(?<name>.+?)""[ ]+?""(?<ip>.+?)""[ ]+?(?<reason>.*)", RegexOptions.IgnoreCase);
             mMatch = this.Parent.RegexMatchPunkbusterBanlist.Match(strPunkbusterMessage);
-
             if (mMatch.Success == true && mMatch.Groups.Count >= 5) {
 
                 //IPAddress ipOut;
@@ -3070,7 +3069,28 @@ namespace PRoCon.Core.Remote {
                     FrostbiteConnection.RaiseEvent(this.PunkbusterPlayerBanned.GetInvocationList(), this, newPbBanInfo);
                 }
             }
+            
+            //PunkBuster Server: Kick/Ban Command Issued (testing) for (slot#1) xxx.xxx.xxx.xxx:yyyy GUID name
+            mMatch = this.Parent.RegexMatchPunkbusterKickBanCmd.Match(strPunkbusterMessage);
+            if (mMatch.Success == true && mMatch.Groups.Count >= 5)
+            {
+                //IPAddress ipOut;
+                string strIP = String.Empty;
+                string[] a_strIP;
 
+                if (mMatch.Groups["ip"].Value.Length > 0 && (a_strIP = mMatch.Groups["ip"].Value.Split(':')).Length > 0)
+                {
+                    strIP = a_strIP[0];
+                }
+
+                CBanInfo newPbBanInfo = new CBanInfo(mMatch.Groups["name"].Value, mMatch.Groups["guid"].Value, mMatch.Groups["ip"].Value, new TimeoutSubset("perm",""), mMatch.Groups["reason"].Value);
+
+                if (this.PunkbusterPlayerBanned != null)
+                {
+                    FrostbiteConnection.RaiseEvent(this.PunkbusterPlayerBanned.GetInvocationList(), this, newPbBanInfo);
+                }
+            }
+            
             //mMatch = Regex.Match(strPunkbusterMessage, @":[ ]+?Guid[ ]+?(?<guid>[A-Za-z0-9]+)[ ]+?has been Unbanned", RegexOptions.IgnoreCase);
             mMatch = this.Parent.RegexMatchPunkbusterUnban.Match(strPunkbusterMessage);
             // If it is a new connection, technically its a resolved guid type command but stil..
