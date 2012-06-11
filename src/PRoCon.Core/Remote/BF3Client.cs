@@ -115,6 +115,8 @@ namespace PRoCon.Core.Remote {
             this.m_responseDelegates.Add("vars.roundLockdownCountdown", this.DispatchVarsRoundLockdownCountdownResponse);
             this.m_responseDelegates.Add("vars.roundWarmupTimeout", this.DispatchVarsRoundWarmupTimeoutResponse);
 
+            this.m_responseDelegates.Add("vars.premiumStatus", this.DispatchVarsPremiumStatusResponse);
+
             #endregion
 
             this.m_responseDelegates.Add("admin.help", this.DispatchHelpResponse);
@@ -155,6 +157,8 @@ namespace PRoCon.Core.Remote {
             this.SendGetReservedSlotsListAggressiveJoinPacket();
             this.SendGetVarsRoundLockdownCountdownPacket();
             this.SendGetVarsRoundWarmupTimeoutPacket();
+
+            this.SendGetVarsPremiumStatusPacket();
         }
 
         #region Overridden Events
@@ -232,6 +236,8 @@ namespace PRoCon.Core.Remote {
         public override event FrostbiteClient.IsEnabledHandler ReservedSlotsListAggressiveJoin;
         public override event FrostbiteClient.LimitHandler RoundLockdownCountdown;
         public override event FrostbiteClient.LimitHandler RoundWarmupTimeout;
+
+        public override event FrostbiteClient.IsEnabledHandler PremiumStatus;
 
         #endregion
 
@@ -455,6 +461,14 @@ namespace PRoCon.Core.Remote {
         public override void SendGetVarsRoundWarmupTimeoutPacket() {
             if (this.IsLoggedIn == true) {
                 this.BuildSendPacket("vars.roundWarmupTimeout");
+            }
+        }
+
+        public virtual void SendPremiumStatusPacket(bool enabled)
+        {
+            if (this.IsLoggedIn == true)
+            {
+                this.BuildSendPacket("vars.premiumStatus", Packet.bltos(enabled));
             }
         }
 
@@ -1067,6 +1081,22 @@ namespace PRoCon.Core.Remote {
                     else if (cpRequestPacket.Words.Count >= 2)
                     {
                         FrostbiteConnection.RaiseEvent(this.RoundWarmupTimeout.GetInvocationList(), this, Convert.ToInt32(cpRequestPacket.Words[1]));
+                    }
+                }
+            }
+        }
+        #endregion
+
+        #region PremiumStatus
+        protected virtual void DispatchVarsPremiumStatusResponse(FrostbiteConnection sender, Packet cpRecievedPacket, Packet cpRequestPacket)
+        {
+            if (cpRequestPacket.Words.Count >= 1) {
+                if (this.PremiumStatus != null) {
+                    if (cpRecievedPacket.Words.Count == 2) {
+                        FrostbiteConnection.RaiseEvent(this.PremiumStatus.GetInvocationList(), this, Convert.ToBoolean(cpRecievedPacket.Words[1]));
+                    }
+                    else if (cpRequestPacket.Words.Count >= 2) {
+                        FrostbiteConnection.RaiseEvent(this.PremiumStatus.GetInvocationList(), this, Convert.ToBoolean(cpRequestPacket.Words[1]));
                     }
                 }
             }

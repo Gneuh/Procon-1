@@ -822,6 +822,8 @@ namespace PRoCon.Core.Plugin {
             this.m_client.Game.RoundLockdownCountdown -= new FrostbiteClient.LimitHandler(Game_RoundLockdownCountdown);
             this.m_client.Game.RoundWarmupTimeout -= new FrostbiteClient.LimitHandler(Game_RoundWarmupTimeout);
 
+            this.m_client.Game.PremiumStatus -= new FrostbiteClient.IsEnabledHandler(Game_PremiumStatus);
+
             // R13
             this.m_client.Game.ServerName -= new FrostbiteClient.ServerNameHandler(m_prcClient_ServerName);
             this.m_client.Game.TeamKillCountForKick -= new FrostbiteClient.LimitHandler(m_prcClient_TeamKillCountForKick);
@@ -991,6 +993,8 @@ namespace PRoCon.Core.Plugin {
             this.m_client.Game.ReservedSlotsListAggressiveJoin += new FrostbiteClient.IsEnabledHandler(Game_ReservedSlotsListAggressiveJoin);
             this.m_client.Game.RoundLockdownCountdown += new FrostbiteClient.LimitHandler(Game_RoundLockdownCountdown);
             this.m_client.Game.RoundWarmupTimeout += new FrostbiteClient.LimitHandler(Game_RoundWarmupTimeout);
+
+            this.m_client.Game.PremiumStatus += new FrostbiteClient.IsEnabledHandler(Game_PremiumStatus);
 
             // R13
             this.m_client.Game.ServerName += new FrostbiteClient.ServerNameHandler(m_prcClient_ServerName);
@@ -1675,6 +1679,11 @@ namespace PRoCon.Core.Plugin {
         private void Game_RoundWarmupTimeout(FrostbiteClient sender, int limit)
         {
             this.InvokeOnAllEnabled("OnRoundWarmupTimeout", new object[] { limit });
+        }
+
+        private void Game_PremiumStatus(FrostbiteClient sender, bool isEnabled)
+        {
+            this.InvokeOnAllEnabled("OnPremiumStatus", isEnabled);
         }
 
         #region Text Chat Moderation Settings

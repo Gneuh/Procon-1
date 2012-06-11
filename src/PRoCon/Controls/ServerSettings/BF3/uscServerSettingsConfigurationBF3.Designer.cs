@@ -52,6 +52,8 @@
             this.lblSettingsAdminPassword = new System.Windows.Forms.Label();
             this.chkSettingsAggressiveJoin = new System.Windows.Forms.CheckBox();
             this.picSettingsAggressiveJoin = new System.Windows.Forms.PictureBox();
+            this.chkSettingsPremiumStatus = new System.Windows.Forms.CheckBox();
+            this.picSettingsPremiumStatus = new System.Windows.Forms.PictureBox();
             this.pnlSettingsSetidleKickLimit.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numSettingsIdleBanRoundsLimit)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsNoIdleBanRoundsLimit)).BeginInit();
@@ -65,6 +67,7 @@
             this.pnlSettingsAdminPassword.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsAdminPassword)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsAggressiveJoin)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picSettingsPremiumStatus)).BeginInit();
             this.SuspendLayout();
             // 
             // pnlSettingsSetidleKickLimit
@@ -405,10 +408,33 @@
             this.picSettingsAggressiveJoin.TabIndex = 291;
             this.picSettingsAggressiveJoin.TabStop = false;
             // 
+            // chkSettingsPremiumStatus
+            // 
+            this.chkSettingsPremiumStatus.AutoSize = true;
+            this.chkSettingsPremiumStatus.Enabled = false;
+            this.chkSettingsPremiumStatus.Location = new System.Drawing.Point(330, 91);
+            this.chkSettingsPremiumStatus.Name = "chkSettingsPremiumStatus";
+            this.chkSettingsPremiumStatus.Size = new System.Drawing.Size(179, 19);
+            this.chkSettingsPremiumStatus.TabIndex = 294;
+            this.chkSettingsPremiumStatus.Text = "exclusive to Premium Players";
+            this.chkSettingsPremiumStatus.UseVisualStyleBackColor = true;
+            this.chkSettingsPremiumStatus.CheckedChanged += new System.EventHandler(this.chkSettingsPremiumStatus_CheckedChanged);
+            // 
+            // picSettingsPremiumStatus
+            // 
+            this.picSettingsPremiumStatus.Location = new System.Drawing.Point(304, 91);
+            this.picSettingsPremiumStatus.Name = "picSettingsPremiumStatus";
+            this.picSettingsPremiumStatus.Size = new System.Drawing.Size(16, 16);
+            this.picSettingsPremiumStatus.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.picSettingsPremiumStatus.TabIndex = 293;
+            this.picSettingsPremiumStatus.TabStop = false;
+            // 
             // uscServerSettingsConfigurationBF3
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.chkSettingsPremiumStatus);
+            this.Controls.Add(this.picSettingsPremiumStatus);
             this.Controls.Add(this.chkSettingsAggressiveJoin);
             this.Controls.Add(this.picSettingsAggressiveJoin);
             this.Controls.Add(this.pnlSettingsAdminPassword);
@@ -444,6 +470,7 @@
             this.pnlSettingsAdminPassword.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsAdminPassword)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsAggressiveJoin)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picSettingsPremiumStatus)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -480,5 +507,7 @@
         private System.Windows.Forms.NumericUpDown numSettingsIdleBanRoundsLimit;
         private System.Windows.Forms.CheckBox chkSettingsAggressiveJoin;
         private System.Windows.Forms.PictureBox picSettingsAggressiveJoin;
+        private System.Windows.Forms.CheckBox chkSettingsPremiumStatus;
+        private System.Windows.Forms.PictureBox picSettingsPremiumStatus;
     }
 }

@@ -66,6 +66,7 @@ namespace PRoCon.Forms {
             
             this.m_praApplication.OptionsSettings.AutoApplyUpdatesChanged += new PRoCon.Core.Options.OptionsSettings.OptionsEnabledHandler(OptionsSettings_AutoApplyUpdatesChanged);
             this.m_praApplication.OptionsSettings.AutoCheckDownloadUpdatesChanged += new PRoCon.Core.Options.OptionsSettings.OptionsEnabledHandler(OptionsSettings_AutoCheckDownloadUpdatesChanged);
+            this.m_praApplication.OptionsSettings.AutoCheckGameConfigsForUpdatesChanged += new PRoCon.Core.Options.OptionsSettings.OptionsEnabledHandler(OptionsSettings_AutoCheckGameConfigsForUpdatesChanged);
             this.m_praApplication.OptionsSettings.ChatLoggingChanged += new PRoCon.Core.Options.OptionsSettings.OptionsEnabledHandler(OptionsSettings_ChatLoggingChanged);
             this.m_praApplication.OptionsSettings.PluginsLoggingChanged += new OptionsSettings.OptionsEnabledHandler(OptionsSettings_PluginsLoggingChanged);
             this.m_praApplication.OptionsSettings.EventsLoggingChanged += new PRoCon.Core.Options.OptionsSettings.OptionsEnabledHandler(OptionsSettings_EventsLoggingChanged);
@@ -91,6 +92,8 @@ namespace PRoCon.Forms {
             this.m_praApplication.OptionsSettings.LayerHideLocalPluginsChanged += new OptionsSettings.OptionsEnabledHandler(OptionsSettings_LayerHideLocalPluginsChanged);
 
             this.m_praApplication.OptionsSettings.ShowRoundTimerConstantlyChanged += new PRoCon.Core.Options.OptionsSettings.OptionsEnabledHandler(OptionsSettings_ShowRoundTimerConstantlyChanged);
+
+            this.m_praApplication.OptionsSettings.ShowDICESpecialOptionsChanged += new PRoCon.Core.Options.OptionsSettings.OptionsEnabledHandler(OptionsSettings_ShowDICESpecialOptionsChanged);
 
             //m_fntComboBoxFont = new Font("Calibri", 10);
             this.m_frmParent = frmParent;
@@ -129,6 +132,7 @@ namespace PRoCon.Forms {
 
                 this.m_praApplication.OptionsSettings.AutoCheckDownloadUpdates = this.m_praApplication.OptionsSettings.AutoCheckDownloadUpdates;
                 this.m_praApplication.OptionsSettings.AutoApplyUpdates = this.m_praApplication.OptionsSettings.AutoApplyUpdates;
+                this.m_praApplication.OptionsSettings.AutoCheckGameConfigsForUpdates = this.m_praApplication.OptionsSettings.AutoCheckGameConfigsForUpdates;
 
                 this.m_praApplication.OptionsSettings.ConsoleLogging = this.m_praApplication.OptionsSettings.ConsoleLogging;
                 this.m_praApplication.OptionsSettings.ChatLogging = this.m_praApplication.OptionsSettings.ChatLogging;
@@ -150,6 +154,8 @@ namespace PRoCon.Forms {
                 this.m_praApplication.OptionsSettings.LayerHideLocalPlugins = this.m_praApplication.OptionsSettings.LayerHideLocalPlugins;
 
                 this.m_praApplication.OptionsSettings.ShowRoundTimerConstantly = this.m_praApplication.OptionsSettings.ShowRoundTimerConstantly;
+
+                this.m_praApplication.OptionsSettings.ShowDICESpecialOptions = this.m_praApplication.OptionsSettings.ShowDICESpecialOptions;
 
                 this.lsvTrustedHostDomainPorts.Items.Clear();
                 foreach (TrustedHostWebsitePort trusted in this.m_praApplication.OptionsSettings.TrustedHostsWebsitesPorts) {
@@ -181,7 +187,8 @@ namespace PRoCon.Forms {
 
             this.lblBasicsPrivacy.Text = clocLanguage.GetLocalized("frmOptions.tabBasics.lblBasicsPrivacy");
             this.chkBasicsAutoCheckDownloadForUpdates.Text = clocLanguage.GetLocalized("frmOptions.tabBasics.chkBasicsAutoCheckDownloadForUpdates");
-            this.chkBasicsAutoApplyUpdates.Text = clocLanguage.GetLocalized("frmOptions.tabBasics.chkBasicsAutoApplyUpdates");
+            this.chkBasicsAutoApplyUpdates.Text = clocLanguage.GetLocalized("frmOptions.tabBasics.chkBasicsAutoApplyUpdates"); 
+            this.chkBasicsAutoCheckGameConfigsForUpdates.Text = clocLanguage.GetLocalized("frmOptions.tabBasics.chkBasicsAutoCheckGameConfigsForUpdates");
 
             this.lblBasicPreferences.Text = clocLanguage.GetLocalized("frmOptions.tabBasics.lblBasicPreferences");
             this.lblBasicsShowWindow.Text = clocLanguage.GetLocalized("frmOptions.tabBasics.lblBasicsShowWindow");
@@ -234,6 +241,10 @@ namespace PRoCon.Forms {
 
             this.lblAdvConVisuals.Text = clocLanguage.GetLocalized("frmOptions.tabAdvanced.lblAdvConVisuals");
             this.chkAdvShowRoundTimerConstantly.Text = clocLanguage.GetLocalized("frmOptions.tabAdvanced.lblAdvConVisuals.chkAdvShowRoundTimerConstantly");
+
+            this.lblAdvSpecialSwitches.Text = clocLanguage.GetLocalized("frmOptions.tabAdvanced.lblAdvSpecialSwitches");
+            this.chkAdvShowDICESpecialOptions.Text = clocLanguage.GetLocalized("frmOptions.tabAdvanced.lblAdvSpecialSwitches.chkAdvShowDICESpecialOptions");
+            this.lblAdvShowDICESpecialOptionsNotice.Text = clocLanguage.GetLocalized("frmOptions.tabAdvanced.lblAdvSpecialSwitches.lblAdvShowDICESpecialOptionsNotice");
 
             //this.m_strSetLanguageFileName = clocLanguage.FileName;
         }
@@ -422,6 +433,20 @@ namespace PRoCon.Forms {
 
         #endregion
 
+        #region Include GameConfig Check in Update Check
+
+        void OptionsSettings_AutoCheckGameConfigsForUpdatesChanged(bool blEnabled)
+        {
+            this.chkBasicsAutoCheckGameConfigsForUpdates.Checked = blEnabled;
+        }
+
+        private void chkBasicsAutoCheckGameConfigsForUpdates_CheckedChanged(object sender, EventArgs e)
+        {
+            this.m_praApplication.OptionsSettings.AutoCheckGameConfigsForUpdates = this.chkBasicsAutoCheckGameConfigsForUpdates.Checked;
+        }
+
+        #endregion
+
         #endregion
 
         #region Logging
@@ -522,7 +547,7 @@ namespace PRoCon.Forms {
             this.m_praApplication.OptionsSettings.MinimizeToTray = this.chkBasicsMinimizeToTray.Checked;
         }
 
-
+        #region plugin settings & http server
 
         void OptionsSettings_RunPluginsInTrustedSandboxChanged(bool blEnabled) {
             this.pnlSandboxOptions.Enabled = blEnabled;
@@ -650,6 +675,8 @@ namespace PRoCon.Forms {
             System.Diagnostics.Process.Start(this.lnkHttpServerExampleLink.Text);
         }
 
+        #endregion
+
         # region Advanced
 
         void OptionsSettings_AdminMoveMessageChanged(bool blEnabled)
@@ -697,6 +724,16 @@ namespace PRoCon.Forms {
         private void chkAdvShowRoundTimerConstantly_CheckedChanged(object sender, EventArgs e)
         {
             this.m_praApplication.OptionsSettings.ShowRoundTimerConstantly = this.chkAdvShowRoundTimerConstantly.Checked;
+        }
+
+        void OptionsSettings_ShowDICESpecialOptionsChanged(bool blEnabled)
+        {
+            this.chkAdvShowDICESpecialOptions.Checked = blEnabled;
+        }
+
+        private void chkAdvShowDICESpecialOptions_CheckedChanged(object sender, EventArgs e)
+        {
+            this.m_praApplication.OptionsSettings.ShowDICESpecialOptions = this.chkAdvShowDICESpecialOptions.Checked;
         }
 
         # endregion

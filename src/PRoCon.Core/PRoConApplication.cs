@@ -643,6 +643,7 @@ namespace PRoCon.Core {
                         stwConfig.WriteLine("procon.private.options.pluginLogging {0}", this.OptionsSettings.PluginLogging);
                         stwConfig.WriteLine("procon.private.options.autoCheckDownloadUpdates {0}", this.OptionsSettings.AutoCheckDownloadUpdates);
                         stwConfig.WriteLine("procon.private.options.autoApplyUpdates {0}", this.OptionsSettings.AutoApplyUpdates);
+                        stwConfig.WriteLine("procon.private.options.autoCheckGameConfigsForUpdates {0}", this.OptionsSettings.AutoCheckGameConfigsForUpdates);
                         stwConfig.WriteLine("procon.private.options.showtrayicon {0}", this.OptionsSettings.ShowTrayIcon);
                         stwConfig.WriteLine("procon.private.options.minimizetotray {0}", this.OptionsSettings.MinimizeToTray);
                         stwConfig.WriteLine("procon.private.options.closetotray {0}", this.OptionsSettings.CloseToTray);
@@ -660,6 +661,8 @@ namespace PRoCon.Core {
                         stwConfig.WriteLine("procon.private.options.layerHideLocalAccounts {0}", this.OptionsSettings.LayerHideLocalAccounts);
 
                         stwConfig.WriteLine("procon.private.options.ShowRoundTimerConstantly {0}", this.OptionsSettings.ShowRoundTimerConstantly);
+
+                        stwConfig.WriteLine("procon.private.options.ShowDICESpecialOptions {0}", this.OptionsSettings.ShowDICESpecialOptions);
 
                         if (this.HttpWebServer != null) {
                             stwConfig.WriteLine("procon.private.httpWebServer.enable {0} {1} \"{2}\"", this.HttpWebServer.IsOnline, this.HttpWebServer.ListeningPort, this.HttpWebServer.BindingAddress);
@@ -1051,7 +1054,17 @@ namespace PRoCon.Core {
                     this.OptionsSettings.AutoApplyUpdates = blEnabled;
                 }
             }
-            else if (lstWords.Count >= 2 && String.Compare(lstWords[0], "procon.private.options.allowanonymoususagedata", true) == 0 && objSender == this) {
+            else if (lstWords.Count >= 2 && String.Compare(lstWords[0], "procon.private.options.autoCheckGameConfigsForUpdates", true) == 0 && objSender == this)
+            {
+                bool blEnabled = false;
+
+                if (bool.TryParse(lstWords[1], out blEnabled) == true)
+                {
+                    this.OptionsSettings.AutoCheckGameConfigsForUpdates = blEnabled;
+                }
+            }
+            else if (lstWords.Count >= 2 && String.Compare(lstWords[0], "procon.private.options.allowanonymoususagedata", true) == 0 && objSender == this)
+            {
                 bool blEnabled = false;
 
                 if (bool.TryParse(lstWords[1], out blEnabled) == true) {
@@ -1149,6 +1162,14 @@ namespace PRoCon.Core {
                 if (bool.TryParse(lstWords[1], out blEnabled) == true)
                 {
                     this.OptionsSettings.ShowRoundTimerConstantly = blEnabled;
+                }
+            }
+            else if (lstWords.Count >= 2 && String.Compare(lstWords[0], "procon.private.options.ShowDICESpecialOptions", true) == 0 && objSender == this)
+            {
+                bool blEnabled = false;
+
+                if (bool.TryParse(lstWords[1], out blEnabled) == true) {
+                    this.OptionsSettings.ShowDICESpecialOptions = blEnabled;
                 }
             }
             else if (lstWords.Count >= 2 && String.Compare(lstWords[0], "procon.private.options.allowAllODBCConnections", true) == 0 && objSender == this)

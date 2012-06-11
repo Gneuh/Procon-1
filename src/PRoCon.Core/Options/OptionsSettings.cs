@@ -20,6 +20,7 @@ namespace PRoCon.Core.Options {
         public event OptionsEnabledHandler ChatLoggingChanged;
         public event OptionsEnabledHandler AutoCheckDownloadUpdatesChanged;
         public event OptionsEnabledHandler AutoApplyUpdatesChanged;
+        public event OptionsEnabledHandler AutoCheckGameConfigsForUpdatesChanged;
         public event OptionsEnabledHandler ShowTrayIconChanged;
         public event OptionsEnabledHandler CloseToTrayChanged;
         public event OptionsEnabledHandler MinimizeToTrayChanged;
@@ -35,6 +36,7 @@ namespace PRoCon.Core.Options {
         public event OptionsEnabledHandler LayerHideLocalAccountsChanged;
 
         public event OptionsEnabledHandler ShowRoundTimerConstantlyChanged;
+        public event OptionsEnabledHandler ShowDICESpecialOptionsChanged;
 
         public event OptionsEnabledHandler AllowAnonymousUsageDataChanged;
 
@@ -130,6 +132,28 @@ namespace PRoCon.Core.Options {
 
                 if (this.AutoApplyUpdatesChanged != null) {
                     FrostbiteConnection.RaiseEvent(this.AutoApplyUpdatesChanged.GetInvocationList(), value);
+                }
+            }
+        }
+
+        private bool m_isAutoCheckGameConfigsForUpdatesEnabled;
+        public bool AutoCheckGameConfigsForUpdates
+        {
+            get {
+                return this.m_isAutoCheckGameConfigsForUpdatesEnabled;
+            }
+            set {
+                if (this.m_praApplication.BlockUpdateChecks == true) {
+                    this.m_isAutoCheckGameConfigsForUpdatesEnabled = false;
+                }
+                else {
+                    this.m_isAutoCheckGameConfigsForUpdatesEnabled = value;
+                }
+
+                this.m_praApplication.SaveMainConfig();
+
+                if (this.AutoCheckDownloadUpdatesChanged != null) {
+                    FrostbiteConnection.RaiseEvent(this.AutoCheckGameConfigsForUpdatesChanged.GetInvocationList(), value);
                 }
             }
         }
@@ -275,6 +299,26 @@ namespace PRoCon.Core.Options {
             }
         }
 
+        // ShowDICESpecialOptions
+        private bool m_isShowDICESpecialOptionsEnabled;
+        public bool ShowDICESpecialOptions
+        {
+            get
+            {
+                return this.m_isShowDICESpecialOptionsEnabled;
+            }
+            set
+            {
+                this.m_isShowDICESpecialOptionsEnabled = value;
+                this.m_praApplication.SaveMainConfig();
+
+                if (this.ShowDICESpecialOptionsChanged != null)
+                {
+                    FrostbiteConnection.RaiseEvent(this.ShowDICESpecialOptionsChanged.GetInvocationList(), value);
+                }
+            }
+        }
+
         private bool m_isAllowAllODBCConnectionsEnabled;
         public bool AllowAllODBCConnections {
             get {
@@ -403,10 +447,13 @@ namespace PRoCon.Core.Options {
         public OptionsSettings(PRoConApplication praApplication) {
             this.m_praApplication = praApplication;
             this.AutoCheckDownloadUpdates = true;
+            this.AutoCheckGameConfigsForUpdates = true;
             this.AllowAnonymousUsageData = true;
 
             this.LayerHideLocalAccounts = true;
             this.LayerHideLocalPlugins = true;
+
+            this.ShowDICESpecialOptions = false;
 
             this.ShowTrayIcon = true;
 

@@ -60,6 +60,7 @@ namespace PRoCon.Core.Remote.Layer {
             this.m_requestDelegates.Add("mapList.getRounds", this.DispatchUseMapFunctionRequest);
 
             this.m_requestDelegates.Add("vars.serverMessage", this.DispatchVarsRequest);
+            this.m_requestDelegates.Add("vars.premiumStatus", this.DispatchVarsRequest);
         }
     }
 }
