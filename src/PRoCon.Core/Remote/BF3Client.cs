@@ -22,6 +22,18 @@ namespace PRoCon.Core.Remote {
             }
         }
 
+        public List<MaplistEntry> lstFullMaplist {
+            get;
+            private set;
+        }
+
+        public List<String> lstFullReservedSlotsList {
+            get;
+            private set;
+        }
+
+        private int iLastMapListOffset;
+
         public BF3Client(FrostbiteConnection connection) : base(connection) {
 
             // Geoff Green 08/10/2011 - bug in BF3 OB version E, sent through with capital P.
@@ -31,6 +43,8 @@ namespace PRoCon.Core.Remote {
             this.m_requestDelegates.Add("player.spawn", this.DispatchPlayerOnSpawnRequest);
 
             #region Maplist
+            this.lstFullMaplist = new List<MaplistEntry>();
+            this.iLastMapListOffset = 0;
             /*
             this.m_responseDelegates.Add("mapList.load", this.DispatchMapListLoadResponse);
             this.m_responseDelegates.Add("mapList.save", this.DispatchMapListSaveResponse );
@@ -64,6 +78,8 @@ namespace PRoCon.Core.Remote {
             #endregion
 
             #region Reserved Slots
+
+            this.lstFullReservedSlotsList = new List<String>();
 
             // Note: These delegates point to methods in FrostbiteClient.
             this.m_responseDelegates.Add("reservedSlotsList.configFile", this.DispatchReservedSlotsConfigFileResponse);
@@ -121,7 +137,8 @@ namespace PRoCon.Core.Remote {
 
             this.m_responseDelegates.Add("admin.help", this.DispatchHelpResponse);
         }
-                public override void FetchStartupVariables() {
+                
+        public override void FetchStartupVariables() {
             base.FetchStartupVariables();
 
             this.SendGetVarsIdleBanRoundsPacket();
@@ -192,6 +209,13 @@ namespace PRoCon.Core.Remote {
 
         #endregion
 
+        #region ReservedSlotsList
+
+        public override event FrostbiteClient.ReservedSlotsListHandler ReservedSlotsList;
+        public override event FrostbiteClient.IsEnabledHandler ReservedSlotsListAggressiveJoin;
+
+        #endregion
+
         #region Map/Round
 
         //public override event FrostbiteClient.EmptyParamterHandler RunNextRound; // Alias for runNextRound
@@ -233,7 +257,6 @@ namespace PRoCon.Core.Remote {
 
         public override event FrostbiteClient.ServerMessageHandler ServerMessage;
 
-        public override event FrostbiteClient.IsEnabledHandler ReservedSlotsListAggressiveJoin;
         public override event FrostbiteClient.LimitHandler RoundLockdownCountdown;
         public override event FrostbiteClient.LimitHandler RoundWarmupTimeout;
 
@@ -287,9 +310,7 @@ namespace PRoCon.Core.Remote {
             }
         }
 
-        /* mapList.list offset ... to be continued
-        public virtual void SendMapListListRoundsPacket(int startIndex)
-        {
+        public virtual void SendMapListListRoundsPacket(int startIndex) {
             if (this.IsLoggedIn == true) {
                 if (startIndex >= 0) {
                     this.BuildSendPacket("mapList.list", startIndex.ToString());
@@ -298,7 +319,6 @@ namespace PRoCon.Core.Remote {
                 }
             }
         }
-        */
 
         /*
         public override void SendMapListClearPacket() {
@@ -347,6 +367,16 @@ namespace PRoCon.Core.Remote {
         public override void SendReservedSlotsListPacket() {
             if (this.IsLoggedIn == true) {
                 this.BuildSendPacket("reservedSlotsList.list");
+            }
+        }
+
+        public virtual void SendReservedSlotsListPacket(int startIndex) {
+            if (this.IsLoggedIn == true) {
+                if (startIndex >= 0) {
+                    this.BuildSendPacket("reservedSlotsList.list", startIndex.ToString());
+                } else {
+                    this.BuildSendPacket("reservedSlotsList.list");
+                }
             }
         }
 
@@ -665,6 +695,17 @@ namespace PRoCon.Core.Remote {
 
                 cpRecievedPacket.Words.RemoveAt(0);
 
+                if (iRequestStartOffset == 0) {
+                    this.lstFullMaplist.Clear();
+                    this.iLastMapListOffset = 0;
+                } else {
+                    if (this.iLastMapListOffset < iRequestStartOffset) {
+                        this.iLastMapListOffset = iRequestStartOffset;
+                    } else {
+                        return;
+                    }
+                }
+
                 #region parse mapList.List output
                 List<MaplistEntry> lstMaplist = new List<MaplistEntry>();
 
@@ -718,10 +759,17 @@ namespace PRoCon.Core.Remote {
                 }
                 #endregion //parse mapList.List output
 
+                if (lstMaplist.Count > 0) {
+                    this.lstFullMaplist.AddRange(lstMaplist);
 
-
-                if (this.MapListListed != null) {
-                    FrostbiteConnection.RaiseEvent(this.MapListListed.GetInvocationList(), this, lstMaplist);
+                    this.SendMapListListRoundsPacket(iRequestStartOffset + 100);
+                }
+                else {
+                    // original
+                    if (this.MapListListed != null)
+                    {
+                        FrostbiteConnection.RaiseEvent(this.MapListListed.GetInvocationList(), this, this.lstFullMaplist);
+                    }
                 }
             }
         }
@@ -791,6 +839,48 @@ namespace PRoCon.Core.Remote {
                 if (int.TryParse(cpRequestPacket.Words[1], out iMapIndex) == true && int.TryParse(cpRequestPacket.Words[3], out iRounds) == true) {
                     if (this.MapListMapInserted != null) {
                         FrostbiteConnection.RaiseEvent(this.MapListMapInserted.GetInvocationList(), this, iMapIndex, cpRequestPacket.Words[2], iRounds);
+                    }
+                }
+            }
+        }
+
+        #endregion
+
+        #region reservedSlotsList.list
+
+        protected override void DispatchReservedSlotsListResponse(FrostbiteConnection sender, Packet cpRecievedPacket, Packet cpRequestPacket) {
+            if (cpRequestPacket.Words.Count >= 1)
+            {
+                int iRequestStartOffset = 0;
+
+                if (cpRequestPacket.Words.Count >= 2)
+                {
+                    if (int.TryParse(cpRequestPacket.Words[1], out iRequestStartOffset) == false)
+                    {
+                        iRequestStartOffset = 0;
+                    }
+                }
+                //
+                if (iRequestStartOffset == 0)
+                {
+                    this.lstFullReservedSlotsList.Clear();
+                }
+                
+                cpRecievedPacket.Words.RemoveAt(0);
+                // List<String> lstReservedSlotsList = new List<String>();
+
+                if (cpRecievedPacket.Words.Count > 0)
+                {
+                    this.lstFullReservedSlotsList.AddRange(cpRecievedPacket.Words);
+
+                    this.SendReservedSlotsListPacket(iRequestStartOffset + 100);
+                }
+                else
+                {
+                    // original
+                    if (this.ReservedSlotsList != null)
+                    {
+                        FrostbiteConnection.RaiseEvent(this.ReservedSlotsList.GetInvocationList(), this, this.lstFullReservedSlotsList);
                     }
                 }
             }
