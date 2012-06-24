@@ -80,6 +80,8 @@ namespace PRoCon.Controls.ServerSettings.BF3 {
             this.lblSettingsPlayerLimit.Text = this.Language.GetLocalized("uscServerSettingsPanel.lblSettingsPlayerLimit");
             this.lnkSettingsSetPlayerLimit.Text = this.Language.GetLocalized("uscServerSettingsPanel.lnkSettingsSetPlayerLimit");
 
+            this.lblSettingsEffectivePlayerLimit.Text = this.Language.GetLocalized("uscServerSettingsPanel.lblSettingsEffectivePlayerLimit");
+
             this.lblSettingsGamePassword.Text = this.Language.GetLocalized("uscServerSettingsPanel.lblSettingsGamePassword");
             this.lnkSettingsSetGamePassword.Text = this.Language.GetLocalized("uscServerSettingsPanel.lnkSettingsSetGamePassword");
             this.lblSettingsAdminPassword.Text = this.Language.GetLocalized("uscServerSettingsPanel.lblSettingsAdminPassword");
@@ -131,7 +133,8 @@ namespace PRoCon.Controls.ServerSettings.BF3 {
 
         private void m_prcClient_ServerInfo(FrostbiteClient sender, CServerInfo csiServerInfo) {
             if (csiServerInfo.MaxPlayerCount > 0 && csiServerInfo.MaxPlayerCount <= this.numSettingsPlayerLimit.Maximum) {
-                this.numSettingsPlayerLimit.Value = (decimal)csiServerInfo.MaxPlayerCount;
+                //this.numSettingsPlayerLimit.Value = (decimal)csiServerInfo.MaxPlayerCount;
+                this.numSettingsEffectivePlayerLimit.Value = (decimal)csiServerInfo.MaxPlayerCount;
             }
 
             this.chkSettingsPunkbuster.Checked = csiServerInfo.PunkBuster;

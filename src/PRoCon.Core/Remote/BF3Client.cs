@@ -141,6 +141,8 @@ namespace PRoCon.Core.Remote {
         public override void FetchStartupVariables() {
             base.FetchStartupVariables();
 
+            this.SendGetVarsPlayerLimitPacket();
+
             this.SendGetVarsIdleBanRoundsPacket();
 
             this.SendGetVarsVehicleSpawnAllowedPacket();
