@@ -26,6 +26,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmOptions));
             this.tbcOptions = new System.Windows.Forms.TabControl();
             this.tabBasics = new System.Windows.Forms.TabPage();
+            this.chkBasicsAutoCheckGameConfigsForUpdates = new System.Windows.Forms.CheckBox();
             this.chkBasicsEnablePluginLogging = new System.Windows.Forms.CheckBox();
             this.chkBasicsAutoApplyUpdates = new System.Windows.Forms.CheckBox();
             this.chkBasicsEnableEventsLogging = new System.Windows.Forms.CheckBox();
@@ -90,6 +91,10 @@
             this.lblHttpServerTitle = new System.Windows.Forms.Label();
             this.panel7 = new System.Windows.Forms.Panel();
             this.tabAdv = new System.Windows.Forms.TabPage();
+            this.lblAdvShowDICESpecialOptionsNotice = new System.Windows.Forms.Label();
+            this.chkAdvShowDICESpecialOptions = new System.Windows.Forms.CheckBox();
+            this.lblAdvSpecialSwitches = new System.Windows.Forms.Label();
+            this.panel14 = new System.Windows.Forms.Panel();
             this.chkAdvShowRoundTimerConstantly = new System.Windows.Forms.CheckBox();
             this.lblAdvConVisuals = new System.Windows.Forms.Label();
             this.lblAdvLayerTabsChangeNotice = new System.Windows.Forms.Label();
@@ -105,11 +110,7 @@
             this.panel9 = new System.Windows.Forms.Panel();
             this.panel12 = new System.Windows.Forms.Panel();
             this.btnClose = new System.Windows.Forms.Button();
-            this.chkBasicsAutoCheckGameConfigsForUpdates = new System.Windows.Forms.CheckBox();
-            this.chkAdvShowDICESpecialOptions = new System.Windows.Forms.CheckBox();
-            this.lblAdvSpecialSwitches = new System.Windows.Forms.Label();
-            this.panel14 = new System.Windows.Forms.Panel();
-            this.lblAdvShowDICESpecialOptionsNotice = new System.Windows.Forms.Label();
+            this.chkAdvShowCfmMsgRoundRestartNext = new System.Windows.Forms.CheckBox();
             this.tbcOptions.SuspendLayout();
             this.tabBasics.SuspendLayout();
             this.tabPlugins.SuspendLayout();
@@ -170,6 +171,19 @@
             this.tabBasics.TabIndex = 0;
             this.tabBasics.Text = "Basics";
             this.tabBasics.UseVisualStyleBackColor = true;
+            // 
+            // chkBasicsAutoCheckGameConfigsForUpdates
+            // 
+            this.chkBasicsAutoCheckGameConfigsForUpdates.AutoSize = true;
+            this.chkBasicsAutoCheckGameConfigsForUpdates.Checked = true;
+            this.chkBasicsAutoCheckGameConfigsForUpdates.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkBasicsAutoCheckGameConfigsForUpdates.Location = new System.Drawing.Point(34, 326);
+            this.chkBasicsAutoCheckGameConfigsForUpdates.Name = "chkBasicsAutoCheckGameConfigsForUpdates";
+            this.chkBasicsAutoCheckGameConfigsForUpdates.Size = new System.Drawing.Size(304, 19);
+            this.chkBasicsAutoCheckGameConfigsForUpdates.TabIndex = 28;
+            this.chkBasicsAutoCheckGameConfigsForUpdates.Text = "Include check for new game configs in update check";
+            this.chkBasicsAutoCheckGameConfigsForUpdates.UseVisualStyleBackColor = true;
+            this.chkBasicsAutoCheckGameConfigsForUpdates.CheckedChanged += new System.EventHandler(this.chkBasicsAutoCheckGameConfigsForUpdates_CheckedChanged);
             // 
             // chkBasicsEnablePluginLogging
             // 
@@ -866,6 +880,7 @@
             // 
             // tabAdv
             // 
+            this.tabAdv.Controls.Add(this.chkAdvShowCfmMsgRoundRestartNext);
             this.tabAdv.Controls.Add(this.lblAdvShowDICESpecialOptionsNotice);
             this.tabAdv.Controls.Add(this.chkAdvShowDICESpecialOptions);
             this.tabAdv.Controls.Add(this.lblAdvSpecialSwitches);
@@ -892,10 +907,51 @@
             this.tabAdv.Text = "Advanced";
             this.tabAdv.UseVisualStyleBackColor = true;
             // 
+            // lblAdvShowDICESpecialOptionsNotice
+            // 
+            this.lblAdvShowDICESpecialOptionsNotice.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblAdvShowDICESpecialOptionsNotice.Location = new System.Drawing.Point(46, 422);
+            this.lblAdvShowDICESpecialOptionsNotice.Name = "lblAdvShowDICESpecialOptionsNotice";
+            this.lblAdvShowDICESpecialOptionsNotice.Size = new System.Drawing.Size(305, 38);
+            this.lblAdvShowDICESpecialOptionsNotice.TabIndex = 32;
+            this.lblAdvShowDICESpecialOptionsNotice.Text = "Only activate if you know what you are doing and what effect those settings will " +
+    "have";
+            // 
+            // chkAdvShowDICESpecialOptions
+            // 
+            this.chkAdvShowDICESpecialOptions.AutoSize = true;
+            this.chkAdvShowDICESpecialOptions.Location = new System.Drawing.Point(30, 401);
+            this.chkAdvShowDICESpecialOptions.Name = "chkAdvShowDICESpecialOptions";
+            this.chkAdvShowDICESpecialOptions.Size = new System.Drawing.Size(142, 19);
+            this.chkAdvShowDICESpecialOptions.TabIndex = 31;
+            this.chkAdvShowDICESpecialOptions.Text = "DICE internal switches";
+            this.chkAdvShowDICESpecialOptions.UseVisualStyleBackColor = true;
+            this.chkAdvShowDICESpecialOptions.CheckedChanged += new System.EventHandler(this.chkAdvShowDICESpecialOptions_CheckedChanged);
+            // 
+            // lblAdvSpecialSwitches
+            // 
+            this.lblAdvSpecialSwitches.AutoSize = true;
+            this.lblAdvSpecialSwitches.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblAdvSpecialSwitches.Location = new System.Drawing.Point(17, 372);
+            this.lblAdvSpecialSwitches.Name = "lblAdvSpecialSwitches";
+            this.lblAdvSpecialSwitches.Size = new System.Drawing.Size(99, 15);
+            this.lblAdvSpecialSwitches.TabIndex = 30;
+            this.lblAdvSpecialSwitches.Text = "Special Switches";
+            // 
+            // panel14
+            // 
+            this.panel14.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel14.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.panel14.Location = new System.Drawing.Point(18, 381);
+            this.panel14.Name = "panel14";
+            this.panel14.Size = new System.Drawing.Size(355, 1);
+            this.panel14.TabIndex = 29;
+            // 
             // chkAdvShowRoundTimerConstantly
             // 
             this.chkAdvShowRoundTimerConstantly.AutoSize = true;
-            this.chkAdvShowRoundTimerConstantly.Location = new System.Drawing.Point(31, 340);
+            this.chkAdvShowRoundTimerConstantly.Location = new System.Drawing.Point(31, 294);
             this.chkAdvShowRoundTimerConstantly.Name = "chkAdvShowRoundTimerConstantly";
             this.chkAdvShowRoundTimerConstantly.Size = new System.Drawing.Size(178, 19);
             this.chkAdvShowRoundTimerConstantly.TabIndex = 28;
@@ -903,11 +959,22 @@
             this.chkAdvShowRoundTimerConstantly.UseVisualStyleBackColor = true;
             this.chkAdvShowRoundTimerConstantly.CheckedChanged += new System.EventHandler(this.chkAdvShowRoundTimerConstantly_CheckedChanged);
             // 
+            // chkAdvShowCfmMsgRoundRestartNext
+            // 
+            this.chkAdvShowCfmMsgRoundRestartNext.AutoSize = true;
+            this.chkAdvShowCfmMsgRoundRestartNext.Location = new System.Drawing.Point(31, 319);
+            this.chkAdvShowCfmMsgRoundRestartNext.Name = "chkAdvShowCfmMsgRoundRestartNext";
+            this.chkAdvShowCfmMsgRoundRestartNext.Size = new System.Drawing.Size(238, 19);
+            this.chkAdvShowCfmMsgRoundRestartNext.TabIndex = 33;
+            this.chkAdvShowCfmMsgRoundRestartNext.Text = "Need to confirm round restart / run next";
+            this.chkAdvShowCfmMsgRoundRestartNext.UseVisualStyleBackColor = true;
+            this.chkAdvShowCfmMsgRoundRestartNext.CheckedChanged += new System.EventHandler(this.chkAdvShowCfmMsgRoundRestartNext_CheckedChanged);
+            // 
             // lblAdvConVisuals
             // 
             this.lblAdvConVisuals.AutoSize = true;
             this.lblAdvConVisuals.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblAdvConVisuals.Location = new System.Drawing.Point(18, 311);
+            this.lblAdvConVisuals.Location = new System.Drawing.Point(18, 265);
             this.lblAdvConVisuals.Name = "lblAdvConVisuals";
             this.lblAdvConVisuals.Size = new System.Drawing.Size(110, 15);
             this.lblAdvConVisuals.TabIndex = 27;
@@ -916,7 +983,7 @@
             // lblAdvLayerTabsChangeNotice
             // 
             this.lblAdvLayerTabsChangeNotice.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblAdvLayerTabsChangeNotice.Location = new System.Drawing.Point(46, 269);
+            this.lblAdvLayerTabsChangeNotice.Location = new System.Drawing.Point(46, 226);
             this.lblAdvLayerTabsChangeNotice.Name = "lblAdvLayerTabsChangeNotice";
             this.lblAdvLayerTabsChangeNotice.Size = new System.Drawing.Size(305, 38);
             this.lblAdvLayerTabsChangeNotice.TabIndex = 26;
@@ -927,7 +994,7 @@
             this.chkAdvHideLocalAccountsTab.AutoSize = true;
             this.chkAdvHideLocalAccountsTab.Checked = true;
             this.chkAdvHideLocalAccountsTab.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkAdvHideLocalAccountsTab.Location = new System.Drawing.Point(31, 247);
+            this.chkAdvHideLocalAccountsTab.Location = new System.Drawing.Point(31, 204);
             this.chkAdvHideLocalAccountsTab.Name = "chkAdvHideLocalAccountsTab";
             this.chkAdvHideLocalAccountsTab.Size = new System.Drawing.Size(150, 19);
             this.chkAdvHideLocalAccountsTab.TabIndex = 22;
@@ -940,7 +1007,7 @@
             this.chkAdvHideLocalPluginsTab.AutoSize = true;
             this.chkAdvHideLocalPluginsTab.Checked = true;
             this.chkAdvHideLocalPluginsTab.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkAdvHideLocalPluginsTab.Location = new System.Drawing.Point(31, 222);
+            this.chkAdvHideLocalPluginsTab.Location = new System.Drawing.Point(31, 179);
             this.chkAdvHideLocalPluginsTab.Name = "chkAdvHideLocalPluginsTab";
             this.chkAdvHideLocalPluginsTab.Size = new System.Drawing.Size(141, 19);
             this.chkAdvHideLocalPluginsTab.TabIndex = 21;
@@ -952,7 +1019,7 @@
             // 
             this.lblAdvLayerTabs.AutoSize = true;
             this.lblAdvLayerTabs.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblAdvLayerTabs.Location = new System.Drawing.Point(17, 193);
+            this.lblAdvLayerTabs.Location = new System.Drawing.Point(17, 150);
             this.lblAdvLayerTabs.Name = "lblAdvLayerTabs";
             this.lblAdvLayerTabs.Size = new System.Drawing.Size(65, 15);
             this.lblAdvLayerTabs.TabIndex = 19;
@@ -963,7 +1030,7 @@
             this.panel11.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel11.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.panel11.Location = new System.Drawing.Point(19, 202);
+            this.panel11.Location = new System.Drawing.Point(19, 159);
             this.panel11.Name = "panel11";
             this.panel11.Size = new System.Drawing.Size(355, 1);
             this.panel11.TabIndex = 20;
@@ -973,7 +1040,7 @@
             this.chkAdvEnableChatAdminName.AutoSize = true;
             this.chkAdvEnableChatAdminName.Checked = true;
             this.chkAdvEnableChatAdminName.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkAdvEnableChatAdminName.Location = new System.Drawing.Point(32, 138);
+            this.chkAdvEnableChatAdminName.Location = new System.Drawing.Point(32, 115);
             this.chkAdvEnableChatAdminName.Name = "chkAdvEnableChatAdminName";
             this.chkAdvEnableChatAdminName.Size = new System.Drawing.Size(225, 19);
             this.chkAdvEnableChatAdminName.TabIndex = 18;
@@ -985,7 +1052,7 @@
             // 
             this.lblAdvChatTab.AutoSize = true;
             this.lblAdvChatTab.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblAdvChatTab.Location = new System.Drawing.Point(18, 109);
+            this.lblAdvChatTab.Location = new System.Drawing.Point(18, 86);
             this.lblAdvChatTab.Name = "lblAdvChatTab";
             this.lblAdvChatTab.Size = new System.Drawing.Size(55, 15);
             this.lblAdvChatTab.TabIndex = 16;
@@ -996,7 +1063,7 @@
             this.panel10.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel10.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.panel10.Location = new System.Drawing.Point(20, 118);
+            this.panel10.Location = new System.Drawing.Point(20, 95);
             this.panel10.Name = "panel10";
             this.panel10.Size = new System.Drawing.Size(355, 1);
             this.panel10.TabIndex = 17;
@@ -1037,7 +1104,7 @@
             this.panel12.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel12.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.panel12.Location = new System.Drawing.Point(19, 320);
+            this.panel12.Location = new System.Drawing.Point(19, 274);
             this.panel12.Name = "panel12";
             this.panel12.Size = new System.Drawing.Size(355, 1);
             this.panel12.TabIndex = 12;
@@ -1051,60 +1118,6 @@
             this.btnClose.Size = new System.Drawing.Size(75, 23);
             this.btnClose.TabIndex = 25;
             this.btnClose.Text = "Close";
-            // 
-            // chkBasicsAutoCheckGameConfigsForUpdates
-            // 
-            this.chkBasicsAutoCheckGameConfigsForUpdates.AutoSize = true;
-            this.chkBasicsAutoCheckGameConfigsForUpdates.Checked = true;
-            this.chkBasicsAutoCheckGameConfigsForUpdates.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkBasicsAutoCheckGameConfigsForUpdates.Location = new System.Drawing.Point(34, 326);
-            this.chkBasicsAutoCheckGameConfigsForUpdates.Name = "chkBasicsAutoCheckGameConfigsForUpdates";
-            this.chkBasicsAutoCheckGameConfigsForUpdates.Size = new System.Drawing.Size(304, 19);
-            this.chkBasicsAutoCheckGameConfigsForUpdates.TabIndex = 28;
-            this.chkBasicsAutoCheckGameConfigsForUpdates.Text = "Include check for new game configs in update check";
-            this.chkBasicsAutoCheckGameConfigsForUpdates.UseVisualStyleBackColor = true;
-            this.chkBasicsAutoCheckGameConfigsForUpdates.CheckedChanged += new System.EventHandler(this.chkBasicsAutoCheckGameConfigsForUpdates_CheckedChanged);
-            // 
-            // chkAdvShowDICESpecialOptions
-            // 
-            this.chkAdvShowDICESpecialOptions.AutoSize = true;
-            this.chkAdvShowDICESpecialOptions.Location = new System.Drawing.Point(30, 401);
-            this.chkAdvShowDICESpecialOptions.Name = "chkAdvShowDICESpecialOptions";
-            this.chkAdvShowDICESpecialOptions.Size = new System.Drawing.Size(142, 19);
-            this.chkAdvShowDICESpecialOptions.TabIndex = 31;
-            this.chkAdvShowDICESpecialOptions.Text = "DICE internal switches";
-            this.chkAdvShowDICESpecialOptions.UseVisualStyleBackColor = true;
-            this.chkAdvShowDICESpecialOptions.CheckedChanged += new System.EventHandler(this.chkAdvShowDICESpecialOptions_CheckedChanged);
-            // 
-            // lblAdvSpecialSwitches
-            // 
-            this.lblAdvSpecialSwitches.AutoSize = true;
-            this.lblAdvSpecialSwitches.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblAdvSpecialSwitches.Location = new System.Drawing.Point(17, 372);
-            this.lblAdvSpecialSwitches.Name = "lblAdvSpecialSwitches";
-            this.lblAdvSpecialSwitches.Size = new System.Drawing.Size(99, 15);
-            this.lblAdvSpecialSwitches.TabIndex = 30;
-            this.lblAdvSpecialSwitches.Text = "Special Switches";
-            // 
-            // panel14
-            // 
-            this.panel14.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel14.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.panel14.Location = new System.Drawing.Point(18, 381);
-            this.panel14.Name = "panel14";
-            this.panel14.Size = new System.Drawing.Size(355, 1);
-            this.panel14.TabIndex = 29;
-            // 
-            // lblAdvShowDICESpecialOptionsNotice
-            // 
-            this.lblAdvShowDICESpecialOptionsNotice.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblAdvShowDICESpecialOptionsNotice.Location = new System.Drawing.Point(46, 422);
-            this.lblAdvShowDICESpecialOptionsNotice.Name = "lblAdvShowDICESpecialOptionsNotice";
-            this.lblAdvShowDICESpecialOptionsNotice.Size = new System.Drawing.Size(305, 38);
-            this.lblAdvShowDICESpecialOptionsNotice.TabIndex = 32;
-            this.lblAdvShowDICESpecialOptionsNotice.Text = "Only activate if you know what you are doing and what effect those settings will " +
-    "have";
             // 
             // frmOptions
             // 
@@ -1235,5 +1248,6 @@
         private System.Windows.Forms.CheckBox chkAdvShowDICESpecialOptions;
         private System.Windows.Forms.Label lblAdvSpecialSwitches;
         private System.Windows.Forms.Panel panel14;
+        private System.Windows.Forms.CheckBox chkAdvShowCfmMsgRoundRestartNext;
     }
 }

@@ -92,6 +92,7 @@ namespace PRoCon.Forms {
             this.m_praApplication.OptionsSettings.LayerHideLocalPluginsChanged += new OptionsSettings.OptionsEnabledHandler(OptionsSettings_LayerHideLocalPluginsChanged);
 
             this.m_praApplication.OptionsSettings.ShowRoundTimerConstantlyChanged += new PRoCon.Core.Options.OptionsSettings.OptionsEnabledHandler(OptionsSettings_ShowRoundTimerConstantlyChanged);
+            this.m_praApplication.OptionsSettings.ShowCfmMsgRoundRestartNextChanged += new PRoCon.Core.Options.OptionsSettings.OptionsEnabledHandler(OptionsSettings_ShowCfmMsgRoundRestartNextChanged);
 
             this.m_praApplication.OptionsSettings.ShowDICESpecialOptionsChanged += new PRoCon.Core.Options.OptionsSettings.OptionsEnabledHandler(OptionsSettings_ShowDICESpecialOptionsChanged);
 
@@ -154,6 +155,7 @@ namespace PRoCon.Forms {
                 this.m_praApplication.OptionsSettings.LayerHideLocalPlugins = this.m_praApplication.OptionsSettings.LayerHideLocalPlugins;
 
                 this.m_praApplication.OptionsSettings.ShowRoundTimerConstantly = this.m_praApplication.OptionsSettings.ShowRoundTimerConstantly;
+                this.m_praApplication.OptionsSettings.ShowCfmMsgRoundRestartNext = this.m_praApplication.OptionsSettings.ShowCfmMsgRoundRestartNext;
 
                 this.m_praApplication.OptionsSettings.ShowDICESpecialOptions = this.m_praApplication.OptionsSettings.ShowDICESpecialOptions;
 
@@ -241,6 +243,7 @@ namespace PRoCon.Forms {
 
             this.lblAdvConVisuals.Text = clocLanguage.GetLocalized("frmOptions.tabAdvanced.lblAdvConVisuals");
             this.chkAdvShowRoundTimerConstantly.Text = clocLanguage.GetLocalized("frmOptions.tabAdvanced.lblAdvConVisuals.chkAdvShowRoundTimerConstantly");
+            this.chkAdvShowCfmMsgRoundRestartNext.Text = clocLanguage.GetLocalized("frmOptions.tabAdvanced.lblAdvConVisuals.chkAdvShowCfmMsgRoundRestartNext");
 
             this.lblAdvSpecialSwitches.Text = clocLanguage.GetLocalized("frmOptions.tabAdvanced.lblAdvSpecialSwitches");
             this.chkAdvShowDICESpecialOptions.Text = clocLanguage.GetLocalized("frmOptions.tabAdvanced.lblAdvSpecialSwitches.chkAdvShowDICESpecialOptions");
@@ -724,6 +727,16 @@ namespace PRoCon.Forms {
         private void chkAdvShowRoundTimerConstantly_CheckedChanged(object sender, EventArgs e)
         {
             this.m_praApplication.OptionsSettings.ShowRoundTimerConstantly = this.chkAdvShowRoundTimerConstantly.Checked;
+        }
+
+        void OptionsSettings_ShowCfmMsgRoundRestartNextChanged(bool blEnabled)
+        {
+            this.chkAdvShowCfmMsgRoundRestartNext.Checked = blEnabled;
+        }
+
+        private void chkAdvShowCfmMsgRoundRestartNext_CheckedChanged(object sender, EventArgs e)
+        {
+            this.m_praApplication.OptionsSettings.ShowCfmMsgRoundRestartNext = this.chkAdvShowCfmMsgRoundRestartNext.Checked;
         }
 
         void OptionsSettings_ShowDICESpecialOptionsChanged(bool blEnabled)

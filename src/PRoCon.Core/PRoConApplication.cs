@@ -661,6 +661,7 @@ namespace PRoCon.Core {
                         stwConfig.WriteLine("procon.private.options.layerHideLocalAccounts {0}", this.OptionsSettings.LayerHideLocalAccounts);
 
                         stwConfig.WriteLine("procon.private.options.ShowRoundTimerConstantly {0}", this.OptionsSettings.ShowRoundTimerConstantly);
+                        stwConfig.WriteLine("procon.private.options.ShowCfmMsgRoundRestartNext {0}", this.OptionsSettings.ShowCfmMsgRoundRestartNext);
 
                         stwConfig.WriteLine("procon.private.options.ShowDICESpecialOptions {0}", this.OptionsSettings.ShowDICESpecialOptions);
 
@@ -1162,6 +1163,14 @@ namespace PRoCon.Core {
                 if (bool.TryParse(lstWords[1], out blEnabled) == true)
                 {
                     this.OptionsSettings.ShowRoundTimerConstantly = blEnabled;
+                }
+            }
+            else if (lstWords.Count >= 2 && String.Compare(lstWords[0], "procon.private.options.ShowCfmMsgRoundRestartNext", true) == 0 && objSender == this)
+            {
+                bool blEnabled = false;
+
+                if (bool.TryParse(lstWords[1], out blEnabled) == true) {
+                    this.OptionsSettings.ShowCfmMsgRoundRestartNext = blEnabled;
                 }
             }
             else if (lstWords.Count >= 2 && String.Compare(lstWords[0], "procon.private.options.ShowDICESpecialOptions", true) == 0 && objSender == this)

@@ -36,6 +36,7 @@ namespace PRoCon.Core.Options {
         public event OptionsEnabledHandler LayerHideLocalAccountsChanged;
 
         public event OptionsEnabledHandler ShowRoundTimerConstantlyChanged;
+        public event OptionsEnabledHandler ShowCfmMsgRoundRestartNextChanged;
         public event OptionsEnabledHandler ShowDICESpecialOptionsChanged;
 
         public event OptionsEnabledHandler AllowAnonymousUsageDataChanged;
@@ -299,6 +300,26 @@ namespace PRoCon.Core.Options {
             }
         }
 
+        // ShowCfmMsgRoundRestartNext
+        private bool m_isShowCfmMsgRoundRestartNextEnabled;
+        public bool ShowCfmMsgRoundRestartNext
+        {
+            get
+            {
+                return this.m_isShowCfmMsgRoundRestartNextEnabled;
+            }
+            set
+            {
+                this.m_isShowCfmMsgRoundRestartNextEnabled = value;
+                this.m_praApplication.SaveMainConfig();
+
+                if (this.ShowCfmMsgRoundRestartNextChanged != null)
+                {
+                    FrostbiteConnection.RaiseEvent(this.ShowCfmMsgRoundRestartNextChanged.GetInvocationList(), value);
+                }
+            }
+        }
+        
         // ShowDICESpecialOptions
         private bool m_isShowDICESpecialOptionsEnabled;
         public bool ShowDICESpecialOptions
@@ -453,6 +474,7 @@ namespace PRoCon.Core.Options {
             this.LayerHideLocalAccounts = true;
             this.LayerHideLocalPlugins = true;
 
+            this.ShowCfmMsgRoundRestartNext = false;
             this.ShowDICESpecialOptions = false;
 
             this.ShowTrayIcon = true;
