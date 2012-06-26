@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("PRoCon Frostbite")]
+[assembly: AssemblyTitle("Procon Frostbite")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Phogue.net")]
-[assembly: AssemblyProduct("PRoCon Frostbite")]
-[assembly: AssemblyCopyright("Copyright © Geoff 'Phogue' Green 2010")]
+[assembly: AssemblyCompany("myrcon.com")]
+[assembly: AssemblyProduct("Procon Frostbite")]
+[assembly: AssemblyCopyright("Copyright © Myrcon Pty. Ltd. 2012")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -32,5 +32,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.2.0.0")]
-[assembly: AssemblyFileVersion("1.2.0.0")]
+[assembly: AssemblyVersion("1.2.0.9")]
+[assembly: AssemblyFileVersion("1.2.0.9")]
