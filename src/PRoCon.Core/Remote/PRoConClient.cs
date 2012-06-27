@@ -443,6 +443,16 @@ namespace PRoCon.Core.Remote {
             private set;
         }
 
+        public string m_strConnectionServerName = String.Empty;
+        public string ConnectionServerName {
+            get {
+                return this.m_strConnectionServerName;
+            }
+            set {
+                this.m_strConnectionServerName = value;
+            }
+        }
+
         private string m_strUsername = String.Empty;
         public string Username {
             get {

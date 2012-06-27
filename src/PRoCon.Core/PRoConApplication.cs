@@ -688,11 +688,18 @@ namespace PRoCon.Core {
                                 }
                             }
 
-                            if (prcClient.CurrentServerInfo != null) {
-                                stwConfig.WriteLine("procon.private.servers.name \"{0}\" {1} \"{2}\"", prcClient.HostName, prcClient.Port, prcClient.CurrentServerInfo.ServerName);
+                            // new position before label
+                            stwConfig.WriteLine(strAddServerCommand);
+
+                            if (prcClient.CurrentServerInfo != null || prcClient.ConnectionServerName != String.Empty) {
+                                if (prcClient.CurrentServerInfo != null) {
+                                    stwConfig.WriteLine("procon.private.servers.name \"{0}\" {1} \"{2}\"", prcClient.HostName, prcClient.Port, prcClient.CurrentServerInfo.ServerName);
+                                } else {
+                                    stwConfig.WriteLine("procon.private.servers.name \"{0}\" {1} \"{2}\"", prcClient.HostName, prcClient.Port, prcClient.ConnectionServerName);
+                                }
                             }
 
-                            stwConfig.WriteLine(strAddServerCommand);
+                            // stwConfig.WriteLine(strAddServerCommand);
 
                             if (prcClient.AutomaticallyConnect == true) {
                                 stwConfig.WriteLine("procon.private.servers.autoconnect \"{0}\" {1}", prcClient.HostName, prcClient.Port);
@@ -932,6 +939,13 @@ namespace PRoCon.Core {
 
                     // Originally leaving it for the reconnect thread to pickup but needed a quicker effect.
                     this.Connections[lstWords[1] + ":" + lstWords[2]].ProconPrivateServerConnect();
+                }
+            }
+
+            else if (lstWords.Count >= 3 && String.Compare(lstWords[0], "procon.private.servers.name", true) == 0 && objSender == this) {
+                // CurrentServerInfo not initialized.
+                if (this.Connections.Contains(lstWords[1] + ":" + lstWords[2]) == true) {
+                    this.Connections[lstWords[1] + ":" + lstWords[2]].ConnectionServerName = lstWords[3];
                 }
             }
 

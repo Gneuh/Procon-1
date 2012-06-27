@@ -707,7 +707,12 @@ namespace PRoCon.Forms {
                             e.Graphics.DrawImage(this.iglIcons.Images["exclamation-button.png"], e.Bounds.Left + 2, e.Bounds.Top + 1, this.iglIcons.ImageSize.Width, this.iglIcons.ImageSize.Height);
                         }
 
-                        e.Graphics.DrawString(drawItem.Client.HostNamePort, this.cboServerList.Font, SystemBrushes.WindowText, e.Bounds.Left + 21, e.Bounds.Top);
+                        if (drawItem.Client.ConnectionServerName != String.Empty) {
+                            e.Graphics.DrawString(String.Format("{0} [{1}]", drawItem.Client.ConnectionServerName, drawItem.Client.HostNamePort), this.cboServerList.Font, SystemBrushes.WindowText, e.Bounds.Left + 21, e.Bounds.Top);
+                        }
+                        else {
+                            e.Graphics.DrawString(drawItem.Client.HostNamePort, this.cboServerList.Font, SystemBrushes.WindowText, e.Bounds.Left + 21, e.Bounds.Top);
+                        }
                     }
                     
                 }
