@@ -49,7 +49,8 @@ namespace PRoCon.Core {
 
             int iServed = 0, iLength = 0;
 
-            if (String.Compare(strServed, "0") == 0 || String.Compare(strServed, "-1") == 0) {
+            //if (String.Compare(strServed, "0") == 0 || String.Compare(strServed, "-1") == 0) {
+            if (String.Compare(strServed, "0") == 0 && String.Compare(strLength, "-1") == 0) {
                 this.Subset = TimeoutSubsetType.Permanent;
             }
             else if (int.TryParse(strServed, out iServed) == true && int.TryParse(strLength, out iLength) == true) {
