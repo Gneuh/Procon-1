@@ -474,7 +474,7 @@ namespace PRoCon.Core.Options {
             this.LayerHideLocalAccounts = true;
             this.LayerHideLocalPlugins = true;
 
-            this.ShowCfmMsgRoundRestartNext = false;
+            this.ShowCfmMsgRoundRestartNext = true;
             this.ShowDICESpecialOptions = false;
 
             this.ShowTrayIcon = true;

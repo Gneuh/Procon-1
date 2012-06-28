@@ -751,6 +751,30 @@ namespace PRoCon.Core.Remote {
             }
         }
 
+        public void ExecuteGlobalVarsConfig(string strConfigFile, int iRecursion, List<string> lstArguments) {
+
+            //FileStream stmConfigFile = null;
+            try {
+
+                if (File.Exists(Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"Configs"),strConfigFile)) == true) {
+
+                    string[] a_strConfigData = File.ReadAllLines(Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Configs"), strConfigFile));
+
+                    if (a_strConfigData != null) {
+
+                        foreach (string strLine in a_strConfigData) {
+                            if (strLine.Length > 0 && Regex.Match(strLine, "^[ ]+//.*").Success == false && Regex.Match(strLine, "^procon.protected.vars.set .*").Success) { // AND not a comment..
+                                this.Parent.ExecutePRoConCommand(this, Packet.Wordify(strLine), iRecursion++);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception e) {
+                FrostbiteConnection.LogError("ExecuteConnectionConfig", String.Empty, e);
+            }
+        }
+
         #endregion
 
         #region Plugin setup & events
@@ -968,6 +992,9 @@ namespace PRoCon.Core.Remote {
                     this.ExecuteConnectionConfig(this.Game.GameType + "." + this.CurrentServerInfo.GameMod + ".def", 0, null);
                 }
                 
+                // load override global_vars.def
+                this.ExecuteGlobalVarsConfig("global_vars.def", 0, null);
+
                 this.ExecuteConnectionConfig("reasons.cfg", 0, null);
                 
                 lock (this.Parent) {
