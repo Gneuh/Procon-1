@@ -1191,6 +1191,8 @@ namespace PRoCon.Core.Remote {
                     this.ExecuteConnectionConfig(this.Game.GameType + "." + this.CurrentServerInfo.GameMod + ".def", 0, null);
                 }
 
+                this.ExecuteGlobalVarsConfig("global_vars.def", 0, null);
+
                 lock (this.Parent) {
                     this.CompilePlugins(this.Parent.OptionsSettings.PluginPermissions);
                 }
