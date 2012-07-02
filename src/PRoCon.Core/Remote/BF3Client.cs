@@ -136,6 +136,8 @@ namespace PRoCon.Core.Remote {
             #endregion
 
             this.m_responseDelegates.Add("admin.help", this.DispatchHelpResponse);
+
+            this.GetPacketsPattern = new Regex(this.GetPacketsPattern.ToString() + "|^reservedSlotsList.list", RegexOptions.Compiled);
         }
                 
         public override void FetchStartupVariables() {

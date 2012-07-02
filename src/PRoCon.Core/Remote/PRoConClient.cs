@@ -3000,15 +3000,21 @@ namespace PRoCon.Core.Remote {
         }
 
         private void PRoConClient_ReservedSlotsList(FrostbiteClient sender, List<string> soldierNames) {
-            foreach (string strSoldierName in soldierNames) {
-                if (this.ReservedSlotList.Contains(strSoldierName) == false) {
-                    this.ReservedSlotList.Add(strSoldierName);
-                }
+            if (sender is BF3Client) {
+                this.ReservedSlotList.Clear();
             }
+            if (soldierNames.Count != 0)
+            {
+                foreach (string strSoldierName in soldierNames) {
+                    if (this.ReservedSlotList.Contains(strSoldierName) == false) {
+                        this.ReservedSlotList.Add(strSoldierName);
+                    }
+                }
 
-            foreach (string strSoldierName in this.ReservedSlotList) {
-                if (soldierNames.Contains(strSoldierName) == false) {
-                    this.ReservedSlotList.Remove(strSoldierName);
+                foreach (string strSoldierName in this.ReservedSlotList) {
+                    if (soldierNames.Contains(strSoldierName) == false) {
+                        this.ReservedSlotList.Remove(strSoldierName);
+                    }
                 }
             }
         }
