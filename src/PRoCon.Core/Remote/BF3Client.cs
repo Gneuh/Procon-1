@@ -33,6 +33,7 @@ namespace PRoCon.Core.Remote {
         }
 
         private int iLastMapListOffset;
+        private int iLastReservedSlotsListOffset;
 
         public BF3Client(FrostbiteConnection connection) : base(connection) {
 
@@ -865,11 +866,21 @@ namespace PRoCon.Core.Remote {
                     }
                 }
                 //
-                if (iRequestStartOffset == 0)
+                /* if (iRequestStartOffset == 0)
                 {
                     this.lstFullReservedSlotsList.Clear();
+                } */
+                if (iRequestStartOffset == 0) {
+                    this.lstFullReservedSlotsList.Clear();
+                    this.iLastReservedSlotsListOffset = 0;
+                } else {
+                    if (this.iLastReservedSlotsListOffset < iRequestStartOffset) {
+                        this.iLastReservedSlotsListOffset = iRequestStartOffset;
+                    } else {
+                        return;
+                    }
                 }
-                
+
                 cpRecievedPacket.Words.RemoveAt(0);
                 // List<String> lstReservedSlotsList = new List<String>();
 
