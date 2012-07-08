@@ -144,6 +144,8 @@ namespace PRoCon {
 
             this.btnSplitTeams.ImageList = this.m_frmMain.iglIcons;
             this.btnSplitTeams.ImageKey = "application_tile_horizontal.png";
+
+            this.cboEndRound.SelectedIndex = 0;
         }
 
         // If we disconnect clear the player list so it's fresh on reconnection.
@@ -338,6 +340,20 @@ namespace PRoCon {
 
             this.statsLookupToolStripMenuItem.Text = this.m_clocLanguage.GetDefaultLocalized("Stats Lookup", "uscPlayerListPanel.ctxPlayerOptions.statsLookupToolStripMenuItem");
             this.punkBusterScreenshotToolStripMenuItem.Text = this.m_clocLanguage.GetDefaultLocalized("PunkBuster Screenshot", "uscPlayerListPanel.ctxPlayerOptions.punkBusterScreenshotToolStripMenuItem");
+
+            // cboEndRound
+            this.cboEndRound.Items.Clear();
+            this.cboEndRound.Items.AddRange(new object[] {
+                this.m_clocLanguage.GetDefaultLocalized("Select winning team to end round:", "uscPlayerListPanel.ctxPlayerOptions.EndRound.Label"),
+                this.m_clocLanguage.GetDefaultLocalized("Team 1", "uscPlayerListPanel.ctxPlayerOptions.EndRound.Team1"),
+                this.m_clocLanguage.GetDefaultLocalized("Team 2", "uscPlayerListPanel.ctxPlayerOptions.EndRound.Team2"),
+                this.m_clocLanguage.GetDefaultLocalized("Team 3", "uscPlayerListPanel.ctxPlayerOptions.EndRound.Team3"),
+                this.m_clocLanguage.GetDefaultLocalized("Team 4", "uscPlayerListPanel.ctxPlayerOptions.EndRound.Team4")
+            });
+            this.cboEndRound.SelectedIndex = 0;
+
+            Graphics cboEndRoundGrafphics = cboEndRound.CreateGraphics();
+            this.cboEndRound.Width = 18 + (int)cboEndRoundGrafphics.MeasureString(this.cboEndRound.Text, this.cboEndRound.Font).Width;
 
             this.kbpBfbcPunishPanel.SetLocalization(this.m_clocLanguage);
             this.kbpPunkbusterPunishPanel.SetLocalization(this.m_clocLanguage);
@@ -1866,7 +1882,14 @@ namespace PRoCon {
 
                         this.moveToSquadToolStripMenuItem.DropDownItems.Add(new ToolStripSeparator());
 
-                        for (int i = 0; i <= 8; i++) {
+                        int iMaxSquadID = 8;
+                        if (this.m_prcClient.GameType == "BF3") {
+                            iMaxSquadID = 32;
+                        } else  {
+                            iMaxSquadID = 16;
+                        }
+
+                        for (int i = 0; i <= iMaxSquadID; i++) {
 
                             ToolStripMenuItem squadChange = new ToolStripMenuItem(this.m_clocLanguage.GetDefaultLocalized(String.Format("Squad {0}", i), "uscPlayerListPanel.ctxPlayerOptions.moveToSquadToolStripMenuItem.Squad", this.m_clocLanguage.GetLocalized(String.Format("global.Squad{0}", i)))); 
                             squadChange.Tag = new object[] { player, i };
@@ -2012,6 +2035,32 @@ namespace PRoCon {
 
         #endregion
 
+        #region EndRound
 
+        private void cboEndRound_SelectedIndexChanged(object sender, EventArgs e) {
+            if (this.cboEndRound.SelectedIndex > 0) {
+                if (Program.m_application.OptionsSettings.ShowCfmMsgRoundRestartNext == true)
+                { //End this round with {0} winning? this.m_clocLanguage.GetLocalized("uscPlayerListPanel.MessageBox.EndRound")
+                    DialogResult cfmEndRound = MessageBox.Show(this.m_clocLanguage.GetLocalized("uscPlayerListPanel.MessageBox.EndRound", new String[] { this.cboEndRound.Text }), 
+                        "PRoCon Frostbite", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    if (cfmEndRound == DialogResult.No)
+                    {
+                        this.cboEndRound.SelectedIndex = 0;
+                        return;
+                    }
+                    if (this.m_prcClient.Game is MoHClient) {
+                        this.m_prcClient.SendRequest(new List<string>() { "admin.endRound", this.cboEndRound.SelectedIndex.ToString() });
+                    }
+                    else if (this.m_prcClient.Game is BFBC2Client) {
+                        this.m_prcClient.SendRequest(new List<string>() { "mapList.endRound", this.cboEndRound.SelectedIndex.ToString() });
+                    }
+                    else if (this.m_prcClient.Game is BF3Client) {
+                        this.m_prcClient.SendRequest(new List<string>() { "mapList.endRound", this.cboEndRound.SelectedIndex.ToString() });
+                    }
+                }
+            }
+            this.cboEndRound.SelectedIndex = 0;
+        }
+        #endregion
     }
 }

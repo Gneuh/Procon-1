@@ -94,6 +94,7 @@
             System.Windows.Forms.ListViewGroup listViewGroup68 = new System.Windows.Forms.ListViewGroup("Team: 16", System.Windows.Forms.HorizontalAlignment.Left);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(uscPlayerListPanel));
             this.spltListAdditionalInfo = new System.Windows.Forms.SplitContainer();
+            this.cboEndRound = new System.Windows.Forms.ComboBox();
             this.spltFourSplit = new System.Windows.Forms.SplitContainer();
             this.spltTwoSplit = new System.Windows.Forms.SplitContainer();
             this.lsvTeamOnePlayers = new PRoCon.Controls.ControlsEx.ListViewNF();
@@ -215,6 +216,7 @@
             // 
             // spltListAdditionalInfo.Panel1
             // 
+            this.spltListAdditionalInfo.Panel1.Controls.Add(this.cboEndRound);
             this.spltListAdditionalInfo.Panel1.Controls.Add(this.spltFourSplit);
             this.spltListAdditionalInfo.Panel1.Controls.Add(this.btnSplitTeams);
             this.spltListAdditionalInfo.Panel1.Controls.Add(this.btnCloseAdditionalInfo);
@@ -226,6 +228,25 @@
             this.spltListAdditionalInfo.Size = new System.Drawing.Size(896, 708);
             this.spltListAdditionalInfo.SplitterDistance = 509;
             this.spltListAdditionalInfo.TabIndex = 20;
+            // 
+            // cboEndRound
+            // 
+            this.cboEndRound.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.cboEndRound.CausesValidation = false;
+            this.cboEndRound.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboEndRound.FormattingEnabled = true;
+            this.cboEndRound.Items.AddRange(new object[] {
+            "Select winning team to end round:",
+            "Team 1",
+            "Team 2",
+            "Team 3",
+            "Team 4"});
+            this.cboEndRound.Location = new System.Drawing.Point(332, 484);
+            this.cboEndRound.MaxDropDownItems = 5;
+            this.cboEndRound.Name = "cboEndRound";
+            this.cboEndRound.Size = new System.Drawing.Size(300, 23);
+            this.cboEndRound.TabIndex = 33;
+            this.cboEndRound.SelectedIndexChanged += new System.EventHandler(this.cboEndRound_SelectedIndexChanged);
             // 
             // spltFourSplit
             // 
@@ -1058,7 +1079,7 @@
             this.ctxPlayerOptions.Name = "ctxPlayerOptions";
             this.ctxPlayerOptions.ShowCheckMargin = true;
             this.ctxPlayerOptions.ShowImageMargin = false;
-            this.ctxPlayerOptions.Size = new System.Drawing.Size(196, 142);
+            this.ctxPlayerOptions.Size = new System.Drawing.Size(196, 120);
             // 
             // moveToSquadToolStripMenuItem
             // 
@@ -1178,7 +1199,7 @@
             this.punkBusterScreenshotToolStripMenuItem.Name = "punkBusterScreenshotToolStripMenuItem";
             this.punkBusterScreenshotToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
             this.punkBusterScreenshotToolStripMenuItem.Text = "PunkBuster Screenshot";
-            this.punkBusterScreenshotToolStripMenuItem.Click += new System.EventHandler(punkBusterScreenshotToolStripMenuItem_Click);
+            this.punkBusterScreenshotToolStripMenuItem.Click += new System.EventHandler(this.punkBusterScreenshotToolStripMenuItem_Click);
             // 
             // uscPlayerListPanel
             // 
@@ -1307,5 +1328,6 @@
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
         private System.Windows.Forms.ToolStripMenuItem statsLookupToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem punkBusterScreenshotToolStripMenuItem;
+        private System.Windows.Forms.ComboBox cboEndRound;
     }
 }
