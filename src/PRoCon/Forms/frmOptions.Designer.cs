@@ -1164,11 +1164,11 @@
             // 
             // btnAddStatsLink
             // 
-            this.btnAddStatsLink.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.btnAddStatsLink.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnAddStatsLink.Enabled = false;
             this.btnAddStatsLink.FlatAppearance.BorderSize = 0;
             this.btnAddStatsLink.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnAddStatsLink.Location = new System.Drawing.Point(342, 6);
+            this.btnAddStatsLink.Location = new System.Drawing.Point(342, 41);
             this.btnAddStatsLink.Name = "btnAddStatsLink";
             this.btnAddStatsLink.Size = new System.Drawing.Size(35, 23);
             this.btnAddStatsLink.TabIndex = 29;
@@ -1177,11 +1177,11 @@
             // 
             // btnRemoveStatsLink
             // 
-            this.btnRemoveStatsLink.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.btnRemoveStatsLink.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnRemoveStatsLink.Enabled = false;
             this.btnRemoveStatsLink.FlatAppearance.BorderSize = 0;
             this.btnRemoveStatsLink.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnRemoveStatsLink.Location = new System.Drawing.Point(343, 85);
+            this.btnRemoveStatsLink.Location = new System.Drawing.Point(343, 120);
             this.btnRemoveStatsLink.Name = "btnRemoveStatsLink";
             this.btnRemoveStatsLink.Size = new System.Drawing.Size(35, 23);
             this.btnRemoveStatsLink.TabIndex = 28;

@@ -676,6 +676,12 @@ namespace PRoCon.Core {
                         stwConfig.WriteLine(String.Empty);
                         //stwConfig.WriteLine("procon.private.options.trustedHostDomainsPorts {0}", String.Join(" ", this.m_frmOptions.TrustedHostDomainsPorts.ToArray()));
 
+                        if (this.OptionsSettings.StatsLinksMaxNum > 4) {
+                            stwConfig.Write("procon.private.options.statsLinksMaxNum");
+                            stwConfig.Write(" {0}", this.OptionsSettings.StatsLinksMaxNum.ToString());
+                            stwConfig.WriteLine(String.Empty);
+                        }
+
                         if (this.OptionsSettings.StatsLinkNameUrl.Count > 0) {
                             stwConfig.Write("procon.private.options.statsLinkNameUrl");
                             foreach (StatsLinkNameUrl statsLink in this.OptionsSettings.StatsLinkNameUrl)
@@ -1233,132 +1239,170 @@ namespace PRoCon.Core {
                     }
                 }
             }
-            else if (lstWords.Count >= 1 && String.Compare(lstWords[0], "procon.private.options.statsLinkNameUrl", true) == 0 && objSender == this) {
+            else if (lstWords.Count >= 1 && String.Compare(lstWords[0], "procon.private.options.statsLinksMaxNum", true) == 0 && objSender == this) {
+                int itmp = 4;
+                if (int.TryParse(lstWords[1], out itmp) == true) {
+                    this.OptionsSettings.StatsLinksMaxNum = itmp;
+                }
+            }
+            else if (lstWords.Count >= 1 && String.Compare(lstWords[0], "procon.private.options.statsLinkNameUrl", true) == 0 && objSender == this)
+            {
                 this.OptionsSettings.StatsLinkNameUrl.Clear();
                 lstWords.RemoveAt(0);
-                for (int i = 0; i + 1 < lstWords.Count; i = i + 2) {
-                    if (this.OptionsSettings.StatsLinkNameUrl.Count < 4) {
+                for (int i = 0; i + 1 < lstWords.Count; i = i + 2)
+                {
+                    if (this.OptionsSettings.StatsLinkNameUrl.Count < 4)
+                    {
                         this.OptionsSettings.StatsLinkNameUrl.Add(new StatsLinkNameUrl(lstWords[i], lstWords[i + 1]));
                     }
                 }
             }
-            else if (lstWords.Count >= 3 && String.Compare(lstWords[0], "procon.protected.notification.write", true) == 0 && objSender is PRoConClient) {
+            else if (lstWords.Count >= 3 && String.Compare(lstWords[0], "procon.protected.notification.write", true) == 0 && objSender is PRoConClient)
+            {
 
                 bool blError = false;
 
-                if (lstWords.Count >= 4 && bool.TryParse(lstWords[3], out blError) == true) {
-                    if (this.ShowNotification != null) {
+                if (lstWords.Count >= 4 && bool.TryParse(lstWords[3], out blError) == true)
+                {
+                    if (this.ShowNotification != null)
+                    {
                         FrostbiteConnection.RaiseEvent(this.ShowNotification.GetInvocationList(), 2000, lstWords[1], lstWords[2], blError);
                     }
                 }
-                else {
-                    if (this.ShowNotification != null) {
+                else
+                {
+                    if (this.ShowNotification != null)
+                    {
                         FrostbiteConnection.RaiseEvent(this.ShowNotification.GetInvocationList(), 2000, lstWords[1], lstWords[2], false);
                     }
                 }
             }
 
-            else if (lstWords.Count >= 3 && String.Compare(lstWords[0], "procon.protected.playsound", true) == 0 && objSender is PRoConClient) {
+            else if (lstWords.Count >= 3 && String.Compare(lstWords[0], "procon.protected.playsound", true) == 0 && objSender is PRoConClient)
+            {
 
                 int iRepeat = 0;
 
                 string blah = Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Media"), lstWords[1]);
 
-                if (int.TryParse(lstWords[2], out iRepeat) == true && iRepeat > 0 && File.Exists(Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Media"), lstWords[1])) == true) {
+                if (int.TryParse(lstWords[2], out iRepeat) == true && iRepeat > 0 && File.Exists(Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Media"), lstWords[1])) == true)
+                {
 
                     //this.Invoke(new DispatchProconProtectedPlaySound(this.PlaySound), new object[] { lstWords[1], iRepeat });
 
                     ((PRoConClient)objSender).PlaySound(lstWords[1], iRepeat);
                 }
             }
-            else if (lstWords.Count >= 1 && String.Compare(lstWords[0], "procon.protected.stopsound", true) == 0 && objSender is PRoConClient) {
+            else if (lstWords.Count >= 1 && String.Compare(lstWords[0], "procon.protected.stopsound", true) == 0 && objSender is PRoConClient)
+            {
                 //this.Invoke(new DispatchProconProtectedStopSound(this.StopSound), new object[] { default(SPlaySound) });
                 ((PRoConClient)objSender).StopSound(default(PRoConClient.SPlaySound));
             }
-            else if (lstWords.Count >= 2 && String.Compare(lstWords[0], "procon.protected.events.captures", true) == 0 && objSender is PRoConClient) {
+            else if (lstWords.Count >= 2 && String.Compare(lstWords[0], "procon.protected.events.captures", true) == 0 && objSender is PRoConClient)
+            {
                 lstWords.RemoveAt(0);
                 ((PRoConClient)objSender).EventsLogging.Settings = lstWords;
             }
-            else if (lstWords.Count >= 2 && String.Compare(lstWords[0], "procon.protected.playerlist.settings", true) == 0 && objSender is PRoConClient) {
+            else if (lstWords.Count >= 2 && String.Compare(lstWords[0], "procon.protected.playerlist.settings", true) == 0 && objSender is PRoConClient)
+            {
                 lstWords.RemoveAt(0);
                 ((PRoConClient)objSender).PlayerListSettings.Settings = lstWords;
             }
-            else if (lstWords.Count >= 2 && String.Compare(lstWords[0], "procon.protected.chat.settings", true) == 0 && objSender is PRoConClient) {
+            else if (lstWords.Count >= 2 && String.Compare(lstWords[0], "procon.protected.chat.settings", true) == 0 && objSender is PRoConClient)
+            {
                 lstWords.RemoveAt(0);
                 ((PRoConClient)objSender).ChatConsole.Settings = lstWords;
             }
-            else if (lstWords.Count >= 2 && String.Compare(lstWords[0], "procon.protected.lists.settings", true) == 0 && objSender is PRoConClient) {
+            else if (lstWords.Count >= 2 && String.Compare(lstWords[0], "procon.protected.lists.settings", true) == 0 && objSender is PRoConClient)
+            {
                 lstWords.RemoveAt(0);
                 ((PRoConClient)objSender).ListSettings.Settings = lstWords;
             }
-            else if (lstWords.Count >= 2 && String.Compare(lstWords[0], "procon.protected.console.settings", true) == 0 && objSender is PRoConClient) {
+            else if (lstWords.Count >= 2 && String.Compare(lstWords[0], "procon.protected.console.settings", true) == 0 && objSender is PRoConClient)
+            {
                 lstWords.RemoveAt(0);
                 ((PRoConClient)objSender).Console.Settings = lstWords;
             }
             else if (lstWords.Count >= 2 && String.Compare(lstWords[0], "procon.protected.timezone_UTCoffset", true) == 0 && objSender is PRoConClient)
             {
                 double UTCoffset;
-                if (double.TryParse(lstWords[1], out UTCoffset) == true) {
+                if (double.TryParse(lstWords[1], out UTCoffset) == true)
+                {
                     ((PRoConClient)objSender).Game.UTCoffset = UTCoffset;
-                } else {
-                    ((PRoConClient)objSender).Game.UTCoffset = 0 ;
+                }
+                else
+                {
+                    ((PRoConClient)objSender).Game.UTCoffset = 0;
                 }
             }
             else if (lstWords.Count >= 1 && String.Compare(lstWords[0], "procon.protected.tasks.clear", true) == 0 && objSender is PRoConClient)
             {
                 ((PRoConClient)objSender).ProconProtectedTasksClear();
             }
-            else if (lstWords.Count >= 2 && String.Compare(lstWords[0], "procon.protected.tasks.remove", true) == 0 && objSender is PRoConClient) {
+            else if (lstWords.Count >= 2 && String.Compare(lstWords[0], "procon.protected.tasks.remove", true) == 0 && objSender is PRoConClient)
+            {
                 ((PRoConClient)objSender).ProconProtectedTasksRemove(lstWords[1]);
             }
-            else if (lstWords.Count >= 1 && String.Compare(lstWords[0], "procon.protected.tasks.list", true) == 0 && objSender is PRoConClient) {
+            else if (lstWords.Count >= 1 && String.Compare(lstWords[0], "procon.protected.tasks.list", true) == 0 && objSender is PRoConClient)
+            {
 
                 ((PRoConClient)objSender).ProconProtectedTasksList();
             }
-            else if (lstWords.Count >= 4 && String.Compare(lstWords[0], "procon.protected.tasks.add", true) == 0 && objSender is PRoConClient) {
+            else if (lstWords.Count >= 4 && String.Compare(lstWords[0], "procon.protected.tasks.add", true) == 0 && objSender is PRoConClient)
+            {
 
                 int iDelay = 0, iInterval = 1, iRepeat = -1;
                 string strTaskName = String.Empty;
 
-                if (int.TryParse(lstWords[1], out iDelay) == true && int.TryParse(lstWords[2], out iInterval) == true && int.TryParse(lstWords[3], out iRepeat) == true) {
+                if (int.TryParse(lstWords[1], out iDelay) == true && int.TryParse(lstWords[2], out iInterval) == true && int.TryParse(lstWords[3], out iRepeat) == true)
+                {
 
                     lstWords.RemoveRange(0, 4);
                     ((PRoConClient)objSender).ProconProtectedTasksAdd(String.Empty, lstWords, iDelay, iInterval, iRepeat);
                 }
-                else if (lstWords.Count >= 5 && int.TryParse(lstWords[2], out iDelay) == true && int.TryParse(lstWords[3], out iInterval) == true && int.TryParse(lstWords[4], out iRepeat) == true) {
+                else if (lstWords.Count >= 5 && int.TryParse(lstWords[2], out iDelay) == true && int.TryParse(lstWords[3], out iInterval) == true && int.TryParse(lstWords[4], out iRepeat) == true)
+                {
                     strTaskName = lstWords[1];
                     lstWords.RemoveRange(0, 5);
                     ((PRoConClient)objSender).ProconProtectedTasksAdd(strTaskName, lstWords, iDelay, iInterval, iRepeat);
                 }
             }
-            else if (lstWords.Count >= 1 && String.Compare(lstWords[0], "procon.protected.vars.list", true) == 0 && objSender is PRoConClient) {
+            else if (lstWords.Count >= 1 && String.Compare(lstWords[0], "procon.protected.vars.list", true) == 0 && objSender is PRoConClient)
+            {
 
                 ((PRoConClient)objSender).Console.Write("Local Variables: [Variable] [Value]");
 
-                foreach (Variable kvpVariable in ((PRoConClient)objSender).Variables) {
+                foreach (Variable kvpVariable in ((PRoConClient)objSender).Variables)
+                {
                     ((PRoConClient)objSender).Console.Write(String.Format("{0} \"{1}\"", kvpVariable.Name, kvpVariable.Value));
                 }
 
                 ((PRoConClient)objSender).Console.Write(String.Format("End of Local Variables List ({0} Variables)", ((PRoConClient)objSender).Variables.Count));
             }
-            else if (lstWords.Count >= 1 && String.Compare(lstWords[0], "procon.protected.sv_vars.list", true) == 0 && objSender is PRoConClient) {
+            else if (lstWords.Count >= 1 && String.Compare(lstWords[0], "procon.protected.sv_vars.list", true) == 0 && objSender is PRoConClient)
+            {
 
                 ((PRoConClient)objSender).Console.Write("Server Variables: [Variable] [Value]");
 
-                foreach (Variable kvpVariable in ((PRoConClient)objSender).SV_Variables) {
+                foreach (Variable kvpVariable in ((PRoConClient)objSender).SV_Variables)
+                {
                     ((PRoConClient)objSender).Console.Write(String.Format("{0} \"{1}\"", kvpVariable.Name, kvpVariable.Value));
                 }
 
                 ((PRoConClient)objSender).Console.Write(String.Format("End of Server Variables List ({0} Variables)", ((PRoConClient)objSender).SV_Variables.Count));
             }
-            else if (lstWords.Count >= 3 && String.Compare(lstWords[0], "procon.protected.plugins.call", true) == 0 && objSender is PRoConClient) {
+            else if (lstWords.Count >= 3 && String.Compare(lstWords[0], "procon.protected.plugins.call", true) == 0 && objSender is PRoConClient)
+            {
 
-                if (((PRoConClient)objSender).PluginsManager != null) {
-                    if (((PRoConClient)objSender).PluginsManager.Plugins.LoadedClassNames.Contains(lstWords[1]) == true) {
+                if (((PRoConClient)objSender).PluginsManager != null)
+                {
+                    if (((PRoConClient)objSender).PluginsManager.Plugins.LoadedClassNames.Contains(lstWords[1]) == true)
+                    {
 
                         string[] strParams = null;
 
-                        if (lstWords.Count - 3 > 0) {
+                        if (lstWords.Count - 3 > 0)
+                        {
                             strParams = new string[lstWords.Count - 3];
                             lstWords.CopyTo(3, strParams, 0, lstWords.Count - 3);
                         }
@@ -1367,23 +1411,28 @@ namespace PRoCon.Core {
                     }
                 }
             }
-            else if (lstWords.Count >= 6 && String.Compare(lstWords[0], "procon.private.tcadmin.enableLayer", true) == 0 && objSender == this) {
+            else if (lstWords.Count >= 6 && String.Compare(lstWords[0], "procon.private.tcadmin.enableLayer", true) == 0 && objSender == this)
+            {
 
-                if (this.Connections.Contains(String.Format("{0}:{1}", lstWords[1], lstWords[2])) == true) {
+                if (this.Connections.Contains(String.Format("{0}:{1}", lstWords[1], lstWords[2])) == true)
+                {
                     UInt16 ui16Port = 0;
                     UInt16.TryParse(lstWords[4], out ui16Port);
 
                     this.Connections[String.Format("{0}:{1}", lstWords[1], lstWords[2])].ProconProtectedLayerEnable(true, ui16Port, lstWords[3], lstWords[5]);
                 }
             }
-            else if (lstWords.Count >= 5 && String.Compare(lstWords[0], "procon.private.tcadmin.setPrivileges", true) == 0 && objSender == this) {
+            else if (lstWords.Count >= 5 && String.Compare(lstWords[0], "procon.private.tcadmin.setPrivileges", true) == 0 && objSender == this)
+            {
 
-                if (this.Connections.Contains(String.Format("{0}:{1}", lstWords[1], lstWords[2])) == true) {
+                if (this.Connections.Contains(String.Format("{0}:{1}", lstWords[1], lstWords[2])) == true)
+                {
 
                     CPrivileges sprPrivs = new CPrivileges();
                     UInt32 ui32Privileges = 0;
 
-                    if (UInt32.TryParse(lstWords[4], out ui32Privileges) == true && this.AccountsList.Contains(lstWords[3]) == true) { 
+                    if (UInt32.TryParse(lstWords[4], out ui32Privileges) == true && this.AccountsList.Contains(lstWords[3]) == true)
+                    {
                         sprPrivs.PrivilegesFlags = ui32Privileges;
                         this.Connections[String.Format("{0}:{1}", lstWords[1], lstWords[2])].ProconProtectedLayerSetPrivileges(this.AccountsList[lstWords[3]], sprPrivs);
                     }

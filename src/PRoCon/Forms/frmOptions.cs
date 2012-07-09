@@ -270,7 +270,7 @@ namespace PRoCon.Forms {
             this.colStatsLinkUrl.Text = clocLanguage.GetLocalized("frmOptions.tabPlayerLookup.colStatsLinkUrl");
             this.lblStatsLinkName.Text = clocLanguage.GetLocalized("frmOptions.tabPlayerLookup.lblStatsLinkName");
             this.lblStatsLinkUrl.Text = clocLanguage.GetLocalized("frmOptions.tabPlayerLookup.lblStatsLinkUrl");
-            this.lblStatsLinkHelpText.Text = clocLanguage.GetLocalized("frmOptions.tabPlayerLookup.lblStatsLinkHelpText").Replace("|*|", Environment.NewLine);
+            this.lblStatsLinkHelpText.Text = clocLanguage.GetLocalized("frmOptions.tabPlayerLookup.lblStatsLinkHelpText", new String[] { this.m_praApplication.OptionsSettings.StatsLinksMaxNum.ToString() }).Replace("|*|", Environment.NewLine);
 
             //this.m_strSetLanguageFileName = clocLanguage.FileName;
         }
@@ -799,13 +799,15 @@ namespace PRoCon.Forms {
         private void txtStatsLinkName_TextChanged(object sender, EventArgs e)
         {
             this.btnAddStatsLink.Enabled = (this.txtStatsLinkName.Text.Length > 0 && this.txtStatsLinkUrl.Text.Length > 0
-                && this.m_praApplication.OptionsSettings.StatsLinkNameUrl.Count < 4 && IsValidUrl(this.txtStatsLinkUrl.Text));
+                && this.m_praApplication.OptionsSettings.StatsLinkNameUrl.Count < this.m_praApplication.OptionsSettings.StatsLinksMaxNum 
+                && IsValidUrl(this.txtStatsLinkUrl.Text));
         }
 
         private void txtStatsLinkUrl_TextChanged(object sender, EventArgs e)
         {
             this.btnAddStatsLink.Enabled = (this.txtStatsLinkUrl.Text.Length > 0 && this.txtStatsLinkName.Text.Length > 0
-                && this.m_praApplication.OptionsSettings.StatsLinkNameUrl.Count < 4 && IsValidUrl(this.txtStatsLinkUrl.Text));
+                && this.m_praApplication.OptionsSettings.StatsLinkNameUrl.Count < this.m_praApplication.OptionsSettings.StatsLinksMaxNum 
+                && IsValidUrl(this.txtStatsLinkUrl.Text));
         }
 
         private void StatsLinkNameUrl_ItemAdded(int iIndex, PRoCon.Core.Options.StatsLinkNameUrl item)
@@ -841,7 +843,6 @@ namespace PRoCon.Forms {
             Regex rx = new Regex(@"^http(s)?://([\w-]+\.)+[\w-]+(/[\w-./?%&=]*)?$");
             return rx.IsMatch(strUrl);
         }
-
 
         #endregion
 

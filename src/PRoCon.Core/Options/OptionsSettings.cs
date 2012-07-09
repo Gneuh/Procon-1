@@ -399,6 +399,10 @@ namespace PRoCon.Core.Options {
             private set;
         }
 
+        public int StatsLinksMaxNum {
+            get;
+            set;
+        }
 
         public PermissionSet PluginPermissions {
 
@@ -486,6 +490,7 @@ namespace PRoCon.Core.Options {
 
             this.TrustedHostsWebsitesPorts = new NotificationList<TrustedHostWebsitePort>();
 
+            this.StatsLinksMaxNum = 4;
             this.StatsLinkNameUrl = new NotificationList<StatsLinkNameUrl>();
             this.StatsLinkNameUrl.Add(new StatsLinkNameUrl("Metabans", "http://metabans.com/search/%player_name%"));
         }
