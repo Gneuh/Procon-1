@@ -82,6 +82,7 @@
     <Compile Include="Battlemap\ZoneTagList.cs" />
     <Compile Include="CBanInfo.cs" />
     <Compile Include="CDownloadFile.cs" />
+    <Compile Include="Options\StatsLinkNameUrl.cs" />
     <Compile Include="UnlockMode.cs" />
     <Compile Include="ConnectionDictionary.cs" />
     <Compile Include="Consoles\ChatConsole.cs" />

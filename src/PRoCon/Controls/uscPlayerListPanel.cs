@@ -31,6 +31,7 @@ using System.Net;
 
 namespace PRoCon {
     using Core;
+    using Core.Options;
     using Core.Players;
     using Core.Plugin;
     using Core.Players.Items;
@@ -1927,6 +1928,20 @@ namespace PRoCon {
                     this.adminToolStripMenuItem.Enabled = !this.adminToolStripMenuItem.Checked;
 
                     this.statsLookupToolStripMenuItem.Tag = this.mutedToolStripMenuItem.Tag = this.normalToolStripMenuItem.Tag = this.voiceToolStripMenuItem.Tag = this.adminToolStripMenuItem.Tag = player;
+                    
+                    // this.statsLookupToolStripMenuItem1.Tag = this.statsLookupToolStripMenuItem2.Tag = this.statsLookupToolStripMenuItem3.Tag = this.statsLookupToolStripMenuItem4.Tag = this.statsLookupToolStripMenuItem.Tag;
+                    this.statsLookupToolStripMenuItem.DropDownItems.Clear();
+                    if (Program.m_application.OptionsSettings.StatsLinkNameUrl.Count > 0)
+                    {
+                        // _PK_
+                        foreach (StatsLinkNameUrl statsLink in Program.m_application.OptionsSettings.StatsLinkNameUrl) {
+                            ToolStripMenuItem statsLookup = new ToolStripMenuItem(statsLink.LinkName);
+                            statsLookup.Tag = new object[] { player, statsLink.LinkUrl };
+                            statsLookup.Click += new EventHandler(statsLookupToolStripMenuItemCustom_Click);
+                            this.statsLookupToolStripMenuItem.DropDownItems.Add(statsLookup);
+                        }
+                    }
+
 
                     CPunkbusterInfo pb_player = ((AdditionalPlayerInfo)lviSelected.Tag).m_pbInfo;
                     this.punkBusterScreenshotToolStripMenuItem.Tag = pb_player;
@@ -2022,6 +2037,32 @@ namespace PRoCon {
                 {
                     System.Diagnostics.Process.Start("http://bf3stats.com/stats_pc/" + ((CPlayerInfo)this.voiceToolStripMenuItem.Tag).SoldierName);
                 }
+            }
+        }
+
+        private void statsLookupToolStripMenuItemCustom_Click(object sender, EventArgs e)
+        {
+            string statsUrl = String.Empty;
+
+            if (sender is ToolStripMenuItem)
+            {
+                ToolStripMenuItem statsLookup = (ToolStripMenuItem)sender;
+
+                CPlayerInfo player = (CPlayerInfo)((object[])statsLookup.Tag)[0];
+                statsUrl = ((object[])statsLookup.Tag)[1].ToString();
+
+                statsUrl = statsUrl.Replace("%game%", this.m_prcClient.GameType.ToLower());
+
+                if (this.voiceToolStripMenuItem.Tag is CPlayerInfo)
+                {
+                    statsUrl = statsUrl.Replace("%player_name%", ((CPlayerInfo)this.voiceToolStripMenuItem.Tag).SoldierName);
+                    statsUrl = statsUrl.Replace("%player_EAguid%", ((CPlayerInfo)this.voiceToolStripMenuItem.Tag).GUID);
+                }
+                if (this.punkBusterScreenshotToolStripMenuItem.Tag is CPunkbusterInfo)
+                {
+                    statsUrl = statsUrl.Replace("%player_PBguid%", ((CPunkbusterInfo)this.punkBusterScreenshotToolStripMenuItem.Tag).GUID);
+                }
+                System.Diagnostics.Process.Start(statsUrl);
             }
         }
 

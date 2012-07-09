@@ -394,6 +394,11 @@ namespace PRoCon.Core.Options {
             private set;
         }
 
+        public NotificationList<StatsLinkNameUrl> StatsLinkNameUrl {
+            get;
+            private set;
+        }
+
 
         public PermissionSet PluginPermissions {
 
@@ -480,6 +485,9 @@ namespace PRoCon.Core.Options {
             this.ShowTrayIcon = true;
 
             this.TrustedHostsWebsitesPorts = new NotificationList<TrustedHostWebsitePort>();
+
+            this.StatsLinkNameUrl = new NotificationList<StatsLinkNameUrl>();
+            this.StatsLinkNameUrl.Add(new StatsLinkNameUrl("Metabans", "http://metabans.com/search/%player_name%"));
         }
     }
 }

@@ -96,6 +96,10 @@ namespace PRoCon.Forms {
 
             this.m_praApplication.OptionsSettings.ShowDICESpecialOptionsChanged += new PRoCon.Core.Options.OptionsSettings.OptionsEnabledHandler(OptionsSettings_ShowDICESpecialOptionsChanged);
 
+            this.m_praApplication.OptionsSettings.StatsLinkNameUrl.ItemAdded += new NotificationList<PRoCon.Core.Options.StatsLinkNameUrl>.ItemModifiedHandler(StatsLinkNameUrl_ItemAdded);
+            this.m_praApplication.OptionsSettings.StatsLinkNameUrl.ItemRemoved += new NotificationList<PRoCon.Core.Options.StatsLinkNameUrl>.ItemModifiedHandler(StatsLinkNameUrl_ItemRemoved);
+
+
             //m_fntComboBoxFont = new Font("Calibri", 10);
             this.m_frmParent = frmParent;
             this.picHttpServerServerStatus.Image = this.m_frmParent.picLayerOffline.Image;
@@ -112,6 +116,11 @@ namespace PRoCon.Forms {
 
             this.cboBasicsShowWindow.SelectedIndex = frmOptions.INT_OPTIONS_PREFERENCES_SHOWWINDOW_TASKBARANDTRAY;
             this.cboPluginsSandboxOptions.SelectedIndex = 0;
+
+            // StatsLinksList
+            this.btnAddStatsLink.ImageList = this.btnRemoveStatsLink.ImageList = this.m_frmParent.iglIcons;
+            this.btnAddStatsLink.ImageKey = "add.png";
+            this.btnRemoveStatsLink.ImageKey = "cross.png";
         }
         
         private void m_praApplication_CurrentLanguageChanged(CLocalization language) {
@@ -166,6 +175,11 @@ namespace PRoCon.Forms {
 
                 if (this.m_praApplication.HttpWebServer != null && this.m_praApplication.HttpWebServer.IsOnline == true) {
                     this.m_praApplication_HttpServerOnline(this.m_praApplication.HttpWebServer);
+                }
+
+                this.lsvStatsLinksList.Items.Clear();
+                foreach (StatsLinkNameUrl StatsLink in this.m_praApplication.OptionsSettings.StatsLinkNameUrl) {
+                    this.StatsLinkNameUrl_ItemAdded(0, StatsLink);
                 }
 
                 this.m_isLoadingForm = false;
@@ -248,6 +262,15 @@ namespace PRoCon.Forms {
             this.lblAdvSpecialSwitches.Text = clocLanguage.GetLocalized("frmOptions.tabAdvanced.lblAdvSpecialSwitches");
             this.chkAdvShowDICESpecialOptions.Text = clocLanguage.GetLocalized("frmOptions.tabAdvanced.lblAdvSpecialSwitches.chkAdvShowDICESpecialOptions");
             this.lblAdvShowDICESpecialOptionsNotice.Text = clocLanguage.GetLocalized("frmOptions.tabAdvanced.lblAdvSpecialSwitches.lblAdvShowDICESpecialOptionsNotice");
+
+            // StatsLinks
+            this.tabPlayerLookup.Text = clocLanguage.GetLocalized("frmOptions.tabPlayerLookup");
+            this.lblStatsPlayerTab.Text = clocLanguage.GetLocalized("frmOptions.tabAdvanced.lblAdvPlayerTab");
+            this.colStatsLinksName.Text = clocLanguage.GetLocalized("frmOptions.tabPlayerLookup.colStatsLinksName");
+            this.colStatsLinkUrl.Text = clocLanguage.GetLocalized("frmOptions.tabPlayerLookup.colStatsLinkUrl");
+            this.lblStatsLinkName.Text = clocLanguage.GetLocalized("frmOptions.tabPlayerLookup.lblStatsLinkName");
+            this.lblStatsLinkUrl.Text = clocLanguage.GetLocalized("frmOptions.tabPlayerLookup.lblStatsLinkUrl");
+            this.lblStatsLinkHelpText.Text = clocLanguage.GetLocalized("frmOptions.tabPlayerLookup.lblStatsLinkHelpText").Replace("|*|", Environment.NewLine);
 
             //this.m_strSetLanguageFileName = clocLanguage.FileName;
         }
@@ -751,7 +774,76 @@ namespace PRoCon.Forms {
 
         # endregion
 
+        #region StatsLinks
 
+        private void btnAddStatsLink_Click(object sender, EventArgs e)
+        {
+            this.m_praApplication.OptionsSettings.StatsLinkNameUrl.Add(new StatsLinkNameUrl(this.txtStatsLinkName.Text, this.txtStatsLinkUrl.Text));
+        }
+
+        private void lsvStatsLinksList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            this.btnRemoveStatsLink.Enabled = (this.lsvStatsLinksList.SelectedItems.Count > 0);
+        }
+
+        private void btnRemoveStatsLink_Click(object sender, EventArgs e)
+        {
+            if (this.lsvStatsLinksList.SelectedItems.Count > 0) {
+                 if (this.lsvStatsLinksList.SelectedItems[0].Tag != null)
+                 {
+                     this.m_praApplication.OptionsSettings.StatsLinkNameUrl.Remove((StatsLinkNameUrl)this.lsvStatsLinksList.SelectedItems[0].Tag);
+                 }
+             }
+        }
+
+        private void txtStatsLinkName_TextChanged(object sender, EventArgs e)
+        {
+            this.btnAddStatsLink.Enabled = (this.txtStatsLinkName.Text.Length > 0 && this.txtStatsLinkUrl.Text.Length > 0
+                && this.m_praApplication.OptionsSettings.StatsLinkNameUrl.Count < 4 && IsValidUrl(this.txtStatsLinkUrl.Text));
+        }
+
+        private void txtStatsLinkUrl_TextChanged(object sender, EventArgs e)
+        {
+            this.btnAddStatsLink.Enabled = (this.txtStatsLinkUrl.Text.Length > 0 && this.txtStatsLinkName.Text.Length > 0
+                && this.m_praApplication.OptionsSettings.StatsLinkNameUrl.Count < 4 && IsValidUrl(this.txtStatsLinkUrl.Text));
+        }
+
+        private void StatsLinkNameUrl_ItemAdded(int iIndex, PRoCon.Core.Options.StatsLinkNameUrl item)
+        {
+            ListViewItem lsiStatsLinksList = new ListViewItem(item.LinkName);
+            lsiStatsLinksList.Tag = item;
+
+            lsiStatsLinksList.SubItems.Add(new ListViewItem.ListViewSubItem(lsiStatsLinksList, item.LinkUrl));
+
+            this.lsvStatsLinksList.Items.Add(lsiStatsLinksList);
+
+            this.txtStatsLinkName.Clear();
+            this.txtStatsLinkUrl.Clear();
+            this.txtStatsLinkName.Focus();
+        }
+
+        private void StatsLinkNameUrl_ItemRemoved(int iIndex, PRoCon.Core.Options.StatsLinkNameUrl item)
+        {
+
+            for (int i = 0; i < this.lsvStatsLinksList.Items.Count; i++)
+            {
+                if (this.lsvStatsLinksList.Items[i].Tag == item)
+                {
+                    this.lsvStatsLinksList.Items.RemoveAt(i);
+                    i--;
+                }
+            }
+        }
+
+        public static bool IsValidUrl(string strUrl)
+        {
+            //Regex rx = new Regex(@"^http(s?)\:\/\/[0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*(:(0-9)*)*(\/?)([a-zA-Z0-9\-\.\?\,\'\/\\\+&amp;%\$#_]*)?$");
+            Regex rx = new Regex(@"^http(s)?://([\w-]+\.)+[\w-]+(/[\w-./?%&=]*)?$");
+            return rx.IsMatch(strUrl);
+        }
+
+
+        #endregion
 
     }
 }

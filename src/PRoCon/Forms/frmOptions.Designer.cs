@@ -91,6 +91,7 @@
             this.lblHttpServerTitle = new System.Windows.Forms.Label();
             this.panel7 = new System.Windows.Forms.Panel();
             this.tabAdv = new System.Windows.Forms.TabPage();
+            this.chkAdvShowCfmMsgRoundRestartNext = new System.Windows.Forms.CheckBox();
             this.lblAdvShowDICESpecialOptionsNotice = new System.Windows.Forms.Label();
             this.chkAdvShowDICESpecialOptions = new System.Windows.Forms.CheckBox();
             this.lblAdvSpecialSwitches = new System.Windows.Forms.Label();
@@ -109,8 +110,21 @@
             this.lblAdvPlayerTab = new System.Windows.Forms.Label();
             this.panel9 = new System.Windows.Forms.Panel();
             this.panel12 = new System.Windows.Forms.Panel();
+            this.tabPlayerLookup = new System.Windows.Forms.TabPage();
+            this.lblStatsLinkHelpText = new System.Windows.Forms.Label();
+            this.pnlStatsLinkManage = new System.Windows.Forms.Panel();
+            this.btnAddStatsLink = new System.Windows.Forms.Button();
+            this.btnRemoveStatsLink = new System.Windows.Forms.Button();
+            this.lsvStatsLinksList = new PRoCon.Controls.ControlsEx.ListViewNF();
+            this.colStatsLinksName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colStatsLinkUrl = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.txtStatsLinkName = new System.Windows.Forms.TextBox();
+            this.txtStatsLinkUrl = new System.Windows.Forms.TextBox();
+            this.lblStatsLinkUrl = new System.Windows.Forms.Label();
+            this.lblStatsLinkName = new System.Windows.Forms.Label();
+            this.lblStatsPlayerTab = new System.Windows.Forms.Label();
+            this.panel15 = new System.Windows.Forms.Panel();
             this.btnClose = new System.Windows.Forms.Button();
-            this.chkAdvShowCfmMsgRoundRestartNext = new System.Windows.Forms.CheckBox();
             this.tbcOptions.SuspendLayout();
             this.tabBasics.SuspendLayout();
             this.tabPlugins.SuspendLayout();
@@ -122,6 +136,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.picHttpServerForwardedTestStatus)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picHttpServerServerStatus)).BeginInit();
             this.tabAdv.SuspendLayout();
+            this.tabPlayerLookup.SuspendLayout();
+            this.pnlStatsLinkManage.SuspendLayout();
             this.SuspendLayout();
             // 
             // tbcOptions
@@ -133,6 +149,7 @@
             this.tbcOptions.Controls.Add(this.tabPlugins);
             this.tbcOptions.Controls.Add(this.tabHttpServer);
             this.tbcOptions.Controls.Add(this.tabAdv);
+            this.tbcOptions.Controls.Add(this.tabPlayerLookup);
             this.tbcOptions.Location = new System.Drawing.Point(14, 14);
             this.tbcOptions.Name = "tbcOptions";
             this.tbcOptions.SelectedIndex = 0;
@@ -907,6 +924,17 @@
             this.tabAdv.Text = "Advanced";
             this.tabAdv.UseVisualStyleBackColor = true;
             // 
+            // chkAdvShowCfmMsgRoundRestartNext
+            // 
+            this.chkAdvShowCfmMsgRoundRestartNext.AutoSize = true;
+            this.chkAdvShowCfmMsgRoundRestartNext.Location = new System.Drawing.Point(31, 319);
+            this.chkAdvShowCfmMsgRoundRestartNext.Name = "chkAdvShowCfmMsgRoundRestartNext";
+            this.chkAdvShowCfmMsgRoundRestartNext.Size = new System.Drawing.Size(238, 19);
+            this.chkAdvShowCfmMsgRoundRestartNext.TabIndex = 33;
+            this.chkAdvShowCfmMsgRoundRestartNext.Text = "Need to confirm round restart / run next";
+            this.chkAdvShowCfmMsgRoundRestartNext.UseVisualStyleBackColor = true;
+            this.chkAdvShowCfmMsgRoundRestartNext.CheckedChanged += new System.EventHandler(this.chkAdvShowCfmMsgRoundRestartNext_CheckedChanged);
+            // 
             // lblAdvShowDICESpecialOptionsNotice
             // 
             this.lblAdvShowDICESpecialOptionsNotice.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -958,17 +986,6 @@
             this.chkAdvShowRoundTimerConstantly.Text = "Show Round time constantly";
             this.chkAdvShowRoundTimerConstantly.UseVisualStyleBackColor = true;
             this.chkAdvShowRoundTimerConstantly.CheckedChanged += new System.EventHandler(this.chkAdvShowRoundTimerConstantly_CheckedChanged);
-            // 
-            // chkAdvShowCfmMsgRoundRestartNext
-            // 
-            this.chkAdvShowCfmMsgRoundRestartNext.AutoSize = true;
-            this.chkAdvShowCfmMsgRoundRestartNext.Location = new System.Drawing.Point(31, 319);
-            this.chkAdvShowCfmMsgRoundRestartNext.Name = "chkAdvShowCfmMsgRoundRestartNext";
-            this.chkAdvShowCfmMsgRoundRestartNext.Size = new System.Drawing.Size(238, 19);
-            this.chkAdvShowCfmMsgRoundRestartNext.TabIndex = 33;
-            this.chkAdvShowCfmMsgRoundRestartNext.Text = "Need to confirm round restart / run next";
-            this.chkAdvShowCfmMsgRoundRestartNext.UseVisualStyleBackColor = true;
-            this.chkAdvShowCfmMsgRoundRestartNext.CheckedChanged += new System.EventHandler(this.chkAdvShowCfmMsgRoundRestartNext_CheckedChanged);
             // 
             // lblAdvConVisuals
             // 
@@ -1109,6 +1126,148 @@
             this.panel12.Size = new System.Drawing.Size(355, 1);
             this.panel12.TabIndex = 12;
             // 
+            // tabPlayerLookup
+            // 
+            this.tabPlayerLookup.Controls.Add(this.lblStatsLinkHelpText);
+            this.tabPlayerLookup.Controls.Add(this.pnlStatsLinkManage);
+            this.tabPlayerLookup.Controls.Add(this.lblStatsPlayerTab);
+            this.tabPlayerLookup.Controls.Add(this.panel15);
+            this.tabPlayerLookup.Location = new System.Drawing.Point(4, 24);
+            this.tabPlayerLookup.Name = "tabPlayerLookup";
+            this.tabPlayerLookup.Size = new System.Drawing.Size(390, 475);
+            this.tabPlayerLookup.TabIndex = 4;
+            this.tabPlayerLookup.Text = "Stats-Links";
+            this.tabPlayerLookup.UseVisualStyleBackColor = true;
+            // 
+            // lblStatsLinkHelpText
+            // 
+            this.lblStatsLinkHelpText.AutoEllipsis = true;
+            this.lblStatsLinkHelpText.Location = new System.Drawing.Point(35, 290);
+            this.lblStatsLinkHelpText.Name = "lblStatsLinkHelpText";
+            this.lblStatsLinkHelpText.Size = new System.Drawing.Size(301, 163);
+            this.lblStatsLinkHelpText.TabIndex = 15;
+            this.lblStatsLinkHelpText.Text = "Help text goes here. ";
+            // 
+            // pnlStatsLinkManage
+            // 
+            this.pnlStatsLinkManage.Controls.Add(this.btnAddStatsLink);
+            this.pnlStatsLinkManage.Controls.Add(this.btnRemoveStatsLink);
+            this.pnlStatsLinkManage.Controls.Add(this.lsvStatsLinksList);
+            this.pnlStatsLinkManage.Controls.Add(this.txtStatsLinkName);
+            this.pnlStatsLinkManage.Controls.Add(this.txtStatsLinkUrl);
+            this.pnlStatsLinkManage.Controls.Add(this.lblStatsLinkUrl);
+            this.pnlStatsLinkManage.Controls.Add(this.lblStatsLinkName);
+            this.pnlStatsLinkManage.Location = new System.Drawing.Point(3, 43);
+            this.pnlStatsLinkManage.Name = "pnlStatsLinkManage";
+            this.pnlStatsLinkManage.Size = new System.Drawing.Size(387, 226);
+            this.pnlStatsLinkManage.TabIndex = 14;
+            // 
+            // btnAddStatsLink
+            // 
+            this.btnAddStatsLink.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.btnAddStatsLink.Enabled = false;
+            this.btnAddStatsLink.FlatAppearance.BorderSize = 0;
+            this.btnAddStatsLink.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnAddStatsLink.Location = new System.Drawing.Point(342, 6);
+            this.btnAddStatsLink.Name = "btnAddStatsLink";
+            this.btnAddStatsLink.Size = new System.Drawing.Size(35, 23);
+            this.btnAddStatsLink.TabIndex = 29;
+            this.btnAddStatsLink.UseVisualStyleBackColor = true;
+            this.btnAddStatsLink.Click += new System.EventHandler(this.btnAddStatsLink_Click);
+            // 
+            // btnRemoveStatsLink
+            // 
+            this.btnRemoveStatsLink.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.btnRemoveStatsLink.Enabled = false;
+            this.btnRemoveStatsLink.FlatAppearance.BorderSize = 0;
+            this.btnRemoveStatsLink.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnRemoveStatsLink.Location = new System.Drawing.Point(343, 85);
+            this.btnRemoveStatsLink.Name = "btnRemoveStatsLink";
+            this.btnRemoveStatsLink.Size = new System.Drawing.Size(35, 23);
+            this.btnRemoveStatsLink.TabIndex = 28;
+            this.btnRemoveStatsLink.UseVisualStyleBackColor = true;
+            this.btnRemoveStatsLink.Click += new System.EventHandler(this.btnRemoveStatsLink_Click);
+            // 
+            // lsvStatsLinksList
+            // 
+            this.lsvStatsLinksList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.colStatsLinksName,
+            this.colStatsLinkUrl});
+            this.lsvStatsLinksList.FullRowSelect = true;
+            this.lsvStatsLinksList.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
+            this.lsvStatsLinksList.HideSelection = false;
+            this.lsvStatsLinksList.Location = new System.Drawing.Point(29, 70);
+            this.lsvStatsLinksList.MultiSelect = false;
+            this.lsvStatsLinksList.Name = "lsvStatsLinksList";
+            this.lsvStatsLinksList.Size = new System.Drawing.Size(304, 136);
+            this.lsvStatsLinksList.TabIndex = 27;
+            this.lsvStatsLinksList.UseCompatibleStateImageBehavior = false;
+            this.lsvStatsLinksList.View = System.Windows.Forms.View.Details;
+            this.lsvStatsLinksList.SelectedIndexChanged += new System.EventHandler(this.lsvStatsLinksList_SelectedIndexChanged);
+            // 
+            // colStatsLinksName
+            // 
+            this.colStatsLinksName.Text = "Name";
+            // 
+            // colStatsLinkUrl
+            // 
+            this.colStatsLinkUrl.Text = "URL";
+            this.colStatsLinkUrl.Width = 240;
+            // 
+            // txtStatsLinkName
+            // 
+            this.txtStatsLinkName.Location = new System.Drawing.Point(29, 41);
+            this.txtStatsLinkName.Name = "txtStatsLinkName";
+            this.txtStatsLinkName.Size = new System.Drawing.Size(64, 23);
+            this.txtStatsLinkName.TabIndex = 22;
+            this.txtStatsLinkName.TextChanged += new System.EventHandler(this.txtStatsLinkName_TextChanged);
+            // 
+            // txtStatsLinkUrl
+            // 
+            this.txtStatsLinkUrl.Location = new System.Drawing.Point(99, 41);
+            this.txtStatsLinkUrl.Name = "txtStatsLinkUrl";
+            this.txtStatsLinkUrl.Size = new System.Drawing.Size(234, 23);
+            this.txtStatsLinkUrl.TabIndex = 23;
+            this.txtStatsLinkUrl.TextChanged += new System.EventHandler(this.txtStatsLinkUrl_TextChanged);
+            // 
+            // lblStatsLinkUrl
+            // 
+            this.lblStatsLinkUrl.AutoSize = true;
+            this.lblStatsLinkUrl.Location = new System.Drawing.Point(96, 23);
+            this.lblStatsLinkUrl.Name = "lblStatsLinkUrl";
+            this.lblStatsLinkUrl.Size = new System.Drawing.Size(28, 15);
+            this.lblStatsLinkUrl.TabIndex = 1;
+            this.lblStatsLinkUrl.Text = "URL";
+            // 
+            // lblStatsLinkName
+            // 
+            this.lblStatsLinkName.AutoSize = true;
+            this.lblStatsLinkName.Location = new System.Drawing.Point(26, 23);
+            this.lblStatsLinkName.Name = "lblStatsLinkName";
+            this.lblStatsLinkName.Size = new System.Drawing.Size(39, 15);
+            this.lblStatsLinkName.TabIndex = 0;
+            this.lblStatsLinkName.Text = "Name";
+            // 
+            // lblStatsPlayerTab
+            // 
+            this.lblStatsPlayerTab.AutoSize = true;
+            this.lblStatsPlayerTab.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblStatsPlayerTab.Location = new System.Drawing.Point(17, 24);
+            this.lblStatsPlayerTab.Name = "lblStatsPlayerTab";
+            this.lblStatsPlayerTab.Size = new System.Drawing.Size(64, 15);
+            this.lblStatsPlayerTab.TabIndex = 12;
+            this.lblStatsPlayerTab.Text = "Player Tab";
+            // 
+            // panel15
+            // 
+            this.panel15.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel15.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.panel15.Location = new System.Drawing.Point(20, 33);
+            this.panel15.Name = "panel15";
+            this.panel15.Size = new System.Drawing.Size(355, 1);
+            this.panel15.TabIndex = 13;
+            // 
             // btnClose
             // 
             this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -1156,6 +1315,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.picHttpServerServerStatus)).EndInit();
             this.tabAdv.ResumeLayout(false);
             this.tabAdv.PerformLayout();
+            this.tabPlayerLookup.ResumeLayout(false);
+            this.tabPlayerLookup.PerformLayout();
+            this.pnlStatsLinkManage.ResumeLayout(false);
+            this.pnlStatsLinkManage.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -1249,5 +1412,19 @@
         private System.Windows.Forms.Label lblAdvSpecialSwitches;
         private System.Windows.Forms.Panel panel14;
         private System.Windows.Forms.CheckBox chkAdvShowCfmMsgRoundRestartNext;
+        private System.Windows.Forms.TabPage tabPlayerLookup;
+        private System.Windows.Forms.Label lblStatsPlayerTab;
+        private System.Windows.Forms.Panel panel15;
+        private System.Windows.Forms.Panel pnlStatsLinkManage;
+        private System.Windows.Forms.Button btnAddStatsLink;
+        private System.Windows.Forms.Button btnRemoveStatsLink;
+        private Controls.ControlsEx.ListViewNF lsvStatsLinksList;
+        private System.Windows.Forms.ColumnHeader colStatsLinksName;
+        private System.Windows.Forms.ColumnHeader colStatsLinkUrl;
+        private System.Windows.Forms.TextBox txtStatsLinkName;
+        private System.Windows.Forms.TextBox txtStatsLinkUrl;
+        private System.Windows.Forms.Label lblStatsLinkUrl;
+        private System.Windows.Forms.Label lblStatsLinkName;
+        private System.Windows.Forms.Label lblStatsLinkHelpText;
     }
 }

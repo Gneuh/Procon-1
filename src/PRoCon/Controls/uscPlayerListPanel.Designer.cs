@@ -181,6 +181,10 @@
             this.reservedSlotToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
             this.statsLookupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.statsLookupToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.statsLookupToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.statsLookupToolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
+            this.statsLookupToolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
             this.punkBusterScreenshotToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.spltListAdditionalInfo.Panel1.SuspendLayout();
             this.spltListAdditionalInfo.Panel2.SuspendLayout();
@@ -1189,10 +1193,39 @@
             // 
             // statsLookupToolStripMenuItem
             // 
+            this.statsLookupToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.statsLookupToolStripMenuItem1,
+            this.statsLookupToolStripMenuItem2,
+            this.statsLookupToolStripMenuItem3,
+            this.statsLookupToolStripMenuItem4});
             this.statsLookupToolStripMenuItem.Name = "statsLookupToolStripMenuItem";
             this.statsLookupToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
             this.statsLookupToolStripMenuItem.Text = "Stats Lookup";
             this.statsLookupToolStripMenuItem.Click += new System.EventHandler(this.statsLookupToolStripMenuItem_Click);
+            // 
+            // statsLookupToolStripMenuItem1
+            // 
+            this.statsLookupToolStripMenuItem1.Name = "statsLookupToolStripMenuItem1";
+            this.statsLookupToolStripMenuItem1.Size = new System.Drawing.Size(195, 22);
+            this.statsLookupToolStripMenuItem1.Text = "Metabans";
+            // 
+            // statsLookupToolStripMenuItem2
+            // 
+            this.statsLookupToolStripMenuItem2.Name = "statsLookupToolStripMenuItem2";
+            this.statsLookupToolStripMenuItem2.Size = new System.Drawing.Size(195, 22);
+            this.statsLookupToolStripMenuItem2.Text = "Custom-2";
+            // 
+            // statsLookupToolStripMenuItem3
+            // 
+            this.statsLookupToolStripMenuItem3.Name = "statsLookupToolStripMenuItem3";
+            this.statsLookupToolStripMenuItem3.Size = new System.Drawing.Size(195, 22);
+            this.statsLookupToolStripMenuItem3.Text = "Custum-3";
+            // 
+            // statsLookupToolStripMenuItem4
+            // 
+            this.statsLookupToolStripMenuItem4.Name = "statsLookupToolStripMenuItem4";
+            this.statsLookupToolStripMenuItem4.Size = new System.Drawing.Size(195, 22);
+            this.statsLookupToolStripMenuItem4.Text = "Custom-4";
             // 
             // punkBusterScreenshotToolStripMenuItem
             // 
@@ -1327,6 +1360,10 @@
         private System.Windows.Forms.ToolStripMenuItem adminToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
         private System.Windows.Forms.ToolStripMenuItem statsLookupToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem statsLookupToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem statsLookupToolStripMenuItem2;
+        private System.Windows.Forms.ToolStripMenuItem statsLookupToolStripMenuItem3;
+        private System.Windows.Forms.ToolStripMenuItem statsLookupToolStripMenuItem4;
         private System.Windows.Forms.ToolStripMenuItem punkBusterScreenshotToolStripMenuItem;
         private System.Windows.Forms.ComboBox cboEndRound;
     }

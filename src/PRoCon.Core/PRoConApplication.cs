@@ -676,6 +676,15 @@ namespace PRoCon.Core {
                         stwConfig.WriteLine(String.Empty);
                         //stwConfig.WriteLine("procon.private.options.trustedHostDomainsPorts {0}", String.Join(" ", this.m_frmOptions.TrustedHostDomainsPorts.ToArray()));
 
+                        if (this.OptionsSettings.StatsLinkNameUrl.Count > 0) {
+                            stwConfig.Write("procon.private.options.statsLinkNameUrl");
+                            foreach (StatsLinkNameUrl statsLink in this.OptionsSettings.StatsLinkNameUrl)
+                            {
+                                stwConfig.Write(" {0} {1}", statsLink.LinkName, statsLink.LinkUrl);
+                            }
+                            stwConfig.WriteLine(String.Empty);
+                        }
+
                         foreach (PRoConClient prcClient in this.Connections) {
 
                             string strAddServerCommand = String.Format("procon.private.servers.add \"{0}\" {1}", prcClient.HostName, prcClient.Port);
@@ -1221,6 +1230,15 @@ namespace PRoCon.Core {
                 for (int i = 0; i + 1 < lstWords.Count; i = i + 2) {
                     if (UInt16.TryParse(lstWords[i + 1], out ui16Port) == true) {
                         this.OptionsSettings.TrustedHostsWebsitesPorts.Add(new TrustedHostWebsitePort(lstWords[i], ui16Port));
+                    }
+                }
+            }
+            else if (lstWords.Count >= 1 && String.Compare(lstWords[0], "procon.private.options.statsLinkNameUrl", true) == 0 && objSender == this) {
+                this.OptionsSettings.StatsLinkNameUrl.Clear();
+                lstWords.RemoveAt(0);
+                for (int i = 0; i + 1 < lstWords.Count; i = i + 2) {
+                    if (this.OptionsSettings.StatsLinkNameUrl.Count < 4) {
+                        this.OptionsSettings.StatsLinkNameUrl.Add(new StatsLinkNameUrl(lstWords[i], lstWords[i + 1]));
                     }
                 }
             }
