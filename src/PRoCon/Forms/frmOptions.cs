@@ -840,7 +840,7 @@ namespace PRoCon.Forms {
         public static bool IsValidUrl(string strUrl)
         {
             //Regex rx = new Regex(@"^http(s?)\:\/\/[0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*(:(0-9)*)*(\/?)([a-zA-Z0-9\-\.\?\,\'\/\\\+&amp;%\$#_]*)?$");
-            Regex rx = new Regex(@"^http(s)?://([\w-]+\.)+[\w-]+(/[\w-./?%&=]*)?$");
+            Regex rx = new Regex(@"^http(s)?://([\w-%]+\.)+[\w-%]+(/[\w-./?%&=]*)?$");
             return rx.IsMatch(strUrl);
         }
 
