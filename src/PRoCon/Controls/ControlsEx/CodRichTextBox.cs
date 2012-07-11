@@ -242,7 +242,7 @@ namespace PRoCon {
             if ((iConsoleBoxLines > maxLines && this.Focused == false) || iConsoleBoxLines > 3000) {
 
                 for (int i = 0; i < iConsoleBoxLines - maxLines; i++) {
-                    this.Select(0, this.PopFirstLine() + 1);
+                    this.Select(0, this.PopFirstLine());
 
                     this.SelectedText = String.Empty;
                 }

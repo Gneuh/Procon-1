@@ -281,7 +281,9 @@ namespace PRoCon.Core.AutoUpdates {
                             }
 
                             // GameConfigs
-                            if (lstExtensibilityVersion.Count >= 4 && String.Compare(lstExtensibilityVersion[0], "gameconfig", true) == 0) {
+                            if (lstExtensibilityVersion.Count >= 4 && String.Compare(lstExtensibilityVersion[0], "gameconfig", true) == 0 &&
+                                this.m_praApplication.OptionsSettings.AutoCheckGameConfigsForUpdates == true)
+                            {
                                 try {
                                     if (File.Exists(Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Configs"), lstExtensibilityVersion[2])) == true)
                                     {

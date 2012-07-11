@@ -43,7 +43,7 @@ namespace PRoCon.Controls.ServerSettings.BF3 {
 
             //this.AsyncSettingControls.Add("vars.punkbuster", new AsyncStyleSetting(this.picSettingsPunkbuster, this.chkSettingsPunkbuster, new Control[] { this.chkSettingsPunkbuster }, false));
             //this.AsyncSettingControls.Add("vars.ranked", new AsyncStyleSetting(this.picSettingsRanked, this.chkSettingsRanked, new Control[] { this.chkSettingsRanked }, false));
-            
+
             this.AsyncSettingControls.Add("vars.playerlimit", new AsyncStyleSetting(this.picSettingsPlayerLimit, this.numSettingsPlayerLimit, new Control[] { this.numSettingsPlayerLimit, this.lnkSettingsSetPlayerLimit }, true));
             
             this.AsyncSettingControls.Add("vars.idletimeout 0", new AsyncStyleSetting(this.picSettingsIdleKickLimit, this.chkSettingsNoIdleKickLimit, new Control[] { this.chkSettingsNoIdleKickLimit }, true));
@@ -55,6 +55,11 @@ namespace PRoCon.Controls.ServerSettings.BF3 {
             this.AsyncSettingControls.Add("vars.gamepassword", new AsyncStyleSetting(this.picSettingsGamePassword, this.txtSettingsGamePassword, new Control[] { this.lblSettingsGamePassword, this.txtSettingsGamePassword, this.lnkSettingsSetGamePassword }, true));
             this.AsyncSettingControls.Add("vars.adminpassword", new AsyncStyleSetting(this.picSettingsAdminPassword, this.txtSettingsAdminPassword, new Control[] { this.lblSettingsAdminPassword, this.txtSettingsAdminPassword, this.lnkSettingsSetAdminPassword }, true));
 
+            if (Program.m_application.OptionsSettings.ShowDICESpecialOptions == true) {
+                this.chkSettingsPremiumStatus.Enabled = Program.m_application.OptionsSettings.ShowDICESpecialOptions;
+                this.AsyncSettingControls.Add("vars.premiumstatus", new AsyncStyleSetting(this.picSettingsPremiumStatus, this.chkSettingsPremiumStatus, new Control[] { this.chkSettingsPremiumStatus }, true));
+            }
+            
             this.AsyncSettingControls.Add("reservedslotslist.aggressivejoin", new AsyncStyleSetting(this.picSettingsAggressiveJoin, this.chkSettingsAggressiveJoin, new Control[] { this.chkSettingsAggressiveJoin }, true));
 
             this.m_iPreviousSuccessPlayerLimit = 50;
@@ -70,8 +75,12 @@ namespace PRoCon.Controls.ServerSettings.BF3 {
             this.chkSettingsPunkbuster.Text = this.Language.GetLocalized("uscServerSettingsPanel.chkSettingsPunkbuster");
             this.chkSettingsRanked.Text = this.Language.GetLocalized("uscServerSettingsPanel.chkSettingsRanked");
 
+            this.chkSettingsPremiumStatus.Text = this.Language.GetLocalized("uscServerSettingsPanel.chkSettingsPremiumStatus");
+
             this.lblSettingsPlayerLimit.Text = this.Language.GetLocalized("uscServerSettingsPanel.lblSettingsPlayerLimit");
             this.lnkSettingsSetPlayerLimit.Text = this.Language.GetLocalized("uscServerSettingsPanel.lnkSettingsSetPlayerLimit");
+
+            this.lblSettingsEffectivePlayerLimit.Text = this.Language.GetLocalized("uscServerSettingsPanel.lblSettingsEffectivePlayerLimit");
 
             this.lblSettingsGamePassword.Text = this.Language.GetLocalized("uscServerSettingsPanel.lblSettingsGamePassword");
             this.lnkSettingsSetGamePassword.Text = this.Language.GetLocalized("uscServerSettingsPanel.lnkSettingsSetGamePassword");
@@ -106,6 +115,8 @@ namespace PRoCon.Controls.ServerSettings.BF3 {
             this.Client.Game.Punkbuster += new FrostbiteClient.IsEnabledHandler(m_prcClient_Punkbuster);
             this.Client.Game.Ranked += new FrostbiteClient.IsEnabledHandler(m_prcClient_Ranked);
 
+            this.Client.Game.PremiumStatus += new FrostbiteClient.IsEnabledHandler(Game_PremiumStatus);
+
             this.Client.Game.GamePassword += new FrostbiteClient.PasswordHandler(m_prcClient_GamePassword);
             this.Client.Game.AdminPassword += new FrostbiteClient.PasswordHandler(m_prcClient_AdminPassword);
 
@@ -122,7 +133,8 @@ namespace PRoCon.Controls.ServerSettings.BF3 {
 
         private void m_prcClient_ServerInfo(FrostbiteClient sender, CServerInfo csiServerInfo) {
             if (csiServerInfo.MaxPlayerCount > 0 && csiServerInfo.MaxPlayerCount <= this.numSettingsPlayerLimit.Maximum) {
-                this.numSettingsPlayerLimit.Value = (decimal)csiServerInfo.MaxPlayerCount;
+                //this.numSettingsPlayerLimit.Value = (decimal)csiServerInfo.MaxPlayerCount;
+                this.numSettingsEffectivePlayerLimit.Value = (decimal)csiServerInfo.MaxPlayerCount;
             }
 
             this.chkSettingsPunkbuster.Checked = csiServerInfo.PunkBuster;
@@ -204,6 +216,24 @@ namespace PRoCon.Controls.ServerSettings.BF3 {
             }
         }
         */
+
+        #endregion
+
+        #region PremiumStatus
+
+        private void Game_PremiumStatus(FrostbiteClient sender, bool isEnabled) {
+            this.OnSettingResponse("vars.premiumstatus", isEnabled, true);
+        }
+
+        private void chkSettingsPremiumStatus_CheckedChanged(object sender, EventArgs e) {
+            if (this.Client != null && this.Client.Game != null) {
+                if (this.IgnoreEvents == false && this.AsyncSettingControls["vars.premiumstatus"].IgnoreEvent == false) {
+                    this.WaitForSettingResponse("vars.premiumstatus", !this.chkSettingsPremiumStatus.Checked);
+
+                    this.Client.Game.SendSetVarsPremiumStatusPacket(this.chkSettingsPremiumStatus.Checked);
+                }
+            }
+        }
 
         #endregion
 

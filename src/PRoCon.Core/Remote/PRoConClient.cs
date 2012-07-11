@@ -443,6 +443,16 @@ namespace PRoCon.Core.Remote {
             private set;
         }
 
+        public string m_strConnectionServerName = String.Empty;
+        public string ConnectionServerName {
+            get {
+                return this.m_strConnectionServerName;
+            }
+            set {
+                this.m_strConnectionServerName = value;
+            }
+        }
+
         private string m_strUsername = String.Empty;
         public string Username {
             get {
@@ -741,6 +751,30 @@ namespace PRoCon.Core.Remote {
             }
         }
 
+        public void ExecuteGlobalVarsConfig(string strConfigFile, int iRecursion, List<string> lstArguments) {
+
+            //FileStream stmConfigFile = null;
+            try {
+
+                if (File.Exists(Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"Configs"),strConfigFile)) == true) {
+
+                    string[] a_strConfigData = File.ReadAllLines(Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Configs"), strConfigFile));
+
+                    if (a_strConfigData != null) {
+
+                        foreach (string strLine in a_strConfigData) {
+                            if (strLine.Length > 0 && Regex.Match(strLine, "^[ ]+//.*").Success == false && Regex.Match(strLine, "^procon.protected.vars.set .*").Success) { // AND not a comment..
+                                this.Parent.ExecutePRoConCommand(this, Packet.Wordify(strLine), iRecursion++);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception e) {
+                FrostbiteConnection.LogError("ExecuteConnectionConfig", String.Empty, e);
+            }
+        }
+
         #endregion
 
         #region Plugin setup & events
@@ -958,6 +992,9 @@ namespace PRoCon.Core.Remote {
                     this.ExecuteConnectionConfig(this.Game.GameType + "." + this.CurrentServerInfo.GameMod + ".def", 0, null);
                 }
                 
+                // load override global_vars.def
+                this.ExecuteGlobalVarsConfig("global_vars.def", 0, null);
+
                 this.ExecuteConnectionConfig("reasons.cfg", 0, null);
                 
                 lock (this.Parent) {
@@ -1153,6 +1190,8 @@ namespace PRoCon.Core.Remote {
                 else {
                     this.ExecuteConnectionConfig(this.Game.GameType + "." + this.CurrentServerInfo.GameMod + ".def", 0, null);
                 }
+
+                this.ExecuteGlobalVarsConfig("global_vars.def", 0, null);
 
                 lock (this.Parent) {
                     this.CompilePlugins(this.Parent.OptionsSettings.PluginPermissions);
@@ -2961,15 +3000,21 @@ namespace PRoCon.Core.Remote {
         }
 
         private void PRoConClient_ReservedSlotsList(FrostbiteClient sender, List<string> soldierNames) {
-            foreach (string strSoldierName in soldierNames) {
-                if (this.ReservedSlotList.Contains(strSoldierName) == false) {
-                    this.ReservedSlotList.Add(strSoldierName);
-                }
+            if (sender is BF3Client) {
+                this.ReservedSlotList.Clear();
             }
+            if (soldierNames.Count != 0)
+            {
+                foreach (string strSoldierName in soldierNames) {
+                    if (this.ReservedSlotList.Contains(strSoldierName) == false) {
+                        this.ReservedSlotList.Add(strSoldierName);
+                    }
+                }
 
-            foreach (string strSoldierName in this.ReservedSlotList) {
-                if (soldierNames.Contains(strSoldierName) == false) {
-                    this.ReservedSlotList.Remove(strSoldierName);
+                foreach (string strSoldierName in this.ReservedSlotList) {
+                    if (soldierNames.Contains(strSoldierName) == false) {
+                        this.ReservedSlotList.Remove(strSoldierName);
+                    }
                 }
             }
         }
@@ -3053,7 +3098,6 @@ namespace PRoCon.Core.Remote {
 
             //mMatch = Regex.Match(strPunkbusterMessage, @":[ ]+?(?<banid>[0-9]+)[ ]+?(?<guid>[A-Za-z0-9]+)[ ]+?{(?<remaining>[0-9\-]+)/(?<banlength>[0-9\-]+)}[ ]+?""(?<name>.+?)""[ ]+?""(?<ip>.+?)""[ ]+?(?<reason>.*)", RegexOptions.IgnoreCase);
             mMatch = this.Parent.RegexMatchPunkbusterBanlist.Match(strPunkbusterMessage);
-
             if (mMatch.Success == true && mMatch.Groups.Count >= 5) {
 
                 //IPAddress ipOut;
@@ -3070,7 +3114,28 @@ namespace PRoCon.Core.Remote {
                     FrostbiteConnection.RaiseEvent(this.PunkbusterPlayerBanned.GetInvocationList(), this, newPbBanInfo);
                 }
             }
+            
+            //PunkBuster Server: Kick/Ban Command Issued (testing) for (slot#1) xxx.xxx.xxx.xxx:yyyy GUID name
+            mMatch = this.Parent.RegexMatchPunkbusterKickBanCmd.Match(strPunkbusterMessage);
+            if (mMatch.Success == true && mMatch.Groups.Count >= 5)
+            {
+                //IPAddress ipOut;
+                string strIP = String.Empty;
+                string[] a_strIP;
 
+                if (mMatch.Groups["ip"].Value.Length > 0 && (a_strIP = mMatch.Groups["ip"].Value.Split(':')).Length > 0)
+                {
+                    strIP = a_strIP[0];
+                }
+
+                CBanInfo newPbBanInfo = new CBanInfo(mMatch.Groups["name"].Value, mMatch.Groups["guid"].Value, mMatch.Groups["ip"].Value, new TimeoutSubset("perm",""), mMatch.Groups["reason"].Value);
+
+                if (this.PunkbusterPlayerBanned != null)
+                {
+                    FrostbiteConnection.RaiseEvent(this.PunkbusterPlayerBanned.GetInvocationList(), this, newPbBanInfo);
+                }
+            }
+            
             //mMatch = Regex.Match(strPunkbusterMessage, @":[ ]+?Guid[ ]+?(?<guid>[A-Za-z0-9]+)[ ]+?has been Unbanned", RegexOptions.IgnoreCase);
             mMatch = this.Parent.RegexMatchPunkbusterUnban.Match(strPunkbusterMessage);
             // If it is a new connection, technically its a resolved guid type command but stil..

@@ -78,6 +78,8 @@ namespace PRoCon.Controls.ServerSettings.BF3 {
             this.Client.Game.ReservedSlotsListAggressiveJoin += new FrostbiteClient.IsEnabledHandler(Game_ReservedSlotsListAggressiveJoin);
             this.Client.Game.RoundLockdownCountdown += new FrostbiteClient.LimitHandler(Game_RoundLockdownCountdown);
             this.Client.Game.RoundWarmupTimeout += new FrostbiteClient.LimitHandler(Game_RoundWarmupTimeout);
+
+            this.Client.Game.PremiumStatus += new FrostbiteClient.IsEnabledHandler(Game_PremiumStatus);
         }
 
         protected override void Game_Login(FrostbiteClient sender) {
@@ -210,6 +212,11 @@ namespace PRoCon.Controls.ServerSettings.BF3 {
         void Game_RoundWarmupTimeout(FrostbiteClient sender, int limit)
         {
             this.AppendSetting("vars.roundWarmupTimeout", limit.ToString());
+        }
+
+        void Game_PremiumStatus(FrostbiteClient sender, bool isEnabled)
+        {
+            this.AppendSetting("vars.premiumStatus", isEnabled.ToString());
         }
     }
 }

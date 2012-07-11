@@ -31,6 +31,7 @@ using System.Net;
 
 namespace PRoCon {
     using Core;
+    using Core.Options;
     using Core.Players;
     using Core.Plugin;
     using Core.Players.Items;
@@ -144,6 +145,8 @@ namespace PRoCon {
 
             this.btnSplitTeams.ImageList = this.m_frmMain.iglIcons;
             this.btnSplitTeams.ImageKey = "application_tile_horizontal.png";
+
+            this.cboEndRound.SelectedIndex = 0;
         }
 
         // If we disconnect clear the player list so it's fresh on reconnection.
@@ -338,6 +341,20 @@ namespace PRoCon {
 
             this.statsLookupToolStripMenuItem.Text = this.m_clocLanguage.GetDefaultLocalized("Stats Lookup", "uscPlayerListPanel.ctxPlayerOptions.statsLookupToolStripMenuItem");
             this.punkBusterScreenshotToolStripMenuItem.Text = this.m_clocLanguage.GetDefaultLocalized("PunkBuster Screenshot", "uscPlayerListPanel.ctxPlayerOptions.punkBusterScreenshotToolStripMenuItem");
+
+            // cboEndRound
+            this.cboEndRound.Items.Clear();
+            this.cboEndRound.Items.AddRange(new object[] {
+                this.m_clocLanguage.GetDefaultLocalized("Select winning team to end round:", "uscPlayerListPanel.ctxPlayerOptions.EndRound.Label"),
+                this.m_clocLanguage.GetDefaultLocalized("Team 1", "uscPlayerListPanel.ctxPlayerOptions.EndRound.Team1"),
+                this.m_clocLanguage.GetDefaultLocalized("Team 2", "uscPlayerListPanel.ctxPlayerOptions.EndRound.Team2"),
+                this.m_clocLanguage.GetDefaultLocalized("Team 3", "uscPlayerListPanel.ctxPlayerOptions.EndRound.Team3"),
+                this.m_clocLanguage.GetDefaultLocalized("Team 4", "uscPlayerListPanel.ctxPlayerOptions.EndRound.Team4")
+            });
+            this.cboEndRound.SelectedIndex = 0;
+
+            Graphics cboEndRoundGrafphics = cboEndRound.CreateGraphics();
+            this.cboEndRound.Width = 18 + (int)cboEndRoundGrafphics.MeasureString(this.cboEndRound.Text, this.cboEndRound.Font).Width;
 
             this.kbpBfbcPunishPanel.SetLocalization(this.m_clocLanguage);
             this.kbpPunkbusterPunishPanel.SetLocalization(this.m_clocLanguage);
@@ -1866,7 +1883,14 @@ namespace PRoCon {
 
                         this.moveToSquadToolStripMenuItem.DropDownItems.Add(new ToolStripSeparator());
 
-                        for (int i = 0; i <= 8; i++) {
+                        int iMaxSquadID = 8;
+                        if (this.m_prcClient.GameType == "BF3") {
+                            iMaxSquadID = 32;
+                        } else  {
+                            iMaxSquadID = 16;
+                        }
+
+                        for (int i = 0; i <= iMaxSquadID; i++) {
 
                             ToolStripMenuItem squadChange = new ToolStripMenuItem(this.m_clocLanguage.GetDefaultLocalized(String.Format("Squad {0}", i), "uscPlayerListPanel.ctxPlayerOptions.moveToSquadToolStripMenuItem.Squad", this.m_clocLanguage.GetLocalized(String.Format("global.Squad{0}", i)))); 
                             squadChange.Tag = new object[] { player, i };
@@ -1904,6 +1928,20 @@ namespace PRoCon {
                     this.adminToolStripMenuItem.Enabled = !this.adminToolStripMenuItem.Checked;
 
                     this.statsLookupToolStripMenuItem.Tag = this.mutedToolStripMenuItem.Tag = this.normalToolStripMenuItem.Tag = this.voiceToolStripMenuItem.Tag = this.adminToolStripMenuItem.Tag = player;
+                    
+                    // this.statsLookupToolStripMenuItem1.Tag = this.statsLookupToolStripMenuItem2.Tag = this.statsLookupToolStripMenuItem3.Tag = this.statsLookupToolStripMenuItem4.Tag = this.statsLookupToolStripMenuItem.Tag;
+                    this.statsLookupToolStripMenuItem.DropDownItems.Clear();
+                    if (Program.m_application.OptionsSettings.StatsLinkNameUrl.Count > 0)
+                    {
+                        // _PK_
+                        foreach (StatsLinkNameUrl statsLink in Program.m_application.OptionsSettings.StatsLinkNameUrl) {
+                            ToolStripMenuItem statsLookup = new ToolStripMenuItem(statsLink.LinkName);
+                            statsLookup.Tag = new object[] { player, statsLink.LinkUrl };
+                            statsLookup.Click += new EventHandler(statsLookupToolStripMenuItemCustom_Click);
+                            this.statsLookupToolStripMenuItem.DropDownItems.Add(statsLookup);
+                        }
+                    }
+
 
                     CPunkbusterInfo pb_player = ((AdditionalPlayerInfo)lviSelected.Tag).m_pbInfo;
                     this.punkBusterScreenshotToolStripMenuItem.Tag = pb_player;
@@ -2002,6 +2040,32 @@ namespace PRoCon {
             }
         }
 
+        private void statsLookupToolStripMenuItemCustom_Click(object sender, EventArgs e)
+        {
+            string statsUrl = String.Empty;
+
+            if (sender is ToolStripMenuItem)
+            {
+                ToolStripMenuItem statsLookup = (ToolStripMenuItem)sender;
+
+                CPlayerInfo player = (CPlayerInfo)((object[])statsLookup.Tag)[0];
+                statsUrl = ((object[])statsLookup.Tag)[1].ToString();
+
+                statsUrl = statsUrl.Replace("%game%", this.m_prcClient.GameType.ToLower());
+
+                if (this.voiceToolStripMenuItem.Tag is CPlayerInfo)
+                {
+                    statsUrl = statsUrl.Replace("%player_name%", ((CPlayerInfo)this.voiceToolStripMenuItem.Tag).SoldierName);
+                    statsUrl = statsUrl.Replace("%player_EAguid%", ((CPlayerInfo)this.voiceToolStripMenuItem.Tag).GUID);
+                }
+                if (this.punkBusterScreenshotToolStripMenuItem.Tag is CPunkbusterInfo)
+                {
+                    statsUrl = statsUrl.Replace("%player_PBguid%", ((CPunkbusterInfo)this.punkBusterScreenshotToolStripMenuItem.Tag).GUID);
+                }
+                System.Diagnostics.Process.Start(statsUrl);
+            }
+        }
+
         private void punkBusterScreenshotToolStripMenuItem_Click(object sender, EventArgs e) {
             if (this.punkBusterScreenshotToolStripMenuItem.Tag is CPunkbusterInfo)
             {
@@ -2012,6 +2076,32 @@ namespace PRoCon {
 
         #endregion
 
+        #region EndRound
 
+        private void cboEndRound_SelectedIndexChanged(object sender, EventArgs e) {
+            if (this.cboEndRound.SelectedIndex > 0) {
+                if (Program.m_application.OptionsSettings.ShowCfmMsgRoundRestartNext == true)
+                { //End this round with {0} winning? this.m_clocLanguage.GetLocalized("uscPlayerListPanel.MessageBox.EndRound")
+                    DialogResult cfmEndRound = MessageBox.Show(this.m_clocLanguage.GetLocalized("uscPlayerListPanel.MessageBox.EndRound", new String[] { this.cboEndRound.Text }), 
+                        "PRoCon Frostbite", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    if (cfmEndRound == DialogResult.No)
+                    {
+                        this.cboEndRound.SelectedIndex = 0;
+                        return;
+                    }
+                    if (this.m_prcClient.Game is MoHClient) {
+                        this.m_prcClient.SendRequest(new List<string>() { "admin.endRound", this.cboEndRound.SelectedIndex.ToString() });
+                    }
+                    else if (this.m_prcClient.Game is BFBC2Client) {
+                        this.m_prcClient.SendRequest(new List<string>() { "mapList.endRound", this.cboEndRound.SelectedIndex.ToString() });
+                    }
+                    else if (this.m_prcClient.Game is BF3Client) {
+                        this.m_prcClient.SendRequest(new List<string>() { "mapList.endRound", this.cboEndRound.SelectedIndex.ToString() });
+                    }
+                }
+            }
+            this.cboEndRound.SelectedIndex = 0;
+        }
+        #endregion
     }
 }

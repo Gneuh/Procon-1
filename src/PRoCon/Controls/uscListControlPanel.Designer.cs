@@ -299,6 +299,7 @@
             this.lsvBanlist.TabIndex = 99;
             this.lsvBanlist.UseCompatibleStateImageBehavior = false;
             this.lsvBanlist.View = System.Windows.Forms.View.Details;
+            this.lsvBanlist.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lsvBanlist_ColumnClick);
             this.lsvBanlist.SelectedIndexChanged += new System.EventHandler(this.lsvBanlist_SelectedIndexChanged);
             this.lsvBanlist.MouseUp += new System.Windows.Forms.MouseEventHandler(this.lsvBanlist_MouseUp);
             // 

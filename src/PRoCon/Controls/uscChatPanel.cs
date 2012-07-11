@@ -313,6 +313,8 @@ namespace PRoCon {
         private void m_prcClient_ListPlayers(FrostbiteClient sender, List<CPlayerInfo> lstPlayers, CPlayerSubset cpsSubset) {
             if (cpsSubset.Subset == CPlayerSubset.PlayerSubsetType.All) {
 
+                lstPlayers.Sort((x, y) => String.Compare(x.SoldierName, y.SoldierName));
+
                 CPlayerInfo objSelected = (CPlayerInfo)this.cboPlayerList.SelectedItem;
 
                 this.cboPlayerList.BeginUpdate();

@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>PRoCon</RootNamespace>
     <AssemblyName>PRoCon</AssemblyName>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetZone>Internet</TargetZone>
     <GenerateManifests>false</GenerateManifests>
@@ -24,14 +24,10 @@
     <OldToolsVersion>3.5</OldToolsVersion>
     <UpgradeBackupLocation />
     <TargetFrameworkProfile />
-    <SccProjectName>
-    </SccProjectName>
-    <SccLocalPath>
-    </SccLocalPath>
-    <SccAuxPath>
-    </SccAuxPath>
-    <SccProvider>
-    </SccProvider>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -593,6 +589,10 @@ xcopy "$(SolutionDir)Resources\Configs" "$(SolutionDir)..\builds\$(Configuration
 xcopy "$(SolutionDir)Resources\Localization" "$(SolutionDir)..\builds\$(ConfigurationName)\Localization" /Y /E /I
 xcopy "$(SolutionDir)Resources\DefaultPlugins" "$(SolutionDir)..\builds\$(ConfigurationName)\Plugins" /Y /E /I
 xcopy "$(SolutionDir)Resources\GeoIP\GeoIP.dat" "$(SolutionDir)..\builds\$(ConfigurationName)" /Y
-xcopy "$(SolutionDir)..\doc\procon.doc" "$(SolutionDir)..\builds\$(ConfigurationName)" /Y</PostBuildEvent>
+mkdir "$(SolutionDir)..\builds\$(ConfigurationName)\docs_licenses"
+xcopy "$(SolutionDir)..\doc\procon.doc" "$(SolutionDir)..\builds\$(ConfigurationName)\docs_licenses" /Y
+xcopy "$(SolutionDir)..\doc\myrcon.pdf" "$(SolutionDir)..\builds\$(ConfigurationName)\docs_licenses" /Y
+xcopy "$(SolutionDir)..\doc\LICENSES.txt" "$(SolutionDir)..\builds\$(ConfigurationName)\docs_licenses" /Y
+</PostBuildEvent>
   </PropertyGroup>
 </Project>

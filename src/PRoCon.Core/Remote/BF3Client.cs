@@ -22,6 +22,19 @@ namespace PRoCon.Core.Remote {
             }
         }
 
+        public List<MaplistEntry> lstFullMaplist {
+            get;
+            private set;
+        }
+
+        public List<String> lstFullReservedSlotsList {
+            get;
+            private set;
+        }
+
+        private int iLastMapListOffset;
+        private int iLastReservedSlotsListOffset;
+
         public BF3Client(FrostbiteConnection connection) : base(connection) {
 
             // Geoff Green 08/10/2011 - bug in BF3 OB version E, sent through with capital P.
@@ -31,6 +44,8 @@ namespace PRoCon.Core.Remote {
             this.m_requestDelegates.Add("player.spawn", this.DispatchPlayerOnSpawnRequest);
 
             #region Maplist
+            this.lstFullMaplist = new List<MaplistEntry>();
+            this.iLastMapListOffset = 0;
             /*
             this.m_responseDelegates.Add("mapList.load", this.DispatchMapListLoadResponse);
             this.m_responseDelegates.Add("mapList.save", this.DispatchMapListSaveResponse );
@@ -64,6 +79,8 @@ namespace PRoCon.Core.Remote {
             #endregion
 
             #region Reserved Slots
+
+            this.lstFullReservedSlotsList = new List<String>();
 
             // Note: These delegates point to methods in FrostbiteClient.
             this.m_responseDelegates.Add("reservedSlotsList.configFile", this.DispatchReservedSlotsConfigFileResponse);
@@ -115,12 +132,19 @@ namespace PRoCon.Core.Remote {
             this.m_responseDelegates.Add("vars.roundLockdownCountdown", this.DispatchVarsRoundLockdownCountdownResponse);
             this.m_responseDelegates.Add("vars.roundWarmupTimeout", this.DispatchVarsRoundWarmupTimeoutResponse);
 
+            this.m_responseDelegates.Add("vars.premiumStatus", this.DispatchVarsPremiumStatusResponse);
+
             #endregion
 
             this.m_responseDelegates.Add("admin.help", this.DispatchHelpResponse);
+
+            this.GetPacketsPattern = new Regex(this.GetPacketsPattern.ToString() + "|^reservedSlotsList.list", RegexOptions.Compiled);
         }
-                public override void FetchStartupVariables() {
+                
+        public override void FetchStartupVariables() {
             base.FetchStartupVariables();
+
+            this.SendGetVarsPlayerLimitPacket();
 
             this.SendGetVarsIdleBanRoundsPacket();
 
@@ -155,6 +179,8 @@ namespace PRoCon.Core.Remote {
             this.SendGetReservedSlotsListAggressiveJoinPacket();
             this.SendGetVarsRoundLockdownCountdownPacket();
             this.SendGetVarsRoundWarmupTimeoutPacket();
+
+            this.SendGetVarsPremiumStatusPacket();
         }
 
         #region Overridden Events
@@ -171,8 +197,8 @@ namespace PRoCon.Core.Remote {
 
         public override event FrostbiteClient.PlayerSpawnedHandler PlayerSpawned;
 
-        public override event FrostbiteClient.RawChatHandler Chat;
-        public override event FrostbiteClient.GlobalChatHandler GlobalChat;
+        // public override event FrostbiteClient.RawChatHandler Chat;
+        // public override event FrostbiteClient.GlobalChatHandler GlobalChat;
 
         #region Maplist
 
@@ -185,6 +211,13 @@ namespace PRoCon.Core.Remote {
         public override event FrostbiteClient.MapListMapInsertedHandler MapListMapInserted;
         //public override event FrostbiteClient.EmptyParamterHandler MapListCleared;
         public override event FrostbiteClient.MapListListedHandler MapListListed;
+
+        #endregion
+
+        #region ReservedSlotsList
+
+        public override event FrostbiteClient.ReservedSlotsListHandler ReservedSlotsList;
+        public override event FrostbiteClient.IsEnabledHandler ReservedSlotsListAggressiveJoin;
 
         #endregion
 
@@ -229,9 +262,10 @@ namespace PRoCon.Core.Remote {
 
         public override event FrostbiteClient.ServerMessageHandler ServerMessage;
 
-        public override event FrostbiteClient.IsEnabledHandler ReservedSlotsListAggressiveJoin;
         public override event FrostbiteClient.LimitHandler RoundLockdownCountdown;
         public override event FrostbiteClient.LimitHandler RoundWarmupTimeout;
+
+        public override event FrostbiteClient.IsEnabledHandler PremiumStatus;
 
         #endregion
 
@@ -281,9 +315,7 @@ namespace PRoCon.Core.Remote {
             }
         }
 
-        /* mapList.list offset ... to be continued
-        public virtual void SendMapListListRoundsPacket(int startIndex)
-        {
+        public virtual void SendMapListListRoundsPacket(int startIndex) {
             if (this.IsLoggedIn == true) {
                 if (startIndex >= 0) {
                     this.BuildSendPacket("mapList.list", startIndex.ToString());
@@ -292,7 +324,6 @@ namespace PRoCon.Core.Remote {
                 }
             }
         }
-        */
 
         /*
         public override void SendMapListClearPacket() {
@@ -341,6 +372,16 @@ namespace PRoCon.Core.Remote {
         public override void SendReservedSlotsListPacket() {
             if (this.IsLoggedIn == true) {
                 this.BuildSendPacket("reservedSlotsList.list");
+            }
+        }
+
+        public virtual void SendReservedSlotsListPacket(int startIndex) {
+            if (this.IsLoggedIn == true) {
+                if (startIndex >= 0) {
+                    this.BuildSendPacket("reservedSlotsList.list", startIndex.ToString());
+                } else {
+                    this.BuildSendPacket("reservedSlotsList.list");
+                }
             }
         }
 
@@ -458,6 +499,14 @@ namespace PRoCon.Core.Remote {
             }
         }
 
+        public virtual void SendPremiumStatusPacket(bool enabled)
+        {
+            if (this.IsLoggedIn == true)
+            {
+                this.BuildSendPacket("vars.premiumStatus", Packet.bltos(enabled));
+            }
+        }
+
         #endregion
 
         #region Level Vars (Non existent in BF3)
@@ -559,7 +608,8 @@ namespace PRoCon.Core.Remote {
             //}
         }
 
-        // This can probably be removed once the onChat event is un-lamed.
+        // obsolet since R-21: This can probably be removed once the onChat event is un-lamed.
+        /*
         protected override void DispatchPlayerOnChatRequest(FrostbiteConnection sender, Packet cpRequestPacket) {
             if (cpRequestPacket.Words.Count >= 3) {
                 if (this.GlobalChat != null) {
@@ -572,7 +622,7 @@ namespace PRoCon.Core.Remote {
                 }
             }
         }
-
+        */
 
         #region Map Functions
         /*
@@ -650,6 +700,17 @@ namespace PRoCon.Core.Remote {
 
                 cpRecievedPacket.Words.RemoveAt(0);
 
+                if (iRequestStartOffset == 0) {
+                    this.lstFullMaplist.Clear();
+                    this.iLastMapListOffset = 0;
+                } else {
+                    if (this.iLastMapListOffset < iRequestStartOffset) {
+                        this.iLastMapListOffset = iRequestStartOffset;
+                    } else {
+                        return;
+                    }
+                }
+
                 #region parse mapList.List output
                 List<MaplistEntry> lstMaplist = new List<MaplistEntry>();
 
@@ -703,10 +764,17 @@ namespace PRoCon.Core.Remote {
                 }
                 #endregion //parse mapList.List output
 
+                if (lstMaplist.Count > 0) {
+                    this.lstFullMaplist.AddRange(lstMaplist);
 
-
-                if (this.MapListListed != null) {
-                    FrostbiteConnection.RaiseEvent(this.MapListListed.GetInvocationList(), this, lstMaplist);
+                    this.SendMapListListRoundsPacket(iRequestStartOffset + 100);
+                }
+                else {
+                    // original
+                    if (this.MapListListed != null)
+                    {
+                        FrostbiteConnection.RaiseEvent(this.MapListListed.GetInvocationList(), this, this.lstFullMaplist);
+                    }
                 }
             }
         }
@@ -776,6 +844,58 @@ namespace PRoCon.Core.Remote {
                 if (int.TryParse(cpRequestPacket.Words[1], out iMapIndex) == true && int.TryParse(cpRequestPacket.Words[3], out iRounds) == true) {
                     if (this.MapListMapInserted != null) {
                         FrostbiteConnection.RaiseEvent(this.MapListMapInserted.GetInvocationList(), this, iMapIndex, cpRequestPacket.Words[2], iRounds);
+                    }
+                }
+            }
+        }
+
+        #endregion
+
+        #region reservedSlotsList.list
+
+        protected override void DispatchReservedSlotsListResponse(FrostbiteConnection sender, Packet cpRecievedPacket, Packet cpRequestPacket) {
+            if (cpRequestPacket.Words.Count >= 1)
+            {
+                int iRequestStartOffset = 0;
+
+                if (cpRequestPacket.Words.Count >= 2)
+                {
+                    if (int.TryParse(cpRequestPacket.Words[1], out iRequestStartOffset) == false)
+                    {
+                        iRequestStartOffset = 0;
+                    }
+                }
+                //
+                /* if (iRequestStartOffset == 0)
+                {
+                    this.lstFullReservedSlotsList.Clear();
+                } */
+                if (iRequestStartOffset == 0) {
+                    this.lstFullReservedSlotsList.Clear();
+                    this.iLastReservedSlotsListOffset = 0;
+                } else {
+                    if (this.iLastReservedSlotsListOffset < iRequestStartOffset) {
+                        this.iLastReservedSlotsListOffset = iRequestStartOffset;
+                    } else {
+                        return;
+                    }
+                }
+
+                cpRecievedPacket.Words.RemoveAt(0);
+                // List<String> lstReservedSlotsList = new List<String>();
+
+                if (cpRecievedPacket.Words.Count > 0)
+                {
+                    this.lstFullReservedSlotsList.AddRange(cpRecievedPacket.Words);
+
+                    this.SendReservedSlotsListPacket(iRequestStartOffset + 100);
+                }
+                else
+                {
+                    // original
+                    if (this.ReservedSlotsList != null)
+                    {
+                        FrostbiteConnection.RaiseEvent(this.ReservedSlotsList.GetInvocationList(), this, this.lstFullReservedSlotsList);
                     }
                 }
             }
@@ -1066,6 +1186,22 @@ namespace PRoCon.Core.Remote {
                     else if (cpRequestPacket.Words.Count >= 2)
                     {
                         FrostbiteConnection.RaiseEvent(this.RoundWarmupTimeout.GetInvocationList(), this, Convert.ToInt32(cpRequestPacket.Words[1]));
+                    }
+                }
+            }
+        }
+        #endregion
+
+        #region PremiumStatus
+        protected virtual void DispatchVarsPremiumStatusResponse(FrostbiteConnection sender, Packet cpRecievedPacket, Packet cpRequestPacket)
+        {
+            if (cpRequestPacket.Words.Count >= 1) {
+                if (this.PremiumStatus != null) {
+                    if (cpRecievedPacket.Words.Count == 2) {
+                        FrostbiteConnection.RaiseEvent(this.PremiumStatus.GetInvocationList(), this, Convert.ToBoolean(cpRecievedPacket.Words[1]));
+                    }
+                    else if (cpRequestPacket.Words.Count >= 2) {
+                        FrostbiteConnection.RaiseEvent(this.PremiumStatus.GetInvocationList(), this, Convert.ToBoolean(cpRequestPacket.Words[1]));
                     }
                 }
             }

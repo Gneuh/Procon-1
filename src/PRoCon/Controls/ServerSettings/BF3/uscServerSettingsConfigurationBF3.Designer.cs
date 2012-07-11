@@ -52,6 +52,10 @@
             this.lblSettingsAdminPassword = new System.Windows.Forms.Label();
             this.chkSettingsAggressiveJoin = new System.Windows.Forms.CheckBox();
             this.picSettingsAggressiveJoin = new System.Windows.Forms.PictureBox();
+            this.chkSettingsPremiumStatus = new System.Windows.Forms.CheckBox();
+            this.picSettingsPremiumStatus = new System.Windows.Forms.PictureBox();
+            this.numSettingsEffectivePlayerLimit = new System.Windows.Forms.NumericUpDown();
+            this.lblSettingsEffectivePlayerLimit = new System.Windows.Forms.Label();
             this.pnlSettingsSetidleKickLimit.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numSettingsIdleBanRoundsLimit)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsNoIdleBanRoundsLimit)).BeginInit();
@@ -65,6 +69,8 @@
             this.pnlSettingsAdminPassword.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsAdminPassword)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsAggressiveJoin)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picSettingsPremiumStatus)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numSettingsEffectivePlayerLimit)).BeginInit();
             this.SuspendLayout();
             // 
             // pnlSettingsSetidleKickLimit
@@ -296,7 +302,7 @@
             // 
             // picSettingsGamePassword
             // 
-            this.picSettingsGamePassword.Location = new System.Drawing.Point(9, 164);
+            this.picSettingsGamePassword.Location = new System.Drawing.Point(9, 219);
             this.picSettingsGamePassword.Name = "picSettingsGamePassword";
             this.picSettingsGamePassword.Size = new System.Drawing.Size(16, 16);
             this.picSettingsGamePassword.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -306,7 +312,7 @@
             // lblSettingsGamePassword
             // 
             this.lblSettingsGamePassword.AutoSize = true;
-            this.lblSettingsGamePassword.Location = new System.Drawing.Point(31, 163);
+            this.lblSettingsGamePassword.Location = new System.Drawing.Point(31, 218);
             this.lblSettingsGamePassword.Name = "lblSettingsGamePassword";
             this.lblSettingsGamePassword.Size = new System.Drawing.Size(91, 15);
             this.lblSettingsGamePassword.TabIndex = 226;
@@ -318,7 +324,7 @@
             this.lnkSettingsSetGamePassword.AutoSize = true;
             this.lnkSettingsSetGamePassword.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
             this.lnkSettingsSetGamePassword.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(220)))));
-            this.lnkSettingsSetGamePassword.Location = new System.Drawing.Point(243, 190);
+            this.lnkSettingsSetGamePassword.Location = new System.Drawing.Point(243, 245);
             this.lnkSettingsSetGamePassword.Name = "lnkSettingsSetGamePassword";
             this.lnkSettingsSetGamePassword.Size = new System.Drawing.Size(38, 15);
             this.lnkSettingsSetGamePassword.TabIndex = 230;
@@ -329,7 +335,7 @@
             // txtSettingsGamePassword
             // 
             this.txtSettingsGamePassword.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtSettingsGamePassword.Location = new System.Drawing.Point(35, 185);
+            this.txtSettingsGamePassword.Location = new System.Drawing.Point(35, 240);
             this.txtSettingsGamePassword.Name = "txtSettingsGamePassword";
             this.txtSettingsGamePassword.Size = new System.Drawing.Size(200, 23);
             this.txtSettingsGamePassword.TabIndex = 228;
@@ -340,7 +346,7 @@
             this.pnlSettingsAdminPassword.Controls.Add(this.picSettingsAdminPassword);
             this.pnlSettingsAdminPassword.Controls.Add(this.txtSettingsAdminPassword);
             this.pnlSettingsAdminPassword.Controls.Add(this.lblSettingsAdminPassword);
-            this.pnlSettingsAdminPassword.Location = new System.Drawing.Point(367, 150);
+            this.pnlSettingsAdminPassword.Location = new System.Drawing.Point(367, 205);
             this.pnlSettingsAdminPassword.Name = "pnlSettingsAdminPassword";
             this.pnlSettingsAdminPassword.Size = new System.Drawing.Size(432, 72);
             this.pnlSettingsAdminPassword.TabIndex = 231;
@@ -405,10 +411,70 @@
             this.picSettingsAggressiveJoin.TabIndex = 291;
             this.picSettingsAggressiveJoin.TabStop = false;
             // 
+            // chkSettingsPremiumStatus
+            // 
+            this.chkSettingsPremiumStatus.AutoSize = true;
+            this.chkSettingsPremiumStatus.Enabled = false;
+            this.chkSettingsPremiumStatus.Location = new System.Drawing.Point(330, 91);
+            this.chkSettingsPremiumStatus.Name = "chkSettingsPremiumStatus";
+            this.chkSettingsPremiumStatus.Size = new System.Drawing.Size(179, 19);
+            this.chkSettingsPremiumStatus.TabIndex = 294;
+            this.chkSettingsPremiumStatus.Text = "exclusive to Premium Players";
+            this.chkSettingsPremiumStatus.UseVisualStyleBackColor = true;
+            this.chkSettingsPremiumStatus.CheckedChanged += new System.EventHandler(this.chkSettingsPremiumStatus_CheckedChanged);
+            // 
+            // picSettingsPremiumStatus
+            // 
+            this.picSettingsPremiumStatus.Location = new System.Drawing.Point(304, 91);
+            this.picSettingsPremiumStatus.Name = "picSettingsPremiumStatus";
+            this.picSettingsPremiumStatus.Size = new System.Drawing.Size(16, 16);
+            this.picSettingsPremiumStatus.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.picSettingsPremiumStatus.TabIndex = 293;
+            this.picSettingsPremiumStatus.TabStop = false;
+            // 
+            // numSettingsEffectivePlayerLimit
+            // 
+            this.numSettingsEffectivePlayerLimit.Enabled = false;
+            this.numSettingsEffectivePlayerLimit.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.numSettingsEffectivePlayerLimit.Location = new System.Drawing.Point(37, 178);
+            this.numSettingsEffectivePlayerLimit.Maximum = new decimal(new int[] {
+            64,
+            0,
+            0,
+            0});
+            this.numSettingsEffectivePlayerLimit.Minimum = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            this.numSettingsEffectivePlayerLimit.Name = "numSettingsEffectivePlayerLimit";
+            this.numSettingsEffectivePlayerLimit.ReadOnly = true;
+            this.numSettingsEffectivePlayerLimit.Size = new System.Drawing.Size(56, 23);
+            this.numSettingsEffectivePlayerLimit.TabIndex = 296;
+            this.numSettingsEffectivePlayerLimit.Value = new decimal(new int[] {
+            8,
+            0,
+            0,
+            0});
+            // 
+            // lblSettingsEffectivePlayerLimit
+            // 
+            this.lblSettingsEffectivePlayerLimit.AutoSize = true;
+            this.lblSettingsEffectivePlayerLimit.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblSettingsEffectivePlayerLimit.Location = new System.Drawing.Point(34, 157);
+            this.lblSettingsEffectivePlayerLimit.Name = "lblSettingsEffectivePlayerLimit";
+            this.lblSettingsEffectivePlayerLimit.Size = new System.Drawing.Size(114, 15);
+            this.lblSettingsEffectivePlayerLimit.TabIndex = 295;
+            this.lblSettingsEffectivePlayerLimit.Text = "Effective player limit";
+            // 
             // uscServerSettingsConfigurationBF3
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.numSettingsEffectivePlayerLimit);
+            this.Controls.Add(this.lblSettingsEffectivePlayerLimit);
+            this.Controls.Add(this.chkSettingsPremiumStatus);
+            this.Controls.Add(this.picSettingsPremiumStatus);
             this.Controls.Add(this.chkSettingsAggressiveJoin);
             this.Controls.Add(this.picSettingsAggressiveJoin);
             this.Controls.Add(this.pnlSettingsAdminPassword);
@@ -428,7 +494,7 @@
             this.Controls.Add(this.picSettingsPunkbuster);
             this.Controls.Add(this.lblSettingsPlayerLimit);
             this.Name = "uscServerSettingsConfigurationBF3";
-            this.Size = new System.Drawing.Size(817, 236);
+            this.Size = new System.Drawing.Size(817, 339);
             this.pnlSettingsSetidleKickLimit.ResumeLayout(false);
             this.pnlSettingsSetidleKickLimit.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numSettingsIdleBanRoundsLimit)).EndInit();
@@ -444,6 +510,8 @@
             this.pnlSettingsAdminPassword.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsAdminPassword)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsAggressiveJoin)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picSettingsPremiumStatus)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numSettingsEffectivePlayerLimit)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -480,5 +548,9 @@
         private System.Windows.Forms.NumericUpDown numSettingsIdleBanRoundsLimit;
         private System.Windows.Forms.CheckBox chkSettingsAggressiveJoin;
         private System.Windows.Forms.PictureBox picSettingsAggressiveJoin;
+        private System.Windows.Forms.CheckBox chkSettingsPremiumStatus;
+        private System.Windows.Forms.PictureBox picSettingsPremiumStatus;
+        private System.Windows.Forms.NumericUpDown numSettingsEffectivePlayerLimit;
+        private System.Windows.Forms.Label lblSettingsEffectivePlayerLimit;
     }
 }

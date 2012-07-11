@@ -1484,7 +1484,23 @@ namespace PRoCon.Core.Remote {
             }
         }
 
+        public virtual void SendSetVarsPremiumStatusPacket(bool enabled)
+        {
+            if (this.IsLoggedIn == true)
+            {
+                this.BuildSendPacket("vars.premiumStatus", Packet.bltos(enabled));
+            }
+        }
 
+        public virtual void SendGetVarsPremiumStatusPacket()
+        {
+            if (this.IsLoggedIn == true)
+            {
+                this.BuildSendPacket("vars.premiumStatus");
+            }
+        }
+
+        
         #endregion
 
         #endregion
@@ -3225,6 +3241,7 @@ namespace PRoCon.Core.Remote {
         public virtual event FrostbiteClient.IsEnabledHandler ReservedSlotsListAggressiveJoin;
         public virtual event FrostbiteClient.LimitHandler RoundLockdownCountdown;
         public virtual event FrostbiteClient.LimitHandler RoundWarmupTimeout;
+        public virtual event FrostbiteClient.IsEnabledHandler PremiumStatus;
 
         #endregion
 

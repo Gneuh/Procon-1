@@ -830,6 +830,12 @@ namespace PRoCon {
 
         private void btnRestartRound_Click(object sender, EventArgs e) {
             if (this.m_prcConnection != null && this.m_prcConnection.Game != null) {
+                if (this.m_praApplication.OptionsSettings.ShowCfmMsgRoundRestartNext == true) {
+                    DialogResult cfmRestartRound = MessageBox.Show(this.m_clocLanguage.GetLocalized("uscServerConnection.MessageBox.RestartRound"), "PRoCon Frostbite", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    if (cfmRestartRound == DialogResult.No) {
+                        return;
+                    }
+                }
                 this.WaitForSettingResponse("admin.restartRound");
                 this.m_prcConnection.Game.SendAdminRestartRoundPacket();
                 //this.m_prcConnection.Game.SendServerinfoPacket();
@@ -842,6 +848,12 @@ namespace PRoCon {
 
         private void btnNextRound_Click(object sender, EventArgs e) {
             if (this.m_prcConnection != null && this.m_prcConnection.Game != null) {
+                if (this.m_praApplication.OptionsSettings.ShowCfmMsgRoundRestartNext == true) {
+                    DialogResult cfmRestartLevel = MessageBox.Show(this.m_clocLanguage.GetLocalized("uscServerConnection.MessageBox.NextRound"), "PRoCon Frostbite", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    if (cfmRestartLevel == DialogResult.No) {
+                        return;
+                    }
+                }
                 this.WaitForSettingResponse("admin.runNextRound");
                 this.m_prcConnection.Game.SendAdminRunNextRoundPacket();
                 //this.m_prcConnection.Game.SendServerinfoPacket();

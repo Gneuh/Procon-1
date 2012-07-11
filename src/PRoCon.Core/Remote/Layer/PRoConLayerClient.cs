@@ -133,6 +133,8 @@ namespace PRoCon.Core.Remote.Layer {
                 }
 
                 this.m_requestDelegates = new Dictionary<string, RequestPacketHandler>() {
+                    { "procon.application.shutdown", this.DispatchProconApplicationShutdownRequest  },
+
                     { "procon.login.username", this.DispatchProconLoginUsernameRequest  },
                     { "procon.registerUid", this.DispatchProconRegisterUidRequest  },
                     { "procon.version", this.DispatchProconVersionRequest  },
@@ -430,6 +432,25 @@ namespace PRoCon.Core.Remote.Layer {
         #region Packet Handling
 
         #region Extended Protocol Handling
+
+        #region Procon.Application.Shutdown
+        
+        // DispatchProconApplicationShutdownRequest
+        private void DispatchProconApplicationShutdownRequest(FrostbiteLayerClient sender, Packet packet)
+        {
+            if (this.IsLoggedIn == true) {
+                if (this.m_sprvPrivileges.CanShutdownServer == true) {
+                    sender.SendResponse(packet, PRoConLayerClient.RESPONSE_OK, "but nothing will happen");
+                    // shutdowns only the connection not the whole procon... this.m_praApplication.Shutdown();
+                } else {
+                    sender.SendResponse(packet, PRoConLayerClient.RESPONSE_INSUFFICIENT_PRIVILEGES);
+                }
+            } else {
+                sender.SendResponse(packet, PRoConLayerClient.RESPONSE_LOGIN_REQUIRED);
+            }
+        }
+
+        #endregion
 
         private void DispatchProconLoginUsernameRequest(FrostbiteLayerClient sender, Packet packet) {
             this.m_strUsername = packet.Words[1];

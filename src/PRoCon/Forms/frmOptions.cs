@@ -66,6 +66,7 @@ namespace PRoCon.Forms {
             
             this.m_praApplication.OptionsSettings.AutoApplyUpdatesChanged += new PRoCon.Core.Options.OptionsSettings.OptionsEnabledHandler(OptionsSettings_AutoApplyUpdatesChanged);
             this.m_praApplication.OptionsSettings.AutoCheckDownloadUpdatesChanged += new PRoCon.Core.Options.OptionsSettings.OptionsEnabledHandler(OptionsSettings_AutoCheckDownloadUpdatesChanged);
+            this.m_praApplication.OptionsSettings.AutoCheckGameConfigsForUpdatesChanged += new PRoCon.Core.Options.OptionsSettings.OptionsEnabledHandler(OptionsSettings_AutoCheckGameConfigsForUpdatesChanged);
             this.m_praApplication.OptionsSettings.ChatLoggingChanged += new PRoCon.Core.Options.OptionsSettings.OptionsEnabledHandler(OptionsSettings_ChatLoggingChanged);
             this.m_praApplication.OptionsSettings.PluginsLoggingChanged += new OptionsSettings.OptionsEnabledHandler(OptionsSettings_PluginsLoggingChanged);
             this.m_praApplication.OptionsSettings.EventsLoggingChanged += new PRoCon.Core.Options.OptionsSettings.OptionsEnabledHandler(OptionsSettings_EventsLoggingChanged);
@@ -91,6 +92,13 @@ namespace PRoCon.Forms {
             this.m_praApplication.OptionsSettings.LayerHideLocalPluginsChanged += new OptionsSettings.OptionsEnabledHandler(OptionsSettings_LayerHideLocalPluginsChanged);
 
             this.m_praApplication.OptionsSettings.ShowRoundTimerConstantlyChanged += new PRoCon.Core.Options.OptionsSettings.OptionsEnabledHandler(OptionsSettings_ShowRoundTimerConstantlyChanged);
+            this.m_praApplication.OptionsSettings.ShowCfmMsgRoundRestartNextChanged += new PRoCon.Core.Options.OptionsSettings.OptionsEnabledHandler(OptionsSettings_ShowCfmMsgRoundRestartNextChanged);
+
+            this.m_praApplication.OptionsSettings.ShowDICESpecialOptionsChanged += new PRoCon.Core.Options.OptionsSettings.OptionsEnabledHandler(OptionsSettings_ShowDICESpecialOptionsChanged);
+
+            this.m_praApplication.OptionsSettings.StatsLinkNameUrl.ItemAdded += new NotificationList<PRoCon.Core.Options.StatsLinkNameUrl>.ItemModifiedHandler(StatsLinkNameUrl_ItemAdded);
+            this.m_praApplication.OptionsSettings.StatsLinkNameUrl.ItemRemoved += new NotificationList<PRoCon.Core.Options.StatsLinkNameUrl>.ItemModifiedHandler(StatsLinkNameUrl_ItemRemoved);
+
 
             //m_fntComboBoxFont = new Font("Calibri", 10);
             this.m_frmParent = frmParent;
@@ -108,6 +116,11 @@ namespace PRoCon.Forms {
 
             this.cboBasicsShowWindow.SelectedIndex = frmOptions.INT_OPTIONS_PREFERENCES_SHOWWINDOW_TASKBARANDTRAY;
             this.cboPluginsSandboxOptions.SelectedIndex = 0;
+
+            // StatsLinksList
+            this.btnAddStatsLink.ImageList = this.btnRemoveStatsLink.ImageList = this.m_frmParent.iglIcons;
+            this.btnAddStatsLink.ImageKey = "add.png";
+            this.btnRemoveStatsLink.ImageKey = "cross.png";
         }
         
         private void m_praApplication_CurrentLanguageChanged(CLocalization language) {
@@ -129,6 +142,7 @@ namespace PRoCon.Forms {
 
                 this.m_praApplication.OptionsSettings.AutoCheckDownloadUpdates = this.m_praApplication.OptionsSettings.AutoCheckDownloadUpdates;
                 this.m_praApplication.OptionsSettings.AutoApplyUpdates = this.m_praApplication.OptionsSettings.AutoApplyUpdates;
+                this.m_praApplication.OptionsSettings.AutoCheckGameConfigsForUpdates = this.m_praApplication.OptionsSettings.AutoCheckGameConfigsForUpdates;
 
                 this.m_praApplication.OptionsSettings.ConsoleLogging = this.m_praApplication.OptionsSettings.ConsoleLogging;
                 this.m_praApplication.OptionsSettings.ChatLogging = this.m_praApplication.OptionsSettings.ChatLogging;
@@ -150,6 +164,9 @@ namespace PRoCon.Forms {
                 this.m_praApplication.OptionsSettings.LayerHideLocalPlugins = this.m_praApplication.OptionsSettings.LayerHideLocalPlugins;
 
                 this.m_praApplication.OptionsSettings.ShowRoundTimerConstantly = this.m_praApplication.OptionsSettings.ShowRoundTimerConstantly;
+                this.m_praApplication.OptionsSettings.ShowCfmMsgRoundRestartNext = this.m_praApplication.OptionsSettings.ShowCfmMsgRoundRestartNext;
+
+                this.m_praApplication.OptionsSettings.ShowDICESpecialOptions = this.m_praApplication.OptionsSettings.ShowDICESpecialOptions;
 
                 this.lsvTrustedHostDomainPorts.Items.Clear();
                 foreach (TrustedHostWebsitePort trusted in this.m_praApplication.OptionsSettings.TrustedHostsWebsitesPorts) {
@@ -158,6 +175,11 @@ namespace PRoCon.Forms {
 
                 if (this.m_praApplication.HttpWebServer != null && this.m_praApplication.HttpWebServer.IsOnline == true) {
                     this.m_praApplication_HttpServerOnline(this.m_praApplication.HttpWebServer);
+                }
+
+                this.lsvStatsLinksList.Items.Clear();
+                foreach (StatsLinkNameUrl StatsLink in this.m_praApplication.OptionsSettings.StatsLinkNameUrl) {
+                    this.StatsLinkNameUrl_ItemAdded(0, StatsLink);
                 }
 
                 this.m_isLoadingForm = false;
@@ -181,7 +203,8 @@ namespace PRoCon.Forms {
 
             this.lblBasicsPrivacy.Text = clocLanguage.GetLocalized("frmOptions.tabBasics.lblBasicsPrivacy");
             this.chkBasicsAutoCheckDownloadForUpdates.Text = clocLanguage.GetLocalized("frmOptions.tabBasics.chkBasicsAutoCheckDownloadForUpdates");
-            this.chkBasicsAutoApplyUpdates.Text = clocLanguage.GetLocalized("frmOptions.tabBasics.chkBasicsAutoApplyUpdates");
+            this.chkBasicsAutoApplyUpdates.Text = clocLanguage.GetLocalized("frmOptions.tabBasics.chkBasicsAutoApplyUpdates"); 
+            this.chkBasicsAutoCheckGameConfigsForUpdates.Text = clocLanguage.GetLocalized("frmOptions.tabBasics.chkBasicsAutoCheckGameConfigsForUpdates");
 
             this.lblBasicPreferences.Text = clocLanguage.GetLocalized("frmOptions.tabBasics.lblBasicPreferences");
             this.lblBasicsShowWindow.Text = clocLanguage.GetLocalized("frmOptions.tabBasics.lblBasicsShowWindow");
@@ -234,6 +257,20 @@ namespace PRoCon.Forms {
 
             this.lblAdvConVisuals.Text = clocLanguage.GetLocalized("frmOptions.tabAdvanced.lblAdvConVisuals");
             this.chkAdvShowRoundTimerConstantly.Text = clocLanguage.GetLocalized("frmOptions.tabAdvanced.lblAdvConVisuals.chkAdvShowRoundTimerConstantly");
+            this.chkAdvShowCfmMsgRoundRestartNext.Text = clocLanguage.GetLocalized("frmOptions.tabAdvanced.lblAdvConVisuals.chkAdvShowCfmMsgRoundRestartNext");
+
+            this.lblAdvSpecialSwitches.Text = clocLanguage.GetLocalized("frmOptions.tabAdvanced.lblAdvSpecialSwitches");
+            this.chkAdvShowDICESpecialOptions.Text = clocLanguage.GetLocalized("frmOptions.tabAdvanced.lblAdvSpecialSwitches.chkAdvShowDICESpecialOptions");
+            this.lblAdvShowDICESpecialOptionsNotice.Text = clocLanguage.GetLocalized("frmOptions.tabAdvanced.lblAdvSpecialSwitches.lblAdvShowDICESpecialOptionsNotice");
+
+            // StatsLinks
+            this.tabPlayerLookup.Text = clocLanguage.GetLocalized("frmOptions.tabPlayerLookup");
+            this.lblStatsPlayerTab.Text = clocLanguage.GetLocalized("frmOptions.tabAdvanced.lblAdvPlayerTab");
+            this.colStatsLinksName.Text = clocLanguage.GetLocalized("frmOptions.tabPlayerLookup.colStatsLinksName");
+            this.colStatsLinkUrl.Text = clocLanguage.GetLocalized("frmOptions.tabPlayerLookup.colStatsLinkUrl");
+            this.lblStatsLinkName.Text = clocLanguage.GetLocalized("frmOptions.tabPlayerLookup.lblStatsLinkName");
+            this.lblStatsLinkUrl.Text = clocLanguage.GetLocalized("frmOptions.tabPlayerLookup.lblStatsLinkUrl");
+            this.lblStatsLinkHelpText.Text = clocLanguage.GetLocalized("frmOptions.tabPlayerLookup.lblStatsLinkHelpText", new String[] { this.m_praApplication.OptionsSettings.StatsLinksMaxNum.ToString() }).Replace("|*|", Environment.NewLine);
 
             //this.m_strSetLanguageFileName = clocLanguage.FileName;
         }
@@ -422,6 +459,20 @@ namespace PRoCon.Forms {
 
         #endregion
 
+        #region Include GameConfig Check in Update Check
+
+        void OptionsSettings_AutoCheckGameConfigsForUpdatesChanged(bool blEnabled)
+        {
+            this.chkBasicsAutoCheckGameConfigsForUpdates.Checked = blEnabled;
+        }
+
+        private void chkBasicsAutoCheckGameConfigsForUpdates_CheckedChanged(object sender, EventArgs e)
+        {
+            this.m_praApplication.OptionsSettings.AutoCheckGameConfigsForUpdates = this.chkBasicsAutoCheckGameConfigsForUpdates.Checked;
+        }
+
+        #endregion
+
         #endregion
 
         #region Logging
@@ -522,7 +573,7 @@ namespace PRoCon.Forms {
             this.m_praApplication.OptionsSettings.MinimizeToTray = this.chkBasicsMinimizeToTray.Checked;
         }
 
-
+        #region plugin settings & http server
 
         void OptionsSettings_RunPluginsInTrustedSandboxChanged(bool blEnabled) {
             this.pnlSandboxOptions.Enabled = blEnabled;
@@ -650,6 +701,8 @@ namespace PRoCon.Forms {
             System.Diagnostics.Process.Start(this.lnkHttpServerExampleLink.Text);
         }
 
+        #endregion
+
         # region Advanced
 
         void OptionsSettings_AdminMoveMessageChanged(bool blEnabled)
@@ -699,9 +752,99 @@ namespace PRoCon.Forms {
             this.m_praApplication.OptionsSettings.ShowRoundTimerConstantly = this.chkAdvShowRoundTimerConstantly.Checked;
         }
 
+        void OptionsSettings_ShowCfmMsgRoundRestartNextChanged(bool blEnabled)
+        {
+            this.chkAdvShowCfmMsgRoundRestartNext.Checked = blEnabled;
+        }
+
+        private void chkAdvShowCfmMsgRoundRestartNext_CheckedChanged(object sender, EventArgs e)
+        {
+            this.m_praApplication.OptionsSettings.ShowCfmMsgRoundRestartNext = this.chkAdvShowCfmMsgRoundRestartNext.Checked;
+        }
+
+        void OptionsSettings_ShowDICESpecialOptionsChanged(bool blEnabled)
+        {
+            this.chkAdvShowDICESpecialOptions.Checked = blEnabled;
+        }
+
+        private void chkAdvShowDICESpecialOptions_CheckedChanged(object sender, EventArgs e)
+        {
+            this.m_praApplication.OptionsSettings.ShowDICESpecialOptions = this.chkAdvShowDICESpecialOptions.Checked;
+        }
+
         # endregion
 
+        #region StatsLinks
 
+        private void btnAddStatsLink_Click(object sender, EventArgs e)
+        {
+            this.m_praApplication.OptionsSettings.StatsLinkNameUrl.Add(new StatsLinkNameUrl(this.txtStatsLinkName.Text, this.txtStatsLinkUrl.Text));
+        }
+
+        private void lsvStatsLinksList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            this.btnRemoveStatsLink.Enabled = (this.lsvStatsLinksList.SelectedItems.Count > 0);
+        }
+
+        private void btnRemoveStatsLink_Click(object sender, EventArgs e)
+        {
+            if (this.lsvStatsLinksList.SelectedItems.Count > 0) {
+                 if (this.lsvStatsLinksList.SelectedItems[0].Tag != null)
+                 {
+                     this.m_praApplication.OptionsSettings.StatsLinkNameUrl.Remove((StatsLinkNameUrl)this.lsvStatsLinksList.SelectedItems[0].Tag);
+                 }
+             }
+        }
+
+        private void txtStatsLinkName_TextChanged(object sender, EventArgs e)
+        {
+            this.btnAddStatsLink.Enabled = (this.txtStatsLinkName.Text.Length > 0 && this.txtStatsLinkUrl.Text.Length > 0
+                && this.m_praApplication.OptionsSettings.StatsLinkNameUrl.Count < this.m_praApplication.OptionsSettings.StatsLinksMaxNum 
+                && IsValidUrl(this.txtStatsLinkUrl.Text));
+        }
+
+        private void txtStatsLinkUrl_TextChanged(object sender, EventArgs e)
+        {
+            this.btnAddStatsLink.Enabled = (this.txtStatsLinkUrl.Text.Length > 0 && this.txtStatsLinkName.Text.Length > 0
+                && this.m_praApplication.OptionsSettings.StatsLinkNameUrl.Count < this.m_praApplication.OptionsSettings.StatsLinksMaxNum 
+                && IsValidUrl(this.txtStatsLinkUrl.Text));
+        }
+
+        private void StatsLinkNameUrl_ItemAdded(int iIndex, PRoCon.Core.Options.StatsLinkNameUrl item)
+        {
+            ListViewItem lsiStatsLinksList = new ListViewItem(item.LinkName);
+            lsiStatsLinksList.Tag = item;
+
+            lsiStatsLinksList.SubItems.Add(new ListViewItem.ListViewSubItem(lsiStatsLinksList, item.LinkUrl));
+
+            this.lsvStatsLinksList.Items.Add(lsiStatsLinksList);
+
+            this.txtStatsLinkName.Clear();
+            this.txtStatsLinkUrl.Clear();
+            this.txtStatsLinkName.Focus();
+        }
+
+        private void StatsLinkNameUrl_ItemRemoved(int iIndex, PRoCon.Core.Options.StatsLinkNameUrl item)
+        {
+
+            for (int i = 0; i < this.lsvStatsLinksList.Items.Count; i++)
+            {
+                if (this.lsvStatsLinksList.Items[i].Tag == item)
+                {
+                    this.lsvStatsLinksList.Items.RemoveAt(i);
+                    i--;
+                }
+            }
+        }
+
+        public static bool IsValidUrl(string strUrl)
+        {
+            //Regex rx = new Regex(@"^http(s?)\:\/\/[0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*(:(0-9)*)*(\/?)([a-zA-Z0-9\-\.\?\,\'\/\\\+&amp;%\$#_]*)?$");
+            Regex rx = new Regex(@"^http(s)?://([\w-%]+\.)+[\w-%]+(/[\w-./?%&=]*)?$");
+            return rx.IsMatch(strUrl);
+        }
+
+        #endregion
 
     }
 }

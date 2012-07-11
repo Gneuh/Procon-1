@@ -223,6 +223,10 @@ namespace PRoCon.Controls {
                         playerSlotsTotal += client.CurrentServerInfo.MaxPlayerCount;
                     }
 
+                    if (client.ConnectionServerName != String.Empty) {
+                        replacedTemplate = replacedTemplate.Replace("%server_name%", client.ConnectionServerName);
+                    }
+
                     connectionHtml.Add("safehostport", Regex.Replace(client.FileHostNamePort, "[^0-9a-zA-Z]", ""));
                     connectionHtml.Add("html", replacedTemplate);
 

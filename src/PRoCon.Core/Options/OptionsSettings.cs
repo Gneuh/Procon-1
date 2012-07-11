@@ -20,6 +20,7 @@ namespace PRoCon.Core.Options {
         public event OptionsEnabledHandler ChatLoggingChanged;
         public event OptionsEnabledHandler AutoCheckDownloadUpdatesChanged;
         public event OptionsEnabledHandler AutoApplyUpdatesChanged;
+        public event OptionsEnabledHandler AutoCheckGameConfigsForUpdatesChanged;
         public event OptionsEnabledHandler ShowTrayIconChanged;
         public event OptionsEnabledHandler CloseToTrayChanged;
         public event OptionsEnabledHandler MinimizeToTrayChanged;
@@ -35,6 +36,8 @@ namespace PRoCon.Core.Options {
         public event OptionsEnabledHandler LayerHideLocalAccountsChanged;
 
         public event OptionsEnabledHandler ShowRoundTimerConstantlyChanged;
+        public event OptionsEnabledHandler ShowCfmMsgRoundRestartNextChanged;
+        public event OptionsEnabledHandler ShowDICESpecialOptionsChanged;
 
         public event OptionsEnabledHandler AllowAnonymousUsageDataChanged;
 
@@ -130,6 +133,28 @@ namespace PRoCon.Core.Options {
 
                 if (this.AutoApplyUpdatesChanged != null) {
                     FrostbiteConnection.RaiseEvent(this.AutoApplyUpdatesChanged.GetInvocationList(), value);
+                }
+            }
+        }
+
+        private bool m_isAutoCheckGameConfigsForUpdatesEnabled;
+        public bool AutoCheckGameConfigsForUpdates
+        {
+            get {
+                return this.m_isAutoCheckGameConfigsForUpdatesEnabled;
+            }
+            set {
+                if (this.m_praApplication.BlockUpdateChecks == true) {
+                    this.m_isAutoCheckGameConfigsForUpdatesEnabled = false;
+                }
+                else {
+                    this.m_isAutoCheckGameConfigsForUpdatesEnabled = value;
+                }
+
+                this.m_praApplication.SaveMainConfig();
+
+                if (this.AutoCheckDownloadUpdatesChanged != null) {
+                    FrostbiteConnection.RaiseEvent(this.AutoCheckGameConfigsForUpdatesChanged.GetInvocationList(), value);
                 }
             }
         }
@@ -275,6 +300,46 @@ namespace PRoCon.Core.Options {
             }
         }
 
+        // ShowCfmMsgRoundRestartNext
+        private bool m_isShowCfmMsgRoundRestartNextEnabled;
+        public bool ShowCfmMsgRoundRestartNext
+        {
+            get
+            {
+                return this.m_isShowCfmMsgRoundRestartNextEnabled;
+            }
+            set
+            {
+                this.m_isShowCfmMsgRoundRestartNextEnabled = value;
+                this.m_praApplication.SaveMainConfig();
+
+                if (this.ShowCfmMsgRoundRestartNextChanged != null)
+                {
+                    FrostbiteConnection.RaiseEvent(this.ShowCfmMsgRoundRestartNextChanged.GetInvocationList(), value);
+                }
+            }
+        }
+        
+        // ShowDICESpecialOptions
+        private bool m_isShowDICESpecialOptionsEnabled;
+        public bool ShowDICESpecialOptions
+        {
+            get
+            {
+                return this.m_isShowDICESpecialOptionsEnabled;
+            }
+            set
+            {
+                this.m_isShowDICESpecialOptionsEnabled = value;
+                this.m_praApplication.SaveMainConfig();
+
+                if (this.ShowDICESpecialOptionsChanged != null)
+                {
+                    FrostbiteConnection.RaiseEvent(this.ShowDICESpecialOptionsChanged.GetInvocationList(), value);
+                }
+            }
+        }
+
         private bool m_isAllowAllODBCConnectionsEnabled;
         public bool AllowAllODBCConnections {
             get {
@@ -329,6 +394,15 @@ namespace PRoCon.Core.Options {
             private set;
         }
 
+        public NotificationList<StatsLinkNameUrl> StatsLinkNameUrl {
+            get;
+            private set;
+        }
+
+        public int StatsLinksMaxNum {
+            get;
+            set;
+        }
 
         public PermissionSet PluginPermissions {
 
@@ -372,17 +446,19 @@ namespace PRoCon.Core.Options {
 
                         try {
                             Regex rxHostRegex;
+                            string strSocketHost="*";
                             if (trusted.HostWebsite == "*" || trusted.HostWebsite == "*.*.*.*") {
                                 rxHostRegex = new Regex(@".*/.*");
                             } else {
                                 rxHostRegex = new Regex(trusted.HostWebsite.Replace(".", @"\.") + ".*", RegexOptions.IgnoreCase);
+                                strSocketHost = Regex.Replace(trusted.HostWebsite, "^(.*:\\/\\/)", "", RegexOptions.IgnoreCase);
                             }
                             //psetPluginPermissions.AddPermission(new System.Net.WebPermission(System.Net.NetworkAccess.Connect, new Regex(trusted.HostWebsite.Replace(".", @"\.") + ".*", RegexOptions.IgnoreCase)));
                             psetPluginPermissions.AddPermission(new System.Net.WebPermission(System.Net.NetworkAccess.Connect, rxHostRegex));
                             if (trusted.Port == (UInt16)0) {
-                                psetPluginPermissions.AddPermission(new System.Net.SocketPermission(System.Net.NetworkAccess.Connect, System.Net.TransportType.All, trusted.HostWebsite, System.Net.SocketPermission.AllPorts));
+                                psetPluginPermissions.AddPermission(new System.Net.SocketPermission(System.Net.NetworkAccess.Connect, System.Net.TransportType.All, strSocketHost, System.Net.SocketPermission.AllPorts));
                             } else {
-                                psetPluginPermissions.AddPermission(new System.Net.SocketPermission(System.Net.NetworkAccess.Connect, System.Net.TransportType.All, trusted.HostWebsite, trusted.Port));
+                                psetPluginPermissions.AddPermission(new System.Net.SocketPermission(System.Net.NetworkAccess.Connect, System.Net.TransportType.All, strSocketHost, trusted.Port));
                             }
                         }
                         catch (Exception) {
@@ -401,14 +477,22 @@ namespace PRoCon.Core.Options {
         public OptionsSettings(PRoConApplication praApplication) {
             this.m_praApplication = praApplication;
             this.AutoCheckDownloadUpdates = true;
+            this.AutoCheckGameConfigsForUpdates = true;
             this.AllowAnonymousUsageData = true;
 
             this.LayerHideLocalAccounts = true;
             this.LayerHideLocalPlugins = true;
 
+            this.ShowCfmMsgRoundRestartNext = true;
+            this.ShowDICESpecialOptions = false;
+
             this.ShowTrayIcon = true;
 
             this.TrustedHostsWebsitesPorts = new NotificationList<TrustedHostWebsitePort>();
+
+            this.StatsLinksMaxNum = 4;
+            this.StatsLinkNameUrl = new NotificationList<StatsLinkNameUrl>();
+            this.StatsLinkNameUrl.Add(new StatsLinkNameUrl("Metabans", "http://metabans.com/search/%player_name%"));
         }
     }
 }

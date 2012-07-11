@@ -560,6 +560,14 @@ namespace PRoCon.Core.Plugin {
 
                 this.LoadedClassNames.Add(pluginClassName);
                 */
+
+                List<string> lstPluginEnv = new List<string>( new string[] { Assembly.GetExecutingAssembly().GetName().Version.ToString(), 
+                                                                             this.m_client.GameType, 
+                                                                             this.m_client.CurrentServerInfo.GameMod.ToString(),
+                                                                             this.m_client.VersionNumber
+                                                                            });
+                this.InvokeOnLoaded(pluginClassName, "OnPluginLoadingEnv", lstPluginEnv);
+
                 this.WritePluginConsole("Loading {0}... ^2Loaded", pluginClassName);
 
                 this.InvokeOnLoaded(pluginClassName, "OnPluginLoaded", this.m_client.HostName, this.m_client.Port.ToString(), Assembly.GetExecutingAssembly().GetName().Version.ToString());
@@ -814,6 +822,8 @@ namespace PRoCon.Core.Plugin {
             this.m_client.Game.RoundLockdownCountdown -= new FrostbiteClient.LimitHandler(Game_RoundLockdownCountdown);
             this.m_client.Game.RoundWarmupTimeout -= new FrostbiteClient.LimitHandler(Game_RoundWarmupTimeout);
 
+            this.m_client.Game.PremiumStatus -= new FrostbiteClient.IsEnabledHandler(Game_PremiumStatus);
+
             // R13
             this.m_client.Game.ServerName -= new FrostbiteClient.ServerNameHandler(m_prcClient_ServerName);
             this.m_client.Game.TeamKillCountForKick -= new FrostbiteClient.LimitHandler(m_prcClient_TeamKillCountForKick);
@@ -983,6 +993,8 @@ namespace PRoCon.Core.Plugin {
             this.m_client.Game.ReservedSlotsListAggressiveJoin += new FrostbiteClient.IsEnabledHandler(Game_ReservedSlotsListAggressiveJoin);
             this.m_client.Game.RoundLockdownCountdown += new FrostbiteClient.LimitHandler(Game_RoundLockdownCountdown);
             this.m_client.Game.RoundWarmupTimeout += new FrostbiteClient.LimitHandler(Game_RoundWarmupTimeout);
+
+            this.m_client.Game.PremiumStatus += new FrostbiteClient.IsEnabledHandler(Game_PremiumStatus);
 
             // R13
             this.m_client.Game.ServerName += new FrostbiteClient.ServerNameHandler(m_prcClient_ServerName);
@@ -1257,17 +1269,7 @@ namespace PRoCon.Core.Plugin {
 
                 this.CommandsNeedingConfirmation.Add(new ConfirmationEntry(playerName, message, mtcCommand, capCommand, subset));
 
-                #region BF3 Player -> Squad chat hack
-
-                if (this.m_client.Game is BF3Client && this.m_client.PlayerList.Contains(playerName) == true) {
-                    this.m_client.Game.SendAdminSayPacket(String.Format("Did you mean {0}?", capCommand.ToString()), new CPlayerSubset(CPlayerSubset.PlayerSubsetType.Squad, this.m_client.PlayerList[playerName].TeamID, this.m_client.PlayerList[playerName].SquadID));
-                }
-                else {
-                    this.m_client.Game.SendAdminSayPacket(String.Format("Did you mean {0}?", capCommand.ToString()), new CPlayerSubset(CPlayerSubset.PlayerSubsetType.Player, playerName));
-                }
-                #endregion
-
-                // this.m_prcClient.SendRequest(new List<string>() { "admin.say", String.Format("Did you mean {0}?", capCommand.ToString()), "player", playerName });
+                this.m_client.Game.SendAdminSayPacket(String.Format("Did you mean {0}?", capCommand.ToString()), new CPlayerSubset(CPlayerSubset.PlayerSubsetType.Player, playerName));
             }
             else {
                 this.InvokeOnEnabled(mtcCommand.RegisteredClassname, mtcCommand.RegisteredMethodName, playerName, message, mtcCommand, capCommand, new CPlayerSubset(CPlayerSubset.PlayerSubsetType.All));
@@ -1677,6 +1679,11 @@ namespace PRoCon.Core.Plugin {
         private void Game_RoundWarmupTimeout(FrostbiteClient sender, int limit)
         {
             this.InvokeOnAllEnabled("OnRoundWarmupTimeout", new object[] { limit });
+        }
+
+        private void Game_PremiumStatus(FrostbiteClient sender, bool isEnabled)
+        {
+            this.InvokeOnAllEnabled("OnPremiumStatus", isEnabled);
         }
 
         #region Text Chat Moderation Settings

@@ -78,11 +78,13 @@ namespace PRoCon.Controls.ServerSettings {
         }
 
         private void Client_GameTypeDiscovered(PRoConClient sender) {
+            this.Client.Game.Ranked += new FrostbiteClient.IsEnabledHandler(Client_Ranked);
+            this.Client.Game.Punkbuster += new FrostbiteClient.IsEnabledHandler(Client_Punkbuster);
             this.Client.Game.ServerName += new FrostbiteClient.ServerNameHandler(Client_ServerName);
             this.Client.Game.GamePassword += new FrostbiteClient.PasswordHandler(Client_GamePassword);
-            this.Client.Game.Punkbuster += new FrostbiteClient.IsEnabledHandler(Client_Punkbuster);
+            
             this.Client.Game.Hardcore += new FrostbiteClient.IsEnabledHandler(Client_Hardcore);
-            this.Client.Game.Ranked += new FrostbiteClient.IsEnabledHandler(Client_Ranked);
+            
             //this.Client.Game.RankLimit += new FrostbiteClient.LimitHandler(Client_RankLimit);
             //this.Client.Game.TeamBalance += new FrostbiteClient.IsEnabledHandler(Client_TeamBalance);
             this.Client.Game.FriendlyFire += new FrostbiteClient.IsEnabledHandler(Client_FriendlyFire);
