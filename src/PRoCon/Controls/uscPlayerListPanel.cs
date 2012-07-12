@@ -2061,6 +2061,7 @@ namespace PRoCon {
                 if (this.punkBusterScreenshotToolStripMenuItem.Tag is CPunkbusterInfo)
                 {
                     statsUrl = statsUrl.Replace("%player_PBguid%", ((CPunkbusterInfo)this.punkBusterScreenshotToolStripMenuItem.Tag).GUID);
+                    statsUrl = statsUrl.Replace("%player_IP%", ((CPunkbusterInfo)this.punkBusterScreenshotToolStripMenuItem.Tag).Ip);
                 }
                 System.Diagnostics.Process.Start(statsUrl);
             }
