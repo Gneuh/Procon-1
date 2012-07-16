@@ -31,6 +31,15 @@ namespace PRoCon.Console {
       
         static void Main(string[] args) {
 
+            int iValue;
+            if (args != null && args.Length >= 2) {
+                for (int i = 0; i < args.Length; i = i + 2) {
+                    if (String.Compare("-use_core", args[i], true) == 0 && int.TryParse(args[i + 1], out iValue) == true && iValue > 0) {
+                        System.Diagnostics.Process.GetCurrentProcess().ProcessorAffinity = (System.IntPtr)iValue;
+                    }
+                }
+            }
+
             PRoConApplication application = null;
 
             if (PRoConApplication.IsProcessOpen() == false) {

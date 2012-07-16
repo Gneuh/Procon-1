@@ -1251,7 +1251,7 @@ namespace PRoCon.Core {
                 lstWords.RemoveAt(0);
                 for (int i = 0; i + 1 < lstWords.Count; i = i + 2)
                 {
-                    if (this.OptionsSettings.StatsLinkNameUrl.Count < 4)
+                    if (this.OptionsSettings.StatsLinkNameUrl.Count < this.OptionsSettings.StatsLinksMaxNum)
                     {
                         this.OptionsSettings.StatsLinkNameUrl.Add(new StatsLinkNameUrl(lstWords[i], lstWords[i + 1]));
                     }
@@ -1784,7 +1784,21 @@ namespace PRoCon.Core {
         private void ReconnectVersionChecker() {
 
             while (this.m_isCheckerRunning == true) {
-                Thread.Sleep(20000);
+                //Thread.Sleep(20000);
+                // taken from msdn social
+                Stopwatch sw = new Stopwatch();
+                sw.Start();
+                for (int i = 0; ; i++) {
+                    if (i % 100000 == 0) {
+                        sw.Stop();
+                        if (sw.ElapsedMilliseconds > 20000) {
+                            break;
+                        }
+                        else {
+                            sw.Start();
+                        }
+                    }
+                }
 
                 // Send a report naow, next in 30 mins.
                 if (this.m_blInitialUsageDataSent == false && this.OptionsSettings.AllowAnonymousUsageData == true) {

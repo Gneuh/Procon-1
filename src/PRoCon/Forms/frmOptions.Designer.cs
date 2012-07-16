@@ -1201,9 +1201,11 @@
             this.lsvStatsLinksList.Name = "lsvStatsLinksList";
             this.lsvStatsLinksList.Size = new System.Drawing.Size(304, 136);
             this.lsvStatsLinksList.TabIndex = 27;
+            this.lsvStatsLinksList.ShowItemToolTips = true;
             this.lsvStatsLinksList.UseCompatibleStateImageBehavior = false;
             this.lsvStatsLinksList.View = System.Windows.Forms.View.Details;
             this.lsvStatsLinksList.SelectedIndexChanged += new System.EventHandler(this.lsvStatsLinksList_SelectedIndexChanged);
+            this.lsvStatsLinksList.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(lsvStatsLinksList_MouseDoubleClick);
             // 
             // colStatsLinksName
             // 

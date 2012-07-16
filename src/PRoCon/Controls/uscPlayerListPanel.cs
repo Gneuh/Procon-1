@@ -227,6 +227,8 @@ namespace PRoCon {
             this.m_prcClient.Game.PlayerChangedTeam += new FrostbiteClient.PlayerTeamChangeHandler(m_prcClient_PlayerChangedTeam);
             this.m_prcClient.Game.PlayerChangedSquad += new FrostbiteClient.PlayerTeamChangeHandler(m_prcClient_PlayerChangedSquad);
 
+            this.m_prcClient.Game.ServerInfo += new FrostbiteClient.ServerInfoHandler(m_prcClient_Serverinfo_EndRound_Update);
+
             this.m_prcClient.ProconPrivileges += new PRoConClient.ProconPrivilegesHandler(m_prcClient_ProconPrivileges);
 
             this.m_prcClient.ConnectionClosed += new PRoConClient.EmptyParamterHandler(m_prcClient_ConnectionClosed);
@@ -2103,6 +2105,31 @@ namespace PRoCon {
             }
             this.cboEndRound.SelectedIndex = 0;
         }
+
+        private void m_prcClient_Serverinfo_EndRound_Update(FrostbiteClient sender, CServerInfo csiServerInfo) { 
+            //
+            int iTeams = this.m_prcClient.GetLocalizedTeamNameCount(this.m_prcClient.CurrentServerInfo.Map, this.m_prcClient.CurrentServerInfo.GameMode);
+
+
+            this.cboEndRound.Items.Clear();
+            this.cboEndRound.Items.AddRange(new object[] {
+                this.m_clocLanguage.GetDefaultLocalized("Select winning team to end round:", "uscPlayerListPanel.ctxPlayerOptions.EndRound.Label")
+            });
+            this.cboEndRound.SelectedIndex = 0;
+
+            for (int i = 1; i < iTeams; i++) {
+                this.cboEndRound.Items.AddRange(new object[] {
+                    String.Format("{0} - {1}", 
+                        this.m_clocLanguage.GetDefaultLocalized("Team " + i.ToString(), "uscPlayerListPanel.ctxPlayerOptions.EndRound.Team"+i.ToString()),
+                        this.m_prcClient.GetLocalizedTeamName(i, this.m_prcClient.CurrentServerInfo.Map, this.m_prcClient.CurrentServerInfo.GameMode)
+                    )
+                });
+            }
+
+            Graphics cboEndRoundGrafphics = cboEndRound.CreateGraphics();
+            this.cboEndRound.Width = 18 + (int)cboEndRoundGrafphics.MeasureString(this.cboEndRound.Text, this.cboEndRound.Font).Width;
+        }
+
         #endregion
     }
 }

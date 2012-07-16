@@ -94,6 +94,10 @@ namespace PRoCon {
                                 if (String.Compare("-gspupdater", args[i], true) == 0 && int.TryParse(args[i + 1], out iValue) == true && iValue == 1) {
                                     blGspUpdater = true;
                                 }
+                                if (String.Compare("-use_core", args[i], true) == 0 && int.TryParse(args[i + 1], out iValue) == true && iValue > 0)
+                                {
+                                    System.Diagnostics.Process.GetCurrentProcess().ProcessorAffinity = (System.IntPtr)iValue;
+                                }
                             }
                         }
 

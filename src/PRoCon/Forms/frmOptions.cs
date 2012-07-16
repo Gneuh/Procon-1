@@ -796,6 +796,19 @@ namespace PRoCon.Forms {
              }
         }
 
+        private void lsvStatsLinksList_MouseDoubleClick(object sender, EventArgs e)
+        {
+            if (this.lsvStatsLinksList.SelectedItems.Count == 0) {
+                return;
+            }
+            try {
+                Clipboard.SetDataObject(this.lsvStatsLinksList.SelectedItems[0].SubItems[1].Text, true, 5, 10);
+            }
+            catch (Exception) {
+                // Nope, another thread is accessing the clipboard..
+            }
+        }
+
         private void txtStatsLinkName_TextChanged(object sender, EventArgs e)
         {
             this.btnAddStatsLink.Enabled = (this.txtStatsLinkName.Text.Length > 0 && this.txtStatsLinkUrl.Text.Length > 0
