@@ -34,10 +34,14 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <SccProjectName>SAK</SccProjectName>
-    <SccLocalPath>SAK</SccLocalPath>
-    <SccAuxPath>SAK</SccAuxPath>
-    <SccProvider>SAK</SccProvider>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -83,6 +87,7 @@
     <Compile Include="CBanInfo.cs" />
     <Compile Include="CDownloadFile.cs" />
     <Compile Include="Options\StatsLinkNameUrl.cs" />
+    <Compile Include="Plugin\PluginInvocation.cs" />
     <Compile Include="UnlockMode.cs" />
     <Compile Include="ConnectionDictionary.cs" />
     <Compile Include="Consoles\ChatConsole.cs" />

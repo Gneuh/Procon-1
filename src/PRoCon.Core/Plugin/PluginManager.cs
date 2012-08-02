@@ -27,6 +27,7 @@ using System.CodeDom.Compiler;
 using System.Reflection;
 using Microsoft.CSharp;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 using System.Security;
@@ -61,14 +62,56 @@ namespace PRoCon.Core.Plugin {
 
         private PRoConClient m_client;
 
-        //private Dictionary<string, IPRoConPluginInterface> m_dicLoadedPlugins;
-        //private Dictionary<string, IPRoConPluginInterface> m_dicEnabledPlugins;
+        /// <summary>
+        /// Queue of plugin invocations.
+        /// 
+        /// I doubt this will ever actually have more than one invocation on it
+        /// unless we make plugin calls asynchronous in the future.
+        /// 
+        /// This however could break existing plugins that require all calls
+        /// to be synchronous.
+        /// </summary>
+        protected List<PluginInvocation> Invocations { get; set; }
 
-        //public Dictionary<string, Dictionary<string, string>> CacheFailCompiledPluginVariables { get; private set; }
+        /// <summary>
+        /// Thread to handle the looping of the timeout checker.
+        /// 
+        /// This thread will check if any invocations have taken longer than five seconds.
+        /// If they have it will destroy the AppDomain, rebuilding it but not loading
+        /// the faulty plugin.
+        /// </summary>
+        protected Thread InvocationTimeoutThread { get; set; }
+
+        /// <summary>
+        /// Checked inside of the invocation timeout loop. If false
+        /// the thread will gracefully exit.
+        /// </summary>
+        protected Boolean InvocationTimeoutThreadRunning { get; set; }
+
+        /// <summary>
+        /// A list of plugin class names that have previously been deemed as 
+        /// broken and should be ignored during compile/load time.
+        /// 
+        /// If a plugin is the cause of the manager going into a panic this
+        /// will serve for the manager to ignore the plugin when/if the manager
+        /// is reloaded because of the panic.
+        /// </summary>
+        public List<String> IgnoredPluginClassNames { get; protected set; }
 
         #endregion
 
         #region Events and Delegates
+
+        public delegate void PluginEventHandler();
+        /// <summary>
+        /// The plugin manager has gone into panic, the plugins should be
+        /// reloaded as the AppDomain has been compromised.
+        /// 
+        /// Panics can occur when a plugin invocation times out, possibly leaning
+        /// towards a runaway call within the AppDomain that would be chewing
+        /// a lot of resources.
+        /// </summary>
+        public event PluginEventHandler PluginPanic;
 
         public delegate void PluginOutputHandler(string strOutput);
         public event PluginOutputHandler PluginOutput;
@@ -116,13 +159,96 @@ namespace PRoCon.Core.Plugin {
 
             //this.CacheFailCompiledPluginVariables = new Dictionary<string, Dictionary<string, string>>();
 
-
             this.m_client = cpcClient;
             //this.LoadedClassNames = new List<string>();
             this.MatchedInGameCommands = new Dictionary<string, MatchCommand>();
             this.CommandsNeedingConfirmation = new ConfirmationDictionary();
 
+            // Handle plugin invocation timeouts.
+            this.Invocations = new List<PluginInvocation>();
+            this.IgnoredPluginClassNames = new List<String>();
+
+            this.InvocationTimeoutThreadRunning = true;
+            this.InvocationTimeoutThread = new Thread(new ThreadStart(this.InvocationTimeoutLoop));
+            this.InvocationTimeoutThread.Start();
+
             this.AssignEventHandler();
+        }
+
+        private void InvocationTimeoutLoop() {
+            // Default maximum runtime = 5 seconds, divided by 20
+            // check every 250 milliseconds.
+            int sleepMilliseconds = (int)(PluginInvocation.MAXIMUM_RUNTIME.TotalMilliseconds / 20.0);
+
+            while (this.InvocationTimeoutThreadRunning) {
+                lock (this) {
+                    PluginInvocation invocation = this.Invocations.FirstOrDefault(); // .OrderBy(x => x.Runtime())
+
+                    if (invocation != null) {
+                        if (invocation.Runtime() >= PluginInvocation.MAXIMUM_RUNTIME) {
+
+                            this.WritePluginConsole("^1^bPlugin manager entering panic..");
+
+                            // Prevent the plugin from being loaded again during this instance
+                            // of the plugin manager.
+                            this.IgnoredPluginClassNames.Add(invocation.Plugin.ClassName);
+
+                            String faultText = invocation.FormatInvocationFault("Call exceeded maximum execution time of {0}", PluginInvocation.MAXIMUM_RUNTIME);
+
+                            // Log the error so we might alert a plugin developer that
+                            // a call to their plugin has caused the plugin manager to go
+                            // into a panic.
+                            File.AppendAllText("PLUGIN_DEBUG.txt", faultText);
+
+                            this.WritePluginConsole("^1^bPlugin invocation timeout: ");
+                            this.WritePluginConsole("^1" + faultText);
+
+                            if (this.PluginPanic != null) {
+                                this.PluginPanic();
+                            }
+                        }
+                    }
+                }
+
+                Thread.Sleep(sleepMilliseconds);
+            }
+        }
+
+        /// <summary>
+        /// Adds an invocation to our list.
+        /// 
+        /// It's titled Enqueue for this may change in the future if this class
+        /// is modified to handle asynchronous calls to plugins it will have to handle
+        /// in a sort-of queue like fashion.
+        /// </summary>
+        /// <param name="plugin">The plugin being invoked</param>
+        /// <param name="methodName">The method name within the plugin that is being invoked</param>
+        /// <param name="parameters">The parameters being passed to the method within the plugin being invoked.</param>
+        protected void EnqueueInvocation(Plugin plugin, String methodName, Object[] parameters) {
+
+            lock (this) {
+                this.Invocations.Add(new PluginInvocation() {
+                    Plugin = plugin,
+                    MethodName = methodName,
+                    Parameters = parameters
+                });
+            }
+        }
+
+        /// <summary>
+        /// Removes all occurences of the invocation
+        /// 
+        /// It's titled Dequeue for this may change in the future if this class
+        /// is modified to handle asynchronous calls to plugins it will have to handle
+        /// in a sort-of queue like fashion.
+        /// </summary>
+        /// <param name="plugin">The plugin that was invoked</param>
+        /// <param name="methodName">The method name within the plugin that was invoked</param>
+        /// <param name="parameters">The parameters being passed to the method within the plugin that was invoked.</param>
+        protected void DequeueInvocation(Plugin plugin, String methodName, Object[] parameters) {
+            lock (this) {
+                this.Invocations.RemoveAll((x) => x.Plugin == plugin && x.MethodName == methodName);
+            }
         }
 
         // TO DO: Move to seperate command control class with events captured by PluginManager.
@@ -186,32 +312,6 @@ namespace PRoCon.Core.Plugin {
                     this.WritePluginConsole("{0}.EnablePlugin(): {1}", className, e.Message);
                 }
             }
-
-            /*
-
-            // If it's loaded
-            if (this.m_dicLoadedPlugins.ContainsKey(strClassName) == true && this.m_dicEnabledPlugins.ContainsKey(strClassName) == false) {
-                // Move to enabled
-                this.m_dicEnabledPlugins.Add(strClassName, this.m_dicLoadedPlugins[strClassName]);
-
-                try {
-                    if (this.m_dicEnabledPlugins.ContainsKey(strClassName) == true) {
-                        this.m_dicEnabledPlugins[strClassName].Invoke("OnPluginEnable");
-
-                        if (this.PluginEnabled != null) {
-                            FrostbiteConnection.RaiseEvent(this.PluginEnabled.GetInvocationList(), strClassName);
-                        }
-                    }
-                }
-                catch (Exception e) {
-                    if (this.PluginOutput != null) {
-
-                    }
-
-                    this.WritePluginConsole("{0}.EnablePlugin(): {1}", strClassName, e.Message);
-                }
-            }
-             * */
         }
 
         public void DisablePlugin(string className) {
@@ -231,25 +331,6 @@ namespace PRoCon.Core.Plugin {
                     this.WritePluginConsole("{0}.DisablePlugin(): {1}", className, e.Message);
                 }
             }
-
-            /*
-            if (this.m_dicEnabledPlugins.ContainsKey(strClassName) == true) {
-
-                try {
-                    if (this.m_dicEnabledPlugins.ContainsKey(strClassName) == true) {
-                        this.m_dicEnabledPlugins[strClassName].Invoke("OnPluginDisable");
-                    }
-                }
-                catch (Exception e) {
-                    this.WritePluginConsole("{0}.DisablePlugin(): {1}", strClassName, e.Message);
-                }
-
-                this.m_dicEnabledPlugins.Remove(strClassName);
-                
-                if (this.PluginDisabled != null) {
-                    FrostbiteConnection.RaiseEvent(this.PluginDisabled.GetInvocationList(), strClassName);
-                }
-            } */
         }
 
         public PluginDetails GetPluginDetails(string strClassName) {
@@ -298,7 +379,11 @@ namespace PRoCon.Core.Plugin {
         public void InvokeOnLoaded(string strClassName, string strMethod, params object[] a_objParameters) {
             try {
                 if (this.Plugins.Contains(strClassName) == true && this.Plugins[strClassName].IsLoaded == true) {
+                    this.EnqueueInvocation(this.Plugins[strClassName], strMethod, a_objParameters);
+
                     this.Plugins[strClassName].Type.Invoke(strMethod, a_objParameters);
+
+                    this.DequeueInvocation(this.Plugins[strClassName], strMethod, a_objParameters);
                 }
             }
             catch (Exception e) {
@@ -312,7 +397,11 @@ namespace PRoCon.Core.Plugin {
 
             try {
                 if (this.Plugins.Contains(strClassName) == true && this.Plugins[strClassName].IsLoaded == true) {
+                    this.EnqueueInvocation(this.Plugins[strClassName], strMethod, a_objParameters);
+
                     strReturn = (string)this.Plugins[strClassName].Type.Invoke(strMethod, a_objParameters);
+
+                    this.DequeueInvocation(this.Plugins[strClassName], strMethod, a_objParameters);
                 }
             }
             catch (Exception e) {
@@ -332,7 +421,11 @@ namespace PRoCon.Core.Plugin {
 
             try {
                 if (this.Plugins.Contains(strClassName) == true && this.Plugins[strClassName].IsLoaded == true) {
+                    this.EnqueueInvocation(this.Plugins[strClassName], strMethod, a_objParameters);
+
                     lstReturn = (List<CPluginVariable>)this.Plugins[strClassName].Type.Invoke(strMethod, a_objParameters);
+
+                    this.DequeueInvocation(this.Plugins[strClassName], strMethod, a_objParameters);
                 }
             }
             catch (Exception e) {
@@ -353,7 +446,11 @@ namespace PRoCon.Core.Plugin {
 
             try {
                 if (this.Plugins.Contains(strClassName) == true && this.Plugins[strClassName].IsEnabled == true) {
+                    this.EnqueueInvocation(this.Plugins[strClassName], strMethod, a_objParameters);
+
                     returnObject = this.Plugins[strClassName].Type.Invoke(strMethod, a_objParameters);
+
+                    this.DequeueInvocation(this.Plugins[strClassName], strMethod, a_objParameters);
                 }
             }
             catch (Exception e) {
@@ -368,7 +465,11 @@ namespace PRoCon.Core.Plugin {
             foreach (Plugin plugin in this.Plugins) {
                 if (plugin.IsLoaded == true) {
                     try {
+                        this.EnqueueInvocation(plugin, strMethod, a_objParameters);
+
                         plugin.ConditionalInvoke(strMethod, a_objParameters);
+
+                        this.DequeueInvocation(plugin, strMethod, a_objParameters);
                     }
                     catch (Exception e) {
                         this.WritePluginConsole("{0}.{1}(): {2}", plugin.ClassName, strMethod, e.Message);
@@ -382,7 +483,11 @@ namespace PRoCon.Core.Plugin {
             foreach (Plugin plugin in this.Plugins) {
                 if (plugin.IsEnabled == true) {
                     try {
+                        this.EnqueueInvocation(plugin, strMethod, a_objParameters);
+
                         plugin.ConditionalInvoke(strMethod, a_objParameters);
+
+                        this.DequeueInvocation(plugin, strMethod, a_objParameters);
                     }
                     catch (Exception e) {
                         this.WritePluginConsole("{0}.{1}(): {2}", plugin.ClassName, strMethod, e.Message);
@@ -588,9 +693,18 @@ namespace PRoCon.Core.Plugin {
             }
         }
 
-        public void CompilePlugins(PermissionSet pluginSandboxPermissions) {
+        public void CompilePlugins(PermissionSet pluginSandboxPermissions, List<String> ignoredPluginClassNames = null) {
 
             try {
+
+                // Make sure we ignore any plugins passed in. These won't even be loaded again.
+                if (ignoredPluginClassNames != null) {
+                    this.IgnoredPluginClassNames = ignoredPluginClassNames;
+                }
+
+                // Clear out all invocations if this is a reload.
+                this.Invocations.Clear();
+
                 this.WritePluginConsole("Preparing plugins directory..");
                 this.PreparePluginsDirectory();
                 this.CleanPlugins();
@@ -645,9 +759,14 @@ namespace PRoCon.Core.Plugin {
 
                     string className = Regex.Replace(pluginFile.Name, "\\.cs$", "");
 
-                    this.CompilePlugin(pluginFile, className, pluginsCodeDomProvider, parameters);
+                    if (this.IgnoredPluginClassNames.Contains(className) == false) {
+                        this.CompilePlugin(pluginFile, className, pluginsCodeDomProvider, parameters);
 
-                    this.LoadPlugin(className, pluginFactory);
+                        this.LoadPlugin(className, pluginFactory);
+                    }
+                    else {
+                        this.WritePluginConsole("Compiling {0}... ^1^bIgnored", className);
+                    }
                 }
 
                 pluginsCodeDomProvider.Dispose();
@@ -663,6 +782,8 @@ namespace PRoCon.Core.Plugin {
             //this.m_dicLoadedPlugins = null;
             //this.LoadedClassNames = null;
             this.m_client = null;
+
+            this.InvocationTimeoutThreadRunning = false;
         }
 
         private void CleanPlugins() {
@@ -687,6 +808,8 @@ namespace PRoCon.Core.Plugin {
         public void Unload() {
 
             this.UnassignEventHandler();
+
+            this.InvocationTimeoutThreadRunning = false;
 
             try {
                 if (this.m_appDomainSandbox != null) {
