@@ -783,6 +783,7 @@ namespace PRoCon.Core.Remote {
 
             Dictionary<string, List<CPluginVariable>> dicClassSavedVariables = new Dictionary<string, List<CPluginVariable>>();
             List<string> lstEnabledPlugins = null;
+            List<String> ignoredPluginClassNames = null;
 
             // If it's a recompile save all the current variables.
             if (this.PluginsManager != null) {
@@ -794,6 +795,7 @@ namespace PRoCon.Core.Remote {
                 }
 
                 lstEnabledPlugins = this.PluginsManager.Plugins.EnabledClassNames;
+                ignoredPluginClassNames = this.PluginsManager.IgnoredPluginClassNames;
 
                 this.PluginsManager.Unload();
 
@@ -809,7 +811,7 @@ namespace PRoCon.Core.Remote {
                 }
             }
 
-            this.PluginsManager.CompilePlugins(prmPluginSandbox);
+            this.PluginsManager.CompilePlugins(prmPluginSandbox, ignoredPluginClassNames);
 
             if (this.PluginsCompiled != null) {
                 FrostbiteConnection.RaiseEvent(this.PluginsCompiled.GetInvocationList(), this);
@@ -828,6 +830,10 @@ namespace PRoCon.Core.Remote {
                     this.PluginsManager.EnablePlugin(strEnabledClass);
                 }
             }
+        }
+
+        private void PluginsManager_PluginPanic() {
+            this.CompilePlugins(this.Parent.OptionsSettings.PluginPermissions);
         }
 
         public List<CMap> GetMapDefines() {
@@ -1407,6 +1413,8 @@ namespace PRoCon.Core.Remote {
                 this.PluginsManager.PluginVariableAltered += new PluginManager.PluginVariableAlteredHandler(Plugins_PluginVariableAltered);
                 this.PluginsManager.PluginEnabled += new PluginManager.PluginEmptyParameterHandler(Plugins_PluginEnabled);
                 this.PluginsManager.PluginDisabled += new PluginManager.PluginEmptyParameterHandler(Plugins_PluginDisabled);
+
+                this.PluginsManager.PluginPanic += new PluginManager.PluginEventHandler(PluginsManager_PluginPanic);
             }
         }
 
