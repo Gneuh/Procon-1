@@ -382,7 +382,8 @@ namespace PRoCon.Core {
             this.RegexMatchPunkbusterUnban = new Regex(@":[ ]+?Guid[ ]+?(?<guid>[A-Fa-f0-9]+)[ ]+?has been Unbanned", RegexOptions.IgnoreCase | RegexOptions.Compiled);
             this.RegexMatchPunkbusterBanAdded = new Regex(@": Ban Added to Ban List", RegexOptions.IgnoreCase | RegexOptions.Compiled);
             // PunkBuster Server: Kick/Ban Command Issued (testing) for (slot#1) aaa.bbb.ccc.ddd:3659 guidstring namestring
-            this.RegexMatchPunkbusterKickBanCmd = new Regex(@": Kick\/Ban Command Issued \((?<reason>.*)\) for \(slot#(?<slotid>[0-9]+)\) (?<ip>[0-9\.:]+) (?<guid>[A-Fa-f0-9]+) (?<name>.*)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+            //this.RegexMatchPunkbusterKickBanCmd = new Regex(@": Kick\/Ban Command Issued \((?<reason>.*)\) for \(slot#(?<slotid>[0-9]+)\) (?<ip>[0-9\.:]+) (?<guid>[A-Fa-f0-9]+) (?<name>.*)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+            this.RegexMatchPunkbusterKickBanCmd = new Regex(@":[ ]+?(Kick|Ban)[ ]+?Command[ ]+?Issued[ ]+?\((?<reason>.*)\)[ ]+?for[ ]+?\(slot\#(?<slotid>[0-9]+)\)[ ]+?(?<ip>[0-9\.:]+)[ ]+(?<guid>[A-Fa-f0-9]+)[ ]+?(?<name>.*)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
             this.RegexMatchPunkbusterBeginPlist = new Regex(@":[ ]+?Player List: ", RegexOptions.IgnoreCase | RegexOptions.Compiled);
             this.RegexMatchPunkbusterEndPlist = new Regex(@":[ ]+?End of Player List \((?<players>[0-9]+) Players\)", RegexOptions.IgnoreCase | RegexOptions.Compiled);

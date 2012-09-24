@@ -499,6 +499,7 @@
             "Admin abuse"});
             this.cboBanlistReason.Location = new System.Drawing.Point(525, 28);
             this.cboBanlistReason.Name = "cboBanlistReason";
+            this.cboBanlistReason.MaxLength = 80;
             this.cboBanlistReason.Size = new System.Drawing.Size(492, 23);
             this.cboBanlistReason.TabIndex = 64;
             // 

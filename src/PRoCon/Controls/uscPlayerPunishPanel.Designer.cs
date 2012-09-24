@@ -78,6 +78,7 @@
             this.cboReason.FormattingEnabled = true;
             this.cboReason.Location = new System.Drawing.Point(170, 27);
             this.cboReason.Name = "cboReason";
+            this.cboReason.MaxLength = 80;
             this.cboReason.Size = new System.Drawing.Size(258, 23);
             this.cboReason.TabIndex = 5;
             // 
