@@ -669,7 +669,7 @@ namespace PRoCon.Core.Remote {
             }
         }
 
-        public void ExecuteConnectionConfig(string strConfigFile, int iRecursion, List<string> lstArguments) {
+        public void ExecuteConnectionConfig(string strConfigFile, int iRecursion, List<string> lstArguments, bool blIncPlugin) {
 
             //FileStream stmConfigFile = null;
             try {
@@ -717,7 +717,11 @@ namespace PRoCon.Core.Remote {
 
                                                     // If they have asked for a command on failure..
                                                     if (lstWordifiedCommand.Count > 3) {
-                                                        this.Parent.ExecutePRoConCommand(this, lstWordifiedCommand.GetRange(3, lstWordifiedCommand.Count - 3), iRecursion++);
+                                                        if (blIncPlugin == true) {
+                                                            this.Parent.ExecutePRoConCommandCon(this, lstWordifiedCommand.GetRange(3, lstWordifiedCommand.Count - 3), iRecursion++);
+                                                        } else {
+                                                            this.Parent.ExecutePRoConCommand(this, lstWordifiedCommand.GetRange(3, lstWordifiedCommand.Count - 3), iRecursion++);
+                                                        }
                                                     }
 
                                                     // Cancel execution of the config file, they don't have the demanded privileges.
@@ -735,11 +739,19 @@ namespace PRoCon.Core.Remote {
                                         }
                                     }
                                     else {
-                                        this.Parent.ExecutePRoConCommand(this, lstWordifiedCommand, iRecursion++);
+                                        if (blIncPlugin == true) {
+                                            this.Parent.ExecutePRoConCommandCon(this, lstWordifiedCommand, iRecursion++);
+                                        } else {
+                                            this.Parent.ExecutePRoConCommand(this, lstWordifiedCommand, iRecursion++);
+                                        }
                                     }
                                 }
                                 else {
-                                    this.Parent.ExecutePRoConCommand(this, Packet.Wordify(strLine), iRecursion++);
+                                    if (blIncPlugin == true) {
+                                        this.Parent.ExecutePRoConCommandCon(this, Packet.Wordify(strLine), iRecursion++);
+                                    } else {
+                                        this.Parent.ExecutePRoConCommand(this, Packet.Wordify(strLine), iRecursion++);
+                                    }
                                 }
                             }
                         }
@@ -992,23 +1004,23 @@ namespace PRoCon.Core.Remote {
                 //this.m_blLoadingSavingConnectionConfig = true;
 
                 if (this.CurrentServerInfo.GameMod == GameMods.None) {
-                    this.ExecuteConnectionConfig(this.Game.GameType + ".def", 0, null);
+                    this.ExecuteConnectionConfig(this.Game.GameType + ".def", 0, null, false);
                 }
                 else {
-                    this.ExecuteConnectionConfig(this.Game.GameType + "." + this.CurrentServerInfo.GameMod + ".def", 0, null);
+                    this.ExecuteConnectionConfig(this.Game.GameType + "." + this.CurrentServerInfo.GameMod + ".def", 0, null, false);
                 }
                 
                 // load override global_vars.def
                 this.ExecuteGlobalVarsConfig("global_vars.def", 0, null);
 
-                this.ExecuteConnectionConfig("reasons.cfg", 0, null);
+                this.ExecuteConnectionConfig("reasons.cfg", 0, null, false);
                 
                 lock (this.Parent) {
                     this.CompilePlugins(this.Parent.OptionsSettings.PluginPermissions);
                 }
 
-                this.ExecuteConnectionConfig(this.FileHostNamePort + ".cfg", 0, null);
-
+                //this.ExecuteConnectionConfig(this.FileHostNamePort + ".cfg", 0, null, true);
+                // moved below login becaue plugins enabled without connection is senseless
 
                 //this.m_blLoadingSavingConnectionConfig = false;
 
@@ -1017,6 +1029,8 @@ namespace PRoCon.Core.Remote {
                 // this.ConnectionError = false;
 
                 this.BeginLoginSequence();
+
+                this.ExecuteConnectionConfig(this.FileHostNamePort + ".cfg", 0, null, true);
 
                 this.m_blLoadingSavingConnectionConfig = false;
             }
@@ -1191,10 +1205,10 @@ namespace PRoCon.Core.Remote {
 
             if (this.m_gameModModified == true) {
                 if (this.CurrentServerInfo.GameMod == GameMods.None) {
-                    this.ExecuteConnectionConfig(this.Game.GameType + ".def", 0, null);
+                    this.ExecuteConnectionConfig(this.Game.GameType + ".def", 0, null, false);
                 }
                 else {
-                    this.ExecuteConnectionConfig(this.Game.GameType + "." + this.CurrentServerInfo.GameMod + ".def", 0, null);
+                    this.ExecuteConnectionConfig(this.Game.GameType + "." + this.CurrentServerInfo.GameMod + ".def", 0, null, false);
                 }
 
                 this.ExecuteGlobalVarsConfig("global_vars.def", 0, null);
@@ -1220,7 +1234,7 @@ namespace PRoCon.Core.Remote {
             // This saves about 1.7 mb's per connection.  I'd prefer the plugins never compiled though if its connecting to a layer.
             //if (this.IsPRoConConnection == true) { this.PluginsManager.Unload(); GC.Collect();  }
 
-            this.ExecuteConnectionConfig("connection_onlogin.cfg", 0, null);
+            this.ExecuteConnectionConfig("connection_onlogin.cfg", 0, null, false);
 
             if (this.Login != null) {
                 FrostbiteConnection.RaiseEvent(this.Login.GetInvocationList(), this);
@@ -2499,6 +2513,12 @@ namespace PRoCon.Core.Remote {
         public void ProconProtectedPluginSetVariable(string strClassName, string strVariable, string strValue) {
             if (this.PluginsManager != null) {
                 this.PluginsManager.SetPluginVariable(strClassName, strVariable, strValue);
+            }
+        }
+
+        public void ProconProtectedPluginSetVariableCon(string strClassName, string strVariable, string strValue) {
+            if (this.PluginsManager != null) {
+                this.PluginsManager.SetPluginVariableCon(strClassName, strVariable, strValue);
             }
         }
 

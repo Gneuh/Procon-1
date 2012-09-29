@@ -376,6 +376,39 @@ namespace PRoCon.Core.Plugin {
             }
         }
 
+        public PluginDetails GetPluginDetailsCon(string strClassName) {
+            PluginDetails spdReturnDetails = new PluginDetails();
+
+            spdReturnDetails.ClassName = strClassName;
+            spdReturnDetails.Name = this.InvokeOnLoaded_String(strClassName, "GetPluginName");
+            spdReturnDetails.Author = this.InvokeOnLoaded_String(strClassName, "GetPluginAuthor");
+            spdReturnDetails.Version = this.InvokeOnLoaded_String(strClassName, "GetPluginVersion");
+            spdReturnDetails.Website = this.InvokeOnLoaded_String(strClassName, "GetPluginWebsite");
+            spdReturnDetails.Description = this.InvokeOnLoaded_String(strClassName, "GetPluginDescription");
+
+            // a bit rough but for the moment...  
+            //spdReturnDetails.DisplayPluginVariables = this.InvokeOnLoaded_CPluginVariables(strClassName, "GetDisplayPluginVariables");
+            spdReturnDetails.PluginVariables = this.InvokeOnLoaded_CPluginVariables(strClassName, "GetPluginVariables");
+
+            return spdReturnDetails;
+        }
+
+        public void SetPluginVariableCon(string strClassName, string strVariable, string strValue) {
+
+            // FailCompiledPlugins
+
+            if (this.Plugins.Contains(strClassName) == true && this.Plugins[strClassName].IsLoaded == true) {
+
+                this.InvokeOnLoaded(strClassName, "SetPluginVariable", new object[] { strVariable, strValue });
+
+                if (this.PluginVariableAltered != null) {
+                    FrostbiteConnection.RaiseEvent(this.PluginVariableAltered.GetInvocationList(), this.GetPluginDetailsCon(strClassName));
+                }
+            } else if (this.Plugins.IsLoaded(strClassName) == false) {
+                this.Plugins.SetCachedPluginVariable(strClassName, strVariable, strValue);
+            }
+        }
+
         public void InvokeOnLoaded(string strClassName, string strMethod, params object[] a_objParameters) {
             try {
                 if (this.Plugins.Contains(strClassName) == true && this.Plugins[strClassName].IsLoaded == true) {
