@@ -128,6 +128,8 @@ namespace PRoCon.Core {
         public string PunkBusterVersion { get; set; }
         public bool JoinQueueEnabled { get; set; }
         public string ServerRegion { get; set; }
+        public string PingSite { get; set; }
+        public string ServerCountry { get; set; }
 
         public List<TeamScore> TeamScores {
             get;

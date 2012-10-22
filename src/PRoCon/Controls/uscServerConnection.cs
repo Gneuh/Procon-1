@@ -516,6 +516,24 @@ namespace PRoCon {
                     default: break;
                 }
             }
+            // BF3 goes here cause it has ConnectionState parameter is empty
+            if (this.Client.Game is BF3Client) {
+                this.toolTipPlasma.SetToolTip(this.lblPlasmaStatus,
+                    this.m_clocLanguage.GetLocalized("uscServerConnection.lblPlasmaStatus.AcceptingPlayers.ToolTip")
+                        + Environment.NewLine + Environment.NewLine + 
+                    this.m_clocLanguage.GetLocalized("uscServerConnection.extServerInfo.ServerRegion.ToolTip") + "\t\t"
+                        + this.m_clocLanguage.GetLocalized(String.Format("uscServerConnection.extServerInfo.ServerRegion.{0}.ToolTip", csiServerInfo.ServerRegion))
+                    + Environment.NewLine +
+                    this.m_clocLanguage.GetDefaultLocalized("Server Country:", "uscServerConnection.extServerInfo.ServerCountry.ToolTip") + "\t\t" + csiServerInfo.ServerCountry
+                    + Environment.NewLine +
+                    this.m_clocLanguage.GetDefaultLocalized("Closest Ping Site:", "uscServerConnection.extServerInfo.PingSite.ToolTip") + "\t\t" +
+                    this.m_clocLanguage.GetDefaultLocalized(csiServerInfo.PingSite, String.Format("uscServerConnection.extServerInfo.PingSite.{0}.ToolTip", csiServerInfo.PingSite))
+                    + Environment.NewLine + Environment.NewLine +
+                    this.m_clocLanguage.GetLocalized("uscServerConnection.extServerInfo.PunkBusterVersion.ToolTip") + "\t" + csiServerInfo.PunkBusterVersion
+                    + Environment.NewLine
+                    + Environment.NewLine
+                );
+            }
         }
 
         private void m_prcConnection_LoadingLevel(FrostbiteClient sender, string mapFileName, int roundsPlayed, int roundsTotal) {
