@@ -2039,6 +2039,10 @@ namespace PRoCon {
                 {
                     System.Diagnostics.Process.Start("http://bf3stats.com/stats_pc/" + ((CPlayerInfo)this.voiceToolStripMenuItem.Tag).SoldierName);
                 }
+                else if (this.m_prcClient.Game is MOHWClient)
+                {
+                    System.Diagnostics.Process.Start("http://mohwstats.com/stats_pc/" + ((CPlayerInfo)this.voiceToolStripMenuItem.Tag).SoldierName);
+                }
             }
         }
 
@@ -2099,6 +2103,10 @@ namespace PRoCon {
                         this.m_prcClient.SendRequest(new List<string>() { "mapList.endRound", this.cboEndRound.SelectedIndex.ToString() });
                     }
                     else if (this.m_prcClient.Game is BF3Client) {
+                        this.m_prcClient.SendRequest(new List<string>() { "mapList.endRound", this.cboEndRound.SelectedIndex.ToString() });
+                    }
+                    else if (this.m_prcClient.Game is MOHWClient)
+                    {
                         this.m_prcClient.SendRequest(new List<string>() { "mapList.endRound", this.cboEndRound.SelectedIndex.ToString() });
                     }
                 }

@@ -404,6 +404,42 @@ namespace PRoCon.Core.Options {
             set;
         }
 
+        private int m_PluginMaxRuntime_s;
+        public int PluginMaxRuntime_s {
+            get {
+                return this.m_PluginMaxRuntime_s;
+            }
+            set {
+                if (value <= 0) { value = 10; }
+                if (value >= 60) { value = 59; }
+                this.m_PluginMaxRuntime_s = value;
+                this.m_praApplication.SaveMainConfig();
+            }
+        }
+
+        private int m_PluginMaxRuntime_m;
+        public int PluginMaxRuntime_m {
+            get {
+                return this.m_PluginMaxRuntime_m;
+            }
+            set {
+                if (value < 0) { value = 0; }
+                if (value >= 60) { value = 59; }
+                this.m_PluginMaxRuntime_m = value;
+                this.m_praApplication.SaveMainConfig();
+            }
+        }
+
+        private bool m_isPluginMaxRuntimeLocked;
+        public bool PluginMaxRuntimeLocked {
+            get {
+                return m_isPluginMaxRuntimeLocked;
+            }
+            set {
+                this.m_isPluginMaxRuntimeLocked = value;
+            }
+        }
+
         public PermissionSet PluginPermissions {
 
             get {
@@ -493,6 +529,9 @@ namespace PRoCon.Core.Options {
             this.StatsLinksMaxNum = 4;
             this.StatsLinkNameUrl = new NotificationList<StatsLinkNameUrl>();
             this.StatsLinkNameUrl.Add(new StatsLinkNameUrl("Metabans", "http://metabans.com/search/%player_name%"));
+
+            this.PluginMaxRuntime_s = 59;
+            this.PluginMaxRuntime_m = 0;
         }
     }
 }

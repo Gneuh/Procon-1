@@ -39,6 +39,7 @@ namespace PRoCon {
     using Controls.ServerSettings.BFBC2;
     using Controls.ServerSettings.MOH;
     using Controls.ServerSettings.BF3;
+    using Controls.ServerSettings.MOHW;
     using PRoCon.Forms;
 
     public partial class uscServerSettingsPanel : UserControl {
@@ -94,14 +95,22 @@ namespace PRoCon {
 
             if (sender.Game is BF3Client) {
                 this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsDetailsBF3());
-            } else {
+            }
+            else if (sender.Game is MOHWClient) {
+                this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsDetailsBF3());
+            }
+            else {
                 this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsDetails());
             }
             
             if (sender.Game is BF3Client) {
                 this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsConfigurationBF3());
             }
-            else {
+            else if (sender.Game is MOHWClient) {
+                this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsConfigurationMOHW());
+            }
+            else
+            {
                 this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsConfiguration());
             }
 
@@ -113,6 +122,9 @@ namespace PRoCon {
             }
             else if (sender.Game is BF3Client) {
                 this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsGameplayBF3());
+            }
+            else if (sender.Game is MOHWClient) {
+                this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsGameplayMOHW());
             }
 
             if (sender.Game is BFBC2Client || sender.Game is MoHClient) {
@@ -130,6 +142,9 @@ namespace PRoCon {
             }
             else if (sender.Game is BF3Client) {
                 this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsConfigGeneratorBF3());
+            }
+            else if (sender.Game is MOHWClient) {
+                this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsConfigGeneratorMOHW());
             }
 
             foreach (uscServerSettings page in this.cboSelectedSettingsPanel.Items) {

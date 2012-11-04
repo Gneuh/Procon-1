@@ -52,6 +52,12 @@
             this.tabPlugins = new System.Windows.Forms.TabPage();
             this.lblPluginsChangesAfterRestart = new System.Windows.Forms.Label();
             this.pnlSandboxOptions = new System.Windows.Forms.Panel();
+            this.numPluginMaxRuntimeSec = new System.Windows.Forms.NumericUpDown();
+            this.numPluginMaxRuntimeMin = new System.Windows.Forms.NumericUpDown();
+            this.lblPluginMaxRuntimeSec = new System.Windows.Forms.Label();
+            this.lblPluginMaxRuntimeMin = new System.Windows.Forms.Label();
+            this.lblPluginMaxRuntime = new System.Windows.Forms.Label();
+            this.panel16 = new System.Windows.Forms.Panel();
             this.chkAllowSmtpConnections = new System.Windows.Forms.CheckBox();
             this.lblPluginsMail = new System.Windows.Forms.Label();
             this.panel13 = new System.Windows.Forms.Panel();
@@ -129,6 +135,8 @@
             this.tabBasics.SuspendLayout();
             this.tabPlugins.SuspendLayout();
             this.pnlSandboxOptions.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numPluginMaxRuntimeSec)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numPluginMaxRuntimeMin)).BeginInit();
             this.pnlPluginsAllowedDomains.SuspendLayout();
             this.tabHttpServer.SuspendLayout();
             this.pnlHttpServerSettings.SuspendLayout();
@@ -465,6 +473,12 @@
             // 
             // pnlSandboxOptions
             // 
+            this.pnlSandboxOptions.Controls.Add(this.numPluginMaxRuntimeSec);
+            this.pnlSandboxOptions.Controls.Add(this.numPluginMaxRuntimeMin);
+            this.pnlSandboxOptions.Controls.Add(this.lblPluginMaxRuntimeSec);
+            this.pnlSandboxOptions.Controls.Add(this.lblPluginMaxRuntimeMin);
+            this.pnlSandboxOptions.Controls.Add(this.lblPluginMaxRuntime);
+            this.pnlSandboxOptions.Controls.Add(this.panel16);
             this.pnlSandboxOptions.Controls.Add(this.chkAllowSmtpConnections);
             this.pnlSandboxOptions.Controls.Add(this.lblPluginsMail);
             this.pnlSandboxOptions.Controls.Add(this.panel13);
@@ -474,10 +488,83 @@
             this.pnlSandboxOptions.Controls.Add(this.pnlPluginsAllowedDomains);
             this.pnlSandboxOptions.Controls.Add(this.lblPluginsOutgoingConnections);
             this.pnlSandboxOptions.Controls.Add(this.panel5);
-            this.pnlSandboxOptions.Location = new System.Drawing.Point(3, 75);
+            this.pnlSandboxOptions.Location = new System.Drawing.Point(3, 60);
             this.pnlSandboxOptions.Name = "pnlSandboxOptions";
-            this.pnlSandboxOptions.Size = new System.Drawing.Size(381, 346);
+            this.pnlSandboxOptions.Size = new System.Drawing.Size(381, 361);
             this.pnlSandboxOptions.TabIndex = 24;
+            // 
+            // numPluginMaxRuntimeSec
+            // 
+            this.numPluginMaxRuntimeSec.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.numPluginMaxRuntimeSec.Location = new System.Drawing.Point(183, 333);
+            this.numPluginMaxRuntimeSec.Maximum = new decimal(new int[] {
+            59,
+            0,
+            0,
+            0});
+            this.numPluginMaxRuntimeSec.Name = "numPluginMaxRuntimeSec";
+            this.numPluginMaxRuntimeSec.Size = new System.Drawing.Size(44, 23);
+            this.numPluginMaxRuntimeSec.TabIndex = 284;
+            this.numPluginMaxRuntimeSec.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.numPluginMaxRuntimeSec.Value = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.numPluginMaxRuntimeSec.Validated += new System.EventHandler(this.numPluginMaxRuntimeSec_Validated);
+            // 
+            // numPluginMaxRuntimeMin
+            // 
+            this.numPluginMaxRuntimeMin.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.numPluginMaxRuntimeMin.Location = new System.Drawing.Point(100, 333);
+            this.numPluginMaxRuntimeMin.Maximum = new decimal(new int[] {
+            59,
+            0,
+            0,
+            0});
+            this.numPluginMaxRuntimeMin.Name = "numPluginMaxRuntimeMin";
+            this.numPluginMaxRuntimeMin.Size = new System.Drawing.Size(44, 23);
+            this.numPluginMaxRuntimeMin.TabIndex = 283;
+            this.numPluginMaxRuntimeMin.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.numPluginMaxRuntimeMin.Validated += new System.EventHandler(this.numPluginMaxRuntimeMin_Validated);
+            // 
+            // lblPluginMaxRuntimeSec
+            // 
+            this.lblPluginMaxRuntimeSec.AutoSize = true;
+            this.lblPluginMaxRuntimeSec.Location = new System.Drawing.Point(233, 335);
+            this.lblPluginMaxRuntimeSec.Name = "lblPluginMaxRuntimeSec";
+            this.lblPluginMaxRuntimeSec.Size = new System.Drawing.Size(24, 15);
+            this.lblPluginMaxRuntimeSec.TabIndex = 33;
+            this.lblPluginMaxRuntimeSec.Text = "sec";
+            // 
+            // lblPluginMaxRuntimeMin
+            // 
+            this.lblPluginMaxRuntimeMin.AutoSize = true;
+            this.lblPluginMaxRuntimeMin.Location = new System.Drawing.Point(150, 335);
+            this.lblPluginMaxRuntimeMin.Name = "lblPluginMaxRuntimeMin";
+            this.lblPluginMaxRuntimeMin.Size = new System.Drawing.Size(28, 15);
+            this.lblPluginMaxRuntimeMin.TabIndex = 27;
+            this.lblPluginMaxRuntimeMin.Text = "min";
+            // 
+            // lblPluginMaxRuntime
+            // 
+            this.lblPluginMaxRuntime.AutoSize = true;
+            this.lblPluginMaxRuntime.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblPluginMaxRuntime.Location = new System.Drawing.Point(14, 314);
+            this.lblPluginMaxRuntime.Name = "lblPluginMaxRuntime";
+            this.lblPluginMaxRuntime.Size = new System.Drawing.Size(184, 15);
+            this.lblPluginMaxRuntime.TabIndex = 30;
+            this.lblPluginMaxRuntime.Text = "Plugin runtime limit (per plugin)";
+            // 
+            // panel16
+            // 
+            this.panel16.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel16.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.panel16.Location = new System.Drawing.Point(17, 323);
+            this.panel16.Name = "panel16";
+            this.panel16.Size = new System.Drawing.Size(355, 1);
+            this.panel16.TabIndex = 31;
             // 
             // chkAllowSmtpConnections
             // 
@@ -666,7 +753,7 @@
             // 
             this.lblPluginsSecurity.AutoSize = true;
             this.lblPluginsSecurity.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblPluginsSecurity.Location = new System.Drawing.Point(17, 24);
+            this.lblPluginsSecurity.Location = new System.Drawing.Point(17, 9);
             this.lblPluginsSecurity.Name = "lblPluginsSecurity";
             this.lblPluginsSecurity.Size = new System.Drawing.Size(90, 15);
             this.lblPluginsSecurity.TabIndex = 20;
@@ -677,7 +764,7 @@
             this.panel6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel6.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.panel6.Location = new System.Drawing.Point(20, 33);
+            this.panel6.Location = new System.Drawing.Point(20, 18);
             this.panel6.Name = "panel6";
             this.panel6.Size = new System.Drawing.Size(355, 1);
             this.panel6.TabIndex = 21;
@@ -690,7 +777,7 @@
             this.cboPluginsSandboxOptions.Items.AddRange(new object[] {
             "Run plugins in a sandbox (recommended)",
             "Run plugins with no restrictions"});
-            this.cboPluginsSandboxOptions.Location = new System.Drawing.Point(31, 46);
+            this.cboPluginsSandboxOptions.Location = new System.Drawing.Point(31, 31);
             this.cboPluginsSandboxOptions.Name = "cboPluginsSandboxOptions";
             this.cboPluginsSandboxOptions.Size = new System.Drawing.Size(304, 24);
             this.cboPluginsSandboxOptions.TabIndex = 23;
@@ -1199,13 +1286,13 @@
             this.lsvStatsLinksList.Location = new System.Drawing.Point(29, 70);
             this.lsvStatsLinksList.MultiSelect = false;
             this.lsvStatsLinksList.Name = "lsvStatsLinksList";
+            this.lsvStatsLinksList.ShowItemToolTips = true;
             this.lsvStatsLinksList.Size = new System.Drawing.Size(304, 136);
             this.lsvStatsLinksList.TabIndex = 27;
-            this.lsvStatsLinksList.ShowItemToolTips = true;
             this.lsvStatsLinksList.UseCompatibleStateImageBehavior = false;
             this.lsvStatsLinksList.View = System.Windows.Forms.View.Details;
             this.lsvStatsLinksList.SelectedIndexChanged += new System.EventHandler(this.lsvStatsLinksList_SelectedIndexChanged);
-            this.lsvStatsLinksList.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(lsvStatsLinksList_MouseDoubleClick);
+            this.lsvStatsLinksList.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.lsvStatsLinksList_MouseDoubleClick);
             // 
             // colStatsLinksName
             // 
@@ -1305,6 +1392,8 @@
             this.tabPlugins.PerformLayout();
             this.pnlSandboxOptions.ResumeLayout(false);
             this.pnlSandboxOptions.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numPluginMaxRuntimeSec)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numPluginMaxRuntimeMin)).EndInit();
             this.pnlPluginsAllowedDomains.ResumeLayout(false);
             this.pnlPluginsAllowedDomains.PerformLayout();
             this.tabHttpServer.ResumeLayout(false);
@@ -1428,5 +1517,11 @@
         private System.Windows.Forms.Label lblStatsLinkUrl;
         private System.Windows.Forms.Label lblStatsLinkName;
         private System.Windows.Forms.Label lblStatsLinkHelpText;
+        private System.Windows.Forms.Label lblPluginMaxRuntimeSec;
+        private System.Windows.Forms.Label lblPluginMaxRuntimeMin;
+        private System.Windows.Forms.Label lblPluginMaxRuntime;
+        private System.Windows.Forms.Panel panel16;
+        private System.Windows.Forms.NumericUpDown numPluginMaxRuntimeMin;
+        private System.Windows.Forms.NumericUpDown numPluginMaxRuntimeSec;
     }
 }

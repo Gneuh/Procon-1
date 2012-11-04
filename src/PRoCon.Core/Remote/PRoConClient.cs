@@ -515,6 +515,8 @@ namespace PRoCon.Core.Remote {
 
         #endregion
 
+        public TimeSpan m_tsPluginMaxRuntime = new TimeSpan(0, 0, 59);
+
         public PRoConClient(PRoConApplication praApplication, string hostName, ushort port, string username, string password) {
 
             this.HostName = hostName;
@@ -535,6 +537,9 @@ namespace PRoCon.Core.Remote {
 
             this.m_dicUsernamesToUids = new Dictionary<string, string>() { { "SYSOP", "" } };
             this.InstigatingAccountName = String.Empty;
+
+            this.m_tsPluginMaxRuntime = new TimeSpan(0, this.Parent.OptionsSettings.PluginMaxRuntime_m, this.Parent.OptionsSettings.PluginMaxRuntime_s);
+
 
         }
         
@@ -1093,7 +1098,12 @@ namespace PRoCon.Core.Remote {
                             this.m_connection = null;
                         }
                         else if (String.Compare(packetBeforeDispatch.Words[1], "BF3", true) == 0) {
-                            this.Game = new BF3Client(sender);
+                            this.Game = new BF3Client((FrostbiteConnection)sender);
+                            this.m_connection = null;
+                        }
+                        else if (String.Compare(packetBeforeDispatch.Words[1], "MOHW", true) == 0)
+                        {
+                            this.Game = new MOHWClient((FrostbiteConnection)sender);
                             this.m_connection = null;
                         }
 
@@ -3028,7 +3038,7 @@ namespace PRoCon.Core.Remote {
         }
 
         private void PRoConClient_ReservedSlotsList(FrostbiteClient sender, List<string> soldierNames) {
-            if (sender is BF3Client) {
+            if (sender is BF3Client || sender is MOHWClient) {
                 this.ReservedSlotList.Clear();
             }
             if (soldierNames.Count != 0)
@@ -3275,7 +3285,7 @@ namespace PRoCon.Core.Remote {
 
         protected void OnPlayerLimit(FrostbiteClient sender, int iPlayerLimit) {
             // Quick 'hack' because BF3 does not have these and it's generating confusion on the forums.
-            if (!(this.Game is BF3Client)) {
+            if (!(this.Game is BF3Client) && !(this.Game is MOHWClient)) {
                 this.SendRequest(new List<string>() { "vars.currentPlayerLimit" });
                 this.SendRequest(new List<string>() { "vars.maxPlayerLimit" });
             }

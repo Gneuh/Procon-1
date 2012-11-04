@@ -200,6 +200,23 @@ namespace PRoCon.Core.Plugin {
         public virtual void OnRoundWarmupTimeout(int limit) { }
         public virtual void OnPremiumStatus(bool isEnabled) { }
 
+        #region MoHW
+        public virtual void OnAllUnlocksUnlocked(bool isEnabled) { }
+        public virtual void OnBuddyOutline(bool isEnabled) { }
+        public virtual void OnHudBuddyInfo(bool isEnabled) { }
+        public virtual void OnHudClassAbility(bool isEnabled) { }
+        public virtual void OnHudCrosshair(bool isEnabled) { }
+        public virtual void OnHudEnemyTag(bool isEnabled) { }
+        public virtual void OnHudExplosiveIcons(bool isEnabled) { }
+        public virtual void OnHudGameMode(bool isEnabled) { }
+        public virtual void OnHudHealthAmmo(bool isEnabled) { }
+        public virtual void OnHudMinimap(bool isEnabled) { }
+        public virtual void OnHudObiturary(bool isEnabled) { }
+        public virtual void OnHudPointsTracker(bool isEnabled) { }
+        public virtual void OnHudUnlocks(bool isEnabled) { }
+        public virtual void OnPlaylist(string playlist) { }
+        #endregion
+
         #endregion
 
         #region Gameplay

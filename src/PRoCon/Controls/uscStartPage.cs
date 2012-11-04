@@ -212,7 +212,7 @@ namespace PRoCon.Controls {
                         if (this.m_proconApplication != null && this.m_proconApplication.CurrentLanguage != null) {
                             CMap tmpMap = client.GetFriendlyMapByFilenamePlayList(client.CurrentServerInfo.Map, client.CurrentServerInfo.GameMode);
                             int iTmpCurRounds = client.CurrentServerInfo.CurrentRound;
-                            if (client.GameType == "BF3") {
+                            if (client.GameType == "BF3" || client.GameType == "MOHW") {
                                 iTmpCurRounds++;
                             }
                             //replacedTemplate = replacedTemplate.Replace("%server_additonal%", this.m_startPageTemplates.GetLocalized("connections.online.additional", client.GetFriendlyGamemode(client.CurrentServerInfo.GameMode), client.GetFriendlyMapname(client.CurrentServerInfo.Map), client.CurrentServerInfo.CurrentRound.ToString(), client.CurrentServerInfo.TotalRounds.ToString()));

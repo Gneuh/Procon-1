@@ -242,7 +242,7 @@ namespace PRoCon {
             if (sender.Game is MoHClient) {
                 cboDisplayList.Items.RemoveAt(1);
             }
-            if (sender.Game is BF3Client) {
+            if (sender.Game is BF3Client || sender.Game is MOHWClient) {
                 this.m_iCanLongMsg = 1;
                 this.m_iChat_MaxLength = 128;
             }
@@ -685,7 +685,7 @@ namespace PRoCon {
                 }
                 else if (this.cboDisplayList.SelectedIndex == 1) {
                     this.m_iYellDuration = (int)cboDisplayChatTime.SelectedItem;
-                    if (this.m_prcClient.Game is BF3Client) {
+                    if (this.m_prcClient.Game is BF3Client || this.m_prcClient.Game is MOHWClient) {
                         this.m_iYellDuration = (int)cboDisplayChatTime.SelectedItem / 1000;
                     }
 

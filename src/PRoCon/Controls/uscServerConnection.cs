@@ -250,6 +250,10 @@ namespace PRoCon {
                 this.m_prcConnection_ServerInfo(this.m_prcConnection.Game, this.m_prcConnection.CurrentServerInfo);
             }
 
+            if (this.m_prcConnection.GameType == "BF3" || this.m_prcConnection.GameType == "MOHW") {
+                this.tbcClientTabs.TabPages.Remove(this.tabMapView);
+            }
+
             this.SetLocalization(this.m_prcConnection.Language);
 
             this.SetVersionInfoLabels(this.m_prcConnection.Game);
@@ -469,7 +473,7 @@ namespace PRoCon {
             this.lblCurrentMapName.Text = String.Format("{0} - {1}", tmpMap.GameMode, tmpMap.PublicLevelName);
             this.toolTipMapControls.SetToolTip(this.lblCurrentMapName, csiServerInfo.Map);
 
-            if (this.Client.Game is BF3Client) {
+            if (this.Client.Game is BF3Client || this.Client.Game is MOHWClient) {
                 this.lblCurrentRound.Text = this.m_clocLanguage.GetLocalized("uscServerConnection.lblCurrentRound", (csiServerInfo.CurrentRound + 1).ToString(), csiServerInfo.TotalRounds.ToString());
             }
             else {
@@ -516,8 +520,8 @@ namespace PRoCon {
                     default: break;
                 }
             }
-            // BF3 goes here cause it has ConnectionState parameter is empty
-            if (this.Client.Game is BF3Client) {
+            // BF3 & MOHW goes here cause it has ConnectionState parameter is empty
+            if (this.Client.Game is BF3Client || this.Client.Game is MOHWClient) {
                 this.toolTipPlasma.SetToolTip(this.lblPlasmaStatus,
                     this.m_clocLanguage.GetLocalized("uscServerConnection.lblPlasmaStatus.AcceptingPlayers.ToolTip")
                         + Environment.NewLine + Environment.NewLine + 
@@ -568,7 +572,7 @@ namespace PRoCon {
 
         private void m_prcConnection_LevelLoaded(FrostbiteClient sender, string mapFileName, string Gamemode, int roundsPlayed, int roundsTotal)
         {
-            if (String.Compare(this.Client.GameType, "BF3", true) == 0)
+            if (String.Compare(this.Client.GameType, "BF3", true) == 0 || String.Compare(this.Client.GameType, "MOHW", true) == 0)
             {
                 this.SetServerInfoLabels(new CServerInfo(this.m_prcConnection.CurrentServerInfo.ServerName,
                                                         mapFileName,

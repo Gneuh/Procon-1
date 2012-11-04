@@ -168,6 +168,40 @@ namespace PRoCon.Core {
             private set;
         }
 
+        private int m_praPluginMaxRuntime_s;
+        public int praPluginMaxRuntime_s {
+            get {
+                return this.m_praPluginMaxRuntime_s;
+            }
+            private set {
+                if (value <= 0) { value = 10; }
+                if (value >= 60) { value = 59; }
+                this.m_praPluginMaxRuntime_s = value;
+            }
+        }
+
+        private int m_praPluginMaxRuntime_m;
+        public int praPluginMaxRuntime_m {
+            get {
+                return this.m_praPluginMaxRuntime_m;
+            }
+            private set {
+                if (value < 0) { value = 0; }
+                if (value >= 60) { value = 59; }
+                this.m_praPluginMaxRuntime_m = value;
+            }
+        }
+
+        private bool m_praIsPluginMaxRuntimeLocked;
+        public bool praPluginMaxRuntimeLocked {
+            get {
+                return m_praIsPluginMaxRuntimeLocked;
+            }
+            private set {
+                this.m_praIsPluginMaxRuntimeLocked = value;
+            }
+        }
+
         public PackageManager PackageManager { get; private set; }
 
         #region Regex
@@ -232,6 +266,28 @@ namespace PRoCon.Core {
                         if (LicenseAgrreementList.Count > 0) {
                             foreach (XmlNode licenseNode in LicenseAgrreementList) {
                                 this.LicenseAgreements.Add(licenseNode.InnerText);
+                            }
+                        }
+                    }
+                    
+                    XmlNodeList PluginRuntimeList = ((XmlElement)OptionsList[0]).GetElementsByTagName("pluginruntime");
+                    if (PluginRuntimeList.Count > 0) {
+
+                        XmlNodeList PluginRuntimeMList = ((XmlElement)PluginRuntimeList[0]).GetElementsByTagName("minutes");
+                        if (PluginRuntimeMList.Count > 0) {
+                            int itmp;
+                            if (int.TryParse(PluginRuntimeMList[0].InnerText, out itmp) == true) {
+                                this.praPluginMaxRuntime_m = itmp;
+                                this.praPluginMaxRuntimeLocked = true;
+                            }
+                        }
+
+                        XmlNodeList PluginRuntimeSList = ((XmlElement)PluginRuntimeList[0]).GetElementsByTagName("seconds");
+                        if (PluginRuntimeSList.Count > 0) {
+                            int itmp;
+                            if (int.TryParse(PluginRuntimeSList[0].InnerText, out itmp) == true) {
+                                this.praPluginMaxRuntime_s = itmp;
+                                this.praPluginMaxRuntimeLocked = true;
                             }
                         }
                     }
@@ -322,6 +378,7 @@ namespace PRoCon.Core {
             this.LicenseAgreements = new List<string>();
 
             int iValue;
+            int iValue2;
             if (args != null && args.Length >= 2) {
                 for (int i = 0; i < args.Length; i = i + 2) {
                     if (String.Compare("-name", args[i], true) == 0) {
@@ -335,6 +392,12 @@ namespace PRoCon.Core {
                     }
                     else if (String.Compare("-licensekey", args[i], true) == 0) {
                         this.LicenseKey = args[i + 1];
+                    }
+                    else if (String.Compare("-plugin_max_runtime", args[i], true) == 0 && int.TryParse(args[i + 1], out iValue) == true && int.TryParse(args[i + 2], out iValue2) == true) {
+                        // transfered in this.LoadingMainConfig L-1333
+                        this.praPluginMaxRuntime_m = iValue;
+                        this.praPluginMaxRuntime_s = iValue2;
+                        this.praPluginMaxRuntimeLocked = true;
                     }
                 }
             }
@@ -402,6 +465,12 @@ namespace PRoCon.Core {
 
             this.ExecuteMainConfig("accounts.cfg");
             this.LoadingAccountsFile = false;
+
+            if (this.praPluginMaxRuntimeLocked == true) {
+                this.OptionsSettings.PluginMaxRuntimeLocked = this.praPluginMaxRuntimeLocked;
+                this.OptionsSettings.PluginMaxRuntime_m = this.praPluginMaxRuntime_m;
+                this.OptionsSettings.PluginMaxRuntime_s = this.m_praPluginMaxRuntime_s;
+            }
 
             this.ExecuteMainConfig("procon.cfg");
             this.LoadingMainConfig = false;
@@ -690,6 +759,10 @@ namespace PRoCon.Core {
                                 stwConfig.Write(" {0} {1}", statsLink.LinkName, statsLink.LinkUrl);
                             }
                             stwConfig.WriteLine(String.Empty);
+                        }
+
+                        if ((this.OptionsSettings.PluginMaxRuntime_m > 0 || this.OptionsSettings.PluginMaxRuntime_s > 0) && this.OptionsSettings.PluginMaxRuntimeLocked == false) {
+                            stwConfig.WriteLine("procon.private.options.pluginMaxRuntime {0} {1}", this.OptionsSettings.PluginMaxRuntime_m, this.OptionsSettings.PluginMaxRuntime_s);
                         }
 
                         foreach (PRoConClient prcClient in this.Connections) {
@@ -1255,6 +1328,27 @@ namespace PRoCon.Core {
                     if (this.OptionsSettings.StatsLinkNameUrl.Count < this.OptionsSettings.StatsLinksMaxNum)
                     {
                         this.OptionsSettings.StatsLinkNameUrl.Add(new StatsLinkNameUrl(lstWords[i], lstWords[i + 1]));
+                    }
+                }
+            }
+            else if (lstWords.Count >= 1 && String.Compare(lstWords[0], "procon.private.options.pluginMaxRuntime", true) == 0 && objSender == this && this.OptionsSettings.PluginMaxRuntimeLocked == false)
+            {
+                this.OptionsSettings.PluginMaxRuntime_m = 0;
+                this.OptionsSettings.PluginMaxRuntime_s = 10;
+                lstWords.RemoveAt(0);
+
+                int itmp = 0;
+                if (lstWords.Count == 2) {
+                    if (int.TryParse(lstWords[0], out itmp) == true)
+                    {
+                        if (itmp < 0) { itmp = 0; } if (itmp >= 60) { itmp = 59; }
+                        this.OptionsSettings.PluginMaxRuntime_m = itmp;
+                    }
+                    itmp = 10;
+                    if (int.TryParse(lstWords[1], out itmp) == true)
+                    {
+                        if (itmp < 0) { itmp = 0; } if (itmp >= 60) { itmp = 59; }
+                        this.OptionsSettings.PluginMaxRuntime_s = itmp;
                     }
                 }
             }

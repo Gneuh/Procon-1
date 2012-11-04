@@ -24,10 +24,10 @@
     <OldToolsVersion>3.5</OldToolsVersion>
     <UpgradeBackupLocation />
     <TargetFrameworkProfile />
-    <SccProjectName>SAK</SccProjectName>
-    <SccLocalPath>SAK</SccLocalPath>
-    <SccAuxPath>SAK</SccAuxPath>
-    <SccProvider>SAK</SccProvider>
+    <SccProjectName></SccProjectName>
+    <SccLocalPath></SccLocalPath>
+    <SccAuxPath></SccAuxPath>
+    <SccProvider></SccProvider>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -160,6 +160,24 @@
     </Compile>
     <Compile Include="Controls\ServerSettings\BFBC2\uscServerSettingsGameplayBFBC2.Designer.cs">
       <DependentUpon>uscServerSettingsGameplayBFBC2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ServerSettings\MOHW\uscServerSettingsConfigGeneratorMOHW.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ServerSettings\MOHW\uscServerSettingsConfigGeneratorMOHW.Designer.cs">
+      <DependentUpon>uscServerSettingsConfigGeneratorMOHW.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ServerSettings\MOHW\uscServerSettingsConfigurationMOHW.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ServerSettings\MOHW\uscServerSettingsConfigurationMOHW.Designer.cs">
+      <DependentUpon>uscServerSettingsConfigurationMOHW.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ServerSettings\MOHW\uscServerSettingsGameplayMOHW.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ServerSettings\MOHW\uscServerSettingsGameplayMOHW.Designer.cs">
+      <DependentUpon>uscServerSettingsGameplayMOHW.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\ServerSettings\MOH\uscServerSettingsConfigGeneratorMoH.cs">
       <SubType>UserControl</SubType>
@@ -387,6 +405,13 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\ServerSettings\BFBC2\uscServerSettingsGameplayBFBC2.resx">
       <DependentUpon>uscServerSettingsGameplayBFBC2.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\ServerSettings\MOHW\uscServerSettingsConfigurationMOHW.resx">
+      <DependentUpon>uscServerSettingsConfigurationMOHW.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\ServerSettings\MOHW\uscServerSettingsGameplayMOHW.resx">
+      <DependentUpon>uscServerSettingsGameplayMOHW.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\ServerSettings\MOH\uscServerSettingsGameplayMoH.resx">

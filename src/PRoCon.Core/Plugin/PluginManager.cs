@@ -176,16 +176,23 @@ namespace PRoCon.Core.Plugin {
         }
 
         private void InvocationTimeoutLoop() {
+            // should be configurable via options
+            TimeSpan PluginMaxRuntime = PluginInvocation.MAXIMUM_RUNTIME;
+            //PluginMaxRuntime = new TimeSpan(0, 0, 59);
+            PluginMaxRuntime = this.m_client.m_tsPluginMaxRuntime;
+
+            if (PluginMaxRuntime.TotalMilliseconds < 10) { PluginMaxRuntime = PluginInvocation.MAXIMUM_RUNTIME; }
+
             // Default maximum runtime = 5 seconds, divided by 20
             // check every 250 milliseconds.
-            int sleepMilliseconds = (int)(PluginInvocation.MAXIMUM_RUNTIME.TotalMilliseconds / 20.0);
+            int sleepMilliseconds = (int)(PluginMaxRuntime.TotalMilliseconds / 20.0);
 
             while (this.InvocationTimeoutThreadRunning) {
                 lock (this) {
                     PluginInvocation invocation = this.Invocations.FirstOrDefault(); // .OrderBy(x => x.Runtime())
 
                     if (invocation != null) {
-                        if (invocation.Runtime() >= PluginInvocation.MAXIMUM_RUNTIME) {
+                        if (invocation.Runtime() >= PluginMaxRuntime) {
 
                             this.WritePluginConsole("^1^bPlugin manager entering panic..");
 
@@ -193,7 +200,7 @@ namespace PRoCon.Core.Plugin {
                             // of the plugin manager.
                             this.IgnoredPluginClassNames.Add(invocation.Plugin.ClassName);
 
-                            String faultText = invocation.FormatInvocationFault("Call exceeded maximum execution time of {0}", PluginInvocation.MAXIMUM_RUNTIME);
+                            String faultText = invocation.FormatInvocationFault("Call exceeded maximum execution time of {0}", PluginMaxRuntime);
 
                             // Log the error so we might alert a plugin developer that
                             // a call to their plugin has caused the plugin manager to go
@@ -980,6 +987,23 @@ namespace PRoCon.Core.Plugin {
 
             this.m_client.Game.PremiumStatus -= new FrostbiteClient.IsEnabledHandler(Game_PremiumStatus);
 
+            #region MoHW
+            this.m_client.Game.AllUnlocksUnlocked -= new FrostbiteClient.IsEnabledHandler(Game_AllUnlocksUnlocked);
+            this.m_client.Game.BuddyOutline -= new FrostbiteClient.IsEnabledHandler(Game_BuddyOutline);
+            this.m_client.Game.HudBuddyInfo -= new FrostbiteClient.IsEnabledHandler(Game_HudBuddyInfo);
+            this.m_client.Game.HudClassAbility -= new FrostbiteClient.IsEnabledHandler(Game_HudClassAbility);
+            this.m_client.Game.HudCrosshair -= new FrostbiteClient.IsEnabledHandler(Game_HudCrosshair);
+            this.m_client.Game.HudEnemyTag -= new FrostbiteClient.IsEnabledHandler(Game_HudEnemyTag);
+            this.m_client.Game.HudExplosiveIcons -= new FrostbiteClient.IsEnabledHandler(Game_HudExplosiveIcons);
+            this.m_client.Game.HudGameMode -= new FrostbiteClient.IsEnabledHandler(Game_HudGameMode);
+            this.m_client.Game.HudHealthAmmo -= new FrostbiteClient.IsEnabledHandler(Game_HudHealthAmmo);
+            this.m_client.Game.HudMinimap -= new FrostbiteClient.IsEnabledHandler(Game_HudMinimap);
+            this.m_client.Game.HudObiturary -= new FrostbiteClient.IsEnabledHandler(Game_HudObiturary);
+            this.m_client.Game.HudPointsTracker -= new FrostbiteClient.IsEnabledHandler(Game_HudPointsTracker);
+            this.m_client.Game.HudUnlocks -= new FrostbiteClient.IsEnabledHandler(Game_HudUnlocks);
+            this.m_client.Game.Playlist -= new FrostbiteClient.PlaylistSetHandler(Game_Playlist);
+            #endregion
+
             // R13
             this.m_client.Game.ServerName -= new FrostbiteClient.ServerNameHandler(m_prcClient_ServerName);
             this.m_client.Game.TeamKillCountForKick -= new FrostbiteClient.LimitHandler(m_prcClient_TeamKillCountForKick);
@@ -1151,6 +1175,23 @@ namespace PRoCon.Core.Plugin {
             this.m_client.Game.RoundWarmupTimeout += new FrostbiteClient.LimitHandler(Game_RoundWarmupTimeout);
 
             this.m_client.Game.PremiumStatus += new FrostbiteClient.IsEnabledHandler(Game_PremiumStatus);
+
+            #region MoHW
+            this.m_client.Game.AllUnlocksUnlocked += new FrostbiteClient.IsEnabledHandler(Game_AllUnlocksUnlocked);
+            this.m_client.Game.BuddyOutline += new FrostbiteClient.IsEnabledHandler(Game_BuddyOutline);
+            this.m_client.Game.HudBuddyInfo += new FrostbiteClient.IsEnabledHandler(Game_HudBuddyInfo);
+            this.m_client.Game.HudClassAbility += new FrostbiteClient.IsEnabledHandler(Game_HudClassAbility);
+            this.m_client.Game.HudCrosshair += new FrostbiteClient.IsEnabledHandler(Game_HudCrosshair);
+            this.m_client.Game.HudEnemyTag += new FrostbiteClient.IsEnabledHandler(Game_HudEnemyTag);
+            this.m_client.Game.HudExplosiveIcons += new FrostbiteClient.IsEnabledHandler(Game_HudExplosiveIcons);
+            this.m_client.Game.HudGameMode += new FrostbiteClient.IsEnabledHandler(Game_HudGameMode);
+            this.m_client.Game.HudHealthAmmo += new FrostbiteClient.IsEnabledHandler(Game_HudHealthAmmo);
+            this.m_client.Game.HudMinimap += new FrostbiteClient.IsEnabledHandler(Game_HudMinimap);
+            this.m_client.Game.HudObiturary += new FrostbiteClient.IsEnabledHandler(Game_HudObiturary);
+            this.m_client.Game.HudPointsTracker += new FrostbiteClient.IsEnabledHandler(Game_HudPointsTracker);
+            this.m_client.Game.HudUnlocks += new FrostbiteClient.IsEnabledHandler(Game_HudUnlocks);
+            this.m_client.Game.Playlist += new FrostbiteClient.PlaylistSetHandler(Game_Playlist);
+            #endregion
 
             // R13
             this.m_client.Game.ServerName += new FrostbiteClient.ServerNameHandler(m_prcClient_ServerName);
@@ -1841,6 +1882,85 @@ namespace PRoCon.Core.Plugin {
         {
             this.InvokeOnAllEnabled("OnPremiumStatus", isEnabled);
         }
+
+        #region MoHW vars setting events
+        private void Game_(FrostbiteClient sender, bool isEnabled) {
+            this.InvokeOnAllEnabled("On", isEnabled);
+        }
+
+        private void Game_AllUnlocksUnlocked(FrostbiteClient sender, bool isEnabled) {
+            this.InvokeOnAllEnabled("OnAllUnlocksUnlocked", isEnabled);
+        }
+
+        private void Game_BuddyOutline(FrostbiteClient sender, bool isEnabled)
+        {
+            this.InvokeOnAllEnabled("OnBuddyOutline", isEnabled);
+        }
+
+        private void Game_HudBuddyInfo(FrostbiteClient sender, bool isEnabled)
+        {
+            this.InvokeOnAllEnabled("OnHudBuddyInfo", isEnabled);
+        }
+
+        private void Game_HudClassAbility(FrostbiteClient sender, bool isEnabled)
+        {
+            this.InvokeOnAllEnabled("OnHudClassAbility", isEnabled);
+        }
+
+        private void Game_HudCrosshair(FrostbiteClient sender, bool isEnabled)
+        {
+            this.InvokeOnAllEnabled("OnCrosshair", isEnabled);
+            this.InvokeOnAllEnabled("OnHudCrosshair", isEnabled);
+        }
+
+        private void Game_HudEnemyTag(FrostbiteClient sender, bool isEnabled)
+        {
+            this.InvokeOnAllEnabled("OnHudEnemyTag", isEnabled);
+        }
+
+        private void Game_HudExplosiveIcons(FrostbiteClient sender, bool isEnabled)
+        {
+            this.InvokeOnAllEnabled("OnHudExplosiveIcons", isEnabled);
+        }
+
+        private void Game_HudGameMode(FrostbiteClient sender, bool isEnabled)
+        {
+            this.InvokeOnAllEnabled("OnHudGameMode", isEnabled);
+        }
+
+        private void Game_HudHealthAmmo(FrostbiteClient sender, bool isEnabled)
+        {
+            this.InvokeOnAllEnabled("OnHudHealthAmmo", isEnabled);
+        }
+
+        private void Game_HudMinimap(FrostbiteClient sender, bool isEnabled)
+        {
+            this.InvokeOnAllEnabled("OnHudMinimap", isEnabled);
+        }
+
+        private void Game_HudObiturary(FrostbiteClient sender, bool isEnabled)
+        {
+            this.InvokeOnAllEnabled("OnHudObiturary", isEnabled);
+        }
+
+        private void Game_HudPointsTracker(FrostbiteClient sender, bool isEnabled)
+        {
+            this.InvokeOnAllEnabled("OnHudPointsTracker", isEnabled);
+        }
+
+        private void Game_HudUnlocks(FrostbiteClient sender, bool isEnabled)
+        {
+            this.InvokeOnAllEnabled("OnHudUnlocks", isEnabled);
+        }
+
+        private void Game_Playlist(FrostbiteClient sender, string playlist)
+        {
+            this.InvokeOnAllEnabled("OnPlaylistSet", playlist);
+            this.InvokeOnAllEnabled("OnPlaylist", playlist);
+        }
+        
+        #endregion
+
 
         #region Text Chat Moderation Settings
 

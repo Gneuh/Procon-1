@@ -1503,6 +1503,235 @@ namespace PRoCon.Core.Remote {
         
         #endregion
 
+        #region MoHW
+
+        // VarsAllUnlocksUnlocked
+        public virtual void SendSetVarsAllUnlocksUnlockedPacket(bool enabled)
+        {
+            if (this.IsLoggedIn == true)
+            {
+                this.BuildSendPacket("vars.allUnlocksUnlocked", Packet.bltos(enabled));
+            }
+        }
+
+        public virtual void SendGetVarsAllUnlocksUnlockedPacket()
+        {
+            if (this.IsLoggedIn == true)
+            {
+                this.BuildSendPacket("vars.allUnlocksUnlocked");
+            }
+        }
+        // VarsHudBuddyOutline
+        public virtual void SendSetVarsBuddyOutlinePacket(bool enabled)
+        {
+            if (this.IsLoggedIn == true)
+            {
+                this.BuildSendPacket("vars.buddyOutline", Packet.bltos(enabled));
+            }
+        }
+
+        public virtual void SendGetVarsBuddyOutlinePacket()
+        {
+            if (this.IsLoggedIn == true)
+            {
+                this.BuildSendPacket("vars.buddyOutline");
+            }
+        }
+        // VarsHudBuddyInfo
+        public virtual void SendSetVarsHudBuddyInfoPacket(bool enabled)
+        {
+            if (this.IsLoggedIn == true)
+            {
+                this.BuildSendPacket("vars.hudBuddyInfo", Packet.bltos(enabled));
+            }
+        }
+
+        public virtual void SendGetVarsHudBuddyInfoPacket()
+        {
+            if (this.IsLoggedIn == true)
+            {
+                this.BuildSendPacket("vars.hudBuddyInfo");
+            }
+        }
+        // VarsHudClassAbility
+        public virtual void SendSetVarsHudClassAbilityPacket(bool enabled)
+        {
+            if (this.IsLoggedIn == true)
+            {
+                this.BuildSendPacket("vars.hudClassAbility", Packet.bltos(enabled));
+            }
+        }
+
+        public virtual void SendGetVarsHudClassAbilityPacket()
+        {
+            if (this.IsLoggedIn == true)
+            {
+                this.BuildSendPacket("vars.hudClassAbility");
+            }
+        }
+        // VarsHudCrosshair
+        public virtual void SendSetVarsHudCrosshairPacket(bool enabled)
+        {
+            if (this.IsLoggedIn == true)
+            {
+                this.BuildSendPacket("vars.hudCrosshair", Packet.bltos(enabled));
+            }
+        }
+
+        public virtual void SendGetVarsHudCrosshairPacket()
+        {
+            if (this.IsLoggedIn == true)
+            {
+                this.BuildSendPacket("vars.hudCrosshair");
+            }
+        }
+        // VarsHudEnemyTag
+        public virtual void SendSetVarsHudEnemyTagPacket(bool enabled)
+        {
+            if (this.IsLoggedIn == true)
+            {
+                this.BuildSendPacket("vars.hudEnemyTag", Packet.bltos(enabled));
+            }
+        }
+
+        public virtual void SendGetVarsHudEnemyTagPacket()
+        {
+            if (this.IsLoggedIn == true)
+            {
+                this.BuildSendPacket("vars.hudEnemyTag");
+            }
+        }
+        // VarsHudExplosiveIcons
+        public virtual void SendSetVarsHudExplosiveIconsPacket(bool enabled)
+        {
+            if (this.IsLoggedIn == true)
+            {
+                this.BuildSendPacket("vars.hudExplosiveIcons", Packet.bltos(enabled));
+            }
+        }
+
+        public virtual void SendGetVarsHudExplosiveIconsPacket()
+        {
+            if (this.IsLoggedIn == true)
+            {
+                this.BuildSendPacket("vars.hudExplosiveIcons");
+            }
+        }
+        // VarsHudGameMode
+        public virtual void SendSetVarsHudGameModePacket(bool enabled)
+        {
+            if (this.IsLoggedIn == true)
+            {
+                this.BuildSendPacket("vars.hudGameMode", Packet.bltos(enabled));
+            }
+        }
+
+        public virtual void SendGetVarsHudGameModePacket()
+        {
+            if (this.IsLoggedIn == true)
+            {
+                this.BuildSendPacket("vars.hudGameMode");
+            }
+        }
+        // VarsHudHealthAmmo
+        public virtual void SendSetVarsHudHealthAmmoPacket(bool enabled)
+        {
+            if (this.IsLoggedIn == true)
+            {
+                this.BuildSendPacket("vars.hudHealthAmmo", Packet.bltos(enabled));
+            }
+        }
+
+        public virtual void SendGetVarsHudHealthAmmoPacket()
+        {
+            if (this.IsLoggedIn == true)
+            {
+                this.BuildSendPacket("vars.hudHealthAmmo");
+            }
+        }
+        // VarsHudMinimapResponse
+        public virtual void SendSetVarsHudMinimapPacket(bool enabled)
+        {
+            if (this.IsLoggedIn == true)
+            {
+                this.BuildSendPacket("vars.hudMinimap", Packet.bltos(enabled));
+            }
+        }
+
+        public virtual void SendGetVarsHudMinimapPacket()
+        {
+            if (this.IsLoggedIn == true)
+            {
+                this.BuildSendPacket("vars.hudMinimap");
+            }
+        }
+        // VarsHudObiturary
+        public virtual void SendSetVarsHudObituraryPacket(bool enabled)
+        {
+            if (this.IsLoggedIn == true)
+            {
+                this.BuildSendPacket("vars.hudObiturary", Packet.bltos(enabled));
+            }
+        }
+
+        public virtual void SendGetVarsHudObituraryPacket()
+        {
+            if (this.IsLoggedIn == true)
+            {
+                this.BuildSendPacket("vars.hudObiturary");
+            }
+        }
+        // VarsHudPointsTracker
+        public virtual void SendSetVarsHudPointsTrackerPacket(bool enabled)
+        {
+            if (this.IsLoggedIn == true)
+            {
+                this.BuildSendPacket("vars.hudPointsTracker", Packet.bltos(enabled));
+            }
+        }
+
+        public virtual void SendGetVarsHudPointsTrackerPacket()
+        {
+            if (this.IsLoggedIn == true)
+            {
+                this.BuildSendPacket("vars.hudPointsTracker");
+            }
+        }
+        // VarsHudUnlocks
+        public virtual void SendSetVarsHudUnlocksPacket(bool enabled)
+        {
+            if (this.IsLoggedIn == true)
+            {
+                this.BuildSendPacket("vars.hudUnlocks", Packet.bltos(enabled));
+            }
+        }
+
+        public virtual void SendGetVarsHudUnlocksPacket()
+        {
+            if (this.IsLoggedIn == true)
+            {
+                this.BuildSendPacket("vars.hudUnlocks");
+            }
+        }
+        // VarsPlaylist
+        public virtual void SendSetVarsPlaylistPacket(string playlist)
+        {
+            if (this.IsLoggedIn == true)
+            {
+                this.BuildSendPacket("vars.playlist", playlist);
+            }
+        }
+
+        public virtual void SendGetVarsPlaylistPacket()
+        {
+            if (this.IsLoggedIn == true)
+            {
+                this.BuildSendPacket("vars.playlist");
+            }
+        }
+
+        #endregion
+        
         #endregion
 
         public virtual void SendSetVarsServerNamePacket(string serverName) {
@@ -3244,7 +3473,24 @@ namespace PRoCon.Core.Remote {
         public virtual event FrostbiteClient.IsEnabledHandler PremiumStatus;
 
         #endregion
-
+        
+        #region vars MoHW
+        public virtual event FrostbiteClient.IsEnabledHandler AllUnlocksUnlocked;
+        public virtual event FrostbiteClient.IsEnabledHandler BuddyOutline;
+        public virtual event FrostbiteClient.IsEnabledHandler HudBuddyInfo;
+        public virtual event FrostbiteClient.IsEnabledHandler HudClassAbility;
+        public virtual event FrostbiteClient.IsEnabledHandler HudCrosshair;
+        public virtual event FrostbiteClient.IsEnabledHandler HudEnemyTag;
+        public virtual event FrostbiteClient.IsEnabledHandler HudExplosiveIcons;
+        public virtual event FrostbiteClient.IsEnabledHandler HudGameMode;
+        public virtual event FrostbiteClient.IsEnabledHandler HudHealthAmmo;
+        public virtual event FrostbiteClient.IsEnabledHandler HudMinimap;
+        public virtual event FrostbiteClient.IsEnabledHandler HudObiturary;
+        public virtual event FrostbiteClient.IsEnabledHandler HudPointsTracker;
+        public virtual event FrostbiteClient.IsEnabledHandler HudUnlocks;
+        public virtual event FrostbiteClient.PlaylistSetHandler Playlist;
+        #endregion
+        
         #endregion
 
         #region Text Chat Moderation

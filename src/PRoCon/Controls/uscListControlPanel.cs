@@ -245,7 +245,7 @@ namespace PRoCon {
             if (this.m_prcClient != null) {
                 //this.RefreshLocalMaplist();
 
-                if (this.m_prcClient.GameType == "BF3")
+                if (this.m_prcClient.GameType == "BF3" || this.m_prcClient.GameType == "MOHW")
                 {
                     this.SendCommand("mapList.list");
                 }
@@ -312,7 +312,7 @@ namespace PRoCon {
                 this.OnReservedSlotsList(this.m_prcClient.Game, new List<string>(this.m_prcClient.ReservedSlotList));
             }
 
-            if (sender.Game is BF3Client) {
+            if (sender.Game is BF3Client || sender.Game is MOHWClient) {
                 this.tbcLists.TabPages.Remove(this.tabTextChatModeration);
             }
         }

@@ -131,6 +131,10 @@ namespace PRoCon.Core.Remote.Layer {
                 else if (prcClient.Game is BF3Client) {
                     this.Game = new BF3LayerClient(newConnection);
                 }
+                else if (prcClient.Game is MOHWClient)
+                {
+                    this.Game = new MOHWLayerClient(newConnection);
+                }
 
                 this.m_requestDelegates = new Dictionary<string, RequestPacketHandler>() {
                     { "procon.application.shutdown", this.DispatchProconApplicationShutdownRequest  },

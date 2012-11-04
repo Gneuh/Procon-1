@@ -168,6 +168,13 @@ namespace PRoCon.Forms {
 
                 this.m_praApplication.OptionsSettings.ShowDICESpecialOptions = this.m_praApplication.OptionsSettings.ShowDICESpecialOptions;
 
+                this.m_praApplication.OptionsSettings.PluginMaxRuntime_m = this.m_praApplication.OptionsSettings.PluginMaxRuntime_m;
+                this.m_praApplication.OptionsSettings.PluginMaxRuntime_s = this.m_praApplication.OptionsSettings.PluginMaxRuntime_s;
+                if (this.m_praApplication.OptionsSettings.PluginMaxRuntimeLocked == true) {
+                    this.numPluginMaxRuntimeMin.Enabled = false;
+                    this.numPluginMaxRuntimeSec.Enabled = false;
+                }
+
                 this.lsvTrustedHostDomainPorts.Items.Clear();
                 foreach (TrustedHostWebsitePort trusted in this.m_praApplication.OptionsSettings.TrustedHostsWebsitesPorts) {
                     this.TrustedHostsWebsitesPorts_ItemAdded(0, trusted);
@@ -271,6 +278,13 @@ namespace PRoCon.Forms {
             this.lblStatsLinkName.Text = clocLanguage.GetLocalized("frmOptions.tabPlayerLookup.lblStatsLinkName");
             this.lblStatsLinkUrl.Text = clocLanguage.GetLocalized("frmOptions.tabPlayerLookup.lblStatsLinkUrl");
             this.lblStatsLinkHelpText.Text = clocLanguage.GetLocalized("frmOptions.tabPlayerLookup.lblStatsLinkHelpText", new String[] { this.m_praApplication.OptionsSettings.StatsLinksMaxNum.ToString() }).Replace("|*|", Environment.NewLine);
+
+            // PluginMaxRuntime
+            this.lblPluginMaxRuntime.Text = clocLanguage.GetDefaultLocalized("Plugin runtime limit (per plugin)", "frmOptions.tabPlugins.lblPluginMaxRuntime");
+            this.numPluginMaxRuntimeMin.Value = this.m_praApplication.OptionsSettings.PluginMaxRuntime_m;
+            this.lblPluginMaxRuntimeMin.Text = clocLanguage.GetDefaultLocalized("min", "frmOptions.tabPlugins.lblPluginMaxRuntimeMin");
+            this.numPluginMaxRuntimeSec.Value = this.m_praApplication.OptionsSettings.PluginMaxRuntime_s;
+            this.lblPluginMaxRuntimeSec.Text = clocLanguage.GetDefaultLocalized("sec", "frmOptions.tabPlugins.lblPluginMaxRuntimeSec");
 
             //this.m_strSetLanguageFileName = clocLanguage.FileName;
         }
@@ -857,6 +871,16 @@ namespace PRoCon.Forms {
             return rx.IsMatch(strUrl);
         }
 
+        #endregion
+
+        #region PluginMaxRuntime
+        private void numPluginMaxRuntimeMin_Validated(object sender, EventArgs e) {
+            this.m_praApplication.OptionsSettings.PluginMaxRuntime_m = (int)this.numPluginMaxRuntimeMin.Value;
+        }
+
+        private void numPluginMaxRuntimeSec_Validated(object sender, EventArgs e) {
+            this.m_praApplication.OptionsSettings.PluginMaxRuntime_s = (int)this.numPluginMaxRuntimeSec.Value;
+        }
         #endregion
 
     }
