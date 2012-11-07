@@ -64,6 +64,10 @@ namespace PRoCon.Core.Remote {
             this.SendGetVarsThirdPersonVehicleCamerasPacket();
         }
 
+        public virtual void FetchStartupVariablesBase() {
+            base.FetchStartupVariables();
+        }
+
         #region Overridden Events
 
         public override event FrostbiteClient.LimitHandler RankLimit;

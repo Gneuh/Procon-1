@@ -551,15 +551,15 @@ namespace PRoCon.Core.Remote {
                         "Passworded",
                         "ServerUptime",
                         "RoundTime",
-                        "GameMod", // Note: if another variable is affixed to both games this method
+                        // "GameMod", // Note: if another variable is affixed to both games this method
                         // "Mappack", // will need to be split into MoHClient and BFBC2Client.
-                        // "ExternalGameIpandPort",
+                        "ExternalGameIpandPort",
                         "PunkBusterVersion",
-                        "Placeholder01",
+                        "JoinQueueEnabled",
                         "ServerRegion",
                         "PingSite",
                         "ServerCountry",
-                        "JoinQueueEnabled"
+                        "QuickMatch"
                     }, cpRecievedPacket.Words.GetRange(1, cpRecievedPacket.Words.Count - 1)
                 );
 

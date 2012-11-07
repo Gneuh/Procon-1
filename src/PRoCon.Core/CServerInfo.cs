@@ -130,6 +130,7 @@ namespace PRoCon.Core {
         public string ServerRegion { get; set; }
         public string PingSite { get; set; }
         public string ServerCountry { get; set; }
+        public bool QuickMatch { get; set; }
 
         public List<TeamScore> TeamScores {
             get;

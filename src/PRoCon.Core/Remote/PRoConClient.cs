@@ -1035,7 +1035,7 @@ namespace PRoCon.Core.Remote {
 
                 this.BeginLoginSequence();
 
-                this.ExecuteConnectionConfig(this.FileHostNamePort + ".cfg", 0, null, true);
+                this.ExecuteConnectionConfig(this.FileHostNamePort + ".cfg", 0, null, false);
 
                 this.m_blLoadingSavingConnectionConfig = false;
             }

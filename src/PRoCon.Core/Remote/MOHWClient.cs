@@ -167,7 +167,7 @@ namespace PRoCon.Core.Remote {
             #region Base fetch
             this.SendGetVarsRankedPacket();
             this.SendGetVarsPlaylistPacket();
-            base.FetchStartupVariables();
+            base.FetchStartupVariablesBase();
             this.SendGetVarsTeamBalancePacket();
             this.SendGetVarsKillCamPacket();
             this.SendGetVarsThirdPersonVehicleCamerasPacket();
@@ -182,6 +182,8 @@ namespace PRoCon.Core.Remote {
             // this.SendGetVarsHudPacket();
             // this.SendGetReservedSlotsListAggressiveJoinPacket();
             // this.SendGetVarsPremiumStatusPacket();
+            // this.SendGetVarsRoundLockdownCountdownPacket();
+            // this.SendGetVarsRoundWarmupTimeoutPacket();
             #endregion
 
             #region vars MoHW
@@ -213,10 +215,8 @@ namespace PRoCon.Core.Remote {
             this.SendGetVarsPlayerRespawnTimePacket();
             this.SendGetVarsRegenerateHealthPacket();
 
-            this.SendGetVarsRoundLockdownCountdownPacket();
             this.SendGetVarsRoundRestartPlayerCountPacket();
             this.SendGetVarsRoundStartPlayerCountPacket();
-            this.SendGetVarsRoundWarmupTimeoutPacket();
 
             this.SendGetVarsServerMessagePacket();
             this.SendGetVarsSoldierHealthPacket();
