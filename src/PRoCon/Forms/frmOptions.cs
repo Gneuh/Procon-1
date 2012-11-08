@@ -99,6 +99,7 @@ namespace PRoCon.Forms {
             this.m_praApplication.OptionsSettings.StatsLinkNameUrl.ItemAdded += new NotificationList<PRoCon.Core.Options.StatsLinkNameUrl>.ItemModifiedHandler(StatsLinkNameUrl_ItemAdded);
             this.m_praApplication.OptionsSettings.StatsLinkNameUrl.ItemRemoved += new NotificationList<PRoCon.Core.Options.StatsLinkNameUrl>.ItemModifiedHandler(StatsLinkNameUrl_ItemRemoved);
 
+            this.m_praApplication.OptionsSettings.UsePluginOldStyleLoadChanged += new PRoCon.Core.Options.OptionsSettings.OptionsEnabledHandler(OptionsSettings_UsePluginOldStyleLoadChanged);
 
             //m_fntComboBoxFont = new Font("Calibri", 10);
             this.m_frmParent = frmParent;
@@ -167,6 +168,8 @@ namespace PRoCon.Forms {
                 this.m_praApplication.OptionsSettings.ShowCfmMsgRoundRestartNext = this.m_praApplication.OptionsSettings.ShowCfmMsgRoundRestartNext;
 
                 this.m_praApplication.OptionsSettings.ShowDICESpecialOptions = this.m_praApplication.OptionsSettings.ShowDICESpecialOptions;
+
+                this.m_praApplication.OptionsSettings.UsePluginOldStyleLoad = this.m_praApplication.OptionsSettings.UsePluginOldStyleLoad;
 
                 this.m_praApplication.OptionsSettings.PluginMaxRuntime_m = this.m_praApplication.OptionsSettings.PluginMaxRuntime_m;
                 this.m_praApplication.OptionsSettings.PluginMaxRuntime_s = this.m_praApplication.OptionsSettings.PluginMaxRuntime_s;
@@ -285,6 +288,11 @@ namespace PRoCon.Forms {
             this.lblPluginMaxRuntimeMin.Text = clocLanguage.GetDefaultLocalized("min", "frmOptions.tabPlugins.lblPluginMaxRuntimeMin");
             this.numPluginMaxRuntimeSec.Value = this.m_praApplication.OptionsSettings.PluginMaxRuntime_s;
             this.lblPluginMaxRuntimeSec.Text = clocLanguage.GetDefaultLocalized("sec", "frmOptions.tabPlugins.lblPluginMaxRuntimeSec");
+
+            // UsePluginOldStyleLoad
+            this.lblAdvStartup.Text = clocLanguage.GetDefaultLocalized(this.lblAdvStartup.Text, "frmOptions.tabAdvanced.lblAdvSpecialSwitches.chkAdvStartup");
+            this.chkAdvUsePluginOldStyleLoad.Text = clocLanguage.GetDefaultLocalized(this.chkAdvUsePluginOldStyleLoad.Text, "frmOptions.tabAdvanced.lblAdvSpecialSwitches.chkAdvUsePluginOldStyleLoad");
+            this.lblAdvStartupChangeNotice.Text = clocLanguage.GetDefaultLocalized(this.lblAdvStartupChangeNotice.Text, "frmOptions.tabAdvanced.lblAdvSpecialSwitches.lblAdvStartupChangeNotice");
 
             //this.m_strSetLanguageFileName = clocLanguage.FileName;
         }
@@ -883,5 +891,16 @@ namespace PRoCon.Forms {
         }
         #endregion
 
+        #region UsePluginOldStyleLoad
+        void OptionsSettings_UsePluginOldStyleLoadChanged(bool blEnabled)
+        {
+            this.chkAdvUsePluginOldStyleLoad.Checked = blEnabled;
+        }
+
+        private void chkAdvUsePluginOldStyleLoad_CheckedChanged(object sender, EventArgs e)
+        {
+            this.m_praApplication.OptionsSettings.UsePluginOldStyleLoad = this.chkAdvUsePluginOldStyleLoad.Checked;
+        }
+        #endregion
     }
 }

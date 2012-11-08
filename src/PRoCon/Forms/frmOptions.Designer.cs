@@ -97,6 +97,10 @@
             this.lblHttpServerTitle = new System.Windows.Forms.Label();
             this.panel7 = new System.Windows.Forms.Panel();
             this.tabAdv = new System.Windows.Forms.TabPage();
+            this.lblAdvStartupChangeNotice = new System.Windows.Forms.Label();
+            this.chkAdvUsePluginOldStyleLoad = new System.Windows.Forms.CheckBox();
+            this.lblAdvStartup = new System.Windows.Forms.Label();
+            this.panel17 = new System.Windows.Forms.Panel();
             this.chkAdvShowCfmMsgRoundRestartNext = new System.Windows.Forms.CheckBox();
             this.lblAdvShowDICESpecialOptionsNotice = new System.Windows.Forms.Label();
             this.chkAdvShowDICESpecialOptions = new System.Windows.Forms.CheckBox();
@@ -984,6 +988,10 @@
             // 
             // tabAdv
             // 
+            this.tabAdv.Controls.Add(this.lblAdvStartupChangeNotice);
+            this.tabAdv.Controls.Add(this.chkAdvUsePluginOldStyleLoad);
+            this.tabAdv.Controls.Add(this.lblAdvStartup);
+            this.tabAdv.Controls.Add(this.panel17);
             this.tabAdv.Controls.Add(this.chkAdvShowCfmMsgRoundRestartNext);
             this.tabAdv.Controls.Add(this.lblAdvShowDICESpecialOptionsNotice);
             this.tabAdv.Controls.Add(this.chkAdvShowDICESpecialOptions);
@@ -1011,10 +1019,51 @@
             this.tabAdv.Text = "Advanced";
             this.tabAdv.UseVisualStyleBackColor = true;
             // 
+            // lblAdvStartupChangeNotice
+            // 
+            this.lblAdvStartupChangeNotice.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblAdvStartupChangeNotice.Location = new System.Drawing.Point(47, 315);
+            this.lblAdvStartupChangeNotice.Name = "lblAdvStartupChangeNotice";
+            this.lblAdvStartupChangeNotice.Size = new System.Drawing.Size(305, 46);
+            this.lblAdvStartupChangeNotice.TabIndex = 37;
+            this.lblAdvStartupChangeNotice.Text = "Disabling may break older plugins variable load. Changing will require a restart " +
+    "to take effect.";
+            // 
+            // chkAdvUsePluginOldStyleLoad
+            // 
+            this.chkAdvUsePluginOldStyleLoad.AutoSize = true;
+            this.chkAdvUsePluginOldStyleLoad.Location = new System.Drawing.Point(30, 293);
+            this.chkAdvUsePluginOldStyleLoad.Name = "chkAdvUsePluginOldStyleLoad";
+            this.chkAdvUsePluginOldStyleLoad.Size = new System.Drawing.Size(227, 19);
+            this.chkAdvUsePluginOldStyleLoad.TabIndex = 36;
+            this.chkAdvUsePluginOldStyleLoad.Text = "Use old style to load plugins at startup";
+            this.chkAdvUsePluginOldStyleLoad.UseVisualStyleBackColor = true;
+            this.chkAdvUsePluginOldStyleLoad.CheckedChanged += new System.EventHandler(this.chkAdvUsePluginOldStyleLoad_CheckedChanged);
+            // 
+            // lblAdvStartup
+            // 
+            this.lblAdvStartup.AutoSize = true;
+            this.lblAdvStartup.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblAdvStartup.Location = new System.Drawing.Point(17, 275);
+            this.lblAdvStartup.Name = "lblAdvStartup";
+            this.lblAdvStartup.Size = new System.Drawing.Size(49, 15);
+            this.lblAdvStartup.TabIndex = 34;
+            this.lblAdvStartup.Text = "Startup";
+            // 
+            // panel17
+            // 
+            this.panel17.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel17.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.panel17.Location = new System.Drawing.Point(20, 284);
+            this.panel17.Name = "panel17";
+            this.panel17.Size = new System.Drawing.Size(355, 1);
+            this.panel17.TabIndex = 35;
+            // 
             // chkAdvShowCfmMsgRoundRestartNext
             // 
             this.chkAdvShowCfmMsgRoundRestartNext.AutoSize = true;
-            this.chkAdvShowCfmMsgRoundRestartNext.Location = new System.Drawing.Point(31, 319);
+            this.chkAdvShowCfmMsgRoundRestartNext.Location = new System.Drawing.Point(29, 253);
             this.chkAdvShowCfmMsgRoundRestartNext.Name = "chkAdvShowCfmMsgRoundRestartNext";
             this.chkAdvShowCfmMsgRoundRestartNext.Size = new System.Drawing.Size(238, 19);
             this.chkAdvShowCfmMsgRoundRestartNext.TabIndex = 33;
@@ -1066,7 +1115,7 @@
             // chkAdvShowRoundTimerConstantly
             // 
             this.chkAdvShowRoundTimerConstantly.AutoSize = true;
-            this.chkAdvShowRoundTimerConstantly.Location = new System.Drawing.Point(31, 294);
+            this.chkAdvShowRoundTimerConstantly.Location = new System.Drawing.Point(29, 228);
             this.chkAdvShowRoundTimerConstantly.Name = "chkAdvShowRoundTimerConstantly";
             this.chkAdvShowRoundTimerConstantly.Size = new System.Drawing.Size(178, 19);
             this.chkAdvShowRoundTimerConstantly.TabIndex = 28;
@@ -1078,7 +1127,7 @@
             // 
             this.lblAdvConVisuals.AutoSize = true;
             this.lblAdvConVisuals.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblAdvConVisuals.Location = new System.Drawing.Point(18, 265);
+            this.lblAdvConVisuals.Location = new System.Drawing.Point(17, 210);
             this.lblAdvConVisuals.Name = "lblAdvConVisuals";
             this.lblAdvConVisuals.Size = new System.Drawing.Size(110, 15);
             this.lblAdvConVisuals.TabIndex = 27;
@@ -1087,7 +1136,7 @@
             // lblAdvLayerTabsChangeNotice
             // 
             this.lblAdvLayerTabsChangeNotice.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblAdvLayerTabsChangeNotice.Location = new System.Drawing.Point(46, 226);
+            this.lblAdvLayerTabsChangeNotice.Location = new System.Drawing.Point(47, 172);
             this.lblAdvLayerTabsChangeNotice.Name = "lblAdvLayerTabsChangeNotice";
             this.lblAdvLayerTabsChangeNotice.Size = new System.Drawing.Size(305, 38);
             this.lblAdvLayerTabsChangeNotice.TabIndex = 26;
@@ -1098,7 +1147,7 @@
             this.chkAdvHideLocalAccountsTab.AutoSize = true;
             this.chkAdvHideLocalAccountsTab.Checked = true;
             this.chkAdvHideLocalAccountsTab.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkAdvHideLocalAccountsTab.Location = new System.Drawing.Point(31, 204);
+            this.chkAdvHideLocalAccountsTab.Location = new System.Drawing.Point(32, 150);
             this.chkAdvHideLocalAccountsTab.Name = "chkAdvHideLocalAccountsTab";
             this.chkAdvHideLocalAccountsTab.Size = new System.Drawing.Size(150, 19);
             this.chkAdvHideLocalAccountsTab.TabIndex = 22;
@@ -1111,7 +1160,7 @@
             this.chkAdvHideLocalPluginsTab.AutoSize = true;
             this.chkAdvHideLocalPluginsTab.Checked = true;
             this.chkAdvHideLocalPluginsTab.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkAdvHideLocalPluginsTab.Location = new System.Drawing.Point(31, 179);
+            this.chkAdvHideLocalPluginsTab.Location = new System.Drawing.Point(32, 125);
             this.chkAdvHideLocalPluginsTab.Name = "chkAdvHideLocalPluginsTab";
             this.chkAdvHideLocalPluginsTab.Size = new System.Drawing.Size(141, 19);
             this.chkAdvHideLocalPluginsTab.TabIndex = 21;
@@ -1123,7 +1172,7 @@
             // 
             this.lblAdvLayerTabs.AutoSize = true;
             this.lblAdvLayerTabs.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblAdvLayerTabs.Location = new System.Drawing.Point(17, 150);
+            this.lblAdvLayerTabs.Location = new System.Drawing.Point(17, 104);
             this.lblAdvLayerTabs.Name = "lblAdvLayerTabs";
             this.lblAdvLayerTabs.Size = new System.Drawing.Size(65, 15);
             this.lblAdvLayerTabs.TabIndex = 19;
@@ -1134,7 +1183,7 @@
             this.panel11.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel11.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.panel11.Location = new System.Drawing.Point(19, 159);
+            this.panel11.Location = new System.Drawing.Point(20, 116);
             this.panel11.Name = "panel11";
             this.panel11.Size = new System.Drawing.Size(355, 1);
             this.panel11.TabIndex = 20;
@@ -1144,7 +1193,7 @@
             this.chkAdvEnableChatAdminName.AutoSize = true;
             this.chkAdvEnableChatAdminName.Checked = true;
             this.chkAdvEnableChatAdminName.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkAdvEnableChatAdminName.Location = new System.Drawing.Point(32, 115);
+            this.chkAdvEnableChatAdminName.Location = new System.Drawing.Point(30, 82);
             this.chkAdvEnableChatAdminName.Name = "chkAdvEnableChatAdminName";
             this.chkAdvEnableChatAdminName.Size = new System.Drawing.Size(225, 19);
             this.chkAdvEnableChatAdminName.TabIndex = 18;
@@ -1156,7 +1205,7 @@
             // 
             this.lblAdvChatTab.AutoSize = true;
             this.lblAdvChatTab.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblAdvChatTab.Location = new System.Drawing.Point(18, 86);
+            this.lblAdvChatTab.Location = new System.Drawing.Point(17, 64);
             this.lblAdvChatTab.Name = "lblAdvChatTab";
             this.lblAdvChatTab.Size = new System.Drawing.Size(55, 15);
             this.lblAdvChatTab.TabIndex = 16;
@@ -1167,7 +1216,7 @@
             this.panel10.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel10.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.panel10.Location = new System.Drawing.Point(20, 95);
+            this.panel10.Location = new System.Drawing.Point(19, 73);
             this.panel10.Name = "panel10";
             this.panel10.Size = new System.Drawing.Size(355, 1);
             this.panel10.TabIndex = 17;
@@ -1175,7 +1224,7 @@
             // chkAdvEnableAdminMoveMsg
             // 
             this.chkAdvEnableAdminMoveMsg.AutoSize = true;
-            this.chkAdvEnableAdminMoveMsg.Location = new System.Drawing.Point(31, 52);
+            this.chkAdvEnableAdminMoveMsg.Location = new System.Drawing.Point(30, 42);
             this.chkAdvEnableAdminMoveMsg.Name = "chkAdvEnableAdminMoveMsg";
             this.chkAdvEnableAdminMoveMsg.Size = new System.Drawing.Size(182, 19);
             this.chkAdvEnableAdminMoveMsg.TabIndex = 15;
@@ -1208,7 +1257,7 @@
             this.panel12.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel12.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.panel12.Location = new System.Drawing.Point(19, 274);
+            this.panel12.Location = new System.Drawing.Point(18, 219);
             this.panel12.Name = "panel12";
             this.panel12.Size = new System.Drawing.Size(355, 1);
             this.panel12.TabIndex = 12;
@@ -1523,5 +1572,9 @@
         private System.Windows.Forms.Panel panel16;
         private System.Windows.Forms.NumericUpDown numPluginMaxRuntimeMin;
         private System.Windows.Forms.NumericUpDown numPluginMaxRuntimeSec;
+        private System.Windows.Forms.CheckBox chkAdvUsePluginOldStyleLoad;
+        private System.Windows.Forms.Label lblAdvStartup;
+        private System.Windows.Forms.Panel panel17;
+        private System.Windows.Forms.Label lblAdvStartupChangeNotice;
     }
 }

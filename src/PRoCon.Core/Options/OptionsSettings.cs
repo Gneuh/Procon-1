@@ -41,6 +41,8 @@ namespace PRoCon.Core.Options {
 
         public event OptionsEnabledHandler AllowAnonymousUsageDataChanged;
 
+        public event OptionsEnabledHandler UsePluginOldStyleLoadChanged;
+
         private bool m_isConsoleLoggingEnabled;
         public bool ConsoleLogging {
             get {
@@ -440,7 +442,23 @@ namespace PRoCon.Core.Options {
             }
         }
 
-        public PermissionSet PluginPermissions {
+        private bool m_isUsePluginOldStyleLoadEnabled;
+        public bool UsePluginOldStyleLoad {
+            get {
+                return this.m_isUsePluginOldStyleLoadEnabled;
+            }
+            set {
+                this.m_isUsePluginOldStyleLoadEnabled = value;
+                this.m_praApplication.SaveMainConfig();
+
+                if (this.UsePluginOldStyleLoadChanged != null) {
+                    FrostbiteConnection.RaiseEvent(this.UsePluginOldStyleLoadChanged.GetInvocationList(), value);
+                }
+            }
+        }
+
+        public PermissionSet PluginPermissions
+        {
 
             get {
 
@@ -532,6 +550,8 @@ namespace PRoCon.Core.Options {
 
             this.PluginMaxRuntime_s = 59;
             this.PluginMaxRuntime_m = 0;
+
+            this.UsePluginOldStyleLoad = false;
         }
     }
 }

@@ -1024,9 +1024,10 @@ namespace PRoCon.Core.Remote {
                     this.CompilePlugins(this.Parent.OptionsSettings.PluginPermissions);
                 }
 
-                //this.ExecuteConnectionConfig(this.FileHostNamePort + ".cfg", 0, null, true);
-                // moved below login becaue plugins enabled without connection is senseless
-
+                if (this.Parent.OptionsSettings.UsePluginOldStyleLoad == true) {
+                    this.ExecuteConnectionConfig(this.FileHostNamePort + ".cfg", 0, null, false);
+                }
+                
                 //this.m_blLoadingSavingConnectionConfig = false;
 
                 // this.ManuallyDisconnected = true;
@@ -1035,7 +1036,9 @@ namespace PRoCon.Core.Remote {
 
                 this.BeginLoginSequence();
 
-                this.ExecuteConnectionConfig(this.FileHostNamePort + ".cfg", 0, null, false);
+                if (this.Parent.OptionsSettings.UsePluginOldStyleLoad == false) {
+                    this.ExecuteConnectionConfig(this.FileHostNamePort + ".cfg", 0, null, true);
+                }
 
                 this.m_blLoadingSavingConnectionConfig = false;
             }

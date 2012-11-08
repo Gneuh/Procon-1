@@ -270,7 +270,7 @@ namespace PRoCon.Core {
                         }
                     }
                     
-                    XmlNodeList PluginRuntimeList = ((XmlElement)OptionsList[0]).GetElementsByTagName("pluginruntime");
+                    XmlNodeList PluginRuntimeList = ((XmlElement)OptionsList[0]).GetElementsByTagName("pluginmaxruntime");
                     if (PluginRuntimeList.Count > 0) {
 
                         XmlNodeList PluginRuntimeMList = ((XmlElement)PluginRuntimeList[0]).GetElementsByTagName("minutes");
@@ -764,6 +764,8 @@ namespace PRoCon.Core {
                         if ((this.OptionsSettings.PluginMaxRuntime_m > 0 || this.OptionsSettings.PluginMaxRuntime_s > 0) && this.OptionsSettings.PluginMaxRuntimeLocked == false) {
                             stwConfig.WriteLine("procon.private.options.pluginMaxRuntime {0} {1}", this.OptionsSettings.PluginMaxRuntime_m, this.OptionsSettings.PluginMaxRuntime_s);
                         }
+
+                        stwConfig.WriteLine("procon.private.options.UsePluginOldStyleLoad {0}", this.OptionsSettings.UsePluginOldStyleLoad);
 
                         foreach (PRoConClient prcClient in this.Connections) {
 
@@ -1350,6 +1352,14 @@ namespace PRoCon.Core {
                         if (itmp < 0) { itmp = 0; } if (itmp >= 60) { itmp = 59; }
                         this.OptionsSettings.PluginMaxRuntime_s = itmp;
                     }
+                }
+            }
+            else if (lstWords.Count >= 2 && String.Compare(lstWords[0], "procon.private.options.UsePluginOldStyleLoad", true) == 0 && objSender == this)
+            {
+                bool blEnabled = false;
+
+                if (bool.TryParse(lstWords[1], out blEnabled) == true) {
+                    this.OptionsSettings.UsePluginOldStyleLoad = blEnabled;
                 }
             }
             else if (lstWords.Count >= 3 && String.Compare(lstWords[0], "procon.protected.notification.write", true) == 0 && objSender is PRoConClient)
