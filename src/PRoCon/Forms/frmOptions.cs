@@ -54,6 +54,7 @@ namespace PRoCon.Forms {
         public static int INT_OPTIONS_PREFERENCES_SHOWWINDOW_TASKBARANDTRAY = 0;
         public static int INT_OPTIONS_PREFERENCES_SHOWWINDOW_TASKBARONLY = 1;
 
+        private string m_strAutoApplyUpdateInfo;
         private PRoConApplication m_praApplication;
 
         public frmOptions(PRoConApplication praApplication, frmMain frmParent) {
@@ -215,6 +216,9 @@ namespace PRoCon.Forms {
             this.chkBasicsAutoCheckDownloadForUpdates.Text = clocLanguage.GetLocalized("frmOptions.tabBasics.chkBasicsAutoCheckDownloadForUpdates");
             this.chkBasicsAutoApplyUpdates.Text = clocLanguage.GetLocalized("frmOptions.tabBasics.chkBasicsAutoApplyUpdates"); 
             this.chkBasicsAutoCheckGameConfigsForUpdates.Text = clocLanguage.GetLocalized("frmOptions.tabBasics.chkBasicsAutoCheckGameConfigsForUpdates");
+
+            this.m_strAutoApplyUpdateInfo = clocLanguage.GetDefaultLocalized("Already downloaded updates are installed in case of a restart!" + Environment.NewLine
+                + "In case you don't want this you should disable the automatic download of updates also.", "frmOptions.tabBasics.AutoApplyUpdateInfo").Replace("|*|", Environment.NewLine);
 
             this.lblBasicPreferences.Text = clocLanguage.GetLocalized("frmOptions.tabBasics.lblBasicPreferences");
             this.lblBasicsShowWindow.Text = clocLanguage.GetLocalized("frmOptions.tabBasics.lblBasicsShowWindow");
@@ -465,6 +469,9 @@ namespace PRoCon.Forms {
         
         private void chkBasicsAutoApplyUpdates_CheckedChanged(object sender, EventArgs e) {
             this.m_praApplication.OptionsSettings.AutoApplyUpdates = this.chkBasicsAutoApplyUpdates.Checked;
+            if (this.chkBasicsAutoApplyUpdates.Checked == false) {
+                MessageBox.Show(this.m_strAutoApplyUpdateInfo, "Important Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
 
         #endregion
