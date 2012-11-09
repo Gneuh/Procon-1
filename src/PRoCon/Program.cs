@@ -48,6 +48,8 @@ using PRoCon.Core.Events;
 
 using System.ComponentModel;
 
+using Microsoft.Win32;
+
 namespace PRoCon {
     using Core.AutoUpdates;
     using Forms;
@@ -71,7 +73,9 @@ namespace PRoCon {
 
             Program.m_Args = args;
 
-            if (PRoConApplication.IsProcessOpen() == false) {
+            bool dotNETCheck = checkNetVersion("3.5");
+
+            if (PRoConApplication.IsProcessOpen() == false && dotNETCheck == true) {
 
                 if (Directory.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Updates")) == true) {
                     AutoUpdater.m_strArgs = args;
@@ -156,6 +160,31 @@ namespace PRoCon {
             }
 
             return Program.m_application;
+        }
+
+        static private bool checkNetVersion(string sExpectedVersion)
+        {
+
+            string neededVersion = "v" + sExpectedVersion;
+
+            RegistryKey installed_versions = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\NET Framework Setup\NDP");
+            string[] version_names = installed_versions.GetSubKeyNames();
+            installed_versions.Close();
+            // versions include v
+
+            bool neededNetFound = false;
+            for (int i=0; i < version_names.Length; i++) {
+                if (version_names[i].IndexOf(neededVersion) > -1) {
+                    neededNetFound = true;
+                    break;
+                }
+            }
+            if (neededNetFound == false) {
+                MessageBox.Show("You need at least .NET " + sExpectedVersion + " installed!", "Procon Frostbite .NET Check", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return false;
+            }
+
+            return true;
         }
 
     }
