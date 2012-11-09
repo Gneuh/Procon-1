@@ -138,7 +138,7 @@ namespace PRoCon.Core.Remote {
 
             #region MoHW vars
 
-            this.m_responseDelegates.Add("vars.allUnlocksUnlocked", this.DispatchVarsAllUnlocksUnlockedResponse);
+            // deprecated R-5 this.m_responseDelegates.Add("vars.allUnlocksUnlocked", this.DispatchVarsAllUnlocksUnlockedResponse);
             this.m_responseDelegates.Add("vars.buddyOutline", this.DispatchVarsBuddyOutlineResponse);
             this.m_responseDelegates.Add("vars.hudBuddyInfo", this.DispatchVarsHudBuddyInfoResponse);
             this.m_responseDelegates.Add("vars.hudClassAbility", this.DispatchVarsHudClassAbilityResponse);
@@ -174,6 +174,7 @@ namespace PRoCon.Core.Remote {
             #endregion
 
             #region MoHW global & R3 disabled
+            // R-5 this.SendGetVarsAllUnlocksUnlockedPacket();
             // this.SendGetVarsVehicleSpawnAllowedPacket();
             // this.SendGetVarsVehicleSpawnDelayPacket();
             // this.SendGetVarsNameTagPacket();
@@ -187,7 +188,6 @@ namespace PRoCon.Core.Remote {
             #endregion
 
             #region vars MoHW
-            this.SendGetVarsAllUnlocksUnlockedPacket();
             this.SendGetVarsBuddyOutlinePacket();
             this.SendGetVarsHudBuddyInfoPacket();
             this.SendGetVarsHudClassAbilityPacket();
@@ -294,7 +294,7 @@ namespace PRoCon.Core.Remote {
         #endregion
 
         #region vars MoHW
-        public override event FrostbiteClient.IsEnabledHandler AllUnlocksUnlocked;
+        // R-5 public override event FrostbiteClient.IsEnabledHandler AllUnlocksUnlocked;
         public override event FrostbiteClient.IsEnabledHandler BuddyOutline;
         public override event FrostbiteClient.IsEnabledHandler HudBuddyInfo;
         public override event FrostbiteClient.IsEnabledHandler HudClassAbility;
@@ -552,7 +552,7 @@ namespace PRoCon.Core.Remote {
         #endregion
 
         #region MoHW only
-
+        /* deprecated R-5
         // VarsAllUnlocksUnlocked
         public override void SendSetVarsAllUnlocksUnlockedPacket(bool enabled) {
             if (this.IsLoggedIn == true) {
@@ -565,6 +565,7 @@ namespace PRoCon.Core.Remote {
                 this.BuildSendPacket("vars.allUnlocksUnlocked");
             }
         }
+        */
         // VarsHudBuddyOutline
         public override void SendSetVarsBuddyOutlinePacket(bool enabled) {
             if (this.IsLoggedIn == true) {
@@ -1363,6 +1364,7 @@ namespace PRoCon.Core.Remote {
         #endregion
 
         #region MoHW
+        /* deprecated R-5
         protected virtual void DispatchVarsAllUnlocksUnlockedResponse(FrostbiteConnection sender, Packet cpRecievedPacket, Packet cpRequestPacket) {
             if (cpRequestPacket.Words.Count >= 1) {
                 if (this.AllUnlocksUnlocked != null) {
@@ -1374,7 +1376,7 @@ namespace PRoCon.Core.Remote {
                 }
             }
         }
-
+        */
         protected virtual void DispatchVarsBuddyOutlineResponse(FrostbiteConnection sender, Packet cpRecievedPacket, Packet cpRequestPacket) {
             if (cpRequestPacket.Words.Count >= 1) {
                 if (this.BuddyOutline != null) {

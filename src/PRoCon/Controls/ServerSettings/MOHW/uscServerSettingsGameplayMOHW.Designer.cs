@@ -83,8 +83,8 @@
             this.picSettingsHudPointsTracker = new System.Windows.Forms.PictureBox();
             this.chkSettingsHudUnlocks = new System.Windows.Forms.CheckBox();
             this.picSettingsHudUnlocks = new System.Windows.Forms.PictureBox();
-            this.chkSettingsAllUnlocksUnlocked = new System.Windows.Forms.CheckBox();
-            this.picSettingsAllUnlocksUnlocked = new System.Windows.Forms.PictureBox();
+            // R-5 this.chkSettingsAllUnlocksUnlocked = new System.Windows.Forms.CheckBox();
+            // R-5 this.picSettingsAllUnlocksUnlocked = new System.Windows.Forms.PictureBox();
             this.picSettingsPlaylist = new System.Windows.Forms.PictureBox();
             this.lnkSettingsPlaylist = new System.Windows.Forms.LinkLabel();
             this.lblSettingsPlaylist = new System.Windows.Forms.Label();
@@ -119,7 +119,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsHudObiturary)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsHudPointsTracker)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsHudUnlocks)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picSettingsAllUnlocksUnlocked)).BeginInit();
+            // R-5 ((System.ComponentModel.ISupportInitialize)(this.picSettingsAllUnlocksUnlocked)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsPlaylist)).BeginInit();
             this.SuspendLayout();
             // 
@@ -838,6 +838,7 @@
             this.picSettingsHudUnlocks.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.picSettingsHudUnlocks.TabIndex = 294;
             this.picSettingsHudUnlocks.TabStop = false;
+            /* deprecated R-5 but we never know
             // 
             // chkSettingsAllUnlocksUnlocked
             // 
@@ -858,6 +859,7 @@
             this.picSettingsAllUnlocksUnlocked.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.picSettingsAllUnlocksUnlocked.TabIndex = 296;
             this.picSettingsAllUnlocksUnlocked.TabStop = false;
+            */
             // 
             // picSettingsPlaylist
             // 
@@ -908,8 +910,8 @@
             this.Controls.Add(this.lnkSettingsPlaylist);
             this.Controls.Add(this.lblSettingsPlaylist);
             this.Controls.Add(this.cboSettingsPlaylist);
-            this.Controls.Add(this.chkSettingsAllUnlocksUnlocked);
-            this.Controls.Add(this.picSettingsAllUnlocksUnlocked);
+            // R-5 this.Controls.Add(this.chkSettingsAllUnlocksUnlocked);
+            // R-5 this.Controls.Add(this.picSettingsAllUnlocksUnlocked);
             this.Controls.Add(this.chkSettingsHudUnlocks);
             this.Controls.Add(this.picSettingsHudUnlocks);
             this.Controls.Add(this.chkSettingsHudPointsTracker);
@@ -1036,8 +1038,8 @@
             this.Controls.SetChildIndex(this.chkSettingsHudPointsTracker, 0);
             this.Controls.SetChildIndex(this.picSettingsHudUnlocks, 0);
             this.Controls.SetChildIndex(this.chkSettingsHudUnlocks, 0);
-            this.Controls.SetChildIndex(this.picSettingsAllUnlocksUnlocked, 0);
-            this.Controls.SetChildIndex(this.chkSettingsAllUnlocksUnlocked, 0);
+            // R-5 this.Controls.SetChildIndex(this.picSettingsAllUnlocksUnlocked, 0);
+            // R-5 this.Controls.SetChildIndex(this.chkSettingsAllUnlocksUnlocked, 0);
             this.Controls.SetChildIndex(this.cboSettingsPlaylist, 0);
             this.Controls.SetChildIndex(this.lblSettingsPlaylist, 0);
             this.Controls.SetChildIndex(this.lnkSettingsPlaylist, 0);
@@ -1072,7 +1074,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsHudObiturary)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsHudPointsTracker)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsHudUnlocks)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picSettingsAllUnlocksUnlocked)).EndInit();
+            // R-5 ((System.ComponentModel.ISupportInitialize)(this.picSettingsAllUnlocksUnlocked)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsPlaylist)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -1141,8 +1143,8 @@
         private System.Windows.Forms.PictureBox picSettingsHudPointsTracker;
         private System.Windows.Forms.CheckBox chkSettingsHudUnlocks;
         private System.Windows.Forms.PictureBox picSettingsHudUnlocks;
-        private System.Windows.Forms.CheckBox chkSettingsAllUnlocksUnlocked;
-        private System.Windows.Forms.PictureBox picSettingsAllUnlocksUnlocked;
+        // R-5 private System.Windows.Forms.CheckBox chkSettingsAllUnlocksUnlocked;
+        // R-5 private System.Windows.Forms.PictureBox picSettingsAllUnlocksUnlocked;
         private System.Windows.Forms.PictureBox picSettingsPlaylist;
         private System.Windows.Forms.LinkLabel lnkSettingsPlaylist;
         private System.Windows.Forms.Label lblSettingsPlaylist;

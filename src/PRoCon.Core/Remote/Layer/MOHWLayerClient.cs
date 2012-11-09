@@ -26,8 +26,10 @@ namespace PRoCon.Core.Remote.Layer {
             // MoHW R-3 this.m_requestDelegates.Add("vars.3dSpotting", this.DispatchVarsRequest);
             // MoHW R-3 this.m_requestDelegates.Add("vars.hud", this.DispatchVarsRequest);
             // MoHW R-3 this.m_requestDelegates.Add("vars.miniMap", this.DispatchVarsRequest);
+            // this.m_requestDelegates.Add("vars.miniMapSpotting", this.DispatchVarsRequest);
             // MoHW R-3 this.m_requestDelegates.Add("vars.nameTag", this.DispatchVarsRequest);
             // MoHW R-3 this.m_requestDelegates.Add("vars.onlySquadLeaderSpawn", this.DispatchVarsRequest);
+            // this.m_requestDelegates.Add("vars.thirdPersonVehicleCameras", this.DispatchVarsRequest);
             // MOHW general this.m_requestDelegates.Add("vars.premiumStatus", this.DispatchVarsRequest);
             // MoHW R-3 this.m_requestDelegates.Add("vars.roundLockdownCountdown", this.DispatchVarsRequest);
             // MoHW R-3 this.m_requestDelegates.Add("vars.roundWarmupTimeout", this.DispatchVarsRequest);
@@ -37,7 +39,7 @@ namespace PRoCon.Core.Remote.Layer {
             #endregion
 
             this.m_requestDelegates.Add("vars.3pCam", this.DispatchVarsRequest);
-            this.m_requestDelegates.Add("vars.allUnlocksUnlocked", this.DispatchVarsRequest); // MoHW
+            // R-5 this.m_requestDelegates.Add("vars.allUnlocksUnlocked", this.DispatchVarsRequest); // MoHW
             this.m_requestDelegates.Add("vars.autoBalance", this.DispatchVarsRequest);
             this.m_requestDelegates.Add("vars.buddyOutline", this.DispatchVarsRequest); // MoHW
             this.m_requestDelegates.Add("vars.bulletDamage", this.DispatchVarsRequest);
@@ -58,7 +60,6 @@ namespace PRoCon.Core.Remote.Layer {
             this.m_requestDelegates.Add("vars.idleBanRounds", this.DispatchVarsRequest);
             this.m_requestDelegates.Add("vars.killCam", this.DispatchVarsRequest);
             this.m_requestDelegates.Add("vars.maxPlayers", this.DispatchVarsRequest);
-            this.m_requestDelegates.Add("vars.miniMapSpotting", this.DispatchVarsRequest);
             this.m_requestDelegates.Add("vars.playlist", this.DispatchAlterMaplistRequest); // MoHW
             this.m_requestDelegates.Add("vars.playerManDownTime", this.DispatchVarsRequest);
             this.m_requestDelegates.Add("vars.playerRespawnTime", this.DispatchVarsRequest);
@@ -66,8 +67,6 @@ namespace PRoCon.Core.Remote.Layer {
             this.m_requestDelegates.Add("vars.roundRestartPlayerCount", this.DispatchVarsRequest);
             this.m_requestDelegates.Add("vars.roundStartPlayerCount", this.DispatchVarsRequest);
             this.m_requestDelegates.Add("vars.soldierHealth", this.DispatchVarsRequest);
-            
-            this.m_requestDelegates.Add("vars.thirdPersonVehicleCameras", this.DispatchVarsRequest);
             
             this.m_requestDelegates.Add("reservedSlotsList.configFile", this.DispatchAlterReservedSlotsListRequest);
             this.m_requestDelegates.Add("reservedSlotsList.load", this.DispatchAlterReservedSlotsListRequest);

@@ -50,7 +50,7 @@ namespace PRoCon.Controls.ServerSettings.MOHW {
 
         private void Client_GameTypeDiscovered(PRoConClient sender) {
             this.Client.Game.ThirdPersonVehicleCameras += new FrostbiteClient.IsEnabledHandler(Client_ThirdPersonVehicleCameras);
-            this.Client.Game.AllUnlocksUnlocked += new FrostbiteClient.IsEnabledHandler(Game_AllUnlocksUnlocked);
+            // deprecated R-5 this.Client.Game.AllUnlocksUnlocked += new FrostbiteClient.IsEnabledHandler(Game_AllUnlocksUnlocked);
             this.Client.Game.TeamBalance += new FrostbiteClient.IsEnabledHandler(Client_TeamBalance);
             this.Client.Game.BuddyOutline += new FrostbiteClient.IsEnabledHandler(Game_BuddyOutline);
             this.Client.Game.BulletDamage += new FrostbiteClient.LimitHandler(Game_BulletDamage);
@@ -124,11 +124,11 @@ namespace PRoCon.Controls.ServerSettings.MOHW {
         void Client_ThirdPersonVehicleCameras(FrostbiteClient sender, bool isEnabled) {
             this.AppendSetting("vars.3pCam", isEnabled.ToString());
         }
-
+        /* deprecated R-5
         void Game_AllUnlocksUnlocked(FrostbiteClient sender, bool isEnabled) {
             this.AppendSetting("vars.allUnlocksUnlocked", isEnabled.ToString());
         }
-
+        */
         void Game_BuddyOutline(FrostbiteClient sender, bool isEnabled) {
             this.AppendSetting("vars.buddyOutline", isEnabled.ToString());
         }

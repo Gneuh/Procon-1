@@ -23,7 +23,7 @@ namespace PRoCon.Controls.ServerSettings.MOHW {
             this.AsyncSettingControls.Add("vars.teambalance", new AsyncStyleSetting(this.picSettingsTeamBalance, this.chkSettingsTeamBalance, new Control[] { this.chkSettingsTeamBalance }, true));
             this.AsyncSettingControls.Add("vars.killcam", new AsyncStyleSetting(this.picSettingsKillCam, this.chkSettingsKillCam, new Control[] { this.chkSettingsKillCam }, true));
 
-            this.AsyncSettingControls.Add("vars.allUnlocksUnlocked", new AsyncStyleSetting(this.picSettingsAllUnlocksUnlocked, this.chkSettingsAllUnlocksUnlocked, new Control[] { this.chkSettingsAllUnlocksUnlocked }, true));
+            // deprecated R-5 this.AsyncSettingControls.Add("vars.allUnlocksUnlocked", new AsyncStyleSetting(this.picSettingsAllUnlocksUnlocked, this.chkSettingsAllUnlocksUnlocked, new Control[] { this.chkSettingsAllUnlocksUnlocked }, true));
             this.AsyncSettingControls.Add("vars.buddyOutline", new AsyncStyleSetting(this.picSettingsBuddyOutline, this.chkSettingsBuddyOutline, new Control[] { this.chkSettingsBuddyOutline }, true));
 
             this.AsyncSettingControls.Add("vars.hudBuddyInfo", new AsyncStyleSetting(this.picSettingsHudBuddyInfo, this.chkSettingsHudBuddyInfo, new Control[] { this.chkSettingsHudBuddyInfo }, true));
@@ -58,7 +58,7 @@ namespace PRoCon.Controls.ServerSettings.MOHW {
 
             this.chkSettingsKillCam.Text = this.Language.GetLocalized("uscServerSettingsPanel.chkSettingsKillCam");
 
-            this.chkSettingsAllUnlocksUnlocked.Text = this.Language.GetDefaultLocalized("allUnlocksUnlocked", "uscServerSettingsPanel.chkSettingsAllUnlocksUnlocked");
+            // deprecated R-5 this.chkSettingsAllUnlocksUnlocked.Text = this.Language.GetDefaultLocalized("allUnlocksUnlocked", "uscServerSettingsPanel.chkSettingsAllUnlocksUnlocked");
             this.chkSettingsBuddyOutline.Text = this.Language.GetDefaultLocalized("buddyOutline", "uscServerSettingsPanel.chkSettingsBuddyOutline");
 
             this.lblHudSettings.Text = this.Language.GetDefaultLocalized("HUD settings:", "uscServerSettingsPanel.lblHudSettings");
@@ -137,7 +137,7 @@ namespace PRoCon.Controls.ServerSettings.MOHW {
             this.Client.Game.TeamBalance += new FrostbiteClient.IsEnabledHandler(m_prcClient_TeamBalance);
             this.Client.Game.KillCam += new FrostbiteClient.IsEnabledHandler(m_prcClient_KillCam);
 
-            this.Client.Game.AllUnlocksUnlocked += new FrostbiteClient.IsEnabledHandler(Game_AllUnlocksUnlocked);
+            // deprecated R-5 this.Client.Game.AllUnlocksUnlocked += new FrostbiteClient.IsEnabledHandler(Game_AllUnlocksUnlocked);
             this.Client.Game.BuddyOutline += new FrostbiteClient.IsEnabledHandler(Game_BuddyOutline);
 
             this.Client.Game.HudBuddyInfo += new FrostbiteClient.IsEnabledHandler(m_prcClient_HudBuddyInfo);
@@ -392,8 +392,8 @@ namespace PRoCon.Controls.ServerSettings.MOHW {
 
         // MoHW Specific
 
-        #region AllUnlocksUnlocked
-
+        #region AllUnlocksUnlocked // deprecated with R-5
+        /* deprecated R-5
         private void chkSettingsAllUnlocksUnlocked_CheckedChanged(object sender, EventArgs e) {
             if (this.Client != null && this.Client.Game != null) {
                 if (this.IgnoreEvents == false && this.AsyncSettingControls["vars.allUnlocksUnlocked"].IgnoreEvent == false) {
@@ -403,12 +403,12 @@ namespace PRoCon.Controls.ServerSettings.MOHW {
                 }
             }
         }
-
+        
         private void Game_AllUnlocksUnlocked(FrostbiteClient sender, bool isEnabled)
         {
             this.OnSettingResponse("vars.buddyOutline", isEnabled, true);
         }
-
+        */
         #endregion
         
         #region Buddy Outline
