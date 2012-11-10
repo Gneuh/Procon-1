@@ -577,7 +577,7 @@
             0,
             0});
             this.numSettingsRoundStartPlayerCount.Minimum = new decimal(new int[] {
-            1,
+            4,
             0,
             0,
             0});

@@ -453,6 +453,7 @@ namespace PRoCon.Controls.ServerSettings.BF3 {
         private int m_iPreviousSuccessRoundRestartPlayerCount;
 
         void Game_RoundRestartPlayerCount(FrostbiteClient sender, int limit) {
+            if (limit == -1) { limit = 2; }
             this.m_iPreviousSuccessRoundRestartPlayerCount = limit;
 
             this.OnSettingResponse("vars.roundrestartplayercount", (decimal)limit, true);
@@ -474,6 +475,7 @@ namespace PRoCon.Controls.ServerSettings.BF3 {
         private int m_iPreviousSuccessRoundStartPlayerCount;
 
         void Game_RoundStartPlayerCount(FrostbiteClient sender, int limit) {
+            if (limit == -1) { limit = 4; }
             this.m_iPreviousSuccessRoundStartPlayerCount = limit;
 
             this.OnSettingResponse("vars.roundstartplayercount", (decimal)limit, true);
