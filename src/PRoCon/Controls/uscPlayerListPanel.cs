@@ -2059,6 +2059,11 @@ namespace PRoCon {
 
                 statsUrl = statsUrl.Replace("%game%", this.m_prcClient.GameType.ToLower());
 
+                string[] gsrv_ip_port = this.m_prcClient.CurrentServerInfo.ExternalGameIpandPort.Split(':');
+                statsUrl = statsUrl.Replace("%srv_ip%", gsrv_ip_port[0]);
+                statsUrl = statsUrl.Replace("%srv_port%", gsrv_ip_port[1]);
+                statsUrl = statsUrl.Replace("%srv_ip_port%", this.m_prcClient.CurrentServerInfo.ExternalGameIpandPort);
+
                 if (this.voiceToolStripMenuItem.Tag is CPlayerInfo)
                 {
                     statsUrl = statsUrl.Replace("%player_name%", ((CPlayerInfo)this.voiceToolStripMenuItem.Tag).SoldierName);
