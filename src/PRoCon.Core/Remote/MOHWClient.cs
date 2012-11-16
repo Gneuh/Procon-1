@@ -920,6 +920,7 @@ namespace PRoCon.Core.Remote {
                 // end
 
                 cpRecievedPacket.Words.RemoveAt(0);
+                cpRecievedPacket.Words.RemoveAt(1); // quick hack for additional playlist info parameter (R-5)
 
                 if (iRequestStartOffset == 0) {
                     this.lstFullMaplist.Clear();
