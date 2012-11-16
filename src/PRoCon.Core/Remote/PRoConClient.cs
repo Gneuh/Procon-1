@@ -3169,7 +3169,16 @@ namespace PRoCon.Core.Remote {
                     strIP = a_strIP[0];
                 }
 
-                CBanInfo newPbBanInfo = new CBanInfo(mMatch.Groups["name"].Value, mMatch.Groups["guid"].Value, mMatch.Groups["ip"].Value, new TimeoutSubset("perm",""), mMatch.Groups["reason"].Value);
+                TimeoutSubset kb_timeoutSubset;
+                if (String.Compare(mMatch.Groups["kb_type"].ToString(), "Kick/Ban", true) == 0) {
+                    kb_timeoutSubset = new TimeoutSubset(new List<string>() { "perm", "" });
+                }
+                else {
+                    kb_timeoutSubset = new TimeoutSubset(new List<string>() { "seconds", "120" });
+                }
+
+                //CBanInfo newPbBanInfo = new CBanInfo(mMatch.Groups["name"].Value, mMatch.Groups["guid"].Value, mMatch.Groups["ip"].Value, new TimeoutSubset("perm",""), mMatch.Groups["reason"].Value);
+                CBanInfo newPbBanInfo = new CBanInfo(mMatch.Groups["name"].Value, mMatch.Groups["guid"].Value, mMatch.Groups["ip"].Value, kb_timeoutSubset, mMatch.Groups["reason"].Value);
 
                 if (this.PunkbusterPlayerBanned != null)
                 {
