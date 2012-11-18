@@ -122,6 +122,11 @@ namespace PRoCon.Controls.ServerSettings.BF3 {
                     this.Client.GameTypeDiscovered += new PRoConClient.EmptyParamterHandler(m_prcClient_GameTypeDiscovered);
                 }
             }
+
+            // override RoundStart minimum in case server is unranked
+            if (this.Client.CurrentServerInfo.Ranked == false) {
+                this.numSettingsRoundStartPlayerCount.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            }
         }
 
         private void m_prcClient_GameTypeDiscovered(PRoConClient sender) {
