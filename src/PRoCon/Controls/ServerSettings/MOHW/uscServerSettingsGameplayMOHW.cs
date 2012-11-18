@@ -668,6 +668,7 @@ namespace PRoCon.Controls.ServerSettings.MOHW {
                 if (this.IgnoreEvents == false && this.AsyncSettingControls["vars.playlist"].IgnoreEvent == false) {
                     this.WaitForSettingResponse("vars.playlist", this.cboSettingsPlaylist.SelectedValue.ToString());
                     this.Client.Game.SendSetVarsPlaylistPacket(this.cboSettingsPlaylist.SelectedValue.ToString());
+                    this.Client.Game.SendMapListListRoundsPacket();
                 }
             }
         }
