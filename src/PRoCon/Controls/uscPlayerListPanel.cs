@@ -2105,7 +2105,7 @@ namespace PRoCon {
                         this.m_prcClient.SendRequest(new List<string>() { "admin.endRound", this.cboEndRound.SelectedIndex.ToString() });
                     }
                     else if (this.m_prcClient.Game is BFBC2Client) {
-                        this.m_prcClient.SendRequest(new List<string>() { "mapList.endRound", this.cboEndRound.SelectedIndex.ToString() });
+                        this.m_prcClient.SendRequest(new List<string>() { "admin.endRound", this.cboEndRound.SelectedIndex.ToString() });
                     }
                     else if (this.m_prcClient.Game is BF3Client) {
                         this.m_prcClient.SendRequest(new List<string>() { "mapList.endRound", this.cboEndRound.SelectedIndex.ToString() });
