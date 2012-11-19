@@ -2418,6 +2418,7 @@ namespace PRoCon.Core.Remote {
             if (cpRequestPacket.Words.Count >= 1) {
                 if (this.MapListLoad != null) {
                     FrostbiteConnection.RaiseEvent(this.MapListLoad.GetInvocationList(), this);
+                    this.SendMapListListRoundsPacket();
                 }
             }
         }

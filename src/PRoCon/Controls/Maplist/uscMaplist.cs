@@ -741,7 +741,7 @@ namespace PRoCon.Controls.Maplist {
             if (this.m_client != null && this.m_client.Game != null)
             {
                 this.m_client.Game.SendMapListLoadPacket();
-                this.m_client.Game.SendMapListListRoundsPacket();
+                //this.m_client.Game.SendMapListListRoundsPacket();
                 this.OnSettingResponse("local.maplist.append", true);
             }
         }
