@@ -573,6 +573,28 @@ namespace PRoCon.Core.Plugin {
             return returnMapList;
         }
 
+        protected List<string> GetTeamListByPlayList(string format, params string[] playList) {
+            List<string> returnMapList = new List<string>();
+
+            foreach (CMap map in this.GetMapDefines()) {
+
+                if (this.IsValidPlaylist(map.PlayList, playList) == true) {
+
+                    foreach (CTeamName teamname in map.TeamNames) {
+                        if (String.Compare(teamname.Playlist, playList[0]) == 0) {
+                            string formattedTeamName = format.Replace("{PublicLevelName}", map.PublicLevelName).Replace("{GameMode}", map.GameMode).Replace("{FileName}", map.FileName).Replace("{TeamName}", this.GetLocalized(teamname.LocalizationKey, teamname.LocalizationKey));
+
+                            if (returnMapList.Contains(formattedTeamName) == false) {
+                                returnMapList.Add(formattedTeamName);
+                            }
+                        }
+                    }
+                }
+            }
+
+            return returnMapList;
+        }
+
         /// <summary>
         /// 
         /// </summary>
