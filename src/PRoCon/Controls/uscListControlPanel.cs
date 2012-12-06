@@ -1207,35 +1207,47 @@ namespace PRoCon {
 
         private void btnBanlistAddBan_Click(object sender, EventArgs e) {
 
+            string m_strReasonAdmin = this.cboBanlistReason.Text;
+            string accountName = this.m_prcClient.Username;
+            if (Program.m_application.OptionsSettings.EnableAdminReason && accountName.Length > 0)
+            {
+                int iBanInfo = (80 - 5 - (accountName.Length + 3));
+                if (m_strReasonAdmin.Length > iBanInfo)
+                {
+                    m_strReasonAdmin = m_strReasonAdmin.Substring(0, iBanInfo);
+                }
+                m_strReasonAdmin = m_strReasonAdmin + " (" + accountName + ")";
+            }
+
             if (this.rdoBanlistName.Checked == true) {
                 // obsolete with BF3 R-8 string name = this.m_prcClient.Game is BF3Client ? "persona" : "name";
                 string name = "name";
 
                 if (this.rdoBanlistPermanent.Checked == true) {
-                    this.SendCommand("banList.add", name, this.txtBanlistManualBanName.Text, "perm", this.cboBanlistReason.Text);
+                    this.SendCommand("banList.add", name, this.txtBanlistManualBanName.Text, "perm", m_strReasonAdmin);
                 }
                 else {
-                    this.SendCommand("banList.add", name, this.txtBanlistManualBanName.Text, "seconds", (uscPlayerPunishPanel.GetBanLength(this.txtBanlistTime, this.cboBanlistTimeMultiplier) * 60).ToString(), this.cboBanlistReason.Text);
+                    this.SendCommand("banList.add", name, this.txtBanlistManualBanName.Text, "seconds", (uscPlayerPunishPanel.GetBanLength(this.txtBanlistTime, this.cboBanlistTimeMultiplier) * 60).ToString(), m_strReasonAdmin);
                 }
             }
             else if (this.rdoBanlistIP.Checked == true) {
                 if (this.rdoBanlistPermanent.Checked == true) {
-                    this.SendCommand("banList.add", "ip", this.txtBanlistManualBanIP.Text, "perm", this.cboBanlistReason.Text);
+                    this.SendCommand("banList.add", "ip", this.txtBanlistManualBanIP.Text, "perm", m_strReasonAdmin);
                 }
                 else {
-                    this.SendCommand("banList.add", "ip", this.txtBanlistManualBanIP.Text, "seconds", (uscPlayerPunishPanel.GetBanLength(this.txtBanlistTime, this.cboBanlistTimeMultiplier) * 60).ToString(), this.cboBanlistReason.Text);
+                    this.SendCommand("banList.add", "ip", this.txtBanlistManualBanIP.Text, "seconds", (uscPlayerPunishPanel.GetBanLength(this.txtBanlistTime, this.cboBanlistTimeMultiplier) * 60).ToString(), m_strReasonAdmin);
                 }
             }
             else if (this.rdoBanlistBc2GUID.Checked == true) {
                 if (this.rdoBanlistPermanent.Checked == true) {
-                    this.SendCommand("banList.add", "guid", this.txtBanlistManualBanGUID.Text, "perm", this.cboBanlistReason.Text);
+                    this.SendCommand("banList.add", "guid", this.txtBanlistManualBanGUID.Text, "perm", m_strReasonAdmin);
                 }
                 else {
-                    this.SendCommand("banList.add", "guid", this.txtBanlistManualBanGUID.Text, "seconds", (uscPlayerPunishPanel.GetBanLength(this.txtBanlistTime, this.cboBanlistTimeMultiplier) * 60).ToString(), this.cboBanlistReason.Text);
+                    this.SendCommand("banList.add", "guid", this.txtBanlistManualBanGUID.Text, "seconds", (uscPlayerPunishPanel.GetBanLength(this.txtBanlistTime, this.cboBanlistTimeMultiplier) * 60).ToString(), m_strReasonAdmin);
                 }
             }
             else if (this.rdoBanlistPbGUID.Checked == true) {
-                this.SendCommand("punkBuster.pb_sv_command", String.Format("pb_sv_banguid {0} \"{1}\" \"{2}\" \"BC2! {3}\"", this.txtBanlistManualBanGUID.Text, this.txtBanlistManualBanName.Text.Length > 0 ? this.txtBanlistManualBanName.Text : "???", this.txtBanlistManualBanIP.Text.Length > 0 ? this.txtBanlistManualBanIP.Text : "???", this.cboBanlistReason.Text));
+                this.SendCommand("punkBuster.pb_sv_command", String.Format("pb_sv_banguid {0} \"{1}\" \"{2}\" \"BC2! {3}\"", this.txtBanlistManualBanGUID.Text, this.txtBanlistManualBanName.Text.Length > 0 ? this.txtBanlistManualBanName.Text : "???", this.txtBanlistManualBanIP.Text.Length > 0 ? this.txtBanlistManualBanIP.Text : "???", m_strReasonAdmin));
                 this.SendCommand("punkBuster.pb_sv_command", this.m_prcClient.Variables.GetVariable<string>("PUNKBUSTER_BANLIST_REFRESH", "pb_sv_banlist BC2! "));
             }
             

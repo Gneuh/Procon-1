@@ -88,6 +88,7 @@ namespace PRoCon.Forms {
 
             this.m_praApplication.OptionsSettings.AdminMoveMessageChanged += new PRoCon.Core.Options.OptionsSettings.OptionsEnabledHandler(OptionsSettings_AdminMoveMessageChanged);
             this.m_praApplication.OptionsSettings.ChatDisplayAdminNameChanged += new PRoCon.Core.Options.OptionsSettings.OptionsEnabledHandler(OptionsSettings_ChatDisplayAdminNameChanged);
+            this.m_praApplication.OptionsSettings.EnableAdminReasonChanged += new PRoCon.Core.Options.OptionsSettings.OptionsEnabledHandler(OptionsSettings_EnableAdminReasonChanged);
 
             this.m_praApplication.OptionsSettings.LayerHideLocalAccountsChanged += new OptionsSettings.OptionsEnabledHandler(OptionsSettings_LayerHideLocalAccountsChanged);
             this.m_praApplication.OptionsSettings.LayerHideLocalPluginsChanged += new OptionsSettings.OptionsEnabledHandler(OptionsSettings_LayerHideLocalPluginsChanged);
@@ -161,6 +162,7 @@ namespace PRoCon.Forms {
 
                 this.m_praApplication.OptionsSettings.AdminMoveMessage = this.m_praApplication.OptionsSettings.AdminMoveMessage;
                 this.m_praApplication.OptionsSettings.ChatDisplayAdminName = this.m_praApplication.OptionsSettings.ChatDisplayAdminName;
+                this.m_praApplication.OptionsSettings.EnableAdminReason = this.m_praApplication.OptionsSettings.EnableAdminReason;
 
                 this.m_praApplication.OptionsSettings.LayerHideLocalAccounts = this.m_praApplication.OptionsSettings.LayerHideLocalAccounts;
                 this.m_praApplication.OptionsSettings.LayerHideLocalPlugins = this.m_praApplication.OptionsSettings.LayerHideLocalPlugins;
@@ -276,6 +278,11 @@ namespace PRoCon.Forms {
             this.lblAdvSpecialSwitches.Text = clocLanguage.GetLocalized("frmOptions.tabAdvanced.lblAdvSpecialSwitches");
             this.chkAdvShowDICESpecialOptions.Text = clocLanguage.GetLocalized("frmOptions.tabAdvanced.lblAdvSpecialSwitches.chkAdvShowDICESpecialOptions");
             this.lblAdvShowDICESpecialOptionsNotice.Text = clocLanguage.GetLocalized("frmOptions.tabAdvanced.lblAdvSpecialSwitches.lblAdvShowDICESpecialOptionsNotice");
+
+            // Advanced2
+            this.tabAdv2.Text = clocLanguage.GetDefaultLocalized("Advanced2", "frmOptions.tabAdvanced2");
+            this.lblAdv2BanTab.Text = clocLanguage.GetDefaultLocalized("Bans", "frmOptions.lblAdv2BanTab");
+            this.chkAdv2EnableAdminReason.Text = clocLanguage.GetDefaultLocalized("Enable Admin name in ban reason", "frmOptions.tabBasics.chkAdv2EnableAdminReason");
 
             // StatsLinks
             this.tabPlayerLookup.Text = clocLanguage.GetLocalized("frmOptions.tabPlayerLookup");
@@ -802,6 +809,19 @@ namespace PRoCon.Forms {
         }
 
         # endregion
+
+        #region Advanced2
+
+        void OptionsSettings_EnableAdminReasonChanged(bool blEnabled) {
+            this.chkAdv2EnableAdminReason.Checked = blEnabled;
+        }
+
+        private void chkAdv2EnableAdminReason_CheckedChanged(object sender, EventArgs e) {
+            this.m_praApplication.OptionsSettings.EnableAdminReason = this.chkAdv2EnableAdminReason.Checked;
+        }
+
+        
+        #endregion
 
         #region StatsLinks
 

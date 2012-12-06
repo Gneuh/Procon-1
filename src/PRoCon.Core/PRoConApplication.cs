@@ -727,6 +727,7 @@ namespace PRoCon.Core {
 
                         stwConfig.WriteLine("procon.private.options.adminMoveMessage {0}", this.OptionsSettings.AdminMoveMessage);
                         stwConfig.WriteLine("procon.private.options.chatDisplayAdminName {0}", this.OptionsSettings.ChatDisplayAdminName);
+                        stwConfig.WriteLine("procon.private.options.EnableAdminReason {0}", this.OptionsSettings.EnableAdminReason);
 
                         stwConfig.WriteLine("procon.private.options.layerHideLocalPlugins {0}", this.OptionsSettings.LayerHideLocalPlugins);
                         stwConfig.WriteLine("procon.private.options.layerHideLocalAccounts {0}", this.OptionsSettings.LayerHideLocalAccounts);
@@ -1248,7 +1249,16 @@ namespace PRoCon.Core {
                     this.OptionsSettings.ChatDisplayAdminName = blEnabled;
                 }
             }
-            else if (lstWords.Count >= 2 && String.Compare(lstWords[0], "procon.private.options.layerHideLocalPlugins", true) == 0 && objSender == this) {
+            else if (lstWords.Count >= 2 && String.Compare(lstWords[0], "procon.private.options.EnableAdminReason", true) == 0 && objSender == this)
+            {
+                bool blEnabled = false;
+
+                if (bool.TryParse(lstWords[1], out blEnabled) == true) {
+                    this.OptionsSettings.EnableAdminReason = blEnabled;
+                }
+            }
+            else if (lstWords.Count >= 2 && String.Compare(lstWords[0], "procon.private.options.layerHideLocalPlugins", true) == 0 && objSender == this)
+            {
                 bool blEnabled = false;
 
                 if (bool.TryParse(lstWords[1], out blEnabled) == true) {
@@ -2078,6 +2088,14 @@ namespace PRoCon.Core {
                 if (bool.TryParse(lstWords[1], out blEnabled) == true)
                 {
                     this.OptionsSettings.ChatDisplayAdminName = blEnabled;
+                }
+            }
+            else if (lstWords.Count >= 2 && String.Compare(lstWords[0], "procon.private.options.EnableAdminReason", true) == 0 && objSender == this)
+            {
+                bool blEnabled = false;
+
+                if (bool.TryParse(lstWords[1], out blEnabled) == true) {
+                    this.OptionsSettings.EnableAdminReason = blEnabled;
                 }
             }
             else if (lstWords.Count >= 2 && String.Compare(lstWords[0], "procon.private.options.layerHideLocalPlugins", true) == 0 && objSender == this)

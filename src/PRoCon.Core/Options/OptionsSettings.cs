@@ -31,6 +31,7 @@ namespace PRoCon.Core.Options {
 
         public event OptionsEnabledHandler AdminMoveMessageChanged;
         public event OptionsEnabledHandler ChatDisplayAdminNameChanged;
+        public event OptionsEnabledHandler EnableAdminReasonChanged;
 
         public event OptionsEnabledHandler LayerHideLocalPluginsChanged;
         public event OptionsEnabledHandler LayerHideLocalAccountsChanged;
@@ -251,7 +252,24 @@ namespace PRoCon.Core.Options {
                 }
             }
         }
-        
+
+        // EnableAdminReason
+        private bool m_isEnableAdminReasonEnabled = true;
+        public bool EnableAdminReason
+        {
+            get {
+                return this.m_isEnableAdminReasonEnabled;
+            }
+            set {
+                this.m_isEnableAdminReasonEnabled = value;
+                this.m_praApplication.SaveMainConfig();
+
+                if (this.EnableAdminReasonChanged != null) {
+                    FrostbiteConnection.RaiseEvent(this.EnableAdminReasonChanged.GetInvocationList(), value);
+                }
+            }
+        }
+
         private bool m_isLayerHideLocalPluginsEnabled = true;
         public bool LayerHideLocalPlugins {
             get {
@@ -533,6 +551,8 @@ namespace PRoCon.Core.Options {
             this.AutoCheckDownloadUpdates = true;
             this.AutoCheckGameConfigsForUpdates = true;
             this.AllowAnonymousUsageData = true;
+
+            this.EnableAdminReason = false;
 
             this.LayerHideLocalAccounts = true;
             this.LayerHideLocalPlugins = true;

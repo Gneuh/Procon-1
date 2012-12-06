@@ -120,6 +120,7 @@
             this.lblAdvPlayerTab = new System.Windows.Forms.Label();
             this.panel9 = new System.Windows.Forms.Panel();
             this.panel12 = new System.Windows.Forms.Panel();
+            this.tabAdv2 = new System.Windows.Forms.TabPage();
             this.tabPlayerLookup = new System.Windows.Forms.TabPage();
             this.lblStatsLinkHelpText = new System.Windows.Forms.Label();
             this.pnlStatsLinkManage = new System.Windows.Forms.Panel();
@@ -135,6 +136,9 @@
             this.lblStatsPlayerTab = new System.Windows.Forms.Label();
             this.panel15 = new System.Windows.Forms.Panel();
             this.btnClose = new System.Windows.Forms.Button();
+            this.chkAdv2EnableAdminReason = new System.Windows.Forms.CheckBox();
+            this.lblAdv2BanTab = new System.Windows.Forms.Label();
+            this.panel18 = new System.Windows.Forms.Panel();
             this.tbcOptions.SuspendLayout();
             this.tabBasics.SuspendLayout();
             this.tabPlugins.SuspendLayout();
@@ -148,6 +152,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.picHttpServerForwardedTestStatus)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picHttpServerServerStatus)).BeginInit();
             this.tabAdv.SuspendLayout();
+            this.tabAdv2.SuspendLayout();
             this.tabPlayerLookup.SuspendLayout();
             this.pnlStatsLinkManage.SuspendLayout();
             this.SuspendLayout();
@@ -161,6 +166,7 @@
             this.tbcOptions.Controls.Add(this.tabPlugins);
             this.tbcOptions.Controls.Add(this.tabHttpServer);
             this.tbcOptions.Controls.Add(this.tabAdv);
+            this.tbcOptions.Controls.Add(this.tabAdv2);
             this.tbcOptions.Controls.Add(this.tabPlayerLookup);
             this.tbcOptions.Location = new System.Drawing.Point(14, 14);
             this.tbcOptions.Name = "tbcOptions";
@@ -1262,6 +1268,19 @@
             this.panel12.Size = new System.Drawing.Size(355, 1);
             this.panel12.TabIndex = 12;
             // 
+            // tabAdv2
+            // 
+            this.tabAdv2.Controls.Add(this.chkAdv2EnableAdminReason);
+            this.tabAdv2.Controls.Add(this.lblAdv2BanTab);
+            this.tabAdv2.Controls.Add(this.panel18);
+            this.tabAdv2.Location = new System.Drawing.Point(4, 24);
+            this.tabAdv2.Name = "tabAdv2";
+            this.tabAdv2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabAdv2.Size = new System.Drawing.Size(390, 475);
+            this.tabAdv2.TabIndex = 5;
+            this.tabAdv2.Text = "Advanced2";
+            this.tabAdv2.UseVisualStyleBackColor = true;
+            // 
             // tabPlayerLookup
             // 
             this.tabPlayerLookup.Controls.Add(this.lblStatsLinkHelpText);
@@ -1416,6 +1435,37 @@
             this.btnClose.TabIndex = 25;
             this.btnClose.Text = "Close";
             // 
+            // lblAdv2BanTab
+            // 
+            this.lblAdv2BanTab.AutoSize = true;
+            this.lblAdv2BanTab.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblAdv2BanTab.Location = new System.Drawing.Point(17, 24);
+            this.lblAdv2BanTab.Name = "lblAdv2BanTab";
+            this.lblAdv2BanTab.Size = new System.Drawing.Size(33, 15);
+            this.lblAdv2BanTab.TabIndex = 16;
+            this.lblAdv2BanTab.Text = "Bans";
+            // 
+            // chkAdv2EnableAdminReason
+            // 
+            this.chkAdv2EnableAdminReason.AutoSize = true;
+            this.chkAdv2EnableAdminReason.Location = new System.Drawing.Point(30, 42);
+            this.chkAdv2EnableAdminReason.Name = "chkAdv2EnableAdminReason";
+            this.chkAdv2EnableAdminReason.Size = new System.Drawing.Size(207, 19);
+            this.chkAdv2EnableAdminReason.TabIndex = 18;
+            this.chkAdv2EnableAdminReason.Text = "Enable Admin name in ban reason";
+            this.chkAdv2EnableAdminReason.UseVisualStyleBackColor = true;
+            this.chkAdv2EnableAdminReason.CheckedChanged += new System.EventHandler(this.chkAdv2EnableAdminReason_CheckedChanged);
+            // 
+            // panel18
+            // 
+            this.panel18.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel18.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.panel18.Location = new System.Drawing.Point(20, 33);
+            this.panel18.Name = "panel18";
+            this.panel18.Size = new System.Drawing.Size(355, 1);
+            this.panel18.TabIndex = 17;
+            // 
             // frmOptions
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -1455,6 +1505,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.picHttpServerServerStatus)).EndInit();
             this.tabAdv.ResumeLayout(false);
             this.tabAdv.PerformLayout();
+            this.tabAdv2.ResumeLayout(false);
+            this.tabAdv2.PerformLayout();
             this.tabPlayerLookup.ResumeLayout(false);
             this.tabPlayerLookup.PerformLayout();
             this.pnlStatsLinkManage.ResumeLayout(false);
@@ -1576,5 +1628,9 @@
         private System.Windows.Forms.Label lblAdvStartup;
         private System.Windows.Forms.Panel panel17;
         private System.Windows.Forms.Label lblAdvStartupChangeNotice;
+        private System.Windows.Forms.TabPage tabAdv2;
+        private System.Windows.Forms.CheckBox chkAdv2EnableAdminReason;
+        private System.Windows.Forms.Label lblAdv2BanTab;
+        private System.Windows.Forms.Panel panel18;
     }
 }
