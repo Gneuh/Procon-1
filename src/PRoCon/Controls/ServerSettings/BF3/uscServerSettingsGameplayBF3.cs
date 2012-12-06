@@ -430,7 +430,7 @@ namespace PRoCon.Controls.ServerSettings.BF3 {
         {
             // see line 126 uscServerSettingsTextChatModeration.cs
             if (this.Client != null && this.Client.Game != null) {
-                if (this.IgnoreEvents == false && this.AsyncSettingControls["vars.unlockmode"].IgnoreEvent == false) {
+                if (this.IgnoreEvents == false && this.AsyncSettingControls["vars.gunMasterWeaponsPreset"].IgnoreEvent == false) {
                     this.WaitForSettingResponse("vars.gunMasterWeaponsPreset", (decimal)this.m_iPreviousSuccessGunMasterWeaponsPreset);
 
                     this.Client.Game.SendSetVarsGunMasterWeaponsPresetPacket(Convert.ToInt32(this.cboSettingsGunMasterWeaponsPreset.SelectedValue));
@@ -740,11 +740,6 @@ namespace PRoCon.Controls.ServerSettings.BF3 {
                 this.Client.Game.SendSetVarsBulletDamagePacket(100);
                 this.Client.Game.SendSetVarsOnlySquadLeaderSpawnPacket(onlySquadLeaderSpawn);
             }
-        }
-
-        private void lnkSettingsUnlockMode_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-
         }
     }
 }
