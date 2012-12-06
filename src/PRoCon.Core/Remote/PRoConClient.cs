@@ -1234,6 +1234,7 @@ namespace PRoCon.Core.Remote {
             if (this.IsPRoConConnection == true) {
                 this.SendRequest(new List<string>() { "procon.privileges" });
                 this.SendRequest(new List<string>() { "procon.registerUid", "true", FrostbiteClient.GeneratePasswordHash(Encoding.ASCII.GetBytes(DateTime.Now.ToString("HH:mm:ss ff")), this.m_strUsername) });
+                this.SendRequest(new List<string>() { "version" });
                 this.SendRequest(new List<string>() { "procon.version" });
             }
 
