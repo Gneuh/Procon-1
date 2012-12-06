@@ -22,6 +22,7 @@ namespace PRoCon.Core.Remote.Layer {
             this.m_requestDelegates.Add("vars.roundRestartPlayerCount", this.DispatchVarsRequest);
             this.m_requestDelegates.Add("vars.onlySquadLeaderSpawn", this.DispatchVarsRequest);
             this.m_requestDelegates.Add("vars.unlockMode", this.DispatchVarsRequest);
+            this.m_requestDelegates.Add("vars.gunMasterWeaponsPreset", this.DispatchVarsRequest);
             this.m_requestDelegates.Add("vars.soldierHealth", this.DispatchVarsRequest);
             this.m_requestDelegates.Add("vars.hud", this.DispatchVarsRequest);
             this.m_requestDelegates.Add("vars.playerManDownTime", this.DispatchVarsRequest);

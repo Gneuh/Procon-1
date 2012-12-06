@@ -119,6 +119,7 @@ namespace PRoCon.Core.Remote {
             this.m_responseDelegates.Add("vars.roundRestartPlayerCount", this.DispatchVarsRoundRestartPlayerCountResponse);
             this.m_responseDelegates.Add("vars.onlySquadLeaderSpawn", this.DispatchVarsOnlySquadLeaderSpawnResponse);
             this.m_responseDelegates.Add("vars.unlockMode", this.DispatchVarsUnlockModeResponse);
+            this.m_responseDelegates.Add("vars.gunMasterWeaponsPreset", this.DispatchVarsGunMasterWeaponsPresetResponse);
             this.m_responseDelegates.Add("vars.soldierHealth", this.DispatchVarsSoldierHealthResponse);
             this.m_responseDelegates.Add("vars.hud", this.DispatchVarsHudResponse);
             this.m_responseDelegates.Add("vars.playerManDownTime", this.DispatchVarsPlayerManDownTimeResponse);
@@ -163,6 +164,7 @@ namespace PRoCon.Core.Remote {
             this.SendGetVarsOnlySquadLeaderSpawnPacket();
 
             this.SendGetVarsUnlockModePacket();
+            this.SendGetVarsGunMasterWeaponsPresetPacket();
 
             this.SendGetVarsSoldierHealthPacket();
 
@@ -245,6 +247,7 @@ namespace PRoCon.Core.Remote {
         public override event FrostbiteClient.IsEnabledHandler OnlySquadLeaderSpawn;
 
         public override event FrostbiteClient.UnlockModeHandler UnlockMode;
+        public override event FrostbiteClient.GunMasterWeaponsPresetHandler GunMasterWeaponsPreset;
 
         public override event FrostbiteClient.LimitHandler SoldierHealth;
 
@@ -1108,7 +1111,22 @@ namespace PRoCon.Core.Remote {
             }
         }
 
-        protected virtual void DispatchVarsHudResponse(FrostbiteConnection sender, Packet cpRecievedPacket, Packet cpRequestPacket) {
+        protected virtual void DispatchVarsGunMasterWeaponsPresetResponse(FrostbiteConnection sender, Packet cpRecievedPacket, Packet cpRequestPacket) {
+            if (cpRequestPacket.Words.Count >= 1) {
+                if (this.VehicleSpawnDelay != null) {
+                    if (cpRecievedPacket.Words.Count == 2) {
+                        FrostbiteConnection.RaiseEvent(this.GunMasterWeaponsPreset.GetInvocationList(), this, Convert.ToInt32(cpRecievedPacket.Words[1]));
+                    }
+                    else if (cpRequestPacket.Words.Count >= 2)
+                    {
+                        FrostbiteConnection.RaiseEvent(this.GunMasterWeaponsPreset.GetInvocationList(), this, Convert.ToInt32(cpRequestPacket.Words[1]));
+                    }
+                }
+            }
+        }
+
+        protected virtual void DispatchVarsHudResponse(FrostbiteConnection sender, Packet cpRecievedPacket, Packet cpRequestPacket)
+        {
             if (cpRequestPacket.Words.Count >= 1) {
                 if (this.Hud != null) {
                     if (cpRecievedPacket.Words.Count == 2) {

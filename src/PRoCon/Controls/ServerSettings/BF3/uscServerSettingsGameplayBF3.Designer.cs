@@ -94,6 +94,10 @@
             this.picSettingsWarmupTimeout = new System.Windows.Forms.PictureBox();
             this.numSettingsWarmupTimeout = new System.Windows.Forms.NumericUpDown();
             this.lblSettingsWarmupTimeout = new System.Windows.Forms.Label();
+            this.picSettingsGunMasterWeaponsPreset = new System.Windows.Forms.PictureBox();
+            this.lnkSettingsGunMasterWeaponsPreset = new System.Windows.Forms.LinkLabel();
+            this.lblSettingsGunMasterWeaponsPreset = new System.Windows.Forms.Label();
+            this.cboSettingsGunMasterWeaponsPreset = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsFriendlyFire)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsHardcore)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsThirdPersonVehicleCameras)).BeginInit();
@@ -129,6 +133,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.numSettingsLockdownCountdown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsWarmupTimeout)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numSettingsWarmupTimeout)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picSettingsGunMasterWeaponsPreset)).BeginInit();
             this.SuspendLayout();
             // 
             // chkSettingsThirdPersonVehicleCameras
@@ -785,17 +790,15 @@
             // 
             // cboGameplayPresets
             // 
-            this.cboGameplayPresets.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.cboGameplayPresets.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboGameplayPresets.FormattingEnabled = true;
-            this.cboGameplayPresets.Location = new System.Drawing.Point(580, 28);
+            this.cboGameplayPresets.Location = new System.Drawing.Point(578, 28);
             this.cboGameplayPresets.Name = "cboGameplayPresets";
             this.cboGameplayPresets.Size = new System.Drawing.Size(144, 23);
             this.cboGameplayPresets.TabIndex = 278;
             // 
             // btnGameplayPresets
             // 
-            this.btnGameplayPresets.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnGameplayPresets.Location = new System.Drawing.Point(730, 27);
             this.btnGameplayPresets.Name = "btnGameplayPresets";
             this.btnGameplayPresets.Size = new System.Drawing.Size(75, 23);
@@ -806,9 +809,8 @@
             // 
             // lblGameplayPresets
             // 
-            this.lblGameplayPresets.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lblGameplayPresets.AutoSize = true;
-            this.lblGameplayPresets.Location = new System.Drawing.Point(577, 10);
+            this.lblGameplayPresets.Location = new System.Drawing.Point(575, 10);
             this.lblGameplayPresets.Name = "lblGameplayPresets";
             this.lblGameplayPresets.Size = new System.Drawing.Size(100, 15);
             this.lblGameplayPresets.TabIndex = 280;
@@ -1023,10 +1025,55 @@
             this.lblSettingsWarmupTimeout.TabIndex = 295;
             this.lblSettingsWarmupTimeout.Text = "Lockdown Countdown";
             // 
+            // picSettingsGunMasterWeaponsPreset
+            // 
+            this.picSettingsGunMasterWeaponsPreset.Location = new System.Drawing.Point(551, 81);
+            this.picSettingsGunMasterWeaponsPreset.Name = "picSettingsGunMasterWeaponsPreset";
+            this.picSettingsGunMasterWeaponsPreset.Size = new System.Drawing.Size(16, 16);
+            this.picSettingsGunMasterWeaponsPreset.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.picSettingsGunMasterWeaponsPreset.TabIndex = 302;
+            this.picSettingsGunMasterWeaponsPreset.TabStop = false;
+            // 
+            // lnkSettingsGunMasterWeaponsPreset
+            // 
+            this.lnkSettingsGunMasterWeaponsPreset.ActiveLinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(220)))));
+            this.lnkSettingsGunMasterWeaponsPreset.AutoSize = true;
+            this.lnkSettingsGunMasterWeaponsPreset.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
+            this.lnkSettingsGunMasterWeaponsPreset.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(220)))));
+            this.lnkSettingsGunMasterWeaponsPreset.Location = new System.Drawing.Point(750, 105);
+            this.lnkSettingsGunMasterWeaponsPreset.Name = "lnkSettingsGunMasterWeaponsPreset";
+            this.lnkSettingsGunMasterWeaponsPreset.Size = new System.Drawing.Size(38, 15);
+            this.lnkSettingsGunMasterWeaponsPreset.TabIndex = 301;
+            this.lnkSettingsGunMasterWeaponsPreset.TabStop = true;
+            this.lnkSettingsGunMasterWeaponsPreset.Text = "Apply";
+            this.lnkSettingsGunMasterWeaponsPreset.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkSettingsGunMasterWeaponsPreset_LinkClicked);
+            // 
+            // lblSettingsGunMasterWeaponsPreset
+            // 
+            this.lblSettingsGunMasterWeaponsPreset.AutoSize = true;
+            this.lblSettingsGunMasterWeaponsPreset.Location = new System.Drawing.Point(575, 81);
+            this.lblSettingsGunMasterWeaponsPreset.Name = "lblSettingsGunMasterWeaponsPreset";
+            this.lblSettingsGunMasterWeaponsPreset.Size = new System.Drawing.Size(105, 15);
+            this.lblSettingsGunMasterWeaponsPreset.TabIndex = 300;
+            this.lblSettingsGunMasterWeaponsPreset.Text = "GunMaster Weapons presets";
+            // 
+            // cboSettingsGunMasterWeaponsPreset
+            // 
+            this.cboSettingsGunMasterWeaponsPreset.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboSettingsGunMasterWeaponsPreset.FormattingEnabled = true;
+            this.cboSettingsGunMasterWeaponsPreset.Location = new System.Drawing.Point(578, 102);
+            this.cboSettingsGunMasterWeaponsPreset.Name = "cboSettingsGunMasterWeaponsPreset";
+            this.cboSettingsGunMasterWeaponsPreset.Size = new System.Drawing.Size(166, 23);
+            this.cboSettingsGunMasterWeaponsPreset.TabIndex = 299;
+            // 
             // uscServerSettingsGameplayBF3
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.picSettingsGunMasterWeaponsPreset);
+            this.Controls.Add(this.lnkSettingsGunMasterWeaponsPreset);
+            this.Controls.Add(this.lblSettingsGunMasterWeaponsPreset);
+            this.Controls.Add(this.cboSettingsGunMasterWeaponsPreset);
             this.Controls.Add(this.lnkSettingsWarmupTimeout);
             this.Controls.Add(this.picSettingsWarmupTimeout);
             this.Controls.Add(this.numSettingsWarmupTimeout);
@@ -1175,6 +1222,10 @@
             this.Controls.SetChildIndex(this.numSettingsWarmupTimeout, 0);
             this.Controls.SetChildIndex(this.picSettingsWarmupTimeout, 0);
             this.Controls.SetChildIndex(this.lnkSettingsWarmupTimeout, 0);
+            this.Controls.SetChildIndex(this.cboSettingsGunMasterWeaponsPreset, 0);
+            this.Controls.SetChildIndex(this.lblSettingsGunMasterWeaponsPreset, 0);
+            this.Controls.SetChildIndex(this.lnkSettingsGunMasterWeaponsPreset, 0);
+            this.Controls.SetChildIndex(this.picSettingsGunMasterWeaponsPreset, 0);
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsFriendlyFire)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsHardcore)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsThirdPersonVehicleCameras)).EndInit();
@@ -1210,6 +1261,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.numSettingsLockdownCountdown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsWarmupTimeout)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numSettingsWarmupTimeout)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picSettingsGunMasterWeaponsPreset)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1288,5 +1340,9 @@
         private System.Windows.Forms.PictureBox picSettingsWarmupTimeout;
         private System.Windows.Forms.NumericUpDown numSettingsWarmupTimeout;
         private System.Windows.Forms.Label lblSettingsWarmupTimeout;
+        private System.Windows.Forms.PictureBox picSettingsGunMasterWeaponsPreset;
+        private System.Windows.Forms.LinkLabel lnkSettingsGunMasterWeaponsPreset;
+        private System.Windows.Forms.Label lblSettingsGunMasterWeaponsPreset;
+        private System.Windows.Forms.ComboBox cboSettingsGunMasterWeaponsPreset;
     }
 }

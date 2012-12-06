@@ -980,6 +980,7 @@ namespace PRoCon.Core.Plugin {
             this.m_client.Game.TextChatSpamTriggerCount -= new FrostbiteClient.LimitHandler(Game_TextChatSpamTriggerCount);
 
             this.m_client.Game.UnlockMode -= new FrostbiteClient.UnlockModeHandler(m_prcClient_UnlockMode);
+            this.m_client.Game.GunMasterWeaponsPreset -= new FrostbiteClient.GunMasterWeaponsPresetHandler(Game_GunMasterWeaponsPreset);
 
             this.m_client.Game.ReservedSlotsListAggressiveJoin -= new FrostbiteClient.IsEnabledHandler(Game_ReservedSlotsListAggressiveJoin);
             this.m_client.Game.RoundLockdownCountdown -= new FrostbiteClient.LimitHandler(Game_RoundLockdownCountdown);
@@ -1169,6 +1170,7 @@ namespace PRoCon.Core.Plugin {
             this.m_client.Game.TextChatSpamTriggerCount += new FrostbiteClient.LimitHandler(Game_TextChatSpamTriggerCount);
 
             this.m_client.Game.UnlockMode += new FrostbiteClient.UnlockModeHandler(m_prcClient_UnlockMode);
+            this.m_client.Game.GunMasterWeaponsPreset += new FrostbiteClient.GunMasterWeaponsPresetHandler(Game_GunMasterWeaponsPreset);
 
             this.m_client.Game.ReservedSlotsListAggressiveJoin += new FrostbiteClient.IsEnabledHandler(Game_ReservedSlotsListAggressiveJoin);
             this.m_client.Game.RoundLockdownCountdown += new FrostbiteClient.LimitHandler(Game_RoundLockdownCountdown);
@@ -1861,6 +1863,11 @@ namespace PRoCon.Core.Plugin {
         private void m_prcClient_UnlockMode(FrostbiteClient sender, string mode)
         {
             this.InvokeOnAllEnabled("OnUnlockMode", new object[] { mode });
+        }
+
+        private void Game_GunMasterWeaponsPreset(FrostbiteClient sender, int preset)
+        {
+            this.InvokeOnAllEnabled("OnGunMasterWeaponsPreset", new object[] { preset });
         }
 
         private void Game_ReservedSlotsListAggressiveJoin(FrostbiteClient sender, bool isEnabled)

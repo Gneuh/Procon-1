@@ -36,6 +36,7 @@ namespace PRoCon.Core.Remote {
     using Core.Maps;
     using Core.TextChatModeration;
     using Core.UnlockMode;
+    using Core.GunMasterWeaponsPreset;
 
     public class FrostbiteClient {
 
@@ -185,6 +186,7 @@ namespace PRoCon.Core.Remote {
         public delegate void EndRoundHandler(FrostbiteClient sender, int iWinningTeamID);
         public delegate void TextChatModerationModeHandler(FrostbiteClient sender, ServerModerationModeType mode);
         public delegate void UnlockModeHandler(FrostbiteClient sender, string mode);
+        public delegate void GunMasterWeaponsPresetHandler(FrostbiteClient sender, int preset);
 
         public delegate void TextChatModerationListAddPlayerHandler(FrostbiteClient sender, TextChatModerationEntry playerEntry);
         public delegate void TextChatModerationListRemovePlayerHandler(FrostbiteClient sender, TextChatModerationEntry playerEntry);
@@ -1374,6 +1376,22 @@ namespace PRoCon.Core.Remote {
             }
         }
 
+        public virtual void SendSetVarsGunMasterWeaponsPresetPacket(int preset)
+        {
+            if (this.IsLoggedIn == true)
+            {
+                this.BuildSendPacket("vars.gunMasterWeaponsPreset", preset.ToString());
+            }
+        }
+
+        public virtual void SendGetVarsGunMasterWeaponsPresetPacket()
+        {
+            if (this.IsLoggedIn == true)
+            {
+                this.BuildSendPacket("vars.gunMasterWeaponsPreset");
+            }
+        }
+        
         public virtual void SendSetVarsSoldierHealthPacket(int limit) {
             if (this.IsLoggedIn == true) {
                 this.BuildSendPacket("vars.soldierHealth", limit.ToString());
@@ -3468,6 +3486,7 @@ namespace PRoCon.Core.Remote {
         public virtual event FrostbiteClient.LimitHandler PlayerRespawnTime;
         public virtual event FrostbiteClient.LimitHandler GameModeCounter;
         public virtual event FrostbiteClient.UnlockModeHandler UnlockMode;
+        public virtual event FrostbiteClient.GunMasterWeaponsPresetHandler GunMasterWeaponsPreset;
         public virtual event FrostbiteClient.IsEnabledHandler ReservedSlotsListAggressiveJoin;
         public virtual event FrostbiteClient.LimitHandler RoundLockdownCountdown;
         public virtual event FrostbiteClient.LimitHandler RoundWarmupTimeout;

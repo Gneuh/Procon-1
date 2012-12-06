@@ -64,6 +64,7 @@ namespace PRoCon.Controls.ServerSettings.BF3 {
             this.Client.Game.RegenerateHealth += new FrostbiteClient.IsEnabledHandler(Game_RegenerateHealth);
             this.Client.Game.OnlySquadLeaderSpawn += new FrostbiteClient.IsEnabledHandler(Game_OnlySquadLeaderSpawn);
             this.Client.Game.UnlockMode += new FrostbiteClient.UnlockModeHandler(Game_UnlockMode);
+            this.Client.Game.GunMasterWeaponsPreset += new FrostbiteClient.GunMasterWeaponsPresetHandler(Game_GunMasterWeaponsPreset);
             this.Client.Game.SoldierHealth += new FrostbiteClient.LimitHandler(Game_SoldierHealth);
             this.Client.Game.Hud += new FrostbiteClient.IsEnabledHandler(Game_Hud);
             this.Client.Game.PlayerManDownTime += new FrostbiteClient.LimitHandler(Game_PlayerManDownTime);
@@ -120,7 +121,12 @@ namespace PRoCon.Controls.ServerSettings.BF3 {
             this.AppendSetting("vars.unlockMode", mode.ToLower());
         }
 
-        void Game_OnlySquadLeaderSpawn(FrostbiteClient sender, bool isEnabled) {
+        void Game_GunMasterWeaponsPreset(FrostbiteClient sender, int preset) {
+            this.AppendSetting("vars.gunMasterWeaponsPreset", preset.ToString());
+        }
+
+        void Game_OnlySquadLeaderSpawn(FrostbiteClient sender, bool isEnabled)
+        {
             this.AppendSetting("vars.onlySquadLeaderSpawn", isEnabled.ToString());
         }
 

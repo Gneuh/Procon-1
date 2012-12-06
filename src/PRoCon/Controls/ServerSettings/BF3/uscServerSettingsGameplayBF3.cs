@@ -11,6 +11,7 @@ namespace PRoCon.Controls.ServerSettings.BF3 {
     using Core;
     using Core.Remote;
     using Core.UnlockMode;
+    using Core.GunMasterWeaponsPreset;
     public partial class uscServerSettingsGameplayBF3 : uscServerSettingsGameplay {
 
         public uscServerSettingsGameplayBF3()
@@ -34,6 +35,7 @@ namespace PRoCon.Controls.ServerSettings.BF3 {
             this.AsyncSettingControls.Add("vars.onlysquadleaderspawn", new AsyncStyleSetting(this.picSettingsOnlySquadLeaderSpawn, this.chkSettingsOnlySquadLeaderSpawn, new Control[] { this.chkSettingsOnlySquadLeaderSpawn }, true));
             
             this.AsyncSettingControls.Add("vars.unlockmode", new AsyncStyleSetting(this.picSettingsUnlockMode, this.cboSettingsUnlockMode, new Control[] { this.cboSettingsUnlockMode }, true));
+            this.AsyncSettingControls.Add("vars.gunMasterWeaponsPreset", new AsyncStyleSetting(this.picSettingsGunMasterWeaponsPreset, this.cboSettingsGunMasterWeaponsPreset, new Control[] { this.cboSettingsGunMasterWeaponsPreset }, true));
 
             this.AsyncSettingControls.Add("vars.vehiclespawnallowed", new AsyncStyleSetting(this.picSettingsVehicleSpawnAllowed, this.chkSettingsVehicleSpawnAllowed, new Control[] { this.chkSettingsVehicleSpawnAllowed }, true));
             this.AsyncSettingControls.Add("vars.vehiclespawndelay", new AsyncStyleSetting(this.picSettingsVehicleSpawnDelay, this.numSettingsVehicleSpawnDelay, new Control[] { this.numSettingsVehicleSpawnDelay, this.lnkSettingsVehicleSpawnDelay }, true));
@@ -109,6 +111,25 @@ namespace PRoCon.Controls.ServerSettings.BF3 {
             this.cboSettingsUnlockMode.DisplayMember = "LongName";
             this.cboSettingsUnlockMode.ValueMember = "ShortName";
 
+            this.lblSettingsGunMasterWeaponsPreset.Text = this.Language.GetDefaultLocalized(this.lblSettingsGunMasterWeaponsPreset.Text, "uscServerSettingsPanel.lblSettingsGunMasterWeaponsPreset");
+            this.lnkSettingsGunMasterWeaponsPreset.Text = this.Language.GetDefaultLocalized(this.lnkSettingsGunMasterWeaponsPreset.Text, "uscServerSettingsPanel.lnkSettingsGunMasterWeaponsPreset");
+
+            ArrayList GunMasterWeaponsPresets = new ArrayList();
+            GunMasterWeaponsPresets.Add(new GunMasterWeaponsPreset(this.Language.GetDefaultLocalized("Standard", "uscServerSettingsPanel.cboSettingsGunMasterWeaponsPreset.Standard"), ((int)GunMasterWeaponsPresetType.standard).ToString()));
+            GunMasterWeaponsPresets.Add(new GunMasterWeaponsPreset(this.Language.GetDefaultLocalized("Standard reversed", "uscServerSettingsPanel.cboSettingsGunMasterWeaponsPreset.Reversed"), ((int)GunMasterWeaponsPresetType.reversed).ToString()));
+            GunMasterWeaponsPresets.Add(new GunMasterWeaponsPreset(this.Language.GetDefaultLocalized("Leight Weight", "uscServerSettingsPanel.cboSettingsGunMasterWeaponsPreset.LightWeight"), ((int)GunMasterWeaponsPresetType.light_weigth).ToString()));
+            GunMasterWeaponsPresets.Add(new GunMasterWeaponsPreset(this.Language.GetDefaultLocalized("Heavy Gear", "uscServerSettingsPanel.cboSettingsGunMasterWeaponsPreset.HeavyGear"), ((int)GunMasterWeaponsPresetType.heavy_gear).ToString()));
+            GunMasterWeaponsPresets.Add(new GunMasterWeaponsPreset(this.Language.GetDefaultLocalized("Pistol run", "uscServerSettingsPanel.cboSettingsGunMasterWeaponsPreset.PistolRun"), ((int)GunMasterWeaponsPresetType.pistol_run).ToString()));
+            GunMasterWeaponsPresets.Add(new GunMasterWeaponsPreset(this.Language.GetDefaultLocalized("Snipers Heaven", "uscServerSettingsPanel.cboSettingsGunMasterWeaponsPreset.SnipersHeaven"), ((int)GunMasterWeaponsPresetType.snipers_heaven).ToString()));
+            GunMasterWeaponsPresets.Add(new GunMasterWeaponsPreset(this.Language.GetDefaultLocalized("US arms race", "uscServerSettingsPanel.cboSettingsGunMasterWeaponsPreset.UsArmsRace"), ((int)GunMasterWeaponsPresetType.us_arms_race).ToString()));
+            GunMasterWeaponsPresets.Add(new GunMasterWeaponsPreset(this.Language.GetDefaultLocalized("RU arms race", "uscServerSettingsPanel.cboSettingsGunMasterWeaponsPreset.RuArmsRace"), ((int)GunMasterWeaponsPresetType.ru_arms_race).ToString()));
+            GunMasterWeaponsPresets.Add(new GunMasterWeaponsPreset(this.Language.GetDefaultLocalized("EU arms race", "uscServerSettingsPanel.cboSettingsGunMasterWeaponsPreset.EuArmsRace"), ((int)GunMasterWeaponsPresetType.eu_arms_race).ToString()));
+
+            this.cboSettingsGunMasterWeaponsPreset.DataSource = GunMasterWeaponsPresets;
+            this.cboSettingsGunMasterWeaponsPreset.DisplayMember = "LongName";
+            this.cboSettingsGunMasterWeaponsPreset.ValueMember = "ShortName";
+
+
         }
 
         public override void SetConnection(Core.Remote.PRoConClient prcClient) {
@@ -144,6 +165,7 @@ namespace PRoCon.Controls.ServerSettings.BF3 {
             this.Client.Game.Hud += new FrostbiteClient.IsEnabledHandler(Game_Hud);
             
             this.Client.Game.UnlockMode += new FrostbiteClient.UnlockModeHandler(Game_UnlockMode);
+            this.Client.Game.GunMasterWeaponsPreset += new FrostbiteClient.GunMasterWeaponsPresetHandler(Game_GunMasterWeaponsPreset);
 
             this.Client.Game.VehicleSpawnAllowed += new FrostbiteClient.IsEnabledHandler(Game_VehicleSpawnAllowed);
             this.Client.Game.VehicleSpawnDelay += new FrostbiteClient.LimitHandler(Game_VehicleSpawnDelay);
@@ -391,7 +413,33 @@ namespace PRoCon.Controls.ServerSettings.BF3 {
         }
 
         #endregion
-        
+
+        #region GunMasterWeaponsPreset
+
+        private int m_iPreviousSuccessGunMasterWeaponsPreset;
+
+        private void Game_GunMasterWeaponsPreset(FrostbiteClient sender, int preset)
+        {
+            this.m_iPreviousSuccessGunMasterWeaponsPreset = preset;
+            this.OnSettingResponse("vars.gunMasterWeaponsPreset", (decimal)preset, true);
+
+            this.cboSettingsGunMasterWeaponsPreset.SelectedValue = preset.ToString();
+        }
+
+        private void lnkSettingsGunMasterWeaponsPreset_LinkClicked(object sender, EventArgs e)
+        {
+            // see line 126 uscServerSettingsTextChatModeration.cs
+            if (this.Client != null && this.Client.Game != null) {
+                if (this.IgnoreEvents == false && this.AsyncSettingControls["vars.unlockmode"].IgnoreEvent == false) {
+                    this.WaitForSettingResponse("vars.gunMasterWeaponsPreset", (decimal)this.m_iPreviousSuccessGunMasterWeaponsPreset);
+
+                    this.Client.Game.SendSetVarsGunMasterWeaponsPresetPacket(Convert.ToInt32(this.cboSettingsGunMasterWeaponsPreset.SelectedValue));
+                }
+            }
+        }
+
+        #endregion
+
         #region Vehicle Spawning
 
         private void chkSettingsVehicleSpawnAllowed_CheckedChanged(object sender, EventArgs e) {
@@ -692,6 +740,11 @@ namespace PRoCon.Controls.ServerSettings.BF3 {
                 this.Client.Game.SendSetVarsBulletDamagePacket(100);
                 this.Client.Game.SendSetVarsOnlySquadLeaderSpawnPacket(onlySquadLeaderSpawn);
             }
+        }
+
+        private void lnkSettingsUnlockMode_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+
         }
     }
 }
