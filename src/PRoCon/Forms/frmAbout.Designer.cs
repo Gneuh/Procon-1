@@ -372,7 +372,7 @@
             this.linkLabel1.Size = new System.Drawing.Size(194, 21);
             this.linkLabel1.TabIndex = 2;
             this.linkLabel1.TabStop = true;
-            this.linkLabel1.Text = "Copyright © 2011 Myrcon Pty. Ltd.";
+            this.linkLabel1.Text = "Copyright © 2012 Myrcon Pty. Ltd.";
             this.linkLabel1.UseCompatibleTextRendering = true;
             this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
             // 
