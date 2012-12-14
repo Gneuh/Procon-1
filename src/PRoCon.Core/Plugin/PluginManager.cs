@@ -544,6 +544,7 @@ namespace PRoCon.Core.Plugin {
                 }
                 
                 File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "PRoCon.Core.dll"), Path.Combine(this.PluginBaseDirectory, "PRoCon.Core.dll"), true);
+                File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "MySql.Data.dll"), Path.Combine(this.PluginBaseDirectory, "MySql.Data.dll"), true);
                 File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "PRoCon.Core.pdb"), Path.Combine(this.PluginBaseDirectory, "PRoCon.Core.pdb"), true);
             }
             catch (Exception e) { }
@@ -582,6 +583,7 @@ namespace PRoCon.Core.Plugin {
             parameters.ReferencedAssemblies.Add("System.Data.dll");
             parameters.ReferencedAssemblies.Add("System.Windows.Forms.dll");
             parameters.ReferencedAssemblies.Add("System.Xml.dll");
+            parameters.ReferencedAssemblies.Add("MySql.Data.dll");
             parameters.ReferencedAssemblies.Add("PRoCon.Core.dll");
             parameters.GenerateInMemory = false;
             parameters.IncludeDebugInformation = false;
