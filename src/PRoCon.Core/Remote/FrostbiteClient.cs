@@ -2159,6 +2159,12 @@ namespace PRoCon.Core.Remote {
                     FrostbiteConnection.RaiseEvent(this.Yelling.GetInvocationList(), this, cpRequestPacket.Words[1], Convert.ToInt32(cpRequestPacket.Words[2]), cpRequestPacket.Words.GetRange(3, cpRequestPacket.Words.Count - 3));
                 }
             }
+            // MoHW
+            if (cpRequestPacket.Words.Count >= 3 && this.GameType == "MOHW") {
+                if (this.Yelling != null) {
+                    FrostbiteConnection.RaiseEvent(this.Yelling.GetInvocationList(), this, cpRequestPacket.Words[1], Convert.ToInt32("0"), cpRequestPacket.Words.GetRange(2, cpRequestPacket.Words.Count - 2));
+                }
+            }
         }
 
         #endregion

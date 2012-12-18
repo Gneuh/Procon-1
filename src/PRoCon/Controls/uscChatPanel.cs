@@ -240,7 +240,11 @@ namespace PRoCon {
             this.m_prcClient.Game.ServerInfo += new FrostbiteClient.ServerInfoHandler(m_prcClient_ServerInfo);
 
             if (sender.Game is MoHClient) {
-                cboDisplayList.Items.RemoveAt(1);
+                this.cboDisplayList.Items.RemoveAt(1);
+            }
+            if (sender.Game is MOHWClient) {
+                this.lblDisplayFor.Visible = false;
+                this.cboDisplayChatTime.Visible = false;
             }
             if (sender.Game is BF3Client || sender.Game is MOHWClient) {
                 this.m_iCanLongMsg = 1;

@@ -1706,6 +1706,22 @@ namespace PRoCon.Core.Remote {
 
                 blCancelPacket = true;
             }
+            // MoHW R-6 hack
+            else if (cpBeforePacketDispatch.Words.Count >= 4 && this.Game.GameType == "MOHW" && String.Compare(cpBeforePacketDispatch.Words[0], "procon.admin.onYell", true) == 0) {
+                // this.SendPacket(new Packet(true, true, cpBeforePacketDispatch.SequenceNumber, new List<string>() { "OK" }));
+
+                int iDisplayDuration = 0;
+
+                if (this.ProconAdminYelling != null) {
+                    FrostbiteConnection.RaiseEvent(this.ProconAdminYelling.GetInvocationList(), this, cpBeforePacketDispatch.Words[1], cpBeforePacketDispatch.Words[2], iDisplayDuration, new CPlayerSubset(cpBeforePacketDispatch.Words.GetRange(4, cpBeforePacketDispatch.Words.Count - 4)));
+                }
+                if (this.PassLayerEvent != null) {
+                    FrostbiteConnection.RaiseEvent(this.PassLayerEvent.GetInvocationList(), this, cpBeforePacketDispatch);
+                }
+
+                blCancelPacket = true;
+            }
+            // hack end
             else if (cpBeforePacketDispatch.Words.Count >= 5 && String.Compare(cpBeforePacketDispatch.Words[0], "procon.admin.onYell", true) == 0) {
                // this.SendPacket(new Packet(true, true, cpBeforePacketDispatch.SequenceNumber, new List<string>() { "OK" }));
 
@@ -2131,6 +2147,38 @@ namespace PRoCon.Core.Remote {
                             blCancelUpdateEvent = true;
                         }
                     }
+                    // MoHW R-6 hack
+                    else if (cpRequestPacket.Words.Count >= 3 && this.Game.GameType == "MOHW" && String.Compare(cpRequestPacket.Words[0], "admin.yell", true) == 0 && this.m_dicForwardedPackets.ContainsKey(cpBeforePacketDispatch.SequenceNumber) == true) {
+                        if (this.m_dicForwardedPackets[cpBeforePacketDispatch.SequenceNumber].m_lstWords.Count >= 4 && String.Compare(this.m_dicForwardedPackets[cpBeforePacketDispatch.SequenceNumber].m_lstWords[0], "procon.admin.yell", true) == 0) {
+                            this.m_dicForwardedPackets[cpBeforePacketDispatch.SequenceNumber].m_lstWords[0] = "procon.admin.onYell";
+
+                            // If we're at the top of the tree, simulate the event coming from a layer above.
+                            if (this.IsPRoConConnection == false) {
+                                List<string> lstWords = this.m_dicForwardedPackets[cpBeforePacketDispatch.SequenceNumber].m_lstWords;
+
+                                int iDisplayDuration = 0;
+                                if (int.TryParse(lstWords[3], out iDisplayDuration) == true) {
+                                    iDisplayDuration = 0;
+                                    if (this.ProconAdminYelling != null)
+                                    {
+                                        FrostbiteConnection.RaiseEvent(this.ProconAdminYelling.GetInvocationList(), this, lstWords[1], lstWords[2], iDisplayDuration, new CPlayerSubset(lstWords.GetRange(4, lstWords.Count - 4)));
+                                    }
+                                }
+
+                            }
+
+                            // Send to all logged in layer clients
+                            if (this.PassLayerEvent != null) {
+                                FrostbiteConnection.RaiseEvent(this.PassLayerEvent.GetInvocationList(), this, new Packet(true, false, cpRequestPacket.SequenceNumber, this.m_dicForwardedPackets[cpBeforePacketDispatch.SequenceNumber].m_lstWords));
+                            }
+
+                            this.m_dicForwardedPackets.Remove(cpBeforePacketDispatch.SequenceNumber);
+                            blCancelPacket = true;
+                            blCancelUpdateEvent = true;
+                        }
+                    }
+                    // end hack
+                    
 
                     if (blCancelUpdateEvent == false) {
                         string strProconEventsUid = String.Empty;
@@ -2810,12 +2858,14 @@ namespace PRoCon.Core.Remote {
                     if (cpPassOn.Words.Count >= 5 && String.Compare(cpPassOn.Words[0], "procon.admin.yell") == 0) {
 
                         if (this.IsPRoConConnection == false) {
+                            if (this.Game is MOHWClient) {
+                                cpPassOn.Words.RemoveAt(3);
+                            }
                             // Just yell it, we'll capture it and process the return in OnBeforePacketRecv
                             cpPassOn.Words.RemoveAt(1);
                             cpPassOn.Words[0] = "admin.yell";
                         }
                         // Else forward the packet as is so the layer above can append its username.
-
                     }
                     else if (cpPassOn.Words.Count >= 4 && String.Compare(cpPassOn.Words[0], "procon.admin.say") == 0) {
 
