@@ -43,6 +43,9 @@ namespace PRoCon.Core.Remote {
             // Geoff Green 08/10/2011 - bug in BF3 OB version E, sent through as 'player.spawn'.
             this.m_requestDelegates.Add("player.spawn", this.DispatchPlayerOnSpawnRequest);
 
+            // MoHW R-6 crippled chat
+            // this.m_requestDelegates.Add("player.onChat", this.DispatchPlayerOnChatRequest);
+
             #region Maplist
             this.lstFullMaplist = new List<MaplistEntry>();
             this.iLastMapListOffset = 0;
@@ -237,8 +240,9 @@ namespace PRoCon.Core.Remote {
 
         public override event FrostbiteClient.PlayerSpawnedHandler PlayerSpawned;
 
-        // public override event FrostbiteClient.RawChatHandler Chat;
-        // public override event FrostbiteClient.GlobalChatHandler GlobalChat;
+        // MoHW R-6 crippled chat related
+        public override event FrostbiteClient.RawChatHandler Chat;
+        public override event FrostbiteClient.GlobalChatHandler GlobalChat;
 
         #region Maplist
 
@@ -829,8 +833,7 @@ namespace PRoCon.Core.Remote {
             //}
         }
 
-        // obsolet since R-21: This can probably be removed once the onChat event is un-lamed.
-        /*
+        // obsolet since R-21 BF3 but back in with MoHW R-6: This can probably be removed once the onChat event is un-lamed.
         protected override void DispatchPlayerOnChatRequest(FrostbiteConnection sender, Packet cpRequestPacket) {
             if (cpRequestPacket.Words.Count >= 3) {
                 if (this.GlobalChat != null) {
@@ -843,7 +846,6 @@ namespace PRoCon.Core.Remote {
                 }
             }
         }
-        */
 
         #region Map Functions
         /*

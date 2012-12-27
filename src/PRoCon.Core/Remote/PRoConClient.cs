@@ -1019,9 +1019,11 @@ namespace PRoCon.Core.Remote {
                 this.ExecuteGlobalVarsConfig("global_vars.def", 0, null);
 
                 this.ExecuteConnectionConfig("reasons.cfg", 0, null, false);
-                
-                lock (this.Parent) {
-                    this.CompilePlugins(this.Parent.OptionsSettings.PluginPermissions);
+
+                if (this.Username.Length == 0) {
+                    lock (this.Parent) {
+                        this.CompilePlugins(this.Parent.OptionsSettings.PluginPermissions);
+                    }
                 }
 
                 if (this.Parent.OptionsSettings.UsePluginOldStyleLoad == true) {
@@ -1226,8 +1228,10 @@ namespace PRoCon.Core.Remote {
 
                 this.ExecuteGlobalVarsConfig("global_vars.def", 0, null);
 
-                lock (this.Parent) {
-                    this.CompilePlugins(this.Parent.OptionsSettings.PluginPermissions);
+                if ((this.Parent.OptionsSettings.LayerHideLocalPlugins == false && this.IsPRoConConnection == true) || this.IsPRoConConnection == false) {
+                    lock (this.Parent) {
+                        this.CompilePlugins(this.Parent.OptionsSettings.PluginPermissions);
+                    }
                 }
             }
 
@@ -1241,12 +1245,15 @@ namespace PRoCon.Core.Remote {
             this.Game.FetchStartupVariables();
 
             // Occurs when they disconnect then reconnect a connection.
-            if (this.PluginsManager == null) {
-                this.CompilePlugins(this.Parent.OptionsSettings.PluginPermissions);
+            if ((this.Parent.OptionsSettings.LayerHideLocalPlugins == false && this.IsPRoConConnection == true) || this.IsPRoConConnection == false) {
+                if (this.PluginsManager == null) {
+                    this.CompilePlugins(this.Parent.OptionsSettings.PluginPermissions);
+                }
             }
 
             // This saves about 1.7 mb's per connection.  I'd prefer the plugins never compiled though if its connecting to a layer.
             //if (this.IsPRoConConnection == true) { this.PluginsManager.Unload(); GC.Collect();  }
+            //if (this.Parent.OptionsSettings.LayerHideLocalPlugins == true && this.IsPRoConConnection == true) { this.PluginsManager.Unload(); GC.Collect(); }
 
             this.ExecuteConnectionConfig("connection_onlogin.cfg", 0, null, false);
 
@@ -2787,8 +2794,25 @@ namespace PRoCon.Core.Remote {
                     this.SendProconAdminYell(words[1], words[2], words[3], words.Count > 4 ? words[4] : String.Empty);
                 }
 // obsolete since R-20 and hopefully stays so.
- #region Quick BF3 Hack
-/*                else if (this.Game is BFClient && words.Count >= 4 && String.Compare(words[0], "admin.say", true) == 0 && String.Compare(words[2], "player", true) == 0) {
+ #region Quick BF3 Hack, now MoHW
+                else if (this.Game is MOHWClient && words.Count >= 4 && String.Compare(words[0], "admin.say", true) == 0 && String.Compare(words[2], "player", true) == 0) {
+                    if (this.PlayerList.Contains(words[3]) == true) {
+                        CPlayerInfo player = this.PlayerList[words[3]];
+
+                        words[2] = "squad";
+                        words[3] = player.TeamID.ToString();
+                        words.Add(player.SquadID.ToString());
+                        
+                        List<string> pwords = new List<string> { "admin.say", "@" + player.SoldierName, words[2], words[3], words[4] }; // new
+
+                        if (this.Game != null && this.Game.Connection != null) {
+                            this.Game.Connection.SendQueued(new Packet(false, false, this.Game.Connection.AcquireSequenceNumber, pwords)); // new
+                            this.Game.Connection.SendQueued(new Packet(false, false, this.Game.Connection.AcquireSequenceNumber, words));
+                        }
+                    }
+                }
+                // MoHW yell hack
+                else if (this.Game is MOHWClient && words.Count >= 4 && String.Compare(words[0], "admin.yell", true) == 0 && String.Compare(words[2], "player", true) == 0) {
                     if (this.PlayerList.Contains(words[3]) == true) {
                         CPlayerInfo player = this.PlayerList[words[3]];
 
@@ -2796,12 +2820,15 @@ namespace PRoCon.Core.Remote {
                         words[3] = player.TeamID.ToString();
                         words.Add(player.SquadID.ToString());
 
+                        List<string> pwords = new List<string>{ "admin.yell", "@" + player.SoldierName, words[2], words[3], words[4] };
+
                         if (this.Game != null && this.Game.Connection != null) {
+                            this.Game.Connection.SendQueued(new Packet(false, false, this.Game.Connection.AcquireSequenceNumber, pwords));
                             this.Game.Connection.SendQueued(new Packet(false, false, this.Game.Connection.AcquireSequenceNumber, words));
                         }
                     }
                 }
- */
+
 #endregion // END Quick BF3 Hack
                 else {
                     if (this.Game != null && this.Game.Connection != null) {

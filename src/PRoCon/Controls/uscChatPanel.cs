@@ -323,29 +323,33 @@ namespace PRoCon {
 
                 this.cboPlayerList.BeginUpdate();
 
-                for (int i = 0; i < this.cboPlayerList.Items.Count; i++) {
-                    CPlayerInfo cpiInfo = (CPlayerInfo)this.cboPlayerList.Items[i];
+                //MoHW R-6 can't address individual players
+                if (sender.GameType != "MOHW") {
+                    // org.
+                    for (int i = 0; i < this.cboPlayerList.Items.Count; i++) {
+                        CPlayerInfo cpiInfo = (CPlayerInfo)this.cboPlayerList.Items[i];
 
-                    if (cpiInfo.SquadID != -10 && cpiInfo.TeamID != -10) {
-                        this.cboPlayerList.Items.RemoveAt(i);
-                        i--;
+                        if (cpiInfo.SquadID != -10 && cpiInfo.TeamID != -10) {
+                            this.cboPlayerList.Items.RemoveAt(i);
+                            i--;
+                        }
                     }
-                }
 
-                foreach (CPlayerInfo cpiPlayer in lstPlayers) {
-                    if (this.isInComboList(cpiPlayer) == false) {
-                        this.cboPlayerList.Items.Add(cpiPlayer);
+                    foreach (CPlayerInfo cpiPlayer in lstPlayers) {
+                        if (this.isInComboList(cpiPlayer) == false) {
+                            this.cboPlayerList.Items.Add(cpiPlayer);
+                        }
                     }
-                }
 
-                this.cboPlayerList.SelectedIndex = 0;
-                for (int i = 0; i < this.cboPlayerList.Items.Count; i++) {
-                    CPlayerInfo cpiInfo = (CPlayerInfo)this.cboPlayerList.Items[i];
-                    if (String.Compare(cpiInfo.SoldierName, objSelected.SoldierName) == 0) {
-                        this.cboPlayerList.SelectedIndex = i;
-                        break;
+                    this.cboPlayerList.SelectedIndex = 0;
+                    for (int i = 0; i < this.cboPlayerList.Items.Count; i++) {
+                        CPlayerInfo cpiInfo = (CPlayerInfo)this.cboPlayerList.Items[i];
+                        if (String.Compare(cpiInfo.SoldierName, objSelected.SoldierName) == 0) {
+                            this.cboPlayerList.SelectedIndex = i;
+                            break;
+                        }
                     }
-                }
+                } // end hack
 
                 /*
                 // So much easier with linq..
