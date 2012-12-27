@@ -142,7 +142,12 @@ namespace PRoCon.Forms {
             System.Diagnostics.Process.Start("http://dotnetzip.codeplex.com/");
         }
 
-        private void lnkTimmsy_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
+        private void lnkMySQLconnector_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
+            System.Diagnostics.Process.Start("http://dev.mysql.com/downloads/connector/net/");
+        }
+
+        private void lnkTimmsy_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
             System.Diagnostics.Process.Start("http://www.u3.net.au");
         }
 
