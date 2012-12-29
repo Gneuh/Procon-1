@@ -1020,8 +1020,8 @@ namespace PRoCon.Core.Remote {
 
                 this.ExecuteConnectionConfig("reasons.cfg", 0, null, false);
 
-                if (this.Username.Length == 0) {
-                    lock (this.Parent) {
+                lock (this.Parent) {
+                    if (this.Username.Length == 0 || this.Parent.OptionsSettings.LayerHideLocalPlugins == false) {
                         this.CompilePlugins(this.Parent.OptionsSettings.PluginPermissions);
                     }
                 }
@@ -1228,8 +1228,8 @@ namespace PRoCon.Core.Remote {
 
                 this.ExecuteGlobalVarsConfig("global_vars.def", 0, null);
 
-                if ((this.Parent.OptionsSettings.LayerHideLocalPlugins == false && this.IsPRoConConnection == true) || this.IsPRoConConnection == false) {
-                    lock (this.Parent) {
+                lock (this.Parent) {
+                    if ((this.Parent.OptionsSettings.LayerHideLocalPlugins == false && this.IsPRoConConnection == true) || this.IsPRoConConnection == false) {
                         this.CompilePlugins(this.Parent.OptionsSettings.PluginPermissions);
                     }
                 }
@@ -1245,8 +1245,8 @@ namespace PRoCon.Core.Remote {
             this.Game.FetchStartupVariables();
 
             // Occurs when they disconnect then reconnect a connection.
-            if ((this.Parent.OptionsSettings.LayerHideLocalPlugins == false && this.IsPRoConConnection == true) || this.IsPRoConConnection == false) {
-                if (this.PluginsManager == null) {
+            if (this.PluginsManager == null) {
+                if ((this.Parent.OptionsSettings.LayerHideLocalPlugins == false && this.IsPRoConConnection == true) || this.IsPRoConConnection == false) {
                     this.CompilePlugins(this.Parent.OptionsSettings.PluginPermissions);
                 }
             }
