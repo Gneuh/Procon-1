@@ -2089,6 +2089,7 @@ namespace PRoCon.Core.Remote {
                         }
                         else {
                             this.IsPRoConConnection = false;
+                            this.Username = "";
                         }
 
                         blCancelPacket = true;
