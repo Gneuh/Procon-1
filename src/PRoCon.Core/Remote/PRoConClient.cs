@@ -584,7 +584,8 @@ namespace PRoCon.Core.Remote {
         // don't trigger a save.
         public void SaveConnectionConfig() {
 
-            if (this.m_blLoadingSavingConnectionConfig == false && this.Layer != null && this.Layer.AccountPrivileges != null && this.PluginsManager != null && this.MapGeometry != null && this.MapGeometry.MapZones != null) {
+            if (this.m_blLoadingSavingConnectionConfig == false && this.Layer != null && this.Layer.AccountPrivileges != null && (this.PluginsManager != null || this.PluginsManager == null && this.IsPRoConConnection == true) && this.MapGeometry != null && this.MapGeometry.MapZones != null)
+            {
 
                 lock (this.m_objConfigSavingLocker) {
 
@@ -623,37 +624,39 @@ namespace PRoCon.Core.Remote {
                                 stwConfig.WriteLine("procon.protected.zones.add \"{0}\" \"{1}\" \"{2}\" {3} {4}", zone.UID, zone.LevelFileName, zone.Tags, zone.ZonePolygon.Length, String.Join(" ", Point3D.ToStringList(zone.ZonePolygon).ToArray()));
                             }
 
-                            foreach (string strClassName in new List<string>(this.PluginsManager.Plugins.LoadedClassNames)) {
+                            if (this.PluginsManager != null) {
+                                foreach (string strClassName in new List<string>(this.PluginsManager.Plugins.LoadedClassNames)) {
 
-                                stwConfig.WriteLine("procon.protected.plugins.enable \"{0}\" {1}", strClassName, this.PluginsManager.Plugins.EnabledClassNames.Contains(strClassName));
+                                    stwConfig.WriteLine("procon.protected.plugins.enable \"{0}\" {1}", strClassName, this.PluginsManager.Plugins.EnabledClassNames.Contains(strClassName));
 
-                                PluginDetails spdUpdatedDetails = this.PluginsManager.GetPluginDetails(strClassName);
+                                    PluginDetails spdUpdatedDetails = this.PluginsManager.GetPluginDetails(strClassName);
 
-                                foreach (CPluginVariable cpvVariable in spdUpdatedDetails.PluginVariables) {
-                                    string strEscapedNewlines = CPluginVariable.Decode(cpvVariable.Value);
-                                    strEscapedNewlines = strEscapedNewlines.Replace("\n", @"\n");
-                                    strEscapedNewlines = strEscapedNewlines.Replace("\r", @"\r");
-                                    strEscapedNewlines = strEscapedNewlines.Replace("\"", @"\""");
+                                    foreach (CPluginVariable cpvVariable in spdUpdatedDetails.PluginVariables) {
+                                        string strEscapedNewlines = CPluginVariable.Decode(cpvVariable.Value);
+                                        strEscapedNewlines = strEscapedNewlines.Replace("\n", @"\n");
+                                        strEscapedNewlines = strEscapedNewlines.Replace("\r", @"\r");
+                                        strEscapedNewlines = strEscapedNewlines.Replace("\"", @"\""");
 
-                                    stwConfig.WriteLine("procon.protected.plugins.setVariable \"{0}\" \"{1}\" \"{2}\"", strClassName, cpvVariable.Name, strEscapedNewlines);
-                                }
-                            }
-
-                            // Now resave all cached plugin settings (plugin settings of of plugins that failed to load)
-                            foreach (Plugin plugin in this.PluginsManager.Plugins) {
-                                if (plugin.IsLoaded == false) {
-                                    foreach (KeyValuePair<string, string> CachedPluginVariable in plugin.CacheFailCompiledPluginVariables) {
-                                        stwConfig.WriteLine("procon.protected.plugins.setVariable \"{0}\" \"{1}\" \"{2}\"", plugin.ClassName, CachedPluginVariable.Key, CachedPluginVariable.Value);
+                                        stwConfig.WriteLine("procon.protected.plugins.setVariable \"{0}\" \"{1}\" \"{2}\"", strClassName, cpvVariable.Name, strEscapedNewlines);
                                     }
                                 }
-                            }
-                            /*
-                            foreach (KeyValuePair<string, Dictionary<string, string>> CachedPluginSettings in this.PluginsManager.CacheFailCompiledPluginVariables) {
-                                foreach (KeyValuePair<string, string> CachedPluginVariable in CachedPluginSettings.Value) {
-                                    stwConfig.WriteLine("procon.protected.plugins.setVariable \"{0}\" \"{1}\" \"{2}\"", CachedPluginSettings.Key, CachedPluginVariable.Key, CachedPluginVariable.Value);
+
+                                // Now resave all cached plugin settings (plugin settings of of plugins that failed to load)
+                                foreach (Plugin plugin in this.PluginsManager.Plugins) {
+                                    if (plugin.IsLoaded == false) {
+                                        foreach (KeyValuePair<string, string> CachedPluginVariable in plugin.CacheFailCompiledPluginVariables) {
+                                            stwConfig.WriteLine("procon.protected.plugins.setVariable \"{0}\" \"{1}\" \"{2}\"", plugin.ClassName, CachedPluginVariable.Key, CachedPluginVariable.Value);
+                                        }
+                                    }
                                 }
+                                /*
+                                foreach (KeyValuePair<string, Dictionary<string, string>> CachedPluginSettings in this.PluginsManager.CacheFailCompiledPluginVariables) {
+                                    foreach (KeyValuePair<string, string> CachedPluginVariable in CachedPluginSettings.Value) {
+                                        stwConfig.WriteLine("procon.protected.plugins.setVariable \"{0}\" \"{1}\" \"{2}\"", CachedPluginSettings.Key, CachedPluginVariable.Key, CachedPluginVariable.Value);
+                                    }
+                                }
+                                */
                             }
-                            */
                             stwConfig.Flush();
                             stwConfig.Close();
 
