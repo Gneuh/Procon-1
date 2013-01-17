@@ -96,7 +96,7 @@ namespace PRoConEvents
 
         public string GetPluginVersion()
         {
-            return "1.0.0.0";
+            return "1.0.1.0";
         }
 
         public string GetPluginAuthor()
@@ -139,26 +139,26 @@ namespace PRoConEvents
 
         <h2>Settings</h2>
         <blockquote><h4>Debug level</h4>
-		<p><i>Indicates how much debug-output is printed to the plugin-console. 0 turns off debug messages (just shows important warnings/exceptions), 6 documents nearly every step.</i></p>
-		</blockquote>
+        <p><i>Indicates how much debug-output is printed to the plugin-console. 0 turns off debug messages (just shows important warnings/exceptions), 6 documents nearly every step.</i></p>
+        </blockquote>
         <blockquote><h4>MySQL Hostname</h4>
-		<p><i>Hostname of the MySQL-Server <i>Battlelog Cache</i> should connect to.</i></p>
-		</blockquote>
+        <p><i>Hostname of the MySQL-Server <i>Battlelog Cache</i> should connect to.</i></p>
+        </blockquote>
         <blockquote><h4>MySQL Port</h4>
-		<p><i>Port of the MySQL-Server <i>Battlelog Cache</i> should connect to. (Default: 3306)</i></p>
-		</blockquote>
+        <p><i>Port of the MySQL-Server <i>Battlelog Cache</i> should connect to. (Default: 3306)</i></p>
+        </blockquote>
         <blockquote><h4>MySQL Database</h4>
-		<p><i>Database <i>Battlelog Cache</i> should use to cache stats.</i></p>
-		</blockquote>
+        <p><i>Database <i>Battlelog Cache</i> should use to cache stats.</i></p>
+        </blockquote>
         <blockquote><h4>MySQL Table</h4>
-		<p><i>Table <i>Battlelog Cache</i> should use to cache stats. (Default: playerstats)</i></p>
-		</blockquote>
+        <p><i>Table <i>Battlelog Cache</i> should use to cache stats. (Default: playerstats)</i></p>
+        </blockquote>
         <blockquote><h4>MySQL Username</h4>
-		<p><i>Username <i>Battlelog Cache</i> should use to authenticate with the MySQL-Server.</i></p>
-		</blockquote>
+        <p><i>Username <i>Battlelog Cache</i> should use to authenticate with the MySQL-Server.</i></p>
+        </blockquote>
         <blockquote><h4>MySQL Password</h4>
-		<p><i>Password <i>Battlelog Cache</i> should use to authenticate with the MySQL-Server.</i></p>
-		</blockquote>
+        <p><i>Password <i>Battlelog Cache</i> should use to authenticate with the MySQL-Server.</i></p>
+        </blockquote>
         <p>If you don't see the MySQL settings, the MySQL details have been 'hardcoded' in the <i>Configs/gsp_settings/battlelogcache_mysql.cfg</i> file. Hosters can use this to 'enforce' all users to query a centralized database, allowing more cache-hits.<br />
         To disable the MySQL settings, create a subfolder <i>gsp_settings</i> within the <i>Configs</i> folder in Procon. Within this subfolder, create a file called <i>battlelogcache_mysql.cfg</i>. This file should have the following structure:
         <blockquote>
@@ -177,7 +177,7 @@ namespace PRoConEvents
 
         <h3>Changelog</h3>
         <blockquote><h4>1.0.0.0 (18.12.2012)</h4>
-	        - initial (public) version<br/>
+            - initial (public) version<br/>
         </blockquote>
         ";
         }
@@ -317,7 +317,7 @@ namespace PRoConEvents
             requestLoopThread.Start();
             responseLoopThread.Start();
 
-            ConsoleWrite("^b^2Enabled!^n^0");
+            ConsoleWrite("^b^2Enabled!^n^0 Version: " + GetPluginVersion());
         }
 
         public void OnPluginDisable()
@@ -523,8 +523,7 @@ namespace PRoConEvents
                         return;
                     }
 
-                    ConsoleException("Exception in RequestLoop!");
-                    ConsoleException(e.ToString());
+                    DebugWrite("Exception in RequestLoop! " + e.ToString(), 3);
                 }
             }
 
@@ -600,8 +599,7 @@ namespace PRoConEvents
                         return;
                     }
 
-                    ConsoleException("Exception in ResponseLoop!");
-                    ConsoleException(e.ToString());
+                    DebugWrite("Exception in ResponseLoop!" + e.ToString(), 3);
                 }
             } 
 
@@ -622,6 +620,45 @@ namespace PRoConEvents
 
             if (!stats.ValidStats(requestType))
             {
+                /*
+                Don't fetch stats if there is a persisted error for the request type
+                */
+                String messageValue = null;
+                switch (requestType)
+                {
+                    case RequestTypeEnum.Overview:
+                        if (stats.OverviewStatsError != String.Empty)
+                        {
+                            messageValue = stats.OverviewStatsError;
+                        }
+                        break;
+                    case RequestTypeEnum.Weapon:
+                        if (stats.WeaponStatsError != String.Empty)
+                        {
+                            messageValue = stats.WeaponStatsError;
+                        }
+                        break;
+                    case RequestTypeEnum.Vehicle:
+                        if (stats.VehicleStatsError != String.Empty)
+                        {
+                            messageValue = stats.VehicleStatsError;
+                        }
+                        break;
+                    case RequestTypeEnum.ClanTag:
+                    default:
+                        break;
+                }
+                
+                if (messageValue != null)
+                {
+                    DebugWrite("No valid stats for player '" + name + "' with requestType '" + requestType + "'", 2);
+                    DebugWrite("    due to cached error: " + messageValue, 3);
+                    Hashtable response = new Hashtable();
+                    response["type"] = "Error";
+                    response["message"] = messageValue;
+                    return JSON.JsonEncode(response);
+                }
+                
                 DebugWrite("No valid stats for player '" + name + "' with requestType '" + requestType + "' found in MySQL-database. Fetching stats...", 5);
 
                 TimeSpan timeElapsed = DateTime.Now.Subtract(startTime);
@@ -632,7 +669,20 @@ namespace PRoConEvents
                     Thread.Sleep((int)(minWaitTime - timeElapsed.TotalSeconds) * 1000);
                 }
 
-                stats = BattlelogLookup(stats, requestType);
+                try
+                {
+                    stats = BattlelogLookup(stats, requestType);
+                }
+                catch (Exception e)
+                {
+                    DebugWrite("BattlelogLookup for player '" + name + "' with requestType '" + requestType + "' failed!", 2);
+                    DebugWrite("    EXCEPTION: " + e.ToString(), 3);
+                    Hashtable response = new Hashtable();
+                    response["type"] = "Error";
+                    response["message"] = e.Message;
+                    return JSON.JsonEncode(response);
+                    // No insert into database
+                }
             }
             else
             {
@@ -656,7 +706,8 @@ namespace PRoConEvents
             }
             else
             {
-                DebugWrite("Fetching stats for player '" + name + "' with requestType '" + requestType + "' failed! General Status: " + stats.GeneralStatus, 2);
+                DebugWrite("Fetching stats for player '" + name + "' with requestType '" + requestType + "' failed!", 2);
+                DebugWrite("    General Status: " + stats.GeneralStatus, 3);
                 Hashtable response = new Hashtable();
                 response["type"] = "Error";
                 response["message"] = stats.GeneralStatus;
@@ -778,7 +829,7 @@ namespace PRoConEvents
             }
             catch (Exception e)
             {
-                DebugWrite(e.ToString(), 1);
+                DebugWrite(e.ToString(), 3);
             }
 
             DebugWrite("MySqlLookup finished!", 6);
@@ -815,10 +866,7 @@ namespace PRoConEvents
                     webClientResponse = DownloadWebPage(webClient, "http://battlelog.battlefield.com/bf3/user/" + name, ref result);
                     if (webClientResponse != String.Empty)
                     {
-                        DebugWrite("WebClientResponse in BattlelogLookup was not empty: " + webClientResponse, 5);
-                        stats.GeneralStatus = webClientResponse;
-                        stats.FetchTime = DateTime.Now.Subtract(startTime).TotalSeconds;
-                        return stats;
+                        throw new BattlelogLookupException("DownloadWebPage(New Persona or ClanTag) failed! " + webClientResponse);
                     }
 
                     if (!isEnabled)
@@ -828,19 +876,23 @@ namespace PRoConEvents
                         return stats;
                     }
 
-                    MatchCollection pid = Regex.Matches(result, @"bf3/soldier/" + name + @"/stats/(\d+)([^/""]+)?", RegexOptions.IgnoreCase | RegexOptions.Singleline);
+                    MatchCollection pid = Regex.Matches(result, @"bf3/soldier/" + name + @"/stats/(\d+)(['""]|/\s*['""]|/[^/'""]+)", RegexOptions.IgnoreCase | RegexOptions.Singleline);
                     String personaId = String.Empty;
 
                     DebugWrite("Extracting personaId...", 6);
                     foreach (Match match in pid)
                     {
-                        if (match.Success && !Regex.Match(match.Groups[2].Value.Trim(), @"(ps3|xbox)", RegexOptions.IgnoreCase).Success)
+                        Match nonPC = Regex.Match(match.Groups[2].Value.Trim(), @"(ps3|xbox)", RegexOptions.IgnoreCase);
+                        if (match.Success && !nonPC.Success)
                         {
                             personaId = match.Groups[1].Value.Trim();
                             break;
                         }
+                        else if (nonPC.Success)
+                        {
+                            DebugWrite("Ignoring non-PC (" + match.Groups[2].Value.Trim() + ") personaId of " + match.Groups[1].Value.Trim(), 4);
+                        }
                     }
-
                     stats.PersonaId = personaId;
 
                     if (stats.PersonaId.Length == 0)
@@ -877,6 +929,7 @@ namespace PRoConEvents
             DebugWrite("Performing requestType-lookup for personaId " + stats.PersonaId + "...", 6);
 
             Hashtable response = null;
+            Hashtable responseData = null;
             Hashtable shrinkedResponse = null;
             Hashtable shrinkedResponseData = null;
 
@@ -889,12 +942,38 @@ namespace PRoConEvents
                 case RequestTypeEnum.Overview:
                     webClientResponse = DownloadWebPage(webClient, "http://battlelog.battlefield.com/bf3/overviewPopulateStats/" + stats.PersonaId + "/bf3-us-engineer/1", ref result);
 
+                    if (webClientResponse != String.Empty)
+                    {
+                        throw new BattlelogLookupException("DownloadWebPage(Overview) failed! " + webClientResponse);
+                    }
+
                     response = (Hashtable)JSON.JsonDecode(result);
                     shrinkedResponse = new Hashtable();
                     shrinkedResponse["type"] = response["type"];
                     shrinkedResponse["message"] = response["message"];
                     shrinkedResponseData = new Hashtable();
-                    Hashtable responseDataOverviewStats = (Hashtable)((Hashtable)response["data"])["overviewStats"];
+                    responseData = (Hashtable)response["data"];
+
+                    if (responseData == null)
+                    {
+                        stats.FetchTime = DateTime.Now.Subtract(startTime).TotalSeconds;
+                        stats.GeneralStatus = "BattlelogLookup(Overview) failed!";
+                        stats.OverviewStatsError = "JSON missing 'data'";
+                        DebugWrite(stats.GeneralStatus + " " + stats.OverviewStatsError, 5);
+                        return stats;
+                    }
+
+                    Hashtable responseDataOverviewStats = (Hashtable)responseData["overviewStats"];
+
+                    if (responseDataOverviewStats == null)
+                    {
+                        stats.FetchTime = DateTime.Now.Subtract(startTime).TotalSeconds;
+                        stats.GeneralStatus = "BattlelogLookup(Overview) failed!";
+                        stats.OverviewStatsError = "JSON missing 'overviewStats'";
+                        DebugWrite(stats.GeneralStatus + " " + stats.OverviewStatsError, 5);
+                        return stats;
+                    }
+
                     Hashtable shrinkedResponseDataOverviewStats = new Hashtable();
 
                     shrinkedResponseDataOverviewStats["vehiclesDestroyed"] = responseDataOverviewStats["vehiclesDestroyed"];
@@ -965,12 +1044,14 @@ namespace PRoConEvents
 
                     stats.OverviewStats = JSON.JsonEncode(shrinkedResponse);
 
+                    /* Moved up to immediately after download call
                     if (webClientResponse != String.Empty)
                     {
                         DebugWrite("WebClientResponse in BattlelogLookup was not empty: " + webClientResponse, 5);
                         stats.GeneralStatus = "overviewStats failed";
                         stats.OverviewStatsError = webClientResponse;
                     }
+                    */
 
                     stats.FetchTime = DateTime.Now.Subtract(startTime).TotalSeconds;
                     DebugWrite("BattlelogLookup returning overviewStats...", 6);
@@ -978,12 +1059,38 @@ namespace PRoConEvents
                 case RequestTypeEnum.Weapon:
                     webClientResponse = DownloadWebPage(webClient, "http://battlelog.battlefield.com/bf3/weaponsPopulateStats/" + stats.PersonaId + "/1", ref result);
 
+                    if (webClientResponse != String.Empty)
+                    {
+                        throw new BattlelogLookupException("DownloadWebPage(Weapon) failed! " + webClientResponse);
+                    }
+
                     response = (Hashtable)JSON.JsonDecode(result);
                     shrinkedResponse = new Hashtable();
                     shrinkedResponse["type"] = response["type"];
                     shrinkedResponse["message"] = response["message"];
                     shrinkedResponseData = new Hashtable();
-                    ArrayList responseDataMainWeaponStats = (ArrayList)((Hashtable)response["data"])["mainWeaponStats"];
+                    responseData = (Hashtable)response["data"];
+
+                    if (responseData == null)
+                    {
+                        stats.FetchTime = DateTime.Now.Subtract(startTime).TotalSeconds;
+                        stats.GeneralStatus = "BattlelogLookup(Weapon) failed!";
+                        stats.WeaponStatsError = "JSON missing 'data'";
+                        DebugWrite(stats.GeneralStatus + " " + stats.WeaponStatsError, 5);
+                        return stats;
+                    }
+                    
+                    ArrayList responseDataMainWeaponStats = (ArrayList)responseData["mainWeaponStats"];
+                    
+                    if (responseDataMainWeaponStats == null)
+                    {
+                        stats.FetchTime = DateTime.Now.Subtract(startTime).TotalSeconds;
+                        stats.GeneralStatus = "BattlelogLookup(Weapon) failed!";
+                        stats.WeaponStatsError = "JSON missing 'mainWeaponStats'";
+                        DebugWrite(stats.GeneralStatus + " " + stats.WeaponStatsError, 5);
+                        return stats;
+                    }
+
                     ArrayList shrinkedResponseDataMainWeaponStats = new ArrayList();
 
                     foreach (Hashtable weaponStats in responseDataMainWeaponStats)
@@ -1007,27 +1114,36 @@ namespace PRoConEvents
 
                     stats.WeaponStats = JSON.JsonEncode(shrinkedResponse);
 
+                    /* Moved up to immediately after download call
                     if (webClientResponse != String.Empty)
                     {
                         DebugWrite("WebClientResponse in BattlelogLookup was not empty: " + webClientResponse, 5);
                         stats.GeneralStatus = "weaponStats failed";
                         stats.WeaponStatsError = webClientResponse;
                     }
+                    */
 
                     stats.FetchTime = DateTime.Now.Subtract(startTime).TotalSeconds;
                     DebugWrite("BattlelogLookup returning weaponStats...", 6);
                     return stats;
                 case RequestTypeEnum.Vehicle:
                     webClientResponse = DownloadWebPage(webClient, "http://battlelog.battlefield.com/bf3/vehiclesPopulateStats/" + stats.PersonaId + "/1", ref result);
+                    
+                    if (webClientResponse != String.Empty)
+                    {
+                        throw new BattlelogLookupException("DownloadWebPage(Vehicle) failed! " + webClientResponse);
+                    }
 
                     stats.VehicleStats = result;
 
+                    /* Moved up to immediately after download call
                     if (webClientResponse != String.Empty)
                     {
                         DebugWrite("WebClientResponse in BattlelogLookup was not empty: " + webClientResponse, 5);
                         stats.GeneralStatus = "vehicleStats failed";
                         stats.VehicleStatsError = webClientResponse;
                     }
+                    */
 
                     stats.FetchTime = DateTime.Now.Subtract(startTime).TotalSeconds;
                     DebugWrite("BattlelogLookup returning vehicleStats...", 6);
@@ -1206,14 +1322,14 @@ namespace PRoConEvents
                         }
                         else
                         {
-                            DebugWrite("MySqlInsert for player '" + stats.PlayerName + "' with requestType '" + requestType + "' failed!", 1);
+                            DebugWrite("MySqlInsert for player '" + stats.PlayerName + "' with requestType '" + requestType + "' failed!", 2);
                         }
                     }
                 }
             }
             catch (Exception e)
             {
-                DebugWrite(FormatMessage(e.ToString(), MessageTypeEnum.Exception), 1);
+                DebugWrite(FormatMessage(e.ToString(), MessageTypeEnum.Exception), 3);
             }
 
             DebugWrite("MySqlInsert finished!", 6);
@@ -1332,9 +1448,33 @@ namespace PRoConEvents
             public String WeaponStats { get { return _weaponStats; } set { _weaponStats = value; } }
             public String VehicleStats { get { return _vehicleStats; } set { _vehicleStats = value; } }
             public String GeneralStatus { get { return _generalStatus; } set { _generalStatus = value; } }
-            public String OverviewStatsError { get { return _overviewStatsError; } set { _overviewStatsError = _overviewStatsError + value + "\n=====\n"; } }
-            public String WeaponStatsError { get { return _weaponStatsError; } set { _weaponStatsError = _weaponStatsError + value + "\n=====\n"; } }
-            public String VehicleStatsError { get { return _vehicleStatsError; } set { _vehicleStatsError = _vehicleStats + value + "\n=====\n"; } }
+            public String OverviewStatsError 
+            {
+                get { return _overviewStatsError; } 
+                set 
+                { 
+                    if (_overviewStatsError.Length == 0) { _overviewStatsError = value; }
+                    else if (!_overviewStatsError.Contains(value)) { _overviewStatsError = _overviewStatsError + "\n=====\n" + value; }
+                }
+            }
+            public String WeaponStatsError 
+            { 
+                get { return _weaponStatsError; } 
+                set
+                { 
+                    if (_weaponStatsError.Length == 0) { _weaponStatsError = value; }
+                    else if (!_weaponStatsError.Contains(value)) { _weaponStatsError = _weaponStatsError + "\n=====\n" + value; }
+                }
+            }
+            public String VehicleStatsError 
+            {
+                get { return _vehicleStatsError; }
+                set
+                {
+                    if (_vehicleStatsError.Length == 0) { _vehicleStatsError = value; }
+                    else if (!_vehicleStatsError.Contains(value)) { _vehicleStatsError = _vehicleStatsError + "\n=====\n"  + value; }
+                }
+            }
             public double FetchTime { get { return _fetchTime; } set { _fetchTime = value; } }
             public double Age { get { return _age; } set { _age = value; } }
 
@@ -1346,7 +1486,11 @@ namespace PRoConEvents
                     return false;
                 }
 
-                if (_generalStatus != String.Empty && !_generalStatus.Contains("Success"))
+                /*
+                ClanTag request may still succeed even if generalStatus is not Success,
+                so ignore generalStatus on ClanTag requests
+                */
+                if (requestType != RequestTypeEnum.ClanTag && _generalStatus != String.Empty && !_generalStatus.Contains("Success"))
                 {
                     return false;
                 }
@@ -1362,18 +1506,21 @@ namespace PRoConEvents
                     case RequestTypeEnum.Overview:
                         if (_overviewStats == String.Empty || _overviewStatsError != String.Empty)
                         {
+                            if (_overviewStatsError != String.Empty) GeneralStatus = "Error, details in OverviewStatsError";
                             return false;
                         }
                         break;
                     case RequestTypeEnum.Weapon:
                         if (_weaponStats == String.Empty || _weaponStatsError != String.Empty)
                         {
+                            if (_weaponStatsError != String.Empty) GeneralStatus = "Error, details in WeaponStatsError";
                             return false;
                         }
                         break;
                     case RequestTypeEnum.Vehicle:
                         if (_vehicleStats == String.Empty || _vehicleStatsError != String.Empty)
                         {
+                            if (_vehicleStatsError != String.Empty) GeneralStatus = "Error, details in VehicleStatsError";
                             return false;
                         }
                         break;
@@ -1419,6 +1566,21 @@ namespace PRoConEvents
                         return String.Empty;
                 }
             }
+        }
+
+        private class BattlelogLookupException: System.Exception
+        {
+           public BattlelogLookupException()
+           {
+           }
+
+           public BattlelogLookupException(string message): base(message)
+           {
+           }
+
+           public BattlelogLookupException(string message, Exception innerException): base(message, innerException)
+           {
+           }
         }
 
         #endregion
