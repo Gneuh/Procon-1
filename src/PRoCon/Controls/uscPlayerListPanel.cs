@@ -2088,6 +2088,34 @@ namespace PRoCon {
 
         #endregion
 
+        #region Double Click on player
+
+        private void lsvPlayers_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            ListViewItem lviSelected = ((PRoCon.Controls.ControlsEx.ListViewNF)sender).GetItemAt(e.X, e.Y);
+
+            if (lviSelected != null && lviSelected.Tag != null && lviSelected.Tag is AdditionalPlayerInfo)
+            {
+                CPlayerInfo player = ((AdditionalPlayerInfo)lviSelected.Tag).m_cpiPlayer;
+
+                if (player != null && lviSelected != null && this.m_lvwColumnSorter.TotalsAveragesChecker.IsMatch(lviSelected.Name) == false)
+                {
+                    if (player.SoldierName == null) {
+                        return;
+                    }
+                    try {
+                        Clipboard.SetDataObject(player.SoldierName, true, 5, 10);
+                    }
+                    catch (Exception) {
+                        // Nope, another thread is accessing the clipboard..
+                    }
+                }
+            }
+
+        }
+
+        #endregion
+
         #region EndRound
 
         private void cboEndRound_SelectedIndexChanged(object sender, EventArgs e) {

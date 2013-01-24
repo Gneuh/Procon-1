@@ -376,6 +376,7 @@
             this.lsvTeamOnePlayers.DragEnter += new System.Windows.Forms.DragEventHandler(this.lsvPlayers_DragEnter);
             this.lsvTeamOnePlayers.DragOver += new System.Windows.Forms.DragEventHandler(this.lsvPlayers_DragOver);
             this.lsvTeamOnePlayers.MouseDown += new System.Windows.Forms.MouseEventHandler(this.lsvPlayers_MouseDown);
+            this.lsvTeamOnePlayers.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.lsvPlayers_MouseDoubleClick);
             // 
             // colSlotID1
             // 
@@ -503,6 +504,7 @@
             this.lsvTeamTwoPlayers.DragEnter += new System.Windows.Forms.DragEventHandler(this.lsvPlayers_DragEnter);
             this.lsvTeamTwoPlayers.DragOver += new System.Windows.Forms.DragEventHandler(this.lsvPlayers_DragOver);
             this.lsvTeamTwoPlayers.MouseDown += new System.Windows.Forms.MouseEventHandler(this.lsvPlayers_MouseDown);
+            this.lsvTeamTwoPlayers.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.lsvPlayers_MouseDoubleClick);
             // 
             // colSlotID2
             // 
@@ -648,6 +650,7 @@
             this.lsvTeamThreePlayers.DragEnter += new System.Windows.Forms.DragEventHandler(this.lsvPlayers_DragEnter);
             this.lsvTeamThreePlayers.DragOver += new System.Windows.Forms.DragEventHandler(this.lsvPlayers_DragOver);
             this.lsvTeamThreePlayers.MouseDown += new System.Windows.Forms.MouseEventHandler(this.lsvPlayers_MouseDown);
+            this.lsvTeamThreePlayers.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.lsvPlayers_MouseDoubleClick);
             // 
             // colSlotID3
             // 
@@ -775,6 +778,7 @@
             this.lsvTeamFourPlayers.DragEnter += new System.Windows.Forms.DragEventHandler(this.lsvPlayers_DragEnter);
             this.lsvTeamFourPlayers.DragOver += new System.Windows.Forms.DragEventHandler(this.lsvPlayers_DragOver);
             this.lsvTeamFourPlayers.MouseDown += new System.Windows.Forms.MouseEventHandler(this.lsvPlayers_MouseDown);
+            this.lsvTeamFourPlayers.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.lsvPlayers_MouseDoubleClick);
             // 
             // colSlotID4
             // 
