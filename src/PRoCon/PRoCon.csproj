@@ -71,9 +71,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\ziplib\Ionic.Zip.Reduced.dll</HintPath>
     </Reference>
-    <Reference Include="mysql.data, Version=6.6.4.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+    <Reference Include="MySql.Data, Version=6.6.4.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\mysql\connector\6.4.4\mysql.data.dll</HintPath>
+      <HintPath>..\..\lib\mysql\connector\6.4.4\MySql.Data.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
