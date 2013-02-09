@@ -508,6 +508,8 @@ namespace PRoCon {
             string name = "name";
 
             string m_strReasonAdmin = this.cboReason.Text;
+            m_strReasonAdmin = m_strReasonAdmin.Replace("%player_name%", this.m_strSoldierName);
+
             string accountName = this.m_prcClient.Username;
             if (Program.m_application.OptionsSettings.EnableAdminReason && accountName.Length > 0) {
                 int iBanInfo = (80 - 5 - (accountName.Length + 3));

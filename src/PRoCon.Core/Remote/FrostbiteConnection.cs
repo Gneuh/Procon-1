@@ -48,6 +48,8 @@ namespace PRoCon.Core.Remote {
 
         private Queue<Packet> m_quePackets;// = new Queue<Packet>();
 
+        private Object m_lock;
+
         private UInt32 m_ui32SequenceNumber;
         public UInt32 AcquireSequenceNumber {
             get {
@@ -115,6 +117,7 @@ namespace PRoCon.Core.Remote {
         }
 
         private void ClearConnection() {
+            this.m_lock = new Object();
             this.m_ui32SequenceNumber = 0;
 
             this.m_dicSentPackets = new Dictionary<UInt32, Packet>();
@@ -209,19 +212,27 @@ namespace PRoCon.Core.Remote {
         private bool QueueUnqueuePacket(bool blSendingPacket, Packet cpPacket, out Packet cpNextPacket) {
             cpNextPacket = null;
             bool blResponse = false;
+            int count = 0;
 
-            lock (new object()) {
+            //lock (m_lock)
+            //lock enhancement to prevent high load dead loop thanks to PapaCharlie9
+            {
 
                 if (blSendingPacket == true) {
-                    if (this.m_dicSentPackets.Count > 0) {
-                        this.m_quePackets.Enqueue(cpPacket);
+                    lock (m_lock) {
+                        count = this.m_dicSentPackets.Count;
+                        if (count > 0) {
+                            this.m_quePackets.Enqueue(cpPacket);
+                        }
+                    }
+                    if (count > 0) {
                         if (this.PacketQueued != null) {
                             FrostbiteConnection.RaiseEvent(this.PacketQueued.GetInvocationList(), this, cpPacket, Thread.CurrentThread.ManagedThreadId);
                             //this.PacketQueued(cpPacket, Thread.CurrentThread.ManagedThreadId);
                         }
                         blResponse = true;
                     }
-                    else {
+                    else lock (m_lock) {
                         if (this.m_dicSentPackets.Count == 0 && this.m_quePackets.Count > 0) {
                             // TODO: I've seen it slip in here once, but that was when I had
                             // combined the events and commands streams.  Have not seen it since, but need to make sure.
@@ -238,14 +249,18 @@ namespace PRoCon.Core.Remote {
                     // Else it's being called from recv and cpPacket holds the processed RequestPacket.
 
                     // Remove the packet 
-                    if (cpPacket != null) {
-                        if (this.m_dicSentPackets.ContainsKey(cpPacket.SequenceNumber) == true) {
-                            this.m_dicSentPackets.Remove(cpPacket.SequenceNumber);
+                    lock (m_lock) {
+                        if (cpPacket != null) {
+                            if (this.m_dicSentPackets.ContainsKey(cpPacket.SequenceNumber) == true) {
+                                this.m_dicSentPackets.Remove(cpPacket.SequenceNumber);
+                            }
+                        }
+                        count = this.m_quePackets.Count;
+                        if (count > 0) {
+                            cpNextPacket = this.m_quePackets.Dequeue();
                         }
                     }
-
-                    if (this.m_quePackets.Count > 0) {
-                        cpNextPacket = this.m_quePackets.Dequeue();
+                    if (count > 0) {
                         if (this.PacketDequeued != null) {
                             FrostbiteConnection.RaiseEvent(this.PacketDequeued.GetInvocationList(), this, cpNextPacket, Thread.CurrentThread.ManagedThreadId);
                             //this.PacketDequeued(cpNextPacket, Thread.CurrentThread.ManagedThreadId);
@@ -297,8 +312,10 @@ namespace PRoCon.Core.Remote {
 
                     byte[] a_bBytePacket = cpPacket.EncodePacket();
 
-                    if (cpPacket.OriginatedFromServer == false && cpPacket.IsResponse == false && this.m_dicSentPackets.ContainsKey(cpPacket.SequenceNumber) == false) {
-                        this.m_dicSentPackets.Add(cpPacket.SequenceNumber, cpPacket);
+                    lock (m_lock) {
+                        if (cpPacket.OriginatedFromServer == false && cpPacket.IsResponse == false && this.m_dicSentPackets.ContainsKey(cpPacket.SequenceNumber) == false) {
+                            this.m_dicSentPackets.Add(cpPacket.SequenceNumber, cpPacket);
+                        }
                     }
 
                     this.m_nwsStream.BeginWrite(a_bBytePacket, 0, a_bBytePacket.Length, this.SendAsyncCallback, cpPacket);
@@ -334,8 +351,10 @@ namespace PRoCon.Core.Remote {
 
             Packet cpRequestPacket = null;
 
-            if (this.m_dicSentPackets.ContainsKey(cpRecievedPacket.SequenceNumber) == true) {
-                cpRequestPacket = this.m_dicSentPackets[cpRecievedPacket.SequenceNumber];
+            lock (m_lock) {
+                if (this.m_dicSentPackets.ContainsKey(cpRecievedPacket.SequenceNumber) == true) {
+                    cpRequestPacket = this.m_dicSentPackets[cpRecievedPacket.SequenceNumber];
+                }
             }
 
             return cpRequestPacket;
@@ -500,8 +519,10 @@ namespace PRoCon.Core.Remote {
         public void AttemptConnection() {
             try {
 
-                this.m_quePackets.Clear();
-                this.m_dicSentPackets.Clear();
+                lock (m_lock) {
+                    this.m_quePackets.Clear();
+                    this.m_dicSentPackets.Clear();
+                }
                 this.m_ui32SequenceNumber = 0;
 
                 this.m_tcpClient = new TcpClient();
