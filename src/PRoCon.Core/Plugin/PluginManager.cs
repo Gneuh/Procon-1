@@ -649,6 +649,9 @@ namespace PRoCon.Core.Plugin {
                     string fullPluginSource = File.ReadAllText(pluginFile.FullName);
 
                     parameters.OutputAssembly = outputAssembly;
+                    // uncomment the following two lines for debugin plugins included in your VS project (taken from PapaCharlie9)
+                    // parameters.IncludeDebugInformation = true;
+                    // parameters.TempFiles = new TempFileCollection(Path.Combine(this.PluginBaseDirectory, "Temp"), true);
 
                     fullPluginSource = this.PrecompileDirectives(fullPluginSource);
 
