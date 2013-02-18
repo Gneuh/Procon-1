@@ -993,6 +993,15 @@ namespace PRoCon.Core.Plugin {
 
             this.m_client.Game.PremiumStatus -= new FrostbiteClient.IsEnabledHandler(Game_PremiumStatus);
 
+            this.m_client.Game.VehicleSpawnAllowed -= new FrostbiteClient.IsEnabledHandler(Game_VehicleSpawnAllowed);
+            this.m_client.Game.VehicleSpawnDelay -= new FrostbiteClient.LimitHandler(Game_VehicleSpawnDelay);
+            this.m_client.Game.BulletDamage -= new FrostbiteClient.LimitHandler(Game_BulletDamage);
+            this.m_client.Game.OnlySquadLeaderSpawn -= new FrostbiteClient.IsEnabledHandler(Game_OnlySquadLeaderSpawn);
+            this.m_client.Game.SoldierHealth -= new FrostbiteClient.LimitHandler(Game_SoldierHealth);
+            this.m_client.Game.PlayerManDownTime -= new FrostbiteClient.LimitHandler(Game_PlayerManDownTime);
+            this.m_client.Game.PlayerRespawnTime -= new FrostbiteClient.LimitHandler(Game_PlayerRespawnTime);
+            this.m_client.Game.Hud -= new FrostbiteClient.IsEnabledHandler(Game_Hud);
+
             #region MoHW
             this.m_client.Game.AllUnlocksUnlocked -= new FrostbiteClient.IsEnabledHandler(Game_AllUnlocksUnlocked);
             this.m_client.Game.BuddyOutline -= new FrostbiteClient.IsEnabledHandler(Game_BuddyOutline);
@@ -1182,6 +1191,15 @@ namespace PRoCon.Core.Plugin {
             this.m_client.Game.RoundWarmupTimeout += new FrostbiteClient.LimitHandler(Game_RoundWarmupTimeout);
 
             this.m_client.Game.PremiumStatus += new FrostbiteClient.IsEnabledHandler(Game_PremiumStatus);
+
+            this.m_client.Game.VehicleSpawnAllowed += new FrostbiteClient.IsEnabledHandler(Game_VehicleSpawnAllowed);
+            this.m_client.Game.VehicleSpawnDelay += new FrostbiteClient.LimitHandler(Game_VehicleSpawnDelay);
+            this.m_client.Game.BulletDamage += new FrostbiteClient.LimitHandler(Game_BulletDamage);
+            this.m_client.Game.OnlySquadLeaderSpawn += new FrostbiteClient.IsEnabledHandler(Game_OnlySquadLeaderSpawn);
+            this.m_client.Game.SoldierHealth += new FrostbiteClient.LimitHandler(Game_SoldierHealth);
+            this.m_client.Game.PlayerManDownTime += new FrostbiteClient.LimitHandler(Game_PlayerManDownTime);
+            this.m_client.Game.PlayerRespawnTime += new FrostbiteClient.LimitHandler(Game_PlayerRespawnTime);
+            this.m_client.Game.Hud += new FrostbiteClient.IsEnabledHandler(Game_Hud);
 
             #region MoHW
             this.m_client.Game.AllUnlocksUnlocked += new FrostbiteClient.IsEnabledHandler(Game_AllUnlocksUnlocked);
@@ -1895,6 +1913,39 @@ namespace PRoCon.Core.Plugin {
             this.InvokeOnAllEnabled("OnPremiumStatus", isEnabled);
         }
 
+        private void Game_VehicleSpawnAllowed(FrostbiteClient sender, bool isEnabled) {
+            this.InvokeOnAllEnabled("OnVehicleSpawnAllowed", isEnabled);
+        }
+
+        private void Game_VehicleSpawnDelay(FrostbiteClient sender, int limit) {
+            this.InvokeOnAllEnabled("OnVehicleSpawnDelay", new object[] { limit });
+        }
+
+        private void Game_BulletDamage(FrostbiteClient sender, int limit) {
+            this.InvokeOnAllEnabled("OnBulletDamage", new object[] { limit });
+        }
+
+        private void Game_OnlySquadLeaderSpawn(FrostbiteClient sender, bool isEnabled) {
+            this.InvokeOnAllEnabled("OnOnlySquadLeaderSpawn", isEnabled);
+        }
+
+        private void Game_SoldierHealth(FrostbiteClient sender, int limit) {
+            this.InvokeOnAllEnabled("OnSoldierHealth", new object[] { limit });
+        }
+
+        private void Game_PlayerManDownTime(FrostbiteClient sender, int limit) {
+            this.InvokeOnAllEnabled("OnPlayerManDownTime", new object[] { limit });
+        }
+
+        private void Game_PlayerRespawnTime(FrostbiteClient sender, int limit) {
+            this.InvokeOnAllEnabled("OnPlayerRespawnTime", new object[] { limit });
+        }
+
+        private void Game_Hud(FrostbiteClient sender, bool isEnabled) {
+            this.InvokeOnAllEnabled("OnHud", isEnabled);
+        }
+
+        
         #region MoHW vars setting events
         private void Game_(FrostbiteClient sender, bool isEnabled) {
             this.InvokeOnAllEnabled("On", isEnabled);

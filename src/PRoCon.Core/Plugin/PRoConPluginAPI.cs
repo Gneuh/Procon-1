@@ -199,6 +199,18 @@ namespace PRoCon.Core.Plugin {
         public virtual void OnRoundLockdownCountdown(int limit) { }
         public virtual void OnRoundWarmupTimeout(int limit) { }
         public virtual void OnPremiumStatus(bool isEnabled) { }
+        
+        public virtual void OnGunMasterWeaponsPreset(int preset) { }
+        
+        public virtual void OnVehicleSpawnAllowed(bool isEnabled) { }
+        public virtual void OnVehicleSpawnDelay(int limit) { }
+        public virtual void OnBulletDamage(int limit) { }
+        public virtual void OnOnlySquadLeaderSpawn(bool isEnabled) { }
+        public virtual void OnSoldierHealth(int limit) { }
+        public virtual void OnPlayerManDownTime(int limit) { }
+        public virtual void OnPlayerRespawnTime(int limit) { }
+        public virtual void OnHud(bool isEnabled) { }
+
 
         #region MoHW
         public virtual void OnAllUnlocksUnlocked(bool isEnabled) { }
@@ -228,7 +240,7 @@ namespace PRoCon.Core.Plugin {
 
         #region BFBC2
 
-        public virtual void OnTeamBalance(bool isEnabled) { }
+        public virtual void OnTeamBalance(bool isEnabled) { } // vars.autoBalance too
         public virtual void OnKillCam(bool isEnabled) { }
         public virtual void OnMiniMap(bool isEnabled) { }
         public virtual void OnCrossHair(bool isEnabled) { }
