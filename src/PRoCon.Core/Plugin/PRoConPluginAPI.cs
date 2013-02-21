@@ -210,6 +210,7 @@ namespace PRoCon.Core.Plugin {
         public virtual void OnPlayerManDownTime(int limit) { }
         public virtual void OnPlayerRespawnTime(int limit) { }
         public virtual void OnHud(bool isEnabled) { }
+        public virtual void OnNameTag(bool isEnabled) { }
 
 
         #region MoHW

@@ -1001,6 +1001,7 @@ namespace PRoCon.Core.Plugin {
             this.m_client.Game.PlayerManDownTime -= new FrostbiteClient.LimitHandler(Game_PlayerManDownTime);
             this.m_client.Game.PlayerRespawnTime -= new FrostbiteClient.LimitHandler(Game_PlayerRespawnTime);
             this.m_client.Game.Hud -= new FrostbiteClient.IsEnabledHandler(Game_Hud);
+            this.m_client.Game.NameTag -= new FrostbiteClient.IsEnabledHandler(Game_NameTag);
 
             #region MoHW
             this.m_client.Game.AllUnlocksUnlocked -= new FrostbiteClient.IsEnabledHandler(Game_AllUnlocksUnlocked);
@@ -1200,6 +1201,7 @@ namespace PRoCon.Core.Plugin {
             this.m_client.Game.PlayerManDownTime += new FrostbiteClient.LimitHandler(Game_PlayerManDownTime);
             this.m_client.Game.PlayerRespawnTime += new FrostbiteClient.LimitHandler(Game_PlayerRespawnTime);
             this.m_client.Game.Hud += new FrostbiteClient.IsEnabledHandler(Game_Hud);
+            this.m_client.Game.NameTag += new FrostbiteClient.IsEnabledHandler(Game_NameTag);
 
             #region MoHW
             this.m_client.Game.AllUnlocksUnlocked += new FrostbiteClient.IsEnabledHandler(Game_AllUnlocksUnlocked);
@@ -1943,6 +1945,10 @@ namespace PRoCon.Core.Plugin {
 
         private void Game_Hud(FrostbiteClient sender, bool isEnabled) {
             this.InvokeOnAllEnabled("OnHud", isEnabled);
+        }
+
+        private void Game_NameTag(FrostbiteClient sender, bool isEnabled) {
+            this.InvokeOnAllEnabled("OnNameTag", isEnabled);
         }
 
         
