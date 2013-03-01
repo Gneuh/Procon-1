@@ -455,6 +455,8 @@
             this.iglFlags.Images.SetKeyName(246, "zm.png");
             this.iglFlags.Images.SetKeyName(247, "zw.png");
             this.iglFlags.Images.SetKeyName(248, "flag_death.png");
+            this.iglFlags.Images.SetKeyName(249, "bq.png");
+            this.iglFlags.Images.SetKeyName(250, "ss.png");
             // 
             // ntfIcon
             // 

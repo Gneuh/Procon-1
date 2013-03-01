@@ -735,7 +735,7 @@ table.nostyle td,table.nostyle th,table.nostyle tr.even td,table.nostyle tr:hove
         }
 
         private void lnkMorePlugins_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
-            System.Diagnostics.Process.Start("http://phogue.net/procon/moreplugins.php");
+            System.Diagnostics.Process.Start("https://forum.myrcon.com/forumdisplay.php?13-Plugins");
         }
 
         private void uscPluginPanel_Resize(object sender, EventArgs e) {

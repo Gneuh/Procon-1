@@ -66,6 +66,10 @@ namespace PRoCon.Core {
         public delegate void RssHandler(PRoConApplication instance, XmlDocument rss);
         public event RssHandler RssUpdateSuccess;
 
+        public event EmptyParameterHandler BeginPromoUpdate;
+        public event EmptyParameterHandler PromoUpdateError;
+        public event RssHandler PromoUpdateSuccess;
+        
         private CountryLookup m_clIpToCountry;
 
         public bool ConsoleMode { get; set; }
@@ -2401,10 +2405,15 @@ namespace PRoCon.Core {
                 FrostbiteConnection.RaiseEvent(this.BeginRssUpdate.GetInvocationList(), this);
             }
 
-            CDownloadFile downloadRssFeed = new CDownloadFile("http://phogue.net/feed/");
+            CDownloadFile downloadRssFeed = new CDownloadFile("https://forum.myrcon.com/external.php?do=rss&type=newcontent&sectionid=1&days=120&count=10");
             downloadRssFeed.DownloadComplete += new CDownloadFile.DownloadFileEventDelegate(downloadRssFeed_DownloadComplete);
             downloadRssFeed.DownloadError += new CDownloadFile.DownloadFileEventDelegate(downloadRssFeed_DownloadError);
             downloadRssFeed.BeginDownload();
+
+            CDownloadFile downloadPromoFeed = new CDownloadFile("https://myrcon.com/procon/promotional_banners");
+            downloadPromoFeed.DownloadComplete += new CDownloadFile.DownloadFileEventDelegate(downloadPromoFeed_DownloadComplete);
+            downloadPromoFeed.DownloadError += new CDownloadFile.DownloadFileEventDelegate(downloadPromoFeed_DownloadError);
+            downloadPromoFeed.BeginDownload();
         }
 
         private void downloadRssFeed_DownloadComplete(CDownloadFile cdfSender) {
@@ -2416,10 +2425,11 @@ namespace PRoCon.Core {
             try {
                 rssDocument.LoadXml(xmlDocumentText);
 
+                /* not used anymore
                 if (this.PackageManager != null) {
                     this.PackageManager.LoadRemotePackages(rssDocument);
                 }
-
+                */
                 if (this.RssUpdateSuccess != null) {
                     FrostbiteConnection.RaiseEvent(this.RssUpdateSuccess.GetInvocationList(), this, rssDocument);
                 }
@@ -2433,6 +2443,32 @@ namespace PRoCon.Core {
             // RSS Error
             if (this.RssUpdateError != null) {
                 FrostbiteConnection.RaiseEvent(this.RssUpdateError.GetInvocationList(), this);
+            }
+
+        }
+
+        private void downloadPromoFeed_DownloadComplete(CDownloadFile cdfSender) {
+
+            string xmlDocumentText = Encoding.UTF8.GetString(cdfSender.CompleteFileData);
+
+            XmlDocument rssDocument = new XmlDocument();
+
+            try {
+                rssDocument.LoadXml(xmlDocumentText);
+
+                if (this.RssUpdateSuccess != null) {
+                    FrostbiteConnection.RaiseEvent(this.PromoUpdateSuccess.GetInvocationList(), this, rssDocument);
+                }
+            }
+            catch (Exception) { }
+
+        }
+
+        private void downloadPromoFeed_DownloadError(CDownloadFile cdfSender) {
+
+            // RSS Error
+            if (this.RssUpdateError != null) {
+                FrostbiteConnection.RaiseEvent(this.PromoUpdateError.GetInvocationList(), this);
             }
 
         }
@@ -2453,6 +2489,7 @@ namespace PRoCon.Core {
 
                 if (a_strSplitIP.Length >= 1) {
                     strReturnCode = this.m_clIpToCountry.lookupCountryCode(a_strSplitIP[0]).ToLower();
+                    strReturnCode = (String.Compare(strReturnCode, "--", true) == 0) ? "unknown" : strReturnCode;
                 }
             }
 

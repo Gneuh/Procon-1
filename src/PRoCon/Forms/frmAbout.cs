@@ -119,11 +119,11 @@ namespace PRoCon.Forms {
         #endregion
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
-            System.Diagnostics.Process.Start("http://www.phogue.net");
+            System.Diagnostics.Process.Start("https://myrcon.com/");
         }
 
         private void linkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
-            System.Diagnostics.Process.Start("http://www.phogue.net/forum/");
+            System.Diagnostics.Process.Start("https://forum.myrcon.com/");
         }
 
         private void okButton_Click(object sender, EventArgs e) {

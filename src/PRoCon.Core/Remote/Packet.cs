@@ -243,7 +243,7 @@ namespace PRoCon.Core.Remote {
             }
 
             ms.Position = 0;
-            MemoryStream outStream = new MemoryStream();
+            //MemoryStream outStream = new MemoryStream();
 
             byte[] compressed = new byte[ms.Length];
             ms.Read(compressed, 0, compressed.Length);
@@ -251,6 +251,9 @@ namespace PRoCon.Core.Remote {
             byte[] gzBuffer = new byte[compressed.Length + 4];
             System.Buffer.BlockCopy(compressed, 0, gzBuffer, 4, compressed.Length);
             System.Buffer.BlockCopy(BitConverter.GetBytes(buffer.Length), 0, gzBuffer, 0, 4);
+
+            ms.Close();
+            ms.Dispose();
 
             return Convert.ToBase64String(gzBuffer);
         }

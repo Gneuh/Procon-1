@@ -52,6 +52,7 @@ namespace PRoCon.Controls {
 
         private bool m_isDocumentReady;
         private XmlDocument m_previousDocument;
+        private XmlDocument m_previousPromoDocument;
 
         private CLocalization m_language;
 
@@ -72,6 +73,10 @@ namespace PRoCon.Controls {
             this.m_proconApplication.BeginRssUpdate += new PRoConApplication.EmptyParameterHandler(m_proconApplication_BeginRssUpdate);
             this.m_proconApplication.RssUpdateError += new PRoConApplication.EmptyParameterHandler(m_proconApplication_RssUpdateError);
             this.m_proconApplication.RssUpdateSuccess += new PRoConApplication.RssHandler(m_proconApplication_RssUpdateSuccess);
+
+            this.m_proconApplication.BeginPromoUpdate += new PRoConApplication.EmptyParameterHandler(m_proconApplication_BeginRssUpdate);
+            this.m_proconApplication.PromoUpdateError += new PRoConApplication.EmptyParameterHandler(m_proconApplication_RssUpdateError);
+            this.m_proconApplication.PromoUpdateSuccess += new PRoConApplication.RssHandler(m_proconApplication_PromoUpdateSuccess);
 
             InitializeComponent();
         }
@@ -308,7 +313,7 @@ namespace PRoCon.Controls {
         #region COM Calls
 
         public void HREF(string url) {
-            if (Regex.Match(url, @"http\:\/\/.*").Success == false) {
+            if (Regex.Match(url, @"http(s)?\:\/\/.*").Success == false) {
                 url = String.Format("http://{0}", url);
             }
 
@@ -322,7 +327,10 @@ namespace PRoCon.Controls {
             if (this.m_previousDocument != null) {
                 this.ReplaceRssContent(this.m_previousDocument);
 
-                this.webBrowser1.Document.InvokeScript("UpdatePackageList", new object[] { this.m_proconApplication.PackageManager.RemoteToJsonString() });
+                // this.webBrowser1.Document.InvokeScript("UpdatePackageList", new object[] { this.m_proconApplication.PackageManager.RemoteToJsonString() });
+            }
+            if (this.m_previousPromoDocument != null) {
+                this.ReplacePromoContent(this.m_previousPromoDocument);
             }
 
             this.SetLocalization(this.m_proconApplication.CurrentLanguage);
@@ -416,6 +424,14 @@ namespace PRoCon.Controls {
                 this.DispatchArticleFeed(rssDocument);
                 //this.DispatchUserSummaryFeed(rssDocument);
                 // this.DispatchDonationFeed(rssDocument);
+                //this.DispatchPromotions(rssDocument);
+            }
+            catch (Exception) { }
+        }
+
+        private void ReplacePromoContent(XmlDocument rssDocument) {
+            try {
+                this.m_previousPromoDocument = rssDocument;
                 this.DispatchPromotions(rssDocument);
             }
             catch (Exception) { }
@@ -423,6 +439,10 @@ namespace PRoCon.Controls {
 
         private void m_proconApplication_RssUpdateSuccess(PRoConApplication instance, XmlDocument rssDocument) {
             this.ReplaceRssContent(rssDocument);
+        }
+
+        private void m_proconApplication_PromoUpdateSuccess(PRoConApplication instance, XmlDocument rssDocument) {
+            this.ReplacePromoContent(rssDocument);
         }
 
         private void m_proconApplication_RssUpdateError(PRoConApplication instance) {
@@ -528,7 +548,7 @@ namespace PRoCon.Controls {
 
                 ArrayList promotionsList = new ArrayList();
 
-                foreach (XmlNode node in rssDocument.SelectNodes("/rss/procon/promotions/promotion")) {
+                foreach (XmlNode node in rssDocument.SelectNodes("/procon/promotions/promotion")) {
                     Hashtable promotion = new Hashtable();
                     promotion.Add("image", node.SelectSingleNode("image").InnerText);
                     promotion.Add("link", node.SelectSingleNode("link").InnerText);

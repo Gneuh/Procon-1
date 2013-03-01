@@ -265,8 +265,13 @@ namespace PRoCon.Core {
                     int iBytesRead = -1;
                     if ((iBytesRead = cdfParent.m_stmResponseStream.EndRead(ar)) > 0) {
 
-                        if (cdfParent.m_blUnknownSize == true) {
+                        if (cdfParent.m_blUnknownSize == true)
+                        {
                             Array.Resize<byte>(ref cdfParent.ma_bCompleteFile, cdfParent.ma_bCompleteFile.Length + iBytesRead);
+                        }
+                        else
+                        {
+                            Array.Resize<byte>(ref cdfParent.ma_bCompleteFile, iBytesRead);
                         }
 
                         Array.Copy(cdfParent.ma_bBufferStream, 0, cdfParent.ma_bCompleteFile, cdfParent.m_iReadBytes, iBytesRead);
