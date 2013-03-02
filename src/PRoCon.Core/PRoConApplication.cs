@@ -2410,7 +2410,7 @@ namespace PRoCon.Core {
             downloadRssFeed.DownloadError += new CDownloadFile.DownloadFileEventDelegate(downloadRssFeed_DownloadError);
             downloadRssFeed.BeginDownload();
 
-            CDownloadFile downloadPromoFeed = new CDownloadFile("https://myrcon.com/procon/promotional_banners");
+            CDownloadFile downloadPromoFeed = new CDownloadFile("https://myrcon.com/procon/streams/banners/format/xml");
             downloadPromoFeed.DownloadComplete += new CDownloadFile.DownloadFileEventDelegate(downloadPromoFeed_DownloadComplete);
             downloadPromoFeed.DownloadError += new CDownloadFile.DownloadFileEventDelegate(downloadPromoFeed_DownloadError);
             downloadPromoFeed.BeginDownload();

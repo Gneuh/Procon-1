@@ -548,7 +548,7 @@ namespace PRoCon.Controls {
 
                 ArrayList promotionsList = new ArrayList();
 
-                foreach (XmlNode node in rssDocument.SelectNodes("/procon/promotions/promotion")) {
+                foreach (XmlNode node in rssDocument.SelectNodes("/xml/procon/promotions/promotion")) {
                     Hashtable promotion = new Hashtable();
                     promotion.Add("image", node.SelectSingleNode("image").InnerText);
                     promotion.Add("link", node.SelectSingleNode("link").InnerText);
