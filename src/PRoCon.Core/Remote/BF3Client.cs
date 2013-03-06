@@ -126,6 +126,7 @@ namespace PRoCon.Core.Remote {
             this.m_responseDelegates.Add("vars.roundStartPlayerCount", this.DispatchVarsRoundStartPlayerCountResponse);
             this.m_responseDelegates.Add("vars.playerRespawnTime", this.DispatchVarsPlayerRespawnTimeResponse);
             this.m_responseDelegates.Add("vars.gameModeCounter", this.DispatchVarsGameModeCounterResponse);
+            this.m_responseDelegates.Add("vars.ctfRoundTimeModifier", this.DispatchVarsCtfRoundTimeModifierResponse);
             this.m_responseDelegates.Add("vars.idleBanRounds", this.DispatchVarsIdleBanRoundsResponse);
 
             this.m_responseDelegates.Add("vars.serverMessage", this.DispatchVarsServerMessageResponse);
@@ -175,6 +176,7 @@ namespace PRoCon.Core.Remote {
             this.SendGetVarsPlayerRespawnTimePacket();
 
             this.SendGetVarsGameModeCounterPacket();
+            this.SendGetVarsCtfRoundTimeModifierPacket();
 
             this.SendGetVarsServerMessagePacket();
 
@@ -261,6 +263,7 @@ namespace PRoCon.Core.Remote {
         public override event FrostbiteClient.LimitHandler PlayerRespawnTime;
 
         public override event FrostbiteClient.LimitHandler GameModeCounter;
+        public override event FrostbiteClient.LimitHandler CtfRoundTimeModifier;
         public override event FrostbiteClient.LimitHandler IdleBanRounds;
 
         public override event FrostbiteClient.ServerMessageHandler ServerMessage;
@@ -1003,6 +1006,19 @@ namespace PRoCon.Core.Remote {
                     else if (cpRequestPacket.Words.Count >= 2)
                     {
                         FrostbiteConnection.RaiseEvent(this.GameModeCounter.GetInvocationList(), this, Convert.ToInt32(cpRequestPacket.Words[1]));
+                    }
+                }
+            }
+        }
+
+        protected virtual void DispatchVarsCtfRoundTimeModifierResponse(FrostbiteConnection sender, Packet cpRecievedPacket, Packet cpRequestPacket)
+        {
+            if (cpRequestPacket.Words.Count >= 1) {
+                if (this.CtfRoundTimeModifier != null) {
+                    if (cpRecievedPacket.Words.Count == 2) {
+                        FrostbiteConnection.RaiseEvent(this.CtfRoundTimeModifier.GetInvocationList(), this, Convert.ToInt32(cpRecievedPacket.Words[1]));
+                    } else if (cpRequestPacket.Words.Count >= 2) {
+                        FrostbiteConnection.RaiseEvent(this.CtfRoundTimeModifier.GetInvocationList(), this, Convert.ToInt32(cpRequestPacket.Words[1]));
                     }
                 }
             }

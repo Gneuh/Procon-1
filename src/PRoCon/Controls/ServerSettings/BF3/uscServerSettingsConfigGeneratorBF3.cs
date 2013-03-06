@@ -72,6 +72,7 @@ namespace PRoCon.Controls.ServerSettings.BF3 {
             this.Client.Game.RoundStartPlayerCount += new FrostbiteClient.LimitHandler(Game_RoundStartPlayerCount);
             this.Client.Game.PlayerRespawnTime += new FrostbiteClient.LimitHandler(Game_PlayerRespawnTime);
             this.Client.Game.GameModeCounter += new FrostbiteClient.LimitHandler(Game_GameModeCounter);
+            this.Client.Game.CtfRoundTimeModifier +=new FrostbiteClient.LimitHandler(Game_CtfRoundTimeModifier);
             this.Client.Game.IdleTimeout += new FrostbiteClient.LimitHandler(Client_IdleTimeout);
             this.Client.Game.IdleBanRounds += new FrostbiteClient.LimitHandler(Game_IdleBanRounds);
             this.Client.Game.ServerMessage += new FrostbiteClient.ServerMessageHandler(Game_ServerMessage);
@@ -186,7 +187,12 @@ namespace PRoCon.Controls.ServerSettings.BF3 {
         {
             this.AppendSetting("vars.gameModeCounter", limit.ToString());
         }
-        
+
+        void Game_CtfRoundTimeModifier(FrostbiteClient sender, int limit)
+        {
+            this.AppendSetting("vars.ctfRoundTimeModifier", limit.ToString());
+        }
+
         protected override void Client_PlayerLimit(FrostbiteClient sender, int limit) {
             this.AppendSetting("vars.maxPlayers", limit.ToString());
         }

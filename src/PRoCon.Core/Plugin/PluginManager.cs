@@ -978,6 +978,7 @@ namespace PRoCon.Core.Plugin {
             this.m_client.Game.RoundRestartPlayerCount -= new FrostbiteClient.LimitHandler(m_prcClient_RoundRestartPlayerCount);
             this.m_client.Game.RoundStartPlayerCount -= new FrostbiteClient.LimitHandler(m_prcClient_RoundStartPlayerCount);
             this.m_client.Game.GameModeCounter -= new FrostbiteClient.LimitHandler(m_prcClient_GameModeCounter);
+            this.m_client.Game.CtfRoundTimeModifier -= new FrostbiteClient.LimitHandler(m_prcClient_CtfRoundTimeModifier);
 
             this.m_client.Game.TextChatModerationMode -= new FrostbiteClient.TextChatModerationModeHandler(Game_TextChatModerationMode);
             this.m_client.Game.TextChatSpamCoolDownTime -= new FrostbiteClient.LimitHandler(Game_TextChatSpamCoolDownTime);
@@ -1178,6 +1179,7 @@ namespace PRoCon.Core.Plugin {
             this.m_client.Game.RoundRestartPlayerCount += new FrostbiteClient.LimitHandler(m_prcClient_RoundRestartPlayerCount);
             this.m_client.Game.RoundStartPlayerCount += new FrostbiteClient.LimitHandler(m_prcClient_RoundStartPlayerCount);
             this.m_client.Game.GameModeCounter += new FrostbiteClient.LimitHandler(m_prcClient_GameModeCounter);
+            this.m_client.Game.CtfRoundTimeModifier += new FrostbiteClient.LimitHandler(m_prcClient_CtfRoundTimeModifier);
 
             this.m_client.Game.TextChatModerationMode += new FrostbiteClient.TextChatModerationModeHandler(Game_TextChatModerationMode);
             this.m_client.Game.TextChatSpamCoolDownTime += new FrostbiteClient.LimitHandler(Game_TextChatSpamCoolDownTime);
@@ -1873,6 +1875,11 @@ namespace PRoCon.Core.Plugin {
         private void m_prcClient_GameModeCounter(FrostbiteClient sender, int limit)
         {
             this.InvokeOnAllEnabled("OnGameModeCounter", new object[] { limit });
+        }
+
+        private void m_prcClient_CtfRoundTimeModifier(FrostbiteClient sender, int limit)
+        {
+            this.InvokeOnAllEnabled("OnCtfRoundTimeModifier", new object[] { limit });
         }
 
         private void m_prcClient_RoundRestartPlayerCount(FrostbiteClient sender, int limit)

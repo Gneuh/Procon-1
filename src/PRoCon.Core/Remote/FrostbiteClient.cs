@@ -1458,7 +1458,20 @@ namespace PRoCon.Core.Remote {
             }
         }
 
-        public virtual void SendSetReservedSlotsListAggressiveJoinPacket(bool enabled) {
+        public virtual void SendSetVarsCtfRoundTimeModifierPacket(int limit) {
+            if (this.IsLoggedIn == true) {
+                this.BuildSendPacket("vars.ctfRoundTimeModifier", limit.ToString());
+            }
+        }
+
+        public virtual void SendGetVarsCtfRoundTimeModifierPacket() {
+            if (this.IsLoggedIn == true) {
+                this.BuildSendPacket("vars.ctfRoundTimeModifier");
+            }
+        }
+
+        public virtual void SendSetReservedSlotsListAggressiveJoinPacket(bool enabled)
+        {
             if (this.IsLoggedIn == true) {
                 this.BuildSendPacket("reservedSlotsList.aggressiveJoin", Packet.bltos(enabled));
             }
@@ -3491,6 +3504,7 @@ namespace PRoCon.Core.Remote {
         public virtual event FrostbiteClient.LimitHandler RoundStartPlayerCount;
         public virtual event FrostbiteClient.LimitHandler PlayerRespawnTime;
         public virtual event FrostbiteClient.LimitHandler GameModeCounter;
+        public virtual event FrostbiteClient.LimitHandler CtfRoundTimeModifier;
         public virtual event FrostbiteClient.UnlockModeHandler UnlockMode;
         public virtual event FrostbiteClient.GunMasterWeaponsPresetHandler GunMasterWeaponsPreset;
         public virtual event FrostbiteClient.IsEnabledHandler ReservedSlotsListAggressiveJoin;

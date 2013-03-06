@@ -29,6 +29,7 @@ namespace PRoCon.Core.Remote.Layer {
             this.m_requestDelegates.Add("vars.roundStartPlayerCount", this.DispatchVarsRequest);
             this.m_requestDelegates.Add("vars.playerRespawnTime", this.DispatchVarsRequest);
             this.m_requestDelegates.Add("vars.gameModeCounter", this.DispatchVarsRequest);
+            this.m_requestDelegates.Add("vars.ctfRoundTimeModifier", this.DispatchVarsRequest);
             this.m_requestDelegates.Add("vars.roundLockdownCountdown", this.DispatchVarsRequest);
             this.m_requestDelegates.Add("vars.roundWarmupTimeout", this.DispatchVarsRequest);
 

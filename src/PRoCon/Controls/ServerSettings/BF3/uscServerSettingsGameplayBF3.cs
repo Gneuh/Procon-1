@@ -48,6 +48,7 @@ namespace PRoCon.Controls.ServerSettings.BF3 {
             this.AsyncSettingControls.Add("vars.playerrespawntime", new AsyncStyleSetting(this.picSettingsPlayerRespawnTime, this.numSettingsPlayerRespawnTime, new Control[] { this.numSettingsPlayerRespawnTime, this.lnkSettingsPlayerRespawnTime }, true));
             
             this.AsyncSettingControls.Add("vars.gameModeCounter", new AsyncStyleSetting(this.picSettingsGameModeCounter, this.numSettingsGameModeCounter, new Control[] { this.numSettingsGameModeCounter, this.lnkSettingsGameModeCounter }, true));
+            this.AsyncSettingControls.Add("vars.ctfRoundTimeModifier", new AsyncStyleSetting(this.picSettingsCtfRoundTimeModifier, this.numSettingsCtfRoundTimeModifier, new Control[] { this.numSettingsCtfRoundTimeModifier, this.lnkSettingsCtfRoundTimeModifier }, true));
             this.AsyncSettingControls.Add("vars.roundLockdownCountdown", new AsyncStyleSetting(this.picSettingsLockdownCountdown, this.numSettingsLockdownCountdown, new Control[] { this.numSettingsLockdownCountdown, this.lnkSettingsLockdownCountdown }, true));
             this.AsyncSettingControls.Add("vars.roundWarmupTimeout", new AsyncStyleSetting(this.picSettingsWarmupTimeout, this.numSettingsWarmupTimeout, new Control[] { this.numSettingsWarmupTimeout, this.lnkSettingsWarmupTimeout }, true));
         }
@@ -86,6 +87,8 @@ namespace PRoCon.Controls.ServerSettings.BF3 {
             this.lnkSettingsPlayerRespawnTime.Text = this.Language.GetLocalized("uscServerSettingsPanel.lnkSettingsPlayerRespawnTime");
             this.lblSettingsGameModeCounter.Text = this.Language.GetLocalized("uscServerSettingsPanel.lblSettingsGameModeCounter");
             this.lnkSettingsGameModeCounter.Text = this.Language.GetLocalized("uscServerSettingsPanel.lnkSettingsGameModeCounter");
+            this.lblSettingsCtfRoundTimeModifier.Text = this.Language.GetLocalized("uscServerSettingsPanel.lblSettingsCtfRoundTimeModifier");
+            this.lnkSettingsCtfRoundTimeModifier.Text = this.Language.GetLocalized("uscServerSettingsPanel.lnkSettingsCtfRoundTimeModifier");
             this.lblSettingsLockdownCountdown.Text = this.Language.GetLocalized("uscServerSettingsPanel.lblSettingsLockdownCountdown");
             this.lnkSettingsLockdownCountdown.Text = this.Language.GetLocalized("uscServerSettingsPanel.lnkSettingsLockdownCountdown");
             this.lblSettingsWarmupTimeout.Text = this.Language.GetLocalized("uscServerSettingsPanel.lblSettingsWarmupTimeout");
@@ -180,6 +183,7 @@ namespace PRoCon.Controls.ServerSettings.BF3 {
             this.Client.Game.PlayerRespawnTime += new FrostbiteClient.LimitHandler(Game_PlayerRespawnTime);
 
             this.Client.Game.GameModeCounter += new FrostbiteClient.LimitHandler(Game_GameModeCounter);
+            this.Client.Game.CtfRoundTimeModifier +=new FrostbiteClient.LimitHandler(Game_CtfRoundTimeModifier);
             this.Client.Game.RoundLockdownCountdown += new FrostbiteClient.LimitHandler(Game_RoundLockdownCountdown);
             this.Client.Game.RoundWarmupTimeout += new FrostbiteClient.LimitHandler(Game_RoundWarmupTimeout);
         }
@@ -634,6 +638,30 @@ namespace PRoCon.Controls.ServerSettings.BF3 {
 
         #endregion
 
+        #region CtfRoundTimeModifier
+
+        private int m_iPreviousSuccessCtfRoundTimeModifierPacket;
+
+        void Game_CtfRoundTimeModifier(FrostbiteClient sender, int limit)
+        {
+            this.m_iPreviousSuccessCtfRoundTimeModifierPacket = limit;
+
+            this.OnSettingResponse("vars.ctfRoundTimeModifier", (decimal)limit, true);
+        }
+
+        private void lnkSettingsCtfRoundTimeModifier_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            if (this.Client != null && this.Client.Game != null)
+            {
+                this.numSettingsCtfRoundTimeModifier.Focus();
+                this.WaitForSettingResponse("vars.ctfRoundTimeModifier", (decimal)this.m_iPreviousSuccessCtfRoundTimeModifierPacket);
+
+                this.Client.Game.SendSetVarsCtfRoundTimeModifierPacket((int)this.numSettingsCtfRoundTimeModifier.Value);
+            }
+        }
+
+        #endregion
+
         #region RoundLockdownCountdown & RoundWarmupTimeout
 
         private int m_iPreviousSuccessRoundLockdownCountdownPacket;
@@ -702,6 +730,7 @@ namespace PRoCon.Controls.ServerSettings.BF3 {
                         this.Client.Game.SendSetVarsCrossHairPacket(true);
                         this.Client.Game.SendSetVarsVehicleSpawnDelayPacket(100);
                         this.Client.Game.SendSetVarsGameModeCounterPacket(100);
+                        this.Client.Game.SendSetVarsCtfRoundTimeModifierPacket(100);
                         break;
                     case 1: // Normal
 

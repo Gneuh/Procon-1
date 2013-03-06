@@ -196,6 +196,7 @@ namespace PRoCon.Core.Plugin {
         public virtual void OnRoundRestartPlayerCount(int limit) { }
         public virtual void OnRoundStartPlayerCount(int limit) { }
         public virtual void OnGameModeCounter(int limit) { }
+        public virtual void OnCtfRoundTimeModifier(int limit) { }
         public virtual void OnRoundLockdownCountdown(int limit) { }
         public virtual void OnRoundWarmupTimeout(int limit) { }
         public virtual void OnPremiumStatus(bool isEnabled) { }
