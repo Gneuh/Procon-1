@@ -186,6 +186,10 @@
             this.statsLookupToolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
             this.statsLookupToolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
             this.punkBusterScreenshotToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.colRank1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colRank2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colRank3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colRank4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.spltListAdditionalInfo.Panel1.SuspendLayout();
             this.spltListAdditionalInfo.Panel2.SuspendLayout();
             this.spltListAdditionalInfo.SuspendLayout();
@@ -304,7 +308,8 @@
             this.colKills1,
             this.colDeaths1,
             this.colKdr1,
-            this.colPing1});
+            this.colPing1,
+            this.colRank1});
             this.lsvTeamOnePlayers.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lsvTeamOnePlayers.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.lsvTeamOnePlayers.FullRowSelect = true;
@@ -375,8 +380,8 @@
             this.lsvTeamOnePlayers.DragDrop += new System.Windows.Forms.DragEventHandler(this.lsvPlayers_DragDrop);
             this.lsvTeamOnePlayers.DragEnter += new System.Windows.Forms.DragEventHandler(this.lsvPlayers_DragEnter);
             this.lsvTeamOnePlayers.DragOver += new System.Windows.Forms.DragEventHandler(this.lsvPlayers_DragOver);
-            this.lsvTeamOnePlayers.MouseDown += new System.Windows.Forms.MouseEventHandler(this.lsvPlayers_MouseDown);
             this.lsvTeamOnePlayers.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.lsvPlayers_MouseDoubleClick);
+            this.lsvTeamOnePlayers.MouseDown += new System.Windows.Forms.MouseEventHandler(this.lsvPlayers_MouseDown);
             // 
             // colSlotID1
             // 
@@ -419,6 +424,10 @@
             // 
             this.colPing1.Text = "Ping";
             // 
+            // colRank1
+            // 
+            this.colRank1.Text = "Rank";
+            // 
             // lsvTeamTwoPlayers
             // 
             this.lsvTeamTwoPlayers.AllowDrop = true;
@@ -432,7 +441,8 @@
             this.colKills2,
             this.colDeaths2,
             this.colKdr2,
-            this.colPing2});
+            this.colPing2,
+            this.colRank2});
             this.lsvTeamTwoPlayers.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lsvTeamTwoPlayers.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.lsvTeamTwoPlayers.FullRowSelect = true;
@@ -503,8 +513,8 @@
             this.lsvTeamTwoPlayers.DragDrop += new System.Windows.Forms.DragEventHandler(this.lsvPlayers_DragDrop);
             this.lsvTeamTwoPlayers.DragEnter += new System.Windows.Forms.DragEventHandler(this.lsvPlayers_DragEnter);
             this.lsvTeamTwoPlayers.DragOver += new System.Windows.Forms.DragEventHandler(this.lsvPlayers_DragOver);
-            this.lsvTeamTwoPlayers.MouseDown += new System.Windows.Forms.MouseEventHandler(this.lsvPlayers_MouseDown);
             this.lsvTeamTwoPlayers.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.lsvPlayers_MouseDoubleClick);
+            this.lsvTeamTwoPlayers.MouseDown += new System.Windows.Forms.MouseEventHandler(this.lsvPlayers_MouseDown);
             // 
             // colSlotID2
             // 
@@ -547,6 +557,10 @@
             // 
             this.colPing2.Text = "Ping";
             // 
+            // colRank2
+            // 
+            this.colRank2.Text = "Rank";
+            // 
             // spltBottomTwoSplit
             // 
             this.spltBottomTwoSplit.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -578,7 +592,8 @@
             this.colKills3,
             this.colDeaths3,
             this.colKdr3,
-            this.colPing3});
+            this.colPing3,
+            this.colRank3});
             this.lsvTeamThreePlayers.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lsvTeamThreePlayers.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.lsvTeamThreePlayers.FullRowSelect = true;
@@ -649,8 +664,8 @@
             this.lsvTeamThreePlayers.DragDrop += new System.Windows.Forms.DragEventHandler(this.lsvPlayers_DragDrop);
             this.lsvTeamThreePlayers.DragEnter += new System.Windows.Forms.DragEventHandler(this.lsvPlayers_DragEnter);
             this.lsvTeamThreePlayers.DragOver += new System.Windows.Forms.DragEventHandler(this.lsvPlayers_DragOver);
-            this.lsvTeamThreePlayers.MouseDown += new System.Windows.Forms.MouseEventHandler(this.lsvPlayers_MouseDown);
             this.lsvTeamThreePlayers.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.lsvPlayers_MouseDoubleClick);
+            this.lsvTeamThreePlayers.MouseDown += new System.Windows.Forms.MouseEventHandler(this.lsvPlayers_MouseDown);
             // 
             // colSlotID3
             // 
@@ -693,6 +708,10 @@
             // 
             this.colPing3.Text = "Ping";
             // 
+            // colRank3
+            // 
+            this.colRank3.Text = "Rank";
+            // 
             // lsvTeamFourPlayers
             // 
             this.lsvTeamFourPlayers.AllowDrop = true;
@@ -706,7 +725,8 @@
             this.colKills4,
             this.colDeaths4,
             this.colKdr4,
-            this.colPing4});
+            this.colPing4,
+            this.colRank4});
             this.lsvTeamFourPlayers.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lsvTeamFourPlayers.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.lsvTeamFourPlayers.FullRowSelect = true;
@@ -777,8 +797,8 @@
             this.lsvTeamFourPlayers.DragDrop += new System.Windows.Forms.DragEventHandler(this.lsvPlayers_DragDrop);
             this.lsvTeamFourPlayers.DragEnter += new System.Windows.Forms.DragEventHandler(this.lsvPlayers_DragEnter);
             this.lsvTeamFourPlayers.DragOver += new System.Windows.Forms.DragEventHandler(this.lsvPlayers_DragOver);
-            this.lsvTeamFourPlayers.MouseDown += new System.Windows.Forms.MouseEventHandler(this.lsvPlayers_MouseDown);
             this.lsvTeamFourPlayers.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.lsvPlayers_MouseDoubleClick);
+            this.lsvTeamFourPlayers.MouseDown += new System.Windows.Forms.MouseEventHandler(this.lsvPlayers_MouseDown);
             // 
             // colSlotID4
             // 
@@ -820,6 +840,10 @@
             // colPing4
             // 
             this.colPing4.Text = "Ping";
+            // 
+            // colRank4
+            // 
+            this.colRank4.Text = "Rank";
             // 
             // btnSplitTeams
             // 
@@ -1210,25 +1234,25 @@
             // statsLookupToolStripMenuItem1
             // 
             this.statsLookupToolStripMenuItem1.Name = "statsLookupToolStripMenuItem1";
-            this.statsLookupToolStripMenuItem1.Size = new System.Drawing.Size(195, 22);
+            this.statsLookupToolStripMenuItem1.Size = new System.Drawing.Size(127, 22);
             this.statsLookupToolStripMenuItem1.Text = "Metabans";
             // 
             // statsLookupToolStripMenuItem2
             // 
             this.statsLookupToolStripMenuItem2.Name = "statsLookupToolStripMenuItem2";
-            this.statsLookupToolStripMenuItem2.Size = new System.Drawing.Size(195, 22);
+            this.statsLookupToolStripMenuItem2.Size = new System.Drawing.Size(127, 22);
             this.statsLookupToolStripMenuItem2.Text = "Custom-2";
             // 
             // statsLookupToolStripMenuItem3
             // 
             this.statsLookupToolStripMenuItem3.Name = "statsLookupToolStripMenuItem3";
-            this.statsLookupToolStripMenuItem3.Size = new System.Drawing.Size(195, 22);
+            this.statsLookupToolStripMenuItem3.Size = new System.Drawing.Size(127, 22);
             this.statsLookupToolStripMenuItem3.Text = "Custum-3";
             // 
             // statsLookupToolStripMenuItem4
             // 
             this.statsLookupToolStripMenuItem4.Name = "statsLookupToolStripMenuItem4";
-            this.statsLookupToolStripMenuItem4.Size = new System.Drawing.Size(195, 22);
+            this.statsLookupToolStripMenuItem4.Size = new System.Drawing.Size(127, 22);
             this.statsLookupToolStripMenuItem4.Text = "Custom-4";
             // 
             // punkBusterScreenshotToolStripMenuItem
@@ -1306,6 +1330,7 @@
         private System.Windows.Forms.ColumnHeader colDeaths2;
         private System.Windows.Forms.ColumnHeader colKdr2;
         private System.Windows.Forms.ColumnHeader colPing2;
+        private System.Windows.Forms.ColumnHeader colRank2;
         private PRoCon.Controls.ControlsEx.ListViewNF lsvTeamOnePlayers;
         private System.Windows.Forms.ColumnHeader colSlotID1;
         private System.Windows.Forms.ColumnHeader colTags1;
@@ -1316,6 +1341,7 @@
         private System.Windows.Forms.ColumnHeader colDeaths1;
         private System.Windows.Forms.ColumnHeader colKdr1;
         private System.Windows.Forms.ColumnHeader colPing1;
+        private System.Windows.Forms.ColumnHeader colRank1;
         private System.Windows.Forms.Button btnSplitTeams;
         private System.Windows.Forms.SplitContainer spltTwoSplit;
         private System.Windows.Forms.SplitContainer spltFourSplit;
@@ -1330,6 +1356,7 @@
         private System.Windows.Forms.ColumnHeader colDeaths3;
         private System.Windows.Forms.ColumnHeader colKdr3;
         private System.Windows.Forms.ColumnHeader colPing3;
+        private System.Windows.Forms.ColumnHeader colRank3;
         private PRoCon.Controls.ControlsEx.ListViewNF lsvTeamFourPlayers;
         private System.Windows.Forms.ColumnHeader colSlotID4;
         private System.Windows.Forms.ColumnHeader colTags4;
@@ -1340,6 +1367,7 @@
         private System.Windows.Forms.ColumnHeader colDeaths4;
         private System.Windows.Forms.ColumnHeader colKdr4;
         private System.Windows.Forms.ColumnHeader colPing4;
+        private System.Windows.Forms.ColumnHeader colRank4;
         private System.Windows.Forms.Timer tmrKillDeathHighlight;
         private System.Windows.Forms.ColumnHeader colKit1;
         private System.Windows.Forms.ColumnHeader colKit2;

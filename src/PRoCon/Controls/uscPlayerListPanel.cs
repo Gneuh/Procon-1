@@ -327,6 +327,7 @@ namespace PRoCon {
             this.colKdr1.Text = this.colKdr2.Text = this.colKdr3.Text = this.colKdr4.Text = this.m_clocLanguage.GetLocalized("uscPlayerListPanel.lsvPlayers.colKdr", null);
             this.colScore1.Text = this.colScore2.Text = this.colScore3.Text = this.colScore4.Text = this.m_clocLanguage.GetLocalized("uscPlayerListPanel.lsvPlayers.colScore", null);
             this.colPing1.Text = this.colPing2.Text = this.colPing3.Text = this.colPing4.Text = this.m_clocLanguage.GetLocalized("uscPlayerListPanel.lsvPlayers.colPing", null);
+            this.colRank1.Tag = this.colRank2.Text = this.colRank3.Text = this.colRank4.Text = this.m_clocLanguage.GetDefaultLocalized("Rank", "uscPlayerListPanel.lsvPlayers.colRank", null);
             
             this.btnPlayerListSelectedCheese.Text = this.m_clocLanguage.GetLocalized("uscPlayerListPanel.btnPlayerListSelectedCheese", null);
 
@@ -466,6 +467,11 @@ namespace PRoCon {
             lviPing.Text = cpiPlayer.Ping.ToString();
             lviNewPlayer.SubItems.Add(lviPing);
 
+            ListViewItem.ListViewSubItem lviRank = new ListViewItem.ListViewSubItem();
+            lviRank.Name = "rank";
+            lviRank.Text = cpiPlayer.Rank.ToString();
+            lviNewPlayer.SubItems.Add(lviRank);
+
             return lviNewPlayer;
         }
 
@@ -566,6 +572,7 @@ namespace PRoCon {
                 ((AdditionalPlayerInfo)this.m_dicPlayers[String.Format("procon.playerlist.totals{0}", iTeamID)].Tag).m_cpiPlayer.Deaths = 0;
                 ((AdditionalPlayerInfo)this.m_dicPlayers[String.Format("procon.playerlist.totals{0}", iTeamID)].Tag).m_cpiPlayer.Score = 0;
                 ((AdditionalPlayerInfo)this.m_dicPlayers[String.Format("procon.playerlist.totals{0}", iTeamID)].Tag).m_cpiPlayer.Ping = 0;
+                ((AdditionalPlayerInfo)this.m_dicPlayers[String.Format("procon.playerlist.totals{0}", iTeamID)].Tag).m_cpiPlayer.Rank = 0;
                 ((AdditionalPlayerInfo)this.m_dicPlayers[String.Format("procon.playerlist.totals{0}", iTeamID)].Tag).m_cpiPlayer.SquadID = 0;
                 ((AdditionalPlayerInfo)this.m_dicPlayers[String.Format("procon.playerlist.totals{0}", iTeamID)].Tag).m_cpiPlayer.Kdr = 0.0F;
 
@@ -574,6 +581,7 @@ namespace PRoCon {
                 this.m_dicPlayers[String.Format("procon.playerlist.totals{0}", iTeamID)].SubItems["deaths"].Text = "0";
                 this.m_dicPlayers[String.Format("procon.playerlist.totals{0}", iTeamID)].SubItems["score"].Text = "0";
                 this.m_dicPlayers[String.Format("procon.playerlist.totals{0}", iTeamID)].SubItems["ping"].Text = String.Empty;
+                this.m_dicPlayers[String.Format("procon.playerlist.totals{0}", iTeamID)].SubItems["rank"].Text = String.Empty;
                 this.m_dicPlayers[String.Format("procon.playerlist.totals{0}", iTeamID)].SubItems["kdr"].Text = "0.00";
 
                 this.m_dicPlayers[String.Format("procon.playerlist.averages{0}", iTeamID)].SubItems["kit"].Text = String.Empty;
@@ -581,6 +589,7 @@ namespace PRoCon {
                 this.m_dicPlayers[String.Format("procon.playerlist.averages{0}", iTeamID)].SubItems["deaths"].Text = "0.00";
                 this.m_dicPlayers[String.Format("procon.playerlist.averages{0}", iTeamID)].SubItems["score"].Text = "0.00";
                 this.m_dicPlayers[String.Format("procon.playerlist.averages{0}", iTeamID)].SubItems["ping"].Text = "0.00";
+                this.m_dicPlayers[String.Format("procon.playerlist.averages{0}", iTeamID)].SubItems["rank"].Text = "-";
                 this.m_dicPlayers[String.Format("procon.playerlist.averages{0}", iTeamID)].SubItems["kdr"].Text = "0.00";
             }
         }
@@ -599,6 +608,7 @@ namespace PRoCon {
                 proconPlayerListTotalsObject.m_cpiPlayer.Deaths += player.m_cpiPlayer.Deaths;
                 proconPlayerListTotalsObject.m_cpiPlayer.Score += player.m_cpiPlayer.Score; ;
                 proconPlayerListTotalsObject.m_cpiPlayer.Ping += player.m_cpiPlayer.Ping;
+                proconPlayerListTotalsObject.m_cpiPlayer.Rank += player.m_cpiPlayer.Rank;
                 proconPlayerListTotalsObject.m_cpiPlayer.Kdr += (player.m_cpiPlayer.Deaths > 0 ? (float)player.m_cpiPlayer.Kills / (float)player.m_cpiPlayer.Deaths : player.m_cpiPlayer.Kills);
                 proconPlayerListTotalsObject.m_cpiPlayer.SquadID++;
 
@@ -653,6 +663,7 @@ namespace PRoCon {
                 proconPlayerListAveragesListItem.SubItems["deaths"].Text = String.Format("{0:0.00}", (float)proconPlayerListTotalsObject.m_cpiPlayer.Deaths / (float)proconPlayerListTotalsObject.m_cpiPlayer.SquadID);
                 proconPlayerListAveragesListItem.SubItems["score"].Text = String.Format("{0:0.00}", (float)proconPlayerListTotalsObject.m_cpiPlayer.Score / (float)proconPlayerListTotalsObject.m_cpiPlayer.SquadID);
                 proconPlayerListAveragesListItem.SubItems["ping"].Text = String.Format("{0:0}", (float)proconPlayerListTotalsObject.m_cpiPlayer.Ping / (float)proconPlayerListTotalsObject.m_cpiPlayer.SquadID);
+                proconPlayerListAveragesListItem.SubItems["rank"].Text = String.Format("{0:0}", (int)proconPlayerListTotalsObject.m_cpiPlayer.Rank / (float)proconPlayerListTotalsObject.m_cpiPlayer.SquadID);
                 proconPlayerListAveragesListItem.SubItems["kdr"].Text = String.Format("{0:0.00}", proconPlayerListTotalsObject.m_cpiPlayer.Kdr / (float)proconPlayerListTotalsObject.m_cpiPlayer.SquadID);
 
                 int mostUsedKitCount = 0;
@@ -989,6 +1000,8 @@ namespace PRoCon {
                         if (String.Compare(playerListItem.SubItems["kdr"].Text, kdr) == 0) { playerListItem.SubItems["kdr"].Text = kdr; }
 
                         if (String.Compare(playerListItem.SubItems["ping"].Text, cpiPlayer.Ping.ToString()) != 0) { playerListItem.SubItems["ping"].Text = cpiPlayer.Ping.ToString(); }
+                        
+                        if (String.Compare(playerListItem.SubItems["rank"].Text, cpiPlayer.Rank.ToString()) != 0) { playerListItem.SubItems["rank"].Text = cpiPlayer.Ping.ToString(); }
 
                         AdditionalPlayerInfo sapiAdditional;
 
