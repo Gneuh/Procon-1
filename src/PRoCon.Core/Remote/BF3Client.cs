@@ -207,7 +207,7 @@ namespace PRoCon.Core.Remote {
 
         public override event FrostbiteClient.PlayerAuthenticatedHandler PlayerAuthenticated;
 
-        //public override event FrostbiteClient.ListPlayersHandler ListPlayers;
+        public override event FrostbiteClient.ListPlayersHandler ListPlayers;
 
         //public override event FrostbiteClient.RoundOverPlayersHandler RoundOverPlayers;
 
@@ -658,21 +658,25 @@ namespace PRoCon.Core.Remote {
                 FrostbiteConnection.RaiseEvent(this.ServerInfo.GetInvocationList(), this, newServerInfo);
             }
         }
-        /*
+        
         protected override void DispatchAdminListPlayersResponse(FrostbiteConnection sender, Packet cpRecievedPacket, Packet cpRequestPacket) {
             if (cpRequestPacket.Words.Count >= 2) {
 
                 cpRecievedPacket.Words.RemoveAt(0);
                 if (this.ListPlayers != null) {
 
-                    List<CPlayerInfo> lstPlayers = BF3PlayerInfo.GetPlayerList(cpRecievedPacket.Words);
+                    List<CPlayerInfo> lstPlayers = CPlayerInfo.GetPlayerList(cpRecievedPacket.Words);
                     CPlayerSubset cpsSubset = new CPlayerSubset(cpRequestPacket.Words.GetRange(1, cpRequestPacket.Words.Count - 1));
 
                     FrostbiteConnection.RaiseEvent(this.ListPlayers.GetInvocationList(), this, lstPlayers, cpsSubset);
+                    // fire pings on each player
+                    foreach (CPlayerInfo cpiPlayer in lstPlayers) {
+                        this.SendPlayerPingPacket(cpiPlayer.SoldierName);
+                    }
                 }
             }
         }
-        
+        /*
         protected override void DispatchServerOnRoundOverPlayersRequest(FrostbiteConnection sender, Packet cpRequestPacket) {
             if (cpRequestPacket.Words.Count >= 2) {
 

@@ -219,6 +219,9 @@ namespace PRoCon {
         private void m_prcClient_GameTypeDiscovered(PRoConClient sender) {
 
             this.m_prcClient.Game.ListPlayers += new FrostbiteClient.ListPlayersHandler(m_prcClient_ListPlayers);
+            if (this.m_prcClient.Game.GameType.Equals("BF3") == true) {
+                this.m_prcClient.Game.PlayerPingedByAdmin += new FrostbiteClient.PlayerPingedByAdminHandler(Game_PlayerPingedByAdmin);
+            }
             this.m_prcClient.Game.PlayerJoin += new FrostbiteClient.PlayerEventHandler(m_prcClient_PlayerJoin);
             this.m_prcClient.Game.PlayerLeft += new FrostbiteClient.PlayerLeaveHandler(m_prcClient_PlayerLeft);
             this.m_prcClient.PunkbusterPlayerInfo += new PRoConClient.PunkbusterPlayerInfoHandler(m_prcClient_PunkbusterPlayerInfo);
@@ -1051,6 +1054,17 @@ namespace PRoCon {
 
                 this.ArrangePlayers();
             }
+        }
+
+        private void Game_PlayerPingedByAdmin(FrostbiteClient sender, string soldierName, int ping) {
+            if (this.m_dicPlayers.ContainsKey(soldierName) == true) {
+
+                ListViewItem playerListItem = this.m_dicPlayers[soldierName];
+
+                if (String.Compare(playerListItem.SubItems["ping"].Text, ping.ToString()) != 0) { playerListItem.SubItems["ping"].Text = ping.ToString(); }
+
+            }
+            this.ArrangePlayers();
         }
 
         /*
