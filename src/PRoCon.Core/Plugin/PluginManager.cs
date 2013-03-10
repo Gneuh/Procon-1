@@ -1004,6 +1004,15 @@ namespace PRoCon.Core.Plugin {
             this.m_client.Game.Hud -= new FrostbiteClient.IsEnabledHandler(Game_Hud);
             this.m_client.Game.NameTag -= new FrostbiteClient.IsEnabledHandler(Game_NameTag);
 
+            this.m_client.Game.PlayerIdleState -= new FrostbiteClient.PlayerIdleStateHandler(Game_PlayerIdleState);
+            this.m_client.Game.PlayerIsAlive -= new FrostbiteClient.PlayerIsAliveHandler(Game_PlayerIsAlive);
+            this.m_client.Game.PlayerPingedByAdmin -= new FrostbiteClient.PlayerPingedByAdminHandler(Game_PlayerPingedByAdmin);
+
+            this.m_client.Game.SquadLeader -= new FrostbiteClient.SquadLeaderHandler(Game_SquadLeader);
+            this.m_client.Game.SquadListActive -= new FrostbiteClient.SquadListActiveHandler(Game_SquadListActive);
+            this.m_client.Game.SquadListPlayers -= new FrostbiteClient.SquadListPlayersHandler(Game_SquadListPlayers);
+            this.m_client.Game.SquadIsPrivate -= new FrostbiteClient.SquadIsPrivateHandler(Game_SquadIsPrivate);
+
             #region MoHW
             this.m_client.Game.AllUnlocksUnlocked -= new FrostbiteClient.IsEnabledHandler(Game_AllUnlocksUnlocked);
             this.m_client.Game.BuddyOutline -= new FrostbiteClient.IsEnabledHandler(Game_BuddyOutline);
@@ -1204,6 +1213,15 @@ namespace PRoCon.Core.Plugin {
             this.m_client.Game.PlayerRespawnTime += new FrostbiteClient.LimitHandler(Game_PlayerRespawnTime);
             this.m_client.Game.Hud += new FrostbiteClient.IsEnabledHandler(Game_Hud);
             this.m_client.Game.NameTag += new FrostbiteClient.IsEnabledHandler(Game_NameTag);
+
+            this.m_client.Game.PlayerIdleState += new FrostbiteClient.PlayerIdleStateHandler(Game_PlayerIdleState);
+            this.m_client.Game.PlayerIsAlive += new FrostbiteClient.PlayerIsAliveHandler(Game_PlayerIsAlive);
+            this.m_client.Game.PlayerPingedByAdmin += new FrostbiteClient.PlayerPingedByAdminHandler(Game_PlayerPingedByAdmin);
+
+            this.m_client.Game.SquadLeader += new FrostbiteClient.SquadLeaderHandler(Game_SquadLeader);
+            this.m_client.Game.SquadListActive += new FrostbiteClient.SquadListActiveHandler(Game_SquadListActive);
+            this.m_client.Game.SquadListPlayers += new FrostbiteClient.SquadListPlayersHandler(Game_SquadListPlayers);
+            this.m_client.Game.SquadIsPrivate += new FrostbiteClient.SquadIsPrivateHandler(Game_SquadIsPrivate);
 
             #region MoHW
             this.m_client.Game.AllUnlocksUnlocked += new FrostbiteClient.IsEnabledHandler(Game_AllUnlocksUnlocked);
@@ -2120,6 +2138,37 @@ namespace PRoCon.Core.Plugin {
             this.InvokeOnAllEnabled("OnPlayerMovedByAdmin", soldierName, destinationTeamId, destinationSquadId, forceKilled);
         }
 
+        #endregion
+
+        #region player/squad cmds
+
+        private void Game_PlayerIdleState(FrostbiteClient sender, string soldierName, int idleTime) {
+            this.InvokeOnAllEnabled("OnPlayerIdleDuration", soldierName, idleTime);
+        }
+
+        private void Game_PlayerIsAlive(FrostbiteClient sender, string soldierName, bool isAlive) {
+            this.InvokeOnAllEnabled("OnPlayerIsAlive", soldierName, isAlive);
+        }
+
+        private void Game_PlayerPingedByAdmin(FrostbiteClient sender, string soldierName, int ping) {
+            this.InvokeOnAllEnabled("OnPlayerPingedByAdmin", soldierName, ping);
+        }
+
+        private void Game_SquadLeader(FrostbiteClient sender, int teamId, int squadId, string soldierName) {
+            this.InvokeOnAllEnabled("OnSquadLeader", teamId, squadId, soldierName);
+        }
+
+        private void Game_SquadListActive(FrostbiteClient sender, int teamId, int squadCount, List<int> squadList) {
+            this.InvokeOnAllEnabled("OnSquadListActive", teamId, squadCount, squadList);
+        }
+
+        private void Game_SquadListPlayers(FrostbiteClient sender, int teamId, int squadId, int playerCount, List<string> playersInSquad) {
+            this.InvokeOnAllEnabled("OnSquadListPlayers", teamId, squadId, playerCount, playersInSquad);
+        }
+
+        private void Game_SquadIsPrivate(FrostbiteClient sender, int teamId, int squadId, bool isPrivate) {
+            this.InvokeOnAllEnabled("OnSquadIsPrivate", teamId, squadId, isPrivate);
+        }
         #endregion
 
         #endregion

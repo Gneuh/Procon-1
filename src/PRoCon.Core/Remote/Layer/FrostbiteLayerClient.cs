@@ -61,6 +61,10 @@ namespace PRoCon.Core.Remote.Layer {
         public delegate void RequestLoginHashedPasswordHandler(FrostbiteLayerClient sender, Packet packet, string hashedPassword);
         public virtual event RequestLoginHashedPasswordHandler RequestLoginHashedPassword;
 
+        public virtual event RequestPacketDispatchHandler RequestPacketSquadLeaderRecieved;
+        public virtual event RequestPacketDispatchHandler RequestPacketSquadIsPrivateReceived;
+
+
         #endregion
 
         public string IPPort {
@@ -301,6 +305,24 @@ namespace PRoCon.Core.Remote.Layer {
         protected virtual void DispatchAdminKillPlayerRequest(FrostbiteLayerConnection sender, Packet cpRecievedPacket) {
             if (this.RequestPacketAdminPlayerKillRecieved != null) {
                 FrostbiteConnection.RaiseEvent(this.RequestPacketAdminPlayerKillRecieved.GetInvocationList(), this, cpRecievedPacket);
+            }
+        }
+
+        #endregion
+
+        #region player/squad cmds
+
+        protected virtual void DispatchSquadLeaderRequest(FrostbiteLayerConnection sender, Packet cpRecievedPacket) {
+            if (this.RequestPacketSquadLeaderRecieved != null) {
+                FrostbiteConnection.RaiseEvent(this.RequestPacketSquadLeaderRecieved.GetInvocationList(), this, cpRecievedPacket);
+            }
+        }
+
+        protected virtual void DispatchSquadIsPrivateRequest(FrostbiteLayerConnection sender, Packet cpRecievedPacket)
+        {
+            if (this.RequestPacketSquadIsPrivateReceived != null)
+            {
+                FrostbiteConnection.RaiseEvent(this.RequestPacketSquadIsPrivateReceived.GetInvocationList(), this, cpRecievedPacket);
             }
         }
 

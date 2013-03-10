@@ -208,6 +208,10 @@ namespace PRoCon.Core.Remote.Layer {
                 this.Game.RequestPacketAlterReservedSlotsListRecieved += new FrostbiteLayerClient.RequestPacketDispatchHandler(Game_RequestPacketAlterReservedSlotsListRecieved);
                 this.Game.RequestPacketAlterTextMonderationListRecieved += new FrostbiteLayerClient.RequestPacketDispatchHandler(Game_RequestPacketAlterTextMonderationListRecieved);
                 this.Game.RequestPacketVarsRecieved += new FrostbiteLayerClient.RequestPacketDispatchHandler(Game_RequestPacketVarsRecieved);
+
+                this.Game.RequestPacketSquadLeaderRecieved += new FrostbiteLayerClient.RequestPacketDispatchHandler(Game_RequestPacketSquadLeaderRecieved);
+                this.Game.RequestPacketSquadIsPrivateReceived += new FrostbiteLayerClient.RequestPacketDispatchHandler(Game_RequestPacketSquadIsPrivateReceived);
+                
             }
 
             this.ClientShutdown += new LayerClientHandler(CPRoConLayerClient_LayerClientShutdown);
@@ -280,6 +284,10 @@ namespace PRoCon.Core.Remote.Layer {
                 this.Game.RequestPacketAlterReservedSlotsListRecieved -= new FrostbiteLayerClient.RequestPacketDispatchHandler(Game_RequestPacketAlterReservedSlotsListRecieved);
                 this.Game.RequestPacketAlterTextMonderationListRecieved -= new FrostbiteLayerClient.RequestPacketDispatchHandler(Game_RequestPacketAlterTextMonderationListRecieved);
                 this.Game.RequestPacketVarsRecieved -= new FrostbiteLayerClient.RequestPacketDispatchHandler(Game_RequestPacketVarsRecieved);
+
+                this.Game.RequestPacketSquadLeaderRecieved -= new FrostbiteLayerClient.RequestPacketDispatchHandler(Game_RequestPacketSquadLeaderRecieved);
+                this.Game.RequestPacketSquadIsPrivateReceived -= new FrostbiteLayerClient.RequestPacketDispatchHandler(Game_RequestPacketSquadIsPrivateReceived);
+
             }
 
             this.ClientShutdown -= new LayerClientHandler(CPRoConLayerClient_LayerClientShutdown);
@@ -1466,6 +1474,35 @@ namespace PRoCon.Core.Remote.Layer {
         }
 
         #endregion
+
+        #endregion
+
+        #region player/squad cmds
+
+        private void Game_RequestPacketSquadLeaderRecieved(FrostbiteLayerClient sender, Packet packet) {
+            if (this.IsLoggedIn == true) {
+                if (this.m_sprvPrivileges.CanMovePlayers == true) {
+                    this.m_prcClient.SendProconLayerPacket(this, packet);
+                } else {
+                    sender.SendResponse(packet, PRoConLayerClient.RESPONSE_INSUFFICIENT_PRIVILEGES);
+                }
+            } else {
+                sender.SendResponse(packet, PRoConLayerClient.RESPONSE_LOGIN_REQUIRED);
+            }
+        }
+
+        private void Game_RequestPacketSquadIsPrivateReceived(FrostbiteLayerClient sender, Packet packet) {
+            if (this.IsLoggedIn == true) {
+                if (this.m_sprvPrivileges.CanMovePlayers == true) {
+                    this.m_prcClient.SendProconLayerPacket(this, packet);
+                } else {
+                    sender.SendResponse(packet, PRoConLayerClient.RESPONSE_INSUFFICIENT_PRIVILEGES);
+                }
+            } else {
+                sender.SendResponse(packet, PRoConLayerClient.RESPONSE_LOGIN_REQUIRED);
+            }
+        }
+
 
         #endregion
 

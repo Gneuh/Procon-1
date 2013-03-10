@@ -169,6 +169,19 @@ namespace PRoCon.Core.Plugin {
 
         #endregion
 
+        #region player/squad cmds BF3
+
+        public virtual void OnPlayerIdleDuration(string soldierName, int idleTime) { }
+        public virtual void OnPlayerIsAlive(string soldierName, bool isAlive) { }
+        public virtual void OnPlayerPingedByAdmin(string soldierName, int ping) { }
+
+        public virtual void OnSquadLeader(int teamId, int squadId, string soldierName) { }
+        public virtual void OnSquadListActive(int teamId, int squadClount, List<int> squadList) { }
+        public virtual void OnSquadListPlayers(int teamId, int squadId, int playerCount, List<string> playersInSquad) { }
+        public virtual void OnSquadIsPrivate(int teamId, int squadId, bool isPrivate) { }
+
+        #endregion
+
         #region Variables
 
         #region Details

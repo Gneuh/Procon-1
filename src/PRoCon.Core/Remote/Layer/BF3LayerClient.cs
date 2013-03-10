@@ -63,6 +63,15 @@ namespace PRoCon.Core.Remote.Layer {
 
             this.m_requestDelegates.Add("vars.serverMessage", this.DispatchVarsRequest);
             this.m_requestDelegates.Add("vars.premiumStatus", this.DispatchVarsRequest);
+
+            this.m_requestDelegates.Add("player.idleDuration", this.DispatchSecureSafeListedRequest);
+            this.m_requestDelegates.Add("player.isAlive", this.DispatchSecureSafeListedRequest);
+            this.m_requestDelegates.Add("player.ping", this.DispatchSecureSafeListedRequest);
+            this.m_requestDelegates.Add("squad.leader", this.DispatchSquadLeaderRequest);
+            this.m_requestDelegates.Add("squad.listActive", this.DispatchSecureSafeListedRequest);
+            this.m_requestDelegates.Add("squad.listPlayers", this.DispatchSecureSafeListedRequest);
+            this.m_requestDelegates.Add("squad.private", this.DispatchSquadIsPrivateRequest);
         }
+
     }
 }

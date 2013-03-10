@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -138,9 +139,22 @@ namespace PRoCon.Core.Remote {
 
             #endregion
 
+            #region player.* / squad.* commands
+
+            this.m_responseDelegates.Add("player.idleDuration", this.DispatchPlayerIdleDurationResponse);
+            this.m_responseDelegates.Add("player.isAlive", this.DispatchPlayerIsAliveResponse);
+            this.m_responseDelegates.Add("player.ping", this.DispatchPlayerPingResponse);
+
+            this.m_responseDelegates.Add("squad.leader", this.DispatchSquadLeaderResponse);
+            this.m_responseDelegates.Add("squad.listActive", this.DispatchSquadListActiveResponse);
+            this.m_responseDelegates.Add("squad.listPlayers", this.DispatchSquadListPlayersResponse);
+            this.m_responseDelegates.Add("squad.private", this.DispatchSquadIsPrivateResponse);
+
+            #endregion
+
             this.m_responseDelegates.Add("admin.help", this.DispatchHelpResponse);
 
-            this.GetPacketsPattern = new Regex(this.GetPacketsPattern.ToString() + "|^reservedSlotsList.list", RegexOptions.Compiled);
+            this.GetPacketsPattern = new Regex(this.GetPacketsPattern.ToString() + @"|^reservedSlotsList.list|^player\.idleDuration|^player\.isAlive|^player\.ping|squad\.listActive|^squad\.listPlayers|^squad\.private", RegexOptions.Compiled);
         }
                 
         public override void FetchStartupVariables() {
@@ -273,6 +287,17 @@ namespace PRoCon.Core.Remote {
 
         public override event FrostbiteClient.IsEnabledHandler PremiumStatus;
 
+        #region player/squad cmd_handler
+
+        public override event FrostbiteClient.PlayerIdleStateHandler PlayerIdleState;
+        public override event FrostbiteClient.PlayerIsAliveHandler PlayerIsAlive;
+        public override event FrostbiteClient.PlayerPingedByAdminHandler PlayerPingedByAdmin;
+
+        public override event FrostbiteClient.SquadLeaderHandler SquadLeader;
+        public override event FrostbiteClient.SquadListActiveHandler SquadListActive;
+        public override event FrostbiteClient.SquadListPlayersHandler SquadListPlayers;
+        public override event FrostbiteClient.SquadIsPrivateHandler SquadIsPrivate;
+        
         #endregion
 
         #endregion
@@ -522,6 +547,67 @@ namespace PRoCon.Core.Remote {
         }
 
         #endregion
+
+        #endregion
+
+        #region R-38 player-squad Packet Helpers
+
+        public virtual void SendPlayerIdleDurationPacket(string soldierName) {
+            if (this.IsLoggedIn == true) {
+                this.BuildSendPacket("player.idleDuration", soldierName);
+            }
+        }
+
+        public virtual void SendPlayerIsAlivePacket(string soldierName) {
+            if (this.IsLoggedIn == true) {
+                this.BuildSendPacket("player.isAlive", soldierName);
+            }
+        }
+
+
+        public virtual void SendPlayerPingPacket(string soldierName) {
+            if (this.IsLoggedIn == true) {
+                this.BuildSendPacket("player.ping", soldierName);
+            }
+        }
+
+        public virtual void SendSetSquadLeaderPacket(int teamId, int squadId, string soldierName)
+        {
+            if (this.IsLoggedIn == true) {
+                this.BuildSendPacket("squad.leader", teamId.ToString(), squadId.ToString(), soldierName);
+            }
+        }
+        
+        public virtual void SendGetSquadLeaderPacket(int teamId, int squadId)
+        {
+            if (this.IsLoggedIn == true) {
+                this.BuildSendPacket("squad.leader", teamId.ToString(), squadId.ToString());
+            }
+        }
+
+        public virtual void SendSquadListActivePacket(int teamId) {
+            if (this.IsLoggedIn == true) {
+                this.BuildSendPacket("squad.listActive", teamId.ToString());
+            }
+        }
+
+        public virtual void SendSquadListPlayersPacket(int teamId, int squadId) {
+            if (this.IsLoggedIn == true) {
+                this.BuildSendPacket("squad.listPlayers", teamId.ToString(), squadId.ToString());
+            }
+        }
+
+        public virtual void SendSetSquadPrivatePacket(int teamId, int squadId, bool isPrivate) {
+            if (this.IsLoggedIn == true) {
+                this.BuildSendPacket("squad.private", teamId.ToString(), squadId.ToString(), Packet.bltos(isPrivate));
+            }
+        }
+
+        public virtual void SendGetSquadPrivatePacket(int teamId, int squadId) {
+            if (this.IsLoggedIn == true) {
+                this.BuildSendPacket("squad.private", teamId.ToString(), squadId.ToString());
+            }
+        }
 
         #endregion
 
@@ -1243,6 +1329,147 @@ namespace PRoCon.Core.Remote {
                 }
             }
         }
+        #endregion
+
+        #endregion
+
+        #region R-38 player-squad command Response Handlers
+
+        #region player.idleDuration
+        protected virtual void DispatchPlayerIdleDurationResponse(FrostbiteConnection sender, Packet cpRecievedPacket, Packet cpRequestPacket)
+        {
+            if (cpRequestPacket.Words.Count >= 1) {
+                if (this.PlayerIdleState != null) {
+                    if (cpRecievedPacket.Words.Count == 2) {
+                        CultureInfo ci_neutral = new CultureInfo("en-US");
+                        int idleTime = (int)decimal.Parse(cpRecievedPacket.Words[1], ci_neutral);
+                        FrostbiteConnection.RaiseEvent(this.PlayerIdleState.GetInvocationList(), this, cpRequestPacket.Words[1], idleTime);
+                    }
+                }
+            }
+        }
+        #endregion
+
+        #region player.isAlive
+        protected virtual void DispatchPlayerIsAliveResponse(FrostbiteConnection sender, Packet cpRecievedPacket, Packet cpRequestPacket)
+        {
+            if (cpRequestPacket.Words.Count >= 1) {
+                if (this.PlayerIsAlive != null) {
+                    if (cpRecievedPacket.Words.Count == 2) {
+                        FrostbiteConnection.RaiseEvent(this.PlayerIsAlive.GetInvocationList(), this, cpRequestPacket.Words[1], Convert.ToBoolean(cpRecievedPacket.Words[1]));
+                    }
+                }
+            }
+        }
+        #endregion
+
+        #region player.ping
+        protected virtual void DispatchPlayerPingResponse(FrostbiteConnection sender, Packet cpRecievedPacket, Packet cpRequestPacket)
+        {
+            if (cpRequestPacket.Words.Count >= 1) {
+                if (this.PlayerPingedByAdmin != null) {
+                    if (cpRecievedPacket.Words.Count == 2) {
+                        FrostbiteConnection.RaiseEvent(this.PlayerPingedByAdmin.GetInvocationList(), this, cpRequestPacket.Words[1], Convert.ToUInt16(cpRecievedPacket.Words[1]));
+                    }
+
+                }
+            }
+        }
+        #endregion
+
+        #region squad.leader
+        protected virtual void DispatchSquadLeaderResponse(FrostbiteConnection sender, Packet cpRecievedPacket, Packet cpRequestPacket) {
+            if (cpRequestPacket.Words.Count >= 3) {
+                int teamId, squadId;
+                string soldierName;
+
+                if (this.SquadLeader != null) {
+                    if (int.TryParse(cpRequestPacket.Words[1], out teamId) == true && int.TryParse(cpRequestPacket.Words[2], out squadId) == true) {
+                        if (cpRecievedPacket.Words.Count == 2) {
+                            soldierName = cpRecievedPacket.Words[1];
+                            FrostbiteConnection.RaiseEvent(this.SquadLeader.GetInvocationList(), this, teamId, squadId, soldierName);
+                        }
+                        else if (cpRecievedPacket.Words.Count == 1) {
+                            soldierName = cpRequestPacket.Words[3];
+                            FrostbiteConnection.RaiseEvent(this.SquadLeader.GetInvocationList(), this, teamId, squadId, soldierName);
+                        }
+                    }
+                }
+            }
+        }
+        #endregion
+
+        #region squad.listActive
+        protected virtual void DispatchSquadListActiveResponse(FrostbiteConnection sender, Packet cpRecievedPacket, Packet cpRequestPacket)
+        {
+            if (cpRequestPacket.Words.Count >= 2) {
+                if (this.SquadListActive != null) {
+                    if (cpRecievedPacket.Words.Count == 2) {
+                        List<int> squadList = new List<int>();
+                        FrostbiteConnection.RaiseEvent(this.SquadListActive.GetInvocationList(), this, Convert.ToUInt16(cpRequestPacket.Words[1]), Convert.ToUInt16(cpRecievedPacket.Words[1]), squadList);
+                    }
+                    else if (cpRecievedPacket.Words.Count >= 2) {
+                        int value;
+                        List<int> squadList = new List<int>();
+                        for (int i = 2; i < cpRecievedPacket.Words.Count; i++) {
+                            if (int.TryParse(cpRecievedPacket.Words[i], out value) == true) {
+                                squadList.Add(value);
+                            }
+                        }
+                        FrostbiteConnection.RaiseEvent(this.SquadListActive.GetInvocationList(), this, Convert.ToUInt16(cpRequestPacket.Words[1]), Convert.ToUInt16(cpRecievedPacket.Words[1]), squadList);
+                    }
+                }
+            }
+        }
+        #endregion
+
+        #region squad.listPlayers
+        protected virtual void DispatchSquadListPlayersResponse(FrostbiteConnection sender, Packet cpRecievedPacket, Packet cpRequestPacket)
+        {
+            if (cpRequestPacket.Words.Count >= 3) {
+                if (this.SquadListPlayers != null) {
+                    if (cpRecievedPacket.Words.Count == 2) {
+                        List<string> playersInSquad = new List<String>();
+                        FrostbiteConnection.RaiseEvent(this.SquadListPlayers.GetInvocationList(), this, Convert.ToUInt16(cpRequestPacket.Words[1]), Convert.ToUInt16(cpRequestPacket.Words[2]), Convert.ToUInt16(cpRecievedPacket.Words[1]), playersInSquad);
+                    }
+                    else if (cpRecievedPacket.Words.Count >= 2) {
+                        List<string> playersInSquad = new List<string>();
+                        for (int i = 2; i < cpRecievedPacket.Words.Count; i++) {
+                            playersInSquad.Add(cpRecievedPacket.Words[i]);
+                        }
+                        FrostbiteConnection.RaiseEvent(this.SquadListPlayers.GetInvocationList(), this, Convert.ToUInt16(cpRequestPacket.Words[1]), Convert.ToUInt16(cpRequestPacket.Words[2]), Convert.ToUInt16(cpRecievedPacket.Words[1]), playersInSquad);
+                    }
+                }
+            }
+        }
+        #endregion
+
+        #region squad.private
+        protected virtual void DispatchSquadIsPrivateResponse(FrostbiteConnection sender, Packet cpRecievedPacket, Packet cpRequestPacket)
+        {
+            if (cpRequestPacket.Words.Count >= 3)
+            {
+                int teamId, squadId;
+                bool isPrivate;
+
+                if (this.SquadIsPrivate != null)
+                {
+                    if (int.TryParse(cpRequestPacket.Words[1], out teamId) == true && int.TryParse(cpRequestPacket.Words[2], out squadId) == true)
+                    {
+                        if (cpRecievedPacket.Words.Count == 2) {
+                            isPrivate = Convert.ToBoolean(cpRecievedPacket.Words[1]);
+                            FrostbiteConnection.RaiseEvent(this.SquadIsPrivate.GetInvocationList(), this, teamId, squadId, isPrivate);
+                        }
+                        else if (cpRecievedPacket.Words.Count == 1) {
+                            isPrivate = Convert.ToBoolean(cpRequestPacket.Words[3]);
+                            FrostbiteConnection.RaiseEvent(this.SquadIsPrivate.GetInvocationList(), this, teamId, squadId, isPrivate);
+                        }
+                    }
+                }
+            }
+        }
+        #endregion
+
         #endregion
 
         #endregion

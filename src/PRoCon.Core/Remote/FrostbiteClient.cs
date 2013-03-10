@@ -121,6 +121,16 @@ namespace PRoCon.Core.Remote {
         public delegate void PlayerLeaveHandler(FrostbiteClient sender, string playerName, CPlayerInfo cpiPlayer);
         public delegate void PlayerAuthenticatedHandler(FrostbiteClient sender, string playerName, string playerGuid);
         public delegate void PlayerKickedHandler(FrostbiteClient sender, string strSoldierName, string strReason);
+
+        public delegate void PlayerIdleStateHandler(FrostbiteClient sender, string soldierName, int idleTime);
+        public delegate void PlayerIsAliveHandler(FrostbiteClient sender, string soldierName, bool isAlive);
+        public delegate void PlayerPingedByAdminHandler(FrostbiteClient sender, string soldierName, int ping);
+
+        public delegate void SquadLeaderHandler(FrostbiteClient sender, int teamId, int squadId, string soldierName);
+        public delegate void SquadListActiveHandler(FrostbiteClient sender, int teamId, int squadCount, List<int> squadList);
+        public delegate void SquadListPlayersHandler(FrostbiteClient sender, int teamId, int squadId, int playerCount, List<string> playersInSquad);
+        public delegate void SquadIsPrivateHandler(FrostbiteClient sender, int teamId, int squadId, bool isPrivate);
+        
         public delegate void PacketDispatchHandler(FrostbiteClient sender, Packet packetBeforeDispatch, bool isCommandConnection);
         public delegate void PlayerTeamChangeHandler(FrostbiteClient sender, string strSoldierName, int iTeamID, int iSquadID);
         public delegate void PacketDispatchedHandler(FrostbiteClient sender, Packet packetBeforeDispatch, bool isCommandConnection, out bool isProcessed);
@@ -3511,6 +3521,20 @@ namespace PRoCon.Core.Remote {
         public virtual event FrostbiteClient.LimitHandler RoundLockdownCountdown;
         public virtual event FrostbiteClient.LimitHandler RoundWarmupTimeout;
         public virtual event FrostbiteClient.IsEnabledHandler PremiumStatus;
+
+        #region player/squad cmd_handler
+
+        public virtual event FrostbiteClient.PlayerIdleStateHandler PlayerIdleState;
+        public virtual event FrostbiteClient.PlayerIsAliveHandler PlayerIsAlive;
+        public virtual event FrostbiteClient.PlayerPingedByAdminHandler PlayerPingedByAdmin;
+
+        public virtual event FrostbiteClient.SquadLeaderHandler SquadLeader;
+        public virtual event FrostbiteClient.SquadListActiveHandler SquadListActive;
+        public virtual event FrostbiteClient.SquadListPlayersHandler SquadListPlayers;
+        public virtual event FrostbiteClient.SquadIsPrivateHandler SquadIsPrivate;
+        
+        #endregion
+
 
         #endregion
         
