@@ -1377,7 +1377,9 @@ namespace PRoCon.Core.Remote {
             if (cpRequestPacket.Words.Count >= 1) {
                 if (this.PlayerPingedByAdmin != null) {
                     if (cpRecievedPacket.Words.Count == 2) {
-                        FrostbiteConnection.RaiseEvent(this.PlayerPingedByAdmin.GetInvocationList(), this, cpRequestPacket.Words[1], Convert.ToInt32(cpRecievedPacket.Words[1]));
+                        int ping = Convert.ToInt32(cpRecievedPacket.Words[1]);
+                        if (ping == 65535) { ping = -1; }
+                        FrostbiteConnection.RaiseEvent(this.PlayerPingedByAdmin.GetInvocationList(), this, cpRequestPacket.Words[1], ping);
                     }
 
                 }
