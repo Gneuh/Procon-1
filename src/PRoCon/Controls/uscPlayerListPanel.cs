@@ -1064,7 +1064,6 @@ namespace PRoCon {
                 if (String.Compare(playerListItem.SubItems["ping"].Text, ping.ToString()) != 0) { playerListItem.SubItems["ping"].Text = ping.ToString(); }
 
             }
-            this.ArrangePlayers();
         }
 
         /*

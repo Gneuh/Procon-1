@@ -669,9 +669,13 @@ namespace PRoCon.Core.Remote {
                     CPlayerSubset cpsSubset = new CPlayerSubset(cpRequestPacket.Words.GetRange(1, cpRequestPacket.Words.Count - 1));
 
                     FrostbiteConnection.RaiseEvent(this.ListPlayers.GetInvocationList(), this, lstPlayers, cpsSubset);
-                    // fire pings on each player
-                    foreach (CPlayerInfo cpiPlayer in lstPlayers) {
-                        this.SendPlayerPingPacket(cpiPlayer.SoldierName);
+                    // fire pings on each player but not if ping comes with listPlayers
+                    bool doPing = true;
+                    if (lstPlayers.Count > 0) { if (lstPlayers[0].Ping != 0) { doPing = false; } }
+                    if (doPing == true) {
+                        foreach (CPlayerInfo cpiPlayer in lstPlayers) {
+                            this.SendPlayerPingPacket(cpiPlayer.SoldierName);
+                        }
                     }
                 }
             }
@@ -1373,7 +1377,7 @@ namespace PRoCon.Core.Remote {
             if (cpRequestPacket.Words.Count >= 1) {
                 if (this.PlayerPingedByAdmin != null) {
                     if (cpRecievedPacket.Words.Count == 2) {
-                        FrostbiteConnection.RaiseEvent(this.PlayerPingedByAdmin.GetInvocationList(), this, cpRequestPacket.Words[1], Convert.ToUInt16(cpRecievedPacket.Words[1]));
+                        FrostbiteConnection.RaiseEvent(this.PlayerPingedByAdmin.GetInvocationList(), this, cpRequestPacket.Words[1], Convert.ToInt32(cpRecievedPacket.Words[1]));
                     }
 
                 }
@@ -1410,7 +1414,7 @@ namespace PRoCon.Core.Remote {
                 if (this.SquadListActive != null) {
                     if (cpRecievedPacket.Words.Count == 2) {
                         List<int> squadList = new List<int>();
-                        FrostbiteConnection.RaiseEvent(this.SquadListActive.GetInvocationList(), this, Convert.ToUInt16(cpRequestPacket.Words[1]), Convert.ToUInt16(cpRecievedPacket.Words[1]), squadList);
+                        FrostbiteConnection.RaiseEvent(this.SquadListActive.GetInvocationList(), this, Convert.ToUInt32(cpRequestPacket.Words[1]), Convert.ToUInt32(cpRecievedPacket.Words[1]), squadList);
                     }
                     else if (cpRecievedPacket.Words.Count >= 2) {
                         int value;
@@ -1420,7 +1424,7 @@ namespace PRoCon.Core.Remote {
                                 squadList.Add(value);
                             }
                         }
-                        FrostbiteConnection.RaiseEvent(this.SquadListActive.GetInvocationList(), this, Convert.ToUInt16(cpRequestPacket.Words[1]), Convert.ToUInt16(cpRecievedPacket.Words[1]), squadList);
+                        FrostbiteConnection.RaiseEvent(this.SquadListActive.GetInvocationList(), this, Convert.ToUInt32(cpRequestPacket.Words[1]), Convert.ToUInt32(cpRecievedPacket.Words[1]), squadList);
                     }
                 }
             }
@@ -1434,14 +1438,14 @@ namespace PRoCon.Core.Remote {
                 if (this.SquadListPlayers != null) {
                     if (cpRecievedPacket.Words.Count == 2) {
                         List<string> playersInSquad = new List<String>();
-                        FrostbiteConnection.RaiseEvent(this.SquadListPlayers.GetInvocationList(), this, Convert.ToUInt16(cpRequestPacket.Words[1]), Convert.ToUInt16(cpRequestPacket.Words[2]), Convert.ToUInt16(cpRecievedPacket.Words[1]), playersInSquad);
+                        FrostbiteConnection.RaiseEvent(this.SquadListPlayers.GetInvocationList(), this, Convert.ToUInt32(cpRequestPacket.Words[1]), Convert.ToUInt32(cpRequestPacket.Words[2]), Convert.ToUInt32(cpRecievedPacket.Words[1]), playersInSquad);
                     }
                     else if (cpRecievedPacket.Words.Count >= 2) {
                         List<string> playersInSquad = new List<string>();
                         for (int i = 2; i < cpRecievedPacket.Words.Count; i++) {
                             playersInSquad.Add(cpRecievedPacket.Words[i]);
                         }
-                        FrostbiteConnection.RaiseEvent(this.SquadListPlayers.GetInvocationList(), this, Convert.ToUInt16(cpRequestPacket.Words[1]), Convert.ToUInt16(cpRequestPacket.Words[2]), Convert.ToUInt16(cpRecievedPacket.Words[1]), playersInSquad);
+                        FrostbiteConnection.RaiseEvent(this.SquadListPlayers.GetInvocationList(), this, Convert.ToUInt32(cpRequestPacket.Words[1]), Convert.ToUInt32(cpRequestPacket.Words[2]), Convert.ToUInt32(cpRecievedPacket.Words[1]), playersInSquad);
                     }
                 }
             }
