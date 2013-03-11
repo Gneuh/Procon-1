@@ -176,7 +176,7 @@ namespace PRoCon.Core.Plugin {
         public virtual void OnPlayerPingedByAdmin(string soldierName, int ping) { }
 
         public virtual void OnSquadLeader(int teamId, int squadId, string soldierName) { }
-        public virtual void OnSquadListActive(int teamId, int squadClount, List<int> squadList) { }
+        public virtual void OnSquadListActive(int teamId, int squadCount, List<int> squadList) { }
         public virtual void OnSquadListPlayers(int teamId, int squadId, int playerCount, List<string> playersInSquad) { }
         public virtual void OnSquadIsPrivate(int teamId, int squadId, bool isPrivate) { }
 

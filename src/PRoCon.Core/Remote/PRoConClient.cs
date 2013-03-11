@@ -584,7 +584,7 @@ namespace PRoCon.Core.Remote {
         // don't trigger a save.
         public void SaveConnectionConfig() {
 
-            if (this.m_blLoadingSavingConnectionConfig == false && this.Layer != null && this.Layer.AccountPrivileges != null && (this.PluginsManager != null || this.PluginsManager == null && this.IsPRoConConnection == true) && this.MapGeometry != null && this.MapGeometry.MapZones != null)
+            if (this.m_blLoadingSavingConnectionConfig == false && this.Layer != null && this.Layer.AccountPrivileges != null && (this.PluginsManager != null || (this.PluginsManager == null && this.IsPRoConConnection == true && this.Parent.OptionsSettings.LayerHideLocalPlugins == true)) && this.MapGeometry != null && this.MapGeometry.MapZones != null)
             {
 
                 lock (this.m_objConfigSavingLocker) {
