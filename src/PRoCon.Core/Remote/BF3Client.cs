@@ -1414,7 +1414,7 @@ namespace PRoCon.Core.Remote {
                 if (this.SquadListActive != null) {
                     if (cpRecievedPacket.Words.Count == 2) {
                         List<int> squadList = new List<int>();
-                        FrostbiteConnection.RaiseEvent(this.SquadListActive.GetInvocationList(), this, Convert.ToUInt32(cpRequestPacket.Words[1]), Convert.ToUInt32(cpRecievedPacket.Words[1]), squadList);
+                        FrostbiteConnection.RaiseEvent(this.SquadListActive.GetInvocationList(), this, Convert.ToInt32(cpRequestPacket.Words[1]), Convert.ToInt32(cpRecievedPacket.Words[1]), squadList);
                     }
                     else if (cpRecievedPacket.Words.Count >= 2) {
                         int value;
@@ -1424,7 +1424,7 @@ namespace PRoCon.Core.Remote {
                                 squadList.Add(value);
                             }
                         }
-                        FrostbiteConnection.RaiseEvent(this.SquadListActive.GetInvocationList(), this, Convert.ToUInt32(cpRequestPacket.Words[1]), Convert.ToUInt32(cpRecievedPacket.Words[1]), squadList);
+                        FrostbiteConnection.RaiseEvent(this.SquadListActive.GetInvocationList(), this, Convert.ToInt32(cpRequestPacket.Words[1]), Convert.ToInt32(cpRecievedPacket.Words[1]), squadList);
                     }
                 }
             }
@@ -1438,14 +1438,14 @@ namespace PRoCon.Core.Remote {
                 if (this.SquadListPlayers != null) {
                     if (cpRecievedPacket.Words.Count == 2) {
                         List<string> playersInSquad = new List<String>();
-                        FrostbiteConnection.RaiseEvent(this.SquadListPlayers.GetInvocationList(), this, Convert.ToUInt32(cpRequestPacket.Words[1]), Convert.ToUInt32(cpRequestPacket.Words[2]), Convert.ToUInt32(cpRecievedPacket.Words[1]), playersInSquad);
+                        FrostbiteConnection.RaiseEvent(this.SquadListPlayers.GetInvocationList(), this, Convert.ToInt32(cpRequestPacket.Words[1]), Convert.ToInt32(cpRequestPacket.Words[2]), Convert.ToInt32(cpRecievedPacket.Words[1]), playersInSquad);
                     }
                     else if (cpRecievedPacket.Words.Count >= 2) {
                         List<string> playersInSquad = new List<string>();
                         for (int i = 2; i < cpRecievedPacket.Words.Count; i++) {
                             playersInSquad.Add(cpRecievedPacket.Words[i]);
                         }
-                        FrostbiteConnection.RaiseEvent(this.SquadListPlayers.GetInvocationList(), this, Convert.ToUInt32(cpRequestPacket.Words[1]), Convert.ToUInt32(cpRequestPacket.Words[2]), Convert.ToUInt32(cpRecievedPacket.Words[1]), playersInSquad);
+                        FrostbiteConnection.RaiseEvent(this.SquadListPlayers.GetInvocationList(), this, Convert.ToInt32(cpRequestPacket.Words[1]), Convert.ToInt32(cpRequestPacket.Words[2]), Convert.ToInt32(cpRecievedPacket.Words[1]), playersInSquad);
                     }
                 }
             }
