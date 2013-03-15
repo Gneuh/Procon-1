@@ -90,8 +90,12 @@ namespace PRoCon.Core.Remote {
             }
         }
 
-        public double UTCoffset
-        {
+        public bool isLayered {
+            get;
+            set;
+        }
+
+        public double UTCoffset {
             get;
             set;
         }

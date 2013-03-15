@@ -36,6 +36,8 @@ namespace PRoCon.Core.Remote {
         private int iLastMapListOffset;
         private int iLastReservedSlotsListOffset;
 
+        private DateTime dtLastListPlayers;
+
         public BF3Client(FrostbiteConnection connection) : base(connection) {
 
             // Geoff Green 08/10/2011 - bug in BF3 OB version E, sent through with capital P.
@@ -154,7 +156,7 @@ namespace PRoCon.Core.Remote {
 
             this.m_responseDelegates.Add("admin.help", this.DispatchHelpResponse);
 
-            this.GetPacketsPattern = new Regex(this.GetPacketsPattern.ToString() + @"|^reservedSlotsList.list|^player\.idleDuration|^player\.isAlive|^player\.ping|squad\.listActive|^squad\.listPlayers|^squad\.private", RegexOptions.Compiled);
+            this.GetPacketsPattern = new Regex(this.GetPacketsPattern.ToString() + @"|^reservedSlotsList.list|^player\.idleDuration|^player\.isAlive|^player.ping|squad\.listActive|^squad\.listPlayers|^squad\.private", RegexOptions.Compiled);
         }
                 
         public override void FetchStartupVariables() {
@@ -669,12 +671,18 @@ namespace PRoCon.Core.Remote {
                     CPlayerSubset cpsSubset = new CPlayerSubset(cpRequestPacket.Words.GetRange(1, cpRequestPacket.Words.Count - 1));
 
                     FrostbiteConnection.RaiseEvent(this.ListPlayers.GetInvocationList(), this, lstPlayers, cpsSubset);
-                    // fire pings on each player but not if ping comes with listPlayers
-                    bool doPing = true;
-                    if (lstPlayers.Count > 0) { if (lstPlayers[0].Ping != 0) { doPing = false; } }
-                    if (doPing == true) {
-                        foreach (CPlayerInfo cpiPlayer in lstPlayers) {
-                            this.SendPlayerPingPacket(cpiPlayer.SoldierName);
+
+                    if (this.isLayered == false) {
+                        if ((DateTime.Now - this.dtLastListPlayers).TotalSeconds >= 30) {
+                            this.dtLastListPlayers = DateTime.Now;
+                            // fire pings on each player but not if ping comes with listPlayers
+                            bool doPing = true;
+                            if (lstPlayers.Count > 0) { if (lstPlayers[0].Ping != 0) { doPing = false; } }
+                            if (doPing == true) {
+                                foreach (CPlayerInfo cpiPlayer in lstPlayers) {
+                                    this.SendPlayerPingPacket(cpiPlayer.SoldierName);
+                                }
+                            }
                         }
                     }
                 }
@@ -1377,7 +1385,7 @@ namespace PRoCon.Core.Remote {
             if (cpRequestPacket.Words.Count >= 1) {
                 if (this.PlayerPingedByAdmin != null) {
                     if (cpRecievedPacket.Words.Count == 2) {
-                        int ping = Convert.ToInt32(cpRecievedPacket.Words[1]);
+                        int ping = int.Parse(cpRecievedPacket.Words[1]);
                         if (ping == 65535) { ping = -1; }
                         FrostbiteConnection.RaiseEvent(this.PlayerPingedByAdmin.GetInvocationList(), this, cpRequestPacket.Words[1], ping);
                     }

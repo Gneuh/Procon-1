@@ -156,6 +156,7 @@ namespace PRoCon {
             }
 
             this.m_dicPlayers.Clear();
+            this.m_dicPings.Clear();
         }
 
         //public void OnConnectionClosed() {
@@ -221,6 +222,7 @@ namespace PRoCon {
             this.m_prcClient.Game.ListPlayers += new FrostbiteClient.ListPlayersHandler(m_prcClient_ListPlayers);
             if (this.m_prcClient.Game.GameType.Equals("BF3") == true) {
                 this.m_prcClient.Game.PlayerPingedByAdmin += new FrostbiteClient.PlayerPingedByAdminHandler(Game_PlayerPingedByAdmin);
+                this.m_prcClient.ProconAdminPinging += new PRoConClient.ProconAdminPlayerPinged(Game_PlayerPingedByAdmin);
             }
             this.m_prcClient.Game.PlayerJoin += new FrostbiteClient.PlayerEventHandler(m_prcClient_PlayerJoin);
             this.m_prcClient.Game.PlayerLeft += new FrostbiteClient.PlayerLeaveHandler(m_prcClient_PlayerLeft);
@@ -397,6 +399,7 @@ namespace PRoCon {
         
         private readonly object m_objPlayerDictionaryLocker = new object();
         private Dictionary<string, ListViewItem> m_dicPlayers = new Dictionary<string, ListViewItem>();
+        private Dictionary<string, int> m_dicPings = new Dictionary<string, int>();
         //private bool m_blSplitList = false;
         //private int m_iSplitPlayerLists = 1;
 
@@ -875,7 +878,9 @@ namespace PRoCon {
                 this.m_dicPlayers[playerName].Remove();
                 this.m_dicPlayers.Remove(playerName);
             }
-
+            if (this.m_dicPings.ContainsKey(playerName) == true) {
+                this.m_dicPings.Remove(playerName);
+            }
             this.UpdateTeamNames();
 
             this.RefreshSelectedPlayer();
@@ -1002,7 +1007,13 @@ namespace PRoCon {
 
                         if (String.Compare(playerListItem.SubItems["kdr"].Text, kdr) == 0) { playerListItem.SubItems["kdr"].Text = kdr; }
 
-                        if (String.Compare(playerListItem.SubItems["ping"].Text, cpiPlayer.Ping.ToString()) != 0) { playerListItem.SubItems["ping"].Text = cpiPlayer.Ping.ToString(); }
+                        //if (String.Compare(playerListItem.SubItems["ping"].Text, cpiPlayer.Ping.ToString()) != 0) { playerListItem.SubItems["ping"].Text = cpiPlayer.Ping.ToString(); }
+                        if ((this.m_prcClient.Game.GameType.Equals("BF3") == true) && (this.m_dicPings.ContainsKey(cpiPlayer.SoldierName) == true)) {
+                            if (String.Compare(playerListItem.SubItems["ping"].Text, this.m_dicPings[cpiPlayer.SoldierName].ToString()) != 0) { 
+                                playerListItem.SubItems["ping"].Text = this.m_dicPings[cpiPlayer.SoldierName].ToString(); }
+                        } else {
+                            if (String.Compare(playerListItem.SubItems["ping"].Text, cpiPlayer.Ping.ToString()) != 0) { playerListItem.SubItems["ping"].Text = cpiPlayer.Ping.ToString(); }
+                        }
                         
                         if (String.Compare(playerListItem.SubItems["rank"].Text, cpiPlayer.Rank.ToString()) != 0) { playerListItem.SubItems["rank"].Text = cpiPlayer.Ping.ToString(); }
 
@@ -1059,10 +1070,22 @@ namespace PRoCon {
         private void Game_PlayerPingedByAdmin(FrostbiteClient sender, string soldierName, int ping) {
             if (this.m_dicPlayers.ContainsKey(soldierName) == true) {
 
-                ListViewItem playerListItem = this.m_dicPlayers[soldierName];
+                if (this.m_dicPings.ContainsKey(soldierName) == true) {
+                    this.m_dicPings[soldierName] = ping;
+                } else {
+                    this.m_dicPings.Add(soldierName, ping);
+                }
+            }
+        }
 
-                if (String.Compare(playerListItem.SubItems["ping"].Text, ping.ToString()) != 0) { playerListItem.SubItems["ping"].Text = ping.ToString(); }
+        private void Game_PlayerPingedByAdmin(PRoConClient sender, string soldierName, int ping) {
+            if (this.m_dicPlayers.ContainsKey(soldierName) == true) {
 
+                if (this.m_dicPings.ContainsKey(soldierName) == true) {
+                    this.m_dicPings[soldierName] = ping;
+                } else {
+                    this.m_dicPings.Add(soldierName, ping);
+                }
             }
         }
 

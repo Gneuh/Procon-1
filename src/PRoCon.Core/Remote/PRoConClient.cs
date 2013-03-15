@@ -117,6 +117,9 @@ namespace PRoCon.Core.Remote {
         public delegate void ProconAdminYellingHandler(PRoConClient sender, string strAdminStack, string strMessage, int iMessageDuration, CPlayerSubset spsAudience);
         public event ProconAdminYellingHandler ProconAdminYelling;
 
+        public delegate void ProconAdminPlayerPinged(PRoConClient sender, string strSoldierName, int iPing);
+        public event ProconAdminPlayerPinged ProconAdminPinging;
+
         public delegate void ProconPrivilegesHandler(PRoConClient sender, CPrivileges spPrivs);
         public event ProconPrivilegesHandler ProconPrivileges;
 
@@ -1750,6 +1753,23 @@ namespace PRoCon.Core.Remote {
 
                 blCancelPacket = true;
             }
+            // bf3 player.ping
+            else if (this.Game.GameType == "BF3" && cpBeforePacketDispatch.Words.Count >= 3 && String.Compare(cpBeforePacketDispatch.Words[0], "procon.admin.onPlayerPinged", true) == 0) {
+                int iPing = 0;
+                string strSoldierName = cpBeforePacketDispatch.Words[1];
+
+                if (int.TryParse(cpBeforePacketDispatch.Words[2], out iPing) == true) {
+                    if (iPing == 65535) { iPing = -1; }
+
+                    if (this.ProconAdminPinging != null) {
+                        FrostbiteConnection.RaiseEvent(this.ProconAdminPinging.GetInvocationList(), this, strSoldierName, iPing);
+                    }
+                    if (this.PassLayerEvent != null) {
+                        FrostbiteConnection.RaiseEvent(this.PassLayerEvent.GetInvocationList(), this, cpBeforePacketDispatch);
+                    }
+                }
+                blCancelPacket = true;
+            }
             else if (cpBeforePacketDispatch.Words.Count >= 3 && String.Compare(cpBeforePacketDispatch.Words[0], "procon.updated", true) == 0) {
                 //this.SendPacket(new Packet(true, true, cpBeforePacketDispatch.SequenceNumber, new List<string>() { "OK" }));
 
@@ -2089,6 +2109,7 @@ namespace PRoCon.Core.Remote {
 
                         if (String.Compare(cpBeforePacketDispatch.Words[0], "OK", true) == 0) {
                             this.IsPRoConConnection = true;
+                            this.Game.isLayered = true;
                         }
                         else {
                             this.IsPRoConConnection = false;
@@ -2189,7 +2210,25 @@ namespace PRoCon.Core.Remote {
                         }
                     }
                     // end hack
-                    
+                    // BF3 player.ping
+                    else if (cpRequestPacket.Words.Count >= 2 && this.Game.GameType == "BF3" && String.Compare(cpRequestPacket.Words[0], "player.ping", true) == 0
+                             && String.Compare(cpBeforePacketDispatch.Words[0], "OK", true) == 0) {
+                        
+                        string strProconEventsUid = String.Empty;
+
+                        List<string> lstProconUpdatedWords = new List<string>(cpRequestPacket.Words);
+                        lstProconUpdatedWords.Insert(0, "procon.admin.onPlayerPinged");
+                        lstProconUpdatedWords.RemoveAt(1);
+                        lstProconUpdatedWords.Add(cpBeforePacketDispatch.Words[1]);
+                        // Now we pass on the packet to all the clients as an event so they can remain in sync.
+
+                        // Don't pass on anything regarding login
+                        if ((lstProconUpdatedWords.Count >= 4 && (String.Compare(lstProconUpdatedWords[2], "login.plainText", true) == 0 || String.Compare(lstProconUpdatedWords[2], "login.hashed", true) == 0)) == false) {
+                            if (this.PassLayerEvent != null) {
+                                FrostbiteConnection.RaiseEvent(this.PassLayerEvent.GetInvocationList(), this, new Packet(true, false, cpRequestPacket.SequenceNumber, lstProconUpdatedWords));
+                            }
+                        }
+                    }
 
                     if (blCancelUpdateEvent == false) {
                         string strProconEventsUid = String.Empty;
