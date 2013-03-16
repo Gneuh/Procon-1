@@ -269,7 +269,7 @@ namespace PRoCon.Core {
                         {
                             Array.Resize<byte>(ref cdfParent.ma_bCompleteFile, cdfParent.ma_bCompleteFile.Length + iBytesRead);
                         }
-                        else
+                        else if (cdfParent.m_blUnknownSize == false && cdfParent.FileName == "xml")
                         {
                             Array.Resize<byte>(ref cdfParent.ma_bCompleteFile, iBytesRead);
                         }
