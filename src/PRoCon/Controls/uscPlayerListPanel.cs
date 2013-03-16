@@ -662,13 +662,13 @@ namespace PRoCon {
                 proconPlayerListTotalsListItem.SubItems["kills"].Text = proconPlayerListTotalsObject.m_cpiPlayer.Kills.ToString();
                 proconPlayerListTotalsListItem.SubItems["deaths"].Text = proconPlayerListTotalsObject.m_cpiPlayer.Deaths.ToString();
                 proconPlayerListTotalsListItem.SubItems["score"].Text = proconPlayerListTotalsObject.m_cpiPlayer.Score.ToString();
-                //proconPlayerListTotalsListItem.SubItems["ping"].Text = ((SAdditionalPlayerInfo)proconPlayerListTotalsListItem.Tag).m_cpiPlayer.Ping.ToString();
+                proconPlayerListTotalsListItem.SubItems["ping"].Text = proconPlayerListTotalsObject.m_cpiPlayer.Ping.ToString();
                 proconPlayerListTotalsListItem.SubItems["kdr"].Text = String.Format("{0:0.00}", proconPlayerListTotalsObject.m_cpiPlayer.Kdr);
 
                 proconPlayerListAveragesListItem.SubItems["kills"].Text = String.Format("{0:0.00}", (float)proconPlayerListTotalsObject.m_cpiPlayer.Kills / (float)proconPlayerListTotalsObject.m_cpiPlayer.SquadID);
                 proconPlayerListAveragesListItem.SubItems["deaths"].Text = String.Format("{0:0.00}", (float)proconPlayerListTotalsObject.m_cpiPlayer.Deaths / (float)proconPlayerListTotalsObject.m_cpiPlayer.SquadID);
                 proconPlayerListAveragesListItem.SubItems["score"].Text = String.Format("{0:0.00}", (float)proconPlayerListTotalsObject.m_cpiPlayer.Score / (float)proconPlayerListTotalsObject.m_cpiPlayer.SquadID);
-                proconPlayerListAveragesListItem.SubItems["ping"].Text = String.Format("{0:0}", (float)proconPlayerListTotalsObject.m_cpiPlayer.Ping / (float)proconPlayerListTotalsObject.m_cpiPlayer.SquadID);
+                proconPlayerListAveragesListItem.SubItems["ping"].Text = String.Format("{0:0}", (int)proconPlayerListTotalsObject.m_cpiPlayer.Ping / (float)proconPlayerListTotalsObject.m_cpiPlayer.SquadID);
                 proconPlayerListAveragesListItem.SubItems["rank"].Text = String.Format("{0:0}", (int)proconPlayerListTotalsObject.m_cpiPlayer.Rank / (float)proconPlayerListTotalsObject.m_cpiPlayer.SquadID);
                 proconPlayerListAveragesListItem.SubItems["kdr"].Text = String.Format("{0:0.00}", proconPlayerListTotalsObject.m_cpiPlayer.Kdr / (float)proconPlayerListTotalsObject.m_cpiPlayer.SquadID);
 
@@ -1010,7 +1010,9 @@ namespace PRoCon {
                         //if (String.Compare(playerListItem.SubItems["ping"].Text, cpiPlayer.Ping.ToString()) != 0) { playerListItem.SubItems["ping"].Text = cpiPlayer.Ping.ToString(); }
                         if ((this.m_prcClient.Game.GameType.Equals("BF3") == true) && (this.m_dicPings.ContainsKey(cpiPlayer.SoldierName) == true)) {
                             if (String.Compare(playerListItem.SubItems["ping"].Text, this.m_dicPings[cpiPlayer.SoldierName].ToString()) != 0) { 
-                                playerListItem.SubItems["ping"].Text = this.m_dicPings[cpiPlayer.SoldierName].ToString(); }
+                                playerListItem.SubItems["ping"].Text = this.m_dicPings[cpiPlayer.SoldierName].ToString();
+                                cpiPlayer.Ping = this.m_dicPings[cpiPlayer.SoldierName];
+                            }
                         } else {
                             if (String.Compare(playerListItem.SubItems["ping"].Text, cpiPlayer.Ping.ToString()) != 0) { playerListItem.SubItems["ping"].Text = cpiPlayer.Ping.ToString(); }
                         }

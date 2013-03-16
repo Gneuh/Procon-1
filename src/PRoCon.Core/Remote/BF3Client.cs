@@ -685,6 +685,7 @@ namespace PRoCon.Core.Remote {
                             }
                         }
                     }
+                    lstPlayers.Clear();
                 }
             }
         }
@@ -1357,8 +1358,9 @@ namespace PRoCon.Core.Remote {
             if (cpRequestPacket.Words.Count >= 1) {
                 if (this.PlayerIdleState != null) {
                     if (cpRecievedPacket.Words.Count == 2) {
-                        CultureInfo ci_neutral = new CultureInfo("en-US");
-                        int idleTime = (int)decimal.Parse(cpRecievedPacket.Words[1], ci_neutral);
+                        // CultureInfo ci_neutral = new CultureInfo("en-US");
+                        //int idleTime = (int)decimal.Parse(cpRecievedPacket.Words[1], ci_neutral);
+                        int idleTime = (int)decimal.Parse(cpRecievedPacket.Words[1], CultureInfo.InvariantCulture);
                         FrostbiteConnection.RaiseEvent(this.PlayerIdleState.GetInvocationList(), this, cpRequestPacket.Words[1], idleTime);
                     }
                 }
@@ -1470,8 +1472,7 @@ namespace PRoCon.Core.Remote {
                 int teamId, squadId;
                 bool isPrivate;
 
-                if (this.SquadIsPrivate != null)
-                {
+                if (this.SquadIsPrivate != null) {
                     if (int.TryParse(cpRequestPacket.Words[1], out teamId) == true && int.TryParse(cpRequestPacket.Words[2], out squadId) == true)
                     {
                         if (cpRecievedPacket.Words.Count == 2) {
