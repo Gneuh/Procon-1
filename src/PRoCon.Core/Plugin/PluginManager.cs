@@ -674,8 +674,9 @@ namespace PRoCon.Core.Plugin {
             catch (Exception) { }
         }
 
-        private void LoadPlugin(string pluginClassName, CPRoConPluginLoaderFactory pluginFactory) {
+        private void LoadPlugin(string pluginClassName, CPRoConPluginLoaderFactory pluginFactory, bool blSandboxDisabled) {
 
+            bool blSandboxEnabled = (blSandboxDisabled == true) ? false : true;
             string outputAssembly = Path.Combine(this.PluginBaseDirectory, pluginClassName + ".dll");
 
             if (File.Exists(outputAssembly) == true) {
@@ -714,7 +715,8 @@ namespace PRoCon.Core.Plugin {
                 List<string> lstPluginEnv = new List<string>( new string[] { Assembly.GetExecutingAssembly().GetName().Version.ToString(), 
                                                                              this.m_client.GameType, 
                                                                              this.m_client.CurrentServerInfo.GameMod.ToString(),
-                                                                             this.m_client.VersionNumber
+                                                                             this.m_client.VersionNumber,
+                                                                             blSandboxEnabled.ToString()
                                                                             });
                 this.InvokeOnLoaded(pluginClassName, "OnPluginLoadingEnv", lstPluginEnv);
 
@@ -807,7 +809,7 @@ namespace PRoCon.Core.Plugin {
                     if (this.IgnoredPluginClassNames.Contains(className) == false) {
                         this.CompilePlugin(pluginFile, className, pluginsCodeDomProvider, parameters);
 
-                        this.LoadPlugin(className, pluginFactory);
+                        this.LoadPlugin(className, pluginFactory, pluginSandboxPermissions.IsUnrestricted());
                     }
                     else {
                         this.WritePluginConsole("Compiling {0}... ^1^bIgnored", className);
