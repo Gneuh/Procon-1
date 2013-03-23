@@ -1360,7 +1360,7 @@ namespace PRoCon.Core.Remote {
                     if (cpRecievedPacket.Words.Count == 2) {
                         // CultureInfo ci_neutral = new CultureInfo("en-US");
                         //int idleTime = (int)decimal.Parse(cpRecievedPacket.Words[1], ci_neutral);
-                        int idleTime = (int)decimal.Parse(cpRecievedPacket.Words[1], CultureInfo.InvariantCulture);
+                        int idleTime = (int)decimal.Parse(cpRecievedPacket.Words[1], CultureInfo.InvariantCulture.NumberFormat);
                         FrostbiteConnection.RaiseEvent(this.PlayerIdleState.GetInvocationList(), this, cpRequestPacket.Words[1], idleTime);
                     }
                 }
