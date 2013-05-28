@@ -580,6 +580,7 @@ namespace PRoCon.Core.Plugin {
             CompilerParameters parameters = new CompilerParameters();
 
             parameters.ReferencedAssemblies.Add("System.dll");
+            parameters.ReferencedAssemblies.Add("System.Core.dll");
             parameters.ReferencedAssemblies.Add("System.Data.dll");
             parameters.ReferencedAssemblies.Add("System.Windows.Forms.dll");
             parameters.ReferencedAssemblies.Add("System.Xml.dll");
@@ -760,7 +761,10 @@ namespace PRoCon.Core.Plugin {
                 this.MoveLegacyPlugins();
 
                 this.WritePluginConsole("Creating compiler..");
-                CodeDomProvider pluginsCodeDomProvider = CodeDomProvider.CreateProvider("CSharp");
+                // CodeDomProvider pluginsCodeDomProvider = CodeDomProvider.CreateProvider("CSharp");
+                Dictionary<String, String> providerOptions = new Dictionary<String, String>();
+                providerOptions.Add("CompilerVersion", "v3.5");
+                CodeDomProvider pluginsCodeDomProvider = new CSharpCodeProvider(providerOptions);
 
                 this.WritePluginConsole("Configuring compiler..");
                 CompilerParameters parameters = GenerateCompilerParameters();
