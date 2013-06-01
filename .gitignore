@@ -1,0 +1,14 @@
+/builds
+/src/PRoCon/bin
+/src/PRoCon/obj
+/src/PRoCon.Console/bin
+/src/PRoCon.Console/obj
+/src/PRoCon.Core/bin
+/src/PRoCon.Core/obj
+/src/PRoCon.Service/bin
+/src/PRoCon.Service/obj
+/src/PRoConUpdater/bin
+/src/PRoConUpdater/obj
+/src/PRoCon-VS2008E.v11.suo
+/src/PRoCon-VS2008E.suo
+/src/PRoCon-VS2008E.sln.docstates.suo
