@@ -181,6 +181,7 @@ namespace PRoCon.Core {
             try {
                 this.m_wrRequest = (HttpWebRequest)HttpWebRequest.Create(this.m_strDownloadSource);
                 this.m_wrRequest.Referer = "http://www.phogue.net/procon/";
+                this.m_wrRequest.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
 
                 this.m_wrRequest.Headers.Add(System.Net.HttpRequestHeader.AcceptEncoding, "gzip");
                 this.m_wrRequest.Proxy = null;
@@ -215,15 +216,10 @@ namespace PRoCon.Core {
                         FrostbiteConnection.RaiseEvent(cdfParent.DownloadDiscoveredFileSize.GetInvocationList(), cdfParent);
                     }
                 }
-                else {
-                    cdfParent.ma_bCompleteFile = new byte[0];
-                }
+
+                cdfParent.ma_bCompleteFile = new byte[0];
 
                 cdfParent.m_stmResponseStream = cdfParent.m_wrResponse.GetResponseStream();
-
-                if (cdfParent.m_wrResponse.Headers.Get("Content-Encoding") != null && cdfParent.m_wrResponse.Headers.Get("Content-Encoding").ToLower() == "gzip") {
-                    cdfParent.m_stmResponseStream = new GZipStream(cdfParent.m_stmResponseStream, CompressionMode.Decompress);
-                }
 
                 IAsyncResult arResult = cdfParent.m_stmResponseStream.BeginRead(cdfParent.ma_bBufferStream, 0, CDownloadFile.INT_BUFFER_SIZE, new AsyncCallback(cdfParent.ReadCallBack), cdfParent);
 
@@ -265,16 +261,16 @@ namespace PRoCon.Core {
                     int iBytesRead = -1;
                     if ((iBytesRead = cdfParent.m_stmResponseStream.EndRead(ar)) > 0) {
 
-                        if (cdfParent.m_blUnknownSize == true)
-                        {
-                            Array.Resize<byte>(ref cdfParent.ma_bCompleteFile, cdfParent.ma_bCompleteFile.Length + iBytesRead);
-                        }
-                        else if (cdfParent.m_blUnknownSize == false && cdfParent.FileName == "xml")
-                        {
-                            Array.Resize<byte>(ref cdfParent.ma_bCompleteFile, iBytesRead);
+
+                        if (this.CompleteFileData.Length < this.BytesDownloaded + iBytesRead) {
+                            byte[] resizedFileData = new byte[this.CompleteFileData.Length + iBytesRead];
+
+                            this.CompleteFileData.CopyTo(resizedFileData, 0);
+
+                            this.ma_bCompleteFile = resizedFileData;
                         }
 
-                        Array.Copy(cdfParent.ma_bBufferStream, 0, cdfParent.ma_bCompleteFile, cdfParent.m_iReadBytes, iBytesRead);
+                        Array.Copy(this.ma_bBufferStream, 0, this.CompleteFileData, this.BytesDownloaded, iBytesRead);
                         cdfParent.m_iReadBytes += iBytesRead;
 
                         IAsyncResult arResult = cdfParent.m_stmResponseStream.BeginRead(cdfParent.ma_bBufferStream, 0, CDownloadFile.INT_BUFFER_SIZE, new AsyncCallback(cdfParent.ReadCallBack), cdfParent);

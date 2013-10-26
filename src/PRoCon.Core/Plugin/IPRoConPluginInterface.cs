@@ -24,6 +24,8 @@ using System.Collections.Generic;
 namespace PRoCon.Core.Plugin {
     public interface IPRoConPluginInterface {
 
+        String ClassName { get; set; }
+
         object Invoke(string strMethodName, params object[] a_objParameters);
 
         // Compile and init events

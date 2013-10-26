@@ -220,8 +220,10 @@ namespace PRoCon.Controls {
                             if (client.GameType == "BF3" || client.GameType == "MOHW") {
                                 iTmpCurRounds++;
                             }
-                            //replacedTemplate = replacedTemplate.Replace("%server_additonal%", this.m_startPageTemplates.GetLocalized("connections.online.additional", client.GetFriendlyGamemode(client.CurrentServerInfo.GameMode), client.GetFriendlyMapname(client.CurrentServerInfo.Map), client.CurrentServerInfo.CurrentRound.ToString(), client.CurrentServerInfo.TotalRounds.ToString()));
-                            replacedTemplate = replacedTemplate.Replace("%server_additonal%", this.m_startPageTemplates.GetLocalized("connections.online.additional", tmpMap.GameMode, tmpMap.PublicLevelName, iTmpCurRounds.ToString(), client.CurrentServerInfo.TotalRounds.ToString()));
+
+                            if (tmpMap != null) {
+                                replacedTemplate = replacedTemplate.Replace("%server_additonal%", this.m_startPageTemplates.GetLocalized("connections.online.additional", tmpMap.GameMode, tmpMap.PublicLevelName, iTmpCurRounds.ToString(), client.CurrentServerInfo.TotalRounds.ToString()));
+                            }
                         }
 
                         playerCount += client.CurrentServerInfo.PlayerCount;

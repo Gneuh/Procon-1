@@ -413,9 +413,9 @@ namespace PRoCon.Core.Events {
         {
 
             if (this.CapturedEvents.Contains(capture.Event) == true) {
-                capture.LoggedTime = capture.LoggedTime.ToUniversalTime().AddHours(m_prcClient.Game.UTCoffset).ToLocalTime();
+                capture.LoggedTime = capture.LoggedTime.ToUniversalTime().AddHours(m_prcClient.Game.UtcOffset).ToLocalTime();
                 if (this.Logging == true) {
-                    this.WriteLogLine(String.Format("{0}\t{1}\t{2}\t{3}\t{4}", capture.eType.ToString(), capture.LoggedTime.ToString("MM/dd/yyyy HH:mm:ss"), capture.InstigatingAdmin, capture.Event.ToString(), capture.EventText.Replace("{", "{{").Replace("}", "}}")));
+                    this.WriteLogLine(String.Format("{0}\t{1}\t{2}\t{3}\t{4}", capture.EventType.ToString(), capture.LoggedTime.ToString("MM/dd/yyyy HH:mm:ss"), capture.InstigatingAdmin, capture.Event.ToString(), capture.EventText.Replace("{", "{{").Replace("}", "}}")));
                 }
 
                 this.LogEntries.Enqueue(capture);

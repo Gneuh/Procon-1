@@ -19,87 +19,77 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Diagnostics;
 using System.IO;
-
-using Ionic.Zip;
-using System.Security.Cryptography;
 using System.Reflection;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading;
-using System.Windows.Forms;
+using Ionic.Zip;
+using PRoCon.Core.Remote;
 
 namespace PRoCon.Core.AutoUpdates {
-    using Core.Remote;
-
     public class AutoUpdater {
+        public delegate void CheckingUpdatesHandler();
+
+        public delegate void CustomDownloadErrorHandler(string strError);
 
         public delegate void DownloadUnzipCompleteHandler();
-        public event DownloadUnzipCompleteHandler DownloadUnzipComplete;
 
-        public delegate void CheckingUpdatesHandler();
+        public delegate void UpdateDownloadingHandler(CDownloadFile cdfDownloading);
+
+        public static string[] Arguments;
+        protected readonly List<CDownloadFile> DownloadingGameConfigs;
+
+        protected readonly List<CDownloadFile> DownloadingLocalizations;
+
+        protected readonly object DownloadingGameConfigsLock = new object();
+        protected readonly object DownloadingLocalizationsLock = new object();
+
+        protected readonly PRoConApplication Application;
+
+        protected bool GameConfigHint;
+        protected CDownloadFile ProconUpdate;
+
+        public AutoUpdater(PRoConApplication praApplication, string[] args) {
+            Arguments = args;
+            Application = praApplication;
+
+            VersionChecker = new CDownloadFile("https://repo.myrcon.com/procon1/version3.php");
+            VersionChecker.DownloadComplete += new CDownloadFile.DownloadFileEventDelegate(VersionChecker_DownloadComplete);
+            DownloadingLocalizations = new List<CDownloadFile>();
+            DownloadingGameConfigs = new List<CDownloadFile>();
+        }
+
+        public CDownloadFile VersionChecker { get; private set; }
+        public event DownloadUnzipCompleteHandler DownloadUnzipComplete;
         public event CheckingUpdatesHandler CheckingUpdates;
         public event CheckingUpdatesHandler NoVersionAvailable;
         public event CheckingUpdatesHandler GameConfigUpdated;
-
-        public delegate void UpdateDownloadingHandler(CDownloadFile cdfDownloading);
         public event UpdateDownloadingHandler UpdateDownloading;
-
-        public delegate void CustomDownloadErrorHandler(string strError);
         public event CustomDownloadErrorHandler CustomDownloadError;
 
-        private readonly object m_objDownloadingLocalizations = new object();
-        private List<CDownloadFile> m_lstDownloadingLocalizations;
-
-        private readonly object m_objDownloadingGameConfigs = new object();
-        private List<CDownloadFile> m_lstDownloadingGameConfigs;
-
-        private CDownloadFile m_cdfPRoConUpdate;
-
-        // Now only used if they manually check for an update and it comes back false.
-        //private bool m_blPopupVersionResults = false;
-
-        private PRoConApplication m_praApplication;
-
-        public CDownloadFile VersionChecker {
-            get;
-            private set;
-        }
-
-        private bool m_blGameConfigHint;
-
-        public AutoUpdater(PRoConApplication praApplication, string[] args) {
-            AutoUpdater.m_strArgs = args;
-            this.m_praApplication = praApplication;
-
-            this.VersionChecker = new CDownloadFile("http://www.phogue.net/procon/version3.php");
-            this.VersionChecker.DownloadComplete += new CDownloadFile.DownloadFileEventDelegate(VersionChecker_DownloadComplete);
-            this.m_lstDownloadingLocalizations = new List<CDownloadFile>();
-            this.m_lstDownloadingGameConfigs = new List<CDownloadFile>();
-        }
-
         public void CheckVersion() {
-            if (this.m_praApplication.BlockUpdateChecks == false) {
-
-                if (this.CheckingUpdates != null) {
-                    FrostbiteConnection.RaiseEvent(this.CheckingUpdates.GetInvocationList());
+            if (Application.BlockUpdateChecks == false) {
+                if (CheckingUpdates != null) {
+                    FrostbiteConnection.RaiseEvent(CheckingUpdates.GetInvocationList());
                 }
 
-                this.VersionChecker.BeginDownload();
+                VersionChecker.BeginDownload();
             }
         }
 
         private void DownloadLocalizationFile(string strDownloadSource, string strLocalizationFilename) {
-            lock (this.m_objDownloadingLocalizations) {
-                CDownloadFile cdfUpdatedLocalization = new CDownloadFile(strDownloadSource, strLocalizationFilename);
+            lock (DownloadingLocalizationsLock) {
+                var cdfUpdatedLocalization = new CDownloadFile(strDownloadSource, strLocalizationFilename);
                 cdfUpdatedLocalization.DownloadComplete += new CDownloadFile.DownloadFileEventDelegate(m_cdfUpdatedLocalization_DownloadComplete);
-                this.m_lstDownloadingLocalizations.Add(cdfUpdatedLocalization);
+                DownloadingLocalizations.Add(cdfUpdatedLocalization);
 
                 cdfUpdatedLocalization.BeginDownload();
             }
         }
 
         private void m_cdfUpdatedLocalization_DownloadComplete(CDownloadFile cdfSender) {
-
             string strLocalizationFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Localization");
 
             try {
@@ -111,97 +101,85 @@ namespace PRoCon.Core.AutoUpdates {
                     zip.ExtractAll(strLocalizationFolder, ExtractExistingFileAction.OverwriteSilently);
                 }
 
-                this.m_praApplication.LoadLocalizationFiles();
-                //this.Invoke(new ReloadLocalizationsDelegate(this.m_frmOptions.LoadLocalizationFiles));
+                Application.LoadLocalizationFiles();
             }
-            catch (Exception) { }
+            catch (Exception) {
+            }
         }
 
-        private void DownloadGameConfigFile(string strDownloadSource, string strGameConfigFilename)
-        {
-            lock (this.m_objDownloadingGameConfigs)
-            {
-                CDownloadFile cdfUpdatedGameConfig = new CDownloadFile(strDownloadSource, strGameConfigFilename);
+        private void DownloadGameConfigFile(string strDownloadSource, string strGameConfigFilename) {
+            lock (DownloadingGameConfigsLock) {
+                var cdfUpdatedGameConfig = new CDownloadFile(strDownloadSource, strGameConfigFilename);
                 cdfUpdatedGameConfig.DownloadComplete += new CDownloadFile.DownloadFileEventDelegate(m_cdfUpdatedGameConfig_DownloadComplete);
-                this.m_lstDownloadingGameConfigs.Add(cdfUpdatedGameConfig);
+                DownloadingGameConfigs.Add(cdfUpdatedGameConfig);
 
                 cdfUpdatedGameConfig.BeginDownload();
             }
         }
 
-        private void m_cdfUpdatedGameConfig_DownloadComplete(CDownloadFile cdfSender)
-        {
-
+        private void m_cdfUpdatedGameConfig_DownloadComplete(CDownloadFile cdfSender) {
             string strGameConfigFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Configs");
 
-            try
-            {
-                if (Directory.Exists(strGameConfigFolder) == false)
-                {
+            try {
+                if (Directory.Exists(strGameConfigFolder) == false) {
                     Directory.CreateDirectory(strGameConfigFolder);
                 }
 
-                using (ZipFile zip = ZipFile.Read(cdfSender.CompleteFileData))
-                {
+                using (ZipFile zip = ZipFile.Read(cdfSender.CompleteFileData)) {
                     zip.ExtractAll(strGameConfigFolder, ExtractExistingFileAction.OverwriteSilently);
                 }
 
                 // GameConfigs require Procon restart
-                if (this.m_blGameConfigHint == false)
-                {
-                    this.GameConfigInfo();
+                if (GameConfigHint == false) {
+                    GameConfigInfo();
                 }
             }
-            catch (Exception) { }
+            catch (Exception) {
+            }
         }
 
-        private void GameConfigInfo()
-        {
-            this.m_blGameConfigHint = true;
-            if (this.GameConfigUpdated != null)
-            {
-                FrostbiteConnection.RaiseEvent(this.GameConfigUpdated.GetInvocationList());
-            }   
+        private void GameConfigInfo() {
+            GameConfigHint = true;
+            if (GameConfigUpdated != null) {
+                FrostbiteConnection.RaiseEvent(GameConfigUpdated.GetInvocationList());
+            }
         }
 
-        private string MD5File(string strFileName)
-        {
-            StringBuilder sbStringifyHash = new StringBuilder();
+        private string MD5File(string strFileName) {
+            var sbStringifyHash = new StringBuilder();
 
             if (File.Exists(strFileName) == true) {
                 MD5 md5Hasher = MD5.Create();
 
-                byte[] a_bHash = md5Hasher.ComputeHash(File.ReadAllBytes(strFileName));
+                byte[] hash = md5Hasher.ComputeHash(File.ReadAllBytes(strFileName));
 
-                for (int x = 0; x < a_bHash.Length; x++) {
-                    sbStringifyHash.Append(a_bHash[x].ToString("x2"));
+                for (int x = 0; x < hash.Length; x++) {
+                    sbStringifyHash.Append(hash[x].ToString("x2"));
                 }
             }
 
             return sbStringifyHash.ToString();
         }
 
-        private string MD5Data(byte[] a_bData) {
-            StringBuilder sbStringifyHash = new StringBuilder();
+        private string MD5Data(byte[] data) {
+            var sbStringifyHash = new StringBuilder();
 
             MD5 md5Hasher = MD5.Create();
 
-            byte[] a_bHash = md5Hasher.ComputeHash(a_bData);
+            byte[] hash = md5Hasher.ComputeHash(data);
 
-            for (int x = 0; x < a_bHash.Length; x++) {
-                sbStringifyHash.Append(a_bHash[x].ToString("x2"));
+            for (int x = 0; x < hash.Length; x++) {
+                sbStringifyHash.Append(hash[x].ToString("x2"));
             }
 
             return sbStringifyHash.ToString();
         }
 
-        private void VersionChecker_DownloadComplete(CDownloadFile cdfSender) {
- 
-            string[] a_strVersionData = System.Text.Encoding.UTF8.GetString(cdfSender.CompleteFileData).Split('\n');
-            this.m_blGameConfigHint = false;
+        private void VersionChecker_DownloadComplete(CDownloadFile sender) {
+            string[] versionData = Encoding.UTF8.GetString(sender.CompleteFileData).Split('\n');
+            GameConfigHint = false;
 
-            if (a_strVersionData.Length >= 4 && (this.m_cdfPRoConUpdate == null || this.m_cdfPRoConUpdate.FileDownloading == false)) {
-
+            if (versionData.Length >= 4 && (ProconUpdate == null || ProconUpdate.FileDownloading == false)) {
                 bool blContinueFileDownload = true;
 
                 try {
@@ -209,111 +187,99 @@ namespace PRoCon.Core.AutoUpdates {
                         AssemblyName proconAssemblyName = AssemblyName.GetAssemblyName(Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Updates"), "PRoCon.exe"));
 
                         // If an update has already been downloaded but not installed..
-                        if (new Version(a_strVersionData[0]).CompareTo(proconAssemblyName.Version) >= 0) {
+                        if (new Version(versionData[0]).CompareTo(proconAssemblyName.Version) >= 0) {
                             blContinueFileDownload = false;
                         }
                     }
                 }
-                catch (Exception e) { }
+                catch (Exception) {
+                }
 
                 if (blContinueFileDownload == true) {
-
-                    if (new Version(a_strVersionData[0]).CompareTo(Assembly.GetExecutingAssembly().GetName().Version) > 0) {
+                    if (new Version(versionData[0]).CompareTo(Assembly.GetExecutingAssembly().GetName().Version) > 0) {
                         // Download file, alert or auto apply once complete with release notes.
-                        this.m_cdfPRoConUpdate = new CDownloadFile(a_strVersionData[2], a_strVersionData[3]);
-                        this.m_cdfPRoConUpdate.DownloadComplete += new CDownloadFile.DownloadFileEventDelegate(cdfPRoConUpdate_DownloadComplete);
+                        ProconUpdate = new CDownloadFile(versionData[2], versionData[3]);
+                        ProconUpdate.DownloadComplete += new CDownloadFile.DownloadFileEventDelegate(cdfPRoConUpdate_DownloadComplete);
 
-                        if (this.UpdateDownloading != null) {
-                            FrostbiteConnection.RaiseEvent(this.UpdateDownloading.GetInvocationList(), this.m_cdfPRoConUpdate);
+                        if (UpdateDownloading != null) {
+                            FrostbiteConnection.RaiseEvent(UpdateDownloading.GetInvocationList(), ProconUpdate);
                         }
 
-                        this.m_cdfPRoConUpdate.BeginDownload();
+                        ProconUpdate.BeginDownload();
                     }
                     else {
-
-                        if (this.NoVersionAvailable != null) {
-                            FrostbiteConnection.RaiseEvent(this.NoVersionAvailable.GetInvocationList());
+                        if (NoVersionAvailable != null) {
+                            FrostbiteConnection.RaiseEvent(NoVersionAvailable.GetInvocationList());
                         }
 
-                        lock (this.m_objDownloadingLocalizations) {
-                            foreach (CDownloadFile cdfFile in this.m_lstDownloadingLocalizations) {
+                        lock (DownloadingLocalizationsLock) {
+                            foreach (CDownloadFile cdfFile in DownloadingLocalizations) {
                                 cdfFile.EndDownload();
                             }
 
-                            this.m_lstDownloadingLocalizations.Clear();
+                            DownloadingLocalizations.Clear();
                         }
 
-                        lock (this.m_objDownloadingGameConfigs) {
-                            foreach (CDownloadFile cdfFile in this.m_lstDownloadingGameConfigs) {
+                        lock (DownloadingGameConfigsLock) {
+                            foreach (CDownloadFile cdfFile in DownloadingGameConfigs) {
                                 cdfFile.EndDownload();
                             }
 
-                            this.m_lstDownloadingGameConfigs.Clear();
+                            DownloadingGameConfigs.Clear();
                         }
 
-                        //ProConClient prcAnyClient = null;
-                        //if (this.Connections.Count > 0) {
-                        //    prcAnyClient = this.Connections[0];
-                        //}
+                        for (int i = 4; i < versionData.Length; i++) {
+                            List<string> lstExtensibilityVersion = Packet.Wordify(versionData[i]);
 
-
-                        for (int i = 4; i < a_strVersionData.Length; i++) {
-                            //string[] a_strVersionMd5s = a_strVersionData[i].Split(new char[] { ' ' });
-                            List<string> lstExtensibilityVersion = Packet.Wordify(a_strVersionData[i]);
-
-                            if (lstExtensibilityVersion.Count >= 4 && String.Compare(lstExtensibilityVersion[0], "localization", true) == 0) {
-
+                            if (lstExtensibilityVersion.Count >= 4 && System.String.Compare(lstExtensibilityVersion[0], "localization", System.StringComparison.OrdinalIgnoreCase) == 0) {
                                 try {
                                     if (File.Exists(Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Localization"), lstExtensibilityVersion[2])) == true) {
-                                        if (String.Compare(lstExtensibilityVersion[1], this.MD5File(Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Localization"), lstExtensibilityVersion[2])), true) != 0) {
+                                        if (System.String.Compare(lstExtensibilityVersion[1], MD5File(Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Localization"), lstExtensibilityVersion[2])), System.StringComparison.OrdinalIgnoreCase) != 0) {
                                             // Download new localization file and tell options to reload it once completed.
-                                            this.DownloadLocalizationFile(lstExtensibilityVersion[3], lstExtensibilityVersion[2]);
+                                            DownloadLocalizationFile(lstExtensibilityVersion[3], lstExtensibilityVersion[2]);
                                             Thread.Sleep(100); // I don't know how many languages there may be later so sleep on it to prevent spam.
                                         }
                                     }
                                     else {
                                         // Download new localization file and tell options to load it once completed.
-                                        this.DownloadLocalizationFile(lstExtensibilityVersion[3], lstExtensibilityVersion[2]);
+                                        DownloadLocalizationFile(lstExtensibilityVersion[3], lstExtensibilityVersion[2]);
                                         Thread.Sleep(100);
                                     }
                                 }
-                                catch (Exception) { }
+                                catch (Exception) {
+                                }
                             }
 
                             // GameConfigs
-                            if (lstExtensibilityVersion.Count >= 4 && String.Compare(lstExtensibilityVersion[0], "gameconfig", true) == 0 &&
-                                this.m_praApplication.OptionsSettings.AutoCheckGameConfigsForUpdates == true)
-                            {
+                            if (lstExtensibilityVersion.Count >= 4 && System.String.Compare(lstExtensibilityVersion[0], "gameconfig", System.StringComparison.OrdinalIgnoreCase) == 0 && Application.OptionsSettings.AutoCheckGameConfigsForUpdates == true) {
                                 try {
-                                    if (File.Exists(Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Configs"), lstExtensibilityVersion[2])) == true)
-                                    {
-                                        if (String.Compare(lstExtensibilityVersion[1], this.MD5File(Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Configs"), lstExtensibilityVersion[2])), true) != 0)
-                                        {
+                                    if (File.Exists(Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Configs"), lstExtensibilityVersion[2])) == true) {
+                                        if (System.String.Compare(lstExtensibilityVersion[1], MD5File(Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Configs"), lstExtensibilityVersion[2])), System.StringComparison.OrdinalIgnoreCase) != 0) {
                                             // Download new GameConfig file 
-                                            this.DownloadGameConfigFile(lstExtensibilityVersion[3], lstExtensibilityVersion[2]);
+                                            DownloadGameConfigFile(lstExtensibilityVersion[3], lstExtensibilityVersion[2]);
                                             Thread.Sleep(100); // we don't know how many will come.
                                         }
-                                    } else {
+                                    }
+                                    else {
                                         // Download new GameConfig file
-                                        this.DownloadGameConfigFile(lstExtensibilityVersion[3], lstExtensibilityVersion[2]);
+                                        DownloadGameConfigFile(lstExtensibilityVersion[3], lstExtensibilityVersion[2]);
                                         Thread.Sleep(100);
                                     }
                                 }
-                                catch (Exception) { }
+                                catch (Exception) {
+                                }
                             }
                         }
                     }
                 }
                 else {
-                    this.DownloadedUnzippedComplete();
+                    DownloadedUnzippedComplete();
                 }
             }
         }
 
         private void cdfPRoConUpdate_DownloadComplete(CDownloadFile cdfSender) {
-
-            if (String.Compare(this.MD5Data(cdfSender.CompleteFileData), (string)cdfSender.AdditionalData, true) == 0) {
-
+            if (System.String.Compare(MD5Data(cdfSender.CompleteFileData), (string) cdfSender.AdditionalData, System.StringComparison.OrdinalIgnoreCase) == 0) {
                 string strUpdatesFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Updates");
 
                 try {
@@ -325,19 +291,19 @@ namespace PRoCon.Core.AutoUpdates {
                         zip.ExtractAll(strUpdatesFolder, ExtractExistingFileAction.OverwriteSilently);
                     }
 
-                    this.DownloadedUnzippedComplete();
+                    DownloadedUnzippedComplete();
                 }
                 catch (Exception e) {
-                    if (this.CustomDownloadError != null) {
-                        FrostbiteConnection.RaiseEvent(this.CustomDownloadError.GetInvocationList(), e.Message);
+                    if (CustomDownloadError != null) {
+                        FrostbiteConnection.RaiseEvent(CustomDownloadError.GetInvocationList(), e.Message);
                     }
 
                     //this.Invoke(new DownloadErrorDelegate(DownloadError_Callback), e.Message);
                 }
             }
             else {
-                if (this.CustomDownloadError != null) {
-                    FrostbiteConnection.RaiseEvent(this.CustomDownloadError.GetInvocationList(), "Downloaded file failed checksum, please try again or download direct from http://phogue.net");
+                if (CustomDownloadError != null) {
+                    FrostbiteConnection.RaiseEvent(CustomDownloadError.GetInvocationList(), "Downloaded file failed checksum, please try again or download direct from http://phogue.net");
                 }
 
                 //this.Invoke(new DownloadErrorDelegate(DownloadError_Callback), "Downloaded file failed checksum, please try again or download direct from http://phogue.net");
@@ -345,44 +311,40 @@ namespace PRoCon.Core.AutoUpdates {
         }
 
         private void DownloadedUnzippedComplete() {
-
-            if (this.m_praApplication.OptionsSettings.AutoApplyUpdates == true) {
-                AutoUpdater.BeginUpdateProcess(this.m_praApplication);
+            if (Application.OptionsSettings.AutoApplyUpdates == true) {
+                BeginUpdateProcess(Application);
             }
             else {
-                if (this.DownloadUnzipComplete != null) {
-                    FrostbiteConnection.RaiseEvent(this.DownloadUnzipComplete.GetInvocationList());
+                if (DownloadUnzipComplete != null) {
+                    FrostbiteConnection.RaiseEvent(DownloadUnzipComplete.GetInvocationList());
                 }
             }
         }
 
         public void Shutdown() {
-            lock (this.m_objDownloadingLocalizations) {
-                if (this.m_cdfPRoConUpdate != null) this.m_cdfPRoConUpdate.EndDownload();
-                if (this.VersionChecker != null) this.VersionChecker.EndDownload();
+            lock (DownloadingLocalizationsLock) {
+                if (ProconUpdate != null)
+                    ProconUpdate.EndDownload();
+                if (VersionChecker != null)
+                    VersionChecker.EndDownload();
 
-                foreach (CDownloadFile cdfFile in this.m_lstDownloadingLocalizations) {
+                foreach (CDownloadFile cdfFile in DownloadingLocalizations) {
                     cdfFile.EndDownload();
                 }
 
-                this.m_lstDownloadingLocalizations.Clear();
+                DownloadingLocalizations.Clear();
             }
 
-            if (this.m_lstDownloadingGameConfigs != null)
-            {
-                lock (this.m_objDownloadingGameConfigs)
-                {
-                    foreach (CDownloadFile cdfFile in this.m_lstDownloadingGameConfigs)
-                    {
+            if (DownloadingGameConfigs != null) {
+                lock (DownloadingGameConfigsLock) {
+                    foreach (CDownloadFile cdfFile in DownloadingGameConfigs) {
                         cdfFile.EndDownload();
                     }
 
-                    this.m_lstDownloadingGameConfigs.Clear();
+                    DownloadingGameConfigs.Clear();
                 }
             }
         }
-
-        public static string[] m_strArgs;
 
         /*
         public static void BeginUpdateProcess() {
@@ -429,7 +391,6 @@ namespace PRoCon.Core.AutoUpdates {
         */
 
         public static void BeginUpdateProcess(PRoConApplication praApplication) {
-
             // Check if the autoupdater needs updating.. if not then we'll forget about it.
 
             string strUpdatesFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Updates");
@@ -471,31 +432,32 @@ namespace PRoCon.Core.AutoUpdates {
                             File.Copy(Path.Combine(strUpdatesFolder, "PRoConUpdater.exe"), strCurrentProconUpdaterPath, true);
                             File.Delete(Path.Combine(strUpdatesFolder, "PRoConUpdater.exe"));
                         }
-                        catch (Exception) { }
+                        catch (Exception) {
+                        }
 
-                        if (AutoUpdater.m_strArgs != null && AutoUpdater.m_strArgs.Length == 0) {
-                            System.Diagnostics.Process.Start(AppDomain.CurrentDomain.BaseDirectory + "PRoConUpdater.exe");
+                        if (Arguments != null && Arguments.Length == 0) {
+                            Process.Start(AppDomain.CurrentDomain.BaseDirectory + "PRoConUpdater.exe");
                         }
                         else {
-                            System.Diagnostics.Process.Start(AppDomain.CurrentDomain.BaseDirectory + "PRoConUpdater.exe", String.Join(" ", AutoUpdater.m_strArgs));
+                            Process.Start(AppDomain.CurrentDomain.BaseDirectory + "PRoConUpdater.exe", String.Join(" ", Arguments));
                         }
 
                         if (praApplication != null) {
                             praApplication.Shutdown();
                         }
 
-                        Application.Exit();
+                        System.Windows.Forms.Application.Exit();
                     }
-                    catch (Exception) { }
-
+                    catch (Exception) {
+                    }
                 }
                 else {
                     // Same or newer version, we're running with the same autoupdater.exe
-                    if (AutoUpdater.m_strArgs != null && AutoUpdater.m_strArgs.Length == 0) {
-                        System.Diagnostics.Process.Start(AppDomain.CurrentDomain.BaseDirectory + "PRoConUpdater.exe");
+                    if (Arguments != null && Arguments.Length == 0) {
+                        Process.Start(AppDomain.CurrentDomain.BaseDirectory + "PRoConUpdater.exe");
                     }
                     else {
-                        System.Diagnostics.Process.Start(AppDomain.CurrentDomain.BaseDirectory + "PRoConUpdater.exe", String.Join(" ", AutoUpdater.m_strArgs));
+                        Process.Start(AppDomain.CurrentDomain.BaseDirectory + "PRoConUpdater.exe", String.Join(" ", Arguments));
                     }
 
                     if (praApplication != null) {
@@ -503,11 +465,9 @@ namespace PRoCon.Core.AutoUpdates {
                     }
 
                     //System.Diagnostics.Process.Start(AppDomain.CurrentDomain.BaseDirectory + "PRoConUpdater.exe");
-                    Application.Exit();
+                    System.Windows.Forms.Application.Exit();
                 }
             }
         }
-
-        
     }
 }

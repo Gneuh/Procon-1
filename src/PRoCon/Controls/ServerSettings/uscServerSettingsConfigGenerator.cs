@@ -228,7 +228,7 @@ namespace PRoCon.Controls.ServerSettings {
                     formattedValueList[i] = valueList[i];
                 }
                 else if (bool.TryParse(valueList[i], out blValue) == true) {
-                    formattedValueList[i] = Packet.bltos(blValue);
+                    formattedValueList[i] = Packet.Bltos(blValue);
                 }
                 else {
                     formattedValueList[i] = String.Format("\"{0}\"", valueList[i]);

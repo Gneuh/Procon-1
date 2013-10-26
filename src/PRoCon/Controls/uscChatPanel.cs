@@ -60,59 +60,6 @@ namespace PRoCon {
 
         Regex m_regRemoveCaretCodes;
 
-        /*
-        private bool m_blChatLogging;
-        public bool ChatLogging {
-            get {
-                return m_blChatLogging;
-            }
-            set {
-
-                if (value == true) {
-
-                    try {
-
-                        if (Directory.Exists(Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Logs"), this.m_uscParent.BFBC2Connection.FileHostNamePort)) == false) {
-                            Directory.CreateDirectory(Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Logs"), this.m_uscParent.BFBC2Connection.FileHostNamePort));
-                        }
-
-                        if (this.m_stmChatFile == null) {
-                            if ((this.m_stmChatFile = new FileStream(Path.Combine(Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Logs"), this.m_uscParent.BFBC2Connection.FileHostNamePort), DateTime.Now.ToString("yyyyMMdd" + "_chat.log")), FileMode.Append) != null) {
-                                if ((this.m_stwChatFile = new StreamWriter(this.m_stmChatFile, Encoding.Unicode)) != null) {
-
-                                    this.m_stwChatFile.WriteLine("Chat logging started: {0}", DateTime.Now.ToString("dddd, d MMMM yyyy HH:mm:ss"));
-                                    this.m_stwChatFile.Flush();
-                                }
-                            }
-
-                            this.m_blChatLogging = true;
-                        }
-                    }
-                    catch (Exception) {
-                        this.m_blChatLogging = false;
-                    }
-                }
-                else {
-                    if (this.m_stwChatFile != null) {
-
-                        this.m_stwChatFile.WriteLine("Chat logging stopped: {0}", DateTime.Now.ToString("dddd, d MMMM yyyy HH:mm:ss"));
-
-                        this.m_stwChatFile.Close();
-                        this.m_stwChatFile.Dispose();
-                        this.m_stwChatFile = null;
-                    }
-
-                    if (this.m_stmChatFile != null) {
-                        this.m_stmChatFile.Close();
-                        this.m_stmChatFile.Dispose();
-                        this.m_stmChatFile = null;
-                    }
-
-                    this.m_blChatLogging = false;
-                }
-            }
-        }
-        */
 
         private void SendCommand(List<string> lstWords) {
             if (lstWords.Count > 0) {
@@ -135,39 +82,6 @@ namespace PRoCon {
             }
         }
 
-        /*
-        public List<string> SetChatSettings {
-            set {
-                if (value.Count > 0) {
-                    bool blChecked = true;
-                    int iIndex = 0;
-
-                    if (value.Count >= 1 && bool.TryParse(value[0], out blChecked) == true) {
-                        this.chkDisplayOnJoinLeaveEvents.Checked = blChecked;
-                    }
-
-                    if (value.Count >= 2 && bool.TryParse(value[1], out blChecked) == true) {
-                        this.chkDisplayOnKilledEvents.Checked = blChecked;
-                    }
-
-                    if (value.Count >= 3 && int.TryParse(value[2], out iIndex) == true && iIndex < this.cboDisplayList.Items.Count) {
-                        this.cboDisplayList.SelectedIndex = iIndex;
-                    }
-
-                    if (value.Count >= 4 && int.TryParse(value[3], out iIndex) == true && iIndex < this.cboDisplayChatTime.Items.Count) {
-                        this.cboDisplayChatTime.SelectedIndex = iIndex;
-                    }
-                }
-
-            }
-        }
-
-        public string ChatSettings {
-            get {
-                return String.Format("{0} {1} {2} {3}", this.chkDisplayOnJoinLeaveEvents.Checked, this.chkDisplayOnKilledEvents.Checked, this.cboDisplayList.SelectedIndex, this.cboDisplayChatTime.SelectedIndex);
-            }
-        }
-        */
 
         public uscChatPanel() {
             InitializeComponent();
@@ -246,7 +160,7 @@ namespace PRoCon {
                 this.lblDisplayFor.Visible = false;
                 this.cboDisplayChatTime.Visible = false;
             }
-            if (sender.Game is BF3Client || sender.Game is MOHWClient) {
+            if (sender.Game is BF4Client || sender.Game is BF3Client || sender.Game is MOHWClient) {
                 this.m_iCanLongMsg = 1;
                 this.m_iChat_MaxLength = 128;
             }
@@ -351,33 +265,6 @@ namespace PRoCon {
                     }
                 } // end hack
 
-                /*
-                // So much easier with linq..
-                foreach (CPlayerInfo cpiPlayer in lstPlayers) {
-                    if (this.isInComboList(cpiPlayer) == false) {
-                        this.cboPlayerList.Items.Add(cpiPlayer);
-                    }
-                }
-
-                for (int i = 0; i < this.cboPlayerList.Items.Count; i++) {
-                    bool blFound = false;
-
-                    CPlayerInfo cpiInfo = (CPlayerInfo)this.cboPlayerList.Items[i];
-
-                    foreach (CPlayerInfo cpiPlayer in lstPlayers) {
-                        if (String.Compare(cpiInfo.SoldierName, cpiPlayer.SoldierName) == 0) {
-                            blFound = true;
-                            break;
-                        }
-                    }
-
-                    if (blFound == false && cpiInfo.SquadID != -10 && cpiInfo.TeamID != -10) {
-                        this.cboPlayerList.Items.RemoveAt(i);
-                        i--;
-                    }
-                }
-                */
-
                 this.cboPlayerList.EndUpdate();
 
             }
@@ -454,81 +341,14 @@ namespace PRoCon {
             string strFormattedConsoleOutput = String.Format("[{0}] {1}{2}", dtLoggedTime.ToString("HH:mm:ss"), strLoggedText, Environment.NewLine);
 
             this.rtbChatBox.AppendText(strFormattedConsoleOutput);
-            //this.rtbConsoleBox.AppendText(String.Format("[{0}] {1}\n", DateTime.Now.ToString("HH:mm:ss"), strConsoleOutput));
-
-            // We only pass the length of the original text to exclude the time from being formatted.
-            //this.ColourizeConsoleOutput(strConsoleOutput.Length);
-
-            //if (this.ChatLogging == true && this.m_stwChatFile != null) {
-            //    this.m_stwChatFile.Write(this.m_regRemoveCaretCodes.Replace(strFormattedConsoleOutput, ""));
-            //    this.m_stwChatFile.Flush();
-            //}
 
             if (this.m_prcClient.ChatConsole.Scrolling == true) {
                 this.rtbChatBox.ScrollToCaret();
             }
 
             this.rtbChatBox.TrimLines(this.m_prcClient.Variables.GetVariable<int>("MAX_CHAT_LINES", 75));
-            /*
-            this.rtbChatBox.ReadOnly = false;
-
-            int iMaxConsoleLines = this.m_prcClient.Variables.GetVariable<int>("MAX_CHAT_LINES", 75);
-            int iConsoleBoxLines = this.rtbChatBox.LineLength;
-
-            if ((iConsoleBoxLines > iMaxConsoleLines && this.rtbChatBox.Focused == false) || iConsoleBoxLines > 3000) {
-
-                for (int i = 0; i < iConsoleBoxLines - iMaxConsoleLines; i++) {
-                    this.rtbChatBox.Select(0, this.rtbChatBox.PopFirstLine() + 1);
-
-                    this.rtbChatBox.SelectedText = String.Empty;
-                }
-            }
-
-            this.rtbChatBox.ReadOnly = true;
-             */
         }
-            /*
-            this.rtbChatBox.ReadOnly = false;
 
-            while (this.rtbChatBox.Lines.Length > this.m_prcClient.Variables.GetVariable<int>("MAX_CHAT_LINES", 75)) {
-                this.rtbChatBox.Select(0, this.rtbChatBox.Lines[0].Length + 1);
-
-                this.rtbChatBox.SelectedText = String.Empty;
-            }
-            this.rtbChatBox.ReadOnly = true;
-        }
-        /*
-        public void Write(string strConsoleOutput) {
-
-            if (String.Compare(strConsoleOutput, m_strPreviousAddition) != 0) {
-
-                m_strPreviousAddition = strConsoleOutput;
-
-                string strFormattedConsoleOutput = String.Format("[{0}] {1}{2}", DateTime.Now.ToString("HH:mm:ss"), strConsoleOutput, Environment.NewLine);
-                
-                this.rtbChatBox.AppendText(strFormattedConsoleOutput);
-                //this.rtbConsoleBox.AppendText(String.Format("[{0}] {1}\n", DateTime.Now.ToString("HH:mm:ss"), strConsoleOutput));
-
-                // We only pass the length of the original text to exclude the time from being formatted.
-                //this.ColourizeConsoleOutput(strConsoleOutput.Length);
-
-                if (this.ChatLogging == true && this.m_stwChatFile != null) {
-                    this.m_stwChatFile.Write(this.m_regRemoveCaretCodes.Replace(strFormattedConsoleOutput, ""));
-                    this.m_stwChatFile.Flush();
-                }
-
-                this.rtbChatBox.ScrollToCaret();
-                this.rtbChatBox.ReadOnly = false;
-
-                while (this.rtbChatBox.Lines.Length > this.m_uscParent.GetVariableInt("MAX_CHAT_LINES", 75)) {
-                    this.rtbChatBox.Select(0, this.rtbChatBox.Lines[0].Length + 1);
-                    
-                    this.rtbChatBox.SelectedText = String.Empty;
-                }
-                this.rtbChatBox.ReadOnly = true;
-            }
-        }
-        */
         private void txtChat_KeyDown(object sender, KeyEventArgs e) {
 
             if (e.KeyData == Keys.Enter) {
@@ -576,79 +396,6 @@ namespace PRoCon {
                 e.SuppressKeyPress = true;
             }
         }
-        /*
-        private string GetLocalizedTeamName(string strTeamID) {
-
-            string strReturn = "Unknown";
-            int iTeamID = 0;
-
-            if (int.TryParse(strTeamID, out iTeamID) == true) {
-                strReturn = this.m_uscParent.GetLocalizedTeamName(iTeamID, this.m_strCurrentMapFileName);
-            }
-
-            return strReturn;
-        }
-        /*
-        public void OnProconAdminSaying(string strAdminStack, string strMessage, CPlayerSubset spsAudience) {
-
-            string strAdminName = this.m_clocLanguage.GetLocalized("uscChatPanel.rtbChatBox.Admin", null);
-
-            if (strAdminStack.Length > 0) {
-                strAdminName = String.Join(" via ", CPluginVariable.DecodeStringArray(strAdminStack));
-            }
-
-            if (spsAudience.Subset == CPlayerSubset.PlayerSubsetType.All) {
-                this.Write(String.Format("^b^2{0}^0 > ^2{1}", strAdminName, strMessage));
-            }
-            else if (spsAudience.Subset == CPlayerSubset.PlayerSubsetType.Player) {
-                this.Write(String.Format("^b^2{0}^0 -^2 {1}^0 > ^2{2}", strAdminName, spsAudience.SoldierName, strMessage));
-            }
-            else if (spsAudience.Subset == CPlayerSubset.PlayerSubsetType.Team) {
-                this.Write(String.Format("^b^2{0}^0 -^2 {1}^0 >^2 {2}", strAdminName, this.m_uscParent.GetLocalizedTeamName(spsAudience.TeamID, this.m_strCurrentMapFileName), strMessage));
-            }
-            else if (spsAudience.Subset == CPlayerSubset.PlayerSubsetType.Squad) {
-                this.Write(String.Format("^b^2{0}^0 -^2 {1}^0 - ^2{2}^0 >^2 {3}", strAdminName, this.m_uscParent.GetLocalizedTeamName(spsAudience.TeamID, this.m_strCurrentMapFileName), this.m_clocLanguage.GetLocalized("global.Squad" + spsAudience.SquadID.ToString(), null), strMessage));
-            }
-        }
-
-        public void OnProconAdminYelling(string strAdminStack, string strMessage, CPlayerSubset spsAudience) {
-
-            string strAdminName = this.m_clocLanguage.GetLocalized("uscChatPanel.rtbChatBox.Admin", null);
-
-            if (strAdminStack.Length > 0) {
-                strAdminName = String.Join(" via ", CPluginVariable.DecodeStringArray(strAdminStack));
-            }
-
-            if (spsAudience.Subset == CPlayerSubset.PlayerSubsetType.All) {
-                this.Write(String.Format("^b^2{0}^0 > ^2{1}", strAdminName.ToUpper(), strMessage.ToUpper()));
-            }
-            else if (spsAudience.Subset == CPlayerSubset.PlayerSubsetType.Player) {
-                this.Write(String.Format("^b^2{0}^0 -^2 {1}^0 > ^2{2}", strAdminName.ToUpper(), spsAudience.SoldierName.ToUpper(), strMessage.ToUpper()));
-            }
-            else if (spsAudience.Subset == CPlayerSubset.PlayerSubsetType.Team) {
-                this.Write(String.Format("^b^2{0}^0 -^2 {1}^0 >^2 {2}", strAdminName.ToUpper(), this.m_uscParent.GetLocalizedTeamName(spsAudience.TeamID, this.m_strCurrentMapFileName).ToUpper(), strMessage.ToUpper()));
-            }
-            else if (spsAudience.Subset == CPlayerSubset.PlayerSubsetType.Squad) {
-                this.Write(String.Format("^b^2{0}^0 -^2 {1}^0 - ^2{2}^0 >^2 {3}", strAdminName.ToUpper(), this.m_uscParent.GetLocalizedTeamName(spsAudience.TeamID, this.m_strCurrentMapFileName).ToUpper(), this.m_clocLanguage.GetLocalized("global.Squad" + spsAudience.SquadID.ToString(), null), strMessage).ToUpper());
-            }
-
-        }
-        
-        public void OnAdminYelling(string strMessage, string strPlayerSubset, string strTarget) {
-
-            if (String.Compare(strPlayerSubset, "all", true) == 0) {
-                this.Write(String.Format("^b^4{0}^0 > ^2{1}", this.m_clocLanguage.GetLocalized("uscChatPanel.rtbChatBox.Admin", null), strMessage));
-            }
-            else if (String.Compare(strPlayerSubset, "player", true) == 0) {
-                this.Write(String.Format("^b^4{0}^0 >^4 {1}:^0 {2} > ^2{3}", this.m_clocLanguage.GetLocalized("uscChatPanel.rtbChatBox.Admin", null), this.m_clocLanguage.GetLocalized("uscChatPanel.rtbChatBox.Private", null), strTarget, strMessage));
-            }
-            else if (String.Compare(strPlayerSubset, "team", true) == 0) {
-                this.Write(String.Format("^b^4{0}^0 >^4 Team:^2{1}^0 >^2 {2}", this.m_clocLanguage.GetLocalized("uscChatPanel.rtbChatBox.Admin", null), strTarget, strMessage));
-            }
-            else if (String.Compare(strPlayerSubset, "squad", true) == 0) {
-                this.Write(String.Format("^b^4{0}^0 >^4 Squad:^2{1}^0 >^2 {2}", this.m_clocLanguage.GetLocalized("uscChatPanel.rtbChatBox.Admin", null), strTarget, strMessage));
-            }
-        }*/
 
         private void btnChatSend_Click(object sender, EventArgs e) {
 
@@ -693,7 +440,7 @@ namespace PRoCon {
                 }
                 else if (this.cboDisplayList.SelectedIndex == 1) {
                     this.m_iYellDuration = (int)cboDisplayChatTime.SelectedItem;
-                    if (this.m_prcClient.Game is BF3Client || this.m_prcClient.Game is MOHWClient) {
+                    if (this.m_prcClient.Game is BF4Client || this.m_prcClient.Game is BF3Client || this.m_prcClient.Game is MOHWClient) {
                         this.m_iYellDuration = (int)cboDisplayChatTime.SelectedItem / 1000;
                     }
 

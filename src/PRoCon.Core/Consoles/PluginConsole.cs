@@ -1,70 +1,61 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using PRoCon.Core.Logging;
+using PRoCon.Core.Plugin;
+using PRoCon.Core.Remote;
 
-// This class will move to .Core once ProConClient is in .Core.
 namespace PRoCon.Core.Consoles {
-    using Core;
-    using Core.Logging;
-    using Core.Plugin;
-    using Core.Remote;
     public class PluginConsole : Loggable {
+        protected PRoConClient Client;
 
+        public PluginConsole(PRoConClient prcClient) : base() {
+            Client = prcClient;
+
+            LogEntries = new Queue<LogEntry>();
+
+            FileHostNamePort = Client.FileHostNamePort;
+            LoggingStartedPrefix = "Plugin logging started";
+            LoggingStoppedPrefix = "Plugin logging stopped";
+            FileNameSuffix = "plugin";
+
+            Client.CompilingPlugins += new PRoConClient.EmptyParamterHandler(m_prcClient_CompilingPlugins);
+            Client.RecompilingPlugins += new PRoConClient.EmptyParamterHandler(m_prcClient_RecompilingPlugins);
+        }
+
+        public Queue<LogEntry> LogEntries { get; private set; }
         public event WriteConsoleHandler WriteConsole;
 
-        private PRoConClient m_prcClient;
-
-        public Queue<LogEntry> LogEntries {
-            get;
-            private set;
-        }
-
-        public PluginConsole(PRoConClient prcClient)
-            : base() {
-
-            this.m_prcClient = prcClient;
-
-            this.LogEntries = new Queue<LogEntry>();
-
-            this.FileHostNamePort = this.m_prcClient.FileHostNamePort;
-            this.LoggingStartedPrefix = "Plugin logging started";
-            this.LoggingStoppedPrefix = "Plugin logging stopped";
-            this.FileNameSuffix = "plugin";
-
-            this.m_prcClient.CompilingPlugins += new PRoConClient.EmptyParamterHandler(m_prcClient_CompilingPlugins);
-            this.m_prcClient.RecompilingPlugins += new PRoConClient.EmptyParamterHandler(m_prcClient_RecompilingPlugins);
-        }
-
         private void m_prcClient_RecompilingPlugins(PRoConClient sender) {
-            this.m_prcClient.PluginsManager.PluginOutput += new PluginManager.PluginOutputHandler(Plugins_PluginOutput);
+            Client.PluginsManager.PluginOutput += new PluginManager.PluginOutputHandler(Plugins_PluginOutput);
         }
 
         private void m_prcClient_CompilingPlugins(PRoConClient sender) {
-            this.m_prcClient.PluginsManager.PluginOutput += new PluginManager.PluginOutputHandler(Plugins_PluginOutput);
+            Client.PluginsManager.PluginOutput += new PluginManager.PluginOutputHandler(Plugins_PluginOutput);
         }
 
         private void Plugins_PluginOutput(string strOutput) {
-            this.Write(strOutput);
+            Write(strOutput);
         }
 
-        public void Write(string strFormat, params string[] a_objArguments) {
+        public void Write(string strFormat, params string[] arguments) {
             try {
-                DateTime dtLoggedTime = DateTime.UtcNow.ToUniversalTime().AddHours(m_prcClient.Game.UTCoffset).ToLocalTime();
-                string strText = String.Format(strFormat, a_objArguments);
+                DateTime dtLoggedTime = DateTime.UtcNow.ToUniversalTime().AddHours(Client.Game.UtcOffset).ToLocalTime();
+                string strText = String.Format(strFormat, arguments);
 
-                this.WriteLogLine(String.Format("[{0}] {1}", dtLoggedTime.ToString("HH:mm:ss"), strText));
+                WriteLogLine(String.Format("[{0}] {1}", dtLoggedTime.ToString("HH:mm:ss"), strText));
 
-                if (this.WriteConsole != null) {
-                    FrostbiteConnection.RaiseEvent(this.WriteConsole.GetInvocationList(), dtLoggedTime, strText);
+                if (WriteConsole != null) {
+                    FrostbiteConnection.RaiseEvent(WriteConsole.GetInvocationList(), dtLoggedTime, strText);
                 }
 
-                this.LogEntries.Enqueue(new LogEntry(dtLoggedTime, strText));
+                LogEntries.Enqueue(new LogEntry(dtLoggedTime, strText));
 
-                while (this.LogEntries.Count > 100) {
-                    this.LogEntries.Dequeue();
+                while (LogEntries.Count > 100) {
+                    LogEntries.Dequeue();
                 }
             }
-            catch (Exception) { }
+            catch (Exception) {
+            }
         }
     }
 }

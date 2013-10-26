@@ -675,7 +675,8 @@ namespace PRoCon.Forms {
 
         private void lnkHttpServerForwardedTest_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
 
-            CDownloadFile portTest = new CDownloadFile("http://www.phogue.net/procon/testport.php?port=" + this.txtHttpServerStartPort.Text);
+            //CDownloadFile portTest = new CDownloadFile("http://www.phogue.net/procon/testport.php?port=" + this.txtHttpServerStartPort.Text);
+            CDownloadFile portTest = new CDownloadFile("https://repo.myrcon.com/procon1/testport.php?port=" + this.txtHttpServerStartPort.Text);
             portTest.DownloadComplete += new CDownloadFile.DownloadFileEventDelegate(portTest_DownloadComplete);
             portTest.DownloadError += new CDownloadFile.DownloadFileEventDelegate(portTest_DownloadError);
 

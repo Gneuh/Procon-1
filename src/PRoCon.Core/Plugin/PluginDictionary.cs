@@ -18,44 +18,26 @@
     along with PRoCon Frostbite.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Text;
+using System.Linq;
 
 namespace PRoCon.Core.Plugin {
     public class PluginDictionary : KeyedCollection<string, Plugin> {
 
         public List<string> EnabledClassNames {
             get {
-                List<string> enabledClasses = new List<string>();
-
-                foreach (Plugin plugin in this) {
-                    if (plugin.IsEnabled == true) {
-                        enabledClasses.Add(plugin.ClassName);
-                    }
-                }
-
-                return enabledClasses;
+                return this.Where(plugin => plugin.IsEnabled == true).Select(plugin => plugin.ClassName).ToList();
             }
         }
 
         public List<string> LoadedClassNames {
             get {
-                List<string> loadedClasses = new List<string>();
-
-                foreach (Plugin plugin in this) {
-                    if (plugin.IsLoaded == true) {
-                        loadedClasses.Add(plugin.ClassName);
-                    }
-                }
-
-                return loadedClasses;
+                return this.Where(plugin => plugin.IsLoaded == true).Select(plugin => plugin.ClassName).ToList();
             }
         }
 
         public bool IsEnabled(string className) {
-
             bool isEnabled = false;
 
             if (this.Contains(className) == true) {
@@ -66,7 +48,6 @@ namespace PRoCon.Core.Plugin {
         }
 
         public bool IsLoaded(string className) {
-
             bool isLoaded = false;
 
             if (this.Contains(className) == true) {

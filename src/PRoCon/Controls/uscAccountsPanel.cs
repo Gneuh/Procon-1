@@ -410,7 +410,8 @@ namespace PRoCon {
         }
 
         private void lnkLayerForwardedTest_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
-            this.PortCheck("http://www.phogue.net/procon/testport.php?port=" + this.txtLayerStartPort.Text);
+            //this.PortCheck("http://www.phogue.net/procon/testport.php?port=" + this.txtLayerStartPort.Text);
+            this.PortCheck("https://repo.myrcon.com/procon1/testport.php?port=" + this.txtLayerStartPort.Text);
         }
 
         #region Layer Events and Helper Methods
@@ -671,7 +672,8 @@ namespace PRoCon {
         }
 
         private void lnkWhatIsPRoConLayer_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
-            System.Diagnostics.Process.Start("http://phogue.net/procon/whatis.php");
+            //System.Diagnostics.Process.Start("http://phogue.net/procon/whatis.php");
+            System.Diagnostics.Process.Start("https://repo.myrcon.com/procon1/whatis.php");
         }
 
         private void txtLayerStartPort_KeyPress(object sender, KeyPressEventArgs e) {

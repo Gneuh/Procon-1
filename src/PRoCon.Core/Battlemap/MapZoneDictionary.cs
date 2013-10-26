@@ -19,17 +19,15 @@
  */
 
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
+using PRoCon.Core.Remote;
 
 namespace PRoCon.Core.Battlemap {
-    using Core.Remote;
-
     [Serializable]
     public class MapZoneDictionary : KeyedCollection<string, MapZoneDrawing> {
-
         public delegate void MapZoneAlteredHandler(MapZoneDrawing item);
+
         public event MapZoneAlteredHandler MapZoneAdded;
         public event MapZoneAlteredHandler MapZoneChanged;
         public event MapZoneAlteredHandler MapZoneRemoved;
@@ -42,32 +40,31 @@ namespace PRoCon.Core.Battlemap {
             base.InsertItem(index, item);
             item.TagsEdited += new MapZoneDrawing.TagsEditedHandler(item_TagsEdited);
 
-            if (this.MapZoneAdded != null) {
-                FrostbiteConnection.RaiseEvent(this.MapZoneAdded.GetInvocationList(), item);
+            if (MapZoneAdded != null) {
+                FrostbiteConnection.RaiseEvent(MapZoneAdded.GetInvocationList(), item);
             }
         }
 
         private void item_TagsEdited(MapZoneDrawing sender) {
-            if (this.MapZoneChanged != null) {
-                FrostbiteConnection.RaiseEvent(this.MapZoneChanged.GetInvocationList(), sender);
+            if (MapZoneChanged != null) {
+                FrostbiteConnection.RaiseEvent(MapZoneChanged.GetInvocationList(), sender);
             }
         }
 
         protected override void RemoveItem(int index) {
-
             MapZoneDrawing apRemoved = this[index];
             apRemoved.TagsEdited -= new MapZoneDrawing.TagsEditedHandler(item_TagsEdited);
 
             base.RemoveItem(index);
 
-            if (this.MapZoneRemoved != null) {
-                FrostbiteConnection.RaiseEvent(this.MapZoneRemoved.GetInvocationList(), apRemoved);
+            if (MapZoneRemoved != null) {
+                FrostbiteConnection.RaiseEvent(MapZoneRemoved.GetInvocationList(), apRemoved);
             }
         }
 
         protected override void SetItem(int index, MapZoneDrawing item) {
-            if (this.MapZoneChanged != null) {
-                FrostbiteConnection.RaiseEvent(this.MapZoneChanged.GetInvocationList(), item);
+            if (MapZoneChanged != null) {
+                FrostbiteConnection.RaiseEvent(MapZoneChanged.GetInvocationList(), item);
             }
 
             base.SetItem(index, item);
@@ -75,29 +72,26 @@ namespace PRoCon.Core.Battlemap {
         }
 
         public void CreateMapZone(string mapFileName, Point3D[] points) {
-
-            Random random = new Random();
+            var random = new Random();
             string strUid = String.Empty;
 
             do {
                 strUid = String.Format("{0}{1}", mapFileName, random.Next());
-                strUid = Convert.ToBase64String(System.Text.ASCIIEncoding.ASCII.GetBytes(strUid));
-            } while (this.Contains(strUid) == true);
+                strUid = Convert.ToBase64String(Encoding.ASCII.GetBytes(strUid));
+            } while (Contains(strUid) == true);
 
-            this.Add(new MapZoneDrawing(strUid, mapFileName, "", points, true));
+            Add(new MapZoneDrawing(strUid, mapFileName, "", points, true));
         }
 
         public void ModifyMapZonePoints(string strUid, Point3D[] points) {
-
-            if (this.Contains(strUid) == true) {
+            if (Contains(strUid) == true) {
                 // this[strUid].LevelFileName = mapFileName;
                 this[strUid].ZonePolygon = points;
 
-                if (this.MapZoneChanged != null) {
-                    FrostbiteConnection.RaiseEvent(this.MapZoneChanged.GetInvocationList(), this[strUid]);
+                if (MapZoneChanged != null) {
+                    FrostbiteConnection.RaiseEvent(MapZoneChanged.GetInvocationList(), this[strUid]);
                 }
             }
-
         }
     }
 }

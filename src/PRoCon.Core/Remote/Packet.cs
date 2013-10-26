@@ -26,10 +26,8 @@ using System.IO.Compression;
 namespace PRoCon.Core.Remote {
     public class Packet : ICloneable {
 
-        public static readonly int INT_PACKET_HEADER_SIZE = 12;
+        public static readonly int PacketHeaderSize = 12;
         
-        #region Setters and Getters
-
         public bool OriginatedFromServer { get; private set; }
 
         public bool IsResponse { get; private set; }
@@ -40,27 +38,26 @@ namespace PRoCon.Core.Remote {
 
         public UInt32 PacketSize { get; private set; }
 
-        //public DateTime CreationTime { get; private set; }
+        public DateTime Stamp { get; private set; }
 
-        #endregion
 
         // Used if we have recieved a packet and need it decoded..
-        public Packet(byte[] a_bRawPacket) {
+        public Packet(byte[] rawPacket) {
             this.NullPacket();
 
-            //this.CreationTime = DateTime.Now;
+            this.Stamp = DateTime.Now;
 
-            this.DecodePacket(a_bRawPacket);
+            this.DecodePacket(rawPacket);
         }
 
         // Used if we'll be using EncodePacket to send to the server.
-        public Packet(bool blOriginatedFromServer, bool blIsResponse, UInt32 ui32SequenceNumber, List<string> a_lstWords) {
-            this.OriginatedFromServer = blOriginatedFromServer;
-            this.IsResponse = blIsResponse;
-            this.SequenceNumber = ui32SequenceNumber;
-            this.Words = a_lstWords;
+        public Packet(bool isOriginatedFromServer, bool isResponse, UInt32 sequenceNumber, List<string> words) {
+            this.OriginatedFromServer = isOriginatedFromServer;
+            this.IsResponse = isResponse;
+            this.SequenceNumber = sequenceNumber;
+            this.Words = words;
 
-            //this.CreationTime = DateTime.Now;
+            this.Stamp = DateTime.Now;
         }
         
         public Packet(bool isOriginatedFromServer, bool isResponse, UInt32 sequenceNumber, string commandString)
@@ -143,15 +140,15 @@ namespace PRoCon.Core.Remote {
             return lstReturn;
         }
 
-        public static string bltos(bool blBoolean) {
+        public static string Bltos(bool blBoolean) {
             return (blBoolean == true ? "true" : "false");
         }
 
-        public static UInt32 DecodePacketSize(byte[] a_bRawPacket) {
+        public static UInt32 DecodePacketSize(byte[] rawPacket) {
             UInt32 ui32ReturnPacketSize = 0;
 
-            if (a_bRawPacket.Length >= Packet.INT_PACKET_HEADER_SIZE) {
-                ui32ReturnPacketSize = BitConverter.ToUInt32(a_bRawPacket, 4);
+            if (rawPacket.Length >= Packet.PacketHeaderSize) {
+                ui32ReturnPacketSize = BitConverter.ToUInt32(rawPacket, 4);
             }
 
             return ui32ReturnPacketSize;
@@ -171,11 +168,11 @@ namespace PRoCon.Core.Remote {
             }
 
             // Construct the remaining packet headers
-            UInt32 ui32PacketSize = Convert.ToUInt32(Packet.INT_PACKET_HEADER_SIZE);
+            UInt32 ui32PacketSize = Convert.ToUInt32(Packet.PacketHeaderSize);
             UInt32 ui32Words = Convert.ToUInt32(this.Words.Count);
 
             // Encode each word (WordLength, Word Bytes, Null Byte)
-            byte[] a_bEncodedWords = new byte[] { };
+            byte[] encodedWords = new byte[] { };
             foreach (string word in this.Words) {
 
                 string strWord = word;
@@ -185,38 +182,38 @@ namespace PRoCon.Core.Remote {
                     strWord = strWord.Substring(0, UInt16.MaxValue - 1);
                 }
 
-                byte[] a_bAppendEncodedWords = new byte[a_bEncodedWords.Length + strWord.Length + 5];
+                byte[] appendEncodedWords = new byte[encodedWords.Length + strWord.Length + 5];
 
-                a_bEncodedWords.CopyTo(a_bAppendEncodedWords, 0);
+                encodedWords.CopyTo(appendEncodedWords, 0);
 
-                BitConverter.GetBytes(strWord.Length).CopyTo(a_bAppendEncodedWords, a_bEncodedWords.Length);
-                Encoding.GetEncoding(1252).GetBytes(strWord + Convert.ToChar(0x00)).CopyTo(a_bAppendEncodedWords, a_bEncodedWords.Length + 4);
+                BitConverter.GetBytes(strWord.Length).CopyTo(appendEncodedWords, encodedWords.Length);
+                Encoding.GetEncoding(1252).GetBytes(strWord + Convert.ToChar(0x00)).CopyTo(appendEncodedWords, encodedWords.Length + 4);
 
-                a_bEncodedWords = a_bAppendEncodedWords;
+                encodedWords = appendEncodedWords;
             }
 
             // Get the full size of the packet.
-            ui32PacketSize += Convert.ToUInt32(a_bEncodedWords.Length);
+            ui32PacketSize += Convert.ToUInt32(encodedWords.Length);
 
             // Now compile the whole packet.
-            byte[] a_bEncodedPacket = new byte[ui32PacketSize];
+            byte[] encodedPacket = new byte[ui32PacketSize];
             this.PacketSize = ui32PacketSize;
-            BitConverter.GetBytes(ui32Header).CopyTo(a_bEncodedPacket, 0);
-            BitConverter.GetBytes(ui32PacketSize).CopyTo(a_bEncodedPacket, 4);
-            BitConverter.GetBytes(ui32Words).CopyTo(a_bEncodedPacket, 8);
-            a_bEncodedWords.CopyTo(a_bEncodedPacket, Packet.INT_PACKET_HEADER_SIZE);
+            BitConverter.GetBytes(ui32Header).CopyTo(encodedPacket, 0);
+            BitConverter.GetBytes(ui32PacketSize).CopyTo(encodedPacket, 4);
+            BitConverter.GetBytes(ui32Words).CopyTo(encodedPacket, 8);
+            encodedWords.CopyTo(encodedPacket, Packet.PacketHeaderSize);
 
-            return a_bEncodedPacket;
+            return encodedPacket;
         }
 
-        public void DecodePacket(byte[] a_bRawPacket) {
+        public void DecodePacket(byte[] rawPacket) {
 
             this.NullPacket();
 
-            UInt32 ui32Header = BitConverter.ToUInt32(a_bRawPacket, 0);
-            this.PacketSize = BitConverter.ToUInt32(a_bRawPacket, 4);
+            UInt32 ui32Header = BitConverter.ToUInt32(rawPacket, 0);
+            this.PacketSize = BitConverter.ToUInt32(rawPacket, 4);
             //UInt32 ui32PacketSize = BitConverter.ToUInt32(a_bRawPacket, 4); // Unused here.
-            UInt32 ui32Words = BitConverter.ToUInt32(a_bRawPacket, 8);
+            UInt32 ui32Words = BitConverter.ToUInt32(rawPacket, 8);
 
             this.OriginatedFromServer = Convert.ToBoolean(ui32Header & 0x80000000);
             this.IsResponse = Convert.ToBoolean(ui32Header & 0x40000000);
@@ -225,9 +222,9 @@ namespace PRoCon.Core.Remote {
             int iWordOffset = 0;
 
             for (UInt32 ui32WordCount = 0; ui32WordCount < ui32Words; ui32WordCount++) {
-                UInt32 ui32WordLength = BitConverter.ToUInt32(a_bRawPacket, Packet.INT_PACKET_HEADER_SIZE + iWordOffset);
+                UInt32 ui32WordLength = BitConverter.ToUInt32(rawPacket, Packet.PacketHeaderSize + iWordOffset);
 
-                this.Words.Add(Encoding.GetEncoding(1252).GetString(a_bRawPacket, Packet.INT_PACKET_HEADER_SIZE + iWordOffset + 4, (int)ui32WordLength));
+                this.Words.Add(Encoding.GetEncoding(1252).GetString(rawPacket, Packet.PacketHeaderSize + iWordOffset + 4, (int)ui32WordLength));
 
                 iWordOffset += Convert.ToInt32(ui32WordLength) + 5; // WordLength + WordSize + NullByte
             }

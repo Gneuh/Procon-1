@@ -555,6 +555,7 @@
             this.iglGameIcons.Images.SetKeyName(3, "bfbc2.vietnam.png");
             this.iglGameIcons.Images.SetKeyName(4, "bf3.png");
             this.iglGameIcons.Images.SetKeyName(5, "mohw.png");
+            this.iglGameIcons.Images.SetKeyName(6, "bf4.png");
             // 
             // tlsConnections
             // 

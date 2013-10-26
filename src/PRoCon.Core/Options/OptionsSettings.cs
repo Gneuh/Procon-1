@@ -498,8 +498,11 @@ namespace PRoCon.Core.Options {
                         psetPluginPermissions.AddPermission(new UIPermission(PermissionState.Unrestricted));
                         psetPluginPermissions.AddPermission(new System.Net.DnsPermission(PermissionState.Unrestricted));
 
+                        // TO DO: rename to something like "Allow all database connections"
                         if (this.AllowAllODBCConnections == true) {
                             psetPluginPermissions.AddPermission(new System.Data.Odbc.OdbcPermission(PermissionState.Unrestricted));
+                            // Also allow all MySQL connections when ODBC is enabled, allowing the .NET MySQL connector to work with sandbox enabled
+                            psetPluginPermissions.AddPermission(new MySql.Data.MySqlClient.MySqlClientPermission(PermissionState.Unrestricted));
                         }
 
                         if (this.AllowAllSmtpConnections == true)

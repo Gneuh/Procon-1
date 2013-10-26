@@ -258,10 +258,9 @@ namespace PRoCon.Controls.Maplist {
 
                 if (lstMapList[i].Gamemode != null && lstMapList[i].Gamemode.Length > 0) {
                     //lviMap.SubItems.Add(this.m_client.GetFriendlyGamemode(lstMapList[i].Gamemode));
-                    CMap tmpMap = null;
-                    tmpMap = this.m_client.GetFriendlyMapByFilenamePlayList(lstMapList[i].MapFileName, lstMapList[i].Gamemode);
-                    lviMap.SubItems.Add(tmpMap.GameMode);
-                    lviMap.SubItems.Add(tmpMap.PublicLevelName);
+                    CMap tmpMap = this.m_client.GetFriendlyMapByFilenamePlayList(lstMapList[i].MapFileName, lstMapList[i].Gamemode);
+                    lviMap.SubItems.Add(tmpMap != null ? tmpMap.GameMode : String.Empty);
+                    lviMap.SubItems.Add(tmpMap != null ? tmpMap.PublicLevelName : String.Empty);
                 }
                 else {
                     lviMap.SubItems.Add(this.m_client.GetFriendlyGamemodeByMap(lstMapList[i].MapFileName));
@@ -359,10 +358,9 @@ namespace PRoCon.Controls.Maplist {
 
             if (mapEntry.Gamemode != null && mapEntry.Gamemode.Length > 0) {
                 //lviMap.SubItems.Add(this.m_client.GetFriendlyGamemode(mapEntry.Gamemode));
-                CMap tmpMap = null;
-                tmpMap = this.m_client.GetFriendlyMapByFilenamePlayList(mapEntry.MapFileName, mapEntry.Gamemode);
-                lviMap.SubItems.Add(tmpMap.GameMode);
-                lviMap.SubItems.Add(tmpMap.PublicLevelName);
+                CMap tmpMap = this.m_client.GetFriendlyMapByFilenamePlayList(mapEntry.MapFileName, mapEntry.Gamemode);
+                lviMap.SubItems.Add(tmpMap != null ? tmpMap.GameMode : String.Empty);
+                lviMap.SubItems.Add(tmpMap != null ? tmpMap.PublicLevelName : String.Empty);
             }
             else {
                 lviMap.SubItems.Add(this.m_client.GetFriendlyGamemodeByMap(mapEntry.MapFileName));

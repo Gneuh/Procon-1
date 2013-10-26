@@ -228,7 +228,8 @@ namespace PRoCon.Core.Packages {
             CDownloadFile packageDownload = null;
 
             if (this.Uid.Length > 0 && this.Md5.Length > 0 && this.Version != null) {
-                packageDownload = new CDownloadFile(String.Format("http://phogue.net/procon/packages/download.php?uid={0}&version={1}", this.Uid, this.Version), extractPath);
+                //packageDownload = new CDownloadFile(String.Format("http://phogue.net/procon/packages/download.php?uid={0}&version={1}", this.Uid, this.Version), extractPath);
+                packageDownload = new CDownloadFile(String.Format("https://repo.myrcon.com/procon1/download.php?uid={0}&version={1}", this.Uid, this.Version), extractPath);
 
                 packageDownload.DownloadComplete += new CDownloadFile.DownloadFileEventDelegate(packageDownload_DownloadComplete);
                 packageDownload.DownloadError += new CDownloadFile.DownloadFileEventDelegate(packageDownload_DownloadError);

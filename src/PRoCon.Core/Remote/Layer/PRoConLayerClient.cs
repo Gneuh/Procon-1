@@ -131,6 +131,9 @@ namespace PRoCon.Core.Remote.Layer {
                 else if (prcClient.Game is BF3Client) {
                     this.Game = new BF3LayerClient(newConnection);
                 }
+                else if (prcClient.Game is BF4Client) {
+                    this.Game = new BF4LayerClient(newConnection);
+                }
                 else if (prcClient.Game is MOHWClient)
                 {
                     this.Game = new MOHWLayerClient(newConnection);
@@ -500,7 +503,7 @@ namespace PRoCon.Core.Remote.Layer {
                     }
                     else if (packet.Words.Count >= 3) {
 
-                        if (this.m_prcClient.Layer.LayerClients.isUidUnique(packet.Words[2]) == true) {
+                        if (this.m_prcClient.Layer.LayerClients.IsUidUnique(packet.Words[2]) == true) {
                             sender.SendResponse(packet, PRoConLayerClient.RESPONSE_OK);
 
                             this.ProconEventsUid = packet.Words[2];
@@ -1672,14 +1675,14 @@ namespace PRoCon.Core.Remote.Layer {
 
         private void Plugins_PluginEnabled(string strClassName) {
             if (this.IsLoggedIn == true && this.m_blEventsEnabled == true && this.Game != null) {
-                this.Game.SendRequest("procon.plugin.onEnabled", strClassName, Packet.bltos(true));
+                this.Game.SendRequest("procon.plugin.onEnabled", strClassName, Packet.Bltos(true));
                 //this.send(new Packet(true, false, this.AcquireSequenceNumber, new List<string>() { "procon.plugin.onEnabled", strClassName, bool.TrueString }));
             }
         }
 
         private void Plugins_PluginDisabled(string strClassName) {
             if (this.IsLoggedIn == true && this.m_blEventsEnabled == true && this.Game != null) {
-                this.Game.SendRequest("procon.plugin.onEnabled", strClassName, Packet.bltos(false));
+                this.Game.SendRequest("procon.plugin.onEnabled", strClassName, Packet.Bltos(false));
                 //this.send(new Packet(true, false, this.AcquireSequenceNumber, new List<string>() { "procon.plugin.onEnabled", strClassName, bool.FalseString }));
             }
         }
@@ -1783,7 +1786,7 @@ namespace PRoCon.Core.Remote.Layer {
 
         private void PackageManager_PackageAwaitingRestart(PackageManager sender, Package target) {
             if (this.IsLoggedIn == true && this.m_blEventsEnabled == true) {
-                this.Game.SendRequest("procon.packages.onInstalled", target.Uid, Packet.bltos(true));
+                this.Game.SendRequest("procon.packages.onInstalled", target.Uid, Packet.Bltos(true));
             }
         }
 

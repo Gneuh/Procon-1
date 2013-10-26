@@ -37,16 +37,16 @@ namespace PRoCon.Core.Remote {
         public BFClient(FrostbiteConnection connection)
             : base(connection) {
 
-            this.m_responseDelegates.Add("vars.rankLimit", this.DispatchVarsRankLimitResponse);
-            this.m_responseDelegates.Add("vars.teamBalance", this.DispatchVarsTeamBalanceResponse);
-            this.m_responseDelegates.Add("vars.killCam", this.DispatchVarsKillCamResponse);
-            this.m_responseDelegates.Add("vars.miniMap", this.DispatchVarsMiniMapResponse);
-            this.m_responseDelegates.Add("vars.crossHair", this.DispatchVarsCrossHairResponse);
-            this.m_responseDelegates.Add("vars.3dSpotting", this.DispatchVars3dSpottingResponse);
-            this.m_responseDelegates.Add("vars.miniMapSpotting", this.DispatchVarsMiniMapSpottingResponse);
-            this.m_responseDelegates.Add("vars.thirdPersonVehicleCameras", this.DispatchVarsThirdPersonVehicleCamerasResponse);
+            this.ResponseDelegates.Add("vars.rankLimit", this.DispatchVarsRankLimitResponse);
+            this.ResponseDelegates.Add("vars.teamBalance", this.DispatchVarsTeamBalanceResponse);
+            this.ResponseDelegates.Add("vars.killCam", this.DispatchVarsKillCamResponse);
+            this.ResponseDelegates.Add("vars.miniMap", this.DispatchVarsMiniMapResponse);
+            this.ResponseDelegates.Add("vars.crossHair", this.DispatchVarsCrossHairResponse);
+            this.ResponseDelegates.Add("vars.3dSpotting", this.DispatchVars3dSpottingResponse);
+            this.ResponseDelegates.Add("vars.miniMapSpotting", this.DispatchVarsMiniMapSpottingResponse);
+            this.ResponseDelegates.Add("vars.thirdPersonVehicleCameras", this.DispatchVarsThirdPersonVehicleCamerasResponse);
 
-            this.m_responseDelegates.Add("admin.password", this.DispatchVarsAdminPasswordResponse);
+            this.ResponseDelegates.Add("admin.password", this.DispatchVarsAdminPasswordResponse);
 
             this.GetPacketsPattern = new Regex(this.GetPacketsPattern.ToString() + "|^admin.getPlaylist|^reservedSlots.list", RegexOptions.Compiled);
         }

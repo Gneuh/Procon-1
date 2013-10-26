@@ -20,147 +20,174 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.ComponentModel;
+using System.Linq;
+using System.Reflection;
+using PRoCon.Core.Battlemap;
+using PRoCon.Core.Players.Items;
+using PRoCon.Core.Plugin.Commands;
+using PRoCon.Core.Remote;
 
 namespace PRoCon.Core.Plugin {
-    using System.ComponentModel;
-    using System.Reflection;
-    using Core.Plugin.Commands;
-    using Core.Players.Items;
-    using Core.Battlemap;
-    using Core.Remote;
-
     public class CPRoConMarshalByRefObject : MarshalByRefObject {
-        public delegate void ExecuteCommandHandler(List<string> lstCommand);
-        public delegate CPrivileges GetAccountPrivilegesHandler(string strAccountName);
-        public delegate string GetVariableHandler(string strVariable);
-        public delegate bool TryGetLocalizedHandler(string strLanguageCode, out string strLocalizedText, string strVariable, string[] a_strArguements);
-        public delegate void RegisterCommandHandler(MatchCommand mtcCommand);
-        public delegate void UnregisterCommandHandler(MatchCommand mtcCommand);
-        public delegate List<MatchCommand> GetRegisteredCommandsHandler();
-        public delegate List<CMap> GetMapDefinesHandler();
-        public delegate WeaponDictionary GetWeaponDefinesHandler();
-        public delegate SpecializationDictionary GetSpecializationDefinesHandler();
+        public delegate void ExecuteCommandHandler(List<string> command);
+
+        public delegate CPrivileges GetAccountPrivilegesHandler(string accountName);
+
         public delegate List<string> GetLoggedInAccountUsernamesHandler();
-        public delegate void RegisterEventsHandler(string className, List<string> lstCommand);
 
-        private ExecuteCommandHandler m_delExecuteCommand;
-        private GetAccountPrivilegesHandler m_delGetAccountPrivileges;
-        private GetVariableHandler m_delGetVariable;
-        private GetVariableHandler m_delGetSvVariable;
-        private GetMapDefinesHandler m_delGetMapDefines;
-        private TryGetLocalizedHandler m_delTryGetLocalized;
-        private RegisterCommandHandler m_delRegisterCommand;
-        private UnregisterCommandHandler m_delUnregisterCommand;
-        private GetRegisteredCommandsHandler m_delGetRegisteredCommands;
+        public delegate List<CMap> GetMapDefinesHandler();
 
-        private GetWeaponDefinesHandler m_delGetWeaponDefines;
-        private GetSpecializationDefinesHandler m_delGetSpecializationDefines;
+        public delegate List<MatchCommand> GetRegisteredCommandsHandler();
 
-        private GetLoggedInAccountUsernamesHandler m_delGetLoggedInAccountUsernames;
-        private RegisterEventsHandler m_delRegisterEvents;
+        public delegate SpecializationDictionary GetSpecializationDefinesHandler();
+
+        public delegate string GetVariableHandler(string variable);
+
+        public delegate WeaponDictionary GetWeaponDefinesHandler();
+
+        public delegate void RegisterCommandHandler(MatchCommand command);
+
+        public delegate void RegisterEventsHandler(string className, List<string> command);
+
+        public delegate bool TryGetLocalizedHandler(string languageCode, out string localizedText, string variable, string[] arguements);
+
+        public delegate void UnregisterCommandHandler(MatchCommand command);
+
+        private ExecuteCommandHandler _executeCommandDelegate;
+        private GetAccountPrivilegesHandler _getAccountPrivilegesDelegate;
+        private GetLoggedInAccountUsernamesHandler _getLoggedInAccountUsernamesDelegate;
+        private GetMapDefinesHandler _getMapDefinesDelegate;
+        private GetRegisteredCommandsHandler _getRegisteredCommandsDelegate;
+
+        private GetSpecializationDefinesHandler _getSpecializationDefinesDelegate;
+        private GetVariableHandler _getSvVariableDelegate;
+        private GetVariableHandler _getVariableDelegate;
+        private GetWeaponDefinesHandler _getWeaponDefinesDelegate;
+        private RegisterCommandHandler _registerCommandDelegate;
+
+        private RegisterEventsHandler _registerEventsDelegate;
+        private TryGetLocalizedHandler _tryGetLocalizedDelegate;
+        private UnregisterCommandHandler _unregisterCommandDelegate;
+        protected Dictionary<string, Weapon> WeaponDictionaryByLocalizedName { get; private set; }
+
+        protected Dictionary<string, Specialization> SpecializationDictionaryByLocalizedName { get; private set; }
+
+        protected Dictionary<String, MethodInfo> KeyedPublicMethodCache;
 
         public void RegisterCallbacks(ExecuteCommandHandler delExecuteCommand, GetAccountPrivilegesHandler delGetAccountPrivileges, GetVariableHandler delGetVariable, GetVariableHandler delGetSvVariable, GetMapDefinesHandler delGetMapDefines, TryGetLocalizedHandler delTryGetLocalized, RegisterCommandHandler delRegisterCommand, UnregisterCommandHandler delUnregisterCommand, GetRegisteredCommandsHandler delGetRegisteredCommands, GetWeaponDefinesHandler delGetWeaponDefines, GetSpecializationDefinesHandler delGetSpecializationDefines, GetLoggedInAccountUsernamesHandler delGetLoggedInAccountUsernames, RegisterEventsHandler delRegisterEvents) {
-            this.m_delExecuteCommand = delExecuteCommand;
-            this.m_delGetAccountPrivileges = delGetAccountPrivileges;
-            this.m_delGetVariable = delGetVariable;
-            this.m_delGetSvVariable = delGetSvVariable;
-            this.m_delGetMapDefines = delGetMapDefines;
-            this.m_delTryGetLocalized = delTryGetLocalized;
+            _executeCommandDelegate = delExecuteCommand;
+            _getAccountPrivilegesDelegate = delGetAccountPrivileges;
+            _getVariableDelegate = delGetVariable;
+            _getSvVariableDelegate = delGetSvVariable;
+            _getMapDefinesDelegate = delGetMapDefines;
+            _tryGetLocalizedDelegate = delTryGetLocalized;
 
-            this.m_delRegisterCommand = delRegisterCommand;
-            this.m_delUnregisterCommand = delUnregisterCommand;
-            this.m_delGetRegisteredCommands = delGetRegisteredCommands;
+            _registerCommandDelegate = delRegisterCommand;
+            _unregisterCommandDelegate = delUnregisterCommand;
+            _getRegisteredCommandsDelegate = delGetRegisteredCommands;
 
-            this.m_delGetWeaponDefines = delGetWeaponDefines;
-            this.m_delGetSpecializationDefines = delGetSpecializationDefines;
+            _getWeaponDefinesDelegate = delGetWeaponDefines;
+            _getSpecializationDefinesDelegate = delGetSpecializationDefines;
 
-            this.m_delGetLoggedInAccountUsernames = delGetLoggedInAccountUsernames;
-            this.m_delRegisterEvents = delRegisterEvents;
+            _getLoggedInAccountUsernamesDelegate = delGetLoggedInAccountUsernames;
+            _registerEventsDelegate = delRegisterEvents;
 
-            this.SetupInternalDictionaries();
+            SetupInternalDictionaries();
         }
 
         public override object InitializeLifetimeService() {
             return null;
         }
+ 
+        public object Invoke(string methodName, object[] parameters) {
+            object returnValue = null;
 
-        public object Invoke(string strMethodName, object[] a_objParameters) {
-            object objReturn = null;
+            if (this.KeyedPublicMethodCache == null) {
 
-            try {
-                if (this.GetType().GetMember(strMethodName).Length > 0) {
-                    objReturn = this.GetType().InvokeMember(strMethodName, BindingFlags.InvokeMethod, null, this, a_objParameters);
+                this.KeyedPublicMethodCache = new Dictionary<String, MethodInfo>();
+
+                foreach (MethodInfo method in this.GetType().GetMethods()) {
+                    if (this.KeyedPublicMethodCache.ContainsKey(method.Name) == false) {
+                        this.KeyedPublicMethodCache.Add(method.Name, method);
+                    }
+                }
+
+            }
+
+            if (this.KeyedPublicMethodCache.ContainsKey(methodName) == true) {
+                try {
+                    returnValue = this.KeyedPublicMethodCache[methodName].Invoke(this, parameters);
+                }
+                catch (Exception) {
                 }
             }
-            catch (Exception) { }
 
-            return objReturn;
+            return returnValue;
         }
 
-        public string GetLocalizedByLanguage(string strLanguageCode, string strDefaultText, string strVariable, params string[] a_strArguements) {
-            string strReturn = strDefaultText;
+        public string GetLocalizedByLanguage(string languageCode, string defaultText, string variable, params string[] arguements) {
+            string strReturn = defaultText;
 
-            if (this.m_delTryGetLocalized != null) {
-                if (this.m_delTryGetLocalized(strLanguageCode, out strReturn, strVariable, a_strArguements) == false) {
-                    strReturn = strDefaultText;
+            if (_tryGetLocalizedDelegate != null) {
+                if (_tryGetLocalizedDelegate(languageCode, out strReturn, variable, arguements) == false) {
+                    strReturn = defaultText;
                 }
             }
 
             return strReturn;
         }
 
-        public string GetLocalized(string strDefaultText, string strVariable, params string[] a_strArguements) {
-            return this.GetLocalizedByLanguage(null, strDefaultText, strVariable, a_strArguements);
+        public string GetLocalized(string defaultText, string variable, params string[] arguements) {
+            return GetLocalizedByLanguage(null, defaultText, variable, arguements);
         }
 
-        public void ExecuteCommand(params string[] a_strCommandWords) {
-            if (this.m_delExecuteCommand != null) {
-                this.m_delExecuteCommand(new List<string>(a_strCommandWords));
+        public void ExecuteCommand(params string[] words) {
+            if (_executeCommandDelegate != null) {
+                _executeCommandDelegate(new List<string>(words));
             }
         }
 
         /// <summary>
-        /// There is no need to register the methods found in IPRoConPluginInterface.
-        /// 
-        /// They will always be called no matter if you register them or not.
-        /// You will need to register all methods you need within PRoConPluginAPI though
-        /// if you choose to RegisterEvents.
-        /// 
-        /// By default if you load up a plugin all of the events will be fired, but this is 
-        /// the most cpu/time consuming task that procon has is calling empty methods within plugins.
-        /// This optimizes your plugin by telling procon to only call your plugin with the registered events.
-        /// 
-        /// You can see the potential gains by enabling all of your plugins and restarting procon.
-        /// See how slowly the console ticks passed compared to having no plugins enabled and logging in.
+        ///     There is no need to register the methods found in IPRoConPluginInterface.
+        ///     They will always be called no matter if you register them or not.
+        ///     You will need to register all methods you need within PRoConPluginAPI though
+        ///     if you choose to RegisterEvents.
+        ///     By default if you load up a plugin all of the events will be fired, but this is
+        ///     the most cpu/time consuming task that procon has is calling empty methods within plugins.
+        ///     This optimizes your plugin by telling procon to only call your plugin with the registered events.
+        ///     You can see the potential gains by enabling all of your plugins and restarting procon.
+        ///     See how slowly the console ticks passed compared to having no plugins enabled and logging in.
         /// </summary>
         /// <param name="className">The name of your plugins class</param>
-        /// <param name="a_events">A list of methods to be called within your plugin by procon
-        /// Example: ("OnListPlayers", "OnPlayerLeft") - Only these two methods will be called within
-        /// your plugin.</param>
-        public void RegisterEvents(string className, params string[] a_events) {
-            if (this.m_delRegisterEvents != null) {
-                this.m_delRegisterEvents(className, new List<string>(a_events));
+        /// <param name="events">
+        ///     A list of methods to be called within your plugin by procon
+        ///     Example: ("OnListPlayers", "OnPlayerLeft") - Only these two methods will be called within
+        ///     your plugin.
+        /// </param>
+        public void RegisterEvents(string className, params string[] events) {
+            if (_registerEventsDelegate != null) {
+                _registerEventsDelegate(className, new List<string>(events));
             }
         }
 
         public void RegisterCommand(MatchCommand mtcCommand) {
-            if (this.m_delRegisterCommand != null) {
-                this.m_delRegisterCommand(mtcCommand);
+            if (_registerCommandDelegate != null) {
+                _registerCommandDelegate(mtcCommand);
             }
         }
 
         public void UnregisterCommand(MatchCommand mtcCommand) {
-            if (this.m_delUnregisterCommand != null) {
-                this.m_delUnregisterCommand(mtcCommand);
+            if (_unregisterCommandDelegate != null) {
+                _unregisterCommandDelegate(mtcCommand);
             }
         }
 
         public List<MatchCommand> GetRegisteredCommands() {
             List<MatchCommand> lstReturn = default(List<MatchCommand>);
 
-            if (this.m_delGetRegisteredCommands != null) {
-                lstReturn = this.m_delGetRegisteredCommands();
+            if (_getRegisteredCommandsDelegate != null) {
+                lstReturn = _getRegisteredCommandsDelegate();
             }
 
             return lstReturn;
@@ -169,32 +196,32 @@ namespace PRoCon.Core.Plugin {
         public List<CMap> GetMapDefines() {
             List<CMap> lstReturn = default(List<CMap>);
 
-            if (this.m_delGetAccountPrivileges != null) {
-                lstReturn = this.m_delGetMapDefines();
+            if (_getAccountPrivilegesDelegate != null) {
+                lstReturn = _getMapDefinesDelegate();
             }
 
             return lstReturn;
         }
 
-        public CPrivileges GetAccountPrivileges(string strAccountName) {
+        public CPrivileges GetAccountPrivileges(string accountName) {
             CPrivileges spReturn = default(CPrivileges);
 
-            if (this.m_delGetAccountPrivileges != null) {
-                spReturn = this.m_delGetAccountPrivileges(strAccountName);
+            if (_getAccountPrivilegesDelegate != null) {
+                spReturn = _getAccountPrivilegesDelegate(accountName);
             }
 
             return spReturn;
         }
 
-        public T GetVariable<T>(string strVariable, T tDefault) {
+        public T GetVariable<T>(string variable, T tDefault) {
             T tReturn = tDefault;
 
-            if (this.m_delGetVariable != null) {
-                string strValue = this.m_delGetVariable(strVariable);
+            if (_getVariableDelegate != null) {
+                string strValue = _getVariableDelegate(variable);
 
-                TypeConverter tycPossible = TypeDescriptor.GetConverter(typeof(T));
-                if (strValue.Length > 0 && tycPossible.CanConvertFrom(typeof(string)) == true) {
-                    tReturn = (T)tycPossible.ConvertFrom(strValue);
+                TypeConverter tycPossible = TypeDescriptor.GetConverter(typeof (T));
+                if (strValue.Length > 0 && tycPossible.CanConvertFrom(typeof (string)) == true) {
+                    tReturn = (T) tycPossible.ConvertFrom(strValue);
                 }
                 else {
                     tReturn = tDefault;
@@ -204,15 +231,15 @@ namespace PRoCon.Core.Plugin {
             return tReturn;
         }
 
-        public T GetSvVariable<T>(string strVariable, T tDefault) {
+        public T GetSvVariable<T>(string variable, T tDefault) {
             T tReturn = tDefault;
 
-            if (this.m_delGetSvVariable != null) {
-                string strValue = this.m_delGetSvVariable(strVariable);
+            if (_getSvVariableDelegate != null) {
+                string strValue = _getSvVariableDelegate(variable);
 
-                TypeConverter tycPossible = TypeDescriptor.GetConverter(typeof(T));
-                if (strValue.Length > 0 && tycPossible.CanConvertFrom(typeof(string)) == true) {
-                    tReturn = (T)tycPossible.ConvertFrom(strValue);
+                TypeConverter tycPossible = TypeDescriptor.GetConverter(typeof (T));
+                if (strValue.Length > 0 && tycPossible.CanConvertFrom(typeof (string)) == true) {
+                    tReturn = (T) tycPossible.ConvertFrom(strValue);
                 }
                 else {
                     tReturn = tDefault;
@@ -225,8 +252,8 @@ namespace PRoCon.Core.Plugin {
         public WeaponDictionary GetWeaponDefines() {
             WeaponDictionary dicReturn = default(WeaponDictionary);
 
-            if (this.m_delGetWeaponDefines != null) {
-                dicReturn = this.m_delGetWeaponDefines();
+            if (_getWeaponDefinesDelegate != null) {
+                dicReturn = _getWeaponDefinesDelegate();
             }
 
             return dicReturn;
@@ -235,8 +262,8 @@ namespace PRoCon.Core.Plugin {
         public SpecializationDictionary GetSpecializationDefines() {
             SpecializationDictionary dicReturn = default(SpecializationDictionary);
 
-            if (this.m_delGetSpecializationDefines != null) {
-                dicReturn = this.m_delGetSpecializationDefines();
+            if (_getSpecializationDefinesDelegate != null) {
+                dicReturn = _getSpecializationDefinesDelegate();
             }
 
             return dicReturn;
@@ -245,20 +272,19 @@ namespace PRoCon.Core.Plugin {
         public List<string> GetLoggedInAccountUsernames() {
             List<string> loggedInList = null;
 
-            if (this.m_delGetLoggedInAccountUsernames != null) {
-                loggedInList = this.m_delGetLoggedInAccountUsernames();
+            if (_getLoggedInAccountUsernamesDelegate != null) {
+                loggedInList = _getLoggedInAccountUsernamesDelegate();
             }
 
             return loggedInList;
         }
 
         /// <summary>
-        /// Provides a way of creating and populating lists inline with the C# 2.0 compiler.
-        /// The below examples would be identical in a 3.5 C# compiler but the first would throw
-        /// compile errors in 2.0
-        /// 
-        /// List<string> lstHelloWorld = new List<string>() { "Hello", "World!" };
-        /// List<string> lstHelloWorld = this.Listify<string>("Hello", "World!");
+        ///     Provides a way of creating and populating lists inline with the C# 2.0 compiler.
+        ///     The below examples would be identical in a 3.5 C# compiler but the first would throw
+        ///     compile errors in 2.0
+        ///     List<string /> lstHelloWorld = new List<string />() { "Hello", "World!" };
+        ///     List<string /> lstHelloWorld = this.Listify<string />("Hello", "World!");
         /// </summary>
         /// <typeparam name="T">The type of object to create a List of</typeparam>
         /// <param name="newList"></param>
@@ -285,8 +311,7 @@ namespace PRoCon.Core.Plugin {
         // 
         // See the @help function in the basic in game information plugin for an example.
         public List<string> WordWrap(string strText, int iColumn) {
-
-            List<string> lstReturn = new List<string>(strText.Split(' '));
+            var lstReturn = new List<string>(strText.Split(' '));
 
             for (int i = 0; i < lstReturn.Count - 1; i++) {
                 if (lstReturn[i].Length + lstReturn[i + 1].Length + 1 <= iColumn) {
@@ -300,9 +325,8 @@ namespace PRoCon.Core.Plugin {
         }
 
         public void UnregisterZoneTags(params string[] tags) {
-
-            string tagList = GetVariable<string>("ZONE_TAG_LIST", String.Empty);
-            ZoneTagList tagsList = new ZoneTagList(tagList);
+            string tagList = GetVariable("ZONE_TAG_LIST", String.Empty);
+            var tagsList = new ZoneTagList(tagList);
 
             foreach (string tag in tags) {
                 if (tagsList.Contains(tag) == true) {
@@ -310,56 +334,44 @@ namespace PRoCon.Core.Plugin {
                 }
             }
 
-            this.ExecuteCommand("procon.protected.vars.set", "ZONE_TAG_LIST", tagsList.ToString());
+            ExecuteCommand("procon.protected.vars.set", "ZONE_TAG_LIST", tagsList.ToString());
         }
 
         public void RegisterZoneTags(params string[] tags) {
+            string tagList = GetVariable("ZONE_TAG_LIST", String.Empty);
 
-            string tagList = GetVariable<string>("ZONE_TAG_LIST", String.Empty);
-
-            ZoneTagList tagsList = new ZoneTagList(tagList);
+            var tagsList = new ZoneTagList(tagList);
             foreach (string tag in tags) {
                 if (tagsList.Contains(tag) == false) {
                     tagsList.Add(tag);
                 }
             }
 
-            this.ExecuteCommand("procon.protected.vars.set", "ZONE_TAG_LIST", tagsList.ToString());
-        }
-
-        protected Dictionary<string, Weapon> WeaponDictionaryByLocalizedName {
-            get;
-            private set;
-        }
-
-        protected Dictionary<string, Specialization> SpecializationDictionaryByLocalizedName {
-            get;
-            private set;
+            ExecuteCommand("procon.protected.vars.set", "ZONE_TAG_LIST", tagsList.ToString());
         }
 
         internal void SetupInternalDictionaries() {
-
             string localizedName = String.Empty;
 
-            WeaponDictionary weapons = this.GetWeaponDefines();
-            this.WeaponDictionaryByLocalizedName = new Dictionary<string, Weapon>();
+            WeaponDictionary weapons = GetWeaponDefines();
+            WeaponDictionaryByLocalizedName = new Dictionary<string, Weapon>();
 
             foreach (Weapon weapon in weapons) {
-                localizedName = this.GetLocalized(weapon.Name, String.Format("global.Weapons.{0}", weapon.Name.ToLower()));
+                localizedName = GetLocalized(weapon.Name, String.Format("global.Weapons.{0}", weapon.Name.ToLower()));
 
-                if (this.WeaponDictionaryByLocalizedName.ContainsKey(localizedName) == false) {
-                    this.WeaponDictionaryByLocalizedName.Add(localizedName, weapon);
+                if (WeaponDictionaryByLocalizedName.ContainsKey(localizedName) == false) {
+                    WeaponDictionaryByLocalizedName.Add(localizedName, weapon);
                 }
             }
 
-            SpecializationDictionary specializations = this.GetSpecializationDefines();
-            this.SpecializationDictionaryByLocalizedName = new Dictionary<string, Specialization>();
+            SpecializationDictionary specializations = GetSpecializationDefines();
+            SpecializationDictionaryByLocalizedName = new Dictionary<string, Specialization>();
 
             foreach (Specialization specialization in specializations) {
-                localizedName = this.GetLocalized(specialization.Name, String.Format("global.Specialization.{0}", specialization.Name.ToLower()));
+                localizedName = GetLocalized(specialization.Name, String.Format("global.Specialization.{0}", specialization.Name.ToLower()));
 
-                if (this.SpecializationDictionaryByLocalizedName.ContainsKey(localizedName) == false) {
-                    this.SpecializationDictionaryByLocalizedName.Add(localizedName, specialization);
+                if (SpecializationDictionaryByLocalizedName.ContainsKey(localizedName) == false) {
+                    SpecializationDictionaryByLocalizedName.Add(localizedName, specialization);
                 }
             }
         }
@@ -367,16 +379,14 @@ namespace PRoCon.Core.Plugin {
         /// <summary>
         /// </summary>
         /// <param name="damageType">
-        /// DamageTypes.None = Full list of weapons
-        /// DamageTypes.SniperRifle = List of sniper rifles
+        ///     DamageTypes.None = Full list of weapons
+        ///     DamageTypes.SniperRifle = List of sniper rifles
         /// </param>
         /// <returns></returns>
         protected List<string> GetWeaponList(DamageTypes damageType) {
+            var returnWeaponList = new List<string>();
 
-            List<string> returnWeaponList = new List<string>();
-
-            foreach (KeyValuePair<string, Weapon> weapon in this.WeaponDictionaryByLocalizedName) {
-
+            foreach (var weapon in WeaponDictionaryByLocalizedName) {
                 if (damageType == DamageTypes.None || (damageType & weapon.Value.Damage) == weapon.Value.Damage) {
                     if (returnWeaponList.Contains(weapon.Key) == false) {
                         returnWeaponList.Add(weapon.Key);
@@ -388,39 +398,36 @@ namespace PRoCon.Core.Plugin {
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="variableName">The name to display in the plugin settings</param>
         /// <param name="assemblyName">A unique name for this enum list, should be unique.  Put your plugin class name in to avoid clashes.</param>
         /// <param name="value">The current value/selected value</param>
-        /// <param name="slotType">DamageTypes.None, gets full list otherwise limits the returned list</param>
+        /// <param name="damageType">DamageTypes.None, gets full list otherwise limits the returned list</param>
         /// <returns></returns>
         protected CPluginVariable GetWeaponListPluginVariable(string variableName, string assemblyName, string value, DamageTypes damageType) {
-            return new CPluginVariable(variableName, String.Format("enum.{0}({1})", assemblyName, String.Join("|", this.GetWeaponList(damageType).ToArray())), value);
+            return new CPluginVariable(variableName, String.Format("enum.{0}({1})", assemblyName, String.Join("|", GetWeaponList(damageType).ToArray())), value);
         }
 
         protected Weapon GetWeaponByLocalizedName(string localizedName) {
             Weapon returnWeapon = null;
 
-            if (this.WeaponDictionaryByLocalizedName.ContainsKey(localizedName) == true) {
-                returnWeapon = this.WeaponDictionaryByLocalizedName[localizedName];
+            if (WeaponDictionaryByLocalizedName.ContainsKey(localizedName) == true) {
+                returnWeapon = WeaponDictionaryByLocalizedName[localizedName];
             }
 
             return returnWeapon;
         }
 
         /// <summary>
-        /// this.GetSpecializationList(SpecializationSlots.None) gets a full list of specs
-        /// this.GetSpecializationList(SpecializationSlots.Kit) will get a list of specs based on Kits
+        ///     this.GetSpecializationList(SpecializationSlots.None) gets a full list of specs
+        ///     this.GetSpecializationList(SpecializationSlots.Kit) will get a list of specs based on Kits
         /// </summary>
         /// <param name="slotType"></param>
         /// <returns></returns>
         protected List<string> GetSpecializationList(SpecializationSlots slotType) {
+            var returnSpecializationList = new List<string>();
 
-            List<string> returnSpecializationList = new List<string>();
-
-            foreach (KeyValuePair<string, Specialization> specialization in this.SpecializationDictionaryByLocalizedName) {
-
+            foreach (var specialization in SpecializationDictionaryByLocalizedName) {
                 if (slotType == SpecializationSlots.None || slotType == specialization.Value.Slot) {
                     if (returnSpecializationList.Contains(specialization.Key) == false) {
                         returnSpecializationList.Add(specialization.Key);
@@ -432,7 +439,6 @@ namespace PRoCon.Core.Plugin {
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="variableName">The name to display in the plugin settings</param>
         /// <param name="assemblyName">A unique name for this enum list, should be unique.  Put your plugin class name in to avoid clashes.</param>
@@ -440,14 +446,14 @@ namespace PRoCon.Core.Plugin {
         /// <param name="slotType">SpecializationSlots.None, gets full list otherwise limits the returned list</param>
         /// <returns></returns>
         protected CPluginVariable GetSpecializationListPluginVariable(string variableName, string assemblyName, string value, SpecializationSlots slotType) {
-            return new CPluginVariable(variableName, String.Format("enum.{0}({1})", assemblyName, String.Join("|", this.GetSpecializationList(slotType).ToArray())), value);
+            return new CPluginVariable(variableName, String.Format("enum.{0}({1})", assemblyName, String.Join("|", GetSpecializationList(slotType).ToArray())), value);
         }
 
         protected Specialization GetSpecializationByLocalizedName(string localizedName) {
             Specialization returnSpecialization = null;
 
-            if (this.SpecializationDictionaryByLocalizedName.ContainsKey(localizedName) == true) {
-                returnSpecialization = this.SpecializationDictionaryByLocalizedName[localizedName];
+            if (SpecializationDictionaryByLocalizedName.ContainsKey(localizedName) == true) {
+                returnSpecialization = SpecializationDictionaryByLocalizedName[localizedName];
             }
 
             return returnSpecialization;
@@ -459,17 +465,13 @@ namespace PRoCon.Core.Plugin {
             if (requestedPlayLists == null) {
                 isValid = true;
             }
-            else if (requestedPlayLists != null) {
-
+            else {
                 if (requestedPlayLists.Length == 0) {
                     isValid = true;
                 }
                 else {
-                    foreach (string playlist in requestedPlayLists) {
-                        if (String.Compare(validatePlayList, playlist) == 0) {
-                            isValid = true;
-                            break;
-                        }
+                    if (requestedPlayLists.Any(playlist => String.CompareOrdinal(validatePlayList, playlist) == 0)) {
+                        isValid = true;
                     }
                 }
             }
@@ -478,23 +480,21 @@ namespace PRoCon.Core.Plugin {
         }
 
         /// <summary>
-        /// Gets a list of formatted maps from the Map Defines.
+        ///     Gets a list of formatted maps from the Map Defines.
         /// </summary>
         /// <param name="format">
-        /// {PublicLevelName}
-        /// {GameMode}
-        /// {FileName}
-        /// {PlayList}
+        ///     {PublicLevelName}
+        ///     {GameMode}
+        ///     {FileName}
+        ///     {PlayList}
         /// </param>
         /// <param name="playList"></param>
         /// <returns></returns>
         protected List<string> GetMapList(string format, params string[] playList) {
-            List<string> returnMapList = new List<string>();
+            var returnMapList = new List<string>();
 
-            foreach (CMap map in this.GetMapDefines()) {
-
-                if (this.IsValidPlaylist(map.PlayList, playList) == true) {
-
+            foreach (CMap map in GetMapDefines()) {
+                if (IsValidPlaylist(map.PlayList, playList) == true) {
                     string formattedMap = format.Replace("{PublicLevelName}", map.PublicLevelName).Replace("{GameMode}", map.GameMode).Replace("{FileName}", map.FileName).Replace("{PlayList}", map.PlayList);
 
                     if (returnMapList.Contains(formattedMap) == false) {
@@ -507,7 +507,6 @@ namespace PRoCon.Core.Plugin {
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="variableName">The name to display in the plugin settings</param>
         /// <param name="assemblyName">A unique name for this enum list, should be unique.  Put your plugin class name in to avoid clashes.</param>
@@ -516,52 +515,38 @@ namespace PRoCon.Core.Plugin {
         /// <param name="playList">SQDM, SQRUSH, CONQUEST, RUSH</param>
         /// <returns></returns>
         protected CPluginVariable GetMapListPluginVariable(string variableName, string assemblyName, string value, string format, params string[] playList) {
-            return new CPluginVariable(variableName, String.Format("enum.{0}({1})", assemblyName, String.Join("|", this.GetMapList(format, playList).ToArray())), value);
+            return new CPluginVariable(variableName, String.Format("enum.{0}({1})", assemblyName, String.Join("|", GetMapList(format, playList).ToArray())), value);
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="format">See this.GetMapList(string, params string[]) for more information about the format variable</param>
         /// <param name="formattedMapName"></param>
         /// <returns></returns>
         protected CMap GetMapByFormattedName(string format, string formattedMapName) {
-
-            CMap returnMap = null;
-
-            foreach (CMap map in this.GetMapDefines()) {
-
-                string formattedMap = format.Replace("{PublicLevelName}", map.PublicLevelName).Replace("{GameMode}", map.GameMode).Replace("{FileName}", map.FileName);
-
-                if (String.Compare(formattedMap, formattedMapName) == 0) {
-                    returnMap = map;
-                    break;
-                }
-            }
-
-            return returnMap;
+            return (GetMapDefines().Select(map => new {
+                map,
+                formattedMap = format.Replace("{PublicLevelName}", map.PublicLevelName).Replace("{GameMode}", map.GameMode).Replace("{FileName}", map.FileName)
+            }).Where(@t => String.CompareOrdinal(@t.formattedMap, formattedMapName) == 0).Select(@t => @t.map)).FirstOrDefault();
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="format">
-        /// {PublicLevelName}
-        /// {GameMode}
-        /// {FileName}
-        /// {TeamName}
+        ///     {PublicLevelName}
+        ///     {GameMode}
+        ///     {FileName}
+        ///     {TeamName}
         /// </param>
         /// <param name="playList"></param>
         /// <returns></returns>
         protected List<string> GetTeamList(string format, params string[] playList) {
-            List<string> returnMapList = new List<string>();
+            var returnMapList = new List<string>();
 
-            foreach (CMap map in this.GetMapDefines()) {
-
-                if (this.IsValidPlaylist(map.PlayList, playList) == true) {
-
+            foreach (CMap map in GetMapDefines()) {
+                if (IsValidPlaylist(map.PlayList, playList) == true) {
                     foreach (CTeamName teamname in map.TeamNames) {
-                        string formattedTeamName = format.Replace("{PublicLevelName}", map.PublicLevelName).Replace("{GameMode}", map.GameMode).Replace("{FileName}", map.FileName).Replace("{TeamName}", this.GetLocalized(teamname.LocalizationKey, teamname.LocalizationKey));
+                        string formattedTeamName = format.Replace("{PublicLevelName}", map.PublicLevelName).Replace("{GameMode}", map.GameMode).Replace("{FileName}", map.FileName).Replace("{TeamName}", GetLocalized(teamname.LocalizationKey, teamname.LocalizationKey));
 
                         if (returnMapList.Contains(formattedTeamName) == false) {
                             returnMapList.Add(formattedTeamName);
@@ -574,15 +559,13 @@ namespace PRoCon.Core.Plugin {
         }
 
         protected List<string> GetTeamListByPlayList(string format, params string[] playList) {
-            List<string> returnMapList = new List<string>();
+            var returnMapList = new List<string>();
 
-            foreach (CMap map in this.GetMapDefines()) {
-
-                if (this.IsValidPlaylist(map.PlayList, playList) == true) {
-
+            foreach (CMap map in GetMapDefines()) {
+                if (IsValidPlaylist(map.PlayList, playList) == true) {
                     foreach (CTeamName teamname in map.TeamNames) {
-                        if (String.Compare(teamname.Playlist, playList[0]) == 0) {
-                            string formattedTeamName = format.Replace("{PublicLevelName}", map.PublicLevelName).Replace("{GameMode}", map.GameMode).Replace("{FileName}", map.FileName).Replace("{TeamName}", this.GetLocalized(teamname.LocalizationKey, teamname.LocalizationKey));
+                        if (String.CompareOrdinal(teamname.Playlist, playList[0]) == 0) {
+                            string formattedTeamName = format.Replace("{PublicLevelName}", map.PublicLevelName).Replace("{GameMode}", map.GameMode).Replace("{FileName}", map.FileName).Replace("{TeamName}", GetLocalized(teamname.LocalizationKey, teamname.LocalizationKey));
 
                             if (returnMapList.Contains(formattedTeamName) == false) {
                                 returnMapList.Add(formattedTeamName);
@@ -596,7 +579,6 @@ namespace PRoCon.Core.Plugin {
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="variableName">The name to display in the plugin settings</param>
         /// <param name="assemblyName">A unique name for this enum list, should be unique.  Put your plugin class name in to avoid clashes.</param>
@@ -605,21 +587,16 @@ namespace PRoCon.Core.Plugin {
         /// <param name="playList">SQDM, SQRUSH, CONQUEST, RUSH</param>
         /// <returns></returns>
         protected CPluginVariable GetTeamListPluginVariable(string variableName, string assemblyName, string value, string format, params string[] playList) {
-            return new CPluginVariable(variableName, String.Format("enum.{0}({1})", assemblyName, String.Join("|", this.GetTeamList(format, playList).ToArray())), value);
+            return new CPluginVariable(variableName, String.Format("enum.{0}({1})", assemblyName, String.Join("|", GetTeamList(format, playList).ToArray())), value);
         }
 
         protected CTeamName GetTeamNameByFormattedTeamName(string format, string formattedTeamName) {
             CTeamName returnTeamName = null;
 
-            foreach (CMap map in this.GetMapDefines()) {
-
-                foreach (CTeamName teamname in map.TeamNames) {
-                    string formattedTeam = format.Replace("{PublicLevelName}", map.PublicLevelName).Replace("{GameMode}", map.GameMode).Replace("{FileName}", map.FileName).Replace("{TeamName}", this.GetLocalized(teamname.LocalizationKey, teamname.LocalizationKey));
-
-                    if (String.Compare(formattedTeam, formattedTeamName) == 0) {
-                        returnTeamName = teamname;
-                        break;
-                    }
+            foreach (CMap map in GetMapDefines()) {
+                foreach (CTeamName teamname in from teamname in map.TeamNames let formattedTeam = format.Replace("{PublicLevelName}", map.PublicLevelName).Replace("{GameMode}", map.GameMode).Replace("{FileName}", map.FileName).Replace("{TeamName}", GetLocalized(teamname.LocalizationKey, teamname.LocalizationKey)) where String.CompareOrdinal(formattedTeam, formattedTeamName) == 0 select teamname) {
+                    returnTeamName = teamname;
+                    break;
                 }
 
                 if (returnTeamName != null) {
@@ -635,11 +612,11 @@ namespace PRoCon.Core.Plugin {
         protected CMap GetMapByFilename(string strMapFileName) {
             CMap cmReturn = null;
 
-            List<CMap> mapDefines = this.GetMapDefines();
+            List<CMap> mapDefines = GetMapDefines();
 
             if (mapDefines != null) {
                 foreach (CMap cmMap in mapDefines) {
-                    if (String.Compare(cmMap.FileName, strMapFileName, true) == 0) {
+                    if (String.Compare(cmMap.FileName, strMapFileName, StringComparison.OrdinalIgnoreCase) == 0) {
                         cmReturn = cmMap;
                         break;
                     }
@@ -649,21 +626,15 @@ namespace PRoCon.Core.Plugin {
             return cmReturn;
         }
 
-        protected CMap GetMapByFilenamePlayList(string strMapFileName, string strMapPlayList)
-        {
+        protected CMap GetMapByFilenamePlayList(string strMapFileName, string strMapPlayList) {
             CMap cmReturn = null;
 
-            List<CMap> mapDefines = this.GetMapDefines();
+            List<CMap> mapDefines = GetMapDefines();
 
-            if (mapDefines != null)
-            {
-                foreach (CMap cmMap in mapDefines)
-                {
-                    if (String.Compare(cmMap.FileName, strMapFileName, true) == 0 && String.Compare(cmMap.PlayList, strMapPlayList, true) == 0)
-                    {
-                        cmReturn = cmMap;
-                        break;
-                    }
+            if (mapDefines != null) {
+                foreach (CMap cmMap in mapDefines.Where(cmMap => String.Compare(cmMap.FileName, strMapFileName, StringComparison.OrdinalIgnoreCase) == 0 && String.Compare(cmMap.PlayList, strMapPlayList, System.StringComparison.OrdinalIgnoreCase) == 0)) {
+                    cmReturn = cmMap;
+                    break;
                 }
             }
 

@@ -39,6 +39,7 @@ namespace PRoCon {
     using Controls.ServerSettings.BFBC2;
     using Controls.ServerSettings.MOH;
     using Controls.ServerSettings.BF3;
+    using Controls.ServerSettings.BF4;
     using Controls.ServerSettings.MOHW;
     using PRoCon.Forms;
 
@@ -96,6 +97,9 @@ namespace PRoCon {
             if (sender.Game is BF3Client) {
                 this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsDetailsBF3());
             }
+            else if (sender.Game is BF4Client) {
+                this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsDetailsBF4());
+            }
             else if (sender.Game is MOHWClient) {
                 this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsDetailsBF3());
             }
@@ -105,6 +109,9 @@ namespace PRoCon {
             
             if (sender.Game is BF3Client) {
                 this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsConfigurationBF3());
+            }
+            else if (sender.Game is BF4Client) {
+                this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsConfigurationBF4());
             }
             else if (sender.Game is MOHWClient) {
                 this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsConfigurationMOHW());
@@ -122,6 +129,9 @@ namespace PRoCon {
             }
             else if (sender.Game is BF3Client) {
                 this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsGameplayBF3());
+            }
+            else if (sender.Game is BF4Client) {
+                this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsGameplayBF4());
             }
             else if (sender.Game is MOHWClient) {
                 this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsGameplayMOHW());
@@ -142,6 +152,9 @@ namespace PRoCon {
             }
             else if (sender.Game is BF3Client) {
                 this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsConfigGeneratorBF3());
+            }
+            else if (sender.Game is BF4Client) {
+                this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsConfigGeneratorBF4());
             }
             else if (sender.Game is MOHWClient) {
                 this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsConfigGeneratorMOHW());
