@@ -1,0 +1,9 @@
+builds/Debug/
+*.DotSettings
+*.suo
+src/PRoCon.Console/obj
+src/PRoCon.Core/bin
+src/PRoCon.Core/obj
+src/PRoCon.Service/obj
+src/PRoCon/obj/
+src/PRoConUpdater/obj
