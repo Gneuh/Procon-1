@@ -93,8 +93,20 @@ namespace PRoCon.Core.Remote.Layer {
             this.RequestDelegates.Add("fairFight.isActive", this.DispatchVarsRequest);
             this.RequestDelegates.Add("fairFight.activate", this.DispatchVarsRequest);
             this.RequestDelegates.Add("fairfight.deactivate", this.DispatchVarsRequest);
-
+            
             this.RequestDelegates.Add("vars.maxSpectators", this.DispatchVarsRequest);
+            
+            this.RequestDelegates.Add("vars.hitIndicatorsEnabled", this.DispatchVarsRequest);
+            this.RequestDelegates.Add("vars.commander", this.DispatchVarsRequest);
+            this.RequestDelegates.Add("vars.serverType", this.DispatchVarsRequest);
+            this.RequestDelegates.Add("vars.forceReloadWholeMags", this.DispatchVarsRequest);
+
+            this.RequestDelegates.Add("vars.roundTimeLimit", this.DispatchVarsRequest);
+            this.RequestDelegates.Add("vars.mpExperience", this.DispatchVarsRequest);
+            this.RequestDelegates.Add("vars.team1FactionOverride", this.DispatchVarsRequest);
+            this.RequestDelegates.Add("vars.team2FactionOverride", this.DispatchVarsRequest);
+            this.RequestDelegates.Add("vars.team3FactionOverride", this.DispatchVarsRequest);
+            this.RequestDelegates.Add("vars.team4FactionOverride", this.DispatchVarsRequest);
         }
 
     }

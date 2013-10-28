@@ -1535,6 +1535,56 @@ namespace PRoCon.Core.Remote {
             }
         }
 
+        public virtual void SendSetVarsHitIndicatorsEnabled(bool enabled) {
+            if (IsLoggedIn == true) {
+                BuildSendPacket("vars.hitIndicatorsEnabled", Packet.Bltos(enabled));
+            }
+        }
+
+        public virtual void SendGetVarsHitIndicatorsEnabled() {
+            if (IsLoggedIn == true) {
+                BuildSendPacket("vars.hitIndicatorsEnabled");
+            }
+        }
+
+        /*
+         * This value is read only.
+        public virtual void SendSetVarsServerType(string value) {
+            if (IsLoggedIn == true) {
+                BuildSendPacket("vars.serverType", value);
+            }
+        }
+        */
+        public virtual void SendGetVarsServerType() {
+            if (IsLoggedIn == true) {
+                BuildSendPacket("vars.serverType");
+            }
+        }
+
+        public virtual void SendSetVarsCommander(bool enabled) {
+            if (IsLoggedIn == true) {
+                BuildSendPacket("vars.commander", Packet.Bltos(enabled));
+            }
+        }
+
+        public virtual void SendGetVarsCommander() {
+            if (IsLoggedIn == true) {
+                BuildSendPacket("vars.commander");
+            }
+        }
+
+        public virtual void SendSetVarsForceReloadWholeMags(bool enabled) {
+            if (IsLoggedIn == true) {
+                BuildSendPacket("vars.forceReloadWholeMags", Packet.Bltos(enabled));
+            }
+        }
+
+        public virtual void SendGetVarsForceReloadWholeMags() {
+            if (IsLoggedIn == true) {
+                BuildSendPacket("vars.forceReloadWholeMags");
+            }
+        }
+
         #endregion
 
         #region MoHW
@@ -1803,6 +1853,8 @@ namespace PRoCon.Core.Remote {
         public delegate void HelpHandler(FrostbiteClient sender, List<string> lstCommands);
 
         public delegate void IsEnabledHandler(FrostbiteClient sender, bool isEnabled);
+
+        public delegate void VarsStringHandler(FrostbiteClient sender, string value);
 
         public delegate void LevelLoadedHandler(FrostbiteClient sender, string mapFileName, string gamemode, int roundsPlayed, int roundsTotal);
 
@@ -3690,6 +3742,14 @@ namespace PRoCon.Core.Remote {
         public virtual event IsEnabledHandler FairFight;
 
         public virtual event LimitHandler MaxSpectators;
+
+        public virtual event IsEnabledHandler IsHitIndicator;
+
+        public virtual event IsEnabledHandler IsCommander;
+
+        public virtual event IsEnabledHandler IsForceReloadWholeMags;
+
+        public virtual event VarsStringHandler ServerType;
 
         #endregion
 

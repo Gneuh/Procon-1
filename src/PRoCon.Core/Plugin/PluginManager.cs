@@ -969,7 +969,7 @@ namespace PRoCon.Core.Plugin {
             ProconClient.Game.RoundWarmupTimeout -= new FrostbiteClient.LimitHandler(Game_RoundWarmupTimeout);
 
             ProconClient.Game.PremiumStatus -= new FrostbiteClient.IsEnabledHandler(Game_PremiumStatus);
-
+            
             ProconClient.Game.VehicleSpawnAllowed -= new FrostbiteClient.IsEnabledHandler(Game_VehicleSpawnAllowed);
             ProconClient.Game.VehicleSpawnDelay -= new FrostbiteClient.LimitHandler(Game_VehicleSpawnDelay);
             ProconClient.Game.BulletDamage -= new FrostbiteClient.LimitHandler(Game_BulletDamage);
@@ -1078,6 +1078,12 @@ namespace PRoCon.Core.Plugin {
             ProconClient.Game.MaxSpectators -= new FrostbiteClient.LimitHandler(Game_MaxSpectators);
 
             ProconClient.Game.FairFight -= new FrostbiteClient.IsEnabledHandler(Game_FairFight);
+
+            ProconClient.Game.IsHitIndicator -= new FrostbiteClient.IsEnabledHandler(Game_IsHitIndicator);
+
+            ProconClient.Game.IsCommander -= new FrostbiteClient.IsEnabledHandler(Game_IsCommander);
+            ProconClient.Game.IsForceReloadWholeMags -= new FrostbiteClient.IsEnabledHandler(Game_IsForceReloadWholeMags);
+            ProconClient.Game.ServerType -= new FrostbiteClient.VarsStringHandler(Game_ServerType);
 
             #endregion
 
@@ -1314,6 +1320,12 @@ namespace PRoCon.Core.Plugin {
 
             ProconClient.Game.FairFight += new FrostbiteClient.IsEnabledHandler(Game_FairFight);
 
+            ProconClient.Game.IsHitIndicator += new FrostbiteClient.IsEnabledHandler(Game_IsHitIndicator);
+
+            ProconClient.Game.IsCommander += new FrostbiteClient.IsEnabledHandler(Game_IsCommander);
+            ProconClient.Game.IsForceReloadWholeMags += new FrostbiteClient.IsEnabledHandler(Game_IsForceReloadWholeMags);
+            ProconClient.Game.ServerType += new FrostbiteClient.VarsStringHandler(Game_ServerType);
+
             #endregion
         }
 
@@ -1323,9 +1335,24 @@ namespace PRoCon.Core.Plugin {
 
         #region BF4
 
+        void Game_ServerType(FrostbiteClient sender, string value) {
+            InvokeOnAllEnabled("OnServerType", value);
+        }
 
+        void Game_IsCommander(FrostbiteClient sender, bool isEnabled) {
+            InvokeOnAllEnabled("OnCommander", isEnabled);
+        }
+
+        void Game_IsForceReloadWholeMags(FrostbiteClient sender, bool isEnabled) {
+            InvokeOnAllEnabled("OnForceReloadWholeMags", isEnabled);
+        }
+        
         void Game_FairFight(FrostbiteClient sender, bool isEnabled) {
             InvokeOnAllEnabled("OnFairFight", isEnabled);
+        }
+
+        void Game_IsHitIndicator(FrostbiteClient sender, bool isEnabled) {
+            InvokeOnAllEnabled("OnIsHitIndicator", isEnabled);
         }
 
         void Game_MaxSpectators(FrostbiteClient sender, int limit) {
@@ -1488,8 +1515,8 @@ namespace PRoCon.Core.Plugin {
         private void m_prcClient_PlayerKilled(PRoConClient sender, Kill kKillerVictimDetails) {
             InvokeOnAllEnabled("OnPlayerKilled", new object[] {kKillerVictimDetails});
 
-            // DEPRECATED
-            InvokeOnAllEnabled("OnPlayerKilled", new object[] {kKillerVictimDetails.Killer.SoldierName, kKillerVictimDetails.Victim.SoldierName});
+            // Obsolete. This was deprecated for BF3, it's now being taken away from BF4.
+            // InvokeOnAllEnabled("OnPlayerKilled", new object[] {kKillerVictimDetails.Killer.SoldierName, kKillerVictimDetails.Victim.SoldierName});
         }
 
         /// <summary>
@@ -1788,14 +1815,14 @@ namespace PRoCon.Core.Plugin {
         private void m_prcClient_MapListListed(FrostbiteClient sender, List<MaplistEntry> lstMaplist) {
             InvokeOnAllEnabled("OnMaplistList", lstMaplist);
 
-            // DEPRECATED
-            var lstMapFileNames = new List<string>();
-            foreach (MaplistEntry mleEntry in lstMaplist) {
-                lstMapFileNames.Add(mleEntry.MapFileName);
-            }
+            // OBSOLETE
+            //var lstMapFileNames = new List<string>();
+            //foreach (MaplistEntry mleEntry in lstMaplist) {
+            //    lstMapFileNames.Add(mleEntry.MapFileName);
+            //}
 
-            // DEPRECATED
-            InvokeOnAllEnabled("OnMaplistList", lstMapFileNames);
+            // OBSOLETE
+            //InvokeOnAllEnabled("OnMaplistList", lstMapFileNames);
         }
 
         private void m_prcClient_GamePassword(FrostbiteClient sender, string password) {

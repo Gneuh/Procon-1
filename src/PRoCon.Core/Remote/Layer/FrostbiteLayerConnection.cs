@@ -18,7 +18,7 @@ namespace PRoCon.Core.Remote.Layer {
         protected byte[] ReceivedBuffer;
         protected UInt32 SequenceNumber;
         protected Object ShutdownConnectionLock = new Object();
-        protected NetworkStream Stream;
+        protected NetworkStream NetworkStream;
 
         #region Events
 
@@ -39,9 +39,9 @@ namespace PRoCon.Core.Remote.Layer {
 
             Client = acceptedConnection;
 
-            Stream = Client.GetStream();
+            NetworkStream = Client.GetStream();
 
-            Stream.BeginRead(ReceivedBuffer, 0, ReceivedBuffer.Length, ReceiveCallback, this);
+            NetworkStream.BeginRead(ReceivedBuffer, 0, ReceivedBuffer.Length, ReceiveCallback, this);
         }
 
         /// <summary>
@@ -78,10 +78,12 @@ namespace PRoCon.Core.Remote.Layer {
 
         private void SendAsyncCallback(IAsyncResult ar) {
             try {
-                Stream.EndWrite(ar);
+                if (NetworkStream != null) {
+                    NetworkStream.EndWrite(ar);
 
-                if (PacketSent != null) {
-                    FrostbiteConnection.RaiseEvent(PacketSent.GetInvocationList(), this, (Packet) ar.AsyncState);
+                    if (PacketSent != null) {
+                        FrostbiteConnection.RaiseEvent(PacketSent.GetInvocationList(), this, (Packet)ar.AsyncState);
+                    }
                 }
             }
             catch (SocketException) {
@@ -94,11 +96,13 @@ namespace PRoCon.Core.Remote.Layer {
 
         public void SendAsync(Packet packet) {
             try {
-                byte[] bytePacket = packet.EncodePacket();
+                if (NetworkStream != null) {
+                    byte[] bytePacket = packet.EncodePacket();
 
-                LastPacketSent = packet;
+                    LastPacketSent = packet;
 
-                Stream.BeginWrite(bytePacket, 0, bytePacket.Length, SendAsyncCallback, packet);
+                    NetworkStream.BeginWrite(bytePacket, 0, bytePacket.Length, SendAsyncCallback, packet);
+                }
             }
             catch (SocketException) {
                 // TO DO: Error reporting, possibly in a log file.
@@ -110,9 +114,9 @@ namespace PRoCon.Core.Remote.Layer {
         }
 
         private void ReceiveCallback(IAsyncResult ar) {
-            if (Stream != null) {
+            if (NetworkStream != null) {
                 try {
-                    int iBytesRead = Stream.EndRead(ar);
+                    int iBytesRead = NetworkStream.EndRead(ar);
                     iBytesRead = ServeCrossDomainPolicy(iBytesRead);
 
                     if (iBytesRead > 0) {
@@ -128,7 +132,7 @@ namespace PRoCon.Core.Remote.Layer {
 
                         UInt32 packetSize = Packet.DecodePacketSize(PacketStream);
 
-                        while (PacketStream.Length >= packetSize && PacketStream.Length > Packet.PacketHeaderSize) {
+                        while (this.PacketStream != null && PacketStream.Length >= packetSize && PacketStream.Length > Packet.PacketHeaderSize) {
                             // Copy the complete packet from the beginning of the stream.
                             var completePacket = new byte[packetSize];
                             Array.Copy(PacketStream, completePacket, packetSize);
@@ -157,8 +161,9 @@ namespace PRoCon.Core.Remote.Layer {
                             ReceivedBuffer = null;
                             Shutdown();
                         }
-                        else {
-                            Stream.BeginRead(ReceivedBuffer, 0, ReceivedBuffer.Length, ReceiveCallback, null);
+
+                        if (this.NetworkStream != null) {
+                            this.NetworkStream.BeginRead(this.ReceivedBuffer, 0, this.ReceivedBuffer.Length, this.ReceiveCallback, this);
                         }
                     }
                     else {
@@ -184,40 +189,42 @@ namespace PRoCon.Core.Remote.Layer {
         ///     </para>
         /// </remarks>
         public virtual void Poke() {
-            bool downstreamDead = LastPacketReceived != null && LastPacketReceived.Stamp < DateTime.Now.AddMinutes(-5);
-            bool upstreamDead = LastPacketSent != null && LastPacketSent.Stamp < DateTime.Now.AddMinutes(-5);
+            bool downstreamDead = this.LastPacketReceived != null && this.LastPacketReceived.Stamp < DateTime.Now.AddMinutes(-2);
+            bool upstreamDead = this.LastPacketSent != null && this.LastPacketSent.Stamp < DateTime.Now.AddMinutes(-2);
 
             if (downstreamDead && upstreamDead) {
+                // Prevent these from raising another poke-shutdown.
+                this.LastPacketReceived = null;
+                this.LastPacketSent = null;
+
                 Shutdown();
             }
         }
 
         // TO DO: Better error reporting on this method.
         public void Shutdown() {
-            try {
-                if (ConnectionClosed != null) {
-                    FrostbiteConnection.RaiseEvent(ConnectionClosed.GetInvocationList(), this);
-                }
-
-                if (Client != null) {
+            if (Client != null) {
+                try {
                     lock (ShutdownConnectionLock) {
-                        if (Stream != null) {
-                            Stream.Close();
-                            Stream.Dispose();
-                            Stream = null;
+                        if (NetworkStream != null) {
+                            NetworkStream.Close();
+                            NetworkStream.Dispose();
+                            NetworkStream = null;
                         }
 
-                        if (Client != null) {
-                            Client.Close();
-                            Client = null;
+                        Client.Close();
+                        Client = null;
+
+                        if (ConnectionClosed != null) {
+                            FrostbiteConnection.RaiseEvent(ConnectionClosed.GetInvocationList(), this);
                         }
                     }
                 }
-            }
-            catch (SocketException) {
-                // TO DO: Error reporting, possibly in a log file.
-            }
-            catch (Exception) {
+                catch (SocketException) {
+                    // TO DO: Error reporting, possibly in a log file.
+                }
+                catch (Exception) {
+                }
             }
         }
 
@@ -245,7 +252,7 @@ namespace PRoCon.Core.Remote.Layer {
                     String sPolicyResponse = "<?xml version=\"1.0\"?>" + "<!DOCTYPE cross-domain-policy " + "SYSTEM \"http://www.macromedia.com/xml/dtds/cross-domain-policy.dtd\">" + "<cross-domain-policy>" + "<allow-access-from domain=\"*\" to-ports=\"" + iLocalPort + "\" />" + "</cross-domain-policy>";
 
                     byte[] response = Encoding.GetEncoding(1252).GetBytes(sPolicyResponse + Convert.ToChar(0x00));
-                    Stream.Write(response, 0, response.Length);
+                    NetworkStream.Write(response, 0, response.Length);
 
                     // Remove the policy request from the begining of the receive buffer
                     iBytesRead -= PolicyRequest.Length;

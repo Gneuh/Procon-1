@@ -102,6 +102,10 @@
             this.picSettingsCtfRoundTimeModifier = new System.Windows.Forms.PictureBox();
             this.numSettingsCtfRoundTimeModifier = new System.Windows.Forms.NumericUpDown();
             this.lblSettingsCtfRoundTimeModifier = new System.Windows.Forms.Label();
+            this.chkSettingsIsHitIndicators = new System.Windows.Forms.CheckBox();
+            this.picSettingsIsHitIndicators = new System.Windows.Forms.PictureBox();
+            this.chkSettingsIsForceReloadWholeMags = new System.Windows.Forms.CheckBox();
+            this.picSettingsIsForceReloadWholeMags = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsFriendlyFire)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsHardcore)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsThirdPersonVehicleCameras)).BeginInit();
@@ -140,6 +144,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsGunMasterWeaponsPreset)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsCtfRoundTimeModifier)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numSettingsCtfRoundTimeModifier)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picSettingsIsHitIndicators)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picSettingsIsForceReloadWholeMags)).BeginInit();
             this.SuspendLayout();
             // 
             // chkSettingsThirdPersonVehicleCameras
@@ -1136,10 +1142,54 @@
             this.lblSettingsCtfRoundTimeModifier.Text = "CTF Round Time Modifier";
             this.lblSettingsCtfRoundTimeModifier.Visible = false;
             // 
+            // chkSettingsIsHitIndicators
+            // 
+            this.chkSettingsIsHitIndicators.AutoSize = true;
+            this.chkSettingsIsHitIndicators.Location = new System.Drawing.Point(43, 471);
+            this.chkSettingsIsHitIndicators.Name = "chkSettingsIsHitIndicators";
+            this.chkSettingsIsHitIndicators.Size = new System.Drawing.Size(100, 19);
+            this.chkSettingsIsHitIndicators.TabIndex = 308;
+            this.chkSettingsIsHitIndicators.Text = "Hit Indiciators";
+            this.chkSettingsIsHitIndicators.UseVisualStyleBackColor = true;
+            this.chkSettingsIsHitIndicators.CheckedChanged += new System.EventHandler(this.chkSettingsIsHitIndicators_CheckedChanged);
+            // 
+            // picSettingsIsHitIndicators
+            // 
+            this.picSettingsIsHitIndicators.Location = new System.Drawing.Point(16, 472);
+            this.picSettingsIsHitIndicators.Name = "picSettingsIsHitIndicators";
+            this.picSettingsIsHitIndicators.Size = new System.Drawing.Size(16, 16);
+            this.picSettingsIsHitIndicators.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.picSettingsIsHitIndicators.TabIndex = 307;
+            this.picSettingsIsHitIndicators.TabStop = false;
+            // 
+            // chkSettingsIsForceReloadWholeMags
+            // 
+            this.chkSettingsIsForceReloadWholeMags.AutoSize = true;
+            this.chkSettingsIsForceReloadWholeMags.Location = new System.Drawing.Point(44, 500);
+            this.chkSettingsIsForceReloadWholeMags.Name = "chkSettingsIsForceReloadWholeMags";
+            this.chkSettingsIsForceReloadWholeMags.Size = new System.Drawing.Size(172, 19);
+            this.chkSettingsIsForceReloadWholeMags.TabIndex = 310;
+            this.chkSettingsIsForceReloadWholeMags.Text = "Force reload of whole mags";
+            this.chkSettingsIsForceReloadWholeMags.UseVisualStyleBackColor = true;
+            this.chkSettingsIsForceReloadWholeMags.CheckedChanged += new System.EventHandler(this.chkSettingsForceReloadWholeMags_CheckedChanged);
+            // 
+            // picSettingsIsForceReloadWholeMags
+            // 
+            this.picSettingsIsForceReloadWholeMags.Location = new System.Drawing.Point(16, 501);
+            this.picSettingsIsForceReloadWholeMags.Name = "picSettingsIsForceReloadWholeMags";
+            this.picSettingsIsForceReloadWholeMags.Size = new System.Drawing.Size(16, 16);
+            this.picSettingsIsForceReloadWholeMags.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.picSettingsIsForceReloadWholeMags.TabIndex = 309;
+            this.picSettingsIsForceReloadWholeMags.TabStop = false;
+            // 
             // uscServerSettingsGameplayBF4
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.chkSettingsIsForceReloadWholeMags);
+            this.Controls.Add(this.picSettingsIsForceReloadWholeMags);
+            this.Controls.Add(this.chkSettingsIsHitIndicators);
+            this.Controls.Add(this.picSettingsIsHitIndicators);
             this.Controls.Add(this.lnkSettingsCtfRoundTimeModifier);
             this.Controls.Add(this.picSettingsCtfRoundTimeModifier);
             this.Controls.Add(this.numSettingsCtfRoundTimeModifier);
@@ -1304,6 +1354,10 @@
             this.Controls.SetChildIndex(this.numSettingsCtfRoundTimeModifier, 0);
             this.Controls.SetChildIndex(this.picSettingsCtfRoundTimeModifier, 0);
             this.Controls.SetChildIndex(this.lnkSettingsCtfRoundTimeModifier, 0);
+            this.Controls.SetChildIndex(this.picSettingsIsHitIndicators, 0);
+            this.Controls.SetChildIndex(this.chkSettingsIsHitIndicators, 0);
+            this.Controls.SetChildIndex(this.picSettingsIsForceReloadWholeMags, 0);
+            this.Controls.SetChildIndex(this.chkSettingsIsForceReloadWholeMags, 0);
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsFriendlyFire)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsHardcore)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsThirdPersonVehicleCameras)).EndInit();
@@ -1342,6 +1396,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsGunMasterWeaponsPreset)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsCtfRoundTimeModifier)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numSettingsCtfRoundTimeModifier)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picSettingsIsHitIndicators)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picSettingsIsForceReloadWholeMags)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1428,5 +1484,9 @@
         private System.Windows.Forms.PictureBox picSettingsCtfRoundTimeModifier;
         private System.Windows.Forms.NumericUpDown numSettingsCtfRoundTimeModifier;
         private System.Windows.Forms.Label lblSettingsCtfRoundTimeModifier;
+        private System.Windows.Forms.CheckBox chkSettingsIsHitIndicators;
+        private System.Windows.Forms.PictureBox picSettingsIsHitIndicators;
+        private System.Windows.Forms.CheckBox chkSettingsIsForceReloadWholeMags;
+        private System.Windows.Forms.PictureBox picSettingsIsForceReloadWholeMags;
     }
 }

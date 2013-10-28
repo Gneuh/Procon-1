@@ -112,6 +112,14 @@ namespace PRoCon.Core.Remote {
 
             ResponseDelegates.Add("admin.eventsEnabled", DispatchEventsEnabledResponse);
 
+            ResponseDelegates.Add("vars.hitIndicatorsEnabled", DispatchVarsHitIndicatorsResponse);
+
+            ResponseDelegates.Add("vars.commander", DispatchVarsCommander);
+            ResponseDelegates.Add("vars.forceReloadWholeMags", DispatchVarsForceReloadWholeMags);
+
+            
+            ResponseDelegates.Add("vars.serverType", DispatchVarsServerType);
+
             /*
             vars.clientSideDamageArbitration
             vars.killRotation
@@ -148,6 +156,7 @@ namespace PRoCon.Core.Remote {
             ResponseDelegates.Add("fairFight.isActive", DispatchVarsFairFightStatusResponse);
 
             ResponseDelegates.Add("vars.maxSpectators", DispatchVarsMaxSpectatorsResponse);
+
 
             #endregion
 
@@ -238,6 +247,12 @@ namespace PRoCon.Core.Remote {
             SendGetVarsFairFightPacket();
 
             SendGetVarsMaxSpectatorsPacket();
+
+            SendGetVarsHitIndicatorsEnabled();
+
+            SendGetVarsServerType();
+            SendGetVarsCommander();
+            SendGetVarsForceReloadWholeMags();
         }
 
         #region Overridden Events
@@ -334,6 +349,13 @@ namespace PRoCon.Core.Remote {
         public override event LimitHandler RoundWarmupTimeout;
 
         public override event IsEnabledHandler PremiumStatus;
+
+        public override event IsEnabledHandler IsHitIndicator;
+
+        public override event IsEnabledHandler IsCommander;
+        public override event IsEnabledHandler IsForceReloadWholeMags;
+        
+        public override event VarsStringHandler ServerType;
 
         #region player/squad cmd_handler
 
@@ -691,15 +713,14 @@ namespace PRoCon.Core.Remote {
                     "Passworded",
                     "ServerUptime",
                     "RoundTime",
-                    // "GameMod", // Note: if another variable is affixed to both games this method
-                    // "Mappack", // will need to be split into MoHClient and BFBC2Client.
                     "ExternalGameIpandPort",
                     "PunkBusterVersion",
                     "JoinQueueEnabled",
                     "ServerRegion",
                     "PingSite",
                     "ServerCountry",
-                    "QuickMatch"
+                    "BlazePlayerCount",
+                    "BlazeGameState"
                 }, cpRecievedPacket.Words.GetRange(1, cpRecievedPacket.Words.Count - 1));
 
                 FrostbiteConnection.RaiseEvent(ServerInfo.GetInvocationList(), this, newServerInfo);
@@ -1382,6 +1403,61 @@ namespace PRoCon.Core.Remote {
         }
 
         #endregion
+
+
+
+
+        protected virtual void DispatchVarsServerType(FrostbiteConnection sender, Packet cpRecievedPacket, Packet cpRequestPacket) {
+            if (cpRequestPacket.Words.Count >= 1) {
+                if (ServerType != null) {
+                    if (cpRecievedPacket.Words.Count == 2) {
+                        FrostbiteConnection.RaiseEvent(ServerType.GetInvocationList(), this, cpRecievedPacket.Words[1]);
+                    }
+                    else if (cpRequestPacket.Words.Count >= 2) {
+                        FrostbiteConnection.RaiseEvent(ServerType.GetInvocationList(), this, cpRequestPacket.Words[1]);
+                    }
+                }
+            }
+        }
+
+        protected virtual void DispatchVarsForceReloadWholeMags(FrostbiteConnection sender, Packet cpRecievedPacket, Packet cpRequestPacket) {
+            if (cpRequestPacket.Words.Count >= 1) {
+                if (IsForceReloadWholeMags != null) {
+                    if (cpRecievedPacket.Words.Count == 2) {
+                        FrostbiteConnection.RaiseEvent(IsForceReloadWholeMags.GetInvocationList(), this, Convert.ToBoolean(cpRecievedPacket.Words[1]));
+                    }
+                    else if (cpRequestPacket.Words.Count >= 2) {
+                        FrostbiteConnection.RaiseEvent(IsForceReloadWholeMags.GetInvocationList(), this, Convert.ToBoolean(cpRequestPacket.Words[1]));
+                    }
+                }
+            }
+        }
+
+        protected virtual void DispatchVarsCommander(FrostbiteConnection sender, Packet cpRecievedPacket, Packet cpRequestPacket) {
+            if (cpRequestPacket.Words.Count >= 1) {
+                if (IsCommander != null) {
+                    if (cpRecievedPacket.Words.Count == 2) {
+                        FrostbiteConnection.RaiseEvent(IsCommander.GetInvocationList(), this, Convert.ToBoolean(cpRecievedPacket.Words[1]));
+                    }
+                    else if (cpRequestPacket.Words.Count >= 2) {
+                        FrostbiteConnection.RaiseEvent(IsCommander.GetInvocationList(), this, Convert.ToBoolean(cpRequestPacket.Words[1]));
+                    }
+                }
+            }
+        }
+
+        protected virtual void DispatchVarsHitIndicatorsResponse(FrostbiteConnection sender, Packet cpRecievedPacket, Packet cpRequestPacket) {
+            if (cpRequestPacket.Words.Count >= 1) {
+                if (IsHitIndicator != null) {
+                    if (cpRecievedPacket.Words.Count == 2) {
+                        FrostbiteConnection.RaiseEvent(IsHitIndicator.GetInvocationList(), this, Convert.ToBoolean(cpRecievedPacket.Words[1]));
+                    }
+                    else if (cpRequestPacket.Words.Count >= 2) {
+                        FrostbiteConnection.RaiseEvent(IsHitIndicator.GetInvocationList(), this, Convert.ToBoolean(cpRequestPacket.Words[1]));
+                    }
+                }
+            }
+        }
 
         #endregion
 

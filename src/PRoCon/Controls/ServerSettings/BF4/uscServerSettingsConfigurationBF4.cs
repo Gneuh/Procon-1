@@ -59,6 +59,8 @@ namespace PRoCon.Controls.ServerSettings.BF4 {
             this.AsyncSettingControls.Add("vars.adminpassword", new AsyncStyleSetting(this.picSettingsAdminPassword, this.txtSettingsAdminPassword, new Control[] { this.lblSettingsAdminPassword, this.txtSettingsAdminPassword, this.lnkSettingsSetAdminPassword }, true));
 
             this.AsyncSettingControls.Add("fairFight.isActive", new AsyncStyleSetting(this.picSettingsFairFight, this.chkSettingsFairFight, new Control[] { this.chkSettingsFairFight }, true));
+
+            this.AsyncSettingControls.Add("vars.commander", new AsyncStyleSetting(this.picSettingsCommander, this.chkSettingsCommander, new Control[] { this.chkSettingsCommander }, true));
             
             this.AsyncSettingControls.Add("reservedslotslist.aggressivejoin", new AsyncStyleSetting(this.picSettingsAggressiveJoin, this.chkSettingsAggressiveJoin, new Control[] { this.chkSettingsAggressiveJoin }, true));
 
@@ -73,7 +75,8 @@ namespace PRoCon.Controls.ServerSettings.BF4 {
             base.SetLocalization(clocLanguage);
 
             this.chkSettingsPunkbuster.Text = this.Language.GetLocalized("uscServerSettingsPanel.chkSettingsPunkbuster");
-            this.chkSettingsRanked.Text = this.Language.GetLocalized("uscServerSettingsPanel.chkSettingsRanked");
+            this.lblSettingsServerType.Text = this.Language.GetLocalized("uscServerSettingsPanel.lblSettingsServerType");
+            this.chkSettingsCommander.Text = this.Language.GetLocalized("uscServerSettingsPanel.chkSettingsCommander");
 
             this.chkSettingsFairFight.Text = this.Language.GetDefaultLocalized("use FairFight", "uscServerSettingsPanel.chkSettingsFairFight");
 
@@ -116,9 +119,10 @@ namespace PRoCon.Controls.ServerSettings.BF4 {
         private void m_prcClient_GameTypeDiscovered(PRoConClient sender) {
 
             this.Client.Game.Punkbuster += new FrostbiteClient.IsEnabledHandler(m_prcClient_Punkbuster);
-            this.Client.Game.Ranked += new FrostbiteClient.IsEnabledHandler(m_prcClient_Ranked);
 
             this.Client.Game.FairFight += new FrostbiteClient.IsEnabledHandler(Game_FairFight);
+            this.Client.Game.IsCommander += new FrostbiteClient.IsEnabledHandler(Game_IsCommander);
+            this.Client.Game.ServerType += new FrostbiteClient.VarsStringHandler(Game_ServerType);
 
             this.Client.Game.GamePassword += new FrostbiteClient.PasswordHandler(m_prcClient_GamePassword);
             this.Client.Game.AdminPassword += new FrostbiteClient.PasswordHandler(m_prcClient_AdminPassword);
@@ -144,8 +148,17 @@ namespace PRoCon.Controls.ServerSettings.BF4 {
             }
 
             this.chkSettingsPunkbuster.Checked = csiServerInfo.PunkBuster;
-            this.chkSettingsRanked.Checked = csiServerInfo.Ranked;
+            //this.chkSettingsRanked.Checked = csiServerInfo.Ranked;
         }
+
+        #region Server Type
+
+        void Game_ServerType(FrostbiteClient sender, string value) {
+            // This value is read only.
+            this.txtSettingsServerType.Text = value;
+        }
+
+        #endregion
 
         #region Passwords
 
@@ -196,28 +209,6 @@ namespace PRoCon.Controls.ServerSettings.BF4 {
 
                     this.Client.Game.SendSetVarsPunkBusterPacket(this.chkSettingsPunkbuster.Checked);
                     //this.SendCommand("vars.punkBuster", Packet.bltos(this.chkSettingsPunkbuster.Checked));
-                }
-            }
-        }
-        */
-
-        #endregion
-
-        #region Ranked
-
-        private void m_prcClient_Ranked(FrostbiteClient sender, bool isEnabled) {
-            this.chkSettingsRanked.Checked = isEnabled;
-            //this.OnSettingResponse("vars.ranked", isEnabled, true);
-        }
-
-        /*
-        private void chkSettingsRanked_CheckedChanged(object sender, EventArgs e) {
-            if (this.Client != null && this.Client.Game != null) {
-                if (this.IgnoreEvents == false && this.AsyncSettingControls["vars.ranked"].IgnoreEvent == false) {
-                    this.WaitForSettingResponse("vars.ranked", !this.chkSettingsRanked.Checked);
-
-                    this.Client.Game.SendSetVarsRankedPacket(this.chkSettingsPunkbuster.Checked);
-                    //this.SendCommand("vars.ranked", Packet.bltos(this.chkSettingsRanked.Checked));
                 }
             }
         }
@@ -412,6 +403,23 @@ namespace PRoCon.Controls.ServerSettings.BF4 {
                 }
             }
         }
+        #endregion
+
+        #region Commander
+
+        private void Game_IsCommander(FrostbiteClient sender, bool isEnabled) {
+            this.OnSettingResponse("vars.commander", isEnabled, true);
+        }
+        private void chkSettingsCommander_CheckedChanged(object sender, EventArgs e) {
+            if (this.Client != null && this.Client.Game != null) {
+                if (this.IgnoreEvents == false && this.AsyncSettingControls["vars.commander"].IgnoreEvent == false) {
+                    this.WaitForSettingResponse("vars.commander", this.chkSettingsCommander.Checked);
+                    
+                    this.Client.Game.SendSetVarsCommander(this.chkSettingsCommander.Checked);
+                }
+            }
+        }
+
         #endregion
 
     }

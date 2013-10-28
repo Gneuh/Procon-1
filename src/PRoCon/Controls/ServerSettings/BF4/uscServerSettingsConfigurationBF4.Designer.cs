@@ -36,8 +36,6 @@
             this.lnkSettingsSetPlayerLimit = new System.Windows.Forms.LinkLabel();
             this.picSettingsPlayerLimit = new System.Windows.Forms.PictureBox();
             this.numSettingsPlayerLimit = new System.Windows.Forms.NumericUpDown();
-            this.chkSettingsRanked = new System.Windows.Forms.CheckBox();
-            this.picSettingsRanked = new System.Windows.Forms.PictureBox();
             this.chkSettingsPunkbuster = new System.Windows.Forms.CheckBox();
             this.picSettingsPunkbuster = new System.Windows.Forms.PictureBox();
             this.lblSettingsPlayerLimit = new System.Windows.Forms.Label();
@@ -65,6 +63,10 @@
             this.picSettingsSpectatorPassword = new System.Windows.Forms.PictureBox();
             this.txtSettingsSpectatorPassword = new System.Windows.Forms.TextBox();
             this.lblSettingsSpectatorPassword = new System.Windows.Forms.Label();
+            this.chkSettingsCommander = new System.Windows.Forms.CheckBox();
+            this.picSettingsCommander = new System.Windows.Forms.PictureBox();
+            this.lblSettingsServerType = new System.Windows.Forms.Label();
+            this.txtSettingsServerType = new System.Windows.Forms.TextBox();
             this.pnlSettingsSetidleKickLimit.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numSettingsIdleBanRoundsLimit)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsNoIdleBanRoundsLimit)).BeginInit();
@@ -72,7 +74,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsIdleKickLimit)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsPlayerLimit)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numSettingsPlayerLimit)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picSettingsRanked)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsPunkbuster)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsGamePassword)).BeginInit();
             this.pnlSettingsAdminPassword.SuspendLayout();
@@ -84,6 +85,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.numSettingsMaxSpectators)).BeginInit();
             this.pnlSettingsSpectatorPassword.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsSpectatorPassword)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picSettingsCommander)).BeginInit();
             this.SuspendLayout();
             // 
             // pnlSettingsSetidleKickLimit
@@ -262,26 +264,6 @@
             0,
             0,
             0});
-            // 
-            // chkSettingsRanked
-            // 
-            this.chkSettingsRanked.AutoSize = true;
-            this.chkSettingsRanked.Enabled = false;
-            this.chkSettingsRanked.Location = new System.Drawing.Point(35, 22);
-            this.chkSettingsRanked.Name = "chkSettingsRanked";
-            this.chkSettingsRanked.Size = new System.Drawing.Size(65, 19);
-            this.chkSettingsRanked.TabIndex = 210;
-            this.chkSettingsRanked.Text = "Ranked";
-            this.chkSettingsRanked.UseVisualStyleBackColor = true;
-            // 
-            // picSettingsRanked
-            // 
-            this.picSettingsRanked.Location = new System.Drawing.Point(9, 24);
-            this.picSettingsRanked.Name = "picSettingsRanked";
-            this.picSettingsRanked.Size = new System.Drawing.Size(16, 16);
-            this.picSettingsRanked.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.picSettingsRanked.TabIndex = 209;
-            this.picSettingsRanked.TabStop = false;
             // 
             // chkSettingsPunkbuster
             // 
@@ -582,10 +564,52 @@
             this.lblSettingsSpectatorPassword.TabIndex = 129;
             this.lblSettingsSpectatorPassword.Text = "Spectator password";
             // 
+            // chkSettingsCommander
+            // 
+            this.chkSettingsCommander.AutoSize = true;
+            this.chkSettingsCommander.Location = new System.Drawing.Point(351, 94);
+            this.chkSettingsCommander.Name = "chkSettingsCommander";
+            this.chkSettingsCommander.Size = new System.Drawing.Size(93, 19);
+            this.chkSettingsCommander.TabIndex = 302;
+            this.chkSettingsCommander.Text = "Commander";
+            this.chkSettingsCommander.UseVisualStyleBackColor = true;
+            this.chkSettingsCommander.CheckedChanged += new System.EventHandler(this.chkSettingsCommander_CheckedChanged);
+            // 
+            // picSettingsCommander
+            // 
+            this.picSettingsCommander.Location = new System.Drawing.Point(325, 94);
+            this.picSettingsCommander.Name = "picSettingsCommander";
+            this.picSettingsCommander.Size = new System.Drawing.Size(16, 16);
+            this.picSettingsCommander.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.picSettingsCommander.TabIndex = 301;
+            this.picSettingsCommander.TabStop = false;
+            // 
+            // lblSettingsServerType
+            // 
+            this.lblSettingsServerType.AutoSize = true;
+            this.lblSettingsServerType.Location = new System.Drawing.Point(34, -1);
+            this.lblSettingsServerType.Name = "lblSettingsServerType";
+            this.lblSettingsServerType.Size = new System.Drawing.Size(65, 15);
+            this.lblSettingsServerType.TabIndex = 303;
+            this.lblSettingsServerType.Text = "Server type";
+            // 
+            // txtSettingsServerType
+            // 
+            this.txtSettingsServerType.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtSettingsServerType.Location = new System.Drawing.Point(38, 21);
+            this.txtSettingsServerType.Name = "txtSettingsServerType";
+            this.txtSettingsServerType.ReadOnly = true;
+            this.txtSettingsServerType.Size = new System.Drawing.Size(200, 23);
+            this.txtSettingsServerType.TabIndex = 304;
+            // 
             // uscServerSettingsConfigurationBF4
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.lblSettingsServerType);
+            this.Controls.Add(this.txtSettingsServerType);
+            this.Controls.Add(this.chkSettingsCommander);
+            this.Controls.Add(this.picSettingsCommander);
             this.Controls.Add(this.pnlSettingsSpectatorPassword);
             this.Controls.Add(this.lnkSettingsSetMaxSpectators);
             this.Controls.Add(this.picSettingsMaxSpectators);
@@ -608,8 +632,6 @@
             this.Controls.Add(this.lnkSettingsSetPlayerLimit);
             this.Controls.Add(this.picSettingsPlayerLimit);
             this.Controls.Add(this.numSettingsPlayerLimit);
-            this.Controls.Add(this.chkSettingsRanked);
-            this.Controls.Add(this.picSettingsRanked);
             this.Controls.Add(this.chkSettingsPunkbuster);
             this.Controls.Add(this.picSettingsPunkbuster);
             this.Controls.Add(this.lblSettingsPlayerLimit);
@@ -623,7 +645,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsIdleKickLimit)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsPlayerLimit)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numSettingsPlayerLimit)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picSettingsRanked)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsPunkbuster)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsGamePassword)).EndInit();
             this.pnlSettingsAdminPassword.ResumeLayout(false);
@@ -637,6 +658,7 @@
             this.pnlSettingsSpectatorPassword.ResumeLayout(false);
             this.pnlSettingsSpectatorPassword.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsSpectatorPassword)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picSettingsCommander)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -653,8 +675,6 @@
         private System.Windows.Forms.LinkLabel lnkSettingsSetPlayerLimit;
         private System.Windows.Forms.PictureBox picSettingsPlayerLimit;
         private System.Windows.Forms.NumericUpDown numSettingsPlayerLimit;
-        private System.Windows.Forms.CheckBox chkSettingsRanked;
-        private System.Windows.Forms.PictureBox picSettingsRanked;
         private System.Windows.Forms.CheckBox chkSettingsPunkbuster;
         private System.Windows.Forms.PictureBox picSettingsPunkbuster;
         private System.Windows.Forms.Label lblSettingsPlayerLimit;
@@ -686,5 +706,9 @@
         private System.Windows.Forms.PictureBox picSettingsSpectatorPassword;
         private System.Windows.Forms.TextBox txtSettingsSpectatorPassword;
         private System.Windows.Forms.Label lblSettingsSpectatorPassword;
+        private System.Windows.Forms.CheckBox chkSettingsCommander;
+        private System.Windows.Forms.PictureBox picSettingsCommander;
+        private System.Windows.Forms.Label lblSettingsServerType;
+        private System.Windows.Forms.TextBox txtSettingsServerType;
     }
 }

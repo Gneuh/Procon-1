@@ -73,7 +73,7 @@ namespace PRoCon.Core.Plugin {
 
         protected Dictionary<string, Specialization> SpecializationDictionaryByLocalizedName { get; private set; }
 
-        protected Dictionary<String, MethodInfo> KeyedPublicMethodCache;
+        protected List<String> PublicMethodNames;
 
         public void RegisterCallbacks(ExecuteCommandHandler delExecuteCommand, GetAccountPrivilegesHandler delGetAccountPrivileges, GetVariableHandler delGetVariable, GetVariableHandler delGetSvVariable, GetMapDefinesHandler delGetMapDefines, TryGetLocalizedHandler delTryGetLocalized, RegisterCommandHandler delRegisterCommand, UnregisterCommandHandler delUnregisterCommand, GetRegisteredCommandsHandler delGetRegisteredCommands, GetWeaponDefinesHandler delGetWeaponDefines, GetSpecializationDefinesHandler delGetSpecializationDefines, GetLoggedInAccountUsernamesHandler delGetLoggedInAccountUsernames, RegisterEventsHandler delRegisterEvents) {
             _executeCommandDelegate = delExecuteCommand;
@@ -103,23 +103,16 @@ namespace PRoCon.Core.Plugin {
         public object Invoke(string methodName, object[] parameters) {
             object returnValue = null;
 
-            if (this.KeyedPublicMethodCache == null) {
-
-                this.KeyedPublicMethodCache = new Dictionary<String, MethodInfo>();
-
-                foreach (MethodInfo method in this.GetType().GetMethods()) {
-                    if (this.KeyedPublicMethodCache.ContainsKey(method.Name) == false) {
-                        this.KeyedPublicMethodCache.Add(method.Name, method);
-                    }
-                }
-
+            if (this.PublicMethodNames == null) {
+                this.PublicMethodNames = this.GetType().GetMethods().Select(method => method.Name).Distinct().ToList();
             }
 
-            if (this.KeyedPublicMethodCache.ContainsKey(methodName) == true) {
+            if (this.PublicMethodNames.Contains(methodName) == true) {
                 try {
-                    returnValue = this.KeyedPublicMethodCache[methodName].Invoke(this, parameters);
+                    returnValue = this.GetType().InvokeMember(methodName, BindingFlags.InvokeMethod, null, this, parameters);
                 }
-                catch (Exception) {
+                catch {
+                    // Do nothing.
                 }
             }
 

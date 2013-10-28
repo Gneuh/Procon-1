@@ -405,8 +405,7 @@ namespace PRoCon.Core.Remote {
 
                     UInt32 ui32PacketSize = Packet.DecodePacketSize(this.PacketStream);
 
-                    while (this.PacketStream.Length >= ui32PacketSize
-                        && this.PacketStream.Length > Packet.PacketHeaderSize) {
+                    while (this.PacketStream != null && this.PacketStream.Length >= ui32PacketSize && this.PacketStream.Length > Packet.PacketHeaderSize) {
 
                         // Copy the complete packet from the beginning of the stream.
                         byte[] completePacket = new byte[ui32PacketSize];
@@ -478,16 +477,13 @@ namespace PRoCon.Core.Remote {
                         this.ReceivedBuffer = null; // GC.collect()
                         this.Shutdown(new Exception("Exceeded maximum garbage packet"));
                     }
-                }
 
-                if (iBytesRead == 0) {
+                    if (this.NetworkStream != null) {
+                        this.NetworkStream.BeginRead(this.ReceivedBuffer, 0, this.ReceivedBuffer.Length, this.ReceiveCallback, this);
+                    }
+                }
+                else if (iBytesRead == 0) {
                     this.Shutdown();
-                    return;
-                }
-
-                if (this.NetworkStream != null) {
-
-                    this.NetworkStream.BeginRead(this.ReceivedBuffer, 0, this.ReceivedBuffer.Length, this.ReceiveCallback, this);
                 }
             }
             catch (SocketException se) {
@@ -505,10 +501,19 @@ namespace PRoCon.Core.Remote {
         /// If a packet exists in our outgoing "SentPackets"
         /// </summary>
         protected void RestartConnectionOnQueueFailure() {
-            if (this.OutgoingPackets.Any(outgoingPacket => outgoingPacket.Value.Stamp < DateTime.Now.AddMinutes(-2)) == true) {
-                this.OutgoingPackets.Clear();
-                this.QueuedPackets.Clear();
+            bool restart = false;
 
+            lock (this.QueueUnqueuePacketLock) {
+                restart = this.OutgoingPackets.Any(outgoingPacket => outgoingPacket.Value.Stamp < DateTime.Now.AddMinutes(-2));
+
+                if (restart == true) {
+                    this.OutgoingPackets.Clear();
+                    this.QueuedPackets.Clear();
+                }
+            }
+
+            // We do this outside of the lock to ensure calls outside this method won't result in a deadlock elsewhere.
+            if (restart == true) {
                 this.Shutdown(new Exception("Failed to hear response to packet within two minutes, forced shutdown."));
             }
         }

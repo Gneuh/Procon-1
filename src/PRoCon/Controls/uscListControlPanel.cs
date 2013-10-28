@@ -314,6 +314,10 @@ namespace PRoCon {
             {
                 this.tbcLists.TabPages.Remove(this.tabTextChatModeration);
             }
+
+            if (!(sender.Game is BF4Client)) {
+                this.tbcLists.TabPages.Remove(this.tabSpectatorSlots);
+            }
         }
 
         public void SetLocalization(CLocalization clocLanguage) {

@@ -143,6 +143,12 @@ namespace PRoCon.Core.Plugin {
 
         public virtual void OnFairFight(bool isEnabled) { }
 
+        public virtual void OnIsHitIndicator(bool isEnabled) { }
+        
+        public virtual void OnCommander(bool isEnabled) { }
+        public virtual void OnForceReloadWholeMags(bool isEnabled) { }
+        public virtual void OnServerType(string value) { }
+
         public virtual void OnMaxSpectators(int limit) { }
 
         #endregion

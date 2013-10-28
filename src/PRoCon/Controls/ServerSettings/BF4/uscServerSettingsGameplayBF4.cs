@@ -51,6 +51,9 @@ namespace PRoCon.Controls.ServerSettings.BF4 {
             // not used in BF4 //this.AsyncSettingControls.Add("vars.ctfRoundTimeModifier", new AsyncStyleSetting(this.picSettingsCtfRoundTimeModifier, this.numSettingsCtfRoundTimeModifier, new Control[] { this.numSettingsCtfRoundTimeModifier, this.lnkSettingsCtfRoundTimeModifier }, true));
             this.AsyncSettingControls.Add("vars.roundLockdownCountdown", new AsyncStyleSetting(this.picSettingsLockdownCountdown, this.numSettingsLockdownCountdown, new Control[] { this.numSettingsLockdownCountdown, this.lnkSettingsLockdownCountdown }, true));
             this.AsyncSettingControls.Add("vars.roundWarmupTimeout", new AsyncStyleSetting(this.picSettingsWarmupTimeout, this.numSettingsWarmupTimeout, new Control[] { this.numSettingsWarmupTimeout, this.lnkSettingsWarmupTimeout }, true));
+
+            this.AsyncSettingControls.Add("vars.hitIndicatorsEnabled", new AsyncStyleSetting(this.picSettingsIsHitIndicators, this.chkSettingsIsHitIndicators, new Control[] { this.chkSettingsIsHitIndicators }, true));
+            this.AsyncSettingControls.Add("vars.forceReloadWholeMags", new AsyncStyleSetting(this.picSettingsIsForceReloadWholeMags, this.chkSettingsIsForceReloadWholeMags, new Control[] { this.chkSettingsIsForceReloadWholeMags }, true));
         }
 
         public override void SetLocalization(CLocalization clocLanguage) {
@@ -96,6 +99,9 @@ namespace PRoCon.Controls.ServerSettings.BF4 {
 
             this.lblSettingsUnlockMode.Text = this.Language.GetLocalized("uscServerSettingsPanel.lblSettingsUnlockMode");
             this.lnkSettingsUnlockMode.Text = this.Language.GetLocalized("uscServerSettingsPanel.lnkSettingsUnlockMode");
+
+            this.chkSettingsIsHitIndicators.Text = this.Language.GetLocalized("uscServerSettingsPanel.chkSettingsIsHitIndicators");
+            this.chkSettingsIsForceReloadWholeMags.Text = this.Language.GetLocalized("uscServerSettingsPanel.chkSettingsIsForceReloadWholeMags");
 
             this.cboGameplayPresets.Items.Clear();
             this.cboGameplayPresets.Items.Add("Quickmatch");
@@ -186,6 +192,10 @@ namespace PRoCon.Controls.ServerSettings.BF4 {
             // not used in BF4 //this.Client.Game.CtfRoundTimeModifier +=new FrostbiteClient.LimitHandler(Game_CtfRoundTimeModifier);
             this.Client.Game.RoundLockdownCountdown += new FrostbiteClient.LimitHandler(Game_RoundLockdownCountdown);
             this.Client.Game.RoundWarmupTimeout += new FrostbiteClient.LimitHandler(Game_RoundWarmupTimeout);
+
+            this.Client.Game.IsHitIndicator += new FrostbiteClient.IsEnabledHandler(Game_IsHitIndicator);
+
+            this.Client.Game.IsForceReloadWholeMags += new FrostbiteClient.IsEnabledHandler(Game_IsForceReloadWholeMags);
         }
 
 
@@ -702,6 +712,44 @@ namespace PRoCon.Controls.ServerSettings.BF4 {
 
                 this.Client.Game.SendSetVarsRoundWarmupTimeoutPacket((int)this.numSettingsWarmupTimeout.Value);
             }
+        }
+
+        #endregion
+
+        #region Hit Indicators
+
+
+        private void chkSettingsIsHitIndicators_CheckedChanged(object sender, EventArgs e) {
+            if (this.Client != null && this.Client.Game != null) {
+                if (this.IgnoreEvents == false && this.AsyncSettingControls["vars.hitIndicatorsEnabled"].IgnoreEvent == false) {
+                    this.WaitForSettingResponse("vars.hitIndicatorsEnabled", !this.chkSettingsIsHitIndicators.Checked);
+
+                    this.Client.Game.SendSetVarsHitIndicatorsEnabled(this.chkSettingsIsHitIndicators.Checked);
+                }
+            }
+        }
+
+        private void Game_IsHitIndicator(FrostbiteClient sender, bool isEnabled) {
+            this.OnSettingResponse("vars.hitIndicatorsEnabled", isEnabled, true);
+        }
+
+        #endregion
+
+        #region Force reload of whole mags
+
+
+        private void chkSettingsForceReloadWholeMags_CheckedChanged(object sender, EventArgs e) {
+            if (this.Client != null && this.Client.Game != null) {
+                if (this.IgnoreEvents == false && this.AsyncSettingControls["vars.forceReloadWholeMags"].IgnoreEvent == false) {
+                    this.WaitForSettingResponse("vars.forceReloadWholeMags", !this.chkSettingsIsForceReloadWholeMags.Checked);
+
+                    this.Client.Game.SendSetVarsForceReloadWholeMags(this.chkSettingsIsForceReloadWholeMags.Checked);
+                }
+            }
+        }
+
+        private void Game_IsForceReloadWholeMags(FrostbiteClient sender, bool isEnabled) {
+            this.OnSettingResponse("vars.forceReloadWholeMags", isEnabled, true);
         }
 
         #endregion
