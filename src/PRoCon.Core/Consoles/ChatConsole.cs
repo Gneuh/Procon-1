@@ -43,6 +43,9 @@ namespace PRoCon.Core.Consoles {
         private bool _logKills;
 
         private bool _scrolling;
+
+        private bool _logComRoseMessages;
+
         private int _displayTimeIndex;
 
         private int _displayTypeIndex;
@@ -110,6 +113,17 @@ namespace PRoCon.Core.Consoles {
             }
         }
 
+        public bool LogComRoseMessages {
+            get { return _logComRoseMessages; }
+            set {
+                if (LogComRoseMessagesChanged != null) {
+                    FrostbiteConnection.RaiseEvent(LogComRoseMessagesChanged.GetInvocationList(), value);
+                }
+
+                _logComRoseMessages = value;
+            }
+        }
+
         public int DisplayTypeIndex {
             get { return _displayTypeIndex; }
             set {
@@ -139,7 +153,8 @@ namespace PRoCon.Core.Consoles {
                     LogKills.ToString(),
                     Scrolling.ToString(),
                     DisplayTypeIndex.ToString(CultureInfo.InvariantCulture),
-                    DisplayTimeIndex.ToString(CultureInfo.InvariantCulture)
+                    DisplayTimeIndex.ToString(CultureInfo.InvariantCulture),
+                    LogComRoseMessages.ToString()
                 };
             }
             set {
@@ -159,12 +174,16 @@ namespace PRoCon.Core.Consoles {
                         Scrolling = isEnabled;
                     }
 
-                    if (value.Count >= 4 && int.TryParse(value[3], out iIndex) == true) {
+                    if (value.Count >= 4 && int.TryParse(value[6], out iIndex) == true) {
                         DisplayTypeIndex = iIndex;
                     }
 
                     if (value.Count >= 5 && int.TryParse(value[4], out iIndex) == true) {
                         DisplayTimeIndex = iIndex;
+                    }
+
+                    if (value.Count >= 6 && bool.TryParse(value[5], out isEnabled) == true) {
+                        LogComRoseMessages = isEnabled;
                     }
                 }
             }
@@ -175,6 +194,7 @@ namespace PRoCon.Core.Consoles {
         public event IsEnabledHandler LogJoinLeavingChanged;
         public event IsEnabledHandler LogKillsChanged;
         public event IsEnabledHandler ScrollingChanged;
+        public event IsEnabledHandler LogComRoseMessagesChanged;
         public event IndexChangedHandler DisplayTypeChanged;
         public event IndexChangedHandler DisplayTimeChanged;
 
@@ -344,6 +364,12 @@ namespace PRoCon.Core.Consoles {
             else if (System.String.Compare(rawChat[1], "ID_CHAT_SORRY", System.StringComparison.OrdinalIgnoreCase) == 0) {
                 rawChat[1] = Client.Language.GetDefaultLocalized("ID_CHAT_SORRY", "uscChatPanel.ID_CHAT_SORRY");
                 commoroseMessage = true;
+            }
+
+            if (commoroseMessage == true && this.LogComRoseMessages == false)
+            {
+                // Commo Rose logging has been disabled
+                return;
             }
 
             if (System.String.Compare(rawChat[0], "server", System.StringComparison.OrdinalIgnoreCase) != 0) {
