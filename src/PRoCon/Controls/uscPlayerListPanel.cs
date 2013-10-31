@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Data;
+using System.Globalization;
 using System.Text;
 using System.Windows.Forms;
 using System.Collections;
@@ -2090,6 +2091,9 @@ namespace PRoCon {
                 {
                     System.Diagnostics.Process.Start("http://bf3stats.com/stats_pc/" + ((CPlayerInfo)this.voiceToolStripMenuItem.Tag).SoldierName);
                 }
+                else if (this.m_prcClient.Game is BF4Client) {
+                    System.Diagnostics.Process.Start("http://bf4stats.com/stats_pc/" + ((CPlayerInfo)this.voiceToolStripMenuItem.Tag).SoldierName);
+                }
                 else if (this.m_prcClient.Game is MOHWClient)
                 {
                     System.Diagnostics.Process.Start("http://mohwstats.com/stats_pc/" + ((CPlayerInfo)this.voiceToolStripMenuItem.Tag).SoldierName);
@@ -2101,9 +2105,10 @@ namespace PRoCon {
         {
             string statsUrl = String.Empty;
 
-            if (sender is ToolStripMenuItem)
-            {
+            if (sender is ToolStripMenuItem) {
                 ToolStripMenuItem statsLookup = (ToolStripMenuItem)sender;
+                String statsUrlBuildError = String.Empty;
+
 
                 CPlayerInfo player = (CPlayerInfo)((object[])statsLookup.Tag)[0];
                 statsUrl = ((object[])statsLookup.Tag)[1].ToString();
@@ -2115,17 +2120,45 @@ namespace PRoCon {
                 statsUrl = statsUrl.Replace("%srv_port%", gsrv_ip_port[1]);
                 statsUrl = statsUrl.Replace("%srv_ip_port%", this.m_prcClient.CurrentServerInfo.ExternalGameIpandPort);
 
-                if (this.voiceToolStripMenuItem.Tag is CPlayerInfo)
-                {
-                    statsUrl = statsUrl.Replace("%player_name%", ((CPlayerInfo)this.voiceToolStripMenuItem.Tag).SoldierName);
-                    statsUrl = statsUrl.Replace("%player_EAguid%", ((CPlayerInfo)this.voiceToolStripMenuItem.Tag).GUID);
+                if (this.voiceToolStripMenuItem.Tag is CPlayerInfo) {
+                    statsUrl = statsUrl.Replace("%player_name%", ((CPlayerInfo) this.voiceToolStripMenuItem.Tag).SoldierName);
+                    statsUrl = statsUrl.Replace("%player_EAguid%", ((CPlayerInfo) this.voiceToolStripMenuItem.Tag).GUID);
                 }
-                if (this.punkBusterScreenshotToolStripMenuItem.Tag is CPunkbusterInfo)
-                {
+                else {
+                    if (statsUrl.Contains("%player_name%") == true) {
+                        statsUrlBuildError = "Missing information for player name replacement in url";
+                    }
+
+                    if (statsUrl.Contains("%player_EAguid%") == true) {
+                        statsUrlBuildError = "Missing information for ea guid replacement in url";
+                    }
+                }
+
+                if (this.punkBusterScreenshotToolStripMenuItem.Tag is CPunkbusterInfo) {
                     statsUrl = statsUrl.Replace("%player_PBguid%", ((CPunkbusterInfo)this.punkBusterScreenshotToolStripMenuItem.Tag).GUID);
                     statsUrl = statsUrl.Replace("%player_IP%", ((CPunkbusterInfo)this.punkBusterScreenshotToolStripMenuItem.Tag).Ip);
                 }
-                System.Diagnostics.Process.Start(statsUrl);
+                else {
+                    if (statsUrl.Contains("%player_PBguid%") == true) {
+                        statsUrlBuildError = "Missing punkbuster information for player guid replacement in url";
+                    }
+
+                    if (statsUrl.Contains("%player_IP%") == true) {
+                        statsUrlBuildError = "Missing punkbuster information for player ip replacement in url";
+                    }
+                }
+
+                if (statsUrlBuildError.Length == 0) {
+                    try {
+                        System.Diagnostics.Process.Start(statsUrl);
+                    }
+                    catch {
+                        MessageBox.Show("Error opening url, possibly missing data for url replacement.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    }
+                }
+                else {
+                    MessageBox.Show(statsUrlBuildError, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                }
             }
         }
 
@@ -2181,17 +2214,17 @@ namespace PRoCon {
                         return;
                     }
                     if (this.m_prcClient.Game is MoHClient) {
-                        this.m_prcClient.SendRequest(new List<string>() { "admin.endRound", this.cboEndRound.SelectedIndex.ToString() });
+                        this.m_prcClient.SendRequest(new List<string>() { "admin.endRound", this.cboEndRound.SelectedIndex.ToString(CultureInfo.InvariantCulture) });
                     }
                     else if (this.m_prcClient.Game is BFBC2Client) {
-                        this.m_prcClient.SendRequest(new List<string>() { "admin.endRound", this.cboEndRound.SelectedIndex.ToString() });
+                        this.m_prcClient.SendRequest(new List<string>() { "admin.endRound", this.cboEndRound.SelectedIndex.ToString(CultureInfo.InvariantCulture) });
                     }
-                    else if (this.m_prcClient.Game is BF3Client) {
-                        this.m_prcClient.SendRequest(new List<string>() { "mapList.endRound", this.cboEndRound.SelectedIndex.ToString() });
+                    else if (this.m_prcClient.Game is BF3Client || this.m_prcClient.Game is BF4Client) {
+                        this.m_prcClient.SendRequest(new List<string>() { "mapList.endRound", this.cboEndRound.SelectedIndex.ToString(CultureInfo.InvariantCulture) });
                     }
                     else if (this.m_prcClient.Game is MOHWClient)
                     {
-                        this.m_prcClient.SendRequest(new List<string>() { "mapList.endRound", this.cboEndRound.SelectedIndex.ToString() });
+                        this.m_prcClient.SendRequest(new List<string>() { "mapList.endRound", this.cboEndRound.SelectedIndex.ToString(CultureInfo.InvariantCulture) });
                     }
                 }
             }

@@ -78,7 +78,7 @@ namespace PRoCon {
             if (PRoConApplication.IsProcessOpen() == false && dotNETCheck == true) {
 
                 if (Directory.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Updates")) == true) {
-                    AutoUpdater.m_strArgs = args;
+                    AutoUpdater.Arguments = args;
                     AutoUpdater.BeginUpdateProcess(null);
                 }
                 else {

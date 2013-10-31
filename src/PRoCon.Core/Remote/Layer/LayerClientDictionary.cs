@@ -17,10 +17,8 @@
 // You should have received a copy of the GNU General Public License
 // along with PRoCon Frostbite.  If not, see <http://www.gnu.org/licenses/>.
 
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace PRoCon.Core.Remote.Layer {
     using Core.Accounts;
@@ -61,17 +59,8 @@ namespace PRoCon.Core.Remote.Layer {
             base.SetItem(index, item);
         }
 
-        public bool isUidUnique(string strProconEventsUid) {
-            bool blUnique = true;
-
-            foreach (PRoConLayerClient plcUidCheck in this) {
-                if (plcUidCheck.ProconEventsUid != null && plcUidCheck.ProconEventsUid.CompareTo(strProconEventsUid) == 0) {
-                    blUnique = false;
-                    break;
-                }
-            }
-
-            return blUnique;
+        public bool IsUidUnique(string strProconEventsUid) {
+            return this.All(plcUidCheck => plcUidCheck.ProconEventsUid == null || System.String.Compare(plcUidCheck.ProconEventsUid, strProconEventsUid, System.StringComparison.Ordinal) != 0);
         }
     }
 }

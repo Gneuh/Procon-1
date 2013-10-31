@@ -468,12 +468,13 @@ namespace PRoCon {
             this.uscAccounts.ServerName = csiServerInfo.ServerName;
             //this.lblCurrentMapName.Text = String.Format("{0} - {1}", this.m_prcConnection.GetFriendlyGamemode(csiServerInfo.GameMode), this.m_prcConnection.GetFriendlyMapname(csiServerInfo.Map));
             // add enhanced detection
-            CMap tmpMap = null;
-            tmpMap = this.m_prcConnection.GetFriendlyMapByFilenamePlayList(csiServerInfo.Map, csiServerInfo.GameMode);
-            this.lblCurrentMapName.Text = String.Format("{0} - {1}", tmpMap.GameMode, tmpMap.PublicLevelName);
+            CMap tmpMap = this.m_prcConnection.GetFriendlyMapByFilenamePlayList(csiServerInfo.Map, csiServerInfo.GameMode);
+
+            this.lblCurrentMapName.Text = tmpMap != null ? String.Format("{0} - {1}", tmpMap.GameMode, tmpMap.PublicLevelName) : String.Empty;
+
             this.toolTipMapControls.SetToolTip(this.lblCurrentMapName, csiServerInfo.Map);
 
-            if (this.Client.Game is BF3Client || this.Client.Game is MOHWClient) {
+            if (this.Client.Game is BF4Client || this.Client.Game is BF3Client || this.Client.Game is MOHWClient) {
                 this.lblCurrentRound.Text = this.m_clocLanguage.GetLocalized("uscServerConnection.lblCurrentRound", (csiServerInfo.CurrentRound + 1).ToString(), csiServerInfo.TotalRounds.ToString());
             }
             else {
@@ -521,7 +522,7 @@ namespace PRoCon {
                 }
             }
             // BF3 & MOHW goes here cause it has ConnectionState parameter is empty
-            if (this.Client.Game is BF3Client) {
+            if (this.Client.Game is BF3Client || this.Client.Game is BF4Client) {
                 this.toolTipPlasma.SetToolTip(this.lblPlasmaStatus,
                     this.m_clocLanguage.GetLocalized("uscServerConnection.lblPlasmaStatus.AcceptingPlayers.ToolTip")
                         + Environment.NewLine + Environment.NewLine +

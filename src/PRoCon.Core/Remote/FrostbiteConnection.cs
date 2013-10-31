@@ -20,44 +20,81 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.IO;
 using System.Diagnostics;
+using System.Threading;
 using System.Windows.Forms;
 using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Threading;
 
 namespace PRoCon.Core.Remote {
     public class FrostbiteConnection {
 
-        private TcpClient m_tcpClient;
-        private NetworkStream m_nwsStream;
+        /// <summary>
+        /// The open client connection.
+        /// </summary>
+        protected System.Net.Sockets.TcpClient Client;
+
+        /// <summary>
+        /// The stream to read and write data to.
+        /// </summary>
+        protected NetworkStream NetworkStream;
 
         // Maximum amount of data to accept before scrapping the whole lot and trying again.
         // Test maximizing this to see if plugin descriptions are causing some problems.
-        private static readonly UInt32 MAX_GARBAGE_BYTES = 4194304;
-        private static readonly UInt16 BUFFER_SIZE = 16384;
+        private const UInt32 MaxGarbageBytes = 4194304;
+        private const UInt16 BufferSize = 16384;
 
-        protected Dictionary<UInt32, Packet> m_dicSentPackets;
+        /// <summary>
+        /// A list of packets currently sent to the server and awaiting a response
+        /// </summary>
+        protected Dictionary<UInt32?, Packet> OutgoingPackets;
 
-        private byte[] a_bReceivedBuffer;
-        private byte[] a_bPacketStream;
+        /// <summary>
+        /// A queue of packets to send to the server (waiting until the outgoing packets list is clear)
+        /// </summary>
+        protected Queue<Packet> QueuedPackets;
 
-        private Queue<Packet> m_quePackets;// = new Queue<Packet>();
+        /// <summary>
+        /// Data collected so far for a packet.
+        /// </summary>
+        protected byte[] ReceivedBuffer;
 
-        private Object m_lock;
+        /// <summary>
+        /// Buffer for the data currently being read from the stream. This is appended to the received buffer.
+        /// </summary>
+        protected byte[] PacketStream;
 
-        private UInt32 m_ui32SequenceNumber;
+        /// <summary>
+        /// Lock used when aquiring a sequence #
+        /// </summary>
+        protected readonly Object AcquireSequenceNumberLock = new Object();
+
+        /// <summary>
+        /// The last packet that was receieved by this connection.
+        /// </summary>
+        public Packet LastPacketReceived { get; protected set; }
+
+        /// <summary>
+        /// The last packet that was sent by this connection.
+        /// </summary>
+        public Packet LastPacketSent { get; protected set; }
+
+        /// <summary>
+        /// Why is this here?
+        /// </summary>
+        protected UInt32 SequenceNumber;
         public UInt32 AcquireSequenceNumber {
             get {
-                lock (new object()) {
-                    return ++this.m_ui32SequenceNumber;
+                lock (this.AcquireSequenceNumberLock) {
+                    return ++this.SequenceNumber;
                 }
             }
         }
+
+        protected Object ShutdownConnectionLock = new Object();
 
         public string Hostname {
             get;
@@ -71,15 +108,20 @@ namespace PRoCon.Core.Remote {
 
         public bool IsConnected {
             get {
-                return this.m_tcpClient == null ? false : this.m_tcpClient.Connected;
+                return this.Client != null && this.Client.Connected;
             }
         }
 
         public bool IsConnecting {
             get {
-                return this.m_tcpClient == null ? false : true ^ this.m_tcpClient.Connected;
+                return this.Client != null && true ^ this.Client.Connected;
             }
         }
+
+        /// <summary>
+        /// Lock for processing new queue items
+        /// </summary>
+        protected readonly Object QueueUnqueuePacketLock = new Object();
 
         #region Events
 
@@ -98,6 +140,7 @@ namespace PRoCon.Core.Remote {
         public event FailureHandler ConnectionFailure;
 
         public delegate void PacketQueuedHandler(FrostbiteConnection sender, Packet cpPacket, int iThreadId);
+
         public event PacketQueuedHandler PacketQueued;
         public event PacketQueuedHandler PacketDequeued;
 
@@ -117,53 +160,49 @@ namespace PRoCon.Core.Remote {
         }
 
         private void ClearConnection() {
-            this.m_lock = new Object();
-            this.m_ui32SequenceNumber = 0;
+            this.SequenceNumber = 0;
 
-            this.m_dicSentPackets = new Dictionary<UInt32, Packet>();
-            this.m_quePackets = new Queue<Packet>();
+            this.OutgoingPackets = new Dictionary<uint?, Packet>();
+            this.QueuedPackets = new Queue<Packet>();
             
-            this.a_bReceivedBuffer = new byte[FrostbiteConnection.BUFFER_SIZE];
-            this.a_bPacketStream = null;
+            this.ReceivedBuffer = new byte[FrostbiteConnection.BufferSize];
+            this.PacketStream = null;
         }
 
         // TO DO: Move out of FrostbiteClient.
-        public static void RaiseEvent(Delegate[] a_delInvokes, params object[] a_objArguments) {
-            for (int i = 0; i < a_delInvokes.Length; i++) {
+        public static void RaiseEvent(Delegate[] invokes, params object[] arguments) {
+            for (int i = 0; i < invokes.Length; i++) {
 
                 try {
-                    if (a_delInvokes[i].Target is Form) {
-                        if (((Form)a_delInvokes[i].Target).Disposing == false && ((Form)a_delInvokes[i].Target).IsDisposed == false && ((Form)a_delInvokes[i].Target).IsHandleCreated == true) {
+                    if (invokes[i].Target is Form) {
+                        if (((Form)invokes[i].Target).Disposing == false && ((Form)invokes[i].Target).IsDisposed == false && ((Form)invokes[i].Target).IsHandleCreated == true) {
                             try {
-                                ((Control)a_delInvokes[i].Target).Invoke(a_delInvokes[i], a_objArguments);
+                                ((Control)invokes[i].Target).Invoke(invokes[i], arguments);
                             }
                             catch (InvalidOperationException) { }
                         }
                     }
-                    else if (a_delInvokes[i].Target is Control) {
-                        if (((Control)a_delInvokes[i].Target).Disposing == false && ((Control)a_delInvokes[i].Target).IsDisposed == false) {//
+                    else if (invokes[i].Target is Control) {
+                        if (((Control)invokes[i].Target).Disposing == false && ((Control)invokes[i].Target).IsDisposed == false) {//
                             try {
-                                ((Control)a_delInvokes[i].Target).Invoke(a_delInvokes[i], a_objArguments);
+                                ((Control)invokes[i].Target).Invoke(invokes[i], arguments);
                             }
                             catch (InvalidOperationException) { }
                         }
                     }
                     else {
-                        //a_delInvokes[i].Method.Invoke(a_delInvokes[i].Target, a_objArguments);
-                        a_delInvokes[i].DynamicInvoke(a_objArguments);
+                        invokes[i].DynamicInvoke(arguments);
                     }
                 }
                 catch (Exception e) {
 
                     string strParams = String.Empty;
 
-                    if (a_objArguments != null) {
-                        foreach (object objParam in a_objArguments) {
-                            strParams += ("---" + objParam.ToString());
-                        }
+                    if (arguments != null) {
+                        strParams = arguments.Aggregate(strParams, (current, objParam) => current + ("---" + objParam.ToString()));
                     }
 
-                    FrostbiteConnection.LogError(String.Format("{0} ::: {1} ::: {2}", a_delInvokes[i].Target.ToString(), a_delInvokes[i].Method.ToString(), strParams), String.Empty, e);
+                    FrostbiteConnection.LogError(String.Format("{0} ::: {1} ::: {2}", invokes[i].Target, invokes[i].Method, strParams), String.Empty, e);
                 }
             }
         }
@@ -179,7 +218,7 @@ namespace PRoCon.Core.Remote {
                 strOutput += String.Format("Method {0}{1}", stTracer.GetFrame((stTracer.FrameCount - 1)).GetMethod().Name, Environment.NewLine);
 
                 strOutput += "DateTime: " + DateTime.Now.ToLongDateString() + " " + DateTime.Now.ToLongTimeString() + Environment.NewLine;
-                strOutput += "Version: " + Assembly.GetExecutingAssembly().GetName().Version.ToString() + Environment.NewLine;
+                strOutput += "Version: " + Assembly.GetExecutingAssembly().GetName().Version + Environment.NewLine;
 
                 strOutput += "Packet: " + Environment.NewLine;
                 strOutput += strPacket + Environment.NewLine;
@@ -204,89 +243,73 @@ namespace PRoCon.Core.Remote {
                     }
                 }
             }
-            catch (Exception ex) {
+            catch (Exception) {
                 // It'd be to ironic to happen, surely?
             }
         }
 
-        private bool QueueUnqueuePacket(bool blSendingPacket, Packet cpPacket, out Packet cpNextPacket) {
-            cpNextPacket = null;
-            bool blResponse = false;
-            int count = 0;
+        private bool QueueUnqueuePacket(bool isSending, Packet packet, out Packet nextPacket) {
 
-            //lock (m_lock)
-            //lock enhancement to prevent high load dead loop thanks to PapaCharlie9
-            {
+            nextPacket = null;
+            bool response = false;
 
-                if (blSendingPacket == true) {
-                    lock (m_lock) {
-                        count = this.m_dicSentPackets.Count;
-                        if (count > 0) {
-                            this.m_quePackets.Enqueue(cpPacket);
-                        }
-                    }
-                    if (count > 0) {
+            lock (this.QueueUnqueuePacketLock) {
+
+                if (isSending == true) {
+                    // If we have something that has been sent and is awaiting a response
+                    if (this.OutgoingPackets.Count > 0) {
+                        // Add the packet to our queue to be sent at a later time.
+                        this.QueuedPackets.Enqueue(packet);
+
+                        response = true;
+
                         if (this.PacketQueued != null) {
-                            FrostbiteConnection.RaiseEvent(this.PacketQueued.GetInvocationList(), this, cpPacket, Thread.CurrentThread.ManagedThreadId);
-                            //this.PacketQueued(cpPacket, Thread.CurrentThread.ManagedThreadId);
-                        }
-                        blResponse = true;
-                    }
-                    else lock (m_lock) {
-                        if (this.m_dicSentPackets.Count == 0 && this.m_quePackets.Count > 0) {
-                            // TODO: I've seen it slip in here once, but that was when I had
-                            // combined the events and commands streams.  Have not seen it since, but need to make sure.
-
-                            //throw new Exception();
-                        }
-                        else {
-                            // No packets waiting for response, free to send the new packet.
-                            blResponse = false;
+                            FrostbiteConnection.RaiseEvent(this.PacketQueued.GetInvocationList(), this, packet, Thread.CurrentThread.ManagedThreadId);
                         }
                     }
+                    // else - response = false
                 }
                 else {
                     // Else it's being called from recv and cpPacket holds the processed RequestPacket.
 
                     // Remove the packet 
-                    lock (m_lock) {
-                        if (cpPacket != null) {
-                            if (this.m_dicSentPackets.ContainsKey(cpPacket.SequenceNumber) == true) {
-                                this.m_dicSentPackets.Remove(cpPacket.SequenceNumber);
-                            }
-                        }
-                        count = this.m_quePackets.Count;
-                        if (count > 0) {
-                            cpNextPacket = this.m_quePackets.Dequeue();
+                    if (packet != null) {
+                        if (this.OutgoingPackets.ContainsKey(packet.SequenceNumber) == true) {
+                            this.OutgoingPackets.Remove(packet.SequenceNumber);
                         }
                     }
-                    if (count > 0) {
+
+                    if (this.QueuedPackets.Count > 0) {
+                        nextPacket = this.QueuedPackets.Dequeue();
+
+                        response = true;
+
                         if (this.PacketDequeued != null) {
-                            FrostbiteConnection.RaiseEvent(this.PacketDequeued.GetInvocationList(), this, cpNextPacket, Thread.CurrentThread.ManagedThreadId);
-                            //this.PacketDequeued(cpNextPacket, Thread.CurrentThread.ManagedThreadId);
+                            FrostbiteConnection.RaiseEvent(this.PacketDequeued.GetInvocationList(), this, nextPacket, Thread.CurrentThread.ManagedThreadId);
                         }
-                        blResponse = true;
                     }
                     else {
-                        blResponse = false;
+                        response = false;
                     }
 
                 }
-
-                return blResponse;
             }
+
+            return response;
         }
 
         private void SendAsyncCallback(IAsyncResult ar) {
 
-            Packet pSentPacket = (Packet)ar.AsyncState;
+            Packet packet = (Packet)ar.AsyncState;
 
             try {
-                if (this.m_nwsStream != null) {
-                    this.m_nwsStream.EndWrite(ar);
+                if (this.NetworkStream != null) {
+                    this.NetworkStream.EndWrite(ar);
                     if (this.PacketSent != null) {
-                        //spcData.rconParent.PacketSent(spcData.cpSentPacket, true);
-                        FrostbiteConnection.RaiseEvent(this.PacketSent.GetInvocationList(), this, false, pSentPacket);
+
+                        this.LastPacketSent = packet;
+
+                        FrostbiteConnection.RaiseEvent(this.PacketSent.GetInvocationList(), this, false, packet);
                     }
                 }
             }
@@ -308,17 +331,17 @@ namespace PRoCon.Core.Remote {
                     this.BeforePacketSend(this, cpPacket, out isProcessed);
                 }
 
-                if (isProcessed == false && this.m_nwsStream != null) {
+                if (isProcessed == false && this.NetworkStream != null) {
 
-                    byte[] a_bBytePacket = cpPacket.EncodePacket();
+                    byte[] bytePacket = cpPacket.EncodePacket();
 
-                    lock (m_lock) {
-                        if (cpPacket.OriginatedFromServer == false && cpPacket.IsResponse == false && this.m_dicSentPackets.ContainsKey(cpPacket.SequenceNumber) == false) {
-                            this.m_dicSentPackets.Add(cpPacket.SequenceNumber, cpPacket);
+                    lock (this.QueueUnqueuePacketLock) {
+                        if (cpPacket.OriginatedFromServer == false && cpPacket.IsResponse == false && this.OutgoingPackets.ContainsKey(cpPacket.SequenceNumber) == false) {
+                            this.OutgoingPackets.Add(cpPacket.SequenceNumber, cpPacket);
                         }
                     }
 
-                    this.m_nwsStream.BeginWrite(a_bBytePacket, 0, a_bBytePacket.Length, this.SendAsyncCallback, cpPacket);
+                    this.NetworkStream.BeginWrite(bytePacket, 0, bytePacket.Length, this.SendAsyncCallback, cpPacket);
 
                 }
             }
@@ -344,6 +367,9 @@ namespace PRoCon.Core.Remote {
                     // No need to queue, queue is empty.  Send away..
                     this.SendAsync(cpPacket);
                 }
+
+                // Shutdown if we're just waiting for a response to an old packet.
+                this.RestartConnectionOnQueueFailure();
             }
         }
 
@@ -351,9 +377,9 @@ namespace PRoCon.Core.Remote {
 
             Packet cpRequestPacket = null;
 
-            lock (m_lock) {
-                if (this.m_dicSentPackets.ContainsKey(cpRecievedPacket.SequenceNumber) == true) {
-                    cpRequestPacket = this.m_dicSentPackets[cpRecievedPacket.SequenceNumber];
+            lock (this.QueueUnqueuePacketLock) {
+                if (this.OutgoingPackets.ContainsKey(cpRecievedPacket.SequenceNumber) == true) {
+                    cpRequestPacket = this.OutgoingPackets[cpRecievedPacket.SequenceNumber];
                 }
             }
 
@@ -363,30 +389,29 @@ namespace PRoCon.Core.Remote {
         private void ReceiveCallback(IAsyncResult ar) {
             
             try {
-                int iBytesRead = this.m_nwsStream.EndRead(ar);
+                int iBytesRead = this.NetworkStream.EndRead(ar);
 
                 if (iBytesRead > 0) {
 
                     // Create or resize our packet stream to hold the new data.
-                    if (this.a_bPacketStream == null) {
-                        this.a_bPacketStream = new byte[iBytesRead];
+                    if (this.PacketStream == null) {
+                        this.PacketStream = new byte[iBytesRead];
                     }
                     else {
-                        Array.Resize(ref this.a_bPacketStream, this.a_bPacketStream.Length + iBytesRead);
+                        Array.Resize(ref this.PacketStream, this.PacketStream.Length + iBytesRead);
                     }
 
-                    Array.Copy(this.a_bReceivedBuffer, 0, this.a_bPacketStream, this.a_bPacketStream.Length - iBytesRead, iBytesRead);
+                    Array.Copy(this.ReceivedBuffer, 0, this.PacketStream, this.PacketStream.Length - iBytesRead, iBytesRead);
 
-                    UInt32 ui32PacketSize = Packet.DecodePacketSize(this.a_bPacketStream);
+                    UInt32 ui32PacketSize = Packet.DecodePacketSize(this.PacketStream);
 
-                    while (this.a_bPacketStream.Length >= ui32PacketSize
-                        && this.a_bPacketStream.Length > Packet.INT_PACKET_HEADER_SIZE) {
+                    while (this.PacketStream != null && this.PacketStream.Length >= ui32PacketSize && this.PacketStream.Length > Packet.PacketHeaderSize) {
 
                         // Copy the complete packet from the beginning of the stream.
-                        byte[] a_bCompletePacket = new byte[ui32PacketSize];
-                        Array.Copy(this.a_bPacketStream, a_bCompletePacket, ui32PacketSize);
+                        byte[] completePacket = new byte[ui32PacketSize];
+                        Array.Copy(this.PacketStream, completePacket, ui32PacketSize);
 
-                        Packet cpCompletePacket = new Packet(a_bCompletePacket);
+                        Packet packet = new Packet(completePacket);
                         //cbfConnection.m_ui32SequenceNumber = Math.Max(cbfConnection.m_ui32SequenceNumber, cpCompletePacket.SequenceNumber) + 1;
 
                         // Dispatch the completed packet.
@@ -394,72 +419,71 @@ namespace PRoCon.Core.Remote {
                             bool isProcessed = false;
 
                             if (this.BeforePacketDispatch != null) {
-                                this.BeforePacketDispatch(this, cpCompletePacket, out isProcessed);
+                                this.BeforePacketDispatch(this, packet, out isProcessed);
                             }
 
                             if (this.PacketReceived != null) {
-                                FrostbiteConnection.RaiseEvent(this.PacketReceived.GetInvocationList(), this, isProcessed, cpCompletePacket);
+                                this.LastPacketReceived = packet;
+
+                                FrostbiteConnection.RaiseEvent(this.PacketReceived.GetInvocationList(), this, isProcessed, packet);
                             }
 
-                            if (cpCompletePacket.OriginatedFromServer == true && cpCompletePacket.IsResponse == false) {
-                                this.SendAsync(new Packet(true, true, cpCompletePacket.SequenceNumber, "OK"));
+                            if (packet.OriginatedFromServer == true && packet.IsResponse == false) {
+                                this.SendAsync(new Packet(true, true, packet.SequenceNumber, "OK"));
                             }
 
                             Packet cpNextPacket = null;
-                            if (this.QueueUnqueuePacket(false, cpCompletePacket, out cpNextPacket) == true) {
+                            if (this.QueueUnqueuePacket(false, packet, out cpNextPacket) == true) {
                                 this.SendAsync(cpNextPacket);
                             }
+
+                            // Shutdown if we're just waiting for a response to an old packet.
+                            this.RestartConnectionOnQueueFailure();
                         }
                         catch (Exception e) {
 
-                            Packet cpRequest = this.GetRequestPacket(cpCompletePacket);
+                            Packet cpRequest = this.GetRequestPacket(packet);
 
                             if (cpRequest != null) {
-                                LogError(cpCompletePacket.ToDebugString(), cpRequest.ToDebugString(), e);
+                                LogError(packet.ToDebugString(), cpRequest.ToDebugString(), e);
                             }
                             else {
-                                LogError(cpCompletePacket.ToDebugString(), String.Empty, e);
+                                LogError(packet.ToDebugString(), String.Empty, e);
                             }
 
                             // Now try to recover..
                             Packet cpNextPacket = null;
-                            if (this.QueueUnqueuePacket(false, cpCompletePacket, out cpNextPacket) == true) {
+                            if (this.QueueUnqueuePacket(false, packet, out cpNextPacket) == true) {
                                 this.SendAsync(cpNextPacket);
                             }
+
+                            // Shutdown if we're just waiting for a response to an old packet.
+                            this.RestartConnectionOnQueueFailure();
                         }
                         
                         // Now remove the completed packet from the beginning of the stream
-                        byte[] a_bUpdatedSteam = new byte[this.a_bPacketStream.Length - ui32PacketSize];
-                        Array.Copy(this.a_bPacketStream, ui32PacketSize, a_bUpdatedSteam, 0, this.a_bPacketStream.Length - ui32PacketSize);
-                        this.a_bPacketStream = a_bUpdatedSteam;
+                        if (this.PacketStream != null) {
+                            byte[] updatedSteam = new byte[this.PacketStream.Length - ui32PacketSize];
+                            Array.Copy(this.PacketStream, ui32PacketSize, updatedSteam, 0, this.PacketStream.Length - ui32PacketSize);
+                            this.PacketStream = updatedSteam;
 
-                        ui32PacketSize = Packet.DecodePacketSize(this.a_bPacketStream);
+                            ui32PacketSize = Packet.DecodePacketSize(this.PacketStream);
+                        }
                     }
 
                     // If we've recieved the maxmimum garbage, scrap it all and shutdown the connection.
                     // We went really wrong somewhere =)
-                    if (this.a_bReceivedBuffer.Length >= FrostbiteConnection.MAX_GARBAGE_BYTES) {
-                        this.a_bReceivedBuffer = null; // GC.collect()
+                    if (this.ReceivedBuffer.Length >= FrostbiteConnection.MaxGarbageBytes) {
+                        this.ReceivedBuffer = null; // GC.collect()
                         this.Shutdown(new Exception("Exceeded maximum garbage packet"));
                     }
-                }
 
-                if (iBytesRead == 0) {
-                    this.Shutdown();
-                    return;
-                }
-
-                if (this.m_nwsStream != null) {
-
-                    IAsyncResult result = this.m_nwsStream.BeginRead(this.a_bReceivedBuffer, 0, this.a_bReceivedBuffer.Length, this.ReceiveCallback, this);
-
-                    if (result.AsyncWaitHandle.WaitOne(180000, false) == false) {
-                        //if (this.ConnectionFailure != null) {
-                        //    FrostbiteConnection.RaiseEvent(this.ConnectionFailure.GetInvocationList(), this, new Exception("Events connection has timed out after two minutes without data."));
-                        //}
-
-                        this.Shutdown(new Exception("Events connection has timed out after two minutes without data."));
+                    if (this.NetworkStream != null) {
+                        this.NetworkStream.BeginRead(this.ReceivedBuffer, 0, this.ReceivedBuffer.Length, this.ReceiveCallback, this);
                     }
+                }
+                else if (iBytesRead == 0) {
+                    this.Shutdown();
                 }
             }
             catch (SocketException se) {
@@ -470,18 +494,73 @@ namespace PRoCon.Core.Remote {
             }
         }
 
+        /// <summary>
+        /// Validates that packets are not 'lost' after being sent. If this is the case then the connection is shutdown
+        /// to then be rebooted at a later time.
+        /// 
+        /// If a packet exists in our outgoing "SentPackets"
+        /// </summary>
+        protected void RestartConnectionOnQueueFailure() {
+            bool restart = false;
+
+            lock (this.QueueUnqueuePacketLock) {
+                restart = this.OutgoingPackets.Any(outgoingPacket => outgoingPacket.Value.Stamp < DateTime.Now.AddMinutes(-2));
+
+                if (restart == true) {
+                    this.OutgoingPackets.Clear();
+                    this.QueuedPackets.Clear();
+                }
+            }
+
+            // We do this outside of the lock to ensure calls outside this method won't result in a deadlock elsewhere.
+            if (restart == true) {
+                this.Shutdown(new Exception("Failed to hear response to packet within two minutes, forced shutdown."));
+            }
+        }
+
+        /// <summary>
+        /// Pokes the connection, ensuring that the connection is still alive. If
+        /// this method determines that the connection is dead then it will call for
+        /// a shutdown.
+        /// </summary>
+        /// <remarks>
+        ///     <para>
+        /// This method is a final check to make sure communications are proceeding in both directions in
+        /// the last five minutes. If nothing has been sent and received in the last five minutes then the connection is assumed
+        /// dead and a shutdown is initiated.
+        /// </para>
+        /// </remarks>
+        public virtual void Poke() {
+            bool downstreamDead = this.LastPacketReceived != null && this.LastPacketReceived.Stamp < DateTime.Now.AddMinutes(-2);
+            bool upstreamDead = this.LastPacketSent != null && this.LastPacketSent.Stamp < DateTime.Now.AddMinutes(-2);
+
+            if (downstreamDead && upstreamDead) {
+                // Clear these out so we don't pick it up again on the next connection attempt.
+                this.LastPacketReceived = null;
+                this.LastPacketSent = null;
+
+                // Now shutdown the connection, it's dead jim.
+                this.Shutdown();
+
+                // Alert the ProconClient of the error, explaining why the connection has been shut down.
+                if (this.ConnectionFailure != null) {
+                    FrostbiteConnection.RaiseEvent(this.ConnectionFailure.GetInvocationList(), this, new Exception("Connection timed out with two minutes of inactivity."));
+                }
+            }
+        }
+
         private void ConnectedCallback(IAsyncResult ar) {
 
             try {
-                this.m_tcpClient.EndConnect(ar);
-                this.m_tcpClient.NoDelay = true;
+                this.Client.EndConnect(ar);
+                this.Client.NoDelay = true;
 
                 if (this.ConnectSuccess != null) {
                     FrostbiteConnection.RaiseEvent(this.ConnectSuccess.GetInvocationList(), this);
                 }
 
-                this.m_nwsStream = this.m_tcpClient.GetStream();
-                this.m_nwsStream.BeginRead(this.a_bReceivedBuffer, 0, this.a_bReceivedBuffer.Length, this.ReceiveCallback, this);
+                this.NetworkStream = this.Client.GetStream();
+                this.NetworkStream.BeginRead(this.ReceivedBuffer, 0, this.ReceivedBuffer.Length, this.ReceiveCallback, this);
 
                 if (this.ConnectionReady != null) {
                     FrostbiteConnection.RaiseEvent(this.ConnectionReady.GetInvocationList(), this);
@@ -519,15 +598,15 @@ namespace PRoCon.Core.Remote {
         public void AttemptConnection() {
             try {
 
-                lock (m_lock) {
-                    this.m_quePackets.Clear();
-                    this.m_dicSentPackets.Clear();
+                lock (this.QueueUnqueuePacketLock) {
+                    this.QueuedPackets.Clear();
+                    this.OutgoingPackets.Clear();
                 }
-                this.m_ui32SequenceNumber = 0;
+                this.SequenceNumber = 0;
 
-                this.m_tcpClient = new TcpClient();
-                this.m_tcpClient.NoDelay = true;
-                this.m_tcpClient.BeginConnect(this.Hostname, this.Port, this.ConnectedCallback, this);
+                this.Client = new TcpClient();
+                this.Client.NoDelay = true;
+                this.Client.BeginConnect(this.Hostname, this.Port, this.ConnectedCallback, this);
 
                 if (this.ConnectAttempt != null) {
                     FrostbiteConnection.RaiseEvent(this.ConnectAttempt.GetInvocationList(), this);
@@ -542,61 +621,45 @@ namespace PRoCon.Core.Remote {
         }
 
         public void Shutdown(Exception e) {
-            if (this.m_tcpClient != null) {
-                this.ShutdownConnection();
+            this.ShutdownConnection();
 
-                if (this.ConnectionClosed != null) {
-                    FrostbiteConnection.RaiseEvent(this.ConnectionClosed.GetInvocationList(), this);
-                }
-
-                if (this.ConnectionFailure != null) {
-                    FrostbiteConnection.RaiseEvent(this.ConnectionFailure.GetInvocationList(), this, e);
-                }
+            if (this.ConnectionFailure != null) {
+                FrostbiteConnection.RaiseEvent(this.ConnectionFailure.GetInvocationList(), this, e);
             }
+            
         }
 
         public void Shutdown(SocketException se) {
-            if (this.m_tcpClient != null) {
-                this.ShutdownConnection();
+            this.ShutdownConnection();
 
-                if (this.ConnectionClosed != null) {
-                    FrostbiteConnection.RaiseEvent(this.ConnectionClosed.GetInvocationList(), this);
-                }
-
-                if (this.SocketException != null) {
-                    FrostbiteConnection.RaiseEvent(this.SocketException.GetInvocationList(), this, se);
-                }
+            if (this.SocketException != null) {
+                FrostbiteConnection.RaiseEvent(this.SocketException.GetInvocationList(), this, se);
             }
         }
 
         public void Shutdown() {
-            if (this.m_tcpClient != null) {
-                this.ShutdownConnection();
-
-                if (this.ConnectionClosed != null) {
-                    FrostbiteConnection.RaiseEvent(this.ConnectionClosed.GetInvocationList(), this);
-                }
-            }
+            this.ShutdownConnection();
         }
 
-        private void ShutdownConnection() {
+        protected void ShutdownConnection() {
 
-            lock (new object()) {
-                if (this.m_tcpClient != null) {
-
+            if (this.Client != null) {
+                lock (this.ShutdownConnectionLock) {
                     try {
 
                         this.ClearConnection();
 
-                        if (this.m_nwsStream != null) {
-                            this.m_nwsStream.Close();
-                            this.m_nwsStream.Dispose();
-                            this.m_nwsStream = null;
+                        if (this.NetworkStream != null) {
+                            this.NetworkStream.Close();
+                            this.NetworkStream.Dispose();
+                            this.NetworkStream = null;
                         }
 
-                        if (this.m_tcpClient != null) {
-                            this.m_tcpClient.Close();
-                            this.m_tcpClient = null;
+                        this.Client.Close();
+                        this.Client = null;
+
+                        if (this.ConnectionClosed != null) {
+                            FrostbiteConnection.RaiseEvent(this.ConnectionClosed.GetInvocationList(), this);
                         }
                     }
                     catch (SocketException se) {
@@ -605,7 +668,11 @@ namespace PRoCon.Core.Remote {
                             //this.SocketException(se);
                         }
                     }
-                    catch (Exception) { }
+                    catch (Exception e) {
+                        if (this.ConnectionFailure != null) {
+                            FrostbiteConnection.RaiseEvent(this.ConnectionFailure.GetInvocationList(), this, e);
+                        }
+                    }
                 }
             }
         }

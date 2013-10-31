@@ -20,58 +20,42 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Web;
 using System.Net;
 using System.Net.Sockets;
-using System.IO;
+using PRoCon.Core.HttpServer.Cache;
+using PRoCon.Core.Remote;
 
 namespace PRoCon.Core.HttpServer {
-    using PRoCon.Core.HttpServer.Cache;
-    using Core.Remote;
-
     public class HttpWebServer {
-        
         public delegate void ProcessResponseHandler(HttpWebServerRequest sender);
-        public event ProcessResponseHandler ProcessRequest;
 
         public delegate void StateChangeHandler(HttpWebServer sender);
-        public event StateChangeHandler HttpServerOnline;
-        public event StateChangeHandler HttpServerOffline;
 
-        private TcpListener m_tcpListener;
-        private List<HttpWebServerRequest> m_httpClients;
-
-        private Dictionary<string, HttpWebServerResponseData> m_cachedResponses;
-
-        public string BindingAddress {
-            get;
-            set;
-        }
-
-        public UInt16 ListeningPort {
-            get;
-            set;
-        }
-
-        public bool IsOnline {
-            get;
-            private set;
-        }
+        protected readonly Dictionary<string, HttpWebServerResponseData> CachedResponses;
+        protected readonly List<HttpWebServerRequest> HttpClients;
+        protected TcpListener Listener;
 
         public HttpWebServer(string bindingAddress, UInt16 port) {
-            this.m_httpClients = new List<HttpWebServerRequest>();
-            this.m_cachedResponses = new Dictionary<string, HttpWebServerResponseData>();
+            HttpClients = new List<HttpWebServerRequest>();
+            CachedResponses = new Dictionary<string, HttpWebServerResponseData>();
 
-            this.BindingAddress = bindingAddress;
-            this.ListeningPort = port;
+            BindingAddress = bindingAddress;
+            ListeningPort = port;
         }
+
+        public string BindingAddress { get; set; }
+
+        public UInt16 ListeningPort { get; set; }
+
+        public bool IsOnline { get; private set; }
+        public event ProcessResponseHandler ProcessRequest;
+        public event StateChangeHandler HttpServerOnline;
+        public event StateChangeHandler HttpServerOffline;
 
         private IPAddress ResolveHostName(string strHostName) {
             IPAddress ipReturn = IPAddress.None;
 
             if (IPAddress.TryParse(strHostName, out ipReturn) == false) {
-
                 ipReturn = IPAddress.None;
 
                 try {
@@ -82,30 +66,30 @@ namespace PRoCon.Core.HttpServer {
                     }
                     // ELSE return IPAddress.None..
                 }
-                catch (Exception) { } // Returns IPAddress.None..
+                catch (Exception) {
+                } // Returns IPAddress.None..
             }
 
             return ipReturn;
         }
 
         public void Start() {
-
             try {
-                IPAddress ipBinding = this.ResolveHostName(this.BindingAddress);
+                IPAddress ipBinding = ResolveHostName(BindingAddress);
 
-                this.m_tcpListener = new TcpListener(ipBinding, this.ListeningPort);
+                Listener = new TcpListener(ipBinding, ListeningPort);
 
-                this.m_tcpListener.Start();
+                Listener.Start();
 
-                this.m_tcpListener.BeginAcceptTcpClient(this.ListenIncommingWebRequests, null);
-                this.IsOnline = true;
+                Listener.BeginAcceptTcpClient(ListenIncommingWebRequests, null);
+                IsOnline = true;
 
-                if (this.HttpServerOnline != null) {
-                    FrostbiteConnection.RaiseEvent(this.HttpServerOnline.GetInvocationList(), this);
+                if (HttpServerOnline != null) {
+                    FrostbiteConnection.RaiseEvent(HttpServerOnline.GetInvocationList(), this);
                 }
             }
             catch (SocketException) {
-                this.Shutdown();
+                Shutdown();
             }
         }
 
@@ -113,14 +97,14 @@ namespace PRoCon.Core.HttpServer {
         private void ListenIncommingWebRequests(IAsyncResult ar) {
             TcpClient tcpNewConnection = null;
             try {
-                tcpNewConnection = this.m_tcpListener.EndAcceptTcpClient(ar);
+                tcpNewConnection = Listener.EndAcceptTcpClient(ar);
 
-                HttpWebServerRequest newClient = new HttpWebServerRequest(tcpNewConnection.GetStream());
-                newClient.ProcessRequest += new HttpWebServer.ProcessResponseHandler(newClient_ProcessRequest);
+                var newClient = new HttpWebServerRequest(tcpNewConnection.GetStream());
+                newClient.ProcessRequest += new ProcessResponseHandler(newClient_ProcessRequest);
                 newClient.ResponseSent += new HttpWebServerRequest.ResponseSentHandler(newClient_ResponseSent);
                 newClient.ClientShutdown += new HttpWebServerRequest.ClientShutdownHandler(newClient_ClientShutdown);
 
-                this.m_httpClients.Add(newClient);
+                HttpClients.Add(newClient);
 
                 //if (this.m_tcpListener != null) {
                 //    this.m_tcpListener.BeginAcceptTcpClient(this.ListenIncommingWebRequests, null);
@@ -133,65 +117,62 @@ namespace PRoCon.Core.HttpServer {
             }
 
             try {
-                if (this.m_tcpListener != null) {
-                    this.m_tcpListener.BeginAcceptTcpClient(this.ListenIncommingWebRequests, null);
+                if (Listener != null) {
+                    Listener.BeginAcceptTcpClient(ListenIncommingWebRequests, null);
                 }
             }
             catch (Exception) {
-                this.Shutdown();
+                Shutdown();
             }
-
         }
 
         private void newClient_ResponseSent(HttpWebServerRequest request, HttpWebServerResponseData response) {
-            if (response.Cache.CacheType == HttpWebServerCacheType.Cache && this.m_cachedResponses.ContainsKey(request.ToString()) == false) {
-                this.m_cachedResponses.Add(request.ToString(), response);
+            if (response.Cache.CacheType == HttpWebServerCacheType.Cache && CachedResponses.ContainsKey(request.ToString()) == false) {
+                CachedResponses.Add(request.ToString(), response);
             }
         }
 
         private void newClient_ProcessRequest(HttpWebServerRequest sender) {
-
             // Scrub the cache for old responses
-            foreach (string key in new List<string>(this.m_cachedResponses.Keys)) {
-                if (this.m_cachedResponses[key].Cache.TrashTime >= DateTime.Now) {
-                    this.m_cachedResponses.Remove(key);
+            foreach (string key in new List<string>(CachedResponses.Keys)) {
+                if (CachedResponses[key].Cache.TrashTime >= DateTime.Now) {
+                    CachedResponses.Remove(key);
                 }
             }
 
-            if (this.m_cachedResponses.ContainsKey(sender.ToString()) == true) {
-                sender.Respond(this.m_cachedResponses[sender.ToString()]);
+            if (CachedResponses.ContainsKey(sender.ToString()) == true) {
+                sender.Respond(CachedResponses[sender.ToString()]);
             }
-            else if (this.ProcessRequest != null) {
-                FrostbiteConnection.RaiseEvent(this.ProcessRequest.GetInvocationList(), sender);
+            else if (ProcessRequest != null) {
+                FrostbiteConnection.RaiseEvent(ProcessRequest.GetInvocationList(), sender);
             }
         }
 
         private void newClient_ClientShutdown(HttpWebServerRequest sender) {
-            if (this.m_httpClients.Contains(sender) == true) {
-                this.m_httpClients.Remove(sender);
+            if (HttpClients.Contains(sender) == true) {
+                HttpClients.Remove(sender);
             }
         }
 
         public void Shutdown() {
-
             try {
-                this.IsOnline = false;
+                IsOnline = false;
 
-                foreach (HttpWebServerRequest client in new List<HttpWebServerRequest>(this.m_httpClients)) {
+                foreach (HttpWebServerRequest client in new List<HttpWebServerRequest>(HttpClients)) {
                     client.Shutdown();
                 }
 
-                if (this.m_tcpListener != null) {
-                    this.m_tcpListener.Stop();
-                    this.m_tcpListener = null;
+                if (Listener != null) {
+                    Listener.Stop();
+                    Listener = null;
                 }
 
-                if (this.HttpServerOffline != null) {
-                    FrostbiteConnection.RaiseEvent(this.HttpServerOffline.GetInvocationList(), this);
+                if (HttpServerOffline != null) {
+                    FrostbiteConnection.RaiseEvent(HttpServerOffline.GetInvocationList(), this);
                 }
             }
-            catch (Exception) { }
+            catch (Exception) {
+            }
         }
-
     }
 }

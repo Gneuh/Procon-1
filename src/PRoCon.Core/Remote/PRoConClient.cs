@@ -20,90 +20,154 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.IO;
+using System.Linq;
+using System.Media;
 using System.Net;
-using System.Reflection;
 using System.Net.Sockets;
+using System.Reflection;
+using System.Security;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
-using System.Media;
 using System.Timers;
-
-using System.Security;
-using System.Security.Permissions;
+using PRoCon.Core.Accounts;
+using PRoCon.Core.Battlemap;
+using PRoCon.Core.Consoles;
+using PRoCon.Core.Events;
+using PRoCon.Core.Lists;
+using PRoCon.Core.Players;
+using PRoCon.Core.Players.Items;
+using PRoCon.Core.Plugin;
+using PRoCon.Core.Remote.Layer;
+using PRoCon.Core.Settings;
+using PRoCon.Core.TextChatModeration;
+using PRoCon.Core.Variables;
+using Timer = System.Timers.Timer;
 
 namespace PRoCon.Core.Remote {
-    using Core;
-    using Core.Players;
-    using Core.Players.Items;
-    using Core.Consoles;
-    using Core.Variables;
-    using Core.Lists;
-    using Core.Remote.Layer;
-    using Core.Accounts;
-    using Core.Events;
-    using Core.Settings;
-    using Core.Maps;
-    using Core.Battlemap;
-    using Core.TextChatModeration;
-    using Core.Plugin;
-
     public class PRoConClient {
+        protected readonly object ConfigSavingLocker = new object();
 
-        private readonly object m_objConfigSavingLocker = new object();
+        /// <summary>
+        /// The task timer to fire at a one second interval.
+        /// </summary>
+        protected Timer TaskTimer;
 
-        private string m_strProconEventsUid;
-
-        public PRoConApplication Parent { get; private set; }
-
-        private bool m_gameModModified = false;
-        private bool m_blLoadingSavingConnectionConfig = false;
-
-        System.Timers.Timer m_taskTimer;
+        /// <summary>
+        /// True if the connection config is currently loading or savings.
+        /// </summary>
+        protected bool IsLoadingSavingConnectionConfig;
         //private Thread m_thTasks;
         //private bool m_isTasksRunning;
 
-        private FrostbiteConnection m_connection;
+        /// <summary>
+        /// What is this and what does it do?
+        /// </summary>
+        private FrostbiteConnection _connection;
+
+        /// <summary>
+        /// Bool to specify if the game is running a modification (BFBC2: Vietnam)
+        /// </summary>
+        protected bool IsGameModModified;
+
+        /// <summary>
+        /// The Uid for this procon events.
+        /// </summary>
+        protected string ProconEventsUid;
+
+        /// <summary>
+        /// The maximum number of seconds/minutes that a plugin can execute a single command before it is disabled.
+        /// </summary>
+        public TimeSpan PluginMaxRuntimeSpan = new TimeSpan(0, 0, 59);
 
         #region Event handlers
 
+        public delegate void AuthenticationFailureHandler(PRoConClient sender, string strError);
+
+        public delegate void AutomaticallyConnectHandler(PRoConClient sender, bool isEnabled);
+
         public delegate void EmptyParamterHandler(PRoConClient sender);
+
+        public delegate void FailureHandler(PRoConClient sender, Exception exception);
+
+        public delegate void FullBanListListHandler(PRoConClient sender, List<CBanInfo> lstBans);
+
+        public delegate void FullTextChatModerationListListHandler(PRoConClient sender, TextChatModerationDictionary moderationList);
+
+        public delegate void ListMapZonesHandler(PRoConClient sender, List<MapZoneDrawing> zones);
+
+        public delegate void MapZoneEditedHandler(PRoConClient sender, MapZoneDrawing zone);
+
+        public delegate void PassLayerEventHandler(PRoConClient sender, Packet packet);
+
+        public delegate void PlayerKilledHandler(PRoConClient sender, Kill kKillerVictimDetails);
+
+        public delegate void PlayerSpawnedHandler(PRoConClient sender, string soldierName, Inventory spawnedInventory);
+
+        public delegate void ProconAdminPlayerPinged(PRoConClient sender, string strSoldierName, int iPing);
+
+        public delegate void ProconAdminSayingHandler(PRoConClient sender, string strAdminStack, string strMessage, CPlayerSubset spsAudience);
+
+        public delegate void ProconAdminYellingHandler(PRoConClient sender, string strAdminStack, string strMessage, int iMessageDuration, CPlayerSubset spsAudience);
+
+        public delegate void ProconPrivilegesHandler(PRoConClient sender, CPrivileges spPrivs);
+
+        public delegate void ProconVersionHandler(PRoConClient sender, Version version);
+
+        public delegate void PunkbusterBanHandler(PRoConClient sender, CBanInfo cbiUnbannedPlayer);
+
+        public delegate void PunkbusterPlayerInfoHandler(PRoConClient sender, CPunkbusterInfo pbInfo);
+
+        public delegate void ReadRemoteConsoleHandler(PRoConClient sender, DateTime loggedTime, string text);
+
+        public delegate void ReceiveProconVariableHandler(PRoConClient sender, string strVariable, string strValue);
+
+        public delegate void RemoteAccountAlteredHandler(PRoConClient sender, string accountName, CPrivileges accountPrivileges);
+
+        public delegate void RemoteAccountHandler(PRoConClient sender, string accountName);
+
+        public delegate void RemoteAccountLoginStatusHandler(PRoConClient sender, string accountName, bool isOnline);
+
+        public delegate void RemoteEnabledPluginsHandler(PRoConClient sender, List<string> enabledPluginClasses);
+
+        public delegate void RemoteLoadedPluginsHandler(PRoConClient sender, Dictionary<string, PluginDetails> loadedPlugins);
+
+        public delegate void RemotePluginEnabledHandler(PRoConClient sender, string strClassName, bool isEnabled);
+
+        public delegate void RemotePluginLoadedHandler(PRoConClient sender, PluginDetails spdDetails);
+
+        public delegate void RemotePluginVariablesHandler(PRoConClient sender, string strClassName, List<CPluginVariable> lstVariables);
+
+        public delegate void SocketExceptionHandler(PRoConClient sender, SocketException se);
+
         public event EmptyParamterHandler ConnectAttempt;
         public event EmptyParamterHandler ConnectSuccess;
         public event EmptyParamterHandler ConnectionClosed;
-        
+
         public event EmptyParamterHandler LoginAttempt;
         public event EmptyParamterHandler Login;
         public event EmptyParamterHandler Logout;
 
         public event EmptyParamterHandler GameTypeDiscovered;
 
-        public delegate void FailureHandler(PRoConClient sender, Exception exception);
         public event FailureHandler ConnectionFailure;
 
-        public delegate void SocketExceptionHandler(PRoConClient sender, SocketException se);
         public event SocketExceptionHandler SocketException;
 
-        public delegate void PassLayerEventHandler(PRoConClient sender, Packet packet);
         public event PassLayerEventHandler PassLayerEvent;
 
-        public delegate void AuthenticationFailureHandler(PRoConClient sender, string strError);
         public event AuthenticationFailureHandler LoginFailure;
 
-        public delegate void PunkbusterPlayerInfoHandler(PRoConClient sender, CPunkbusterInfo pbInfo);
         public event PunkbusterPlayerInfoHandler PunkbusterPlayerInfo;
         public event EmptyParamterHandler PunkbusterBeginPlayerInfo;
         public event EmptyParamterHandler PunkbusterEndPlayerInfo;
 
-        public delegate void PunkbusterBanHandler(PRoConClient sender, CBanInfo cbiUnbannedPlayer);
         public event PunkbusterBanHandler PunkbusterPlayerBanned;
         public event PunkbusterBanHandler PunkbusterPlayerUnbanned;
 
-        public delegate void FullBanListListHandler(PRoConClient sender, List<CBanInfo> lstBans);
         public event FullBanListListHandler FullBanListList;
 
-        public delegate void FullTextChatModerationListListHandler(PRoConClient sender, TextChatModerationDictionary moderationList);
         public event FullTextChatModerationListListHandler FullTextChatModerationListList;
 
         // These events are in PRoConClient to determine if it's a recompile or not.
@@ -111,85 +175,70 @@ namespace PRoCon.Core.Remote {
         public event EmptyParamterHandler RecompilingPlugins;
         public event EmptyParamterHandler PluginsCompiled;
 
-        public delegate void ProconAdminSayingHandler(PRoConClient sender, string strAdminStack, string strMessage, CPlayerSubset spsAudience);
         public event ProconAdminSayingHandler ProconAdminSaying;
 
-        public delegate void ProconAdminYellingHandler(PRoConClient sender, string strAdminStack, string strMessage, int iMessageDuration, CPlayerSubset spsAudience);
         public event ProconAdminYellingHandler ProconAdminYelling;
 
-        public delegate void ProconAdminPlayerPinged(PRoConClient sender, string strSoldierName, int iPing);
         public event ProconAdminPlayerPinged ProconAdminPinging;
 
-        public delegate void ProconPrivilegesHandler(PRoConClient sender, CPrivileges spPrivs);
         public event ProconPrivilegesHandler ProconPrivileges;
 
-        public delegate void ProconVersionHandler(PRoConClient sender, Version version);
         public event ProconVersionHandler ProconVersion;
 
-        public delegate void ReceiveProconVariableHandler(PRoConClient sender, string strVariable, string strValue);
         public event ReceiveProconVariableHandler ReceiveProconVariable;
 
         // List/Edit/Create/Delete Accounts through the Parent Layer Control.
-        public delegate void RemoteAccountLoginStatusHandler(PRoConClient sender, string accountName, bool isOnline);
+
         public event RemoteAccountLoginStatusHandler RemoteAccountLoggedIn;
 
         public event EmptyParamterHandler RemoteAccountChangePassword;
 
-        public delegate void RemoteAccountAlteredHandler(PRoConClient sender, string accountName, CPrivileges accountPrivileges);
         public event RemoteAccountAlteredHandler RemoteAccountAltered;
 
-        public delegate void RemoteAccountHandler(PRoConClient sender, string accountName);
         public event RemoteAccountHandler RemoteAccountCreated;
         public event RemoteAccountHandler RemoteAccountDeleted;
 
         // List/Enable/Disable remote plugins via PLC.
-        public delegate void RemoteEnabledPluginsHandler(PRoConClient sender, List<string> enabledPluginClasses);
+
         public event RemoteEnabledPluginsHandler RemoteEnabledPlugins;
 
-        public delegate void RemoteLoadedPluginsHandler(PRoConClient sender, Dictionary<string, PluginDetails> loadedPlugins);
         public event RemoteLoadedPluginsHandler RemoteLoadedPlugins;
 
-        public delegate void RemotePluginLoadedHandler(PRoConClient sender, PluginDetails spdDetails);
         public event RemotePluginLoadedHandler RemotePluginLoaded;
 
-        public delegate void RemotePluginEnabledHandler(PRoConClient sender, string strClassName, bool isEnabled);
         public event RemotePluginEnabledHandler RemotePluginEnabled;
 
-        public delegate void RemotePluginVariablesHandler(PRoConClient sender, string strClassName, List<CPluginVariable> lstVariables);
         public event RemotePluginVariablesHandler RemotePluginVariables;
 
-        public delegate void AutomaticallyConnectHandler(PRoConClient sender, bool isEnabled);
         public event AutomaticallyConnectHandler AutomaticallyConnectChanged;
 
-        public new delegate void PlayerSpawnedHandler(PRoConClient sender, string soldierName, Inventory spawnedInventory);
-        public new event PlayerSpawnedHandler PlayerSpawned;
+        public event PlayerSpawnedHandler PlayerSpawned;
 
-        public new delegate void PlayerKilledHandler(PRoConClient sender, Kill kKillerVictimDetails);
-        public new event PlayerKilledHandler PlayerKilled;
+        public event PlayerKilledHandler PlayerKilled;
 
-        public delegate void MapZoneEditedHandler(PRoConClient sender, MapZoneDrawing zone);
         public event MapZoneEditedHandler MapZoneCreated;
         public event MapZoneEditedHandler MapZoneDeleted;
         public event MapZoneEditedHandler MapZoneModified;
 
-        public delegate void ListMapZonesHandler(PRoConClient sender, List<MapZoneDrawing> zones);
         public event ListMapZonesHandler ListMapZones;
 
-        public delegate void ReadRemoteConsoleHandler(PRoConClient sender, DateTime loggedTime, string text);
         public event ReadRemoteConsoleHandler ReadRemotePluginConsole;
         public event ReadRemoteConsoleHandler ReadRemoteChatConsole;
 
         #region Packages
-        
+
+        public delegate void RemotePackagesInstallErrorHandler(PRoConClient sender, string uid, string error);
+
         public delegate void RemotePackagesInstallHandler(PRoConClient sender, string uid);
+
+        public delegate void RemotePackagesInstalledHandler(PRoConClient sender, string uid, bool restart);
+
         public event RemotePackagesInstallHandler PackageDownloading;
         public event RemotePackagesInstallHandler PackageDownloaded;
         public event RemotePackagesInstallHandler PackageInstalling;
 
-        public delegate void RemotePackagesInstallErrorHandler(PRoConClient sender, string uid, string error);
         public event RemotePackagesInstallErrorHandler PackageDownloadError;
 
-        public delegate void RemotePackagesInstalledHandler(PRoConClient sender, string uid, bool restart);
         public event RemotePackagesInstalledHandler PackageInstalled;
 
         #endregion
@@ -198,215 +247,76 @@ namespace PRoCon.Core.Remote {
 
         #region Attributes
 
-        public FrostbiteClient Game {
-            get;
-            private set;
-        }
+        protected bool IsAutomaticallyConnectEnabled;
+        public FrostbiteClient Game { get; private set; }
 
         public string InstigatingAccountName { get; private set; }
 
-        public string Password {
-            get;
-            set;
-        }
+        public string Password { get; set; }
 
-        public bool IsPRoConConnection {
-            get;
-            private set;
-        }
+        public bool IsPRoConConnection { get; private set; }
 
-        public EventCaptures EventsLogging {
-            get;
-            private set;
-        }
+        public EventCaptures EventsLogging { get; private set; }
 
-        public PluginManager PluginsManager {
-            get;
-            private set;
-        }
+        public PluginManager PluginsManager { get; private set; }
 
-        public PluginConsole PluginConsole {
-            get;
-            private set;
-        }
+        public PluginConsole PluginConsole { get; private set; }
 
-        public ConnectionConsole Console {
-            get;
-            private set;
-        }
+        public ConnectionConsole Console { get; private set; }
 
-        public PunkbusterConsole PunkbusterConsole {
-            get;
-            private set;
-        }
+        public PunkbusterConsole PunkbusterConsole { get; private set; }
 
-        public ChatConsole ChatConsole {
-            get;
-            private set;
-        }
+        public ChatConsole ChatConsole { get; private set; }
 
-        public PlayerDictionary PlayerList {
-            get;
-            private set;
-        }
+        public PlayerDictionary PlayerList { get; private set; }
 
-        public PlayerListSettings PlayerListSettings {
-            get;
-            private set;
-        }
+        public PlayerListSettings PlayerListSettings { get; private set; }
 
-        public ListsSettings ListSettings {
-            get;
-            private set;
-        }
+        public ListsSettings ListSettings { get; private set; }
 
-        public ServerSettings ServerSettings {
-            get;
-            private set;
-        }
+        public ServerSettings ServerSettings { get; private set; }
 
-        public CServerInfo CurrentServerInfo {
-            get;
-            private set;
-        }
+        public CServerInfo CurrentServerInfo { get; private set; }
 
-        public List<CTeamName> TeamNameList {
-            get;
-            private set;
-        }
+        public List<CTeamName> TeamNameList { get; private set; }
 
-        public NotificationList<CMap> MapListPool {
-            get;
-            private set;
-        }
+        public NotificationList<CMap> MapListPool { get; private set; }
 
-        public NotificationList<string> ReservedSlotList {
-            get;
-            private set;
-        }
+        public NotificationList<string> ReservedSlotList { get; private set; }
+
+        public NotificationList<string> SpectatorList { get; private set; }
 
         public CLocalization Language {
-            get {
-                return this.Parent.CurrentLanguage;
-            }
+            get { return Parent.CurrentLanguage; }
         }
 
-        public CPrivileges Privileges {
-            get;
-            private set;
-        }
+        public CPrivileges Privileges { get; private set; }
 
         public Version ConnectedLayerVersion { get; private set; }
 
-        public PRoConLayer Layer {
-            get;
-            private set;
-        }
+        public PRoConLayer Layer { get; private set; }
 
-        public NotificationList<string> Reasons {
-            get;
-            private set;
-        }
+        public NotificationList<string> Reasons { get; private set; }
 
-        public VariableDictionary Variables {
-            get;
-            private set;
-        }
+        public VariableDictionary Variables { get; private set; }
 
-        public List<CBanInfo> FullVanillaBanList {
-            get;
-            private set;
-        }
+        public List<CBanInfo> FullVanillaBanList { get; private set; }
 
 
-        public TextChatModerationDictionary FullTextChatModerationList {
-            get;
-            private set;
-        }
+        public TextChatModerationDictionary FullTextChatModerationList { get; private set; }
 
-        public MapGeometry MapGeometry {
-            get;
-            private set;
-        }
+        public MapGeometry MapGeometry { get; private set; }
 
-        private bool m_blAutomaticallyConnect = false;
         public bool AutomaticallyConnect {
-            get {
-                return this.m_blAutomaticallyConnect;
-            }
+            get { return IsAutomaticallyConnectEnabled; }
             set {
-                this.m_blAutomaticallyConnect = value;
+                IsAutomaticallyConnectEnabled = value;
 
-                if (this.AutomaticallyConnectChanged != null) {
-                    FrostbiteConnection.RaiseEvent(this.AutomaticallyConnectChanged.GetInvocationList(), this, value);
+                if (AutomaticallyConnectChanged != null) {
+                    FrostbiteConnection.RaiseEvent(AutomaticallyConnectChanged.GetInvocationList(), this, value);
                 }
             }
         }
-
-        #region Connection State
-
-        private bool IsConnected {
-            get {
-                bool isConnected = false;
-
-                if (this.Game != null && this.Game.Connection != null) {
-                    isConnected = this.Game.Connection.IsConnected;
-                }
-                else if (this.m_connection != null) {
-                    isConnected = this.m_connection.IsConnected;
-                }
-
-                return isConnected;
-            }
-        }
-
-        private bool IsConnecting {
-            get {
-                bool isConnecting = false;
-
-                if (this.Game != null && this.Game.Connection != null) {
-                    isConnecting = this.Game.Connection.IsConnecting;
-                }
-                else if (this.m_connection != null) {
-                    isConnecting = this.m_connection.IsConnecting;
-                }
-
-                return isConnecting;
-            }
-        }
-
-        private ConnectionState m_currentState;
-        public ConnectionState State {
-            get {
-                ConnectionState currentState = this.m_currentState;
-
-                if (this.IsConnected == true) {
-                    currentState = ConnectionState.Connected;
-                }
-                else if (this.IsConnecting == true) {
-                    currentState = ConnectionState.Connecting;
-                }
-
-                return currentState;
-            }
-            set {
-                this.m_currentState = value;
-            }
-        }
-
-        public bool IsLoggedIn {
-            get {
-                bool isLoggedIn = false;
-
-                if (this.Game != null) {
-                    isLoggedIn = this.Game.IsLoggedIn;
-                }
-
-                return isLoggedIn;
-            }
-        }
-
-        #endregion
 
         /*
         public bool ManuallyDisconnected {
@@ -414,66 +324,42 @@ namespace PRoCon.Core.Remote {
             private set;
         }
         */
-        private List<Task> Tasks {
-            get;
-            set;
-        }
+        private List<Task> Tasks { get; set; }
 
         // Variables received by the server.
         //private Dictionary<string, string> m_dicSvLayerVariables;
-        public VariableDictionary SV_Variables {
-            get;
-            private set;
-        }
+        public VariableDictionary SV_Variables { get; private set; }
 
-        public WeaponDictionary Weapons {
-            get;
-            private set;
-        }
+        public WeaponDictionary Weapons { get; private set; }
 
-        public SpecializationDictionary Specializations {
-            get;
-            private set;
-        }
+        public SpecializationDictionary Specializations { get; private set; }
 
-        public string HostName {
-            get;
-            private set;
-        }
+        public string HostName { get; private set; }
 
-        public ushort Port {
-            get;
-            private set;
-        }
+        public ushort Port { get; private set; }
 
-        public string m_strConnectionServerName = String.Empty;
         public string ConnectionServerName {
-            get {
-                return this.m_strConnectionServerName;
-            }
-            set {
-                this.m_strConnectionServerName = value;
-            }
+            get { return _connectionServerName; }
+            set { _connectionServerName = value; }
         }
+        private string _connectionServerName = String.Empty;
 
-        private string m_strUsername = String.Empty;
         public string Username {
-            get {
-                return this.m_strUsername;
-            }
+            get { return _username; }
             set {
-                if (this.Game != null && this.Game.IsLoggedIn == false) {
-                    this.m_strUsername = value;
+                if (Game != null && Game.IsLoggedIn == false) {
+                    _username = value;
                 }
             }
         }
+        private string _username = String.Empty;
 
         public string HostNamePort {
-            get { return this.HostName + ":" + this.Port.ToString(); }
+            get { return HostName + ":" + Port.ToString(); }
         }
 
         public string FileHostNamePort {
-            get { return this.HostName + "_" + this.Port.ToString(); }
+            get { return HostName + "_" + Port.ToString(); }
         }
 
         /*
@@ -487,152 +373,2542 @@ namespace PRoCon.Core.Remote {
             get {
                 string gameType = String.Empty;
 
-                if (this.Game != null) {
-                    gameType = this.Game.GameType;
+                if (Game != null) {
+                    gameType = Game.GameType;
                 }
 
                 return gameType;
             }
         }
 
-        public string VersionNumber {
-            get;
-            private set;
+        public string VersionNumber { get; private set; }
+
+        #region Connection State
+
+        private bool IsConnected {
+            get {
+                bool isConnected = false;
+
+                if (Game != null && Game.Connection != null) {
+                    isConnected = Game.Connection.IsConnected;
+                }
+                else if (_connection != null) {
+                    isConnected = _connection.IsConnected;
+                }
+
+                return isConnected;
+            }
         }
+
+        private bool IsConnecting {
+            get {
+                bool isConnecting = false;
+
+                if (Game != null && Game.Connection != null) {
+                    isConnecting = Game.Connection.IsConnecting;
+                }
+                else if (_connection != null) {
+                    isConnecting = _connection.IsConnecting;
+                }
+
+                return isConnecting;
+            }
+        }
+
+        public ConnectionState State {
+            get {
+                ConnectionState currentState = _currentState;
+
+                if (IsConnected == true) {
+                    currentState = ConnectionState.Connected;
+                }
+                else if (IsConnecting == true) {
+                    currentState = ConnectionState.Connecting;
+                }
+
+                return currentState;
+            }
+            set { _currentState = value; }
+        }
+        private ConnectionState _currentState;
+
+        public bool IsLoggedIn {
+            get {
+                bool isLoggedIn = false;
+
+                if (Game != null) {
+                    isLoggedIn = Game.IsLoggedIn;
+                }
+
+                return isLoggedIn;
+            }
+        }
+
+        #endregion
 
         #endregion
 
         #region Layer Packet Passing
 
-        internal struct SOriginalForwardedPacket {
-            public UInt32 m_ui32OriginalSequence;
-            public PRoConLayerClient m_sender;
-            public List<string> m_lstWords;
-        }
-
         // <UInt32, - Sequence number sent to the BFBC2 server
         // Packet> - Original sequence number to be used when passing it back to the PRoCon layer.
-        private Dictionary<UInt32, SOriginalForwardedPacket> m_dicForwardedPackets;
+        private readonly Dictionary<UInt32, SOriginalForwardedPacket> m_dicForwardedPackets;
 
-        private Dictionary<string, string> m_dicUsernamesToUids;
+        private readonly Dictionary<string, string> m_dicUsernamesToUids;
+
+        internal struct SOriginalForwardedPacket {
+            public List<string> m_lstWords;
+            public PRoConLayerClient m_sender;
+            public UInt32 m_ui32OriginalSequence;
+        }
 
         #endregion
 
-        public TimeSpan m_tsPluginMaxRuntime = new TimeSpan(0, 0, 59);
-
         public PRoConClient(PRoConApplication praApplication, string hostName, ushort port, string username, string password) {
-
-            this.HostName = hostName;
-            this.Port = port;
-            this.Password = password;
-            this.m_strUsername = username;
+            HostName = hostName;
+            Port = port;
+            Password = password;
+            _username = username;
             //this.m_uscParent = frmParent;
-            this.Parent = praApplication;
+            Parent = praApplication;
 
-            this.m_strProconEventsUid = String.Empty;
+            ProconEventsUid = String.Empty;
 
             m_dicForwardedPackets = new Dictionary<UInt32, SOriginalForwardedPacket>();
 
-            this.Tasks = new List<Task>();
-            this.VersionNumber = String.Empty;
+            Tasks = new List<Task>();
+            VersionNumber = String.Empty;
 
-            this.Layer = new PRoConLayer();
+            Layer = new PRoConLayer();
 
-            this.m_dicUsernamesToUids = new Dictionary<string, string>() { { "SYSOP", "" } };
-            this.InstigatingAccountName = String.Empty;
+            m_dicUsernamesToUids = new Dictionary<string, string>() {
+                {"SYSOP", ""}
+            };
+            InstigatingAccountName = String.Empty;
 
-            this.m_tsPluginMaxRuntime = new TimeSpan(0, this.Parent.OptionsSettings.PluginMaxRuntime_m, this.Parent.OptionsSettings.PluginMaxRuntime_s);
-
-
+            PluginMaxRuntimeSpan = new TimeSpan(0, Parent.OptionsSettings.PluginMaxRuntime_m, Parent.OptionsSettings.PluginMaxRuntime_s);
         }
-        
+
+        public PRoConApplication Parent { get; private set; }
+
         private void AssignEventHandlers() {
+            if (Game != null) {
+                Game.Login += new FrostbiteClient.EmptyParamterHandler(Game_Login);
+                Game.LoginFailure += new FrostbiteClient.AuthenticationFailureHandler(Game_LoginFailure);
+                Game.Logout += new FrostbiteClient.EmptyParamterHandler(Game_Logout);
 
-            if (this.Game != null) {
-
-                this.Game.Login += new FrostbiteClient.EmptyParamterHandler(Game_Login);
-                this.Game.LoginFailure += new FrostbiteClient.AuthenticationFailureHandler(Game_LoginFailure);
-                this.Game.Logout += new FrostbiteClient.EmptyParamterHandler(Game_Logout);
-
-                this.Game.ListPlayers += this.OnListPlayers;
-                this.Game.PlayerLeft += this.OnPlayerLeft;
-                this.Game.PunkbusterMessage += this.OnPunkbusterMessage;
+                Game.ListPlayers += OnListPlayers;
+                Game.PlayerLeft += OnPlayerLeft;
+                Game.PunkbusterMessage += OnPunkbusterMessage;
 
                 // this.Game.ServerInfo += this.OnServerInfo;
 
-                this.Game.BanListList += new FrostbiteClient.BanListListHandler(PRoConClient_BanListList);
-                this.Game.TextChatModerationListAddPlayer += new FrostbiteClient.TextChatModerationListAddPlayerHandler(Game_TextChatModerationListAddPlayer);
-                this.Game.TextChatModerationListRemovePlayer += new FrostbiteClient.TextChatModerationListRemovePlayerHandler(Game_TextChatModerationListRemovePlayer);
-                this.Game.TextChatModerationListClear += new FrostbiteClient.EmptyParamterHandler(Game_TextChatModerationListClear);
-                this.Game.TextChatModerationListList += new FrostbiteClient.TextChatModerationListListHandler(Game_TextChatModerationListList);
-                this.Game.PlayerLimit += this.OnPlayerLimit;
+                Game.BanListList += new FrostbiteClient.BanListListHandler(PRoConClient_BanListList);
+                Game.TextChatModerationListAddPlayer += new FrostbiteClient.TextChatModerationListAddPlayerHandler(Game_TextChatModerationListAddPlayer);
+                Game.TextChatModerationListRemovePlayer += new FrostbiteClient.TextChatModerationListRemovePlayerHandler(Game_TextChatModerationListRemovePlayer);
+                Game.TextChatModerationListClear += new FrostbiteClient.EmptyParamterHandler(Game_TextChatModerationListClear);
+                Game.TextChatModerationListList += new FrostbiteClient.TextChatModerationListListHandler(Game_TextChatModerationListList);
+                Game.PlayerLimit += OnPlayerLimit;
 
-                this.Game.ReservedSlotsList += new FrostbiteClient.ReservedSlotsListHandler(PRoConClient_ReservedSlotsList);
-                this.Game.ReservedSlotsPlayerAdded += new FrostbiteClient.ReservedSlotsPlayerHandler(PRoConClient_ReservedSlotsPlayerAdded);
-                this.Game.ReservedSlotsPlayerRemoved += new FrostbiteClient.ReservedSlotsPlayerHandler(PRoConClient_ReservedSlotsPlayerRemoved);
+                Game.ReservedSlotsList += new FrostbiteClient.ReservedSlotsListHandler(PRoConClient_ReservedSlotsList);
+                Game.ReservedSlotsPlayerAdded += new FrostbiteClient.ReservedSlotsPlayerHandler(PRoConClient_ReservedSlotsPlayerAdded);
+                Game.ReservedSlotsPlayerRemoved += new FrostbiteClient.ReservedSlotsPlayerHandler(PRoConClient_ReservedSlotsPlayerRemoved);
 
-                this.Game.ResponseError += new FrostbiteClient.ResponseErrorHandler(PRoConClient_ResponseError);
+                Game.ResponseError += new FrostbiteClient.ResponseErrorHandler(PRoConClient_ResponseError);
 
-                this.PluginsCompiled += new EmptyParamterHandler(ProConClient_PluginsCompiled);
+                PluginsCompiled += new EmptyParamterHandler(ProConClient_PluginsCompiled);
 
-                this.Game.PlayerSpawned += new FrostbiteClient.PlayerSpawnedHandler(PRoConClient_PlayerSpawned);
-                this.Game.PlayerKilled += new FrostbiteClient.PlayerKilledHandler(PRoConClient_PlayerKilled);
-
+                Game.PlayerSpawned += new FrostbiteClient.PlayerSpawnedHandler(PRoConClient_PlayerSpawned);
+                Game.PlayerKilled += new FrostbiteClient.PlayerKilledHandler(PRoConClient_PlayerKilled);
             }
         }
+
+        private void Connection_ConnectionClosed(FrostbiteConnection sender) {
+            State = ConnectionState.Disconnected;
+            //sender.PacketReceived -= new FrostbiteConnection.PacketDispatchHandler(Connection_PacketRecieved);
+
+            if (ConnectionClosed != null) {
+                FrostbiteConnection.RaiseEvent(ConnectionClosed.GetInvocationList(), this);
+            }
+        }
+
+        private void Connection_ConnectionFailure(FrostbiteConnection sender, Exception exception) {
+            State = ConnectionState.Error;
+
+            //sender.PacketReceived -= new FrostbiteConnection.PacketDispatchHandler(Connection_PacketRecieved);
+
+            if (ConnectionFailure != null) {
+                FrostbiteConnection.RaiseEvent(ConnectionFailure.GetInvocationList(), this, exception);
+            }
+        }
+
+        private void Connection_SocketException(FrostbiteConnection sender, SocketException se) {
+            State = ConnectionState.Error;
+
+            //sender.PacketReceived -= new FrostbiteConnection.PacketDispatchHandler(Connection_PacketRecieved);
+
+            if (SocketException != null) {
+                FrostbiteConnection.RaiseEvent(SocketException.GetInvocationList(), this, se);
+            }
+        }
+
+        private void InitialSetup() {
+            if (Game != null) {
+                IsLoadingSavingConnectionConfig = true;
+
+                AssignEventHandlers();
+
+                // Assume full access until we're told otherwise.
+                Layer.Initialize(Parent, this);
+
+                // I may move these events to within Layer, depends on the end of the restructure.
+                Layer.LayerOnline += new PRoConLayer.LayerEmptyParameterHandler(Layer_LayerOnline);
+                Layer.LayerOffline += new PRoConLayer.LayerEmptyParameterHandler(Layer_LayerOffline);
+                Layer.AccountPrivileges.AccountPrivilegeAdded += new AccountPrivilegeDictionary.AccountPrivilegeAlteredHandler(AccountPrivileges_AccountPrivilegeAdded);
+                Layer.AccountPrivileges.AccountPrivilegeRemoved += new AccountPrivilegeDictionary.AccountPrivilegeAlteredHandler(AccountPrivileges_AccountPrivilegeRemoved);
+
+                foreach (AccountPrivilege apPriv in Layer.AccountPrivileges) {
+                    apPriv.AccountPrivilegesChanged += new AccountPrivilege.AccountPrivilegesChangedHandler(item_AccountPrivilegesChanged);
+                }
+
+                Privileges = new CPrivileges(CPrivileges.FullPrivilegesFlags);
+                EventsLogging = new EventCaptures(this);
+                Console = new ConnectionConsole(this);
+                PunkbusterConsole = new PunkbusterConsole(this);
+                ChatConsole = new ChatConsole(this);
+                PluginConsole = new PluginConsole(this);
+                MapGeometry = new MapGeometry(this);
+                MapGeometry.MapZones.MapZoneAdded += new MapZoneDictionary.MapZoneAlteredHandler(MapZones_MapZoneAdded);
+                MapGeometry.MapZones.MapZoneChanged += new MapZoneDictionary.MapZoneAlteredHandler(MapZones_MapZoneChanged);
+                MapGeometry.MapZones.MapZoneRemoved += new MapZoneDictionary.MapZoneAlteredHandler(MapZones_MapZoneRemoved);
+
+                if (CurrentServerInfo == null) {
+                    CurrentServerInfo = new CServerInfo();
+                }
+
+                ListSettings = new ListsSettings(this);
+                ServerSettings = new ServerSettings(this);
+                PlayerListSettings = new PlayerListSettings();
+                PlayerList = new PlayerDictionary();
+                TeamNameList = new List<CTeamName>();
+                MapListPool = new NotificationList<CMap>();
+                ReservedSlotList = new NotificationList<string>();
+                Variables = new VariableDictionary();
+                SV_Variables = new VariableDictionary();
+                Reasons = new NotificationList<string>();
+                FullVanillaBanList = new List<CBanInfo>();
+                FullTextChatModerationList = new TextChatModerationDictionary();
+                Weapons = new WeaponDictionary();
+                Specializations = new SpecializationDictionary();
+
+                if (Regex.Match(HostName, @"^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$").Success == true) {
+                    Variables.SetVariable("SERVER_COUNTRY", Parent.GetCountryName(HostName));
+                    Variables.SetVariable("SERVER_COUNTRY_CODE", Parent.GetCountryCode(HostName));
+                }
+                else {
+                    IPAddress ipServer = FrostbiteConnection.ResolveHostName(HostName);
+                    Variables.SetVariable("SERVER_COUNTRY", Parent.GetCountryName(ipServer.ToString()));
+                    Variables.SetVariable("SERVER_COUNTRY_CODE", Parent.GetCountryCode(ipServer.ToString()));
+                }
+
+                Console.Logging = Parent.OptionsSettings.ConsoleLogging;
+                EventsLogging.Logging = Parent.OptionsSettings.EventsLogging;
+                ChatConsole.Logging = Parent.OptionsSettings.ChatLogging;
+                PluginConsole.Logging = Parent.OptionsSettings.PluginLogging;
+
+                //this.m_blLoadingSavingConnectionConfig = true;
+
+                if (CurrentServerInfo.GameMod == GameMods.None) {
+                    ExecuteConnectionConfig(Game.GameType + ".def", 0, null, false);
+                }
+                else {
+                    ExecuteConnectionConfig(Game.GameType + "." + CurrentServerInfo.GameMod + ".def", 0, null, false);
+                }
+
+                // load override global_vars.def
+                ExecuteGlobalVarsConfig("global_vars.def", 0, null);
+
+                ExecuteConnectionConfig("reasons.cfg", 0, null, false);
+
+                lock (Parent) {
+                    if (Username.Length == 0 || Parent.OptionsSettings.LayerHideLocalPlugins == false) {
+                        CompilePlugins(Parent.OptionsSettings.PluginPermissions);
+                    }
+                }
+
+                if (Parent.OptionsSettings.UsePluginOldStyleLoad == true) {
+                    ExecuteConnectionConfig(FileHostNamePort + ".cfg", 0, null, false);
+                }
+
+                //this.m_blLoadingSavingConnectionConfig = false;
+
+                // this.ManuallyDisconnected = true;
+
+                // this.ConnectionError = false;
+
+                BeginLoginSequence();
+
+                if (Parent.OptionsSettings.UsePluginOldStyleLoad == false) {
+                    ExecuteConnectionConfig(FileHostNamePort + ".cfg", 0, null, true);
+                }
+
+                IsLoadingSavingConnectionConfig = false;
+            }
+        }
+
+        private void BeginLoginSequence() {
+            if (Username.Length > 0) {
+                SendProconLoginUsernamePacket(Username);
+            }
+            else {
+                Game.SendLoginHashedPacket(Password);
+            }
+        }
+
+        private void Connection_PacketRecieved(FrostbiteConnection sender, bool isHandled, Packet packetBeforeDispatch) {
+            if (packetBeforeDispatch.OriginatedFromServer == false) {
+                Packet request = sender.GetRequestPacket(packetBeforeDispatch);
+
+                if (request != null && String.Compare(request.Words[0], "version", StringComparison.OrdinalIgnoreCase) == 0) {
+                    if (Game == null) {
+                        if (String.Compare(packetBeforeDispatch.Words[1], "BFBC2", StringComparison.OrdinalIgnoreCase) == 0) {
+                            Game = new BFBC2Client(sender);
+                            _connection = null;
+                        }
+                        else if (String.Compare(packetBeforeDispatch.Words[1], "MOH", StringComparison.OrdinalIgnoreCase) == 0) {
+                            Game = new MoHClient(sender);
+                            _connection = null;
+                        }
+                        else if (String.Compare(packetBeforeDispatch.Words[1], "BF3", StringComparison.OrdinalIgnoreCase) == 0) {
+                            Game = new BF3Client(sender);
+                            _connection = null;
+                        }
+                        else if (String.Compare(packetBeforeDispatch.Words[1], "BF4", StringComparison.OrdinalIgnoreCase) == 0) {
+                            Game = new BF4Client(sender);
+                            _connection = null;
+                        }
+                        else if (String.Compare(packetBeforeDispatch.Words[1], "MOHW", StringComparison.OrdinalIgnoreCase) == 0) {
+                            Game = new MOHWClient(sender);
+                            _connection = null;
+                        }
+
+                        if (Game != null) {
+                            VersionNumber = packetBeforeDispatch.Words[2];
+
+                            Game.ServerInfo += new FrostbiteClient.ServerInfoHandler(OnServerInfo);
+                            Game.SendServerinfoPacket();
+
+                            //sender.SendQueued(new Packet(false, false, sender.AcquireSequenceNumber, "serverInfo"));
+                        }
+                    }
+                    else if (Game.Connection != null) {
+                        BeginLoginSequence();
+                    }
+
+                    sender.PacketReceived -= new FrostbiteConnection.PacketDispatchHandler(Connection_PacketRecieved);
+                }
+            }
+        }
+
+        private void Connection_ConnectSuccess(FrostbiteConnection sender) {
+            if (ConnectSuccess != null) {
+                FrostbiteConnection.RaiseEvent(ConnectSuccess.GetInvocationList(), this);
+            }
+
+            sender.PacketReceived -= new FrostbiteConnection.PacketDispatchHandler(Connection_PacketRecieved);
+            sender.PacketReceived += new FrostbiteConnection.PacketDispatchHandler(Connection_PacketRecieved);
+        }
+
+        private void m_connection_ConnectionReady(FrostbiteConnection sender) {
+            // Sleep the thread so the server has enough time to setup the listener.
+            // This is generally only problematic when connecting to local layers.
+            Thread.Sleep(50);
+
+            sender.SendQueued(new Packet(false, false, sender.AcquireSequenceNumber, "version"));
+        }
+
+        private void Connection_ConnectAttempt(FrostbiteConnection sender) {
+            if (ConnectAttempt != null) {
+                FrostbiteConnection.RaiseEvent(ConnectAttempt.GetInvocationList(), this);
+            }
+        }
+
+        private void Game_LoginFailure(FrostbiteClient sender, string strError) {
+            if (LoginFailure != null) {
+                State = ConnectionState.Error;
+
+                FrostbiteConnection.RaiseEvent(LoginFailure.GetInvocationList(), this, strError);
+            }
+        }
+
+        private void Game_Logout(FrostbiteClient sender) {
+            if (Logout != null) {
+                FrostbiteConnection.RaiseEvent(Logout.GetInvocationList(), this);
+            }
+        }
+
+        private void Game_Login(FrostbiteClient sender) {
+            if (IsGameModModified == true) {
+                if (CurrentServerInfo.GameMod == GameMods.None) {
+                    ExecuteConnectionConfig(Game.GameType + ".def", 0, null, false);
+                }
+                else {
+                    ExecuteConnectionConfig(Game.GameType + "." + CurrentServerInfo.GameMod + ".def", 0, null, false);
+                }
+
+                ExecuteGlobalVarsConfig("global_vars.def", 0, null);
+
+                lock (Parent) {
+                    if ((Parent.OptionsSettings.LayerHideLocalPlugins == false && IsPRoConConnection == true) || IsPRoConConnection == false) {
+                        CompilePlugins(Parent.OptionsSettings.PluginPermissions);
+                    }
+                }
+            }
+
+            if (IsPRoConConnection == true) {
+                SendRequest(new List<string>() {
+                    "procon.privileges"
+                });
+                SendRequest(new List<string>() {
+                    "procon.registerUid",
+                    "true",
+                    FrostbiteClient.GeneratePasswordHash(Encoding.ASCII.GetBytes(DateTime.Now.ToString("HH:mm:ss ff")), _username)
+                });
+                SendRequest(new List<string>() {
+                    "version"
+                });
+                SendRequest(new List<string>() {
+                    "procon.version"
+                });
+            }
+
+            Game.FetchStartupVariables();
+
+            // Occurs when they disconnect then reconnect a connection.
+            if (PluginsManager == null) {
+                if ((Parent.OptionsSettings.LayerHideLocalPlugins == false && IsPRoConConnection == true) || IsPRoConConnection == false) {
+                    CompilePlugins(Parent.OptionsSettings.PluginPermissions);
+                }
+            }
+
+            // This saves about 1.7 mb's per connection.  I'd prefer the plugins never compiled though if its connecting to a layer.
+            //if (this.IsPRoConConnection == true) { this.PluginsManager.Unload(); GC.Collect();  }
+            //if (this.Parent.OptionsSettings.LayerHideLocalPlugins == true && this.IsPRoConConnection == true) { this.PluginsManager.Unload(); GC.Collect(); }
+
+            ExecuteConnectionConfig("connection_onlogin.cfg", 0, null, false);
+
+            if (Login != null) {
+                FrostbiteConnection.RaiseEvent(Login.GetInvocationList(), this);
+            }
+
+            // Tasks
+
+            if (TaskTimer == null) {
+                TaskTimer = new Timer(1000);
+                TaskTimer.Elapsed += new ElapsedEventHandler(TaskTimer_Elapsed);
+                TaskTimer.Start();
+            }
+        }
+
+        public void Shutdown() {
+            if (Game != null) {
+                Game.Shutdown();
+            }
+            else if (_connection != null) {
+                _connection.Shutdown();
+            }
+            else if (ConnectionClosed != null) {
+                FrostbiteConnection.RaiseEvent(ConnectionClosed.GetInvocationList(), this);
+            }
+        }
+
+        public void Poke() {
+            // Poke the connection every second to make sure it's still alive.
+            if (Game != null && Game.Connection != null) {
+                Game.Connection.Poke();
+            }
+
+            if (Layer != null) {
+                // Poke all of the layer clients to make sure they are still connected.
+                this.Layer.Poke();
+            }
+        }
+
+        public void Connect() {
+            if (State != ConnectionState.Connecting && State != ConnectionState.Connected || (State == ConnectionState.Connected && IsLoggedIn == false)) {
+                if (TaskTimer != null) {
+                    TaskTimer.Stop();
+                    TaskTimer = null;
+                }
+                /*
+                if (this.m_thTasks != null) {
+
+                    try {
+                        this.m_thTasks.Abort();
+                    }
+                    catch (Exception) { }
+
+                    this.m_thTasks = null;
+                }
+                */
+                if (Game == null) {
+                    if (_connection == null) {
+                        _connection = new FrostbiteConnection(HostName, Port);
+                        _connection.ConnectAttempt += new FrostbiteConnection.EmptyParamterHandler(Connection_ConnectAttempt);
+                        _connection.ConnectionReady += new FrostbiteConnection.EmptyParamterHandler(m_connection_ConnectionReady);
+                        _connection.ConnectSuccess += new FrostbiteConnection.EmptyParamterHandler(Connection_ConnectSuccess);
+                        //this.m_connection.PacketReceived += new FrostbiteConnection.PacketDispatchHandler(Connection_PacketRecieved);
+                        _connection.SocketException += new FrostbiteConnection.SocketExceptionHandler(Connection_SocketException);
+                        _connection.ConnectionFailure += new FrostbiteConnection.FailureHandler(Connection_ConnectionFailure);
+                        _connection.ConnectionClosed += new FrostbiteConnection.EmptyParamterHandler(Connection_ConnectionClosed);
+                        _connection.BeforePacketDispatch += new FrostbiteConnection.PrePacketDispatchedHandler(Connection_BeforePacketDispatch);
+                    }
+
+                    _connection.AttemptConnection();
+                }
+                else if (Game.Connection != null && Game.Connection.IsConnected == false) {
+                    Game.Connection.AttemptConnection();
+                }
+            }
+        }
+
+        private void ProConClient_PluginsCompiled(PRoConClient sender) {
+            if (PluginsManager != null) {
+                PluginsManager.PluginVariableAltered += new PluginManager.PluginVariableAlteredHandler(Plugins_PluginVariableAltered);
+                PluginsManager.PluginEnabled += new PluginManager.PluginEmptyParameterHandler(Plugins_PluginEnabled);
+                PluginsManager.PluginDisabled += new PluginManager.PluginEmptyParameterHandler(Plugins_PluginDisabled);
+
+                PluginsManager.PluginPanic += new PluginManager.PluginEventHandler(PluginsManager_PluginPanic);
+            }
+        }
+
+        private void Plugins_PluginDisabled(string strClassName) {
+            SaveConnectionConfig();
+        }
+
+        private void Plugins_PluginEnabled(string strClassName) {
+            SaveConnectionConfig();
+        }
+
+        private void Plugins_PluginVariableAltered(PluginDetails spdNewDetails) {
+            SaveConnectionConfig();
+        }
+
+        private void Connection_BeforePacketDispatch(FrostbiteConnection sender, Packet packetBeforeDispatch, out bool isProcessed) {
+            bool blCancelPacket = false;
+            bool blCancelUpdateEvent = false;
+
+            InstigatingAccountName = String.Empty;
+
+            // IF it's a response to a packet we sent..
+            if (packetBeforeDispatch.OriginatedFromServer == false && packetBeforeDispatch.IsResponse == true) {
+                blCancelPacket = HandleResponsePacket(packetBeforeDispatch, blCancelUpdateEvent, blCancelPacket);
+            }
+                // ELSE IF it's an event initiated by the server (OnJoin, OnLeave, OnChat etc)
+            else if (packetBeforeDispatch.OriginatedFromServer == true && packetBeforeDispatch.IsResponse == false) {
+                blCancelPacket = HandleEventPacket(packetBeforeDispatch, blCancelPacket);
+            }
+
+            isProcessed = blCancelPacket;
+        }
+
+        private bool HandleEventPacket(Packet cpBeforePacketDispatch, bool blCancelPacket) {
+            if (cpBeforePacketDispatch.Words.Count >= 1 && String.Compare(cpBeforePacketDispatch.Words[0], "procon.shutdown", true) == 0) {
+                //this.SendPacket(new Packet(true, true, cpBeforePacketDispatch.SequenceNumber, new List<string>() { "OK" }));
+
+                State = ConnectionState.Error;
+                Connection_ConnectionFailure(Game.Connection, new Exception("The PRoCon layer has been shutdown by the host"));
+
+                Shutdown();
+                blCancelPacket = true;
+            }
+            else if (cpBeforePacketDispatch.Words.Count >= 2 && String.Compare(cpBeforePacketDispatch.Words[0], "procon.account.onLogin", true) == 0) {
+                //this.SendPacket(new Packet(true, true, cpBeforePacketDispatch.SequenceNumber, new List<string>() { "OK" }));
+
+                // Also able to get their privs as well if needed?
+                //this.m_uscParent.OnRemoteAccountLoggedIn(cpBeforePacketDispatch.Words[1], true);
+
+                if (RemoteAccountLoggedIn != null) {
+                    FrostbiteConnection.RaiseEvent(RemoteAccountLoggedIn.GetInvocationList(), this, cpBeforePacketDispatch.Words[1], true);
+                }
+
+                blCancelPacket = true;
+            }
+            else if (cpBeforePacketDispatch.Words.Count >= 2 && String.Compare(cpBeforePacketDispatch.Words[0], "procon.account.onLogout", true) == 0) {
+                //this.SendPacket(new Packet(true, true, cpBeforePacketDispatch.SequenceNumber, new List<string>() { "OK" }));
+
+                if (RemoteAccountLoggedIn != null) {
+                    FrostbiteConnection.RaiseEvent(RemoteAccountLoggedIn.GetInvocationList(), this, cpBeforePacketDispatch.Words[1], false);
+                }
+
+                blCancelPacket = true;
+            }
+            else if (cpBeforePacketDispatch.Words.Count >= 3 && String.Compare(cpBeforePacketDispatch.Words[0], "procon.account.onUidRegistered", true) == 0) {
+                if (m_dicUsernamesToUids.ContainsKey(cpBeforePacketDispatch.Words[2]) == true) {
+                    m_dicUsernamesToUids[cpBeforePacketDispatch.Words[2]] = cpBeforePacketDispatch.Words[1];
+                }
+                else {
+                    m_dicUsernamesToUids.Add(cpBeforePacketDispatch.Words[2], cpBeforePacketDispatch.Words[1]);
+                }
+
+                blCancelPacket = true;
+            }
+            else if (cpBeforePacketDispatch.Words.Count >= 2 && String.Compare(cpBeforePacketDispatch.Words[0], "procon.account.onCreated", true) == 0) {
+                //this.SendPacket(new Packet(true, true, cpBeforePacketDispatch.SequenceNumber, new List<string>() { "OK" }));
+
+                if (RemoteAccountCreated != null) {
+                    FrostbiteConnection.RaiseEvent(RemoteAccountCreated.GetInvocationList(), this, cpBeforePacketDispatch.Words[1]);
+                }
+
+                blCancelPacket = true;
+            }
+            else if (cpBeforePacketDispatch.Words.Count >= 2 && String.Compare(cpBeforePacketDispatch.Words[0], "procon.account.onDeleted", true) == 0) {
+                //this.SendPacket(new Packet(true, true, cpBeforePacketDispatch.SequenceNumber, new List<string>() { "OK" }));
+
+                if (RemoteAccountDeleted != null) {
+                    FrostbiteConnection.RaiseEvent(RemoteAccountDeleted.GetInvocationList(), this, cpBeforePacketDispatch.Words[1]);
+                }
+
+                blCancelPacket = true;
+            }
+            else if (cpBeforePacketDispatch.Words.Count >= 3 && String.Compare(cpBeforePacketDispatch.Words[0], "procon.account.onAltered", true) == 0) {
+                //this.SendPacket(new Packet(true, true, cpBeforePacketDispatch.SequenceNumber, new List<string>() { "OK" }));
+
+                UInt32 ui32Privileges = 0;
+                if (UInt32.TryParse(cpBeforePacketDispatch.Words[2], out ui32Privileges) == true) {
+                    var spPrivs = new CPrivileges();
+                    spPrivs.PrivilegesFlags = ui32Privileges;
+
+                    if (ProconPrivileges != null && String.Compare(cpBeforePacketDispatch.Words[1], Username) == 0) {
+                        Privileges = spPrivs;
+
+                        FrostbiteConnection.RaiseEvent(ProconPrivileges.GetInvocationList(), this, spPrivs);
+                    }
+
+                    if (RemoteAccountAltered != null) {
+                        FrostbiteConnection.RaiseEvent(RemoteAccountAltered.GetInvocationList(), this, cpBeforePacketDispatch.Words[1], spPrivs);
+                    }
+                }
+
+                blCancelPacket = true;
+            }
+
+            else if (cpBeforePacketDispatch.Words.Count >= 2 && String.Compare(cpBeforePacketDispatch.Words[0], "procon.packages.onDownloading", true) == 0) {
+                if (PackageDownloading != null) {
+                    FrostbiteConnection.RaiseEvent(PackageDownloading.GetInvocationList(), this, cpBeforePacketDispatch.Words[1]);
+                }
+
+                blCancelPacket = true;
+            }
+            else if (cpBeforePacketDispatch.Words.Count >= 2 && String.Compare(cpBeforePacketDispatch.Words[0], "procon.packages.onDownloaded", true) == 0) {
+                if (PackageDownloaded != null) {
+                    FrostbiteConnection.RaiseEvent(PackageDownloaded.GetInvocationList(), this, cpBeforePacketDispatch.Words[1]);
+                }
+
+                blCancelPacket = true;
+            }
+            else if (cpBeforePacketDispatch.Words.Count >= 2 && String.Compare(cpBeforePacketDispatch.Words[0], "procon.packages.onInstalling", true) == 0) {
+                if (PackageInstalling != null) {
+                    FrostbiteConnection.RaiseEvent(PackageInstalling.GetInvocationList(), this, cpBeforePacketDispatch.Words[1]);
+                }
+
+                blCancelPacket = true;
+            }
+            else if (cpBeforePacketDispatch.Words.Count >= 3 && String.Compare(cpBeforePacketDispatch.Words[0], "procon.packages.onDownloadError", true) == 0) {
+                if (PackageDownloadError != null) {
+                    FrostbiteConnection.RaiseEvent(PackageDownloadError.GetInvocationList(), this, cpBeforePacketDispatch.Words[1], cpBeforePacketDispatch.Words[2]);
+                }
+
+                blCancelPacket = true;
+            }
+            else if (cpBeforePacketDispatch.Words.Count >= 3 && String.Compare(cpBeforePacketDispatch.Words[0], "procon.packages.onInstalled", true) == 0) {
+                bool restartRequired = false;
+
+                if (bool.TryParse(cpBeforePacketDispatch.Words[2], out restartRequired) == true) {
+                    if (PackageInstalled != null) {
+                        FrostbiteConnection.RaiseEvent(PackageInstalled.GetInvocationList(), this, cpBeforePacketDispatch.Words[1], restartRequired);
+                    }
+                }
+
+                blCancelPacket = true;
+            }
+
+
+            else if (cpBeforePacketDispatch.Words.Count >= 3 && String.Compare(cpBeforePacketDispatch.Words[0], "procon.chat.onConsole", true) == 0) {
+                long logTime = 0L;
+
+                if (long.TryParse(cpBeforePacketDispatch.Words[1], out logTime) == true) {
+                    if (ReadRemoteChatConsole != null) {
+                        FrostbiteConnection.RaiseEvent(ReadRemoteChatConsole.GetInvocationList(), this, DateTime.FromBinary(logTime), cpBeforePacketDispatch.Words[2]);
+                    }
+                }
+            }
+            else if (cpBeforePacketDispatch.Words.Count >= 3 && String.Compare(cpBeforePacketDispatch.Words[0], "procon.plugin.onConsole", true) == 0) {
+                long logTime = 0L;
+
+                if (long.TryParse(cpBeforePacketDispatch.Words[1], out logTime) == true) {
+                    if (ReadRemotePluginConsole != null) {
+                        FrostbiteConnection.RaiseEvent(ReadRemotePluginConsole.GetInvocationList(), this, DateTime.FromBinary(logTime), cpBeforePacketDispatch.Words[2]);
+                    }
+                }
+            }
+            else if (cpBeforePacketDispatch.Words.Count >= 3 && String.Compare(cpBeforePacketDispatch.Words[0], "procon.plugin.onVariablesAltered", true) == 0) {
+                //this.SendPacket(new Packet(true, true, cpBeforePacketDispatch.SequenceNumber, new List<string>() { "OK" }));
+
+                int i = 1;
+                var lstVariables = new List<CPluginVariable>();
+                string strClassName = cpBeforePacketDispatch.Words[i++];
+
+                int iTotalVariables = 0;
+                if (int.TryParse(cpBeforePacketDispatch.Words[i++], out iTotalVariables) == true && i + (iTotalVariables * 3) <= cpBeforePacketDispatch.Words.Count) {
+                    for (int x = 0; x < (iTotalVariables * 3); x += 3) {
+                        lstVariables.Add(new CPluginVariable(cpBeforePacketDispatch.Words[i++], cpBeforePacketDispatch.Words[i++], cpBeforePacketDispatch.Words[i++]));
+                    }
+                }
+
+                if (RemotePluginVariables != null) {
+                    FrostbiteConnection.RaiseEvent(RemotePluginVariables.GetInvocationList(), this, strClassName, lstVariables);
+                }
+
+                blCancelPacket = true;
+            }
+            else if (cpBeforePacketDispatch.Words.Count >= 1 && String.Compare(cpBeforePacketDispatch.Words[0], "procon.plugin.onLoaded", true) == 0) {
+                //this.SendPacket(new Packet(true, true, cpBeforePacketDispatch.SequenceNumber, new List<string>() { "OK" }));
+
+                int i = 1;
+                if (i + 6 <= cpBeforePacketDispatch.Words.Count) {
+                    var spdLoaded = new PluginDetails();
+
+                    spdLoaded.ClassName = cpBeforePacketDispatch.Words[i++];
+                    spdLoaded.Name = cpBeforePacketDispatch.Words[i++];
+                    spdLoaded.Author = cpBeforePacketDispatch.Words[i++];
+                    spdLoaded.Website = cpBeforePacketDispatch.Words[i++];
+                    spdLoaded.Version = cpBeforePacketDispatch.Words[i++];
+                    spdLoaded.Description = cpBeforePacketDispatch.Words[i++];
+
+                    spdLoaded.DisplayPluginVariables = new List<CPluginVariable>();
+                    spdLoaded.PluginVariables = new List<CPluginVariable>(); // Not used here.
+                    int iTotalVariables = 0;
+                    if (int.TryParse(cpBeforePacketDispatch.Words[i++], out iTotalVariables) == true && i + (iTotalVariables * 3) <= cpBeforePacketDispatch.Words.Count) {
+                        for (int x = 0; x < (iTotalVariables * 3); x += 3) {
+                            spdLoaded.DisplayPluginVariables.Add(new CPluginVariable(cpBeforePacketDispatch.Words[i++], cpBeforePacketDispatch.Words[i++], cpBeforePacketDispatch.Words[i++]));
+                        }
+                    }
+
+                    if (RemotePluginLoaded != null) {
+                        FrostbiteConnection.RaiseEvent(RemotePluginLoaded.GetInvocationList(), this, spdLoaded);
+                    }
+                }
+
+                blCancelPacket = true;
+            }
+            else if (cpBeforePacketDispatch.Words.Count >= 3 && String.Compare(cpBeforePacketDispatch.Words[0], "procon.plugin.onEnabled", true) == 0) {
+                //this.SendPacket(new Packet(true, true, cpBeforePacketDispatch.SequenceNumber, new List<string>() { "OK" }));
+
+                bool blEnabled = false;
+
+                if (bool.TryParse(cpBeforePacketDispatch.Words[2], out blEnabled) == true && RemotePluginEnabled != null) {
+                    FrostbiteConnection.RaiseEvent(RemotePluginEnabled.GetInvocationList(), this, cpBeforePacketDispatch.Words[1], blEnabled);
+                }
+
+                blCancelPacket = true;
+            }
+            else if (cpBeforePacketDispatch.Words.Count >= 4 && String.Compare(cpBeforePacketDispatch.Words[0], "procon.admin.onSay", true) == 0) {
+                //this.SendPacket(new Packet(true, true, cpBeforePacketDispatch.SequenceNumber, new List<string>() { "OK" }));
+
+                if (ProconAdminSaying != null) {
+                    FrostbiteConnection.RaiseEvent(ProconAdminSaying.GetInvocationList(), this, cpBeforePacketDispatch.Words[1], cpBeforePacketDispatch.Words[2], new CPlayerSubset(cpBeforePacketDispatch.Words.GetRange(3, cpBeforePacketDispatch.Words.Count - 3)));
+                }
+
+                if (PassLayerEvent != null) {
+                    FrostbiteConnection.RaiseEvent(PassLayerEvent.GetInvocationList(), this, cpBeforePacketDispatch);
+                }
+
+                blCancelPacket = true;
+            }
+                // MoHW R-6 hack
+            else if (cpBeforePacketDispatch.Words.Count >= 4 && Game.GameType == "MOHW" && String.Compare(cpBeforePacketDispatch.Words[0], "procon.admin.onYell", true) == 0) {
+                // this.SendPacket(new Packet(true, true, cpBeforePacketDispatch.SequenceNumber, new List<string>() { "OK" }));
+
+                int iDisplayDuration = 0;
+
+                if (ProconAdminYelling != null) {
+                    FrostbiteConnection.RaiseEvent(ProconAdminYelling.GetInvocationList(), this, cpBeforePacketDispatch.Words[1], cpBeforePacketDispatch.Words[2], iDisplayDuration, new CPlayerSubset(cpBeforePacketDispatch.Words.GetRange(4, cpBeforePacketDispatch.Words.Count - 4)));
+                }
+                if (PassLayerEvent != null) {
+                    FrostbiteConnection.RaiseEvent(PassLayerEvent.GetInvocationList(), this, cpBeforePacketDispatch);
+                }
+
+                blCancelPacket = true;
+            }
+                // hack end
+            else if (cpBeforePacketDispatch.Words.Count >= 5 && String.Compare(cpBeforePacketDispatch.Words[0], "procon.admin.onYell", true) == 0) {
+                // this.SendPacket(new Packet(true, true, cpBeforePacketDispatch.SequenceNumber, new List<string>() { "OK" }));
+
+                int iDisplayDuration = 0;
+
+                if (int.TryParse(cpBeforePacketDispatch.Words[3], out iDisplayDuration) == true) {
+                    if (ProconAdminYelling != null) {
+                        FrostbiteConnection.RaiseEvent(ProconAdminYelling.GetInvocationList(), this, cpBeforePacketDispatch.Words[1], cpBeforePacketDispatch.Words[2], iDisplayDuration, new CPlayerSubset(cpBeforePacketDispatch.Words.GetRange(4, cpBeforePacketDispatch.Words.Count - 4)));
+                    }
+
+                    if (PassLayerEvent != null) {
+                        FrostbiteConnection.RaiseEvent(PassLayerEvent.GetInvocationList(), this, cpBeforePacketDispatch);
+                    }
+                }
+
+                blCancelPacket = true;
+            }
+                // bf3 player.ping
+            else if (Game.GameType == "BF3" && cpBeforePacketDispatch.Words.Count >= 3 && String.Compare(cpBeforePacketDispatch.Words[0], "procon.admin.onPlayerPinged", true) == 0) {
+                int iPing = 0;
+                string strSoldierName = cpBeforePacketDispatch.Words[1];
+
+                if (int.TryParse(cpBeforePacketDispatch.Words[2], out iPing) == true) {
+                    if (iPing == 65535) {
+                        iPing = -1;
+                    }
+
+                    if (ProconAdminPinging != null) {
+                        FrostbiteConnection.RaiseEvent(ProconAdminPinging.GetInvocationList(), this, strSoldierName, iPing);
+                    }
+                    if (PassLayerEvent != null) {
+                        FrostbiteConnection.RaiseEvent(PassLayerEvent.GetInvocationList(), this, cpBeforePacketDispatch);
+                    }
+                }
+                blCancelPacket = true;
+            }
+            else if (cpBeforePacketDispatch.Words.Count >= 3 && String.Compare(cpBeforePacketDispatch.Words[0], "procon.updated", true) == 0) {
+                //this.SendPacket(new Packet(true, true, cpBeforePacketDispatch.SequenceNumber, new List<string>() { "OK" }));
+
+                foreach (var registerUid in m_dicUsernamesToUids) {
+                    if (String.Compare(cpBeforePacketDispatch.Words[1], registerUid.Value) == 0) {
+                        InstigatingAccountName = registerUid.Key;
+                        break;
+                    }
+                }
+
+                // Only parse it if the UID is different from this connections registered UID.
+                if (String.Compare(cpBeforePacketDispatch.Words[1], ProconEventsUid) != 0) {
+                    var lstAssumedRequestPacket = new List<string>(cpBeforePacketDispatch.Words);
+                    lstAssumedRequestPacket.RemoveRange(0, 2);
+
+                    var cpAssumedRequestPacket = new Packet(false, false, 0, lstAssumedRequestPacket);
+                    var cpAssumedResponsePacket = new Packet(false, true, 0, new List<string>() {
+                        "OK"
+                    });
+
+                    Game.DispatchResponsePacket(Game.Connection, cpAssumedResponsePacket, cpAssumedRequestPacket);
+
+                    cpAssumedRequestPacket = null;
+                    cpAssumedResponsePacket = null;
+
+                    if (PassLayerEvent != null) {
+                        FrostbiteConnection.RaiseEvent(PassLayerEvent.GetInvocationList(), this, cpBeforePacketDispatch);
+                    }
+                }
+
+                blCancelPacket = true;
+            }
+
+            else if (cpBeforePacketDispatch.Words.Count >= 2 && String.Compare(cpBeforePacketDispatch.Words[0], "procon.battlemap.onZoneRemoved", true) == 0) {
+                if (MapZoneDeleted != null) {
+                    FrostbiteConnection.RaiseEvent(MapZoneDeleted.GetInvocationList(), this, new MapZoneDrawing(cpBeforePacketDispatch.Words[1], String.Empty, String.Empty, null, true));
+                }
+            }
+
+            else if (cpBeforePacketDispatch.Words.Count >= 4 && String.Compare(cpBeforePacketDispatch.Words[0], "procon.battlemap.onZoneCreated", true) == 0) {
+                //this.SendPacket(new Packet(true, true, cpBeforePacketDispatch.SequenceNumber, new List<string>() { "OK" }));
+
+                int iPoints = 0;
+
+                if (int.TryParse(cpBeforePacketDispatch.Words[3], out iPoints) == true) {
+                    var points = new Point3D[iPoints];
+
+                    for (int i = 0; i < iPoints; i++) {
+                        points[i] = new Point3D(cpBeforePacketDispatch.Words[3 + i * 3 + 1], cpBeforePacketDispatch.Words[3 + i * 3 + 2], cpBeforePacketDispatch.Words[3 + i * 3 + 3]);
+                    }
+
+                    if (MapZoneCreated != null) {
+                        FrostbiteConnection.RaiseEvent(MapZoneCreated.GetInvocationList(), this, new MapZoneDrawing(cpBeforePacketDispatch.Words[1], cpBeforePacketDispatch.Words[2], String.Empty, points, true));
+                    }
+                }
+
+                blCancelPacket = true;
+            }
+
+            else if (cpBeforePacketDispatch.Words.Count >= 3 && String.Compare(cpBeforePacketDispatch.Words[0], "procon.battlemap.onZoneModified", true) == 0) {
+                //this.SendPacket(new Packet(true, true, cpBeforePacketDispatch.SequenceNumber, new List<string>() { "OK" }));
+
+                int iPoints = 0;
+
+                if (int.TryParse(cpBeforePacketDispatch.Words[3], out iPoints) == true) {
+                    var points = new Point3D[iPoints];
+
+                    for (int i = 0; i < iPoints; i++) {
+                        points[i] = new Point3D(cpBeforePacketDispatch.Words[3 + i * 3 + 1], cpBeforePacketDispatch.Words[3 + i * 3 + 2], cpBeforePacketDispatch.Words[3 + i * 3 + 3]);
+                    }
+
+                    if (MapZoneModified != null) {
+                        FrostbiteConnection.RaiseEvent(MapZoneModified.GetInvocationList(), this, new MapZoneDrawing(cpBeforePacketDispatch.Words[1], String.Empty, cpBeforePacketDispatch.Words[2], points, true));
+                    }
+                }
+
+                blCancelPacket = true;
+            }
+
+
+            else if (cpBeforePacketDispatch.Words.Count >= 3 && String.Compare(cpBeforePacketDispatch.Words[0], "procon.vars.onAltered", true) == 0) {
+                //this.SendPacket(new Packet(true, true, cpBeforePacketDispatch.SequenceNumber, new List<string>() { "OK" }));
+
+                SV_Variables.SetVariable(cpBeforePacketDispatch.Words[1], cpBeforePacketDispatch.Words[2]);
+
+                if (ReceiveProconVariable != null) {
+                    FrostbiteConnection.RaiseEvent(ReceiveProconVariable.GetInvocationList(), this, cpBeforePacketDispatch.Words[1], cpBeforePacketDispatch.Words[2]);
+                }
+
+                blCancelPacket = true;
+            }
+
+            else {
+                //  if (blCommandConnection == false) Pass everything else onto any connected clients..
+                if (PassLayerEvent != null) {
+                    FrostbiteConnection.RaiseEvent(PassLayerEvent.GetInvocationList(), this, cpBeforePacketDispatch);
+                }
+            }
+
+            return blCancelPacket;
+        }
+
+        private bool HandleResponsePacket(Packet cpBeforePacketDispatch, bool blCancelUpdateEvent, bool blCancelPacket) {
+            if (Game != null) {
+                Packet cpRequestPacket = Game.Connection.GetRequestPacket(cpBeforePacketDispatch);
+
+                if (cpRequestPacket != null) {
+                    if (cpBeforePacketDispatch.Words.Count >= 1 && String.Compare(cpBeforePacketDispatch.Words[0], "InvalidUsername", true) == 0) {
+                        if (LoginFailure != null) {
+                            FrostbiteConnection.RaiseEvent(LoginFailure.GetInvocationList(), this, cpBeforePacketDispatch.Words[0]);
+                        }
+
+                        Shutdown();
+                        State = ConnectionState.Error;
+
+                        blCancelPacket = true;
+                    }
+                    else if (cpRequestPacket.Words.Count >= 1 && String.Compare(cpRequestPacket.Words[0], "procon.version", true) == 0 && cpBeforePacketDispatch.Words.Count >= 2) {
+                        try {
+                            ConnectedLayerVersion = new Version(cpBeforePacketDispatch.Words[1]);
+
+                            if (ProconVersion != null) {
+                                FrostbiteConnection.RaiseEvent(ProconVersion.GetInvocationList(), this, ConnectedLayerVersion);
+                            }
+                        }
+                        catch (Exception) {
+                        }
+
+                        blCancelPacket = true;
+                    }
+                    else if (cpRequestPacket.Words.Count >= 1 && String.Compare(cpRequestPacket.Words[0], "procon.privileges", true) == 0 && cpBeforePacketDispatch.Words.Count >= 2) {
+                        UInt32 ui32Privileges = 0;
+                        if (UInt32.TryParse(cpBeforePacketDispatch.Words[1], out ui32Privileges) == true) {
+                            var spPrivs = new CPrivileges();
+                            spPrivs.PrivilegesFlags = ui32Privileges;
+
+                            Privileges = spPrivs;
+
+                            if (ProconPrivileges != null) {
+                                FrostbiteConnection.RaiseEvent(ProconPrivileges.GetInvocationList(), this, spPrivs);
+                            }
+                        }
+
+                        blCancelPacket = true;
+                    }
+                    else if (cpRequestPacket.Words.Count >= 2 && String.Compare(cpRequestPacket.Words[0], "procon.registerUid", true) == 0 && cpBeforePacketDispatch.Words.Count >= 1) {
+                        if (String.Compare(cpBeforePacketDispatch.Words[0], "OK", true) == 0 && cpRequestPacket.Words.Count >= 3) {
+                            ProconEventsUid = cpRequestPacket.Words[2];
+                        }
+                        else if (String.Compare(cpBeforePacketDispatch.Words[0], "ProconUidConflict", true) == 0) {
+                            // Conflict in our UID, just hash and send another one.
+                            // Then go to vegas.
+                            SendRequest(new List<string>() {
+                                "procon.registerUid",
+                                "true",
+                                FrostbiteClient.GeneratePasswordHash(Encoding.ASCII.GetBytes(DateTime.Now.ToString("HH:mm:ss ff")), _username)
+                            });
+                        }
+
+                        blCancelPacket = true;
+                    }
+                    else if (cpRequestPacket.Words.Count >= 1 && String.Compare(cpRequestPacket.Words[0], "procon.account.listAccounts", true) == 0) {
+                        UInt32 ui32Privileges = 0;
+
+                        for (int i = 1; i < cpBeforePacketDispatch.Words.Count; i += 2) {
+                            if (UInt32.TryParse(cpBeforePacketDispatch.Words[i + 1], out ui32Privileges) == true) {
+                                var spPrivs = new CPrivileges();
+                                spPrivs.PrivilegesFlags = ui32Privileges;
+
+                                if (RemoteAccountCreated != null && RemoteAccountAltered != null) {
+                                    FrostbiteConnection.RaiseEvent(RemoteAccountCreated.GetInvocationList(), this, cpBeforePacketDispatch.Words[i]);
+                                    FrostbiteConnection.RaiseEvent(RemoteAccountAltered.GetInvocationList(), this, cpBeforePacketDispatch.Words[i], spPrivs);
+                                }
+                            }
+                        }
+
+                        blCancelPacket = true;
+                    }
+                    else if (cpRequestPacket.Words.Count >= 1 && String.Compare(cpRequestPacket.Words[0], "procon.battlemap.listZones", true) == 0 && cpBeforePacketDispatch.Words.Count >= 2 && String.Compare(cpBeforePacketDispatch.Words[0], "OK", true) == 0) {
+                        var zones = new List<MapZoneDrawing>();
+
+                        int iZones = 0;
+                        int iOffset = 1;
+
+                        if (int.TryParse(cpBeforePacketDispatch.Words[iOffset++], out iZones) == true) {
+                            for (int iZoneCount = 0; iZoneCount < iZones; iZoneCount++) {
+                                string uid = String.Empty;
+                                string level = String.Empty;
+                                string tags = String.Empty;
+                                var points = new List<Point3D>();
+
+                                if (iOffset + 4 < cpBeforePacketDispatch.Words.Count) {
+                                    uid = cpBeforePacketDispatch.Words[iOffset++];
+                                    level = cpBeforePacketDispatch.Words[iOffset++];
+                                    tags = cpBeforePacketDispatch.Words[iOffset++];
+
+                                    int iZonePoints = 0;
+                                    if (int.TryParse(cpBeforePacketDispatch.Words[iOffset++], out iZonePoints) == true && iOffset + iZonePoints * 3 <= cpBeforePacketDispatch.Words.Count) {
+                                        for (int iZonePointCount = 0; iZonePointCount < iZonePoints && iOffset + 3 <= cpBeforePacketDispatch.Words.Count; iZonePointCount++) {
+                                            points.Add(new Point3D(cpBeforePacketDispatch.Words[iOffset++], cpBeforePacketDispatch.Words[iOffset++], cpBeforePacketDispatch.Words[iOffset++]));
+                                        }
+                                    }
+                                }
+
+                                zones.Add(new MapZoneDrawing(uid, level, tags, points.ToArray(), true));
+                            }
+                        }
+
+                        if (ListMapZones != null) {
+                            FrostbiteConnection.RaiseEvent(ListMapZones.GetInvocationList(), this, zones);
+                        }
+
+                        blCancelPacket = true;
+                    }
+
+
+                    else if (cpRequestPacket.Words.Count >= 1 && String.Compare(cpRequestPacket.Words[0], "procon.account.setPassword", true) == 0 && cpBeforePacketDispatch.Words.Count >= 1 && String.Compare(cpBeforePacketDispatch.Words[0], "OK", true) == 0) {
+                        if (RemoteAccountChangePassword != null) {
+                            FrostbiteConnection.RaiseEvent(RemoteAccountChangePassword.GetInvocationList(), this);
+                        }
+
+                        blCancelPacket = true;
+                    }
+                    else if (cpRequestPacket.Words.Count >= 1 && String.Compare(cpRequestPacket.Words[0], "procon.account.listLoggedIn", true) == 0) {
+                        bool containsUids = (cpRequestPacket.Words.Count >= 2 && String.Compare(cpRequestPacket.Words[1], "uids") == 0);
+
+                        if (RemoteAccountLoggedIn != null) {
+                            for (int i = 1; i < cpBeforePacketDispatch.Words.Count; i++) {
+                                FrostbiteConnection.RaiseEvent(RemoteAccountLoggedIn.GetInvocationList(), this, cpBeforePacketDispatch.Words[i], true);
+
+                                if (containsUids == true && i + 1 < cpBeforePacketDispatch.Words.Count) {
+                                    if (m_dicUsernamesToUids.ContainsKey(cpBeforePacketDispatch.Words[i]) == true) {
+                                        m_dicUsernamesToUids[cpBeforePacketDispatch.Words[i]] = cpBeforePacketDispatch.Words[i + 1];
+                                    }
+                                    else {
+                                        m_dicUsernamesToUids.Add(cpBeforePacketDispatch.Words[i], cpBeforePacketDispatch.Words[i + 1]);
+                                    }
+
+                                    i++;
+                                }
+                            }
+                        }
+
+                        blCancelPacket = true;
+                    }
+
+                    else if (cpRequestPacket.Words.Count >= 1 && String.Compare(cpRequestPacket.Words[0], "procon.plugin.listEnabled", true) == 0) {
+                        if (RemoteEnabledPlugins != null) {
+                            var lstEnabledPlugins = new List<string>(cpBeforePacketDispatch.Words);
+                            lstEnabledPlugins.RemoveAt(0);
+
+                            FrostbiteConnection.RaiseEvent(RemoteEnabledPlugins.GetInvocationList(), this, lstEnabledPlugins);
+                        }
+
+                        blCancelPacket = true;
+                    }
+                    else if (cpRequestPacket.Words.Count >= 1 && String.Compare(cpRequestPacket.Words[0], "procon.vars", true) == 0 && cpBeforePacketDispatch.Words.Count >= 3) {
+                        SV_Variables.SetVariable(cpBeforePacketDispatch.Words[1], cpBeforePacketDispatch.Words[2]);
+
+                        if (ReceiveProconVariable != null) {
+                            FrostbiteConnection.RaiseEvent(ReceiveProconVariable.GetInvocationList(), this, cpBeforePacketDispatch.Words[1], cpBeforePacketDispatch.Words[2]);
+                        }
+                        // Dispatch to plugins.
+                    }
+                    else if (cpRequestPacket.Words.Count >= 1 && String.Compare(cpRequestPacket.Words[0], "procon.plugin.listLoaded", true) == 0) {
+                        if (RemoteLoadedPlugins != null) {
+                            int i = 0;
+                            if (cpBeforePacketDispatch.Words.Count >= 1 && String.Compare(cpBeforePacketDispatch.Words[i++], "OK", true) == 0) {
+                                var dicLoadedPlugins = new Dictionary<string, PluginDetails>();
+
+                                while (i + 6 <= cpBeforePacketDispatch.Words.Count) {
+                                    var spdLoaded = new PluginDetails();
+
+                                    spdLoaded.ClassName = cpBeforePacketDispatch.Words[i++];
+                                    spdLoaded.Name = cpBeforePacketDispatch.Words[i++];
+                                    spdLoaded.Author = cpBeforePacketDispatch.Words[i++];
+                                    spdLoaded.Website = cpBeforePacketDispatch.Words[i++];
+                                    spdLoaded.Version = cpBeforePacketDispatch.Words[i++];
+                                    spdLoaded.Description = cpBeforePacketDispatch.Words[i++];
+
+                                    spdLoaded.DisplayPluginVariables = new List<CPluginVariable>();
+                                    spdLoaded.PluginVariables = new List<CPluginVariable>(); // Not used here.
+                                    int iTotalVariables = 0;
+                                    if (int.TryParse(cpBeforePacketDispatch.Words[i++], out iTotalVariables) == true && i + (iTotalVariables * 3) <= cpBeforePacketDispatch.Words.Count) {
+                                        for (int x = 0; x < (iTotalVariables * 3); x += 3) {
+                                            spdLoaded.DisplayPluginVariables.Add(new CPluginVariable(cpBeforePacketDispatch.Words[i++], cpBeforePacketDispatch.Words[i++], cpBeforePacketDispatch.Words[i++]));
+                                        }
+                                    }
+
+                                    if (dicLoadedPlugins.ContainsKey(spdLoaded.ClassName) == false) {
+                                        dicLoadedPlugins.Add(spdLoaded.ClassName, spdLoaded);
+                                    }
+                                }
+
+                                FrostbiteConnection.RaiseEvent(RemoteLoadedPlugins.GetInvocationList(), this, dicLoadedPlugins);
+                            }
+                        }
+
+                        blCancelPacket = true;
+                    }
+                    else if (cpRequestPacket.Words.Count >= 2 && String.Compare(cpRequestPacket.Words[0], "login.hashed", true) == 0 && cpBeforePacketDispatch.Words.Count >= 1 && String.Compare(cpBeforePacketDispatch.Words[0], "InsufficientPrivileges", true) == 0) {
+                        if (LoginFailure != null) {
+                            FrostbiteConnection.RaiseEvent(LoginFailure.GetInvocationList(), this, cpBeforePacketDispatch.Words[0]);
+                        }
+
+                        Shutdown();
+                        State = ConnectionState.Error;
+
+                        blCancelPacket = true;
+                    }
+                    else if (cpRequestPacket.Words.Count >= 2 && String.Compare(cpRequestPacket.Words[0], "procon.login.username", true) == 0 && cpBeforePacketDispatch.Words.Count >= 1 && (String.Compare(cpBeforePacketDispatch.Words[0], "OK", true) == 0 || String.Compare(cpBeforePacketDispatch.Words[0], "UnknownCommand", true) == 0)) {
+                        //this.send(new Packet(true, true, cpBeforePacketDispatch.SequenceNumber, new List<string>() { "procon.login.requestUsername", this.m_strUsername }));
+
+                        // This is the first command we would recieve so now we know we're connected through a PRoCon layer.
+                        if (LoginAttempt != null) {
+                            FrostbiteConnection.RaiseEvent(LoginAttempt.GetInvocationList(), this);
+                        }
+
+                        Game.SendLoginHashedPacket(Password);
+
+                        if (String.Compare(cpBeforePacketDispatch.Words[0], "OK", true) == 0) {
+                            IsPRoConConnection = true;
+                            Game.IsLayered = true;
+                        }
+                        else {
+                            IsPRoConConnection = false;
+                            Username = "";
+                        }
+
+                        blCancelPacket = true;
+                    }
+                    else if (cpRequestPacket.Words.Count >= 2 && String.Compare(cpRequestPacket.Words[0], "procon.login.username", true) == 0 && cpBeforePacketDispatch.Words.Count >= 1 && String.Compare(cpBeforePacketDispatch.Words[0], "InsufficientPrivileges", true) == 0) {
+                        // The servers just told us off, try and login normally.
+                        if (LoginFailure != null) {
+                            FrostbiteConnection.RaiseEvent(LoginFailure.GetInvocationList(), this, cpBeforePacketDispatch.Words[0]);
+                        }
+
+                        Shutdown();
+                        State = ConnectionState.Error;
+
+                        blCancelPacket = true;
+                    }
+                    else if (cpRequestPacket.Words.Count >= 3 && String.Compare(cpRequestPacket.Words[0], "admin.say", true) == 0 && m_dicForwardedPackets.ContainsKey(cpBeforePacketDispatch.SequenceNumber) == true) {
+                        if (m_dicForwardedPackets[cpBeforePacketDispatch.SequenceNumber].m_lstWords.Count >= 4 && String.Compare(m_dicForwardedPackets[cpBeforePacketDispatch.SequenceNumber].m_lstWords[0], "procon.admin.say", true) == 0) {
+                            m_dicForwardedPackets[cpBeforePacketDispatch.SequenceNumber].m_lstWords[0] = "procon.admin.onSay";
+
+                            if (IsPRoConConnection == false) {
+                                List<string> lstWords = m_dicForwardedPackets[cpBeforePacketDispatch.SequenceNumber].m_lstWords;
+
+                                if (ProconAdminSaying != null) {
+                                    FrostbiteConnection.RaiseEvent(ProconAdminSaying.GetInvocationList(), this, lstWords[1], lstWords[2], new CPlayerSubset(lstWords.GetRange(3, lstWords.Count - 3)));
+                                }
+                            }
+
+                            if (PassLayerEvent != null) {
+                                FrostbiteConnection.RaiseEvent(PassLayerEvent.GetInvocationList(), this, new Packet(true, false, cpRequestPacket.SequenceNumber, m_dicForwardedPackets[cpBeforePacketDispatch.SequenceNumber].m_lstWords));
+                            }
+
+                            // Send to all logged in layer clients
+                            m_dicForwardedPackets.Remove(cpBeforePacketDispatch.SequenceNumber);
+                            blCancelPacket = true;
+                            blCancelUpdateEvent = true;
+                        }
+                    }
+                    else if (cpRequestPacket.Words.Count >= 4 && String.Compare(cpRequestPacket.Words[0], "admin.yell", true) == 0 && m_dicForwardedPackets.ContainsKey(cpBeforePacketDispatch.SequenceNumber) == true) {
+                        if (m_dicForwardedPackets[cpBeforePacketDispatch.SequenceNumber].m_lstWords.Count >= 5 && String.Compare(m_dicForwardedPackets[cpBeforePacketDispatch.SequenceNumber].m_lstWords[0], "procon.admin.yell", true) == 0) {
+                            m_dicForwardedPackets[cpBeforePacketDispatch.SequenceNumber].m_lstWords[0] = "procon.admin.onYell";
+
+                            // If we're at the top of the tree, simulate the event coming from a layer above.
+                            if (IsPRoConConnection == false) {
+                                List<string> lstWords = m_dicForwardedPackets[cpBeforePacketDispatch.SequenceNumber].m_lstWords;
+
+                                int iDisplayDuration = 0;
+
+                                if (int.TryParse(lstWords[3], out iDisplayDuration) == true) {
+                                    if (ProconAdminYelling != null) {
+                                        FrostbiteConnection.RaiseEvent(ProconAdminYelling.GetInvocationList(), this, lstWords[1], lstWords[2], iDisplayDuration, new CPlayerSubset(lstWords.GetRange(4, lstWords.Count - 4)));
+                                    }
+                                }
+                            }
+
+                            // Send to all logged in layer clients
+                            if (PassLayerEvent != null) {
+                                FrostbiteConnection.RaiseEvent(PassLayerEvent.GetInvocationList(), this, new Packet(true, false, cpRequestPacket.SequenceNumber, m_dicForwardedPackets[cpBeforePacketDispatch.SequenceNumber].m_lstWords));
+                            }
+
+                            m_dicForwardedPackets.Remove(cpBeforePacketDispatch.SequenceNumber);
+                            blCancelPacket = true;
+                            blCancelUpdateEvent = true;
+                        }
+                    }
+                        // MoHW R-6 hack
+                    else if (cpRequestPacket.Words.Count >= 3 && Game.GameType == "MOHW" && String.Compare(cpRequestPacket.Words[0], "admin.yell", true) == 0 && m_dicForwardedPackets.ContainsKey(cpBeforePacketDispatch.SequenceNumber) == true) {
+                        if (m_dicForwardedPackets[cpBeforePacketDispatch.SequenceNumber].m_lstWords.Count >= 4 && String.Compare(m_dicForwardedPackets[cpBeforePacketDispatch.SequenceNumber].m_lstWords[0], "procon.admin.yell", true) == 0) {
+                            m_dicForwardedPackets[cpBeforePacketDispatch.SequenceNumber].m_lstWords[0] = "procon.admin.onYell";
+
+                            // If we're at the top of the tree, simulate the event coming from a layer above.
+                            if (IsPRoConConnection == false) {
+                                List<string> lstWords = m_dicForwardedPackets[cpBeforePacketDispatch.SequenceNumber].m_lstWords;
+
+                                int iDisplayDuration = 0;
+                                if (int.TryParse(lstWords[3], out iDisplayDuration) == true) {
+                                    iDisplayDuration = 0;
+                                    if (ProconAdminYelling != null) {
+                                        FrostbiteConnection.RaiseEvent(ProconAdminYelling.GetInvocationList(), this, lstWords[1], lstWords[2], iDisplayDuration, new CPlayerSubset(lstWords.GetRange(4, lstWords.Count - 4)));
+                                    }
+                                }
+                            }
+
+                            // Send to all logged in layer clients
+                            if (PassLayerEvent != null) {
+                                FrostbiteConnection.RaiseEvent(PassLayerEvent.GetInvocationList(), this, new Packet(true, false, cpRequestPacket.SequenceNumber, m_dicForwardedPackets[cpBeforePacketDispatch.SequenceNumber].m_lstWords));
+                            }
+
+                            m_dicForwardedPackets.Remove(cpBeforePacketDispatch.SequenceNumber);
+                            blCancelPacket = true;
+                            blCancelUpdateEvent = true;
+                        }
+                    }
+                        // end hack
+                        // BF3 player.ping
+                    else if (cpRequestPacket.Words.Count >= 2 && Game.GameType == "BF3" && String.Compare(cpRequestPacket.Words[0], "player.ping", true) == 0 && String.Compare(cpBeforePacketDispatch.Words[0], "OK", true) == 0) {
+                        string strProconEventsUid = String.Empty;
+
+                        var lstProconUpdatedWords = new List<string>(cpRequestPacket.Words);
+                        lstProconUpdatedWords.Insert(0, "procon.admin.onPlayerPinged");
+                        lstProconUpdatedWords.RemoveAt(1);
+                        lstProconUpdatedWords.Add(cpBeforePacketDispatch.Words[1]);
+                        // Now we pass on the packet to all the clients as an event so they can remain in sync.
+
+                        // Don't pass on anything regarding login
+                        if ((lstProconUpdatedWords.Count >= 4 && (String.Compare(lstProconUpdatedWords[2], "login.plainText", true) == 0 || String.Compare(lstProconUpdatedWords[2], "login.hashed", true) == 0)) == false) {
+                            if (PassLayerEvent != null) {
+                                FrostbiteConnection.RaiseEvent(PassLayerEvent.GetInvocationList(), this, new Packet(true, false, cpRequestPacket.SequenceNumber, lstProconUpdatedWords));
+                            }
+                        }
+                    }
+
+                    if (blCancelUpdateEvent == false) {
+                        string strProconEventsUid = String.Empty;
+
+                        // If a layer client sent this packet..
+                        if (m_dicForwardedPackets.ContainsKey(cpBeforePacketDispatch.SequenceNumber) == true) {
+                            if (m_dicForwardedPackets[cpBeforePacketDispatch.SequenceNumber].m_sender != null) {
+                                (m_dicForwardedPackets[cpBeforePacketDispatch.SequenceNumber].m_sender).OnServerForwardedResponse(new Packet(false, true, m_dicForwardedPackets[cpBeforePacketDispatch.SequenceNumber].m_ui32OriginalSequence, new List<string>(cpBeforePacketDispatch.Words)));
+
+                                strProconEventsUid = (m_dicForwardedPackets[cpBeforePacketDispatch.SequenceNumber].m_sender).ProconEventsUid;
+
+                                InstigatingAccountName = m_dicForwardedPackets[cpBeforePacketDispatch.SequenceNumber].m_sender.Username;
+                            }
+
+                            // Unregister the sequence and packet.
+                            m_dicForwardedPackets.Remove(cpBeforePacketDispatch.SequenceNumber);
+                        }
+
+                        // IF the command was not a request for a list (it's a GET operation only,
+                        // as in it only lists or retrieves information and will never be set.)
+
+                        if (Game != null && Game.GetPacketsPattern.IsMatch(cpRequestPacket.ToString()) == false) {
+                            // && cpBeforePacketDispatch.Words.Count >= 1 && String.Compare(cpBeforePacketDispatch.Words[0], "OK") == 0) {
+                            var lstProconUpdatedWords = new List<string>(cpRequestPacket.Words);
+                            lstProconUpdatedWords.Insert(0, "procon.updated");
+                            lstProconUpdatedWords.Insert(1, strProconEventsUid);
+                            // Now we pass on the packet to all the clients as an event so they can remain in sync.
+
+                            // Don't pass on anything regarding login
+                            if ((lstProconUpdatedWords.Count >= 4 && (String.Compare(lstProconUpdatedWords[2], "login.plainText", true) == 0 || String.Compare(lstProconUpdatedWords[2], "login.hashed", true) == 0)) == false) {
+                                if (PassLayerEvent != null) {
+                                    FrostbiteConnection.RaiseEvent(PassLayerEvent.GetInvocationList(), this, new Packet(true, false, cpRequestPacket.SequenceNumber, lstProconUpdatedWords));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            return blCancelPacket;
+        }
+
+        // TO DO: With events most of these can be removed.
+
+        public void Disconnect() {
+            State = ConnectionState.Disconnected;
+            ForceDisconnect();
+        }
+
+        public void ForceDisconnect() {
+            SaveConnectionConfig();
+
+            IsLoadingSavingConnectionConfig = true;
+
+            if (Console != null)
+                Console.Logging = false;
+            if (EventsLogging != null)
+                EventsLogging.Logging = false;
+            if (PunkbusterConsole != null)
+                PunkbusterConsole.Logging = false;
+            if (PluginConsole != null)
+                PluginConsole.Logging = false;
+            if (ChatConsole != null)
+                ChatConsole.Logging = false;
+
+            SendRequest(new List<string>() {
+                "quit"
+            });
+
+            if (TaskTimer != null) {
+                TaskTimer.Stop();
+            }
+
+            /*
+            this.m_isTasksRunning = false;
+            if (this.m_thTasks != null) {
+
+                try {
+                    this.m_thTasks.Abort();
+                }
+                catch (Exception) { }
+
+                this.m_thTasks = null;
+            }
+            */
+            if (Layer != null) {
+                Layer.ShutdownLayerListener();
+            }
+
+            Shutdown();
+
+            IsLoadingSavingConnectionConfig = false;
+        }
+
+        public void Destroy() {
+            //this.SaveConnectionConfig();
+
+            IsLoadingSavingConnectionConfig = true;
+
+            lock (ConfigSavingLocker) {
+                if (PluginsManager != null) {
+                    PluginsManager.Unload();
+                    PluginsManager = null;
+                }
+            }
+
+            IsLoadingSavingConnectionConfig = false;
+        }
+
+        #region General methods
+
+        public int GetLocalizedTeamNameCount(string mapFilename, string playlist) {
+            int teamCount = 0;
+
+            foreach (CTeamName team in TeamNameList) {
+                if (String.IsNullOrEmpty(playlist) == false && String.IsNullOrEmpty(team.Playlist) == false) {
+                    if (String.Compare(team.MapFilename, mapFilename, true) == 0 && String.Compare(team.Playlist, playlist, true) == 0) {
+                        teamCount++;
+                    }
+                }
+                else {
+                    if (String.Compare(team.MapFilename, mapFilename, true) == 0) {
+                        teamCount++;
+                    }
+                }
+            }
+
+            return teamCount;
+        }
+
+        public string GetLocalizedTeamName(int teamId, string mapFilename, string playlist) {
+            string returnName = String.Empty;
+
+            foreach (CTeamName team in TeamNameList) {
+                if (String.IsNullOrEmpty(playlist) == false && String.IsNullOrEmpty(team.Playlist) == false) {
+                    if (String.Compare(team.MapFilename, mapFilename, true) == 0 && team.TeamID == teamId && String.Compare(team.Playlist, playlist, true) == 0) {
+                        returnName = Language.GetLocalized(team.LocalizationKey, null);
+                        break;
+                    }
+                }
+                else {
+                    if (String.Compare(team.MapFilename, mapFilename, true) == 0 && team.TeamID == teamId) {
+                        returnName = Language.GetLocalized(team.LocalizationKey, null);
+                        break;
+                    }
+                }
+            }
+
+            return returnName;
+        }
+
+        public CMap GetFriendlyMapByFilenamePlayList(string strMapFileName, string strMapPlayList) {
+            CMap cmReturn = null;
+            List<CMap> mapDefines = GetMapDefines();
+
+            if (mapDefines != null) {
+                foreach (CMap cmMap in mapDefines) {
+                    if (String.Compare(cmMap.FileName, strMapFileName, true) == 0 && String.Compare(cmMap.PlayList, strMapPlayList, true) == 0) {
+                        cmReturn = cmMap;
+                        break;
+                    }
+                }
+            }
+
+            return cmReturn;
+        }
+
+        public string GetFriendlyGamemodeByMap(string strMapFileName) {
+            string strFriendlyName = String.Empty;
+
+            if (MapListPool != null) {
+                foreach (CMap cmMap in MapListPool) {
+                    if (string.Compare(cmMap.FileName, strMapFileName, true) == 0) {
+                        strFriendlyName = cmMap.GameMode;
+                        break;
+                    }
+                }
+            }
+
+            return strFriendlyName;
+        }
+
+        public string GetFriendlyGamemode(string strPlaylistName) {
+            string strFriendlyName = String.Empty;
+
+            if (MapListPool != null) {
+                foreach (CMap cmMap in MapListPool) {
+                    if (string.Compare(cmMap.PlayList, strPlaylistName, true) == 0) {
+                        strFriendlyName = cmMap.GameMode;
+                        break;
+                    }
+                }
+            }
+
+            return strFriendlyName;
+        }
+
+        public string GetFriendlyMapname(string strMapFileName) {
+            string strFriendlyName = String.Empty;
+
+            if (MapListPool != null) {
+                foreach (CMap cmMap in MapListPool) {
+                    if (string.Compare(cmMap.FileName, strMapFileName, true) == 0) {
+                        strFriendlyName = cmMap.PublicLevelName;
+                        break;
+                    }
+                }
+            }
+
+            return strFriendlyName;
+        }
+
+        public string GetPlaylistByMapname(string strMapFileName) {
+            string strFriendlyName = String.Empty;
+
+            foreach (CMap cmMap in MapListPool) {
+                if (string.Compare(cmMap.FileName, strMapFileName, true) == 0) {
+                    strFriendlyName = cmMap.PlayList;
+                    break;
+                }
+            }
+
+            return strFriendlyName;
+        }
+
+        public int GetDefaultSquadIDByMapname(string strMapFileName) {
+            int iDefaultSquadID = 0;
+
+            foreach (CMap cmMap in MapListPool) {
+                if (string.Compare(cmMap.FileName, strMapFileName, true) == 0) {
+                    iDefaultSquadID = cmMap.DefaultSquadID;
+                    break;
+                }
+            }
+
+            return iDefaultSquadID;
+        }
+
+        /// <summary>
+        ///     Return an arbitrary list of CMap objects in this.MapListPool
+        ///     with unique .Gamemode
+        /// </summary>
+        /// <returns></returns>
+        public List<CMap> GetGamemodeList() {
+            var returnList = new List<CMap>();
+
+            foreach (CMap map in MapListPool) {
+                bool isGamemodeAdded = false;
+
+                foreach (CMap gamemodeMap in returnList) {
+                    if (String.Compare(map.GameMode, gamemodeMap.GameMode, true) == 0) {
+                        isGamemodeAdded = true;
+                    }
+                }
+
+                if (isGamemodeAdded == false) {
+                    returnList.Add(map);
+                }
+            }
+
+            return returnList;
+        }
+
+        #endregion
+
+        #region Playing Sounds
+
+        private readonly SoundPlayer m_spPlayer = new SoundPlayer();
+        private bool m_blPlaySound;
+
+        private Thread m_thSound;
+        private Thread m_thStopSound;
+
+        public void PlaySound(string strSoundFile, int iRepeat) {
+            var spsSound = new SPlaySound();
+            spsSound.m_iRepeat = iRepeat;
+            spsSound.m_strSoundFile = strSoundFile;
+            //spsSound.m_spPlayer = this.m_spPlayer;
+
+            if (m_thSound != null) {
+                StopSound(spsSound);
+            }
+            else {
+                m_thSound = new Thread(new ParameterizedThreadStart(PlaySound));
+                m_blPlaySound = true;
+                m_thSound.Start(spsSound);
+            }
+        }
+
+        public void StopSound(SPlaySound spsSound) {
+            m_blPlaySound = false;
+            //this.m_spPlayer.Stop();
+
+            if (m_thSound != null) {
+                m_thStopSound = new Thread(new ParameterizedThreadStart(StopSound));
+                m_thStopSound.Start(spsSound);
+            }
+        }
+
+        private void StopSound(object obj) {
+            try {
+                if (m_thSound != null) {
+                    //this.m_spPlayer.Stop();
+                    m_blPlaySound = false;
+                    m_thSound.Join();
+
+                    if (obj != null) {
+                        m_thSound = new Thread(new ParameterizedThreadStart(PlaySound));
+                        m_blPlaySound = true;
+                        m_thSound.Start((SPlaySound) obj);
+                    }
+                    else {
+                        m_thSound = null;
+                    }
+                }
+            }
+            catch (Exception e) {
+            }
+        }
+
+        private void PlaySound(object obj) {
+            var spsSound = (SPlaySound) obj;
+
+            try {
+                using (var brFormatCheck = new BinaryReader(File.Open(Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Media"), spsSound.m_strSoundFile), FileMode.Open))) {
+                    brFormatCheck.BaseStream.Position = 20;
+                    Int16 i16Format = brFormatCheck.ReadInt16();
+
+                    if (i16Format == 1 || i16Format == 2) {
+                        brFormatCheck.Close();
+
+                        // Load it in this thread in case the file is big.
+                        m_spPlayer.SoundLocation = Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Media"), spsSound.m_strSoundFile);
+
+                        for (int i = 0; i < spsSound.m_iRepeat && m_blPlaySound == true; i++) {
+                            m_spPlayer.PlaySync();
+                        }
+                    }
+                    else {
+                        brFormatCheck.Close();
+                    }
+                }
+            }
+            catch (Exception e) {
+            }
+        }
+
+        public struct SPlaySound {
+            public int m_iRepeat;
+            public string m_strSoundFile;
+        }
+
+        #endregion
+
+        #region Internal Commands
+
+        /*
+        public void ProconProtectedWeaponsClear() {
+            this.Weapons.Clear();
+        }
+
+        public void ProconProtectedWeaponsAdd(Kits restriction, string name, WeaponSlots slot, DamageTypes damage) {
+            this.Weapons.Add(new Weapon(restriction, name, slot, damage);
+        }
+
+        public void ProconProtectedSpecializationClear() {
+            this.Specializations.Clear();
+        }
+
+        public void ProconProtectedSpecializationAdd(SpecializationSlots slot, string name) {
+            this.Specializations.Add(new Specialization(slot, name));
+        }
+        */
+
+        public void ProconProtectedTeamNamesClear() {
+            TeamNameList.Clear();
+
+            foreach (CMap cmMap in MapListPool) {
+                cmMap.TeamNames.Clear();
+            }
+        }
+
+        public void ProconProtectedTeamNamesAdd(string strFileName, int iTeamID, string strLocalizationKey, string strImageKey, string playlist = "") {
+            foreach (CMap cmMap in MapListPool) {
+                if (String.Compare(cmMap.FileName, strFileName, true) == 0) {
+                    cmMap.TeamNames.Add(new CTeamName(strFileName, iTeamID, strLocalizationKey, strImageKey, playlist));
+                }
+            }
+
+            TeamNameList.Add(new CTeamName(strFileName, iTeamID, strLocalizationKey, strImageKey, playlist));
+        }
+
+        public void ProconProtectedMapsClear() {
+            MapListPool.Clear();
+        }
+
+        public void ProconProtectedMapsAdd(string strPlaylist, string strFileName, string strGamemode, string strPublicLevelName, int iDefaultSquadID) {
+            MapListPool.Add(new CMap(strPlaylist, strFileName, strGamemode, strPublicLevelName, iDefaultSquadID));
+        }
+
+        public void ProconProtectedReasonsClear() {
+            Reasons.Clear();
+        }
+
+        public void ProconProtectedReasonsAdd(string strReason) {
+            Reasons.Add(strReason);
+        }
+
+        public void ProconProtectedServerVersionsClear(string strType) {
+            Game.VersionNumberToFriendlyName.Clear();
+        }
+
+        public void ProconProtectedServerVersionsAdd(string strType, string strVerNr, string strVerRel) {
+            Game.VersionNumberToFriendlyName.Add(strVerNr, strVerRel);
+            /* Geoff 08/10/2011 - What were these checks for?
+            if (strType == "BFBC2")
+            {
+                this.Game.VersionNumberToFriendlyName.Add(strVerNr, strVerRel);
+            }
+            if (strType == "MoH")
+            {
+                this.Game.VersionNumberToFriendlyName.Add(strVerNr, strVerRel);
+            }
+            */
+        }
+
+        public void ProconProtectedPluginEnable(string strClassName, bool blEnabled) {
+            if (PluginsManager != null && PluginsManager.Plugins.LoadedClassNames.Contains(strClassName) == true) {
+                if (blEnabled == true) {
+                    PluginsManager.EnablePlugin(strClassName);
+                }
+                else {
+                    PluginsManager.DisablePlugin(strClassName);
+                }
+            }
+        }
+
+
+        public void ProconProtectedPluginSetVariable(string strClassName, string strVariable, string strValue) {
+            if (PluginsManager != null) {
+                PluginsManager.SetPluginVariable(strClassName, strVariable, strValue);
+            }
+        }
+
+        public void ProconProtectedPluginSetVariableCon(string strClassName, string strVariable, string strValue) {
+            if (PluginsManager != null) {
+                PluginsManager.SetPluginVariableCon(strClassName, strVariable, strValue);
+            }
+        }
+
+        public void ProconProtectedLayerSetPrivileges(Account account, CPrivileges sprvPrivileges) {
+            if (Layer.AccountPrivileges.Contains(account.Name) == true) {
+                Layer.AccountPrivileges[account.Name].SetPrivileges(sprvPrivileges);
+            }
+            else {
+                Layer.AccountPrivileges.Add(new AccountPrivilege(account, sprvPrivileges));
+            }
+        }
+
+        public void ProconProtectedLayerEnable(bool blEnabled, UInt16 ui16Port, string strBindingAddress, string strLayerName) {
+            if (Layer != null) {
+                Layer.LayerEnabled = blEnabled;
+                //if (this.Layer.LayerEnabled == true) {
+                Layer.ListeningPort = ui16Port;
+                Layer.BindingAddress = strBindingAddress;
+                Layer.LayerNameFormat = strLayerName;
+                //}
+
+                // Start it up if we've logged into the bfbc2 server..
+                if (Game != null && Game.IsLoggedIn == true) {
+                    if (Layer.LayerEnabled == true && Layer.IsLayerOnline == false) {
+                        Layer.StartLayerListener();
+                    }
+                    else if (Layer.LayerEnabled == false && Layer.IsLayerOnline == true) {
+                        Layer.ShutdownLayerListener();
+                    }
+                }
+            }
+            else {
+                // Magic!!!
+            }
+        }
+
+        public void ProconPrivateServerConnect() {
+            Connect();
+        }
+
+        #region Tasks
+
+        // Quick and dirty thread safe tasks.
+        // private readonly object m_taskLocker = new object();
+
+        public void ProconProtectedTasksList() {
+            Console.Write("Running Tasks: [Name] [Delay] [Interval] [Repeat] [Command]");
+
+            //lock (this.m_taskLocker) {
+            foreach (Task ctTask in new List<Task>(Tasks)) {
+                Console.Write(ctTask.ToString());
+            }
+            //}
+
+            Console.Write(String.Format("End of Tasks List ({0} Tasks)", Tasks.Count));
+        }
+
+        public void ProconProtectedTasksAdd(string strTaskname, List<string> lstCommandWords, int iDelay, int iInterval, int iRepeat) {
+            if (iDelay >= 0 && iInterval > 0 && iRepeat != 0) {
+                //lock (this.m_taskLocker) {
+                Tasks.Add(new Task(strTaskname, lstCommandWords, iDelay, iInterval, iRepeat));
+                //}
+            }
+        }
+
+        public void ProconProtectedTasksClear() {
+            //lock (this.m_taskLocker) {
+            Tasks.Clear();
+            //}
+        }
+
+        public void ProconProtectedTasksRemove(string strTaskName) {
+            //lock (this.m_taskLocker) {
+            for (int i = 0; i < Tasks.Count; i++) {
+                if (String.Compare(Tasks[i].TaskName, strTaskName) == 0) {
+                    Tasks.RemoveAt(i);
+                    i--;
+                }
+            }
+            //}
+        }
+
+        private void TaskTimer_Elapsed(object sender, ElapsedEventArgs e) {
+            try {
+                foreach (Task ctExecute in new List<Task>(Tasks).Where(ctExecute => Game != null && Game.IsLoggedIn == true && ctExecute.ExecuteCommand == true)) {
+                    Parent.ExecutePRoConCommand(this, ctExecute.Command, 0);
+                }
+
+                Tasks.RemoveAll(RepeatTaskDisabled);
+            }
+            catch (Exception ex) {
+                // Debug for 0.3.1.0 to make sure this bug is gone.
+                FrostbiteConnection.LogError("TaskExecuterThread", String.Empty, ex);
+            }
+        }
+
+        private static bool RepeatTaskDisabled(Task ctRemoveAll) {
+            return ctRemoveAll.RemoveTask;
+        }
+
+        #endregion
+
+        #endregion
+
+        #region Send Packet Helpers
+
+        public void SendResponse(params string[] words) {
+            SendResponse(new List<string>(words));
+        }
+
+        public void SendResponse(List<string> lstWords) {
+            if (lstWords.Count > 0) {
+                if (Game != null && Game.Connection != null) {
+                    Game.Connection.SendQueued(new Packet(true, true, Game.Connection.AcquireSequenceNumber, lstWords));
+                }
+            }
+        }
+
+        private void SendRequest(params string[] words) {
+            SendRequest(new List<string>(words));
+        }
+
+        public void SendRequest(List<string> words) {
+            if (IsLoggedIn == true && words.Count > 0) {
+                if (words.Count >= 4 && String.Compare(words[0], "procon.admin.yell", true) == 0) {
+                    SendProconAdminYell(words[1], words[2], words[3], words.Count > 4 ? words[4] : String.Empty);
+                }
+// obsolete since R-20 and hopefully stays so.
+                    #region Quick BF3 Hack, now MoHW
+
+                else if (Game is MOHWClient && words.Count >= 4 && String.Compare(words[0], "admin.say", true) == 0 && String.Compare(words[2], "player", true) == 0) {
+                    if (PlayerList.Contains(words[3]) == true) {
+                        CPlayerInfo player = PlayerList[words[3]];
+
+                        words[2] = "squad";
+                        words[3] = player.TeamID.ToString();
+                        words.Add(player.SquadID.ToString());
+
+                        var pwords = new List<string> {
+                            "admin.say",
+                            "@" + player.SoldierName,
+                            words[2],
+                            words[3],
+                            words[4]
+                        }; // new
+
+                        if (Game != null && Game.Connection != null) {
+                            Game.Connection.SendQueued(new Packet(false, false, Game.Connection.AcquireSequenceNumber, pwords)); // new
+                            Game.Connection.SendQueued(new Packet(false, false, Game.Connection.AcquireSequenceNumber, words));
+                        }
+                    }
+                }
+                    // MoHW yell hack
+                else if (Game is MOHWClient && words.Count >= 4 && String.Compare(words[0], "admin.yell", true) == 0 && String.Compare(words[2], "player", true) == 0) {
+                    if (PlayerList.Contains(words[3]) == true) {
+                        CPlayerInfo player = PlayerList[words[3]];
+
+                        words[2] = "squad";
+                        words[3] = player.TeamID.ToString();
+                        words.Add(player.SquadID.ToString());
+
+                        var pwords = new List<string> {
+                            "admin.yell",
+                            "@" + player.SoldierName,
+                            words[2],
+                            words[3],
+                            words[4]
+                        };
+
+                        if (Game != null && Game.Connection != null) {
+                            Game.Connection.SendQueued(new Packet(false, false, Game.Connection.AcquireSequenceNumber, pwords));
+                            Game.Connection.SendQueued(new Packet(false, false, Game.Connection.AcquireSequenceNumber, words));
+                        }
+                    }
+                }
+
+                    #endregion // END Quick BF3 Hack
+
+                else {
+                    if (Game != null && Game.Connection != null) {
+                        Game.Connection.SendQueued(new Packet(false, false, Game.Connection.AcquireSequenceNumber, words));
+                    }
+                }
+            }
+            else {
+                int i = 0;
+            }
+        }
+
+        public void SendPacket(Packet packet) {
+            Game.Connection.SendQueued(packet);
+        }
+
+        #region Procon Extensions
+
+        public void SendProconAdminSay(string strText, string strPlayerSubset, string strTarget) {
+            if (strTarget.Length > 0) {
+                SendProconLayerPacket(null, new Packet(false, false, Game.Connection.AcquireSequenceNumber, new List<string>() {
+                    "procon.admin.say",
+                    String.Empty,
+                    strText,
+                    strPlayerSubset,
+                    strTarget
+                }));
+            }
+            else {
+                SendProconLayerPacket(null, new Packet(false, false, Game.Connection.AcquireSequenceNumber, new List<string>() {
+                    "procon.admin.say",
+                    String.Empty,
+                    strText,
+                    strPlayerSubset
+                }));
+            }
+        }
+
+        public void SendProconAdminYell(string strText, string strDisplayTime, string strPlayerSubset, string strTarget) {
+            if (strTarget.Length > 0) {
+                SendProconLayerPacket(null, new Packet(false, false, Game.Connection.AcquireSequenceNumber, new List<string>() {
+                    "procon.admin.yell",
+                    String.Empty,
+                    strText,
+                    strDisplayTime,
+                    strPlayerSubset,
+                    strTarget
+                }));
+            }
+            else {
+                SendProconLayerPacket(null, new Packet(false, false, Game.Connection.AcquireSequenceNumber, new List<string>() {
+                    "procon.admin.yell",
+                    String.Empty,
+                    strText,
+                    strDisplayTime,
+                    strPlayerSubset
+                }));
+            }
+        }
+
+        public void SendProconLayerPacket(PRoConLayerClient sender, Packet cpPassOn) {
+            lock (new object()) {
+                UInt32 ui32MainConnSequence = Game.Connection.AcquireSequenceNumber;
+
+                if (m_dicForwardedPackets.ContainsKey(ui32MainConnSequence) == false) {
+                    var spopForwardedPacket = new SOriginalForwardedPacket();
+                    spopForwardedPacket.m_ui32OriginalSequence = cpPassOn.SequenceNumber;
+                    spopForwardedPacket.m_sender = sender;
+                    spopForwardedPacket.m_lstWords = new List<string>(cpPassOn.Words);
+
+                    // Register the packet as forwared. 
+                    m_dicForwardedPackets.Add(ui32MainConnSequence, spopForwardedPacket);
+
+                    if (cpPassOn.Words.Count >= 5 && String.Compare(cpPassOn.Words[0], "procon.admin.yell") == 0) {
+                        if (IsPRoConConnection == false) {
+                            if (Game is MOHWClient) {
+                                cpPassOn.Words.RemoveAt(3);
+                            }
+                            // Just yell it, we'll capture it and process the return in OnBeforePacketRecv
+                            cpPassOn.Words.RemoveAt(1);
+                            cpPassOn.Words[0] = "admin.yell";
+                        }
+                        // Else forward the packet as is so the layer above can append its username.
+                    }
+                    else if (cpPassOn.Words.Count >= 4 && String.Compare(cpPassOn.Words[0], "procon.admin.say") == 0) {
+                        if (IsPRoConConnection == false) {
+                            // Just yell it, we'll capture it and process the return in OnBeforePacketRecv
+                            cpPassOn.Words.RemoveAt(1);
+                            cpPassOn.Words[0] = "admin.say";
+                        }
+                        // Else forward the packet as is so the layer above can append its username.
+                    }
+
+                    // Now forward the packet.
+                    SendPacket(new Packet(false, false, ui32MainConnSequence, cpPassOn.Words));
+                }
+            }
+        }
+
+        public virtual void SendProconLoginUsernamePacket(string username) {
+            // By pass all usual login checks.
+            if (Game != null && Game.Connection != null) {
+                Game.Connection.SendQueued(new Packet(false, false, Game.Connection.AcquireSequenceNumber, new List<string>() {
+                    "procon.login.username",
+                    username
+                }));
+            }
+        }
+
+        public virtual void SendProconBattlemapListZonesPacket() {
+            if (IsLoggedIn == true) {
+                SendRequest("procon.battlemap.listZones");
+            }
+        }
+
+        public virtual void SendGetProconVarsPacket(string variable) {
+            if (IsLoggedIn == true) {
+                SendRequest("procon.vars", variable);
+            }
+        }
+
+        public virtual void SendProconPluginSetVariablePacket(string strClassName, string strVariable, string strValue) {
+            if (IsLoggedIn == true) {
+                SendRequest("procon.plugin.setVariable", strClassName, strVariable, strValue);
+            }
+        }
+
+        public virtual void SendProconPluginEnablePacket(string strClassName, bool blEnabled) {
+            if (IsLoggedIn == true) {
+                SendRequest("procon.plugin.enable", strClassName, Packet.Bltos(blEnabled));
+            }
+        }
+
+        #region Map Zones
+
+        public virtual void SendProconBattlemapModifyZonePointsPacket(string uid, Point3D[] zonePoints) {
+            if (IsLoggedIn == true) {
+                var list = new List<string>() {
+                    "procon.battlemap.modifyZonePoints",
+                    uid
+                };
+                list.Add(zonePoints.Length.ToString());
+                list.AddRange(Point3D.ToStringList(zonePoints));
+
+                SendRequest(list);
+            }
+        }
+
+        public virtual void SendProconBattlemapDeleteZonePacket(string uid) {
+            if (IsLoggedIn == true) {
+                SendRequest("procon.battlemap.deleteZone", uid);
+            }
+        }
+
+        public virtual void SendProconBattlemapCreateZonePacket(string mapFileName, Point3D[] zonePoints) {
+            if (IsLoggedIn == true) {
+                var list = new List<string>() {
+                    "procon.battlemap.createZone",
+                    mapFileName
+                };
+                list.Add(zonePoints.Length.ToString());
+                list.AddRange(Point3D.ToStringList(zonePoints));
+
+                SendRequest(list);
+            }
+        }
+
+        public virtual void SendProconBattlemapModifyZoneTagsPacket(string uid, string tagList) {
+            if (IsLoggedIn == true) {
+                SendRequest("procon.battlemap.modifyZoneTags", uid, tagList);
+            }
+        }
+
+        #endregion
+
+        #region Layer
+
+        public virtual void SendProconLayerSetPrivilegesPacket(string username, UInt32 privileges) {
+            if (IsLoggedIn == true) {
+                SendRequest("procon.layer.setPrivileges", username, privileges.ToString());
+            }
+        }
+
+        #endregion
+
+        #region Accounts
+
+        public virtual void SendProconAccountListAccountsPacket() {
+            if (IsLoggedIn == true) {
+                SendRequest("procon.account.listAccounts");
+            }
+        }
+
+        public virtual void SendProconAccountListLoggedInPacket() {
+            if (IsLoggedIn == true) {
+                SendRequest("procon.account.listLoggedIn", "uids");
+            }
+        }
+
+        public virtual void SendProconAccountSetPasswordPacket(string username, string password) {
+            if (IsLoggedIn == true) {
+                SendRequest("procon.account.setPassword", username, password);
+            }
+        }
+
+        public virtual void SendProconAccountCreatePacket(string username, string password) {
+            if (IsLoggedIn == true) {
+                SendRequest("procon.account.create", username, password);
+            }
+        }
+
+        public virtual void SendProconAccountDeletePacket(string username) {
+            if (IsLoggedIn == true) {
+                SendRequest("procon.account.delete", username);
+            }
+        }
+
+        #endregion
+
+        #region Plugins
+
+        public virtual void SendProconPluginListLoadedPacket() {
+            if (IsLoggedIn == true) {
+                SendRequest("procon.plugin.listLoaded");
+            }
+        }
+
+        public virtual void SendProconPluginListEnabledPacket() {
+            if (IsLoggedIn == true) {
+                SendRequest("procon.plugin.listEnabled");
+            }
+        }
+
+        #endregion
+
+        #region Packages
+
+        public virtual void SendProconPackagesInstallPacket(string uid, string version, string md5) {
+            if (IsLoggedIn == true) {
+                SendRequest("procon.packages.install", uid, version, md5);
+            }
+        }
+
+        #endregion
+
+        #endregion
+
+        #endregion
+
+        #region Game events
+
+        private void PRoConClient_PlayerKilled(FrostbiteClient sender, string strKiller, string strVictim, string strDamageType, bool blHeadshot, Point3D pntKiller, Point3D pntVictim) {
+            if (PlayerKilled != null) {
+                CPlayerInfo cpKiller = null, cpVictim = null;
+
+                if (PlayerList.Contains(strKiller) == true) {
+                    cpKiller = PlayerList[strKiller];
+                }
+                else {
+                    cpKiller = new CPlayerInfo(strKiller, String.Empty, 0, 0);
+                }
+
+                if (PlayerList.Contains(strVictim) == true) {
+                    cpVictim = PlayerList[strVictim];
+                }
+                else {
+                    cpVictim = new CPlayerInfo(strVictim, String.Empty, 0, 0);
+                }
+
+                FrostbiteConnection.RaiseEvent(PlayerKilled.GetInvocationList(), this, new Kill(cpKiller, cpVictim, strDamageType, blHeadshot, pntKiller, pntVictim));
+            }
+        }
+
+        private void PRoConClient_PlayerSpawned(FrostbiteClient sender, string soldierName, string strKit, List<string> lstWeapons, List<string> lstSpecializations) {
+            if (PlayerSpawned != null) {
+                if (Enum.IsDefined(typeof (Kits), strKit) == true) {
+                    var inv = new Inventory((Kits) Enum.Parse(typeof (Kits), strKit));
+
+                    foreach (string strWeapon in lstWeapons) {
+                        if (Weapons.Contains(strWeapon) == true) {
+                            inv.Weapons.Add(Weapons[strWeapon]);
+                        }
+                    }
+
+                    foreach (string strSpecialization in lstSpecializations) {
+                        if (Specializations.Contains(strSpecialization) == true) {
+                            inv.Specializations.Add(Specializations[strSpecialization]);
+                        }
+                    }
+
+                    FrostbiteConnection.RaiseEvent(PlayerSpawned.GetInvocationList(), this, soldierName, inv);
+                }
+                else {
+                    FrostbiteConnection.RaiseEvent(PlayerSpawned.GetInvocationList(), this, soldierName, new Inventory(Kits.None));
+                }
+            }
+        }
+
+        private void PRoConClient_ReservedSlotsPlayerRemoved(FrostbiteClient sender, string strSoldierName) {
+            if (ReservedSlotList.Contains(strSoldierName) == true) {
+                ReservedSlotList.Remove(strSoldierName);
+            }
+        }
+
+        private void PRoConClient_ReservedSlotsPlayerAdded(FrostbiteClient sender, string strSoldierName) {
+            if (ReservedSlotList.Contains(strSoldierName) == false) {
+                ReservedSlotList.Add(strSoldierName);
+            }
+        }
+
+        private void PRoConClient_ReservedSlotsList(FrostbiteClient sender, List<string> soldierNames) {
+            if (sender is BF4Client || sender is BF3Client || sender is MOHWClient) {
+                ReservedSlotList.Clear();
+            }
+
+            if (soldierNames.Count != 0) {
+                foreach (string strSoldierName in soldierNames) {
+                    if (ReservedSlotList.Contains(strSoldierName) == false) {
+                        ReservedSlotList.Add(strSoldierName);
+                    }
+                }
+
+                foreach (string strSoldierName in ReservedSlotList) {
+                    if (soldierNames.Contains(strSoldierName) == false) {
+                        ReservedSlotList.Remove(strSoldierName);
+                    }
+                }
+            }
+        }
+
+        protected void OnServerInfo(FrostbiteClient sender, CServerInfo csiServerInfo) {
+            GameMods oldGameMod = CurrentServerInfo != null ? CurrentServerInfo.GameMod : GameMods.None;
+
+            // Initial loading..
+            if (CurrentServerInfo == null) {
+                CurrentServerInfo = csiServerInfo;
+
+                InitialSetup();
+
+                if (GameTypeDiscovered != null) {
+                    FrostbiteConnection.RaiseEvent(GameTypeDiscovered.GetInvocationList(), this);
+                }
+            }
+            else if (CurrentServerInfo != null && oldGameMod != csiServerInfo.GameMod) {
+                IsGameModModified = true;
+            }
+            else {
+                IsGameModModified = false;
+            }
+
+            CurrentServerInfo = csiServerInfo;
+        }
+
+        protected void OnLogout() {
+            Shutdown();
+        }
+
+        protected void OnPlayerLeft(FrostbiteClient sender, string strSoldierName, CPlayerInfo cpiPlayer) {
+            if (PlayerList.Contains(strSoldierName) == true) {
+                PlayerList.Remove(strSoldierName);
+            }
+        }
+
+        protected void OnPunkbusterMessage(FrostbiteClient sender, string strPunkbusterMessage) {
+            strPunkbusterMessage = strPunkbusterMessage.TrimEnd('\r', '\n');
+
+            // PunkBuster Server: ([0-9]+)[ ]? ([A-Za-z0-9]+)\(.*?\) ([0-9\.:]+).*?\(.*?\) "(.*?)"
+            // PunkBuster Server: 1  2c90591ce08a5f799622705d7ba1155c(-) 192.168.1.3:52460 OK   1 3.0 0 (W) "(U3)Phogue"
+            //Match mMatch = Regex.Match(strPunkbusterMessage, @":[ ]+?(?<slotid>[0-9]+)[ ]+?(?<guid>[A-Za-z0-9]+)\(.*?\)[ ]+?(?<ip>[0-9\.:]+).*?\(.*?\)[ ]+?""(?<name>.*?)\""", RegexOptions.IgnoreCase);
+            Match mMatch = Parent.RegexMatchPunkbusterPlist.Match(strPunkbusterMessage);
+            // If it is a punkbuster pb_plist update
+            if (mMatch.Success == true && mMatch.Groups.Count >= 5) {
+                var newPbInfo = new CPunkbusterInfo(mMatch.Groups["slotid"].Value, mMatch.Groups["name"].Value, mMatch.Groups["guid"].Value, mMatch.Groups["ip"].Value, Parent.GetCountryName(mMatch.Groups["ip"].Value), Parent.GetCountryCode(mMatch.Groups["ip"].Value));
+
+                if (PunkbusterPlayerInfo != null) {
+                    FrostbiteConnection.RaiseEvent(PunkbusterPlayerInfo.GetInvocationList(), this, newPbInfo);
+                }
+            }
+
+            mMatch = Parent.RegexMatchPunkbusterBeginPlist.Match(strPunkbusterMessage);
+            if (mMatch.Success == true && PunkbusterBeginPlayerInfo != null) {
+                FrostbiteConnection.RaiseEvent(PunkbusterBeginPlayerInfo.GetInvocationList(), this);
+            }
+
+            mMatch = Parent.RegexMatchPunkbusterEndPlist.Match(strPunkbusterMessage);
+            if (mMatch.Success == true && PunkbusterEndPlayerInfo != null) {
+                FrostbiteConnection.RaiseEvent(PunkbusterEndPlayerInfo.GetInvocationList(), this);
+            }
+
+            // PunkBuster Server: Player Guid Computed ([A-Za-z0-9]+)\(.*?\) \(slot #([0-9]+)\) ([0-9\.:]+) (.*)
+            // PunkBuster Server: Player Guid Computed 2c90591ce08a5f799622705d7ba1155c(-) (slot #1) 192.168.1.3:52581 (U3)Phogue
+            //mMatch = Regex.Match(strPunkbusterMessage, @": Player Guid Computed[ ]+?(?<guid>[A-Za-z0-9]+)\(.*?\)[ ]+?\(slot #(?<slotid>[0-9]+)\)[ ]+?(?<ip>[0-9\.:]+)[ ]+?(?<name>.*)", RegexOptions.IgnoreCase);
+            mMatch = Parent.RegexMatchPunkbusterGuidComputed.Match(strPunkbusterMessage);
+            // If it is a new connection, technically its a resolved guid type command but stil..
+            if (mMatch.Success == true && mMatch.Groups.Count >= 5) {
+                var newPbInfo = new CPunkbusterInfo(mMatch.Groups["slotid"].Value, mMatch.Groups["name"].Value, mMatch.Groups["guid"].Value, mMatch.Groups["ip"].Value, Parent.GetCountryName(mMatch.Groups["ip"].Value), Parent.GetCountryCode(mMatch.Groups["ip"].Value));
+
+                if (PunkbusterPlayerInfo != null) {
+                    FrostbiteConnection.RaiseEvent(PunkbusterPlayerInfo.GetInvocationList(), this, newPbInfo);
+                }
+            }
+
+            //mMatch = Regex.Match(strPunkbusterMessage, @":[ ]+?(?<banid>[0-9]+)[ ]+?(?<guid>[A-Za-z0-9]+)[ ]+?{(?<remaining>[0-9\-]+)/(?<banlength>[0-9\-]+)}[ ]+?""(?<name>.+?)""[ ]+?""(?<ip>.+?)""[ ]+?(?<reason>.*)", RegexOptions.IgnoreCase);
+            mMatch = Parent.RegexMatchPunkbusterBanlist.Match(strPunkbusterMessage);
+            if (mMatch.Success == true && mMatch.Groups.Count >= 5) {
+                //IPAddress ipOut;
+                string strIP = String.Empty;
+                string[] a_strIP;
+
+                if (mMatch.Groups["ip"].Value.Length > 0 && (a_strIP = mMatch.Groups["ip"].Value.Split(':')).Length > 0) {
+                    strIP = a_strIP[0];
+                }
+
+                var newPbBanInfo = new CBanInfo(mMatch.Groups["name"].Value, mMatch.Groups["guid"].Value, mMatch.Groups["ip"].Value, new TimeoutSubset(mMatch.Groups["banlength"].Value, mMatch.Groups["remaining"].Value), mMatch.Groups["reason"].Value);
+
+                if (PunkbusterPlayerBanned != null) {
+                    FrostbiteConnection.RaiseEvent(PunkbusterPlayerBanned.GetInvocationList(), this, newPbBanInfo);
+                }
+            }
+
+            //PunkBuster Server: Kick/Ban Command Issued (testing) for (slot#1) xxx.xxx.xxx.xxx:yyyy GUID name
+            mMatch = Parent.RegexMatchPunkbusterKickBanCmd.Match(strPunkbusterMessage);
+            if (mMatch.Success == true && mMatch.Groups.Count >= 5) {
+                //IPAddress ipOut;
+                string strIP = String.Empty;
+                string[] a_strIP;
+
+                if (mMatch.Groups["ip"].Value.Length > 0 && (a_strIP = mMatch.Groups["ip"].Value.Split(':')).Length > 0) {
+                    strIP = a_strIP[0];
+                }
+
+                TimeoutSubset kb_timeoutSubset;
+                if (String.Compare(mMatch.Groups["kb_type"].ToString(), "Kick/Ban", true) == 0) {
+                    kb_timeoutSubset = new TimeoutSubset(new List<string>() {
+                        "perm",
+                        ""
+                    });
+                }
+                else {
+                    kb_timeoutSubset = new TimeoutSubset(new List<string>() {
+                        "seconds",
+                        "120"
+                    });
+                }
+
+                //CBanInfo newPbBanInfo = new CBanInfo(mMatch.Groups["name"].Value, mMatch.Groups["guid"].Value, mMatch.Groups["ip"].Value, new TimeoutSubset("perm",""), mMatch.Groups["reason"].Value);
+                var newPbBanInfo = new CBanInfo(mMatch.Groups["name"].Value, mMatch.Groups["guid"].Value, mMatch.Groups["ip"].Value, kb_timeoutSubset, mMatch.Groups["reason"].Value);
+
+                if (PunkbusterPlayerBanned != null) {
+                    FrostbiteConnection.RaiseEvent(PunkbusterPlayerBanned.GetInvocationList(), this, newPbBanInfo);
+                }
+            }
+
+            //mMatch = Regex.Match(strPunkbusterMessage, @":[ ]+?Guid[ ]+?(?<guid>[A-Za-z0-9]+)[ ]+?has been Unbanned", RegexOptions.IgnoreCase);
+            mMatch = Parent.RegexMatchPunkbusterUnban.Match(strPunkbusterMessage);
+            // If it is a new connection, technically its a resolved guid type command but stil..
+            if (mMatch.Success == true && mMatch.Groups.Count >= 2) {
+                var cbiUnbannedPlayer = new CBanInfo(String.Empty, mMatch.Groups["guid"].Value, String.Empty, new TimeoutSubset(TimeoutSubset.TimeoutSubsetType.None), String.Empty);
+
+                if (PunkbusterPlayerUnbanned != null) {
+                    FrostbiteConnection.RaiseEvent(PunkbusterPlayerUnbanned.GetInvocationList(), this, cbiUnbannedPlayer);
+                }
+            }
+
+            //mMatch = Regex.Match(strPunkbusterMessage, @": Ban Added to Ban List", RegexOptions.IgnoreCase);
+            mMatch = Parent.RegexMatchPunkbusterBanAdded.Match(strPunkbusterMessage);
+            if (mMatch.Success == true && mMatch.Groups.Count >= 5) {
+                SendRequest(new List<string>() {
+                    "punkBuster.pb_sv_command",
+                    Variables.GetVariable("PUNKBUSTER_BANLIST_REFRESH", "pb_sv_banlist BC2! ")
+                });
+            }
+        }
+
+        protected void OnListPlayers(FrostbiteClient sender, List<CPlayerInfo> lstPlayers, CPlayerSubset cpsSubset) {
+            if (cpsSubset.Subset == CPlayerSubset.PlayerSubsetType.All) {
+                // Add or update players.
+                foreach (CPlayerInfo cpiPlayer in lstPlayers) {
+                    if (PlayerList.Contains(cpiPlayer.SoldierName) == true) {
+                        PlayerList[PlayerList.IndexOf(PlayerList[cpiPlayer.SoldierName])] = cpiPlayer;
+                    }
+                    else {
+                        PlayerList.Add(cpiPlayer);
+                    }
+                }
+
+                var recievedPlayerList = new PlayerDictionary(lstPlayers);
+                foreach (CPlayerInfo storedPlayer in new List<CPlayerInfo>(PlayerList)) {
+                    // If the stored player is not in the list we recieved
+                    if (recievedPlayerList.Contains(storedPlayer.SoldierName) == false) {
+                        // They have left the server, remove them from the master stored list.
+                        PlayerList.Remove(storedPlayer.SoldierName);
+                    }
+                }
+            }
+        }
+
+        private void PRoConClient_BanListList(FrostbiteClient sender, int iStartOffset, List<CBanInfo> lstBans) {
+            if (iStartOffset == 0) {
+                FullVanillaBanList.Clear();
+            }
+
+            if (lstBans.Count > 0) {
+                FullVanillaBanList.AddRange(lstBans);
+
+                Game.SendBanListListPacket(iStartOffset + 100);
+                //this.SendRequest(new List<string>() { "banList.list", (iStartOffset + 100).ToString() });
+            }
+            else {
+                // We have recieved the whole banlist in 100 ban increments.. throw event.
+                if (FullBanListList != null) {
+                    FrostbiteConnection.RaiseEvent(FullBanListList.GetInvocationList(), this, FullVanillaBanList);
+                }
+            }
+        }
+
+        private void PRoConClient_ResponseError(FrostbiteClient sender, Packet originalRequest, string errorMessage) {
+            // Banlist backwards compatability with R11 (Will attempt to get "banList.list 100" which will throw this error)
+            if (originalRequest.Words.Count > 0 && String.Compare(originalRequest.Words[0], "banList.list", true) == 0 && String.Compare(errorMessage, "InvalidArguments", true) == 0) {
+                if (FullBanListList != null) {
+                    FrostbiteConnection.RaiseEvent(FullBanListList.GetInvocationList(), this, FullVanillaBanList);
+                }
+            }
+        }
+
+        protected void OnPlayerLimit(FrostbiteClient sender, int iPlayerLimit) {
+            // Quick 'hack' because BF3 does not have these and it's generating confusion on the forums.
+            if (!(Game is BF4Client) && !(Game is BF3Client) && !(Game is MOHWClient)) {
+                SendRequest(new List<string>() {
+                    "vars.currentPlayerLimit"
+                });
+                SendRequest(new List<string>() {
+                    "vars.maxPlayerLimit"
+                });
+            }
+
+            SendRequest(new List<string>() {
+                "serverInfo"
+            });
+        }
+
+        #region Text Chat Moderation
+
+        // FullTextChatModerationList
+        private void Game_TextChatModerationListList(FrostbiteClient sender, int startOffset, List<TextChatModerationEntry> textChatModerationList) {
+            if (startOffset == 0) {
+                FullTextChatModerationList.Clear();
+            }
+
+            if (textChatModerationList.Count > 0) {
+                FullTextChatModerationList.AddRange(textChatModerationList);
+
+                Game.SendTextChatModerationListListPacket(startOffset + 100);
+                //this.SendRequest(new List<string>() { "banList.list", (startOffset + 100).ToString() });
+            }
+            else {
+                // We have recieved the whole banlist in 100 ban increments.. throw event.
+                if (FullTextChatModerationListList != null) {
+                    FrostbiteConnection.RaiseEvent(FullTextChatModerationListList.GetInvocationList(), this, FullTextChatModerationList);
+                }
+            }
+        }
+
+        private void Game_TextChatModerationListClear(FrostbiteClient sender) {
+            FullTextChatModerationList.Clear();
+        }
+
+        private void Game_TextChatModerationListRemovePlayer(FrostbiteClient sender, TextChatModerationEntry playerEntry) {
+            FullTextChatModerationList.RemoveEntry(playerEntry);
+        }
+
+        private void Game_TextChatModerationListAddPlayer(FrostbiteClient sender, TextChatModerationEntry playerEntry) {
+            FullTextChatModerationList.AddEntry(playerEntry);
+        }
+
+        #endregion
+
+        #endregion
+
+        #region Mapzones
+
+        private void MapZones_MapZoneRemoved(MapZoneDrawing item) {
+            SaveConnectionConfig();
+        }
+
+        private void MapZones_MapZoneChanged(MapZoneDrawing item) {
+            SaveConnectionConfig();
+        }
+
+        private void MapZones_MapZoneAdded(MapZoneDrawing item) {
+            SaveConnectionConfig();
+        }
+
+        #endregion
+
+        #region Layer Events
+
+        private void Layer_LayerOffline() {
+            SaveConnectionConfig();
+        }
+
+        private void Layer_LayerOnline() {
+            SaveConnectionConfig();
+        }
+
+        private void AccountPrivileges_AccountPrivilegeRemoved(AccountPrivilege item) {
+            item.AccountPrivilegesChanged -= new AccountPrivilege.AccountPrivilegesChangedHandler(item_AccountPrivilegesChanged);
+
+            SaveConnectionConfig();
+        }
+
+        private void AccountPrivileges_AccountPrivilegeAdded(AccountPrivilege item) {
+            item.AccountPrivilegesChanged += new AccountPrivilege.AccountPrivilegesChangedHandler(item_AccountPrivilegesChanged);
+
+            SaveConnectionConfig();
+        }
+
+        private void item_AccountPrivilegesChanged(AccountPrivilege item) {
+            SaveConnectionConfig();
+        }
+
+        #endregion
 
         #region Saving/Loading Settings
 
         // Set to true just before the config is open so events thrown during the loading process
         // don't trigger a save.
         public void SaveConnectionConfig() {
-
-            if (this.m_blLoadingSavingConnectionConfig == false && this.Layer != null && this.Layer.AccountPrivileges != null && (this.PluginsManager != null || (this.PluginsManager == null && this.IsPRoConConnection == true && this.Parent.OptionsSettings.LayerHideLocalPlugins == true)) && this.MapGeometry != null && this.MapGeometry.MapZones != null)
-            {
-
-                lock (this.m_objConfigSavingLocker) {
-
+            if (IsLoadingSavingConnectionConfig == false && Layer != null && Layer.AccountPrivileges != null && (PluginsManager != null || (PluginsManager == null && IsPRoConConnection == true && Parent.OptionsSettings.LayerHideLocalPlugins == true)) && MapGeometry != null && MapGeometry.MapZones != null) {
+                lock (ConfigSavingLocker) {
                     FileStream stmConnectionConfigFile = null;
 
                     try {
-                        if (Directory.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"Configs")) == false) {
+                        if (Directory.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Configs")) == false) {
                             Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Configs"));
                         }
 
-                        string strSaveFile = Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Configs"), this.FileHostNamePort + ".cfg");
+                        string strSaveFile = Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Configs"), FileHostNamePort + ".cfg");
 
                         stmConnectionConfigFile = new FileStream(strSaveFile + ".temp", FileMode.Create);
 
                         if (stmConnectionConfigFile != null) {
-                            StreamWriter stwConfig = new StreamWriter(stmConnectionConfigFile, Encoding.Unicode);
+                            var stwConfig = new StreamWriter(stmConnectionConfigFile, Encoding.UTF8);
 
                             stwConfig.WriteLine("/////////////////////////////////////////////");
                             stwConfig.WriteLine("// This config will be overwritten by procon.");
                             stwConfig.WriteLine("/////////////////////////////////////////////");
 
-                            foreach (AccountPrivilege apPrivs in this.Layer.AccountPrivileges) {
+                            foreach (AccountPrivilege apPrivs in Layer.AccountPrivileges) {
                                 stwConfig.WriteLine("procon.protected.layer.setPrivileges \"{0}\" {1}", apPrivs.Owner.Name, apPrivs.Privileges.PrivilegesFlags);
                             }
 
-                            stwConfig.WriteLine("procon.protected.layer.enable {0} {1} \"{2}\" \"{3}\"", this.Layer.LayerEnabled, this.Layer.ListeningPort, this.Layer.BindingAddress, this.Layer.LayerNameFormat);
+                            stwConfig.WriteLine("procon.protected.layer.enable {0} {1} \"{2}\" \"{3}\"", Layer.LayerEnabled, Layer.ListeningPort, Layer.BindingAddress, Layer.LayerNameFormat);
 
-                            stwConfig.WriteLine("procon.protected.playerlist.settings " + String.Join(" ", this.PlayerListSettings.Settings.ToArray()));
-                            stwConfig.WriteLine("procon.protected.chat.settings " + String.Join(" ", this.ChatConsole.Settings.ToArray()));
-                            stwConfig.WriteLine("procon.protected.events.captures " + String.Join(" ", this.EventsLogging.Settings.ToArray()));
-                            stwConfig.WriteLine("procon.protected.lists.settings " + String.Join(" ", this.ListSettings.Settings.ToArray()));
-                            stwConfig.WriteLine("procon.protected.console.settings " + String.Join(" ", this.Console.Settings.ToArray()));
-                            stwConfig.WriteLine("procon.protected.timezone_UTCoffset " + this.Game.UTCoffset);
+                            stwConfig.WriteLine("procon.protected.playerlist.settings " + String.Join(" ", PlayerListSettings.Settings.ToArray()));
+                            stwConfig.WriteLine("procon.protected.chat.settings " + String.Join(" ", ChatConsole.Settings.ToArray()));
+                            stwConfig.WriteLine("procon.protected.events.captures " + String.Join(" ", EventsLogging.Settings.ToArray()));
+                            stwConfig.WriteLine("procon.protected.lists.settings " + String.Join(" ", ListSettings.Settings.ToArray()));
+                            stwConfig.WriteLine("procon.protected.console.settings " + String.Join(" ", Console.Settings.ToArray()));
+                            stwConfig.WriteLine("procon.protected.timezone_UTCoffset " + Game.UtcOffset);
 
-                            foreach (MapZoneDrawing zone in this.MapGeometry.MapZones) {
+                            foreach (MapZoneDrawing zone in MapGeometry.MapZones) {
                                 stwConfig.WriteLine("procon.protected.zones.add \"{0}\" \"{1}\" \"{2}\" {3} {4}", zone.UID, zone.LevelFileName, zone.Tags, zone.ZonePolygon.Length, String.Join(" ", Point3D.ToStringList(zone.ZonePolygon).ToArray()));
                             }
 
-                            if (this.PluginsManager != null) {
-                                foreach (string strClassName in new List<string>(this.PluginsManager.Plugins.LoadedClassNames)) {
+                            if (PluginsManager != null) {
+                                foreach (string strClassName in new List<string>(PluginsManager.Plugins.LoadedClassNames)) {
+                                    stwConfig.WriteLine("procon.protected.plugins.enable \"{0}\" {1}", strClassName, PluginsManager.Plugins.EnabledClassNames.Contains(strClassName));
 
-                                    stwConfig.WriteLine("procon.protected.plugins.enable \"{0}\" {1}", strClassName, this.PluginsManager.Plugins.EnabledClassNames.Contains(strClassName));
-
-                                    PluginDetails spdUpdatedDetails = this.PluginsManager.GetPluginDetails(strClassName);
+                                    PluginDetails spdUpdatedDetails = PluginsManager.GetPluginDetails(strClassName);
 
                                     foreach (CPluginVariable cpvVariable in spdUpdatedDetails.PluginVariables) {
                                         string strEscapedNewlines = CPluginVariable.Decode(cpvVariable.Value);
@@ -645,9 +2921,9 @@ namespace PRoCon.Core.Remote {
                                 }
 
                                 // Now resave all cached plugin settings (plugin settings of of plugins that failed to load)
-                                foreach (Plugin plugin in this.PluginsManager.Plugins) {
+                                foreach (Plugin.Plugin plugin in PluginsManager.Plugins) {
                                     if (plugin.IsLoaded == false) {
-                                        foreach (KeyValuePair<string, string> CachedPluginVariable in plugin.CacheFailCompiledPluginVariables) {
+                                        foreach (var CachedPluginVariable in plugin.CacheFailCompiledPluginVariables) {
                                             stwConfig.WriteLine("procon.protected.plugins.setVariable \"{0}\" \"{1}\" \"{2}\"", plugin.ClassName, CachedPluginVariable.Key, CachedPluginVariable.Value);
                                         }
                                     }
@@ -681,23 +2957,19 @@ namespace PRoCon.Core.Remote {
         }
 
         public void ExecuteConnectionConfig(string strConfigFile, int iRecursion, List<string> lstArguments, bool blIncPlugin) {
-
             //FileStream stmConfigFile = null;
             try {
-
-                if (File.Exists(Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"Configs"),strConfigFile)) == true) {
-
+                if (File.Exists(Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Configs"), strConfigFile)) == true) {
                     //stmConfigFile = new FileStream(String.Format(@"{0}Configs\{1}", AppDomain.CurrentDomain.BaseDirectory, strConfigFile), FileMode.Open);
 
                     string[] a_strConfigData = File.ReadAllLines(Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Configs"), strConfigFile));
 
                     if (a_strConfigData != null) {
-
                         foreach (string strLine in a_strConfigData) {
-                            if (strLine.Length > 0 && Regex.Match(strLine, "^[ ]+//.*").Success == false) { // AND not a comment..
+                            if (strLine.Length > 0 && Regex.Match(strLine, "^[ ]+//.*").Success == false) {
+                                // AND not a comment..
 
                                 if (lstArguments != null) {
-
                                     string strReplacedLine = strLine;
 
                                     for (int i = 0; i < lstArguments.Count; i++) {
@@ -707,31 +2979,30 @@ namespace PRoCon.Core.Remote {
                                     List<string> lstWordifiedCommand = Packet.Wordify(strReplacedLine);
                                     // procon.protected.config.demand 48543 CanKickPlayers procon.protected.send admin.say "You're not allowed to kick" player phogue
                                     if (lstWordifiedCommand.Count >= 3 && String.Compare(lstWordifiedCommand[0], "procon.protected.config.demand", true) == 0) {
-
                                         UInt32 ui32PrivilegesFlags = 0;
 
                                         if (UInt32.TryParse(lstWordifiedCommand[1], out ui32PrivilegesFlags) == true) {
-                                            CPrivileges cpConfigPrivs = new CPrivileges(ui32PrivilegesFlags);
+                                            var cpConfigPrivs = new CPrivileges(ui32PrivilegesFlags);
                                             bool blHasPrivileges = false;
 
                                             try {
-                                                System.Reflection.PropertyInfo[] a_piAllProperties = cpConfigPrivs.GetType().GetProperties();
+                                                PropertyInfo[] a_piAllProperties = cpConfigPrivs.GetType().GetProperties();
 
-                                                foreach (System.Reflection.PropertyInfo pInfo in a_piAllProperties) {
+                                                foreach (PropertyInfo pInfo in a_piAllProperties) {
                                                     if (String.Compare(pInfo.GetGetMethod().Name, "get_" + lstWordifiedCommand[2]) == 0) {
-                                                        blHasPrivileges = (bool)pInfo.GetValue(cpConfigPrivs, null);
+                                                        blHasPrivileges = (bool) pInfo.GetValue(cpConfigPrivs, null);
                                                         break;
                                                     }
                                                 }
 
                                                 if (blHasPrivileges == false) {
-
                                                     // If they have asked for a command on failure..
                                                     if (lstWordifiedCommand.Count > 3) {
                                                         if (blIncPlugin == true) {
-                                                            this.Parent.ExecutePRoConCommandCon(this, lstWordifiedCommand.GetRange(3, lstWordifiedCommand.Count - 3), iRecursion++);
-                                                        } else {
-                                                            this.Parent.ExecutePRoConCommand(this, lstWordifiedCommand.GetRange(3, lstWordifiedCommand.Count - 3), iRecursion++);
+                                                            Parent.ExecutePRoConCommandCon(this, lstWordifiedCommand.GetRange(3, lstWordifiedCommand.Count - 3), iRecursion++);
+                                                        }
+                                                        else {
+                                                            Parent.ExecutePRoConCommand(this, lstWordifiedCommand.GetRange(3, lstWordifiedCommand.Count - 3), iRecursion++);
                                                         }
                                                     }
 
@@ -751,17 +3022,19 @@ namespace PRoCon.Core.Remote {
                                     }
                                     else {
                                         if (blIncPlugin == true) {
-                                            this.Parent.ExecutePRoConCommandCon(this, lstWordifiedCommand, iRecursion++);
-                                        } else {
-                                            this.Parent.ExecutePRoConCommand(this, lstWordifiedCommand, iRecursion++);
+                                            Parent.ExecutePRoConCommandCon(this, lstWordifiedCommand, iRecursion++);
+                                        }
+                                        else {
+                                            Parent.ExecutePRoConCommand(this, lstWordifiedCommand, iRecursion++);
                                         }
                                     }
                                 }
                                 else {
                                     if (blIncPlugin == true) {
-                                        this.Parent.ExecutePRoConCommandCon(this, Packet.Wordify(strLine), iRecursion++);
-                                    } else {
-                                        this.Parent.ExecutePRoConCommand(this, Packet.Wordify(strLine), iRecursion++);
+                                        Parent.ExecutePRoConCommandCon(this, Packet.Wordify(strLine), iRecursion++);
+                                    }
+                                    else {
+                                        Parent.ExecutePRoConCommand(this, Packet.Wordify(strLine), iRecursion++);
                                     }
                                 }
                             }
@@ -775,19 +3048,16 @@ namespace PRoCon.Core.Remote {
         }
 
         public void ExecuteGlobalVarsConfig(string strConfigFile, int iRecursion, List<string> lstArguments) {
-
             //FileStream stmConfigFile = null;
             try {
-
-                if (File.Exists(Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"Configs"),strConfigFile)) == true) {
-
+                if (File.Exists(Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Configs"), strConfigFile)) == true) {
                     string[] a_strConfigData = File.ReadAllLines(Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Configs"), strConfigFile));
 
                     if (a_strConfigData != null) {
-
                         foreach (string strLine in a_strConfigData) {
-                            if (strLine.Length > 0 && Regex.Match(strLine, "^[ ]+//.*").Success == false && Regex.Match(strLine, "^procon.protected.vars.set .*").Success) { // AND not a comment..
-                                this.Parent.ExecutePRoConCommand(this, Packet.Wordify(strLine), iRecursion++);
+                            if (strLine.Length > 0 && Regex.Match(strLine, "^[ ]+//.*").Success == false && Regex.Match(strLine, "^procon.protected.vars.set .*").Success) {
+                                // AND not a comment..
+                                Parent.ExecutePRoConCommand(this, Packet.Wordify(strLine), iRecursion++);
                             }
                         }
                     }
@@ -802,83 +3072,78 @@ namespace PRoCon.Core.Remote {
 
         #region Plugin setup & events
 
-        public void CompilePlugins(System.Security.PermissionSet prmPluginSandbox) {
-
-            Dictionary<string, List<CPluginVariable>> dicClassSavedVariables = new Dictionary<string, List<CPluginVariable>>();
+        public void CompilePlugins(PermissionSet prmPluginSandbox) {
+            var dicClassSavedVariables = new Dictionary<string, List<CPluginVariable>>();
             List<string> lstEnabledPlugins = null;
             List<String> ignoredPluginClassNames = null;
 
             // If it's a recompile save all the current variables.
-            if (this.PluginsManager != null) {
-                foreach (String strClassName in this.PluginsManager.Plugins.LoadedClassNames) {
+            if (PluginsManager != null) {
+                foreach (String strClassName in PluginsManager.Plugins.LoadedClassNames) {
                     if (dicClassSavedVariables.ContainsKey(strClassName) == false) {
-                        dicClassSavedVariables.Add(strClassName, this.PluginsManager.GetPluginVariables(strClassName));
+                        dicClassSavedVariables.Add(strClassName, PluginsManager.GetPluginVariables(strClassName));
                         //dicClassSavedVariables.Add(strClassName, ProConClient.GetSvVariables(this.m_cpPlugins.InvokeOnLoaded(strClassName, "GetPluginVariables", null)));
                     }
                 }
 
-                lstEnabledPlugins = this.PluginsManager.Plugins.EnabledClassNames;
-                ignoredPluginClassNames = this.PluginsManager.IgnoredPluginClassNames;
+                lstEnabledPlugins = PluginsManager.Plugins.EnabledClassNames;
+                ignoredPluginClassNames = PluginsManager.IgnoredPluginClassNames;
 
-                this.PluginsManager.Unload();
+                PluginsManager.Unload();
 
-                this.PluginsManager = new PluginManager(this);
-                if (this.RecompilingPlugins != null) {
-                    FrostbiteConnection.RaiseEvent(this.RecompilingPlugins.GetInvocationList(), this);
+                PluginsManager = new PluginManager(this);
+                if (RecompilingPlugins != null) {
+                    FrostbiteConnection.RaiseEvent(RecompilingPlugins.GetInvocationList(), this);
                 }
             }
             else {
-                this.PluginsManager = new PluginManager(this);
-                if (this.CompilingPlugins != null) {
-                    FrostbiteConnection.RaiseEvent(this.CompilingPlugins.GetInvocationList(), this);
+                PluginsManager = new PluginManager(this);
+                if (CompilingPlugins != null) {
+                    FrostbiteConnection.RaiseEvent(CompilingPlugins.GetInvocationList(), this);
                 }
             }
 
-            this.PluginsManager.CompilePlugins(prmPluginSandbox, ignoredPluginClassNames);
+            PluginsManager.CompilePlugins(prmPluginSandbox, ignoredPluginClassNames);
 
-            if (this.PluginsCompiled != null) {
-                FrostbiteConnection.RaiseEvent(this.PluginsCompiled.GetInvocationList(), this);
+            if (PluginsCompiled != null) {
+                FrostbiteConnection.RaiseEvent(PluginsCompiled.GetInvocationList(), this);
             }
 
             // Reload all the variables if it's a recompile
-            foreach (KeyValuePair<string, List<CPluginVariable>> kvpPluginVariables in dicClassSavedVariables) {
+            foreach (var kvpPluginVariables in dicClassSavedVariables) {
                 foreach (CPluginVariable cpvVariable in kvpPluginVariables.Value) {
-                    this.PluginsManager.SetPluginVariable(kvpPluginVariables.Key, cpvVariable.Name, cpvVariable.Value);
+                    PluginsManager.SetPluginVariable(kvpPluginVariables.Key, cpvVariable.Name, cpvVariable.Value);
                     //this.Plugins.InvokeOnLoaded(kvpPluginVariables.Key, "SetPluginVariable", new object[] { cpvVariable.Name, cpvVariable.Value });
                 }
             }
 
             if (lstEnabledPlugins != null) {
                 foreach (string strEnabledClass in lstEnabledPlugins) {
-                    this.PluginsManager.EnablePlugin(strEnabledClass);
+                    PluginsManager.EnablePlugin(strEnabledClass);
                 }
             }
         }
 
         private void PluginsManager_PluginPanic() {
-            this.CompilePlugins(this.Parent.OptionsSettings.PluginPermissions);
+            CompilePlugins(Parent.OptionsSettings.PluginPermissions);
         }
 
         public List<CMap> GetMapDefines() {
-            return new List<CMap>(this.MapListPool);
+            return new List<CMap>(MapListPool);
         }
 
-        public bool TryGetLocalized(string strLanguageCode, out string strLocalizedText, string strVariable, string[] a_strArguements) {
-
+        public bool TryGetLocalized(string languageCode, out string localizedText, string variable, string[] arguements) {
             bool isSuccess = false;
-            strLocalizedText = String.Empty;
+            localizedText = String.Empty;
 
-            if (strLanguageCode == null) {
-                isSuccess = this.Language.TryGetLocalized(out strLocalizedText, strVariable, a_strArguements);
+            if (languageCode == null) {
+                isSuccess = Language.TryGetLocalized(out localizedText, variable, arguements);
             }
             else {
                 string strCountryCode = String.Empty;
 
-                foreach (CLocalization LanguageFile in this.Parent.Languages) {
-                    if (LanguageFile.TryGetLocalized(out strCountryCode, "file.countrycode") == true && String.Compare(strCountryCode, strLanguageCode, true) == 0) {
-                        isSuccess = this.Language.TryGetLocalized(out strLocalizedText, strVariable, a_strArguements);
-                        break;
-                    }
+                if (Parent.Languages.Any(languageFile => languageFile.TryGetLocalized(out strCountryCode, "file.countrycode") == true && String.Compare(strCountryCode, languageCode, StringComparison.OrdinalIgnoreCase) == 0)) {
+                    isSuccess = Language.TryGetLocalized(out localizedText, variable, arguements);
                 }
             }
 
@@ -886,19 +3151,18 @@ namespace PRoCon.Core.Remote {
         }
 
         public string GetVariable(string strVariable) {
-            return this.Variables.GetVariable<string>(strVariable, String.Empty);
+            return Variables.GetVariable(strVariable, String.Empty);
         }
 
         public string GetSvVariable(string strVariable) {
-            return this.SV_Variables.GetVariable<string>(strVariable, String.Empty);
+            return SV_Variables.GetVariable(strVariable, String.Empty);
         }
 
         public CPrivileges GetAccountPrivileges(string strAccountName) {
-
             CPrivileges spReturn = default(CPrivileges);
 
-            if (this.Layer.AccountPrivileges.Contains(strAccountName) == true) {
-                spReturn = this.Layer.AccountPrivileges[strAccountName].Privileges;
+            if (Layer.AccountPrivileges.Contains(strAccountName) == true) {
+                spReturn = Layer.AccountPrivileges[strAccountName].Privileges;
             }
 
             return spReturn;
@@ -906,2604 +3170,18 @@ namespace PRoCon.Core.Remote {
 
         public void ExecuteCommand(List<string> lstCommand) {
             if (lstCommand != null) {
-                this.Parent.ExecutePRoConCommand(this, lstCommand, 0);
+                Parent.ExecutePRoConCommand(this, lstCommand, 0);
             }
         }
 
         public WeaponDictionary GetWeaponDefines() {
-            return (WeaponDictionary)this.Weapons.Clone();
+            return (WeaponDictionary) Weapons.Clone();
         }
 
         public SpecializationDictionary GetSpecializationDefines() {
-            return (SpecializationDictionary)this.Specializations.Clone();
+            return (SpecializationDictionary) Specializations.Clone();
         }
 
         #endregion
-
-        private void Connection_ConnectionClosed(FrostbiteConnection sender) {
-            //sender.PacketReceived -= new FrostbiteConnection.PacketDispatchHandler(Connection_PacketRecieved);
-
-            if (this.ConnectionClosed != null) {
-                FrostbiteConnection.RaiseEvent(this.ConnectionClosed.GetInvocationList(), this);
-            }
-        }
-
-        private void Connection_ConnectionFailure(FrostbiteConnection sender, Exception exception) {
-            this.State = ConnectionState.Error;
-
-            //sender.PacketReceived -= new FrostbiteConnection.PacketDispatchHandler(Connection_PacketRecieved);
-
-            if (this.ConnectionFailure != null) {
-                FrostbiteConnection.RaiseEvent(this.ConnectionFailure.GetInvocationList(), this, exception);
-            }
-        }
-
-        private void Connection_SocketException(FrostbiteConnection sender, SocketException se) {
-            this.State = ConnectionState.Error;
-
-            //sender.PacketReceived -= new FrostbiteConnection.PacketDispatchHandler(Connection_PacketRecieved);
-
-            if (this.SocketException != null) {
-                FrostbiteConnection.RaiseEvent(this.SocketException.GetInvocationList(), this, se);
-            }
-        }
-
-        private void InitialSetup() {
-            if (this.Game != null) {
-                this.m_blLoadingSavingConnectionConfig = true;
-
-                this.AssignEventHandlers();
-
-                // Assume full access until we're told otherwise.
-                this.Layer.Initialize(this.Parent, this);
-
-                // I may move these events to within Layer, depends on the end of the restructure.
-                this.Layer.LayerOnline += new PRoConLayer.LayerEmptyParameterHandler(Layer_LayerOnline);
-                this.Layer.LayerOffline += new PRoConLayer.LayerEmptyParameterHandler(Layer_LayerOffline);
-                this.Layer.AccountPrivileges.AccountPrivilegeAdded += new AccountPrivilegeDictionary.AccountPrivilegeAlteredHandler(AccountPrivileges_AccountPrivilegeAdded);
-                this.Layer.AccountPrivileges.AccountPrivilegeRemoved += new AccountPrivilegeDictionary.AccountPrivilegeAlteredHandler(AccountPrivileges_AccountPrivilegeRemoved);
-
-                foreach (AccountPrivilege apPriv in this.Layer.AccountPrivileges) {
-                    apPriv.AccountPrivilegesChanged += new AccountPrivilege.AccountPrivilegesChangedHandler(item_AccountPrivilegesChanged);
-                }
-
-                this.Privileges = new CPrivileges(CPrivileges.FullPrivilegesFlags);
-                this.EventsLogging = new EventCaptures(this);
-                this.Console = new ConnectionConsole(this);
-                this.PunkbusterConsole = new PunkbusterConsole(this);
-                this.ChatConsole = new ChatConsole(this);
-                this.PluginConsole = new PluginConsole(this);
-                this.MapGeometry = new MapGeometry(this);
-                this.MapGeometry.MapZones.MapZoneAdded += new MapZoneDictionary.MapZoneAlteredHandler(MapZones_MapZoneAdded);
-                this.MapGeometry.MapZones.MapZoneChanged += new MapZoneDictionary.MapZoneAlteredHandler(MapZones_MapZoneChanged);
-                this.MapGeometry.MapZones.MapZoneRemoved += new MapZoneDictionary.MapZoneAlteredHandler(MapZones_MapZoneRemoved);
-
-                if (this.CurrentServerInfo == null) {
-                    this.CurrentServerInfo = new CServerInfo();
-                }
-
-                this.ListSettings = new ListsSettings(this);
-                this.ServerSettings = new ServerSettings(this);
-                this.PlayerListSettings = new PlayerListSettings();
-                this.PlayerList = new PlayerDictionary();
-                this.TeamNameList = new List<CTeamName>();
-                this.MapListPool = new NotificationList<CMap>();
-                this.ReservedSlotList = new NotificationList<string>();
-                this.Variables = new VariableDictionary();
-                this.SV_Variables = new VariableDictionary();
-                this.Reasons = new NotificationList<string>();
-                this.FullVanillaBanList = new List<CBanInfo>();
-                this.FullTextChatModerationList = new TextChatModerationDictionary();
-                this.Weapons = new WeaponDictionary();
-                this.Specializations = new SpecializationDictionary();
-
-                if (Regex.Match(this.HostName, @"^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$").Success == true) {
-                    this.Variables.SetVariable("SERVER_COUNTRY", this.Parent.GetCountryName(this.HostName));
-                    this.Variables.SetVariable("SERVER_COUNTRY_CODE", this.Parent.GetCountryCode(this.HostName));
-                }
-                else {
-                    IPAddress ipServer = FrostbiteConnection.ResolveHostName(this.HostName);
-                    this.Variables.SetVariable("SERVER_COUNTRY", this.Parent.GetCountryName(ipServer.ToString()));
-                    this.Variables.SetVariable("SERVER_COUNTRY_CODE", this.Parent.GetCountryCode(ipServer.ToString()));
-                }
-
-                this.Console.Logging = this.Parent.OptionsSettings.ConsoleLogging;
-                this.EventsLogging.Logging = this.Parent.OptionsSettings.EventsLogging;
-                this.ChatConsole.Logging = this.Parent.OptionsSettings.ChatLogging;
-                this.PluginConsole.Logging = this.Parent.OptionsSettings.PluginLogging;
-
-                //this.m_blLoadingSavingConnectionConfig = true;
-
-                if (this.CurrentServerInfo.GameMod == GameMods.None) {
-                    this.ExecuteConnectionConfig(this.Game.GameType + ".def", 0, null, false);
-                }
-                else {
-                    this.ExecuteConnectionConfig(this.Game.GameType + "." + this.CurrentServerInfo.GameMod + ".def", 0, null, false);
-                }
-                
-                // load override global_vars.def
-                this.ExecuteGlobalVarsConfig("global_vars.def", 0, null);
-
-                this.ExecuteConnectionConfig("reasons.cfg", 0, null, false);
-
-                lock (this.Parent) {
-                    if (this.Username.Length == 0 || this.Parent.OptionsSettings.LayerHideLocalPlugins == false) {
-                        this.CompilePlugins(this.Parent.OptionsSettings.PluginPermissions);
-                    }
-                }
-
-                if (this.Parent.OptionsSettings.UsePluginOldStyleLoad == true) {
-                    this.ExecuteConnectionConfig(this.FileHostNamePort + ".cfg", 0, null, false);
-                }
-                
-                //this.m_blLoadingSavingConnectionConfig = false;
-
-                // this.ManuallyDisconnected = true;
-
-                // this.ConnectionError = false;
-
-                this.BeginLoginSequence();
-
-                if (this.Parent.OptionsSettings.UsePluginOldStyleLoad == false) {
-                    this.ExecuteConnectionConfig(this.FileHostNamePort + ".cfg", 0, null, true);
-                }
-
-                this.m_blLoadingSavingConnectionConfig = false;
-            }
-        }
-
-        private void BeginLoginSequence() {
-            if (this.Username.Length > 0) {
-                this.SendProconLoginUsernamePacket(this.Username);
-            }
-            else {
-                this.Game.SendLoginHashedPacket(this.Password);
-            }
-        }
-
-        private void Connection_PacketRecieved(FrostbiteConnection sender, bool isHandled, Packet packetBeforeDispatch) {
-
-            if (packetBeforeDispatch.OriginatedFromServer == false) {
-
-                Packet request = sender.GetRequestPacket(packetBeforeDispatch);
-
-                /*
-                if (request != null && String.Compare(request.Words[0], "serverInfo", true) == 0) {
-
-                    this.CurrentServerInfo = new CServerInfo(
-                        new List<string>() {
-                        "ServerName",
-                        "PlayerCount",
-                        "MaxPlayerCount",
-                        "GameMode",
-                        "Map",
-                        "CurrentRound",
-                        "TotalRounds",
-                        "TeamScores",
-                        "ConnectionState",
-                        "Ranked",
-                        "PunkBuster",
-                        "Passworded",
-                        "ServerUptime",
-                        "RoundTime",
-                        "GameMod", // Note: if another variable is affixed to both games this method
-                        "Mappack",  // will need to be split into MoHClient and BFBC2Client.
-                        "ExternalGameIpandPort",
-                        "PunkBusterVersion",
-                        "JoinQueueEnabled",
-                        "ServerRegion"
-                        }, packetBeforeDispatch.Words.GetRange(1, packetBeforeDispatch.Words.Count - 1)
-                    );
-                }
-                */
-                if (request != null && String.Compare(request.Words[0], "version", true) == 0) {
-
-                    if (this.Game == null) {
-
-                        if (String.Compare(packetBeforeDispatch.Words[1], "BFBC2", true) == 0) {
-                            this.Game = new BFBC2Client((FrostbiteConnection)sender);
-                            this.m_connection = null;
-                        }
-                        else if (String.Compare(packetBeforeDispatch.Words[1], "MOH", true) == 0) {
-                            this.Game = new MoHClient((FrostbiteConnection)sender);
-                            this.m_connection = null;
-                        }
-                        else if (String.Compare(packetBeforeDispatch.Words[1], "BF3", true) == 0) {
-                            this.Game = new BF3Client((FrostbiteConnection)sender);
-                            this.m_connection = null;
-                        }
-                        else if (String.Compare(packetBeforeDispatch.Words[1], "MOHW", true) == 0)
-                        {
-                            this.Game = new MOHWClient((FrostbiteConnection)sender);
-                            this.m_connection = null;
-                        }
-
-                        if (this.Game != null) {
-
-                            this.VersionNumber = packetBeforeDispatch.Words[2];
-
-                            this.Game.ServerInfo += new FrostbiteClient.ServerInfoHandler(this.OnServerInfo);
-                            this.Game.SendServerinfoPacket();
-
-                            //sender.SendQueued(new Packet(false, false, sender.AcquireSequenceNumber, "serverInfo"));
-                        }
-                    }
-                    else if (this.Game.Connection != null) {
-                        this.BeginLoginSequence();
-                    }
-
-                    sender.PacketReceived -= new FrostbiteConnection.PacketDispatchHandler(Connection_PacketRecieved);
-                }
-            }
-        }
-
-        private void Connection_ConnectSuccess(FrostbiteConnection sender) {
-
-            if (this.ConnectSuccess != null) {
-                FrostbiteConnection.RaiseEvent(this.ConnectSuccess.GetInvocationList(), this);
-            }
-
-            sender.PacketReceived -= new FrostbiteConnection.PacketDispatchHandler(Connection_PacketRecieved);
-            sender.PacketReceived += new FrostbiteConnection.PacketDispatchHandler(Connection_PacketRecieved);
-        }
-
-        private void m_connection_ConnectionReady(FrostbiteConnection sender) {
-            // Sleep the thread so the server has enough time to setup the listener.
-            // This is generally only problematic when connecting to local layers.
-            Thread.Sleep(50);
-
-            sender.SendQueued(new Packet(false, false, sender.AcquireSequenceNumber, "version"));
-
-        }
-
-        private void Connection_ConnectAttempt(FrostbiteConnection sender) {
-            if (this.ConnectAttempt != null) {
-                FrostbiteConnection.RaiseEvent(this.ConnectAttempt.GetInvocationList(), this);
-            }
-        }
-
-        private void Game_LoginFailure(FrostbiteClient sender, string strError) {
-            if (this.LoginFailure != null) {
-                this.State = ConnectionState.Error;
-
-                FrostbiteConnection.RaiseEvent(this.LoginFailure.GetInvocationList(), this, strError);
-            }
-        }
-
-        private void Game_Logout(FrostbiteClient sender) {
-            if (this.Logout != null) {
-                FrostbiteConnection.RaiseEvent(this.Logout.GetInvocationList(), this);
-            }
-        }
-
-        private void Game_Login(FrostbiteClient sender) {
-
-            // Now abuse the hell out the queue..
-            // TO DO: Make virtual helpers for all of these.
-            // ... Load up for each game type?  Some of these sent commands may not even be relevant to MoH.
-            /*
-            this.SendRequest(new List<string>() { "serverInfo" });
-            this.SendRequest(new List<string>() { "admin.listPlayers", "all" });
-
-            //this.SendRequest(new List<string>() { "version" });
-            this.SendRequest(new List<string>() { "admin.getPlaylist" });
-
-            this.SendRequest(new List<string>() { "reservedSlots.list" });
-            this.SendRequest(new List<string>() { "mapList.list", "rounds" });
-            this.SendRequest(new List<string>() { "vars.gamePassword" });
-            this.SendRequest(new List<string>() { "vars.gamePassword" });
-            this.SendRequest(new List<string>() { "vars.punkBuster" });
-            this.SendRequest(new List<string>() { "vars.hardCore" });
-            this.SendRequest(new List<string>() { "vars.ranked" });
-            this.SendRequest(new List<string>() { "vars.rankLimit" });
-            this.SendRequest(new List<string>() { "vars.teamBalance" });
-            this.SendRequest(new List<string>() { "vars.friendlyFire" });
-
-            this.SendRequest(new List<string>() { "vars.currentPlayerLimit" });
-            this.SendRequest(new List<string>() { "vars.maxPlayerLimit" });
-
-            this.SendRequest(new List<string>() { "vars.bannerUrl" });
-            this.SendRequest(new List<string>() { "vars.serverDescription" });
-            this.SendRequest(new List<string>() { "vars.killCam" });
-            this.SendRequest(new List<string>() { "vars.miniMap" });
-            this.SendRequest(new List<string>() { "vars.crossHair" });
-            this.SendRequest(new List<string>() { "vars.3dSpotting" });
-            this.SendRequest(new List<string>() { "vars.miniMapSpotting" });
-            this.SendRequest(new List<string>() { "vars.thirdPersonVehicleCameras" });
-            this.SendRequest(new List<string>() { "banList.list" });
-
-            this.SendRequest(new List<string>() { "vars.serverName" });
-
-            this.SendRequest(new List<string>() { "vars.idleTimeout" });
-            this.SendRequest(new List<string>() { "vars.profanityFilter" });
-            this.SendRequest(new List<string>() { "vars.teamKillCountForKick" });
-            this.SendRequest(new List<string>() { "vars.teamKillValueForKick" });
-            this.SendRequest(new List<string>() { "vars.teamKillValueIncrease" });
-            this.SendRequest(new List<string>() { "vars.teamKillValueDecreasePerSecond" });
-
-            this.SendRequest(new List<string>() { "punkBuster.pb_sv_command", "pb_sv_plist" });
-            */
-
-            if (this.m_gameModModified == true) {
-                if (this.CurrentServerInfo.GameMod == GameMods.None) {
-                    this.ExecuteConnectionConfig(this.Game.GameType + ".def", 0, null, false);
-                }
-                else {
-                    this.ExecuteConnectionConfig(this.Game.GameType + "." + this.CurrentServerInfo.GameMod + ".def", 0, null, false);
-                }
-
-                this.ExecuteGlobalVarsConfig("global_vars.def", 0, null);
-
-                lock (this.Parent) {
-                    if ((this.Parent.OptionsSettings.LayerHideLocalPlugins == false && this.IsPRoConConnection == true) || this.IsPRoConConnection == false) {
-                        this.CompilePlugins(this.Parent.OptionsSettings.PluginPermissions);
-                    }
-                }
-            }
-
-            if (this.IsPRoConConnection == true) {
-                this.SendRequest(new List<string>() { "procon.privileges" });
-                this.SendRequest(new List<string>() { "procon.registerUid", "true", FrostbiteClient.GeneratePasswordHash(Encoding.ASCII.GetBytes(DateTime.Now.ToString("HH:mm:ss ff")), this.m_strUsername) });
-                this.SendRequest(new List<string>() { "version" });
-                this.SendRequest(new List<string>() { "procon.version" });
-            }
-
-            this.Game.FetchStartupVariables();
-
-            // Occurs when they disconnect then reconnect a connection.
-            if (this.PluginsManager == null) {
-                if ((this.Parent.OptionsSettings.LayerHideLocalPlugins == false && this.IsPRoConConnection == true) || this.IsPRoConConnection == false) {
-                    this.CompilePlugins(this.Parent.OptionsSettings.PluginPermissions);
-                }
-            }
-
-            // This saves about 1.7 mb's per connection.  I'd prefer the plugins never compiled though if its connecting to a layer.
-            //if (this.IsPRoConConnection == true) { this.PluginsManager.Unload(); GC.Collect();  }
-            //if (this.Parent.OptionsSettings.LayerHideLocalPlugins == true && this.IsPRoConConnection == true) { this.PluginsManager.Unload(); GC.Collect(); }
-
-            this.ExecuteConnectionConfig("connection_onlogin.cfg", 0, null, false);
-
-            if (this.Login != null) {
-                FrostbiteConnection.RaiseEvent(this.Login.GetInvocationList(), this);
-            }
-
-            // Tasks
-
-            if (this.m_taskTimer == null) {
-                this.m_taskTimer = new System.Timers.Timer(1000);
-                this.m_taskTimer.Elapsed += new ElapsedEventHandler(m_taskTimer_Elapsed);
-                this.m_taskTimer.Start();
-            }
-            /*
-            if (this.m_thTasks == null) {
-                this.m_thTasks = new Thread(this.TaskExecuterThread);
-                this.m_isTasksRunning = true;
-                this.m_thTasks.Start();
-            }
-            */
-        }
-        
-        public void Shutdown() {
-            if (this.Game != null) {
-                this.Game.Shutdown();
-            }
-            else if (this.m_connection != null) {
-                this.m_connection.Shutdown();
-            }
-            else if (this.ConnectionClosed != null) {
-                FrostbiteConnection.RaiseEvent(this.ConnectionClosed.GetInvocationList(), this);
-            }
-        }
-
-        ///////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////
-
-        /*
-        public void Connect() {
-            // this.ManuallyDisconnected = false;
-
-
-            this.AttemptConnection();
-        }*/
-
-        public void Connect() {
-            if (this.State != ConnectionState.Connecting && this.State != ConnectionState.Connected || (this.State == ConnectionState.Connected && this.IsLoggedIn == false)) {
-
-                if (this.m_taskTimer != null) {
-                    this.m_taskTimer.Stop();
-                    this.m_taskTimer = null;
-                }
-                /*
-                if (this.m_thTasks != null) {
-
-                    try {
-                        this.m_thTasks.Abort();
-                    }
-                    catch (Exception) { }
-
-                    this.m_thTasks = null;
-                }
-                */
-                if (this.Game == null) {
-                    if (this.m_connection == null) {
-                        this.m_connection = new FrostbiteConnection(this.HostName, this.Port);
-                        this.m_connection.ConnectAttempt += new FrostbiteConnection.EmptyParamterHandler(Connection_ConnectAttempt);
-                        this.m_connection.ConnectionReady += new FrostbiteConnection.EmptyParamterHandler(m_connection_ConnectionReady);
-                        this.m_connection.ConnectSuccess += new FrostbiteConnection.EmptyParamterHandler(Connection_ConnectSuccess);
-                        //this.m_connection.PacketReceived += new FrostbiteConnection.PacketDispatchHandler(Connection_PacketRecieved);
-                        this.m_connection.SocketException += new FrostbiteConnection.SocketExceptionHandler(Connection_SocketException);
-                        this.m_connection.ConnectionFailure += new FrostbiteConnection.FailureHandler(Connection_ConnectionFailure);
-                        this.m_connection.ConnectionClosed += new FrostbiteConnection.EmptyParamterHandler(Connection_ConnectionClosed);
-                        this.m_connection.BeforePacketDispatch += new FrostbiteConnection.PrePacketDispatchedHandler(Connection_BeforePacketDispatch);
-                    }
-                    
-                    this.m_connection.AttemptConnection();
-                }
-                else if (this.Game.Connection != null && this.Game.Connection.IsConnected == false) {
-                    this.Game.Connection.AttemptConnection();
-                }
-            }
-        }
-        
-        #region Layer Events
-
-        private void Layer_LayerOffline() {
-            this.SaveConnectionConfig();
-        }
-
-        private void Layer_LayerOnline() {
-            this.SaveConnectionConfig();
-        }
-
-        private void AccountPrivileges_AccountPrivilegeRemoved(AccountPrivilege item) {
-            item.AccountPrivilegesChanged -= new AccountPrivilege.AccountPrivilegesChangedHandler(item_AccountPrivilegesChanged);
-
-            this.SaveConnectionConfig();
-        }
-
-        private void AccountPrivileges_AccountPrivilegeAdded(AccountPrivilege item) {
-            item.AccountPrivilegesChanged += new AccountPrivilege.AccountPrivilegesChangedHandler(item_AccountPrivilegesChanged);
-
-            this.SaveConnectionConfig();
-        }
-
-        private void item_AccountPrivilegesChanged(AccountPrivilege item) {
-            this.SaveConnectionConfig();
-        }
-
-        #endregion
-
-        private void ProConClient_PluginsCompiled(PRoConClient sender) {
-            if (this.PluginsManager != null) {
-                this.PluginsManager.PluginVariableAltered += new PluginManager.PluginVariableAlteredHandler(Plugins_PluginVariableAltered);
-                this.PluginsManager.PluginEnabled += new PluginManager.PluginEmptyParameterHandler(Plugins_PluginEnabled);
-                this.PluginsManager.PluginDisabled += new PluginManager.PluginEmptyParameterHandler(Plugins_PluginDisabled);
-
-                this.PluginsManager.PluginPanic += new PluginManager.PluginEventHandler(PluginsManager_PluginPanic);
-            }
-        }
-
-        void Plugins_PluginDisabled(string strClassName) {
-            this.SaveConnectionConfig();
-        }
-
-        void Plugins_PluginEnabled(string strClassName) {
-            this.SaveConnectionConfig();
-        }
-
-        private void Plugins_PluginVariableAltered(PluginDetails spdNewDetails) {
-            this.SaveConnectionConfig();
-        }
-
-        private void Connection_BeforePacketDispatch(FrostbiteConnection sender, Packet packetBeforeDispatch, out bool isProcessed) {
- 
-            bool blCancelPacket = false;
-            bool blCancelUpdateEvent = false;
-
-            this.InstigatingAccountName = String.Empty;
-
-            // IF it's a response to a packet we sent..
-            if (packetBeforeDispatch.OriginatedFromServer == false && packetBeforeDispatch.IsResponse == true) {
-
-                blCancelPacket = this.HandleResponsePacket(packetBeforeDispatch, blCancelUpdateEvent, blCancelPacket);
-            }
-            // ELSE IF it's an event initiated by the server (OnJoin, OnLeave, OnChat etc)
-            else if (packetBeforeDispatch.OriginatedFromServer == true && packetBeforeDispatch.IsResponse == false) {
-
-                blCancelPacket = this.HandleEventPacket(packetBeforeDispatch, blCancelPacket);
-            }
-
-            isProcessed = blCancelPacket;
-        }
-
-        private bool HandleEventPacket(Packet cpBeforePacketDispatch, bool blCancelPacket) {
-
-            if (cpBeforePacketDispatch.Words.Count >= 1 && String.Compare(cpBeforePacketDispatch.Words[0], "procon.shutdown", true) == 0) {
-                //this.SendPacket(new Packet(true, true, cpBeforePacketDispatch.SequenceNumber, new List<string>() { "OK" }));
-
-                this.State = ConnectionState.Error;
-                this.Connection_ConnectionFailure(this.Game.Connection, new Exception("The PRoCon layer has been shutdown by the host"));
-
-                this.Shutdown();
-                blCancelPacket = true;
-            }
-            else if (cpBeforePacketDispatch.Words.Count >= 2 && String.Compare(cpBeforePacketDispatch.Words[0], "procon.account.onLogin", true) == 0) {
-                //this.SendPacket(new Packet(true, true, cpBeforePacketDispatch.SequenceNumber, new List<string>() { "OK" }));
-
-                // Also able to get their privs as well if needed?
-                //this.m_uscParent.OnRemoteAccountLoggedIn(cpBeforePacketDispatch.Words[1], true);
-
-                if (this.RemoteAccountLoggedIn != null) {
-                    FrostbiteConnection.RaiseEvent(this.RemoteAccountLoggedIn.GetInvocationList(), this, cpBeforePacketDispatch.Words[1], true);
-                }
-
-                blCancelPacket = true;
-            }
-            else if (cpBeforePacketDispatch.Words.Count >= 2 && String.Compare(cpBeforePacketDispatch.Words[0], "procon.account.onLogout", true) == 0) {
-                //this.SendPacket(new Packet(true, true, cpBeforePacketDispatch.SequenceNumber, new List<string>() { "OK" }));
-
-                if (this.RemoteAccountLoggedIn != null) {
-                    FrostbiteConnection.RaiseEvent(this.RemoteAccountLoggedIn.GetInvocationList(), this, cpBeforePacketDispatch.Words[1], false);
-                }
-
-                blCancelPacket = true;
-            }
-            else if (cpBeforePacketDispatch.Words.Count >= 3 && String.Compare(cpBeforePacketDispatch.Words[0], "procon.account.onUidRegistered", true) == 0) {
-
-                if (this.m_dicUsernamesToUids.ContainsKey(cpBeforePacketDispatch.Words[2]) == true) {
-                    this.m_dicUsernamesToUids[cpBeforePacketDispatch.Words[2]] = cpBeforePacketDispatch.Words[1];
-                }
-                else {
-                    this.m_dicUsernamesToUids.Add(cpBeforePacketDispatch.Words[2], cpBeforePacketDispatch.Words[1]);
-                }
-
-                blCancelPacket = true;
-            }
-            else if (cpBeforePacketDispatch.Words.Count >= 2 && String.Compare(cpBeforePacketDispatch.Words[0], "procon.account.onCreated", true) == 0) {
-                //this.SendPacket(new Packet(true, true, cpBeforePacketDispatch.SequenceNumber, new List<string>() { "OK" }));
-
-                if (this.RemoteAccountCreated != null) {
-                    FrostbiteConnection.RaiseEvent(this.RemoteAccountCreated.GetInvocationList(), this, cpBeforePacketDispatch.Words[1]);
-                }
-
-                blCancelPacket = true;
-            }
-            else if (cpBeforePacketDispatch.Words.Count >= 2 && String.Compare(cpBeforePacketDispatch.Words[0], "procon.account.onDeleted", true) == 0) {
-                //this.SendPacket(new Packet(true, true, cpBeforePacketDispatch.SequenceNumber, new List<string>() { "OK" }));
-
-                if (this.RemoteAccountDeleted != null) {
-                    FrostbiteConnection.RaiseEvent(this.RemoteAccountDeleted.GetInvocationList(), this, cpBeforePacketDispatch.Words[1]);
-                }
-
-                blCancelPacket = true;
-            }
-            else if (cpBeforePacketDispatch.Words.Count >= 3 && String.Compare(cpBeforePacketDispatch.Words[0], "procon.account.onAltered", true) == 0) {
-                //this.SendPacket(new Packet(true, true, cpBeforePacketDispatch.SequenceNumber, new List<string>() { "OK" }));
-
-                UInt32 ui32Privileges = 0;
-                if (UInt32.TryParse(cpBeforePacketDispatch.Words[2], out ui32Privileges) == true) {
-                    CPrivileges spPrivs = new CPrivileges();
-                    spPrivs.PrivilegesFlags = ui32Privileges;
-
-                    if (this.ProconPrivileges != null && String.Compare(cpBeforePacketDispatch.Words[1], this.Username) == 0) {
-
-                        this.Privileges = spPrivs;
-
-                        FrostbiteConnection.RaiseEvent(this.ProconPrivileges.GetInvocationList(), this, spPrivs);
-                    }
-
-                    if (this.RemoteAccountAltered != null) {
-                        FrostbiteConnection.RaiseEvent(this.RemoteAccountAltered.GetInvocationList(), this, cpBeforePacketDispatch.Words[1], spPrivs);
-                    }
-
-                }
-
-                blCancelPacket = true;
-            }
-
-            else if (cpBeforePacketDispatch.Words.Count >= 2 && String.Compare(cpBeforePacketDispatch.Words[0], "procon.packages.onDownloading", true) == 0) {
-
-                if (this.PackageDownloading != null) {
-                    FrostbiteConnection.RaiseEvent(this.PackageDownloading.GetInvocationList(), this, cpBeforePacketDispatch.Words[1]);
-                }
-
-                blCancelPacket = true;
-            }
-            else if (cpBeforePacketDispatch.Words.Count >= 2 && String.Compare(cpBeforePacketDispatch.Words[0], "procon.packages.onDownloaded", true) == 0) {
-
-                if (this.PackageDownloaded != null) {
-                    FrostbiteConnection.RaiseEvent(this.PackageDownloaded.GetInvocationList(), this, cpBeforePacketDispatch.Words[1]);
-                }
-
-                blCancelPacket = true;
-            }
-            else if (cpBeforePacketDispatch.Words.Count >= 2 && String.Compare(cpBeforePacketDispatch.Words[0], "procon.packages.onInstalling", true) == 0) {
-
-                if (this.PackageInstalling != null) {
-                    FrostbiteConnection.RaiseEvent(this.PackageInstalling.GetInvocationList(), this, cpBeforePacketDispatch.Words[1]);
-                }
-
-                blCancelPacket = true;
-            }
-            else if (cpBeforePacketDispatch.Words.Count >= 3 && String.Compare(cpBeforePacketDispatch.Words[0], "procon.packages.onDownloadError", true) == 0) {
-
-                if (this.PackageDownloadError != null) {
-                    FrostbiteConnection.RaiseEvent(this.PackageDownloadError.GetInvocationList(), this, cpBeforePacketDispatch.Words[1], cpBeforePacketDispatch.Words[2]);
-                }
-
-                blCancelPacket = true;
-            }
-            else if (cpBeforePacketDispatch.Words.Count >= 3 && String.Compare(cpBeforePacketDispatch.Words[0], "procon.packages.onInstalled", true) == 0) {
-
-                bool restartRequired = false;
-
-                if (bool.TryParse(cpBeforePacketDispatch.Words[2], out restartRequired) == true) {
-                    if (this.PackageInstalled != null) {
-                        FrostbiteConnection.RaiseEvent(this.PackageInstalled.GetInvocationList(), this, cpBeforePacketDispatch.Words[1], restartRequired);
-                    }
-                }
-
-                blCancelPacket = true;
-            }
-
-
-            else if (cpBeforePacketDispatch.Words.Count >= 3 && String.Compare(cpBeforePacketDispatch.Words[0], "procon.chat.onConsole", true) == 0) {
-
-                long logTime = 0L;
-
-                if (long.TryParse(cpBeforePacketDispatch.Words[1], out logTime) == true) {
-                    if (this.ReadRemoteChatConsole != null) {
-                        FrostbiteConnection.RaiseEvent(this.ReadRemoteChatConsole.GetInvocationList(), this, DateTime.FromBinary(logTime), cpBeforePacketDispatch.Words[2]);
-                    }
-                }
-            }
-            else if (cpBeforePacketDispatch.Words.Count >= 3 && String.Compare(cpBeforePacketDispatch.Words[0], "procon.plugin.onConsole", true) == 0) {
-
-                long logTime = 0L;
-
-                if (long.TryParse(cpBeforePacketDispatch.Words[1], out logTime) == true) {
-                    if (this.ReadRemotePluginConsole != null) {
-                        FrostbiteConnection.RaiseEvent(this.ReadRemotePluginConsole.GetInvocationList(), this, DateTime.FromBinary(logTime), cpBeforePacketDispatch.Words[2]);
-                    }
-                }
-            }
-            else if (cpBeforePacketDispatch.Words.Count >= 3 && String.Compare(cpBeforePacketDispatch.Words[0], "procon.plugin.onVariablesAltered", true) == 0) {
-                //this.SendPacket(new Packet(true, true, cpBeforePacketDispatch.SequenceNumber, new List<string>() { "OK" }));
-
-                int i = 1;
-                List<CPluginVariable> lstVariables = new List<CPluginVariable>();
-                string strClassName = cpBeforePacketDispatch.Words[i++];
-
-                int iTotalVariables = 0;
-                if (int.TryParse(cpBeforePacketDispatch.Words[i++], out iTotalVariables) == true && i + (iTotalVariables * 3) <= cpBeforePacketDispatch.Words.Count) {
-                    for (int x = 0; x < (iTotalVariables * 3); x += 3) {
-                        lstVariables.Add(new CPluginVariable(cpBeforePacketDispatch.Words[i++], cpBeforePacketDispatch.Words[i++], cpBeforePacketDispatch.Words[i++]));
-                    }
-                }
-
-                if (this.RemotePluginVariables != null) {
-                    FrostbiteConnection.RaiseEvent(this.RemotePluginVariables.GetInvocationList(), this, strClassName, lstVariables);
-                }
-
-                blCancelPacket = true;
-            }
-            else if (cpBeforePacketDispatch.Words.Count >= 1 && String.Compare(cpBeforePacketDispatch.Words[0], "procon.plugin.onLoaded", true) == 0) {
-                //this.SendPacket(new Packet(true, true, cpBeforePacketDispatch.SequenceNumber, new List<string>() { "OK" }));
-
-                int i = 1;
-                if (i + 6 <= cpBeforePacketDispatch.Words.Count) {
-                    PluginDetails spdLoaded = new PluginDetails();
-
-                    spdLoaded.ClassName = cpBeforePacketDispatch.Words[i++];
-                    spdLoaded.Name = cpBeforePacketDispatch.Words[i++];
-                    spdLoaded.Author = cpBeforePacketDispatch.Words[i++];
-                    spdLoaded.Website = cpBeforePacketDispatch.Words[i++];
-                    spdLoaded.Version = cpBeforePacketDispatch.Words[i++];
-                    spdLoaded.Description = cpBeforePacketDispatch.Words[i++];
-
-                    spdLoaded.DisplayPluginVariables = new List<CPluginVariable>();
-                    spdLoaded.PluginVariables = new List<CPluginVariable>(); // Not used here.
-                    int iTotalVariables = 0;
-                    if (int.TryParse(cpBeforePacketDispatch.Words[i++], out iTotalVariables) == true && i + (iTotalVariables * 3) <= cpBeforePacketDispatch.Words.Count) {
-                        for (int x = 0; x < (iTotalVariables * 3); x += 3) {
-                            spdLoaded.DisplayPluginVariables.Add(new CPluginVariable(cpBeforePacketDispatch.Words[i++], cpBeforePacketDispatch.Words[i++], cpBeforePacketDispatch.Words[i++]));
-                        }
-                    }
-
-                    if (this.RemotePluginLoaded != null) {
-                        FrostbiteConnection.RaiseEvent(this.RemotePluginLoaded.GetInvocationList(), this, spdLoaded);
-                    }
-
-                }
-
-                blCancelPacket = true;
-            }
-            else if (cpBeforePacketDispatch.Words.Count >= 3 && String.Compare(cpBeforePacketDispatch.Words[0], "procon.plugin.onEnabled", true) == 0) {
-                //this.SendPacket(new Packet(true, true, cpBeforePacketDispatch.SequenceNumber, new List<string>() { "OK" }));
-
-                bool blEnabled = false;
-
-                if (bool.TryParse(cpBeforePacketDispatch.Words[2], out blEnabled) == true && this.RemotePluginEnabled != null) {
-
-                    FrostbiteConnection.RaiseEvent(this.RemotePluginEnabled.GetInvocationList(), this, cpBeforePacketDispatch.Words[1], blEnabled);
-                }
-
-                blCancelPacket = true;
-            }
-            else if (cpBeforePacketDispatch.Words.Count >= 4 && String.Compare(cpBeforePacketDispatch.Words[0], "procon.admin.onSay", true) == 0) {
-                //this.SendPacket(new Packet(true, true, cpBeforePacketDispatch.SequenceNumber, new List<string>() { "OK" }));
-
-                if (this.ProconAdminSaying != null) {
-                    FrostbiteConnection.RaiseEvent(this.ProconAdminSaying.GetInvocationList(), this, cpBeforePacketDispatch.Words[1], cpBeforePacketDispatch.Words[2], new CPlayerSubset(cpBeforePacketDispatch.Words.GetRange(3, cpBeforePacketDispatch.Words.Count - 3)));
-                }
-
-                if (this.PassLayerEvent != null) {
-                    FrostbiteConnection.RaiseEvent(this.PassLayerEvent.GetInvocationList(), this, cpBeforePacketDispatch);
-                }
-
-                blCancelPacket = true;
-            }
-            // MoHW R-6 hack
-            else if (cpBeforePacketDispatch.Words.Count >= 4 && this.Game.GameType == "MOHW" && String.Compare(cpBeforePacketDispatch.Words[0], "procon.admin.onYell", true) == 0) {
-                // this.SendPacket(new Packet(true, true, cpBeforePacketDispatch.SequenceNumber, new List<string>() { "OK" }));
-
-                int iDisplayDuration = 0;
-
-                if (this.ProconAdminYelling != null) {
-                    FrostbiteConnection.RaiseEvent(this.ProconAdminYelling.GetInvocationList(), this, cpBeforePacketDispatch.Words[1], cpBeforePacketDispatch.Words[2], iDisplayDuration, new CPlayerSubset(cpBeforePacketDispatch.Words.GetRange(4, cpBeforePacketDispatch.Words.Count - 4)));
-                }
-                if (this.PassLayerEvent != null) {
-                    FrostbiteConnection.RaiseEvent(this.PassLayerEvent.GetInvocationList(), this, cpBeforePacketDispatch);
-                }
-
-                blCancelPacket = true;
-            }
-            // hack end
-            else if (cpBeforePacketDispatch.Words.Count >= 5 && String.Compare(cpBeforePacketDispatch.Words[0], "procon.admin.onYell", true) == 0) {
-               // this.SendPacket(new Packet(true, true, cpBeforePacketDispatch.SequenceNumber, new List<string>() { "OK" }));
-
-                int iDisplayDuration = 0;
-
-                if (int.TryParse(cpBeforePacketDispatch.Words[3], out iDisplayDuration) == true) {
-
-                    if (this.ProconAdminYelling != null) {
-                        FrostbiteConnection.RaiseEvent(this.ProconAdminYelling.GetInvocationList(), this, cpBeforePacketDispatch.Words[1], cpBeforePacketDispatch.Words[2], iDisplayDuration, new CPlayerSubset(cpBeforePacketDispatch.Words.GetRange(4, cpBeforePacketDispatch.Words.Count - 4)));
-                    }
-
-                    if (this.PassLayerEvent != null) {
-                        FrostbiteConnection.RaiseEvent(this.PassLayerEvent.GetInvocationList(), this, cpBeforePacketDispatch);
-                    }
-                }
-
-                blCancelPacket = true;
-            }
-            // bf3 player.ping
-            else if (this.Game.GameType == "BF3" && cpBeforePacketDispatch.Words.Count >= 3 && String.Compare(cpBeforePacketDispatch.Words[0], "procon.admin.onPlayerPinged", true) == 0) {
-                int iPing = 0;
-                string strSoldierName = cpBeforePacketDispatch.Words[1];
-
-                if (int.TryParse(cpBeforePacketDispatch.Words[2], out iPing) == true) {
-                    if (iPing == 65535) { iPing = -1; }
-
-                    if (this.ProconAdminPinging != null) {
-                        FrostbiteConnection.RaiseEvent(this.ProconAdminPinging.GetInvocationList(), this, strSoldierName, iPing);
-                    }
-                    if (this.PassLayerEvent != null) {
-                        FrostbiteConnection.RaiseEvent(this.PassLayerEvent.GetInvocationList(), this, cpBeforePacketDispatch);
-                    }
-                }
-                blCancelPacket = true;
-            }
-            else if (cpBeforePacketDispatch.Words.Count >= 3 && String.Compare(cpBeforePacketDispatch.Words[0], "procon.updated", true) == 0) {
-                //this.SendPacket(new Packet(true, true, cpBeforePacketDispatch.SequenceNumber, new List<string>() { "OK" }));
-
-                foreach (KeyValuePair<string, string> registerUid in this.m_dicUsernamesToUids) {
-                    if (String.Compare(cpBeforePacketDispatch.Words[1], registerUid.Value) == 0) {
-                        this.InstigatingAccountName = registerUid.Key;
-                        break;
-                    }
-                }
-
-                // Only parse it if the UID is different from this connections registered UID.
-                if (String.Compare(cpBeforePacketDispatch.Words[1], this.m_strProconEventsUid) != 0) {
-                    List<string> lstAssumedRequestPacket = new List<string>(cpBeforePacketDispatch.Words);
-                    lstAssumedRequestPacket.RemoveRange(0, 2);
-
-                    Packet cpAssumedRequestPacket = new Packet(false, false, 0, lstAssumedRequestPacket);
-                    Packet cpAssumedResponsePacket = new Packet(false, true, 0, new List<string>() { "OK" });
-
-                    this.Game.DispatchResponsePacket(this.Game.Connection, cpAssumedResponsePacket, cpAssumedRequestPacket);
-
-                    cpAssumedRequestPacket = null;
-                    cpAssumedResponsePacket = null;
-
-                    if (this.PassLayerEvent != null) {
-                        FrostbiteConnection.RaiseEvent(this.PassLayerEvent.GetInvocationList(), this, cpBeforePacketDispatch);
-                    }
-                }
-
-                blCancelPacket = true;
-            }
-
-            else if (cpBeforePacketDispatch.Words.Count >= 2 && String.Compare(cpBeforePacketDispatch.Words[0], "procon.battlemap.onZoneRemoved", true) == 0) {
-                if (this.MapZoneDeleted != null) {
-                    FrostbiteConnection.RaiseEvent(this.MapZoneDeleted.GetInvocationList(), this, new MapZoneDrawing(cpBeforePacketDispatch.Words[1], String.Empty, String.Empty, null, true));
-                }
-            }
-
-            else if (cpBeforePacketDispatch.Words.Count >= 4 && String.Compare(cpBeforePacketDispatch.Words[0], "procon.battlemap.onZoneCreated", true) == 0) {
-                //this.SendPacket(new Packet(true, true, cpBeforePacketDispatch.SequenceNumber, new List<string>() { "OK" }));
-
-                int iPoints = 0;
-
-                if (int.TryParse(cpBeforePacketDispatch.Words[3], out iPoints) == true) {
-
-                    Point3D[] points = new Point3D[iPoints];
-
-                    for (int i = 0; i < iPoints; i++) {
-                        points[i] = new Point3D(cpBeforePacketDispatch.Words[3 + i * 3 + 1], cpBeforePacketDispatch.Words[3 + i * 3 + 2], cpBeforePacketDispatch.Words[3 + i * 3 + 3]);
-                    }
-
-                    if (this.MapZoneCreated != null) {
-                        FrostbiteConnection.RaiseEvent(this.MapZoneCreated.GetInvocationList(), this, new MapZoneDrawing(cpBeforePacketDispatch.Words[1], cpBeforePacketDispatch.Words[2], String.Empty, points, true));
-                    }
-                }
-
-                blCancelPacket = true;
-            }
-
-            else if (cpBeforePacketDispatch.Words.Count >= 3 && String.Compare(cpBeforePacketDispatch.Words[0], "procon.battlemap.onZoneModified", true) == 0) {
-                //this.SendPacket(new Packet(true, true, cpBeforePacketDispatch.SequenceNumber, new List<string>() { "OK" }));
-
-                int iPoints = 0;
-
-                if (int.TryParse(cpBeforePacketDispatch.Words[3], out iPoints) == true) {
-
-                    Point3D[] points = new Point3D[iPoints];
-
-                    for (int i = 0; i < iPoints; i++) {
-                        points[i] = new Point3D(cpBeforePacketDispatch.Words[3 + i * 3 + 1], cpBeforePacketDispatch.Words[3 + i * 3 + 2], cpBeforePacketDispatch.Words[3 + i * 3 + 3]);
-                    }
-
-                    if (this.MapZoneModified != null) {
-                        FrostbiteConnection.RaiseEvent(this.MapZoneModified.GetInvocationList(), this, new MapZoneDrawing(cpBeforePacketDispatch.Words[1], String.Empty, cpBeforePacketDispatch.Words[2], points, true));
-                    }
-                }
-
-                blCancelPacket = true;
-            }
-
-
-            else if (cpBeforePacketDispatch.Words.Count >= 3 && String.Compare(cpBeforePacketDispatch.Words[0], "procon.vars.onAltered", true) == 0) {
-                //this.SendPacket(new Packet(true, true, cpBeforePacketDispatch.SequenceNumber, new List<string>() { "OK" }));
-
-                this.SV_Variables.SetVariable(cpBeforePacketDispatch.Words[1], cpBeforePacketDispatch.Words[2]);
-
-                if (this.ReceiveProconVariable != null) {
-                    FrostbiteConnection.RaiseEvent(this.ReceiveProconVariable.GetInvocationList(), this, cpBeforePacketDispatch.Words[1], cpBeforePacketDispatch.Words[2]);
-                }
-
-                blCancelPacket = true;
-            }
-
-            else { //  if (blCommandConnection == false) Pass everything else onto any connected clients..
-                if (this.PassLayerEvent != null) {
-                    FrostbiteConnection.RaiseEvent(this.PassLayerEvent.GetInvocationList(), this, cpBeforePacketDispatch);
-                }
-            }
-
-            return blCancelPacket;
-        }
-
-        private bool HandleResponsePacket(Packet cpBeforePacketDispatch, bool blCancelUpdateEvent, bool blCancelPacket) {
-
-            if (this.Game != null) {
-
-                Packet cpRequestPacket = this.Game.Connection.GetRequestPacket(cpBeforePacketDispatch);
-
-                if (cpRequestPacket != null) {
-
-                    if (cpBeforePacketDispatch.Words.Count >= 1 && String.Compare(cpBeforePacketDispatch.Words[0], "InvalidUsername", true) == 0) {
-
-                        if (this.LoginFailure != null) {
-                            FrostbiteConnection.RaiseEvent(this.LoginFailure.GetInvocationList(), this, cpBeforePacketDispatch.Words[0]);
-                        }
-
-                        this.Shutdown();
-                        this.State = ConnectionState.Error;
-
-                        blCancelPacket = true;
-                    }
-                    else if (cpRequestPacket.Words.Count >= 1 && String.Compare(cpRequestPacket.Words[0], "procon.version", true) == 0 && cpBeforePacketDispatch.Words.Count >= 2) {
-
-                        try {
-                            this.ConnectedLayerVersion = new Version(cpBeforePacketDispatch.Words[1]);
-
-                            if (this.ProconVersion != null) {
-                                FrostbiteConnection.RaiseEvent(this.ProconVersion.GetInvocationList(), this, this.ConnectedLayerVersion);
-                            }
-                        }
-                        catch (Exception) { }
-
-                        blCancelPacket = true;
-                    }
-                    else if (cpRequestPacket.Words.Count >= 1 && String.Compare(cpRequestPacket.Words[0], "procon.privileges", true) == 0 && cpBeforePacketDispatch.Words.Count >= 2) {
-
-                        UInt32 ui32Privileges = 0;
-                        if (UInt32.TryParse(cpBeforePacketDispatch.Words[1], out ui32Privileges) == true) {
-                            CPrivileges spPrivs = new CPrivileges();
-                            spPrivs.PrivilegesFlags = ui32Privileges;
-
-                            this.Privileges = spPrivs;
-
-                            if (this.ProconPrivileges != null) {
-                                FrostbiteConnection.RaiseEvent(this.ProconPrivileges.GetInvocationList(), this, spPrivs);
-                            }
-                        }
-
-                        blCancelPacket = true;
-                    }
-                    else if (cpRequestPacket.Words.Count >= 2 && String.Compare(cpRequestPacket.Words[0], "procon.registerUid", true) == 0 && cpBeforePacketDispatch.Words.Count >= 1) {
-
-                        if (String.Compare(cpBeforePacketDispatch.Words[0], "OK", true) == 0 && cpRequestPacket.Words.Count >= 3) {
-                            this.m_strProconEventsUid = cpRequestPacket.Words[2];
-                        }
-                        else if (String.Compare(cpBeforePacketDispatch.Words[0], "ProconUidConflict", true) == 0) {
-                            // Conflict in our UID, just hash and send another one.
-                            // Then go to vegas.
-                            this.SendRequest(new List<string>() { "procon.registerUid", "true", FrostbiteClient.GeneratePasswordHash(Encoding.ASCII.GetBytes(DateTime.Now.ToString("HH:mm:ss ff")), this.m_strUsername) });
-                        }
-
-                        blCancelPacket = true;
-                    }
-                    else if (cpRequestPacket.Words.Count >= 1 && String.Compare(cpRequestPacket.Words[0], "procon.account.listAccounts", true) == 0) {
-
-                        UInt32 ui32Privileges = 0;
-
-                        for (int i = 1; i < cpBeforePacketDispatch.Words.Count; i += 2) {
-                            if (UInt32.TryParse(cpBeforePacketDispatch.Words[i + 1], out ui32Privileges) == true) {
-                                CPrivileges spPrivs = new CPrivileges();
-                                spPrivs.PrivilegesFlags = ui32Privileges;
-
-                                if (this.RemoteAccountCreated != null && this.RemoteAccountAltered != null) {
-                                    FrostbiteConnection.RaiseEvent(this.RemoteAccountCreated.GetInvocationList(), this, cpBeforePacketDispatch.Words[i]);
-                                    FrostbiteConnection.RaiseEvent(this.RemoteAccountAltered.GetInvocationList(), this, cpBeforePacketDispatch.Words[i], spPrivs);
-                                }
-                            }
-                        }
-
-                        blCancelPacket = true;
-                    }
-                    else if (cpRequestPacket.Words.Count >= 1 && String.Compare(cpRequestPacket.Words[0], "procon.battlemap.listZones", true) == 0 && cpBeforePacketDispatch.Words.Count >= 2 && String.Compare(cpBeforePacketDispatch.Words[0], "OK", true) == 0) {
-
-                        List<MapZoneDrawing> zones = new List<MapZoneDrawing>();
-
-                        int iZones = 0;
-                        int iOffset = 1;
-
-                        if (int.TryParse(cpBeforePacketDispatch.Words[iOffset++], out iZones) == true) {
-
-                            for (int iZoneCount = 0; iZoneCount < iZones; iZoneCount++) {
-
-                                string uid = String.Empty;
-                                string level = String.Empty;
-                                string tags = String.Empty;
-                                List<Point3D> points = new List<Point3D>();
-
-                                if (iOffset + 4 < cpBeforePacketDispatch.Words.Count) {
-
-                                    uid = cpBeforePacketDispatch.Words[iOffset++];
-                                    level = cpBeforePacketDispatch.Words[iOffset++];
-                                    tags = cpBeforePacketDispatch.Words[iOffset++];
-
-                                    int iZonePoints = 0;
-                                    if (int.TryParse(cpBeforePacketDispatch.Words[iOffset++], out iZonePoints) == true && iOffset + iZonePoints * 3 <= cpBeforePacketDispatch.Words.Count) {
-
-                                        for (int iZonePointCount = 0; iZonePointCount < iZonePoints && iOffset + 3 <= cpBeforePacketDispatch.Words.Count; iZonePointCount++) {
-                                            points.Add(new Point3D(cpBeforePacketDispatch.Words[iOffset++], cpBeforePacketDispatch.Words[iOffset++], cpBeforePacketDispatch.Words[iOffset++]));
-                                        }
-
-                                    }
-                                }
-
-                                zones.Add(new MapZoneDrawing(uid, level, tags, points.ToArray(), true));
-                            }
-                        }
-
-                        if (this.ListMapZones != null) {
-                            FrostbiteConnection.RaiseEvent(this.ListMapZones.GetInvocationList(), this, zones);
-                        }
-
-                        blCancelPacket = true;
-                    }
-
-
-                    else if (cpRequestPacket.Words.Count >= 1 && String.Compare(cpRequestPacket.Words[0], "procon.account.setPassword", true) == 0 && cpBeforePacketDispatch.Words.Count >= 1 && String.Compare(cpBeforePacketDispatch.Words[0], "OK", true) == 0) {
-
-                        if (this.RemoteAccountChangePassword != null) {
-                            FrostbiteConnection.RaiseEvent(this.RemoteAccountChangePassword.GetInvocationList(), this);
-                        }
-
-                        blCancelPacket = true;
-                    }
-                    else if (cpRequestPacket.Words.Count >= 1 && String.Compare(cpRequestPacket.Words[0], "procon.account.listLoggedIn", true) == 0) {
-
-                        bool containsUids = (cpRequestPacket.Words.Count >= 2 && String.Compare(cpRequestPacket.Words[1], "uids") == 0);
-
-                        if (this.RemoteAccountLoggedIn != null) {
-                            for (int i = 1; i < cpBeforePacketDispatch.Words.Count; i++) {
-                                FrostbiteConnection.RaiseEvent(this.RemoteAccountLoggedIn.GetInvocationList(), this, cpBeforePacketDispatch.Words[i], true);
-
-                                if (containsUids == true && i + 1 < cpBeforePacketDispatch.Words.Count) {
-
-                                    if (this.m_dicUsernamesToUids.ContainsKey(cpBeforePacketDispatch.Words[i]) == true) {
-                                        this.m_dicUsernamesToUids[cpBeforePacketDispatch.Words[i]] = cpBeforePacketDispatch.Words[i + 1];
-                                    }
-                                    else {
-                                        this.m_dicUsernamesToUids.Add(cpBeforePacketDispatch.Words[i], cpBeforePacketDispatch.Words[i + 1]);
-                                    }
-
-                                    i++;
-                                }
-                            }
-                        }
-
-                        blCancelPacket = true;
-                    }
-
-                    else if (cpRequestPacket.Words.Count >= 1 && String.Compare(cpRequestPacket.Words[0], "procon.plugin.listEnabled", true) == 0) {
-
-                        if (this.RemoteEnabledPlugins != null) {
-                            List<string> lstEnabledPlugins = new List<string>(cpBeforePacketDispatch.Words);
-                            lstEnabledPlugins.RemoveAt(0);
-
-                            FrostbiteConnection.RaiseEvent(this.RemoteEnabledPlugins.GetInvocationList(), this, lstEnabledPlugins);
-                        }
-
-                        blCancelPacket = true;
-                    }
-                    else if (cpRequestPacket.Words.Count >= 1 && String.Compare(cpRequestPacket.Words[0], "procon.vars", true) == 0 && cpBeforePacketDispatch.Words.Count >= 3) {
-                        this.SV_Variables.SetVariable(cpBeforePacketDispatch.Words[1], cpBeforePacketDispatch.Words[2]);
-
-                        if (this.ReceiveProconVariable != null) {
-                            FrostbiteConnection.RaiseEvent(this.ReceiveProconVariable.GetInvocationList(), this, cpBeforePacketDispatch.Words[1], cpBeforePacketDispatch.Words[2]);
-                        }
-                        // Dispatch to plugins.
-                    }
-                    else if (cpRequestPacket.Words.Count >= 1 && String.Compare(cpRequestPacket.Words[0], "procon.plugin.listLoaded", true) == 0) {
-
-                        if (this.RemoteLoadedPlugins != null) {
-
-                            int i = 0;
-                            if (cpBeforePacketDispatch.Words.Count >= 1 && String.Compare(cpBeforePacketDispatch.Words[i++], "OK", true) == 0) {
-
-                                Dictionary<string, PluginDetails> dicLoadedPlugins = new Dictionary<string, PluginDetails>();
-
-                                while (i + 6 <= cpBeforePacketDispatch.Words.Count) {
-                                    PluginDetails spdLoaded = new PluginDetails();
-
-                                    spdLoaded.ClassName = cpBeforePacketDispatch.Words[i++];
-                                    spdLoaded.Name = cpBeforePacketDispatch.Words[i++];
-                                    spdLoaded.Author = cpBeforePacketDispatch.Words[i++];
-                                    spdLoaded.Website = cpBeforePacketDispatch.Words[i++];
-                                    spdLoaded.Version = cpBeforePacketDispatch.Words[i++];
-                                    spdLoaded.Description = cpBeforePacketDispatch.Words[i++];
-
-                                    spdLoaded.DisplayPluginVariables = new List<CPluginVariable>();
-                                    spdLoaded.PluginVariables = new List<CPluginVariable>(); // Not used here.
-                                    int iTotalVariables = 0;
-                                    if (int.TryParse(cpBeforePacketDispatch.Words[i++], out iTotalVariables) == true && i + (iTotalVariables * 3) <= cpBeforePacketDispatch.Words.Count) {
-                                        for (int x = 0; x < (iTotalVariables * 3); x += 3) {
-                                            spdLoaded.DisplayPluginVariables.Add(new CPluginVariable(cpBeforePacketDispatch.Words[i++], cpBeforePacketDispatch.Words[i++], cpBeforePacketDispatch.Words[i++]));
-                                        }
-                                    }
-
-                                    if (dicLoadedPlugins.ContainsKey(spdLoaded.ClassName) == false) {
-                                        dicLoadedPlugins.Add(spdLoaded.ClassName, spdLoaded);
-                                    }
-                                }
-
-                                FrostbiteConnection.RaiseEvent(this.RemoteLoadedPlugins.GetInvocationList(), this, dicLoadedPlugins);
-                            }
-
-                        }
-
-                        blCancelPacket = true;
-                    }
-                    else if (cpRequestPacket.Words.Count >= 2 && String.Compare(cpRequestPacket.Words[0], "login.hashed", true) == 0 && cpBeforePacketDispatch.Words.Count >= 1 && String.Compare(cpBeforePacketDispatch.Words[0], "InsufficientPrivileges", true) == 0) {
-
-                        if (this.LoginFailure != null) {
-                            FrostbiteConnection.RaiseEvent(this.LoginFailure.GetInvocationList(), this, cpBeforePacketDispatch.Words[0]);
-                        }
-
-                        this.Shutdown();
-                        this.State = ConnectionState.Error;
-
-                        blCancelPacket = true;
-                    }
-                    else if (cpRequestPacket.Words.Count >= 2 && String.Compare(cpRequestPacket.Words[0], "procon.login.username", true) == 0 && cpBeforePacketDispatch.Words.Count >= 1 && (String.Compare(cpBeforePacketDispatch.Words[0], "OK", true) == 0 || String.Compare(cpBeforePacketDispatch.Words[0], "UnknownCommand", true) == 0)) {
-                        //this.send(new Packet(true, true, cpBeforePacketDispatch.SequenceNumber, new List<string>() { "procon.login.requestUsername", this.m_strUsername }));
-
-                        // This is the first command we would recieve so now we know we're connected through a PRoCon layer.
-                        if (this.LoginAttempt != null) {
-                            FrostbiteConnection.RaiseEvent(this.LoginAttempt.GetInvocationList(), this);
-                        }
-
-                        this.Game.SendLoginHashedPacket(this.Password);
-
-                        if (String.Compare(cpBeforePacketDispatch.Words[0], "OK", true) == 0) {
-                            this.IsPRoConConnection = true;
-                            this.Game.isLayered = true;
-                        }
-                        else {
-                            this.IsPRoConConnection = false;
-                            this.Username = "";
-                        }
-
-                        blCancelPacket = true;
-                    }
-                    else if (cpRequestPacket.Words.Count >= 2 && String.Compare(cpRequestPacket.Words[0], "procon.login.username", true) == 0 && cpBeforePacketDispatch.Words.Count >= 1 && String.Compare(cpBeforePacketDispatch.Words[0], "InsufficientPrivileges", true) == 0) {
-                        // The servers just told us off, try and login normally.
-                        if (this.LoginFailure != null) {
-                            FrostbiteConnection.RaiseEvent(this.LoginFailure.GetInvocationList(), this, cpBeforePacketDispatch.Words[0]);
-                        }
-
-                        this.Shutdown();
-                        this.State = ConnectionState.Error;
-
-                        blCancelPacket = true;
-                    }
-                    else if (cpRequestPacket.Words.Count >= 3 && String.Compare(cpRequestPacket.Words[0], "admin.say", true) == 0 && this.m_dicForwardedPackets.ContainsKey(cpBeforePacketDispatch.SequenceNumber) == true) {
-                        if (this.m_dicForwardedPackets[cpBeforePacketDispatch.SequenceNumber].m_lstWords.Count >= 4 && String.Compare(this.m_dicForwardedPackets[cpBeforePacketDispatch.SequenceNumber].m_lstWords[0], "procon.admin.say", true) == 0) {
-                            this.m_dicForwardedPackets[cpBeforePacketDispatch.SequenceNumber].m_lstWords[0] = "procon.admin.onSay";
-
-                            if (this.IsPRoConConnection == false) {
-                                List<string> lstWords = this.m_dicForwardedPackets[cpBeforePacketDispatch.SequenceNumber].m_lstWords;
-
-                                if (this.ProconAdminSaying != null) {
-                                    FrostbiteConnection.RaiseEvent(this.ProconAdminSaying.GetInvocationList(), this, lstWords[1], lstWords[2], new CPlayerSubset(lstWords.GetRange(3, lstWords.Count - 3)));
-                                }
-                            }
-
-                            if (this.PassLayerEvent != null) {
-                                FrostbiteConnection.RaiseEvent(this.PassLayerEvent.GetInvocationList(), this, new Packet(true, false, cpRequestPacket.SequenceNumber, this.m_dicForwardedPackets[cpBeforePacketDispatch.SequenceNumber].m_lstWords));
-                            }
-
-                            // Send to all logged in layer clients
-                            this.m_dicForwardedPackets.Remove(cpBeforePacketDispatch.SequenceNumber);
-                            blCancelPacket = true;
-                            blCancelUpdateEvent = true;
-                        }
-                    }
-                    else if (cpRequestPacket.Words.Count >= 4 && String.Compare(cpRequestPacket.Words[0], "admin.yell", true) == 0 && this.m_dicForwardedPackets.ContainsKey(cpBeforePacketDispatch.SequenceNumber) == true) {
-                        if (this.m_dicForwardedPackets[cpBeforePacketDispatch.SequenceNumber].m_lstWords.Count >= 5 && String.Compare(this.m_dicForwardedPackets[cpBeforePacketDispatch.SequenceNumber].m_lstWords[0], "procon.admin.yell", true) == 0) {
-                            this.m_dicForwardedPackets[cpBeforePacketDispatch.SequenceNumber].m_lstWords[0] = "procon.admin.onYell";
-
-                            // If we're at the top of the tree, simulate the event coming from a layer above.
-                            if (this.IsPRoConConnection == false) {
-                                List<string> lstWords = this.m_dicForwardedPackets[cpBeforePacketDispatch.SequenceNumber].m_lstWords;
-
-                                int iDisplayDuration = 0;
-
-                                if (int.TryParse(lstWords[3], out iDisplayDuration) == true) {
-
-                                    if (this.ProconAdminYelling != null) {
-                                        FrostbiteConnection.RaiseEvent(this.ProconAdminYelling.GetInvocationList(), this, lstWords[1], lstWords[2], iDisplayDuration, new CPlayerSubset(lstWords.GetRange(4, lstWords.Count - 4)));
-                                    }
-                                }
-                            }
-
-                            // Send to all logged in layer clients
-                            if (this.PassLayerEvent != null) {
-                                FrostbiteConnection.RaiseEvent(this.PassLayerEvent.GetInvocationList(), this, new Packet(true, false, cpRequestPacket.SequenceNumber, this.m_dicForwardedPackets[cpBeforePacketDispatch.SequenceNumber].m_lstWords));
-                            }
-
-                            this.m_dicForwardedPackets.Remove(cpBeforePacketDispatch.SequenceNumber);
-                            blCancelPacket = true;
-                            blCancelUpdateEvent = true;
-                        }
-                    }
-                    // MoHW R-6 hack
-                    else if (cpRequestPacket.Words.Count >= 3 && this.Game.GameType == "MOHW" && String.Compare(cpRequestPacket.Words[0], "admin.yell", true) == 0 && this.m_dicForwardedPackets.ContainsKey(cpBeforePacketDispatch.SequenceNumber) == true) {
-                        if (this.m_dicForwardedPackets[cpBeforePacketDispatch.SequenceNumber].m_lstWords.Count >= 4 && String.Compare(this.m_dicForwardedPackets[cpBeforePacketDispatch.SequenceNumber].m_lstWords[0], "procon.admin.yell", true) == 0) {
-                            this.m_dicForwardedPackets[cpBeforePacketDispatch.SequenceNumber].m_lstWords[0] = "procon.admin.onYell";
-
-                            // If we're at the top of the tree, simulate the event coming from a layer above.
-                            if (this.IsPRoConConnection == false) {
-                                List<string> lstWords = this.m_dicForwardedPackets[cpBeforePacketDispatch.SequenceNumber].m_lstWords;
-
-                                int iDisplayDuration = 0;
-                                if (int.TryParse(lstWords[3], out iDisplayDuration) == true) {
-                                    iDisplayDuration = 0;
-                                    if (this.ProconAdminYelling != null)
-                                    {
-                                        FrostbiteConnection.RaiseEvent(this.ProconAdminYelling.GetInvocationList(), this, lstWords[1], lstWords[2], iDisplayDuration, new CPlayerSubset(lstWords.GetRange(4, lstWords.Count - 4)));
-                                    }
-                                }
-
-                            }
-
-                            // Send to all logged in layer clients
-                            if (this.PassLayerEvent != null) {
-                                FrostbiteConnection.RaiseEvent(this.PassLayerEvent.GetInvocationList(), this, new Packet(true, false, cpRequestPacket.SequenceNumber, this.m_dicForwardedPackets[cpBeforePacketDispatch.SequenceNumber].m_lstWords));
-                            }
-
-                            this.m_dicForwardedPackets.Remove(cpBeforePacketDispatch.SequenceNumber);
-                            blCancelPacket = true;
-                            blCancelUpdateEvent = true;
-                        }
-                    }
-                    // end hack
-                    // BF3 player.ping
-                    else if (cpRequestPacket.Words.Count >= 2 && this.Game.GameType == "BF3" && String.Compare(cpRequestPacket.Words[0], "player.ping", true) == 0
-                             && String.Compare(cpBeforePacketDispatch.Words[0], "OK", true) == 0) {
-                        
-                        string strProconEventsUid = String.Empty;
-
-                        List<string> lstProconUpdatedWords = new List<string>(cpRequestPacket.Words);
-                        lstProconUpdatedWords.Insert(0, "procon.admin.onPlayerPinged");
-                        lstProconUpdatedWords.RemoveAt(1);
-                        lstProconUpdatedWords.Add(cpBeforePacketDispatch.Words[1]);
-                        // Now we pass on the packet to all the clients as an event so they can remain in sync.
-
-                        // Don't pass on anything regarding login
-                        if ((lstProconUpdatedWords.Count >= 4 && (String.Compare(lstProconUpdatedWords[2], "login.plainText", true) == 0 || String.Compare(lstProconUpdatedWords[2], "login.hashed", true) == 0)) == false) {
-                            if (this.PassLayerEvent != null) {
-                                FrostbiteConnection.RaiseEvent(this.PassLayerEvent.GetInvocationList(), this, new Packet(true, false, cpRequestPacket.SequenceNumber, lstProconUpdatedWords));
-                            }
-                        }
-                    }
-
-                    if (blCancelUpdateEvent == false) {
-                        string strProconEventsUid = String.Empty;
-
-                        // If a layer client sent this packet..
-                        if (this.m_dicForwardedPackets.ContainsKey(cpBeforePacketDispatch.SequenceNumber) == true) {
-                            if (this.m_dicForwardedPackets[cpBeforePacketDispatch.SequenceNumber].m_sender != null) {
-                                ((PRoConLayerClient)this.m_dicForwardedPackets[cpBeforePacketDispatch.SequenceNumber].m_sender).OnServerForwardedResponse(new Packet(false, true, this.m_dicForwardedPackets[cpBeforePacketDispatch.SequenceNumber].m_ui32OriginalSequence, new List<string>(cpBeforePacketDispatch.Words)));
-
-                                strProconEventsUid = ((PRoConLayerClient)this.m_dicForwardedPackets[cpBeforePacketDispatch.SequenceNumber].m_sender).ProconEventsUid;
-
-                                this.InstigatingAccountName = this.m_dicForwardedPackets[cpBeforePacketDispatch.SequenceNumber].m_sender.Username;
-                            }
-
-                            // Unregister the sequence and packet.
-                            this.m_dicForwardedPackets.Remove(cpBeforePacketDispatch.SequenceNumber);
-                        }
-
-                        // IF the command was not a request for a list (it's a GET operation only,
-                        // as in it only lists or retrieves information and will never be set.)
-
-                        if (this.Game != null && this.Game.GetPacketsPattern.IsMatch(cpRequestPacket.ToString()) == false) { // && cpBeforePacketDispatch.Words.Count >= 1 && String.Compare(cpBeforePacketDispatch.Words[0], "OK") == 0) {
-                            List<string> lstProconUpdatedWords = new List<string>(cpRequestPacket.Words);
-                            lstProconUpdatedWords.Insert(0, "procon.updated");
-                            lstProconUpdatedWords.Insert(1, strProconEventsUid);
-                            // Now we pass on the packet to all the clients as an event so they can remain in sync.
-
-                            // Don't pass on anything regarding login
-                            if ((lstProconUpdatedWords.Count >= 4 && (String.Compare(lstProconUpdatedWords[2], "login.plainText", true) == 0 || String.Compare(lstProconUpdatedWords[2], "login.hashed", true) == 0)) == false) {
-                                if (this.PassLayerEvent != null) {
-                                    FrostbiteConnection.RaiseEvent(this.PassLayerEvent.GetInvocationList(), this, new Packet(true, false, cpRequestPacket.SequenceNumber, lstProconUpdatedWords));
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            return blCancelPacket;
-        }
-
-        #region General methods
-
-        public int GetLocalizedTeamNameCount(string mapFilename, string playlist) {
-
-            int teamCount = 0;
-
-            foreach (CTeamName team in this.TeamNameList) {
-                if (String.IsNullOrEmpty(playlist) == false && String.IsNullOrEmpty(team.Playlist) == false) {
-                    if (String.Compare(team.MapFilename, mapFilename, true) == 0 && String.Compare(team.Playlist, playlist, true) == 0) {
-                        teamCount++;
-                    }
-                }
-                else {
-                    if (String.Compare(team.MapFilename, mapFilename, true) == 0) {
-                        teamCount++;
-                    }
-                }
-            }
-
-            return teamCount;
-        }
-
-        public string GetLocalizedTeamName(int teamId, string mapFilename, string playlist) {
-
-            string returnName = String.Empty;
-
-            foreach (CTeamName team in this.TeamNameList) {
-                if (String.IsNullOrEmpty(playlist) == false && String.IsNullOrEmpty(team.Playlist) == false) {
-                    if (String.Compare(team.MapFilename, mapFilename, true) == 0 && team.TeamID == teamId && String.Compare(team.Playlist, playlist, true) == 0) {
-                        returnName = this.Language.GetLocalized(team.LocalizationKey, null);
-                        break;
-                    }
-                }
-                else {
-                    if (String.Compare(team.MapFilename, mapFilename, true) == 0 && team.TeamID == teamId) {
-                        returnName = this.Language.GetLocalized(team.LocalizationKey, null);
-                        break;
-                    }
-                }
-            }
-
-            return returnName;
-        }
-
-        public CMap GetFriendlyMapByFilenamePlayList(string strMapFileName, string strMapPlayList)
-        {
-            CMap cmReturn = null;
-            List<CMap> mapDefines = this.GetMapDefines();
-
-            if (mapDefines != null) {
-                foreach (CMap cmMap in mapDefines) {
-                    if (String.Compare(cmMap.FileName, strMapFileName, true) == 0 && String.Compare(cmMap.PlayList, strMapPlayList, true) == 0) {
-                        cmReturn = cmMap;
-                        break;
-                    }
-                }
-            }
-
-            return cmReturn;
-        }
-        
-        public string GetFriendlyGamemodeByMap(string strMapFileName)
-        {
-
-            string strFriendlyName = String.Empty;
-
-            if (this.MapListPool != null) {
-                foreach (CMap cmMap in this.MapListPool) {
-                    if (string.Compare(cmMap.FileName, strMapFileName, true) == 0) {
-                        strFriendlyName = cmMap.GameMode;
-                        break;
-                    }
-                }
-            }
-
-            return strFriendlyName;
-        }
-
-        public string GetFriendlyGamemode(string strPlaylistName) {
-
-            string strFriendlyName = String.Empty;
-
-            if (this.MapListPool != null) {
-                foreach (CMap cmMap in this.MapListPool) {
-                    if (string.Compare(cmMap.PlayList, strPlaylistName, true) == 0) {
-                        strFriendlyName = cmMap.GameMode;
-                        break;
-                    }
-                }
-            }
-
-            return strFriendlyName;
-        }
-
-        public string GetFriendlyMapname(string strMapFileName) {
-
-            string strFriendlyName = String.Empty;
-
-            if (this.MapListPool != null) {
-                foreach (CMap cmMap in this.MapListPool) {
-                    if (string.Compare(cmMap.FileName, strMapFileName, true) == 0) {
-                        strFriendlyName = cmMap.PublicLevelName;
-                        break;
-                    }
-                }
-            }
-
-            return strFriendlyName;
-        }
-
-        public string GetPlaylistByMapname(string strMapFileName) {
-
-            string strFriendlyName = String.Empty;
-
-            foreach (CMap cmMap in this.MapListPool) {
-                if (string.Compare(cmMap.FileName, strMapFileName, true) == 0) {
-                    strFriendlyName = cmMap.PlayList;
-                    break;
-                }
-            }
-
-            return strFriendlyName;
-        }
-
-        public int GetDefaultSquadIDByMapname(string strMapFileName) {
-            int iDefaultSquadID = 0;
-
-            foreach (CMap cmMap in this.MapListPool) {
-                if (string.Compare(cmMap.FileName, strMapFileName, true) == 0) {
-                    iDefaultSquadID = cmMap.DefaultSquadID;
-                    break;
-                }
-            }
-
-            return iDefaultSquadID;
-        }
-
-        /// <summary>
-        /// Return an arbitrary list of CMap objects in this.MapListPool
-        /// with unique .Gamemode
-        /// </summary>
-        /// <returns></returns>
-        public List<CMap> GetGamemodeList() {
-
-            List<CMap> returnList = new List<CMap>();
-
-            foreach (CMap map in this.MapListPool) {
-
-                bool isGamemodeAdded = false;
-
-                foreach (CMap gamemodeMap in returnList) {
-                    if (String.Compare(map.GameMode, gamemodeMap.GameMode, true) == 0) {
-                        isGamemodeAdded = true;
-                    }
-                }
-
-                if (isGamemodeAdded == false) {
-                    returnList.Add(map);
-                }
-
-            }
-
-            return returnList;
-        }
-
-        #endregion
-
-        #region Playing Sounds
-
-        private SoundPlayer m_spPlayer = new SoundPlayer();
-
-        public struct SPlaySound {
-            public string m_strSoundFile;
-            public int m_iRepeat;
-        }
-
-        private Thread m_thSound;
-        private Thread m_thStopSound;
-        private bool m_blPlaySound;
-
-        public void PlaySound(string strSoundFile, int iRepeat) {
-
-            SPlaySound spsSound = new SPlaySound();
-            spsSound.m_iRepeat = iRepeat;
-            spsSound.m_strSoundFile = strSoundFile;
-            //spsSound.m_spPlayer = this.m_spPlayer;
-
-            if (this.m_thSound != null) {
-                this.StopSound(spsSound);
-            }
-            else {
-                this.m_thSound = new Thread(new ParameterizedThreadStart(PlaySound));
-                this.m_blPlaySound = true;
-                this.m_thSound.Start(spsSound);
-            }
-        }
-
-        public void StopSound(SPlaySound spsSound) {
-
-            this.m_blPlaySound = false;
-            //this.m_spPlayer.Stop();
-
-            if (this.m_thSound != null) {
-                this.m_thStopSound = new Thread(new ParameterizedThreadStart(StopSound));
-                this.m_thStopSound.Start(spsSound);
-            }
-        }
-
-        private void StopSound(object obj) {
-            try {
-                if (this.m_thSound != null) {
-                    //this.m_spPlayer.Stop();
-                    this.m_blPlaySound = false;
-                    this.m_thSound.Join();
-
-                    if (obj != null) {
-                        this.m_thSound = new Thread(new ParameterizedThreadStart(PlaySound));
-                        this.m_blPlaySound = true;
-                        this.m_thSound.Start((SPlaySound)obj);
-                    }
-                    else {
-                        this.m_thSound = null;
-                    }
-                }
-            }
-            catch (Exception e) {
-
-            }
-        }
-
-        private void PlaySound(object obj) {
-            SPlaySound spsSound = (SPlaySound)obj;
-
-            try {
-
-                using (BinaryReader brFormatCheck = new BinaryReader(File.Open(Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Media"), spsSound.m_strSoundFile), FileMode.Open))) {
-
-                    brFormatCheck.BaseStream.Position = 20;
-                    Int16 i16Format = brFormatCheck.ReadInt16();
-
-                    if (i16Format == 1 || i16Format == 2) {
-
-                        brFormatCheck.Close();
-
-                        // Load it in this thread in case the file is big.
-                        this.m_spPlayer.SoundLocation = Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Media"), spsSound.m_strSoundFile);
-
-                        for (int i = 0; i < spsSound.m_iRepeat && this.m_blPlaySound == true; i++) {
-                            this.m_spPlayer.PlaySync();
-                        }
-                    }
-                    else {
-                        brFormatCheck.Close();
-                    }
-                }
-            }
-            catch (Exception e) {
-
-            }
-        }
-
-        #endregion
-
-        // TO DO: With events most of these can be removed.
-        #region Internal Commands
-
-        /*
-        public void ProconProtectedWeaponsClear() {
-            this.Weapons.Clear();
-        }
-
-        public void ProconProtectedWeaponsAdd(Kits restriction, string name, WeaponSlots slot, DamageTypes damage) {
-            this.Weapons.Add(new Weapon(restriction, name, slot, damage);
-        }
-
-        public void ProconProtectedSpecializationClear() {
-            this.Specializations.Clear();
-        }
-
-        public void ProconProtectedSpecializationAdd(SpecializationSlots slot, string name) {
-            this.Specializations.Add(new Specialization(slot, name));
-        }
-        */
-
-        public void ProconProtectedTeamNamesClear() {
-            this.TeamNameList.Clear();
-
-            foreach (CMap cmMap in this.MapListPool) {
-                cmMap.TeamNames.Clear();
-            }
-        }
-
-        public void ProconProtectedTeamNamesAdd(string strFileName, int iTeamID, string strLocalizationKey, string strImageKey, string playlist = "") {
-            foreach (CMap cmMap in this.MapListPool) {
-                if (String.Compare(cmMap.FileName, strFileName, true) == 0) {
-                    cmMap.TeamNames.Add(new CTeamName(strFileName, iTeamID, strLocalizationKey, strImageKey, playlist));
-                }
-            }
-
-            this.TeamNameList.Add(new CTeamName(strFileName, iTeamID, strLocalizationKey, strImageKey, playlist));
-        }
-
-        public void ProconProtectedMapsClear() {
-            this.MapListPool.Clear();
-        }
-
-        public void ProconProtectedMapsAdd(string strPlaylist, string strFileName, string strGamemode, string strPublicLevelName, int iDefaultSquadID) {
-            this.MapListPool.Add(new CMap(strPlaylist, strFileName, strGamemode, strPublicLevelName, iDefaultSquadID));
-        }
-
-        public void ProconProtectedReasonsClear() {
-            this.Reasons.Clear();
-        }
-
-        public void ProconProtectedReasonsAdd(string strReason) {
-            this.Reasons.Add(strReason);
-        }
-
-        public void ProconProtectedServerVersionsClear(string strType)
-        {
-            this.Game.VersionNumberToFriendlyName.Clear();
-        }
-
-        public void ProconProtectedServerVersionsAdd(string strType, string strVerNr, string strVerRel)
-        {
-            this.Game.VersionNumberToFriendlyName.Add(strVerNr, strVerRel);
-            /* Geoff 08/10/2011 - What were these checks for?
-            if (strType == "BFBC2")
-            {
-                this.Game.VersionNumberToFriendlyName.Add(strVerNr, strVerRel);
-            }
-            if (strType == "MoH")
-            {
-                this.Game.VersionNumberToFriendlyName.Add(strVerNr, strVerRel);
-            }
-            */
-        }
-
-        public void ProconProtectedPluginEnable(string strClassName, bool blEnabled)
-        {
-
-            if (this.PluginsManager != null && this.PluginsManager.Plugins.LoadedClassNames.Contains(strClassName) == true) {
-                if (blEnabled == true) {
-                    this.PluginsManager.EnablePlugin(strClassName);
-                }
-                else {
-                    this.PluginsManager.DisablePlugin(strClassName);
-                }
-            }
-        }
-
-
-        public void ProconProtectedPluginSetVariable(string strClassName, string strVariable, string strValue) {
-            if (this.PluginsManager != null) {
-                this.PluginsManager.SetPluginVariable(strClassName, strVariable, strValue);
-            }
-        }
-
-        public void ProconProtectedPluginSetVariableCon(string strClassName, string strVariable, string strValue) {
-            if (this.PluginsManager != null) {
-                this.PluginsManager.SetPluginVariableCon(strClassName, strVariable, strValue);
-            }
-        }
-
-        public void ProconProtectedLayerSetPrivileges(Account account, CPrivileges sprvPrivileges) {
-
-            if (this.Layer.AccountPrivileges.Contains(account.Name) == true) {
-                this.Layer.AccountPrivileges[account.Name].SetPrivileges(sprvPrivileges);
-            }
-            else {
-
-                this.Layer.AccountPrivileges.Add(new AccountPrivilege(account, sprvPrivileges));
-                
-            }
-        }
-
-        public void ProconProtectedLayerEnable(bool blEnabled, UInt16 ui16Port, string strBindingAddress, string strLayerName) {
-
-            if (this.Layer != null) {
-
-                this.Layer.LayerEnabled = blEnabled;
-                //if (this.Layer.LayerEnabled == true) {
-                this.Layer.ListeningPort = ui16Port;
-                this.Layer.BindingAddress = strBindingAddress;
-                this.Layer.LayerNameFormat = strLayerName;
-                //}
-
-                // Start it up if we've logged into the bfbc2 server..
-                if (this.Game != null && this.Game.IsLoggedIn == true) {
-
-                    if (this.Layer.LayerEnabled == true && this.Layer.IsLayerOnline == false) {
-                        this.Layer.StartLayerListener();
-                    }
-                    else if (this.Layer.LayerEnabled == false && this.Layer.IsLayerOnline == true) {
-                        this.Layer.ShutdownLayerListener();
-                    }
-                }
-            }
-            else {
-                // Magic!!!
-            }
-        }
-
-        public void ProconPrivateServerConnect() {
-            this.Connect();
-        }
-
-        #region Tasks
-
-        // Quick and dirty thread safe tasks.
-        // private readonly object m_taskLocker = new object();
-
-        public void ProconProtectedTasksList() {
-            this.Console.Write("Running Tasks: [Name] [Delay] [Interval] [Repeat] [Command]");
-
-            //lock (this.m_taskLocker) {
-                foreach (Task ctTask in new List<Task>(this.Tasks)) {
-                    this.Console.Write(ctTask.ToString());
-                }
-            //}
-
-            this.Console.Write(String.Format("End of Tasks List ({0} Tasks)", this.Tasks.Count));
-        }
-
-        public void ProconProtectedTasksAdd(string strTaskname, List<string> lstCommandWords, int iDelay, int iInterval, int iRepeat) {
-            if (iDelay >= 0 && iInterval > 0 && iRepeat != 0) {
-                //lock (this.m_taskLocker) {
-                    this.Tasks.Add(new Task(strTaskname, lstCommandWords, iDelay, iInterval, iRepeat));
-                //}
-            }
-        }
-
-        public void ProconProtectedTasksClear() {
-            //lock (this.m_taskLocker) {
-                this.Tasks.Clear();
-            //}
-        }
-
-        public void ProconProtectedTasksRemove(string strTaskName) {
-            //lock (this.m_taskLocker) {
-                for (int i = 0; i < this.Tasks.Count; i++) {
-                    if (String.Compare(this.Tasks[i].TaskName, strTaskName) == 0) {
-                        this.Tasks.RemoveAt(i);
-                        i--;
-                    }
-                }
-            //}
-        }
-
-        private void m_taskTimer_Elapsed(object sender, ElapsedEventArgs e) {
-            try {
-                foreach (Task ctExecute in new List<Task>(this.Tasks)) {
-                    if (this.Game != null && this.Game.IsLoggedIn == true && ctExecute.ExecuteCommand == true) {
-                        this.Parent.ExecutePRoConCommand(this, ctExecute.Command, 0);
-                    }
-                }
-
-                this.Tasks.RemoveAll(RepeatTaskDisabled);
-            }
-            catch (Exception ex) { // Debug for 0.3.1.0 to make sure this bug is gone.
-                FrostbiteConnection.LogError("TaskExecuterThread", String.Empty, ex);
-            }
-        }
-
-        /*
-        private void TaskExecuterThread() {
-
-            while (this.m_isTasksRunning == true) {
-
-                try {
-                    lock (this.m_taskLocker) {
-                        foreach (Task ctExecute in new List<Task>(this.Tasks)) {
-                            if (this.Game != null && this.Game.IsLoggedIn == true && ctExecute.ExecuteCommand == true) {
-                                this.Parent.ExecutePRoConCommand(this, ctExecute.Command, 0);
-                            }
-                        }
-
-                        this.Tasks.RemoveAll(RepeatTaskDisabled);
-                    }
-                }
-                catch (Exception ex) { // Debug for 0.3.1.0 to make sure this bug is gone.
-                    FrostbiteConnection.LogError("TaskExecuterThread", String.Empty, ex);
-                }
-
-                Thread.Sleep(1000);
-            }
-        }
-        */
-        private static bool RepeatTaskDisabled(Task ctRemoveAll) {
-            return ctRemoveAll.RemoveTask;
-        }
-
-        #endregion
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        #endregion
-
-        #region Send Packet Helpers
-
-        public void SendResponse(params string[] words) {
-            this.SendResponse(new List<string>(words));
-        }
-
-        public void SendResponse(List<string> lstWords) {
-            if (lstWords.Count > 0) {
-
-                if (this.Game != null && this.Game.Connection != null) {
-                    this.Game.Connection.SendQueued(new Packet(true, true, this.Game.Connection.AcquireSequenceNumber, lstWords));
-                }
-            }
-        }
-
-        private void SendRequest(params string[] words) {
-            this.SendRequest(new List<string>(words));
-        }
-
-        public void SendRequest(List<string> words) {
-            if (this.IsLoggedIn == true && words.Count > 0) {
-
-                if (words.Count >= 4 && String.Compare(words[0], "procon.admin.yell", true) == 0) {
-                    this.SendProconAdminYell(words[1], words[2], words[3], words.Count > 4 ? words[4] : String.Empty);
-                }
-// obsolete since R-20 and hopefully stays so.
- #region Quick BF3 Hack, now MoHW
-                else if (this.Game is MOHWClient && words.Count >= 4 && String.Compare(words[0], "admin.say", true) == 0 && String.Compare(words[2], "player", true) == 0) {
-                    if (this.PlayerList.Contains(words[3]) == true) {
-                        CPlayerInfo player = this.PlayerList[words[3]];
-
-                        words[2] = "squad";
-                        words[3] = player.TeamID.ToString();
-                        words.Add(player.SquadID.ToString());
-                        
-                        List<string> pwords = new List<string> { "admin.say", "@" + player.SoldierName, words[2], words[3], words[4] }; // new
-
-                        if (this.Game != null && this.Game.Connection != null) {
-                            this.Game.Connection.SendQueued(new Packet(false, false, this.Game.Connection.AcquireSequenceNumber, pwords)); // new
-                            this.Game.Connection.SendQueued(new Packet(false, false, this.Game.Connection.AcquireSequenceNumber, words));
-                        }
-                    }
-                }
-                // MoHW yell hack
-                else if (this.Game is MOHWClient && words.Count >= 4 && String.Compare(words[0], "admin.yell", true) == 0 && String.Compare(words[2], "player", true) == 0) {
-                    if (this.PlayerList.Contains(words[3]) == true) {
-                        CPlayerInfo player = this.PlayerList[words[3]];
-
-                        words[2] = "squad";
-                        words[3] = player.TeamID.ToString();
-                        words.Add(player.SquadID.ToString());
-
-                        List<string> pwords = new List<string>{ "admin.yell", "@" + player.SoldierName, words[2], words[3], words[4] };
-
-                        if (this.Game != null && this.Game.Connection != null) {
-                            this.Game.Connection.SendQueued(new Packet(false, false, this.Game.Connection.AcquireSequenceNumber, pwords));
-                            this.Game.Connection.SendQueued(new Packet(false, false, this.Game.Connection.AcquireSequenceNumber, words));
-                        }
-                    }
-                }
-
-#endregion // END Quick BF3 Hack
-                else {
-                    if (this.Game != null && this.Game.Connection != null) {
-                        this.Game.Connection.SendQueued(new Packet(false, false, this.Game.Connection.AcquireSequenceNumber, words));
-                    }
-                }
-            }
-            else {
-                int i = 0;
-            }
-        }
-
-        public void SendPacket(Packet packet) {
-            this.Game.Connection.SendQueued(packet);
-        }
-
-        #region Procon Extensions
-
-        public void SendProconAdminSay(string strText, string strPlayerSubset, string strTarget) {
-
-            if (strTarget.Length > 0) {
-                this.SendProconLayerPacket(null, new Packet(false, false, this.Game.Connection.AcquireSequenceNumber, new List<string>() { "procon.admin.say", String.Empty, strText, strPlayerSubset, strTarget }));
-            }
-            else {
-                this.SendProconLayerPacket(null, new Packet(false, false, this.Game.Connection.AcquireSequenceNumber, new List<string>() { "procon.admin.say", String.Empty, strText, strPlayerSubset }));
-            }
-        }
-
-        public void SendProconAdminYell(string strText, string strDisplayTime, string strPlayerSubset, string strTarget) {
-
-            if (strTarget.Length > 0) {
-                this.SendProconLayerPacket(null, new Packet(false, false, this.Game.Connection.AcquireSequenceNumber, new List<string>() { "procon.admin.yell", String.Empty, strText, strDisplayTime, strPlayerSubset, strTarget }));
-            }
-            else {
-                this.SendProconLayerPacket(null, new Packet(false, false, this.Game.Connection.AcquireSequenceNumber, new List<string>() { "procon.admin.yell", String.Empty, strText, strDisplayTime, strPlayerSubset }));
-            }
-        }
-
-        public void SendProconLayerPacket(PRoConLayerClient sender, Packet cpPassOn) {
-
-            lock (new object()) {
-                UInt32 ui32MainConnSequence = this.Game.Connection.AcquireSequenceNumber;
-
-                if (this.m_dicForwardedPackets.ContainsKey(ui32MainConnSequence) == false) {
-
-                    SOriginalForwardedPacket spopForwardedPacket = new SOriginalForwardedPacket();
-                    spopForwardedPacket.m_ui32OriginalSequence = cpPassOn.SequenceNumber;
-                    spopForwardedPacket.m_sender = sender;
-                    spopForwardedPacket.m_lstWords = new List<string>(cpPassOn.Words);
-
-                    // Register the packet as forwared. 
-                    this.m_dicForwardedPackets.Add(ui32MainConnSequence, spopForwardedPacket);
-
-                    if (cpPassOn.Words.Count >= 5 && String.Compare(cpPassOn.Words[0], "procon.admin.yell") == 0) {
-
-                        if (this.IsPRoConConnection == false) {
-                            if (this.Game is MOHWClient) {
-                                cpPassOn.Words.RemoveAt(3);
-                            }
-                            // Just yell it, we'll capture it and process the return in OnBeforePacketRecv
-                            cpPassOn.Words.RemoveAt(1);
-                            cpPassOn.Words[0] = "admin.yell";
-                        }
-                        // Else forward the packet as is so the layer above can append its username.
-                    }
-                    else if (cpPassOn.Words.Count >= 4 && String.Compare(cpPassOn.Words[0], "procon.admin.say") == 0) {
-
-                        if (this.IsPRoConConnection == false) {
-                            // Just yell it, we'll capture it and process the return in OnBeforePacketRecv
-                            cpPassOn.Words.RemoveAt(1);
-                            cpPassOn.Words[0] = "admin.say";
-                        }
-                        // Else forward the packet as is so the layer above can append its username.
-                    }
-
-                    // Now forward the packet.
-                    this.SendPacket(new Packet(false, false, ui32MainConnSequence, cpPassOn.Words));
-                }
-            }
-        }
-
-        public virtual void SendProconLoginUsernamePacket(string username) {
-
-            // By pass all usual login checks.
-            if (this.Game != null && this.Game.Connection != null) {
-                this.Game.Connection.SendQueued(new Packet(false, false, this.Game.Connection.AcquireSequenceNumber, new List<string>() { "procon.login.username", username }));
-            }
-        }
-
-        public virtual void SendProconBattlemapListZonesPacket() {
-            if (this.IsLoggedIn == true) {
-                this.SendRequest("procon.battlemap.listZones");
-            }
-        }
-
-        public virtual void SendGetProconVarsPacket(string variable) {
-            if (this.IsLoggedIn == true) {
-                this.SendRequest("procon.vars", variable);
-            }
-        }
-
-        public virtual void SendProconPluginSetVariablePacket(string strClassName, string strVariable, string strValue) {
-            if (this.IsLoggedIn == true) {
-                this.SendRequest("procon.plugin.setVariable", strClassName, strVariable, strValue);
-            }
-        }
-
-        public virtual void SendProconPluginEnablePacket(string strClassName, bool blEnabled) {
-            if (this.IsLoggedIn == true) {
-                this.SendRequest("procon.plugin.enable", strClassName, Packet.bltos(blEnabled));
-            }
-        }
-
-        #region Map Zones
-
-        public virtual void SendProconBattlemapModifyZonePointsPacket(string uid, Point3D[] zonePoints) {
-            if (this.IsLoggedIn == true) {
-                List<string> list = new List<string>() { "procon.battlemap.modifyZonePoints", uid };
-                list.Add(zonePoints.Length.ToString());
-                list.AddRange(Point3D.ToStringList(zonePoints));
-
-                this.SendRequest(list);
-            }
-        }
-
-        public virtual void SendProconBattlemapDeleteZonePacket(string uid) {
-            if (this.IsLoggedIn == true) {
-                this.SendRequest("procon.battlemap.deleteZone", uid);
-                
-            }
-        }
-
-        public virtual void SendProconBattlemapCreateZonePacket(string mapFileName, Point3D[] zonePoints) {
-            if (this.IsLoggedIn == true) {
-
-                List<string> list = new List<string>() { "procon.battlemap.createZone", mapFileName };
-                list.Add(zonePoints.Length.ToString());
-                list.AddRange(Point3D.ToStringList(zonePoints));
-
-                this.SendRequest(list);
-            }
-        }
-
-        public virtual void SendProconBattlemapModifyZoneTagsPacket(string uid, string tagList) {
-            if (this.IsLoggedIn == true) {
-                this.SendRequest("procon.battlemap.modifyZoneTags", uid, tagList);
-
-            }
-        }
-
-        #endregion
-
-        #region Layer
-
-        public virtual void SendProconLayerSetPrivilegesPacket(string username, UInt32 privileges) {
-            if (this.IsLoggedIn == true) {
-                this.SendRequest("procon.layer.setPrivileges", username, privileges.ToString());
-            }
-        }
-
-        #endregion
-
-        #region Accounts
-
-        public virtual void SendProconAccountListAccountsPacket() {
-            if (this.IsLoggedIn == true) {
-                this.SendRequest("procon.account.listAccounts");
-            }
-        }
-
-        public virtual void SendProconAccountListLoggedInPacket() {
-            if (this.IsLoggedIn == true) {
-                this.SendRequest("procon.account.listLoggedIn", "uids");
-            }
-        }
-
-        public virtual void SendProconAccountSetPasswordPacket(string username, string password) {
-            if (this.IsLoggedIn == true) {
-                this.SendRequest("procon.account.setPassword", username, password);
-            }
-        }
-
-        public virtual void SendProconAccountCreatePacket(string username, string password) {
-            if (this.IsLoggedIn == true) {
-                this.SendRequest("procon.account.create", username, password);
-            }
-        }
-
-        public virtual void SendProconAccountDeletePacket(string username) {
-            if (this.IsLoggedIn == true) {
-                this.SendRequest("procon.account.delete", username);
-            }
-        }
-
-        #endregion
-
-        #region Plugins
-
-        public virtual void SendProconPluginListLoadedPacket() {
-            if (this.IsLoggedIn == true) {
-                this.SendRequest("procon.plugin.listLoaded");
-            }
-        }
-
-        public virtual void SendProconPluginListEnabledPacket() {
-            if (this.IsLoggedIn == true) {
-                this.SendRequest("procon.plugin.listEnabled");
-            }
-        }
-
-        #endregion
-
-        #region Packages
-
-        public virtual void SendProconPackagesInstallPacket(string uid, string version, string md5) {
-            if (this.IsLoggedIn == true) {
-                this.SendRequest("procon.packages.install", uid, version, md5);
-            }
-        }
-
-        #endregion
-
-        #endregion
-
-        #endregion
-
-        #region Game events
-
-        private void PRoConClient_PlayerKilled(FrostbiteClient sender, string strKiller, string strVictim, string strDamageType, bool blHeadshot, Point3D pntKiller, Point3D pntVictim) {
-            if (this.PlayerKilled != null) {
-
-                CPlayerInfo cpKiller = null, cpVictim = null;
-
-                if (this.PlayerList.Contains(strKiller) == true) {
-                    cpKiller = this.PlayerList[strKiller];
-                }
-                else {
-                    cpKiller = new CPlayerInfo(strKiller, String.Empty, 0, 0);
-                }
-
-                if (this.PlayerList.Contains(strVictim) == true) {
-                    cpVictim = this.PlayerList[strVictim];
-                }
-                else {
-                    cpVictim = new CPlayerInfo(strVictim, String.Empty, 0, 0);
-                }
-
-                FrostbiteConnection.RaiseEvent(this.PlayerKilled.GetInvocationList(), this, new Kill(cpKiller, cpVictim, strDamageType, blHeadshot, pntKiller, pntVictim));
-            }
-        }
-
-        private void PRoConClient_PlayerSpawned(FrostbiteClient sender, string soldierName, string strKit, List<string> lstWeapons, List<string> lstSpecializations) {
-            if (this.PlayerSpawned != null) {
-
-                if (Enum.IsDefined(typeof(Kits), strKit) == true) {
-                    Inventory inv = new Inventory((Kits)Enum.Parse(typeof(Kits), strKit));
-
-                    foreach (string strWeapon in lstWeapons) {
-                        if (this.Weapons.Contains(strWeapon) == true) {
-                            inv.Weapons.Add(this.Weapons[strWeapon]);
-                        }
-                    }
-
-                    foreach (string strSpecialization in lstSpecializations) {
-                        if (this.Specializations.Contains(strSpecialization) == true) {
-                            inv.Specializations.Add(this.Specializations[strSpecialization]);
-                        }
-                    }
-
-                    FrostbiteConnection.RaiseEvent(this.PlayerSpawned.GetInvocationList(), this, soldierName, inv);
-                }
-                else {
-                    FrostbiteConnection.RaiseEvent(this.PlayerSpawned.GetInvocationList(), this, soldierName, new Inventory(Kits.None));
-                }
-            }
-        }
-
-        private void PRoConClient_ReservedSlotsPlayerRemoved(FrostbiteClient sender, string strSoldierName) {
-            if (this.ReservedSlotList.Contains(strSoldierName) == true) {
-                this.ReservedSlotList.Remove(strSoldierName);
-            }
-        }
-
-        private void PRoConClient_ReservedSlotsPlayerAdded(FrostbiteClient sender, string strSoldierName) {
-            if (this.ReservedSlotList.Contains(strSoldierName) == false) {
-                this.ReservedSlotList.Add(strSoldierName);
-            }
-        }
-
-        private void PRoConClient_ReservedSlotsList(FrostbiteClient sender, List<string> soldierNames) {
-            if (sender is BF3Client || sender is MOHWClient) {
-                this.ReservedSlotList.Clear();
-            }
-            if (soldierNames.Count != 0)
-            {
-                foreach (string strSoldierName in soldierNames) {
-                    if (this.ReservedSlotList.Contains(strSoldierName) == false) {
-                        this.ReservedSlotList.Add(strSoldierName);
-                    }
-                }
-
-                foreach (string strSoldierName in this.ReservedSlotList) {
-                    if (soldierNames.Contains(strSoldierName) == false) {
-                        this.ReservedSlotList.Remove(strSoldierName);
-                    }
-                }
-            }
-        }
-
-        protected void OnServerInfo(FrostbiteClient sender, CServerInfo csiServerInfo) {
-
-            GameMods oldGameMod = this.CurrentServerInfo != null ? this.CurrentServerInfo.GameMod : GameMods.None;
-
-            // Initial loading..
-            if (this.CurrentServerInfo == null) {
-
-                this.CurrentServerInfo = csiServerInfo;
-
-                this.InitialSetup();
-
-                if (this.GameTypeDiscovered != null) {
-                    FrostbiteConnection.RaiseEvent(this.GameTypeDiscovered.GetInvocationList(), this);
-                }
-            }
-            else if (this.CurrentServerInfo != null && oldGameMod != csiServerInfo.GameMod) {
-                this.m_gameModModified = true;
-            }
-            else {
-                this.m_gameModModified = false;
-            }
-
-            this.CurrentServerInfo = csiServerInfo;
-        }
-
-        protected void OnLogout() {
-            this.Shutdown();
-        }
-
-        protected void OnPlayerLeft(FrostbiteClient sender, string strSoldierName, CPlayerInfo cpiPlayer) {
-            if (this.PlayerList.Contains(strSoldierName) == true) {
-                this.PlayerList.Remove(strSoldierName);
-            }
-        }
-
-        protected void OnPunkbusterMessage(FrostbiteClient sender, string strPunkbusterMessage) {
-
-            strPunkbusterMessage = strPunkbusterMessage.TrimEnd('\r', '\n');
-
-            // PunkBuster Server: ([0-9]+)[ ]? ([A-Za-z0-9]+)\(.*?\) ([0-9\.:]+).*?\(.*?\) "(.*?)"
-            // PunkBuster Server: 1  2c90591ce08a5f799622705d7ba1155c(-) 192.168.1.3:52460 OK   1 3.0 0 (W) "(U3)Phogue"
-            //Match mMatch = Regex.Match(strPunkbusterMessage, @":[ ]+?(?<slotid>[0-9]+)[ ]+?(?<guid>[A-Za-z0-9]+)\(.*?\)[ ]+?(?<ip>[0-9\.:]+).*?\(.*?\)[ ]+?""(?<name>.*?)\""", RegexOptions.IgnoreCase);
-            Match mMatch = this.Parent.RegexMatchPunkbusterPlist.Match(strPunkbusterMessage);
-            // If it is a punkbuster pb_plist update
-            if (mMatch.Success == true && mMatch.Groups.Count >= 5) {
-
-                CPunkbusterInfo newPbInfo = new CPunkbusterInfo(mMatch.Groups["slotid"].Value, mMatch.Groups["name"].Value, mMatch.Groups["guid"].Value, mMatch.Groups["ip"].Value, this.Parent.GetCountryName(mMatch.Groups["ip"].Value), this.Parent.GetCountryCode(mMatch.Groups["ip"].Value));
-
-                if (this.PunkbusterPlayerInfo != null) {
-                    FrostbiteConnection.RaiseEvent(this.PunkbusterPlayerInfo.GetInvocationList(), this, newPbInfo);
-                }
-            }
-
-            mMatch = this.Parent.RegexMatchPunkbusterBeginPlist.Match(strPunkbusterMessage);
-            if (mMatch.Success == true && this.PunkbusterBeginPlayerInfo != null) {
-                FrostbiteConnection.RaiseEvent(this.PunkbusterBeginPlayerInfo.GetInvocationList(), this);
-            }
-
-            mMatch = this.Parent.RegexMatchPunkbusterEndPlist.Match(strPunkbusterMessage);
-            if (mMatch.Success == true && this.PunkbusterEndPlayerInfo != null) {
-                FrostbiteConnection.RaiseEvent(this.PunkbusterEndPlayerInfo.GetInvocationList(), this);
-            }
-
-            // PunkBuster Server: Player Guid Computed ([A-Za-z0-9]+)\(.*?\) \(slot #([0-9]+)\) ([0-9\.:]+) (.*)
-            // PunkBuster Server: Player Guid Computed 2c90591ce08a5f799622705d7ba1155c(-) (slot #1) 192.168.1.3:52581 (U3)Phogue
-            //mMatch = Regex.Match(strPunkbusterMessage, @": Player Guid Computed[ ]+?(?<guid>[A-Za-z0-9]+)\(.*?\)[ ]+?\(slot #(?<slotid>[0-9]+)\)[ ]+?(?<ip>[0-9\.:]+)[ ]+?(?<name>.*)", RegexOptions.IgnoreCase);
-            mMatch = this.Parent.RegexMatchPunkbusterGuidComputed.Match(strPunkbusterMessage);
-            // If it is a new connection, technically its a resolved guid type command but stil..
-            if (mMatch.Success == true && mMatch.Groups.Count >= 5) {
-
-                CPunkbusterInfo newPbInfo = new CPunkbusterInfo(mMatch.Groups["slotid"].Value, mMatch.Groups["name"].Value, mMatch.Groups["guid"].Value, mMatch.Groups["ip"].Value, this.Parent.GetCountryName(mMatch.Groups["ip"].Value), this.Parent.GetCountryCode(mMatch.Groups["ip"].Value));
-
-                if (this.PunkbusterPlayerInfo != null) {
-                    FrostbiteConnection.RaiseEvent(this.PunkbusterPlayerInfo.GetInvocationList(), this, newPbInfo);
-                }
-            }
-
-            //mMatch = Regex.Match(strPunkbusterMessage, @":[ ]+?(?<banid>[0-9]+)[ ]+?(?<guid>[A-Za-z0-9]+)[ ]+?{(?<remaining>[0-9\-]+)/(?<banlength>[0-9\-]+)}[ ]+?""(?<name>.+?)""[ ]+?""(?<ip>.+?)""[ ]+?(?<reason>.*)", RegexOptions.IgnoreCase);
-            mMatch = this.Parent.RegexMatchPunkbusterBanlist.Match(strPunkbusterMessage);
-            if (mMatch.Success == true && mMatch.Groups.Count >= 5) {
-
-                //IPAddress ipOut;
-                string strIP = String.Empty;
-                string[] a_strIP;
-
-                if (mMatch.Groups["ip"].Value.Length > 0 && (a_strIP = mMatch.Groups["ip"].Value.Split(':')).Length > 0) {
-                    strIP = a_strIP[0];
-                }
-
-                CBanInfo newPbBanInfo = new CBanInfo(mMatch.Groups["name"].Value, mMatch.Groups["guid"].Value, mMatch.Groups["ip"].Value, new TimeoutSubset(mMatch.Groups["banlength"].Value, mMatch.Groups["remaining"].Value), mMatch.Groups["reason"].Value);
-
-                if (this.PunkbusterPlayerBanned != null) {
-                    FrostbiteConnection.RaiseEvent(this.PunkbusterPlayerBanned.GetInvocationList(), this, newPbBanInfo);
-                }
-            }
-            
-            //PunkBuster Server: Kick/Ban Command Issued (testing) for (slot#1) xxx.xxx.xxx.xxx:yyyy GUID name
-            mMatch = this.Parent.RegexMatchPunkbusterKickBanCmd.Match(strPunkbusterMessage);
-            if (mMatch.Success == true && mMatch.Groups.Count >= 5)
-            {
-                //IPAddress ipOut;
-                string strIP = String.Empty;
-                string[] a_strIP;
-
-                if (mMatch.Groups["ip"].Value.Length > 0 && (a_strIP = mMatch.Groups["ip"].Value.Split(':')).Length > 0)
-                {
-                    strIP = a_strIP[0];
-                }
-
-                TimeoutSubset kb_timeoutSubset;
-                if (String.Compare(mMatch.Groups["kb_type"].ToString(), "Kick/Ban", true) == 0) {
-                    kb_timeoutSubset = new TimeoutSubset(new List<string>() { "perm", "" });
-                }
-                else {
-                    kb_timeoutSubset = new TimeoutSubset(new List<string>() { "seconds", "120" });
-                }
-
-                //CBanInfo newPbBanInfo = new CBanInfo(mMatch.Groups["name"].Value, mMatch.Groups["guid"].Value, mMatch.Groups["ip"].Value, new TimeoutSubset("perm",""), mMatch.Groups["reason"].Value);
-                CBanInfo newPbBanInfo = new CBanInfo(mMatch.Groups["name"].Value, mMatch.Groups["guid"].Value, mMatch.Groups["ip"].Value, kb_timeoutSubset, mMatch.Groups["reason"].Value);
-
-                if (this.PunkbusterPlayerBanned != null)
-                {
-                    FrostbiteConnection.RaiseEvent(this.PunkbusterPlayerBanned.GetInvocationList(), this, newPbBanInfo);
-                }
-            }
-            
-            //mMatch = Regex.Match(strPunkbusterMessage, @":[ ]+?Guid[ ]+?(?<guid>[A-Za-z0-9]+)[ ]+?has been Unbanned", RegexOptions.IgnoreCase);
-            mMatch = this.Parent.RegexMatchPunkbusterUnban.Match(strPunkbusterMessage);
-            // If it is a new connection, technically its a resolved guid type command but stil..
-            if (mMatch.Success == true && mMatch.Groups.Count >= 2) {
-                CBanInfo cbiUnbannedPlayer = new CBanInfo(String.Empty, mMatch.Groups["guid"].Value, String.Empty, new TimeoutSubset(TimeoutSubset.TimeoutSubsetType.None), String.Empty);
-
-                if (this.PunkbusterPlayerUnbanned != null) {
-                    FrostbiteConnection.RaiseEvent(this.PunkbusterPlayerUnbanned.GetInvocationList(), this, cbiUnbannedPlayer);
-                }
-            }
-
-            //mMatch = Regex.Match(strPunkbusterMessage, @": Ban Added to Ban List", RegexOptions.IgnoreCase);
-            mMatch = this.Parent.RegexMatchPunkbusterBanAdded.Match(strPunkbusterMessage);
-            if (mMatch.Success == true && mMatch.Groups.Count >= 5) {
-                this.SendRequest(new List<string>() { "punkBuster.pb_sv_command", this.Variables.GetVariable<string>("PUNKBUSTER_BANLIST_REFRESH", "pb_sv_banlist BC2! ") });
-            }
-        }
-
-        protected void OnListPlayers(FrostbiteClient sender, List<CPlayerInfo> lstPlayers, CPlayerSubset cpsSubset) {
-            if (cpsSubset.Subset == CPlayerSubset.PlayerSubsetType.All) {
-
-                // Add or update players.
-                foreach (CPlayerInfo cpiPlayer in lstPlayers) {
-                    if (this.PlayerList.Contains(cpiPlayer.SoldierName) == true) {
-                        this.PlayerList[this.PlayerList.IndexOf(this.PlayerList[cpiPlayer.SoldierName])] = cpiPlayer;
-                    }
-                    else {
-                        this.PlayerList.Add(cpiPlayer);
-                    }
-                }
-
-                PlayerDictionary recievedPlayerList = new PlayerDictionary(lstPlayers);
-                foreach (CPlayerInfo storedPlayer in new List<CPlayerInfo>(this.PlayerList)) {
-
-                    // If the stored player is not in the list we recieved
-                    if (recievedPlayerList.Contains(storedPlayer.SoldierName) == false) {
-                        // They have left the server, remove them from the master stored list.
-                        this.PlayerList.Remove(storedPlayer.SoldierName);
-                    }
-                }
-
-            }
-        }
-
-        #region Text Chat Moderation
-
-        // FullTextChatModerationList
-        private void Game_TextChatModerationListList(FrostbiteClient sender, int startOffset, List<TextChatModerationEntry> textChatModerationList) {
-            if (startOffset == 0) {
-                this.FullTextChatModerationList.Clear();
-            }
-
-            if (textChatModerationList.Count > 0) {
-                this.FullTextChatModerationList.AddRange(textChatModerationList);
-
-                this.Game.SendTextChatModerationListListPacket(startOffset + 100);
-                //this.SendRequest(new List<string>() { "banList.list", (startOffset + 100).ToString() });
-            }
-            else {
-                // We have recieved the whole banlist in 100 ban increments.. throw event.
-                if (this.FullTextChatModerationListList != null) {
-                    FrostbiteConnection.RaiseEvent(this.FullTextChatModerationListList.GetInvocationList(), this, this.FullTextChatModerationList);
-                }
-            }
-        }
-
-        private void Game_TextChatModerationListClear(FrostbiteClient sender) {
-            this.FullTextChatModerationList.Clear();
-        }
-
-        private void Game_TextChatModerationListRemovePlayer(FrostbiteClient sender, TextChatModerationEntry playerEntry) {
-            this.FullTextChatModerationList.RemoveEntry(playerEntry);
-        }
-
-        private void Game_TextChatModerationListAddPlayer(FrostbiteClient sender, TextChatModerationEntry playerEntry) {
-            this.FullTextChatModerationList.AddEntry(playerEntry);
-        }
-
-        #endregion
-
-        private void PRoConClient_BanListList(FrostbiteClient sender, int iStartOffset, List<CBanInfo> lstBans) {
-            if (iStartOffset == 0) {
-                this.FullVanillaBanList.Clear();
-            }
-
-            if (lstBans.Count > 0) {
-                this.FullVanillaBanList.AddRange(lstBans);
-
-                this.Game.SendBanListListPacket(iStartOffset + 100);
-                //this.SendRequest(new List<string>() { "banList.list", (iStartOffset + 100).ToString() });
-            }
-            else {
-                // We have recieved the whole banlist in 100 ban increments.. throw event.
-                if (this.FullBanListList != null) {
-                    FrostbiteConnection.RaiseEvent(this.FullBanListList.GetInvocationList(), this, this.FullVanillaBanList);
-                }
-            }
-        }
-
-        void PRoConClient_ResponseError(FrostbiteClient sender, Packet originalRequest, string errorMessage) {
-
-            // Banlist backwards compatability with R11 (Will attempt to get "banList.list 100" which will throw this error)
-            if (originalRequest.Words.Count > 0 && String.Compare(originalRequest.Words[0], "banList.list", true) == 0 && String.Compare(errorMessage, "InvalidArguments", true) == 0) {
-                if (this.FullBanListList != null) {
-                    FrostbiteConnection.RaiseEvent(this.FullBanListList.GetInvocationList(), this, this.FullVanillaBanList);
-                }
-            }
-        }
-
-        protected void OnPlayerLimit(FrostbiteClient sender, int iPlayerLimit) {
-            // Quick 'hack' because BF3 does not have these and it's generating confusion on the forums.
-            if (!(this.Game is BF3Client) && !(this.Game is MOHWClient)) {
-                this.SendRequest(new List<string>() { "vars.currentPlayerLimit" });
-                this.SendRequest(new List<string>() { "vars.maxPlayerLimit" });
-            }
-
-            this.SendRequest(new List<string>() { "serverInfo" });
-        }
-
-        #endregion
-
-        #region Mapzones
-
-        private void MapZones_MapZoneRemoved(MapZoneDrawing item) {
-            this.SaveConnectionConfig();
-        }
-
-        private void MapZones_MapZoneChanged(MapZoneDrawing item) {
-            this.SaveConnectionConfig();
-        }
-
-        private void MapZones_MapZoneAdded(MapZoneDrawing item) {
-            this.SaveConnectionConfig();
-        }
-
-        #endregion
-
-        public void Disconnect() {
-
-            this.State = ConnectionState.Disconnected;
-            this.ForceDisconnect();
-        }
-
-        public void ForceDisconnect() {
-
-            this.SaveConnectionConfig();
-
-            this.m_blLoadingSavingConnectionConfig = true;
-
-            if (this.Console != null) this.Console.Logging = false;
-            if (this.EventsLogging != null) this.EventsLogging.Logging = false;
-            if (this.PunkbusterConsole != null) this.PunkbusterConsole.Logging = false;
-            if (this.PluginConsole != null) this.PluginConsole.Logging = false;
-            if (this.ChatConsole != null) this.ChatConsole.Logging = false;
-
-            this.SendRequest(new List<string>() { "quit" });
-
-            if (this.m_taskTimer != null) {
-                this.m_taskTimer.Stop();
-            }
-
-            /*
-            this.m_isTasksRunning = false;
-            if (this.m_thTasks != null) {
-
-                try {
-                    this.m_thTasks.Abort();
-                }
-                catch (Exception) { }
-
-                this.m_thTasks = null;
-            }
-            */
-            if (this.Layer != null) {
-                this.Layer.ShutdownLayerListener();
-            }
-
-            this.Shutdown();
-
-            this.m_blLoadingSavingConnectionConfig = false;
-        }
-
-        public void Destroy() {
-
-            //this.SaveConnectionConfig();
-
-            this.m_blLoadingSavingConnectionConfig = true;
-
-            lock (this.m_objConfigSavingLocker) {
-                if (this.PluginsManager != null) {
-                    this.PluginsManager.Unload();
-                    this.PluginsManager = null;
-                }
-            }
-
-            this.m_blLoadingSavingConnectionConfig = false;
-        }
-
     }
 }

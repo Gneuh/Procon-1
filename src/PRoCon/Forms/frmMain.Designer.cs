@@ -555,6 +555,7 @@
             this.iglGameIcons.Images.SetKeyName(3, "bfbc2.vietnam.png");
             this.iglGameIcons.Images.SetKeyName(4, "bf3.png");
             this.iglGameIcons.Images.SetKeyName(5, "mohw.png");
+            this.iglGameIcons.Images.SetKeyName(6, "bf4.png");
             // 
             // tlsConnections
             // 
@@ -728,7 +729,7 @@
             this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MinimumSize = new System.Drawing.Size(1024, 800);
+            this.MinimumSize = new System.Drawing.Size(800, 600);
             this.Name = "frmMain";
             this.Text = "Procon Frostbite";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmMain_FormClosing);

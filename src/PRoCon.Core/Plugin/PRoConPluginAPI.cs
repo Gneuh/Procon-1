@@ -20,11 +20,9 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace PRoCon.Core.Plugin {
     using Core.Players;
-    using Core.Players.Items;
     using Core.Plugin.Commands;
     using Core.Battlemap;
     using Core.Maps;
@@ -32,6 +30,8 @@ namespace PRoCon.Core.Plugin {
     using Core.TextChatModeration;
 
     public class PRoConPluginAPI : CPRoConMarshalByRefObject {
+
+        public String ClassName { get; set; }
 
         #region Properties
 
@@ -122,6 +122,34 @@ namespace PRoCon.Core.Plugin {
         #region BFBC2
 
         public virtual void OnPlaylistSet(string playlist) { }
+
+        #endregion
+
+        #region BF4
+
+        public virtual void OnSpectatorListLoad() { }
+        public virtual void OnSpectatorListSave() { }
+        public virtual void OnSpectatorListPlayerAdded(string soldierName) { }
+        public virtual void OnSpectatorListPlayerRemoved(string soldierName) { }
+        public virtual void OnSpectatorListCleared() { }
+        public virtual void OnSpectatorListList(List<string> soldierNames) { }
+
+        public virtual void OnGameAdminLoad() { }
+        public virtual void OnGameAdminSave() { }
+        public virtual void OnGameAdminPlayerAdded(string soldierName) { }
+        public virtual void OnGameAdminPlayerRemoved(string soldierName) { }
+        public virtual void OnGameAdminCleared() { }
+        public virtual void OnGameAdminList(List<string> soldierNames) { }
+
+        public virtual void OnFairFight(bool isEnabled) { }
+
+        public virtual void OnIsHitIndicator(bool isEnabled) { }
+        
+        public virtual void OnCommander(bool isEnabled) { }
+        public virtual void OnForceReloadWholeMags(bool isEnabled) { }
+        public virtual void OnServerType(string value) { }
+
+        public virtual void OnMaxSpectators(int limit) { }
 
         #endregion
 
@@ -384,7 +412,7 @@ namespace PRoCon.Core.Plugin {
         /// <param name="roundsTotal"></param>
         public virtual void OnLoadingLevel(string mapFileName, int roundsPlayed, int roundsTotal) { }
         public virtual void OnLevelStarted() { }
-        public virtual void OnLevelLoaded(string mapFileName, string Gamemode, int roundsPlayed, int roundsTotal) { } // BF3
+        public virtual void OnLevelLoaded(string mapFileName, string gamemode, int roundsPlayed, int roundsTotal) { } // BF3
 
         #endregion
 
@@ -454,10 +482,10 @@ namespace PRoCon.Core.Plugin {
         /// speaker has met the required privliege and has confirmed the command as correct.
         /// </summary>
         /// <param name="speaker">The player that issued the command</param>
-        /// <param name="strText">The text that was matched to the MatchCommand object</param>
-        /// <param name="mtcCommand">The registered command object</param>
-        /// <param name="capCommand">The captured command details</param>
-        /// <param name="subMatchedScope">The scope the message was sent by the player (squad chat, team chat etc)</param>
+        /// <param name="text">The text that was matched to the MatchCommand object</param>
+        /// <param name="matchedCommand">The registered command object</param>
+        /// <param name="capturedCommand">The captured command details</param>
+        /// <param name="matchedScope">The scope the message was sent by the player (squad chat, team chat etc)</param>
         /// Note: This method was not included, instead you delegate a method when creating a MatchCommand object.
         public virtual void OnAnyMatchRegisteredCommand(string speaker, string text, MatchCommand matchedCommand, CapturedCommand capturedCommand, CPlayerSubset matchedScope) { }
 
@@ -466,13 +494,13 @@ namespace PRoCon.Core.Plugin {
         /// Care should be taken not to enter an endless loop with this function by setting a command
         /// inside of the event.
         /// </summary>
-        /// <param name="mtcCommand">The registered command object</param>
+        /// <param name="command">The registered command object</param>
         public virtual void OnRegisteredCommand(MatchCommand command) { }
 
         /// <summary>
         /// Fires whenever a command is unregisted from procon from any plugin.
         /// </summary>
-        /// <param name="mtcCommand"></param>
+        /// <param name="command"></param>
         public virtual void OnUnregisteredCommand(MatchCommand command) { }
 
         #endregion
@@ -482,11 +510,11 @@ namespace PRoCon.Core.Plugin {
         /// <summary>
         /// Fires when a player takes [ZoneAction] and [flTresspassPercentage] > 0.0F
         /// </summary>
-        /// <param name="cpiSoldier">The PlayerInfo object procon has on the player.</param>
+        /// <param name="playerInfo">The PlayerInfo object procon has on the player.</param>
         /// <param name="action">The action the player has taken on the zone</param>
         /// <param name="sender">The mapzone object that has fired the event</param>
-        /// <param name="pntTresspassLocation">The location, reported by the game, that the action has taken place</param>
-        /// <param name="flTresspassPercentage">The percentage (0.0F to 1.0F) that the circle created by the error radius (default 14m) that
+        /// <param name="tresspassLocation">The location, reported by the game, that the action has taken place</param>
+        /// <param name="tresspassPercentage">The percentage (0.0F to 1.0F) that the circle created by the error radius (default 14m) that
         /// this player has tresspased on the zone at point [pntTresspassLocation].</param>
         /// <param name="trespassState">Additional information about the event.  If the ZoneAction is Kill/Death then this object is type "Kill".</param>
         public virtual void OnZoneTrespass(CPlayerInfo playerInfo, ZoneAction action, MapZone sender, Point3D tresspassLocation, float tresspassPercentage, object trespassState) { }

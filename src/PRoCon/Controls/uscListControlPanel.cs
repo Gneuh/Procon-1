@@ -42,6 +42,7 @@ namespace PRoCon {
         private PRoConClient m_prcClient;
 
         private ListViewColumnSorter m_lvwReservedSlotsColumnSorter;
+        private ListViewColumnSorter m_lvwSpectatorSlotsColumnSorter;
         private ListViewColumnSorter m_lvwBanlistColumnSorter;
         private Font m_fntComboBoxSelectedFont;
 
@@ -56,7 +57,10 @@ namespace PRoCon {
 
         private bool m_blSettingAppendingReservedPlayer;
         private bool m_blSettingRemovingReservedPlayer;
-
+        
+        private bool m_blSettingAppendingSpectatorPlayer;
+        private bool m_blSettingRemovingSpectatorPlayer;
+        
         //private bool m_blSettingAppendingSingleMap;
         //private bool m_blSettingNewPlaylist;
 
@@ -101,42 +105,34 @@ namespace PRoCon {
             this.m_lvwReservedSlotsColumnSorter = new ListViewColumnSorter();
             this.lsvReservedList.ListViewItemSorter = this.m_lvwReservedSlotsColumnSorter;
 
+            this.m_lvwSpectatorSlotsColumnSorter = new ListViewColumnSorter();
+            this.lsvSpectatorList.ListViewItemSorter = this.m_lvwSpectatorSlotsColumnSorter;
+            
             this.m_lvwBanlistColumnSorter = new ListViewColumnSorter();
             this.lsvBanlist.ListViewItemSorter = this.m_lvwBanlistColumnSorter;
 
-            //this.pnlCurrentMaplist.Dock = DockStyle.Fill;
-            //this.pnlMaplistConfirmation.Dock = DockStyle.Fill;
             this.pnlReservedPanel.Dock = DockStyle.Fill;
-
-            //this.m_dicFriendlyPlaylistNames = new Dictionary<string, string>();
-            //this.m_dicMaplistsPerPlaylist = new Dictionary<string, Dictionary<string, string>>();
+            this.pnlSpectatorPanel.Dock = DockStyle.Fill;
 
             this.m_fntComboBoxSelectedFont = new Font("Segoe UI", 10, FontStyle.Bold);
-
-            //this.m_iReselectShufflingMapIndex = 0;
-            //this.m_blSettingNewPlaylist = false;
 
             this.m_blSettingAppendingReservedPlayer = false;
             this.m_blSettingRemovingReservedPlayer = false;
 
+            this.m_blSettingAppendingSpectatorPlayer = false;
+            this.m_blSettingRemovingSpectatorPlayer = false;
+
             this.m_dicAsyncSettingControls = new Dictionary<string, AsyncStyleSetting>();
             
-            // Maplist updates
-
-            //this.m_dicAsyncSettingControls.Add("local.playlist.change", new AsyncStyleSetting(this.picMaplistChangePlaylist, this.lsvMaplist, new Control[] { this.pnlMaplistPositionControls, this.pnlMaplistAddMap, this.lsvMaplist, this.lnkMaplistChangePlaylist }, true));
-            //this.m_dicAsyncSettingControls.Add("local.maplist.change", new AsyncStyleSetting(this.picMaplistAlterMaplist, this.lsvMaplist, new Control[] { this.pnlMaplistPositionControls, this.pnlMaplistAddMap, this.lsvMaplist, this.lnkMaplistChangePlaylist }, true));
-
-            //this.m_blSettingAppendingSingleMap = false;
-            //this.m_dicAsyncSettingControls.Add("local.maplist.append", new AsyncStyleSetting(this.picMaplistAppendMap, this.lsvMaplist, new Control[] { this.lblMaplistPool, this.lnkMaplistAddMapToList, this.lnkMaplistSetNextMap }, true));
-            //this.m_dicAsyncSettingControls.Add("local.maplist.setnextlevel", new AsyncStyleSetting(this.picMaplistAppendMap, this.lsvMaplist, new Control[] { this.lblMaplistPool, this.lnkMaplistAddMapToList, this.lnkMaplistSetNextMap }, true));
-
-            //this.m_dicAsyncSettingControls.Add("local.maplist.runnextlevel", new AsyncStyleSetting(this.picMaplistRunNextMap, this.lsvMaplist, new Control[] { this.lnkMaplistRunNextMap }, true));
-            //this.m_dicAsyncSettingControls.Add("local.maplist.restartlevel", new AsyncStyleSetting(this.picMaplistRestartMap, this.lsvMaplist, new Control[] { this.lnkMaplistRestartMap }, true));
-
             // Reservedlist updates
             this.m_dicAsyncSettingControls.Add("local.reservedlist.list", new AsyncStyleSetting(this.picReservedList, this.lsvReservedList, new Control[] { this.btnReservedSlotsListRefresh }, true)); 
             this.m_dicAsyncSettingControls.Add("local.reservedlist.append", new AsyncStyleSetting(this.picReservedAddSoldierName, this.lsvReservedList, new Control[] { this.lblReservedAddSoldierName, this.txtReservedAddSoldierName, this.lnkReservedAddSoldierName }, true));
             this.m_dicAsyncSettingControls.Add("local.reservedlist.remove", new AsyncStyleSetting(this.picReservedList, this.lsvReservedList, new Control[] { this.btnReservedRemoveSoldier }, true));
+
+            // SpectatorList updates
+            this.m_dicAsyncSettingControls.Add("local.spectatorlist.list", new AsyncStyleSetting(this.picSpectatorList, this.lsvSpectatorList, new Control[] { this.btnSpectatorSlotsListRefresh }, true));
+            this.m_dicAsyncSettingControls.Add("local.spectatorlist.append", new AsyncStyleSetting(this.picSpectatorAddSoldierName, this.lsvSpectatorList, new Control[] { this.lblSpectatorAddSoldierName, this.txtSpectatorAddSoldierName, this.lnkSpectatorAddSoldierName }, true));
+            this.m_dicAsyncSettingControls.Add("local.spectatorlist.remove", new AsyncStyleSetting(this.picSpectatorList, this.lsvSpectatorList, new Control[] { this.btnSpectatorRemoveSoldier }, true));
 
             this.m_dicAsyncSettingControls.Add("local.banlist.clearlist", new AsyncStyleSetting(this.picClearLists, this.btnBanlistClearBanlist, new Control[] { this.btnBanlistClearBanlist }, true));
             this.m_dicAsyncSettingControls.Add("local.banlist.unban", new AsyncStyleSetting(this.picUnbanPlayer, this.btnBanlistUnban, new Control[] { this.btnBanlistUnban }, true));
@@ -148,29 +144,12 @@ namespace PRoCon {
             this.cboBanlistTimeMultiplier.SelectedIndex = 0;
 
             this.m_spPrivileges = new CPrivileges(CPrivileges.FullPrivilegesFlags);
-            //this.m_spPrivileges.PrivilegesFlags = CPrivileges.FullPrivilegesFlags;
+
         }
 
         public void m_prcClient_ProconPrivileges(PRoConClient sender, CPrivileges spPrivs) {
 
             this.m_spPrivileges = spPrivs;
-
-            //this.m_dicAsyncSettingControls["local.playlist.change"].m_blReEnableControls = this.m_spPrivileges.CanEditMapList;
-            //this.lnkMaplistChangePlaylist.Enabled = this.m_spPrivileges.CanEditMapList;
-
-            //this.m_dicAsyncSettingControls["local.maplist.change"].m_blReEnableControls = this.m_spPrivileges.CanEditMapList;
-            //this.m_dicAsyncSettingControls["local.maplist.append"].m_blReEnableControls = this.m_spPrivileges.CanEditMapList;
-            //this.lnkMaplistAddMapToList.Enabled = this.m_spPrivileges.CanEditMapList;
-            //if (this.lsvMaplist.SelectedItems.Count > 0) { 
-            //    this.pnlMaplistPositionControls.Enabled = this.m_spPrivileges.CanEditMapList;
-            //} // ELSE It'll already be disabled 
-
-            //this.m_dicAsyncSettingControls["local.maplist.setnextlevel"].m_blReEnableControls = this.m_spPrivileges.CanUseMapFunctions;
-            //this.m_dicAsyncSettingControls["local.maplist.restartlevel"].m_blReEnableControls = this.m_spPrivileges.CanUseMapFunctions;
-            //this.m_dicAsyncSettingControls["local.maplist.restartlevel"].m_blReEnableControls = this.m_spPrivileges.CanUseMapFunctions;
-            //this.lnkMaplistSetNextMap.Enabled = this.m_spPrivileges.CanUseMapFunctions;
-            //this.lnkMaplistRunNextMap.Enabled = this.m_spPrivileges.CanUseMapFunctions;
-            //this.lnkMaplistRestartMap.Enabled = this.m_spPrivileges.CanUseMapFunctions;
 
             this.m_dicAsyncSettingControls["local.reservedlist.append"].m_blReEnableControls = this.m_spPrivileges.CanEditReservedSlotsList;
             this.m_dicAsyncSettingControls["local.reservedlist.remove"].m_blReEnableControls = this.m_spPrivileges.CanEditReservedSlotsList;
@@ -178,6 +157,14 @@ namespace PRoCon {
                 this.btnReservedRemoveSoldier.Enabled = this.m_spPrivileges.CanEditReservedSlotsList;
             } // ELSE It'll already be disabled 
             this.lnkReservedAddSoldierName.Enabled = this.m_spPrivileges.CanEditReservedSlotsList;
+
+            this.m_dicAsyncSettingControls["local.spectatorlist.append"].m_blReEnableControls = this.m_spPrivileges.CanEditReservedSlotsList;
+            this.m_dicAsyncSettingControls["local.spectatorlist.remove"].m_blReEnableControls = this.m_spPrivileges.CanEditReservedSlotsList;
+            if (this.lsvSpectatorList.SelectedItems.Count > 0)
+            {
+                this.btnSpectatorRemoveSoldier.Enabled = this.m_spPrivileges.CanEditReservedSlotsList;
+            } // ELSE It'll already be disabled 
+            this.lnkSpectatorAddSoldierName.Enabled = this.m_spPrivileges.CanEditReservedSlotsList;
 
             this.m_dicAsyncSettingControls["local.banlist.clearlist"].m_blReEnableControls = this.m_spPrivileges.CanEditBanList;
             this.m_dicAsyncSettingControls["local.banlist.unban"].m_blReEnableControls = this.m_spPrivileges.CanEditBanList;
@@ -212,15 +199,10 @@ namespace PRoCon {
             this.tabBanlist.ImageKey = "mouse_ban.png";
             this.tabMaplist.ImageKey = "world.png";
             this.tabReservedSlots.ImageKey = "user.png";
+            this.tabSpectatorSlots.ImageKey = "user.png";
 
             this.btnBanlistRefresh.ImageList = this.m_frmMain.iglIcons;
             this.btnBanlistRefresh.ImageKey = "arrow_refresh.png";
-
-            //this.btnMaplistMoveMapUp.ImageList = this.m_frmMain.iglIcons;
-            //this.btnMaplistMoveMapUp.ImageKey = "bullet_arrow_up.png";
-
-            //this.btnMaplistRemoveMap.ImageList = this.m_frmMain.iglIcons;
-            //this.btnMaplistRemoveMap.ImageKey = "cross.png";
 
             this.btnReservedRemoveSoldier.ImageList = this.m_frmMain.iglIcons;
             this.btnReservedRemoveSoldier.ImageKey = "cross.png";
@@ -228,8 +210,11 @@ namespace PRoCon {
             this.btnReservedSlotsListRefresh.ImageList = this.m_frmMain.iglIcons;
             this.btnReservedSlotsListRefresh.ImageKey = "arrow_refresh.png";
 
-            //this.btnMaplistMoveMapDown.ImageList = this.m_frmMain.iglIcons;
-            //this.btnMaplistMoveMapDown.ImageKey = "bullet_arrow_down.png";
+            this.btnSpectatorRemoveSoldier.ImageList = this.m_frmMain.iglIcons;
+            this.btnSpectatorRemoveSoldier.ImageKey = "cross.png";
+
+            this.btnSpectatorSlotsListRefresh.ImageList = this.m_frmMain.iglIcons;
+            this.btnSpectatorSlotsListRefresh.ImageKey = "arrow_refresh.png";
 
             this.picCloseOpenManualBans.Image = this.m_frmMain.iglIcons.Images["arrow_down.png"];
 
@@ -245,7 +230,7 @@ namespace PRoCon {
             if (this.m_prcClient != null) {
                 //this.RefreshLocalMaplist();
 
-                if (this.m_prcClient.GameType == "BF3" || this.m_prcClient.GameType == "MOHW")
+                if (this.m_prcClient.GameType == "BF3" || this.m_prcClient.GameType == "BF4" || this.m_prcClient.GameType == "MOHW")
                 {
                     this.SendCommand("mapList.list");
                 }
@@ -254,11 +239,15 @@ namespace PRoCon {
                     this.SendCommand("mapList.list", "rounds");
                 }
 
+                if (this.m_prcClient.GameType == "BF3" || this.m_prcClient.GameType == "MOHW") {
+                    this.tabSpectatorSlots.Enabled = false;
+                }
+                
                 if (this.m_prcClient.GameType == "MOH") {
                     this.tabReservedSlots.Enabled = false;
+                    this.tabSpectatorSlots.Enabled = false;
                     this.lblMohNotice.Visible = true;
                 }
-
             }
         }
 
@@ -282,6 +271,11 @@ namespace PRoCon {
             this.m_prcClient.Game.ReservedSlotsList += new FrostbiteClient.ReservedSlotsListHandler(this.OnReservedSlotsList);
             this.m_prcClient.Game.ReservedSlotsPlayerAdded += new FrostbiteClient.ReservedSlotsPlayerHandler(this.OnReservedSlotsPlayerAdded);
             this.m_prcClient.Game.ReservedSlotsPlayerRemoved += new FrostbiteClient.ReservedSlotsPlayerHandler(this.OnReservedSlotsPlayerRemoved);
+
+            this.m_prcClient.Game.SpectatorListSave += new FrostbiteClient.EmptyParamterHandler(this.OnSpectatorSlotsSave);
+            this.m_prcClient.Game.SpectatorListList += new FrostbiteClient.SpectatorListListHandler(this.OnSpectatorSlotsList);
+            this.m_prcClient.Game.SpectatorListPlayerAdded += new FrostbiteClient.SpectatorListPlayerHandler(this.OnSpectatorSlotsPlayerAdded);
+            this.m_prcClient.Game.SpectatorListPlayerRemoved += new FrostbiteClient.SpectatorListPlayerHandler(this.OnSpectatorSlotsPlayerRemoved);
 
             this.m_prcClient.Game.BanListClear += new FrostbiteClient.EmptyParamterHandler(this.OnClearBanList);
             this.m_prcClient.FullBanListList += new PRoConClient.FullBanListListHandler(this.OnBanList);
@@ -312,8 +306,17 @@ namespace PRoCon {
                 this.OnReservedSlotsList(this.m_prcClient.Game, new List<string>(this.m_prcClient.ReservedSlotList));
             }
 
-            if (sender.Game is BF3Client || sender.Game is MOHWClient) {
+            if (this.m_prcClient.SpectatorList != null) {
+                this.OnSpectatorSlotsList(this.m_prcClient.Game, new List<string>(this.m_prcClient.SpectatorList));
+            }
+
+            if (sender.Game is BF4Client || sender.Game is BF3Client || sender.Game is MOHWClient)
+            {
                 this.tbcLists.TabPages.Remove(this.tabTextChatModeration);
+            }
+
+            if (!(sender.Game is BF4Client)) {
+                this.tbcLists.TabPages.Remove(this.tabSpectatorSlots);
             }
         }
 
@@ -378,7 +381,13 @@ namespace PRoCon {
             this.colSoldierNames.Text = clocLanguage.GetLocalized("uscListControlPanel.tabReservedSlots.lsvReservedList.colSoldierNames", null);
             this.lblReservedAddSoldierName.Text = clocLanguage.GetLocalized("uscListControlPanel.tabReservedSlots.lblReservedAddSoldierName", null);
             this.lnkReservedAddSoldierName.Text = clocLanguage.GetLocalized("uscListControlPanel.tabReservedSlots.lnkReservedAddSoldierName", null);
-        
+
+            this.tabSpectatorSlots.Text = clocLanguage.GetLocalized("uscListControlPanel.tabSpectatorSlots", null);
+            this.lblSpectatorCurrent.Text = clocLanguage.GetLocalized("uscListControlPanel.tabSpectatorSlots.lblSpectatorCurrent", null);
+            this.colSpectatorSoldierNames.Text = clocLanguage.GetLocalized("uscListControlPanel.tabSpectatorSlots.lsvSpectatorList.colSpectatorSoldierNames", null);
+            this.lblSpectatorAddSoldierName.Text = clocLanguage.GetLocalized("uscListControlPanel.tabSpectatorSlots.lblSpectatorAddSoldierName", null);
+            this.lnkSpectatorAddSoldierName.Text = clocLanguage.GetLocalized("uscListControlPanel.tabSpectatorSlots.lnkSpectatorAddSoldierName", null);
+
             this.lnkCloseOpenManualBans.Text = clocLanguage.GetLocalized("uscListControlPanel.tabBanlist.lnkCloseOpenManualBans.Close", null);
             this.rdoBanlistName.Text = clocLanguage.GetLocalized("uscListControlPanel.tabBanlist.rdoBanlistName", null);
             //this.rdoBanlistPbGUID.Text = clocLanguage.GetLocalized("uscListControlPanel.tabBanlist.rdoBanlistGUID", null);
@@ -672,6 +681,164 @@ namespace PRoCon {
 
         #endregion
 
+        #region Spectator Slots
+
+        public void OnSpectatorSlotsList(FrostbiteClient sender, List<string> lstSoldierNames)
+        {
+            this.lsvSpectatorList.BeginUpdate();
+            this.lsvSpectatorList.Items.Clear();
+            foreach (string strSoldierName in lstSoldierNames)
+            {
+                if (this.lsvSpectatorList.Items.ContainsKey(strSoldierName) == false)
+                {
+
+                    ListViewItem lsvNewSoldier = new ListViewItem(strSoldierName);
+                    lsvNewSoldier.Name = strSoldierName;
+
+                    this.lsvSpectatorList.Items.Add(lsvNewSoldier);
+                }
+            }
+            this.lsvSpectatorList.EndUpdate();
+        }
+
+        public void OnSpectatorSlotsPlayerRemoved(FrostbiteClient sender, string strSoldierName)
+        {
+            if (this.lsvSpectatorList.Items.ContainsKey(strSoldierName) == true)
+            {
+                this.lsvSpectatorList.Items.RemoveByKey(strSoldierName);
+            }
+        }
+
+        public void OnSpectatorSlotsPlayerAdded(FrostbiteClient sender, string strSoldierName)
+        {
+            if (this.lsvSpectatorList.Items.ContainsKey(strSoldierName) == false)
+            {
+
+                ListViewItem lsvNewSoldier = new ListViewItem(strSoldierName);
+                lsvNewSoldier.Name = strSoldierName;
+
+                this.lsvSpectatorList.Items.Add(lsvNewSoldier);
+            }
+        }
+
+        public void OnSpectatorSlotsSave(FrostbiteClient sender)
+        {
+            if (this.m_blSettingAppendingSpectatorPlayer == true)
+            {
+                this.OnSettingResponse("local.spectatorlist.append", true);
+                this.m_blSettingAppendingSpectatorPlayer = false;
+            }
+            else if (this.m_blSettingRemovingSpectatorPlayer == true)
+            {
+                this.OnSettingResponse("local.spectatorlist.remove", true);
+                this.m_blSettingRemovingSpectatorPlayer = false;
+            }
+
+        }
+
+        private void lnkSpectatorAddSoldierName_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+
+            if (this.txtSpectatorAddSoldierName.Text.Length > 0)
+            {
+                this.m_blSettingAppendingSpectatorPlayer = true;
+                this.WaitForSettingResponse("local.spectatorlist.append");
+
+                this.m_prcClient.Game.SendSpectatorListAddPlayerPacket(this.txtSpectatorAddSoldierName.Text);
+                //this.SendCommand("spectatorList.add", );
+
+                this.m_prcClient.Game.SendSpectatorListSavePacket();
+                //this.SendCommand("spectatorList.save");
+
+                this.txtSpectatorAddSoldierName.Clear();
+                this.txtSpectatorAddSoldierName.Focus();
+            }
+        }
+
+        private void lsvSpectatorList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+            if (this.lsvSpectatorList.SelectedItems.Count > 0 && this.lsvSpectatorList.FocusedItem != null)
+            {
+                this.btnSpectatorRemoveSoldier.Enabled = true && this.m_spPrivileges.CanEditReservedSlotsList;
+            }
+
+        }
+
+        private void btnSpectatorRemoveSoldier_Click(object sender, EventArgs e)
+        {
+
+            if (this.lsvSpectatorList.SelectedItems.Count > 0)
+            {
+
+                this.m_blSettingRemovingSpectatorPlayer = true;
+                this.WaitForSettingResponse("local.spectatorlist.remove");
+
+                this.m_prcClient.Game.SendSpectatorListRemovePlayerPacket(this.lsvSpectatorList.SelectedItems[0].Name);
+                //this.SendCommand("spectatorList.remove", this.lsvSpectatorList.SelectedItems[0].Name);
+
+                this.m_prcClient.Game.SendSpectatorListSavePacket();
+                //this.SendCommand("spectatorList.save");
+            }
+        }
+
+        private void txtSpectatorAddSoldierName_TextChanged(object sender, EventArgs e)
+        {
+
+            if (this.txtSpectatorAddSoldierName.Text.Length > 0)
+            {
+                this.lnkSpectatorAddSoldierName.Enabled = true && this.m_spPrivileges.CanEditReservedSlotsList;
+            }
+            else
+            {
+                this.lnkSpectatorAddSoldierName.Enabled = false;
+            }
+        }
+
+        private void txtSpectatorAddSoldierName_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (this.txtSpectatorAddSoldierName.Text.Length > 0 && e.KeyData == Keys.Enter)
+            {
+                this.lnkSpectatorAddSoldierName_LinkClicked(this, null);
+                e.SuppressKeyPress = true;
+            }
+        }
+
+        private void lsvSpectatorList_ColumnClick(object sender, ColumnClickEventArgs e)
+        {
+            // Determine if clicked column is already the column that is being sorted.
+            if (e.Column == this.m_lvwSpectatorSlotsColumnSorter.SortColumn)
+            {
+                // Reverse the current sort direction for this column.
+                if (this.m_lvwSpectatorSlotsColumnSorter.Order == SortOrder.Ascending)
+                {
+                    this.m_lvwSpectatorSlotsColumnSorter.Order = SortOrder.Descending;
+                }
+                else
+                {
+                    this.m_lvwSpectatorSlotsColumnSorter.Order = SortOrder.Ascending;
+                }
+            }
+            else
+            {
+                // Set the column number that is to be sorted; default to ascending.
+                this.m_lvwSpectatorSlotsColumnSorter.SortColumn = e.Column;
+                this.m_lvwSpectatorSlotsColumnSorter.Order = SortOrder.Ascending;
+            }
+
+            // Perform the sort with these new sort options.
+            this.lsvSpectatorList.Sort();
+        }
+
+        private void btnSpectatorSlotsListRefresh_Click(object sender, EventArgs e)
+        {
+            this.m_prcClient.Game.SendSpectatorListLoadPacket();
+            this.m_prcClient.Game.SendSpectatorListListPacket();
+        }
+
+        #endregion
+
+        
         #region Banlist
 
         private void Reasons_ItemRemoved(int iIndex, string item) {

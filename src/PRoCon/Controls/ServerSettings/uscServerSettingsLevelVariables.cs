@@ -589,7 +589,7 @@ namespace PRoCon.Controls.ServerSettings {
             if (this.IgnoreEvents == false && this.AsyncSettingControls["levelvars.set vehiclesdisabled"].IgnoreEvent == false) {
                 this.WaitForSettingResponse("levelvars.set vehiclesdisabled", !this.chkLevelVehiclesDisabled.Checked);
 
-                this.SetLevelVariablesByContext(this.GetSelectedContext(), "vehiclesDisabled", Packet.bltos(this.chkLevelVehiclesDisabled.Checked));
+                this.SetLevelVariablesByContext(this.GetSelectedContext(), "vehiclesDisabled", Packet.Bltos(this.chkLevelVehiclesDisabled.Checked));
 
             }
         }

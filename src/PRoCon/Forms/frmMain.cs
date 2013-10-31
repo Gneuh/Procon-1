@@ -368,12 +368,14 @@ namespace PRoCon.Forms {
         }
 
         private void changelogToolStripMenuItem_Click(object sender, EventArgs e) {
-            System.Diagnostics.Process.Start("http://phogue.net/procon/changelog.php");
+            //System.Diagnostics.Process.Start("http://phogue.net/procon/changelog.php");
+            System.Diagnostics.Process.Start("https://repo.myrcon.com/procon1/changelog.php");
 
         }
 
         private void pRoConHostingProvidersToolStripMenuItem_Click(object sender, EventArgs e) {
-            System.Diagnostics.Process.Start("http://phogue.net/procon/proconhosting.php");
+            //System.Diagnostics.Process.Start("http://phogue.net/procon/proconhosting.php");
+            System.Diagnostics.Process.Start("https://repo.myrcon.com/procon1/proconhosting.php");
         }
 
         private void optionsToolStripMenuItem1_Click(object sender, EventArgs e) {

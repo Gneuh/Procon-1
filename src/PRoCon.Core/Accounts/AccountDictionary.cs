@@ -18,16 +18,14 @@
     along with PRoCon Frostbite.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Text;
+using PRoCon.Core.Remote;
 
 namespace PRoCon.Core.Accounts {
-    using Core.Remote;
     public class AccountDictionary : KeyedCollection<string, Account> {
-
         public delegate void AccountAlteredHandler(Account item);
+
         public event AccountAlteredHandler AccountAdded;
         public event AccountAlteredHandler AccountChanged;
         public event AccountAlteredHandler AccountRemoved;
@@ -39,64 +37,50 @@ namespace PRoCon.Core.Accounts {
         protected override void InsertItem(int index, Account item) {
             base.InsertItem(index, item);
 
-            if (this.AccountAdded != null) {
-                FrostbiteConnection.RaiseEvent(this.AccountAdded.GetInvocationList(), item);
+            if (AccountAdded != null) {
+                FrostbiteConnection.RaiseEvent(AccountAdded.GetInvocationList(), item);
             }
         }
 
         protected override void RemoveItem(int index) {
-
-            if (this.AccountRemoved != null) {
-                FrostbiteConnection.RaiseEvent(this.AccountRemoved.GetInvocationList(), this[index]);
+            if (AccountRemoved != null) {
+                FrostbiteConnection.RaiseEvent(AccountRemoved.GetInvocationList(), this[index]);
             }
 
             base.RemoveItem(index);
         }
 
         protected override void SetItem(int index, Account item) {
-            if (this.AccountChanged != null) {
-                FrostbiteConnection.RaiseEvent(this.AccountChanged.GetInvocationList(), item);
+            if (AccountChanged != null) {
+                FrostbiteConnection.RaiseEvent(AccountChanged.GetInvocationList(), item);
             }
 
             base.SetItem(index, item);
         }
 
         public void CreateAccount(string strUsername, string strPassword) {
-            if (this.Contains(strUsername) == true) {
+            if (Contains(strUsername) == true) {
                 this[strUsername].Password = strPassword;
             }
             else {
-                Account accNewAccount = new Account(strUsername, strPassword);
-
-                // Temporary until privileges can be extracted from here and into the layer.
-                /*
-                foreach (Account accCurrentAccount in this) {
-                    foreach (AccountPrivilege accCurrentPrivilege in accCurrentAccount.AccountPrivileges) {
-                        if (accNewAccount.AccountPrivileges.Contains(accCurrentPrivilege.HostNamePort) == false) {
-                            accNewAccount.AccountPrivileges.Add(new AccountPrivilege(accNewAccount, accCurrentPrivilege.HostNamePort, new CPrivileges()));
-                        }
-                    }
-                }
-                */
-                this.Add(accNewAccount);
+                Add(new Account(strUsername, strPassword));
             }
         }
 
         public void DeleteAccount(string strUsername) {
-            if (this.Contains(strUsername) == true) {
-                this.Remove(strUsername);
+            if (Contains(strUsername) == true) {
+                Remove(strUsername);
             }
         }
 
         public void ChangePassword(string strUsername, string strPassword) {
-            if (this.Contains(strUsername) == true) {
+            if (Contains(strUsername) == true) {
                 this[strUsername].Password = strPassword;
             }
         }
 
         public List<string> ListAccountNames() {
-            return new List<string>(this.Dictionary.Keys);
+            return new List<string>(Dictionary.Keys);
         }
-
     }
 }

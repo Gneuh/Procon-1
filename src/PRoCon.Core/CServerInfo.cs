@@ -132,6 +132,10 @@ namespace PRoCon.Core {
         public string ServerCountry { get; set; }
         public bool QuickMatch { get; set; }
 
+        // BF4
+        public int BlazePlayerCount { get; set; }
+        public string BlazeGameState { get; set; }
+
         public List<TeamScore> TeamScores {
             get;
             private set;

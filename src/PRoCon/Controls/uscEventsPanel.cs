@@ -165,23 +165,23 @@ namespace PRoCon {
 
             ListViewItem lviNewEvent = new ListViewItem();
 
-            if (ceEvent.eType == EventType.Game) {
+            if (ceEvent.EventType == EventType.Game) {
                 lviNewEvent.ImageKey = "bfbc2server.png";
                 lviNewEvent.Text = "Game";
             }
-            else if (ceEvent.eType == EventType.Plugins) {
+            else if (ceEvent.EventType == EventType.Plugins) {
                 lviNewEvent.ImageKey = "plugin.png";
                 lviNewEvent.Text = "Plugins";
             }
-            else if (ceEvent.eType == EventType.Connection) {
+            else if (ceEvent.EventType == EventType.Connection) {
                 lviNewEvent.ImageKey = "connect.png";
                 lviNewEvent.Text = "Connection";
             }
-            else if (ceEvent.eType == EventType.Playerlist) {
+            else if (ceEvent.EventType == EventType.Playerlist) {
                 lviNewEvent.ImageKey = "mouse.png";
                 lviNewEvent.Text = "Playerlist";
             }
-            else if (ceEvent.eType == EventType.Layer) {
+            else if (ceEvent.EventType == EventType.Layer) {
                 lviNewEvent.ImageKey = "layer.png";
                 lviNewEvent.Text = "Layer";
             }

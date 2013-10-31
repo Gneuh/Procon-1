@@ -628,6 +628,7 @@ namespace PRoCon.Core {
 
         #region Loading/Saving Configs and Commands
 
+
         public void LoadLocalizationFiles() {
 
             lock (new object()) {
@@ -671,7 +672,7 @@ namespace PRoCon.Core {
             if (File.Exists(Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Configs"), strConfigFile)) == true)
             {
 
-                string[] a_strLines = File.ReadAllLines(Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Configs"), strConfigFile)); // , Encoding.Unicode
+                string[] a_strLines = File.ReadAllLines(Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Configs"), strConfigFile), Encoding.UTF8);
 
                 foreach (string strLine in a_strLines) {
 
@@ -698,7 +699,7 @@ namespace PRoCon.Core {
                     stmProconConfigFile = new FileStream(Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Configs"), "procon.cfg"), FileMode.Create);
 
                     if (stmProconConfigFile != null) {
-                        StreamWriter stwConfig = new StreamWriter(stmProconConfigFile, Encoding.Unicode);
+                        StreamWriter stwConfig = new StreamWriter(stmProconConfigFile, Encoding.UTF8);
 
                         stwConfig.WriteLine("/////////////////////////////////////////////");
                         stwConfig.WriteLine("// This config will be overwritten by procon.");
@@ -1448,11 +1449,11 @@ namespace PRoCon.Core {
                 double UTCoffset;
                 if (double.TryParse(lstWords[1], out UTCoffset) == true)
                 {
-                    ((PRoConClient)objSender).Game.UTCoffset = UTCoffset;
+                    ((PRoConClient)objSender).Game.UtcOffset = UTCoffset;
                 }
                 else
                 {
-                    ((PRoConClient)objSender).Game.UTCoffset = 0;
+                    ((PRoConClient)objSender).Game.UtcOffset = 0;
                 }
             }
             else if (lstWords.Count >= 1 && String.Compare(lstWords[0], "procon.protected.tasks.clear", true) == 0 && objSender is PRoConClient)
@@ -2270,11 +2271,11 @@ namespace PRoCon.Core {
                 double UTCoffset;
                 if (double.TryParse(lstWords[1], out UTCoffset) == true)
                 {
-                    ((PRoConClient)objSender).Game.UTCoffset = UTCoffset;
+                    ((PRoConClient)objSender).Game.UtcOffset = UTCoffset;
                 }
                 else
                 {
-                    ((PRoConClient)objSender).Game.UTCoffset = 0;
+                    ((PRoConClient)objSender).Game.UtcOffset = 0;
                 }
             }
             else if (lstWords.Count >= 1 && String.Compare(lstWords[0], "procon.protected.tasks.clear", true) == 0 && objSender is PRoConClient)
@@ -2528,7 +2529,7 @@ namespace PRoCon.Core {
                     stmProconConfigFile = new FileStream(Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Configs"), "accounts.cfg"), FileMode.Create);
 
                     if (stmProconConfigFile != null) {
-                        StreamWriter stwConfig = new StreamWriter(stmProconConfigFile, Encoding.Unicode);
+                        StreamWriter stwConfig = new StreamWriter(stmProconConfigFile, Encoding.UTF8);
 
                         stwConfig.WriteLine("/////////////////////////////////////////////");
                         stwConfig.WriteLine("// This config will be overwritten by procon.");
@@ -2681,7 +2682,7 @@ namespace PRoCon.Core {
                 connection.AppendChild(this.CreateNode(document, "ip", client.HostName));
                 connection.AppendChild(this.CreateNode(document, "port", client.Port.ToString()));
                 connection.AppendChild(this.CreateNode(document, "game", client.GameType));
-                connection.AppendChild(this.CreateNode(document, "servername", client.CurrentServerInfo != null ? client.CurrentServerInfo.ServerName : ""));
+                connection.AppendChild(this.CreateNode(document, "servername", ""));
                 connection.AppendChild(this.CreateNode(document, "is_layer_connection", client.IsPRoConConnection.ToString()));
 
                 XmlNode layer = document.CreateElement("layer");
@@ -2786,8 +2787,10 @@ namespace PRoCon.Core {
                         prcClient.Connect();
                     }
 
+                    prcClient.Poke();
+
                     //if (((prcClient.ConnectionError == true && prcClient.IsConnected == false) || (prcClient.IsConnected == false && prcClient.ManuallyDisconnected == false)) && prcClient.AutomaticallyConnect == true) {
-                        
+
                     //}
                 }
 

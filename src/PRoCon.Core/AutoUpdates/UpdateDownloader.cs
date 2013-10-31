@@ -1,127 +1,95 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
 using System.IO;
-using Ionic.Zip;
 using System.Security.Cryptography;
+using System.Text;
+using Ionic.Zip;
+using PRoCon.Core.Remote;
 
 namespace PRoCon.Core.AutoUpdates {
-    using Core.Remote;
-
     public class UpdateDownloader {
+        public delegate void CustomDownloadErrorHandler(string strError);
 
         public delegate void DownloadUnzipCompleteHandler();
-        public event DownloadUnzipCompleteHandler DownloadUnzipComplete;
 
         public delegate void UpdateDownloadingHandler(CDownloadFile cdfDownloading);
-        public event UpdateDownloadingHandler UpdateDownloading;
 
-        public delegate void CustomDownloadErrorHandler(string strError);
-        public event CustomDownloadErrorHandler CustomDownloadError;
+        protected CDownloadFile ProconUpdate;
 
-        private CDownloadFile m_cdfPRoConUpdate;
-
-        private string m_updatesDirectoryName;
-
-        public CDownloadFile VersionChecker {
-            get;
-            private set;
-        }
+        protected string UpdatesDirectoryName;
 
         public UpdateDownloader(string updatesDirectoryName) {
-            this.m_updatesDirectoryName = updatesDirectoryName;
-            this.VersionChecker = new CDownloadFile("http://www.phogue.net/procon/version3.php");
-            this.VersionChecker.DownloadComplete += new CDownloadFile.DownloadFileEventDelegate(VersionChecker_DownloadComplete);
+            UpdatesDirectoryName = updatesDirectoryName;
+            VersionChecker = new CDownloadFile("https://repo.myrcon.com/procon1/version3.php");
+            VersionChecker.DownloadComplete += new CDownloadFile.DownloadFileEventDelegate(VersionChecker_DownloadComplete);
         }
+
+        public CDownloadFile VersionChecker { get; private set; }
+        public event DownloadUnzipCompleteHandler DownloadUnzipComplete;
+        public event UpdateDownloadingHandler UpdateDownloading;
+        public event CustomDownloadErrorHandler CustomDownloadError;
 
         public void DownloadLatest() {
-            this.VersionChecker.BeginDownload();
+            VersionChecker.BeginDownload();
         }
 
-        private string MD5File(string strFileName) {
-            StringBuilder sbStringifyHash = new StringBuilder();
-
-            if (File.Exists(strFileName) == true) {
-                MD5 md5Hasher = MD5.Create();
-
-                byte[] a_bHash = md5Hasher.ComputeHash(File.ReadAllBytes(strFileName));
-
-                for (int x = 0; x < a_bHash.Length; x++) {
-                    sbStringifyHash.Append(a_bHash[x].ToString("x2"));
-                }
-            }
-
-            return sbStringifyHash.ToString();
-        }
-
-        private string MD5Data(byte[] a_bData) {
-            StringBuilder sbStringifyHash = new StringBuilder();
+        private string MD5Data(byte[] data) {
+            var stringifyHash = new StringBuilder();
 
             MD5 md5Hasher = MD5.Create();
 
-            byte[] a_bHash = md5Hasher.ComputeHash(a_bData);
+            byte[] hash = md5Hasher.ComputeHash(data);
 
-            for (int x = 0; x < a_bHash.Length; x++) {
-                sbStringifyHash.Append(a_bHash[x].ToString("x2"));
+            for (int x = 0; x < hash.Length; x++) {
+                stringifyHash.Append(hash[x].ToString("x2"));
             }
 
-            return sbStringifyHash.ToString();
+            return stringifyHash.ToString();
         }
 
-        private void VersionChecker_DownloadComplete(CDownloadFile cdfSender) {
- 
-            string[] a_strVersionData = System.Text.Encoding.UTF8.GetString(cdfSender.CompleteFileData).Split('\n');
+        private void VersionChecker_DownloadComplete(CDownloadFile sender) {
+            string[] versionData = Encoding.UTF8.GetString(sender.CompleteFileData).Split('\n');
 
-            if (a_strVersionData.Length >= 4 && (this.m_cdfPRoConUpdate == null || this.m_cdfPRoConUpdate.FileDownloading == false)) {
-
+            if (versionData.Length >= 4 && (ProconUpdate == null || ProconUpdate.FileDownloading == false)) {
                 // Download file, alert or auto apply once complete with release notes.
-                this.m_cdfPRoConUpdate = new CDownloadFile(a_strVersionData[2], a_strVersionData[3]);
-                this.m_cdfPRoConUpdate.DownloadComplete += new CDownloadFile.DownloadFileEventDelegate(cdfPRoConUpdate_DownloadComplete);
+                ProconUpdate = new CDownloadFile(versionData[2], versionData[3]);
+                ProconUpdate.DownloadComplete += new CDownloadFile.DownloadFileEventDelegate(cdfPRoConUpdate_DownloadComplete);
 
-                if (this.UpdateDownloading != null) {
-                    FrostbiteConnection.RaiseEvent(this.UpdateDownloading.GetInvocationList(), this.m_cdfPRoConUpdate);
+                if (UpdateDownloading != null) {
+                    FrostbiteConnection.RaiseEvent(UpdateDownloading.GetInvocationList(), ProconUpdate);
                 }
 
-                this.m_cdfPRoConUpdate.BeginDownload();
+                ProconUpdate.BeginDownload();
             }
         }
 
-        private void cdfPRoConUpdate_DownloadComplete(CDownloadFile cdfSender) {
-
-            if (String.Compare(this.MD5Data(cdfSender.CompleteFileData), (string)cdfSender.AdditionalData, true) == 0) {
-
-                string strUpdatesFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, this.m_updatesDirectoryName);
+        private void cdfPRoConUpdate_DownloadComplete(CDownloadFile sender) {
+            if (String.Compare(MD5Data(sender.CompleteFileData), (string) sender.AdditionalData, StringComparison.OrdinalIgnoreCase) == 0) {
+                string updatesFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, UpdatesDirectoryName);
 
                 try {
-                    if (Directory.Exists(strUpdatesFolder) == false) {
-                        Directory.CreateDirectory(strUpdatesFolder);
+                    if (Directory.Exists(updatesFolder) == false) {
+                        Directory.CreateDirectory(updatesFolder);
                     }
 
-                    using (ZipFile zip = ZipFile.Read(cdfSender.CompleteFileData)) {
-                        zip.ExtractAll(strUpdatesFolder, ExtractExistingFileAction.OverwriteSilently);
+                    using (ZipFile zip = ZipFile.Read(sender.CompleteFileData)) {
+                        zip.ExtractAll(updatesFolder, ExtractExistingFileAction.OverwriteSilently);
                     }
 
-                    if (this.DownloadUnzipComplete != null) {
-                        FrostbiteConnection.RaiseEvent(this.DownloadUnzipComplete.GetInvocationList());
+                    if (DownloadUnzipComplete != null) {
+                        FrostbiteConnection.RaiseEvent(DownloadUnzipComplete.GetInvocationList());
                     }
                 }
                 catch (Exception e) {
-                    if (this.CustomDownloadError != null) {
-                        FrostbiteConnection.RaiseEvent(this.CustomDownloadError.GetInvocationList(), e.Message);
+                    if (CustomDownloadError != null) {
+                        FrostbiteConnection.RaiseEvent(CustomDownloadError.GetInvocationList(), e.Message);
                     }
-
-                    //this.Invoke(new DownloadErrorDelegate(DownloadError_Callback), e.Message);
                 }
             }
             else {
-                if (this.CustomDownloadError != null) {
-                    FrostbiteConnection.RaiseEvent(this.CustomDownloadError.GetInvocationList(), "Downloaded file failed checksum, please try again or download direct from http://phogue.net");
+                if (CustomDownloadError != null) {
+                    FrostbiteConnection.RaiseEvent(CustomDownloadError.GetInvocationList(), "Downloaded file failed checksum, please try again or download direct from https://myrcon.com");
                 }
-
-                //this.Invoke(new DownloadErrorDelegate(DownloadError_Callback), "Downloaded file failed checksum, please try again or download direct from http://phogue.net");
             }
         }
-
     }
 }

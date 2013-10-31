@@ -68,11 +68,11 @@
             this.SquadID = iSquadId;
         }
         
-        public string ClanTag { get; private set; }
+        public string ClanTag { get; set; }
 
-        public string SoldierName { get; private set; }
+        public string SoldierName { get; set; }
 
-        public string GUID { get; private set; }
+        public string GUID { get; set; }
 
         public int TeamID { get; set; }
 

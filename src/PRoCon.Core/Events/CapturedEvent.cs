@@ -1,11 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace PRoCon.Core.Events {
     public class CapturedEvent {
+        public CapturedEvent(EventType eventType, CapturableEvents capturableEvent, string eventText, DateTime loggedTime, string instigatingAdmin) {
+            EventType = eventType;
+            Event = capturableEvent;
+            EventText = eventText;
+            LoggedTime = loggedTime;
 
-        public EventType eType { get; private set; }
+            InstigatingAdmin = instigatingAdmin;
+        }
+
+        public EventType EventType { get; private set; }
 
         public CapturableEvents Event { get; private set; }
 
@@ -14,14 +20,5 @@ namespace PRoCon.Core.Events {
         public DateTime LoggedTime { get; set; }
 
         public string InstigatingAdmin { get; private set; }
-
-        public CapturedEvent(EventType etType, CapturableEvents ceEvent, string strEventText, DateTime dtLoggedTime, string instigatingAdmin) {
-            this.eType = etType;
-            this.Event = ceEvent;
-            this.EventText = strEventText;
-            this.LoggedTime = dtLoggedTime;
-
-            this.InstigatingAdmin = instigatingAdmin;
-        }
     }
 }

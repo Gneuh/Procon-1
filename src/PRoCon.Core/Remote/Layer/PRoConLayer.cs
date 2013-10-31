@@ -302,6 +302,17 @@ namespace PRoCon.Core.Remote.Layer {
             }
         }
 
+        /// <summary>
+        /// Pokes all connections, making sure they are still alive and well. Shuts them down if no traffic has occured in
+        /// the last five minutes.
+        /// </summary>
+        public void Poke() {
+            
+            foreach (PRoConLayerClient client in this.LayerClients) {
+                client.Game.Connection.Poke();
+            }
+        }
+
         private IPAddress ResolveHostName(string strHostName) {
             IPAddress ipReturn = IPAddress.None;
 

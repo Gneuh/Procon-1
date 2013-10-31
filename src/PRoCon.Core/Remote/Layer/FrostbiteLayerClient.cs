@@ -1,18 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace PRoCon.Core.Remote.Layer {
     public class FrostbiteLayerClient {
 
-        private FrostbiteLayerConnection m_connection;
+        public FrostbiteLayerConnection Connection { get; set; }
 
         #region Packet Management
 
         protected delegate void RequestPacketHandler(FrostbiteLayerConnection sender, Packet cpRecievedPacket);
         //protected delegate void ResponsePacketHandler(FrostbiteLayerConnection sender, Packet cpRecievedPacket);
         //protected Dictionary<string, ResponsePacketHandler> m_responseDelegates = new Dictionary<string, ResponsePacketHandler>();
-        protected Dictionary<string, RequestPacketHandler> m_requestDelegates = new Dictionary<string, RequestPacketHandler>();
+        protected Dictionary<string, RequestPacketHandler> RequestDelegates = new Dictionary<string, RequestPacketHandler>();
 
         #endregion
 
@@ -71,8 +70,8 @@ namespace PRoCon.Core.Remote.Layer {
             get {
                 string returnIpPort = String.Empty;
 
-                if (this.m_connection != null) {
-                    returnIpPort = this.m_connection.IPPort;
+                if (this.Connection != null) {
+                    returnIpPort = this.Connection.IPPort;
                 }
 
                 return returnIpPort;
@@ -80,9 +79,9 @@ namespace PRoCon.Core.Remote.Layer {
         }
 
         public FrostbiteLayerClient(FrostbiteLayerConnection connection) {
-            this.m_connection = connection;
+            this.Connection = connection;
 
-            this.m_requestDelegates = new Dictionary<string, RequestPacketHandler>() {
+            this.RequestDelegates = new Dictionary<string, RequestPacketHandler>() {
                 { "login.plainText", this.DispatchLoginPlainTextRequest },
                 { "login.hashed", this.DispatchLoginHashedRequest },
                 { "logout", this.DispatchLogoutRequest },
@@ -204,8 +203,8 @@ namespace PRoCon.Core.Remote.Layer {
                 { "admin.shutDown", this.DispatchAdminShutDownRequest },
             };
 
-            this.m_connection.PacketReceived += new FrostbiteLayerConnection.PacketDispatchHandler(m_connection_PacketReceived);
-            this.m_connection.ConnectionClosed += new FrostbiteLayerConnection.EmptyParameterHandler(m_connection_ConnectionClosed);
+            this.Connection.PacketReceived += new FrostbiteLayerConnection.PacketDispatchHandler(m_connection_PacketReceived);
+            this.Connection.ConnectionClosed += new FrostbiteLayerConnection.EmptyParameterHandler(m_connection_ConnectionClosed);
         }
 
 
@@ -399,8 +398,8 @@ namespace PRoCon.Core.Remote.Layer {
 
         public virtual void DispatchRequestPacket(FrostbiteLayerConnection sender, Packet cpRequestPacket) {
             if (cpRequestPacket.Words.Count >= 1) {
-                if (this.m_requestDelegates.ContainsKey(cpRequestPacket.Words[0]) == true) {
-                    this.m_requestDelegates[cpRequestPacket.Words[0]](sender, cpRequestPacket);
+                if (this.RequestDelegates.ContainsKey(cpRequestPacket.Words[0]) == true) {
+                    this.RequestDelegates[cpRequestPacket.Words[0]](sender, cpRequestPacket);
                 }
                 else {
                     if (this.RequestPacketUnknownRecieved != null) {
@@ -428,14 +427,14 @@ namespace PRoCon.Core.Remote.Layer {
         }
 
         public void SendPacket(Packet packet) {
-            if (this.m_connection != null) {
-                this.m_connection.SendAsync(packet);
+            if (this.Connection != null) {
+                this.Connection.SendAsync(packet);
             }
         }
 
         public void SendRequest(List<string> words) {
-            if (this.m_connection != null) {
-                this.m_connection.SendAsync(new Packet(true, false, this.m_connection.AcquireSequenceNumber, words));
+            if (this.Connection != null) {
+                this.Connection.SendAsync(new Packet(true, false, this.Connection.AcquireSequenceNumber, words));
             }
         }
 
@@ -445,8 +444,8 @@ namespace PRoCon.Core.Remote.Layer {
 
         public void SendResponse(Packet packet, List<string> words) {
 
-            if (this.m_connection != null) {
-                this.m_connection.SendAsync(new Packet(false, true, packet.SequenceNumber, words));
+            if (this.Connection != null) {
+                this.Connection.SendAsync(new Packet(false, true, packet.SequenceNumber, words));
             }
         }
 
@@ -456,9 +455,9 @@ namespace PRoCon.Core.Remote.Layer {
 
         public void Shutdown() {
 
-            if (this.m_connection != null) {
-                this.m_connection.Shutdown();
-                this.m_connection = null;
+            if (this.Connection != null) {
+                this.Connection.Shutdown();
+                this.Connection = null;
             }
         }
     }

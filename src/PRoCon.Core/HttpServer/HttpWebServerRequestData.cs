@@ -89,16 +89,16 @@ namespace PRoCon.Core.HttpServer {
                 this.Request = methodFileMatch.Groups["request"].Value;
                 this.HttpVersion = methodFileMatch.Groups["http_version"].Value;
 
-                string[] a_requestQueryString = this.Request.Split(new char[] { '?' }, 2, StringSplitOptions.RemoveEmptyEntries);
+                string[] requestQueryString = this.Request.Split(new char[] { '?' }, 2, StringSplitOptions.RemoveEmptyEntries);
 
-                if (a_requestQueryString.Length >= 1) {
-                    int lastIndexForwardSlash = a_requestQueryString[0].LastIndexOf('/') + 1;
+                if (requestQueryString.Length >= 1) {
+                    int lastIndexForwardSlash = requestQueryString[0].LastIndexOf('/') + 1;
 
-                    this.RequestPath = a_requestQueryString[0].Substring(0, lastIndexForwardSlash);
-                    this.RequestFile = a_requestQueryString[0].Substring(lastIndexForwardSlash, a_requestQueryString[0].Length - lastIndexForwardSlash);
+                    this.RequestPath = requestQueryString[0].Substring(0, lastIndexForwardSlash);
+                    this.RequestFile = requestQueryString[0].Substring(lastIndexForwardSlash, requestQueryString[0].Length - lastIndexForwardSlash);
 
-                    if (a_requestQueryString.Length >= 2) {
-                        this.Query = HttpUtility.ParseQueryString(a_requestQueryString[1]);
+                    if (requestQueryString.Length >= 2) {
+                        this.Query = HttpUtility.ParseQueryString(requestQueryString[1]);
                     }
                 }
 
@@ -116,7 +116,7 @@ namespace PRoCon.Core.HttpServer {
                     headersMatch = headersMatch.NextMatch();
                 }
 
-                if (String.Compare(this.Method, "POST", true) == 0) {
+                if (System.String.Compare(this.Method, "POST", System.StringComparison.OrdinalIgnoreCase) == 0) {
                     // Read additional post data.
                 }
             }
