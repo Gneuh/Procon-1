@@ -126,6 +126,12 @@ namespace PRoCon {
                 this.m_prcClient.ChatConsole.LogComRoseMessages = this.m_prcClient.ChatConsole.LogComRoseMessages;
                 this.m_prcClient.ChatConsole.DisplayTypeIndex = this.m_prcClient.ChatConsole.DisplayTypeIndex;
                 this.m_prcClient.ChatConsole.DisplayTimeIndex = this.m_prcClient.ChatConsole.DisplayTimeIndex;
+
+                if (System.String.Compare(this.m_prcClient.GameType, "BF4", System.StringComparison.OrdinalIgnoreCase) != 0)
+                {
+                    this.chkDisplayComRoseMsg.Enabled = false;
+                    this.chkDisplayComRoseMsg.Visible = false;
+                }
             }
         }
 
