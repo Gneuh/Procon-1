@@ -174,7 +174,7 @@ namespace PRoCon.Core.Consoles {
                         Scrolling = isEnabled;
                     }
 
-                    if (value.Count >= 4 && int.TryParse(value[6], out iIndex) == true) {
+                    if (value.Count >= 4 && int.TryParse(value[3], out iIndex) == true) {
                         DisplayTypeIndex = iIndex;
                     }
 
