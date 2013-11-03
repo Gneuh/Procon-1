@@ -37,14 +37,15 @@
             this.chkDisplayOnKilledEvents = new System.Windows.Forms.CheckBox();
             this.cboDisplayChatTime = new System.Windows.Forms.ComboBox();
             this.lblDisplayFor = new System.Windows.Forms.Label();
+            this.chkDisplayComRoseMsg = new System.Windows.Forms.CheckBox();
             this.pnlChatEnclosure.SuspendLayout();
             this.SuspendLayout();
             // 
             // pnlChatEnclosure
             // 
-            this.pnlChatEnclosure.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.pnlChatEnclosure.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.pnlChatEnclosure.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pnlChatEnclosure.Controls.Add(this.rtbChatBox);
             this.pnlChatEnclosure.Location = new System.Drawing.Point(4, 4);
@@ -91,8 +92,8 @@
             // 
             // txtChat
             // 
-            this.txtChat.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtChat.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.txtChat.Location = new System.Drawing.Point(4, 376);
             this.txtChat.MaxLength = 100;
             this.txtChat.Name = "txtChat";
@@ -223,10 +224,23 @@
             this.lblDisplayFor.TabIndex = 28;
             this.lblDisplayFor.Text = "Display for";
             // 
+            // chkDisplayComRoseMsg
+            // 
+            this.chkDisplayComRoseMsg.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.chkDisplayComRoseMsg.AutoSize = true;
+            this.chkDisplayComRoseMsg.Location = new System.Drawing.Point(168, 431);
+            this.chkDisplayComRoseMsg.Name = "chkDisplayComRoseMsg";
+            this.chkDisplayComRoseMsg.Size = new System.Drawing.Size(203, 19);
+            this.chkDisplayComRoseMsg.TabIndex = 37;
+            this.chkDisplayComRoseMsg.Text = "Display \"Commo Rose\" messages";
+            this.chkDisplayComRoseMsg.UseVisualStyleBackColor = true;
+            this.chkDisplayComRoseMsg.CheckedChanged += new System.EventHandler(this.chkDisplayComRoseMsg_CheckedChanged);
+            // 
             // uscChatPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.chkDisplayComRoseMsg);
             this.Controls.Add(this.pnlChatEnclosure);
             this.Controls.Add(this.chkDisplayScrollingEvents);
             this.Controls.Add(this.btnclearchat);
@@ -266,6 +280,7 @@
         private System.Windows.Forms.CheckBox chkDisplayScrollingEvents;
         private System.Windows.Forms.Panel pnlChatEnclosure;
         private CodRichTextBox rtbChatBox;
+        private System.Windows.Forms.CheckBox chkDisplayComRoseMsg;
 
     }
 }

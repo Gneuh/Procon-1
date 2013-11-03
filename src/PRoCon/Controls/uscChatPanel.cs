@@ -123,8 +123,15 @@ namespace PRoCon {
                 this.m_prcClient.ChatConsole.LogJoinLeaving = this.m_prcClient.ChatConsole.LogJoinLeaving;
                 this.m_prcClient.ChatConsole.LogKills = this.m_prcClient.ChatConsole.LogKills;
                 this.m_prcClient.ChatConsole.Scrolling = this.m_prcClient.ChatConsole.Scrolling;
+                this.m_prcClient.ChatConsole.LogComRoseMessages = this.m_prcClient.ChatConsole.LogComRoseMessages;
                 this.m_prcClient.ChatConsole.DisplayTypeIndex = this.m_prcClient.ChatConsole.DisplayTypeIndex;
                 this.m_prcClient.ChatConsole.DisplayTimeIndex = this.m_prcClient.ChatConsole.DisplayTimeIndex;
+
+                if (System.String.Compare(this.m_prcClient.GameType, "BF4", System.StringComparison.OrdinalIgnoreCase) != 0)
+                {
+                    this.chkDisplayComRoseMsg.Enabled = false;
+                    this.chkDisplayComRoseMsg.Visible = false;
+                }
             }
         }
 
@@ -146,6 +153,7 @@ namespace PRoCon {
             this.m_prcClient.ChatConsole.LogJoinLeavingChanged += new PRoCon.Core.Consoles.ChatConsole.IsEnabledHandler(ChatConsole_LogJoinLeavingChanged);
             this.m_prcClient.ChatConsole.LogKillsChanged += new PRoCon.Core.Consoles.ChatConsole.IsEnabledHandler(ChatConsole_LogKillsChanged);
             this.m_prcClient.ChatConsole.ScrollingChanged += new PRoCon.Core.Consoles.ChatConsole.IsEnabledHandler(ChatConsole_ScrollingChanged);
+            this.m_prcClient.ChatConsole.LogComRoseMessagesChanged += new PRoCon.Core.Consoles.ChatConsole.IsEnabledHandler(ChatConsole_LogComRoseMessagesChanged);
 
             this.m_prcClient.ChatConsole.DisplayTimeChanged += new PRoCon.Core.Consoles.ChatConsole.IndexChangedHandler(ChatConsole_DisplayTimeChanged);
             this.m_prcClient.ChatConsole.DisplayTypeChanged += new PRoCon.Core.Consoles.ChatConsole.IndexChangedHandler(ChatConsole_DisplayTypeChanged);
@@ -196,6 +204,7 @@ namespace PRoCon {
             this.chkDisplayOnJoinLeaveEvents.Text = this.m_clocLanguage.GetLocalized("uscChatPanel.chkDisplayOnJoinLeaveEvents", null);
             this.chkDisplayOnKilledEvents.Text = this.m_clocLanguage.GetLocalized("uscChatPanel.chkDisplayOnKilledEvents", null);
             this.chkDisplayScrollingEvents.Text = this.m_clocLanguage.GetLocalized("uscChatPanel.chkDisplayScrolling", null);
+            this.chkDisplayComRoseMsg.Text = this.m_clocLanguage.GetLocalized("uscChatPanel.chkDisplayComRoseMsg", null);
             this.btnclearchat.Text = this.m_clocLanguage.GetLocalized("uscChatPanel.btnclearchat", null);
             this.cboDisplayChatTime.Refresh();
         }
@@ -600,6 +609,14 @@ namespace PRoCon {
             }
         }
 
+        private void chkDisplayComRoseMsg_CheckedChanged(object sender, EventArgs e)
+        {
+            if (this.m_prcClient != null)
+            {
+                this.m_prcClient.ChatConsole.LogComRoseMessages = this.chkDisplayComRoseMsg.Checked;
+            }
+        }
+
         private void ChatConsole_ScrollingChanged(bool isEnabled) {
             this.chkDisplayScrollingEvents.Checked = isEnabled;
             this.chatUpdTxtLength();
@@ -612,6 +629,10 @@ namespace PRoCon {
 
         private void ChatConsole_LogJoinLeavingChanged(bool isEnabled) {
             this.chkDisplayOnJoinLeaveEvents.Checked = isEnabled;
+        }
+
+        private void ChatConsole_LogComRoseMessagesChanged(bool isEnabled) {
+            this.chkDisplayComRoseMsg.Checked = isEnabled;
         }
 
         private void ChatConsole_DisplayTimeChanged(int index) {
