@@ -217,7 +217,8 @@ namespace PRoCon.Controls {
                         if (this.m_proconApplication != null && this.m_proconApplication.CurrentLanguage != null) {
                             CMap tmpMap = client.GetFriendlyMapByFilenamePlayList(client.CurrentServerInfo.Map, client.CurrentServerInfo.GameMode);
                             int iTmpCurRounds = client.CurrentServerInfo.CurrentRound;
-                            if (client.GameType == "BF3" || client.GameType == "MOHW") {
+                            if (client.GameType == "BF3" || client.GameType == "MOHW" || client.GameType == "BF4")
+                            {
                                 iTmpCurRounds++;
                             }
 
