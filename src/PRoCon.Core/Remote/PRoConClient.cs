@@ -823,8 +823,8 @@ namespace PRoCon.Core.Remote {
         }
 
         public void Poke() {
-            // Poke the connection every second to make sure it's still alive.
-            if (Game != null && Game.Connection != null) {
+            // Poke the connection every second to make sure it's still alive, provided the state is not set to disconnected.
+            if (Game != null && Game.Connection != null && State != ConnectionState.Disconnected) {
                 Game.Connection.Poke();
             }
 
