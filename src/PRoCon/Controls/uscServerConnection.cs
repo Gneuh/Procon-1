@@ -250,7 +250,7 @@ namespace PRoCon {
                 this.m_prcConnection_ServerInfo(this.m_prcConnection.Game, this.m_prcConnection.CurrentServerInfo);
             }
 
-            if (this.m_prcConnection.GameType == "BF3" || this.m_prcConnection.GameType == "MOHW") {
+            if (this.m_prcConnection.GameType == "BF3" || this.m_prcConnection.GameType == "BF4" || this.m_prcConnection.GameType == "MOHW") {
                 this.tbcClientTabs.TabPages.Remove(this.tabMapView);
             }
 
