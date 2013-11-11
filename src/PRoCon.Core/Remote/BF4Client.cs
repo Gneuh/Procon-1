@@ -219,7 +219,6 @@ namespace PRoCon.Core.Remote {
             SendGetVarsOnlySquadLeaderSpawnPacket();
 
             SendGetVarsUnlockModePacket();
-            SendGetVarsGunMasterWeaponsPresetPacket();
 
             SendGetVarsSoldierHealthPacket();
 
@@ -230,15 +229,12 @@ namespace PRoCon.Core.Remote {
             SendGetVarsPlayerRespawnTimePacket();
 
             SendGetVarsGameModeCounterPacket();
-            SendGetVarsCtfRoundTimeModifierPacket();
 
             SendGetVarsServerMessagePacket();
 
             SendGetReservedSlotsListAggressiveJoinPacket();
             SendGetVarsRoundLockdownCountdownPacket();
             SendGetVarsRoundWarmupTimeoutPacket();
-
-            SendGetVarsPremiumStatusPacket();
 
             SendSpectatorListListPacket();
 

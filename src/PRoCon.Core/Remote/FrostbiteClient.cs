@@ -199,7 +199,6 @@ namespace PRoCon.Core.Remote {
 
 
             SendGetVarsServerNamePacket();
-            SendGetVarsBannerUrlPacket();
             SendGetVarsServerDescriptionPacket();
 
             // Vars - Gameplay

@@ -54,11 +54,9 @@ namespace PRoCon.Core.Remote {
         public override void FetchStartupVariables() {
             base.FetchStartupVariables();
 
-            this.SendGetVarsRankLimitPacket();
             this.SendGetVarsTeamBalancePacket();
             this.SendGetVarsKillCamPacket();
             this.SendGetVarsMiniMapPacket();
-            this.SendGetVarsCrossHairPacket();
             this.SendGetVars3dSpottingPacket();
             this.SendGetVarsMiniMapSpottingPacket();
             this.SendGetVarsThirdPersonVehicleCamerasPacket();

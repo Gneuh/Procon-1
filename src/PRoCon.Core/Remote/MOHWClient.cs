@@ -158,6 +158,8 @@ namespace PRoCon.Core.Remote {
 
             #region Base fetch
 
+            SendGetVarsBannerUrlPacket();
+
             SendGetVarsRankedPacket();
             SendGetVarsPlaylistPacket();
             base.FetchStartupVariablesBase();

@@ -55,6 +55,11 @@ namespace PRoCon.Core.Remote {
         public override void FetchStartupVariables() {
             base.FetchStartupVariables();
 
+            SendGetVarsBannerUrlPacket();
+
+            SendGetVarsRankLimitPacket();
+            SendGetVarsCrossHairPacket();
+
             SendTextChatModerationListListPacket();
 
             SendGetVarsHardCorePacket();
