@@ -44,6 +44,10 @@
                     this.Score = iValue;
                 }
                 else if (String.Compare(lstParameters[i], "ping", true) == 0 && int.TryParse(lstVariables[i], out iValue)) {
+                    if (iValue > 5000) {
+                        iValue = -1;
+                    }
+
                     this.Ping = iValue;
                 }
                 else if (String.Compare(lstParameters[i], "rank", true) == 0 && int.TryParse(lstVariables[i], out iValue)) {
