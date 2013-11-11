@@ -45,7 +45,6 @@ namespace PRoCon.Controls.ServerSettings.BF4 {
             this.AsyncSettingControls.Add("vars.servername", new AsyncStyleSetting(this.picSettingsServerName, this.txtSettingsServerName, new Control[] { this.lblSettingsServerName, this.txtSettingsServerName, this.lnkSettingsSetServerName }, true));
             this.AsyncSettingControls.Add("vars.serverdescription", new AsyncStyleSetting(this.picSettingsDescription, this.txtSettingsDescription, new Control[] { this.lblSettingsDescription, this.txtSettingsDescription, this.lnkSettingsSetDescription }, true));
             this.AsyncSettingControls.Add("vars.servermessage", new AsyncStyleSetting(this.picSettingsMessage, this.txtSettingsMessage, new Control[] { this.lblSettingsMessage, this.txtSettingsMessage, this.lnkSettingsSetMessage }, true));
-            this.AsyncSettingControls.Add("vars.bannerurl", new AsyncStyleSetting(this.picSettingsBannerURL, this.txtSettingsBannerURL, new Control[] { this.lblSettingsBannerURL, this.txtSettingsBannerURL, this.lnkSettingsSetBannerURL }, true));
 
             this.m_strPreviousSuccessServerName = String.Empty;
             this.m_strPreviousSuccessServerDescription = String.Empty;
@@ -60,10 +59,6 @@ namespace PRoCon.Controls.ServerSettings.BF4 {
             this.lnkSettingsSetDescription.Text = this.Language.GetLocalized("uscServerSettingsPanel.lnkSettingsSetDescription");
             this.lblSettingsMessage.Text = this.Language.GetLocalized("uscServerSettingsPanel.lblSettingsMessage");
             this.lnkSettingsSetMessage.Text = this.Language.GetLocalized("uscServerSettingsPanel.lnkSettingsSetMessage");
-            this.lblSettingsBannerURL.Text = this.Language.GetLocalized("uscServerSettingsPanel.lblSettingsBannerURL");
-            this.lnkSettingsSetBannerURL.Text = this.Language.GetLocalized("uscServerSettingsPanel.lnkSettingsSetBannerURL");
-
-            this.lblSettingsDownloadedBannerURLError.Text = this.Language.GetLocalized("uscServerSettingsPanel.lblSettingsDownloadedBannerURLError");
 
             this.lblSettingsServerName.Text = this.Language.GetLocalized("uscServerSettingsPanel.lblSettingsServerName");
             this.lnkSettingsSetServerName.Text = this.Language.GetLocalized("uscServerSettingsPanel.lnkSettingsSetServerName");
@@ -88,63 +83,10 @@ namespace PRoCon.Controls.ServerSettings.BF4 {
         private void Client_GameTypeDiscovered(PRoConClient sender) {
 
             this.Client.Game.ServerName += new FrostbiteClient.ServerNameHandler(m_prcClient_ServerName);
-            this.Client.Game.BannerUrl += new FrostbiteClient.BannerUrlHandler(m_prcClient_BannerUrl);
             this.Client.Game.ServerDescription += new FrostbiteClient.ServerDescriptionHandler(m_prcClient_ServerDescription);
             this.Client.Game.ServerMessage += new FrostbiteClient.ServerMessageHandler(m_prcClient_ServerMessage);
             
         }
-
-        #region Banner URL
-
-        private void m_prcClient_BannerUrl(FrostbiteClient sender, string url) {
-            this.OnSettingResponse("vars.bannerurl", url, true);
-
-            if (String.Compare(this.m_strPreviousSuccessBannerURL, url) != 0) {
-
-                if (String.IsNullOrEmpty(url) == false) {
-                    this.DownloadBannerURL(url);
-                }
-                else {
-                    this.cdfBanner_DownloadComplete(null);
-                }
-            }
-
-            this.m_strPreviousSuccessBannerURL = url;
-        }
-
-        public void OnSettingsBannerURLSuccess(FrostbiteClient sender, string strSuccessBannerURL) {
-            if (String.Compare(this.m_strPreviousSuccessBannerURL, strSuccessBannerURL) != 0) {
-
-                if (String.IsNullOrEmpty(strSuccessBannerURL) == false) {
-                    this.DownloadBannerURL(strSuccessBannerURL);
-                }
-                else {
-                    this.cdfBanner_DownloadComplete(null);
-                }
-            }
-
-            this.m_strPreviousSuccessBannerURL = strSuccessBannerURL;
-        }
-
-        private void lnkSettingsSetBannerURL_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
-            if (this.Client != null && this.Client.Game != null) {
-                // TO DO: More error reporting about the image.
-                if (String.IsNullOrEmpty(this.txtSettingsBannerURL.Text) == false) {
-                    this.DownloadBannerURL(this.txtSettingsBannerURL.Text);
-                }
-                else {
-                    this.cdfBanner_DownloadComplete(null);
-                }
-                //this.picSettingsDownloadedBannerURL.ImageLocation = this.txtSettingsBannerURL.Text;
-
-                this.txtSettingsBannerURL.Focus();
-                this.WaitForSettingResponse("vars.bannerurl", this.m_strPreviousSuccessBannerURL);
-
-                this.Client.Game.SendSetVarsBannerUrlPacket(this.txtSettingsBannerURL.Text);
-            }
-        }
-
-        #endregion
 
         #region Server Description
 
@@ -215,38 +157,6 @@ namespace PRoCon.Controls.ServerSettings.BF4 {
 
                 this.Client.Game.SendSetVarsServerNamePacket(this.txtSettingsServerName.Text);
                 //this.SendCommand("vars.serverName", this.txtSettingsServerName.Text);
-            }
-        }
-
-        #endregion
-
-        #region Download Banner
-
-        private void DownloadBannerURL(string strUrl) {
-            if (strUrl != null) {
-                this.m_cdfBanner = new CDownloadFile(strUrl);
-                this.m_cdfBanner.DownloadComplete += new CDownloadFile.DownloadFileEventDelegate(cdfBanner_DownloadComplete);
-                this.m_cdfBanner.DownloadError += new CDownloadFile.DownloadFileEventDelegate(cdfBanner_DownloadError);
-                this.m_cdfBanner.BeginDownload();
-            }
-        }
-
-        private void cdfBanner_DownloadError(CDownloadFile cdfSender) {
-            this.lblSettingsDownloadedBannerURLError.Visible = true;
-            this.picSettingsDownloadedBannerURL.Image = null;
-        }
-
-        private void cdfBanner_DownloadComplete(CDownloadFile cdfSender) {
-            this.lblSettingsDownloadedBannerURLError.Visible = false;
-
-            if (cdfSender != null) {
-                MemoryStream msImage = new MemoryStream(cdfSender.CompleteFileData);
-                Image imgCompleted = Image.FromStream(msImage);
-
-                this.picSettingsDownloadedBannerURL.Image = imgCompleted;
-            }
-            else {
-                this.picSettingsDownloadedBannerURL.Image = null;
             }
         }
 

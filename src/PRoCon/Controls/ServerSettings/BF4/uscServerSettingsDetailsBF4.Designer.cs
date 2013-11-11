@@ -27,13 +27,7 @@
             this.picSettingsServerName = new System.Windows.Forms.PictureBox();
             this.txtSettingsServerName = new System.Windows.Forms.TextBox();
             this.lblSettingsServerName = new System.Windows.Forms.Label();
-            this.lblSettingsDownloadedBannerURLError = new System.Windows.Forms.Label();
-            this.lnkSettingsSetBannerURL = new System.Windows.Forms.LinkLabel();
             this.lnkSettingsSetDescription = new System.Windows.Forms.LinkLabel();
-            this.picSettingsDownloadedBannerURL = new System.Windows.Forms.PictureBox();
-            this.picSettingsBannerURL = new System.Windows.Forms.PictureBox();
-            this.txtSettingsBannerURL = new System.Windows.Forms.TextBox();
-            this.lblSettingsBannerURL = new System.Windows.Forms.Label();
             this.picSettingsDescription = new System.Windows.Forms.PictureBox();
             this.txtSettingsDescription = new System.Windows.Forms.TextBox();
             this.lblSettingsDescription = new System.Windows.Forms.Label();
@@ -42,8 +36,6 @@
             this.txtSettingsMessage = new System.Windows.Forms.TextBox();
             this.lblSettingsMessage = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsServerName)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picSettingsDownloadedBannerURL)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picSettingsBannerURL)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsDescription)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsMessage)).BeginInit();
             this.SuspendLayout();
@@ -92,34 +84,6 @@
             this.lblSettingsServerName.TabIndex = 211;
             this.lblSettingsServerName.Text = "Server name";
             // 
-            // lblSettingsDownloadedBannerURLError
-            // 
-            this.lblSettingsDownloadedBannerURLError.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblSettingsDownloadedBannerURLError.ForeColor = System.Drawing.Color.Maroon;
-            this.lblSettingsDownloadedBannerURLError.Location = new System.Drawing.Point(309, 352);
-            this.lblSettingsDownloadedBannerURLError.Name = "lblSettingsDownloadedBannerURLError";
-            this.lblSettingsDownloadedBannerURLError.Size = new System.Drawing.Size(374, 24);
-            this.lblSettingsDownloadedBannerURLError.TabIndex = 210;
-            this.lblSettingsDownloadedBannerURLError.Text = "Error downloading image";
-            this.lblSettingsDownloadedBannerURLError.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.lblSettingsDownloadedBannerURLError.Visible = false;
-            // 
-            // lnkSettingsSetBannerURL
-            // 
-            this.lnkSettingsSetBannerURL.ActiveLinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(220)))));
-            this.lnkSettingsSetBannerURL.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.lnkSettingsSetBannerURL.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
-            this.lnkSettingsSetBannerURL.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(220)))));
-            this.lnkSettingsSetBannerURL.Location = new System.Drawing.Point(730, 307);
-            this.lnkSettingsSetBannerURL.Name = "lnkSettingsSetBannerURL";
-            this.lnkSettingsSetBannerURL.Size = new System.Drawing.Size(254, 17);
-            this.lnkSettingsSetBannerURL.TabIndex = 209;
-            this.lnkSettingsSetBannerURL.TabStop = true;
-            this.lnkSettingsSetBannerURL.Text = "Apply";
-            this.lnkSettingsSetBannerURL.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            this.lnkSettingsSetBannerURL.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkSettingsSetBannerURL_LinkClicked);
-            // 
             // lnkSettingsSetDescription
             // 
             this.lnkSettingsSetDescription.ActiveLinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(220)))));
@@ -134,47 +98,6 @@
             this.lnkSettingsSetDescription.Text = "Apply";
             this.lnkSettingsSetDescription.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.lnkSettingsSetDescription.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkSettingsSetDescription_LinkClicked);
-            // 
-            // picSettingsDownloadedBannerURL
-            // 
-            this.picSettingsDownloadedBannerURL.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.picSettingsDownloadedBannerURL.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.picSettingsDownloadedBannerURL.ImageLocation = "";
-            this.picSettingsDownloadedBannerURL.Location = new System.Drawing.Point(240, 332);
-            this.picSettingsDownloadedBannerURL.Name = "picSettingsDownloadedBannerURL";
-            this.picSettingsDownloadedBannerURL.Size = new System.Drawing.Size(512, 64);
-            this.picSettingsDownloadedBannerURL.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
-            this.picSettingsDownloadedBannerURL.TabIndex = 207;
-            this.picSettingsDownloadedBannerURL.TabStop = false;
-            // 
-            // picSettingsBannerURL
-            // 
-            this.picSettingsBannerURL.Location = new System.Drawing.Point(8, 251);
-            this.picSettingsBannerURL.Name = "picSettingsBannerURL";
-            this.picSettingsBannerURL.Size = new System.Drawing.Size(16, 16);
-            this.picSettingsBannerURL.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.picSettingsBannerURL.TabIndex = 206;
-            this.picSettingsBannerURL.TabStop = false;
-            // 
-            // txtSettingsBannerURL
-            // 
-            this.txtSettingsBannerURL.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtSettingsBannerURL.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtSettingsBannerURL.Location = new System.Drawing.Point(34, 275);
-            this.txtSettingsBannerURL.MaxLength = 255;
-            this.txtSettingsBannerURL.Name = "txtSettingsBannerURL";
-            this.txtSettingsBannerURL.Size = new System.Drawing.Size(948, 23);
-            this.txtSettingsBannerURL.TabIndex = 205;
-            // 
-            // lblSettingsBannerURL
-            // 
-            this.lblSettingsBannerURL.AutoSize = true;
-            this.lblSettingsBannerURL.Location = new System.Drawing.Point(30, 250);
-            this.lblSettingsBannerURL.Name = "lblSettingsBannerURL";
-            this.lblSettingsBannerURL.Size = new System.Drawing.Size(68, 15);
-            this.lblSettingsBannerURL.TabIndex = 204;
-            this.lblSettingsBannerURL.Text = "Banner URL";
             // 
             // picSettingsDescription
             // 
@@ -263,21 +186,13 @@
             this.Controls.Add(this.picSettingsServerName);
             this.Controls.Add(this.txtSettingsServerName);
             this.Controls.Add(this.lblSettingsServerName);
-            this.Controls.Add(this.lblSettingsDownloadedBannerURLError);
-            this.Controls.Add(this.lnkSettingsSetBannerURL);
             this.Controls.Add(this.lnkSettingsSetDescription);
-            this.Controls.Add(this.picSettingsDownloadedBannerURL);
-            this.Controls.Add(this.picSettingsBannerURL);
-            this.Controls.Add(this.txtSettingsBannerURL);
-            this.Controls.Add(this.lblSettingsBannerURL);
             this.Controls.Add(this.picSettingsDescription);
             this.Controls.Add(this.txtSettingsDescription);
             this.Controls.Add(this.lblSettingsDescription);
             this.Name = "uscServerSettingsDetailsBF4";
             this.Size = new System.Drawing.Size(992, 417);
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsServerName)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picSettingsDownloadedBannerURL)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picSettingsBannerURL)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsDescription)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsMessage)).EndInit();
             this.ResumeLayout(false);
@@ -291,13 +206,7 @@
         private System.Windows.Forms.PictureBox picSettingsServerName;
         private System.Windows.Forms.TextBox txtSettingsServerName;
         private System.Windows.Forms.Label lblSettingsServerName;
-        private System.Windows.Forms.Label lblSettingsDownloadedBannerURLError;
-        private System.Windows.Forms.LinkLabel lnkSettingsSetBannerURL;
         private System.Windows.Forms.LinkLabel lnkSettingsSetDescription;
-        private System.Windows.Forms.PictureBox picSettingsDownloadedBannerURL;
-        private System.Windows.Forms.PictureBox picSettingsBannerURL;
-        private System.Windows.Forms.TextBox txtSettingsBannerURL;
-        private System.Windows.Forms.Label lblSettingsBannerURL;
         private System.Windows.Forms.PictureBox picSettingsDescription;
         private System.Windows.Forms.TextBox txtSettingsDescription;
         private System.Windows.Forms.Label lblSettingsDescription;
