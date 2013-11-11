@@ -228,7 +228,7 @@
             // 
             this.chkDisplayComRoseMsg.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.chkDisplayComRoseMsg.AutoSize = true;
-            this.chkDisplayComRoseMsg.Location = new System.Drawing.Point(168, 431);
+            this.chkDisplayComRoseMsg.Location = new System.Drawing.Point(244, 431);
             this.chkDisplayComRoseMsg.Name = "chkDisplayComRoseMsg";
             this.chkDisplayComRoseMsg.Size = new System.Drawing.Size(203, 19);
             this.chkDisplayComRoseMsg.TabIndex = 37;
