@@ -354,18 +354,24 @@ namespace PRoCon.Core {
 
             int processCount = 0;
 
-            Process currentProcess = Process.GetCurrentProcess();
-            foreach (Process instance in Process.GetProcessesByName(currentProcess.ProcessName)) {
+            try {
+                Process currentProcess = Process.GetCurrentProcess();
+                foreach (Process instance in Process.GetProcessesByName(currentProcess.ProcessName)) {
 
-                if (String.Compare(instance.MainModule.FileName, currentProcess.MainModule.FileName) == 0) {
+                    if (String.Compare(instance.MainModule.FileName, currentProcess.MainModule.FileName) == 0) {
 
-                    processCount++;
+                        processCount++;
 
-                    if (processCount > 1) {
-                        break;
+                        if (processCount > 1) {
+                            break;
+                        }
                     }
-                }
 
+                }
+            }
+            // To catch permission exceptions
+            catch {
+                processCount = 0;
             }
 
             return (processCount > 1);
