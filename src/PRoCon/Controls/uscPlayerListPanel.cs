@@ -1601,7 +1601,7 @@ namespace PRoCon {
 
             // TO DO: PunishPlayer should be renamed to SendCommand
             if (lviHover != null && lviHover.Tag != null && ((AdditionalPlayerInfo)lviHover.Tag).m_cpiPlayer != null && cpiSwitchingPlayer != null && cpiSwitchingPlayer.TeamID != ((AdditionalPlayerInfo)lviHover.Tag).m_cpiPlayer.TeamID) {
-                if (Program.m_application.OptionsSettings.AdminMoveMessage)
+                if (Program.ProconApplication.OptionsSettings.AdminMoveMessage)
                     this.m_prcClient.Game.SendAdminSayPacket("You have been moved to another team/squad by an admin.", new CPlayerSubset(CPlayerSubset.PlayerSubsetType.Player, cpiSwitchingPlayer.SoldierName));
                 this.m_prcClient.Game.SendAdminMovePlayerPacket(cpiSwitchingPlayer.SoldierName, ((AdditionalPlayerInfo)lviHover.Tag).m_cpiPlayer.TeamID, this.m_prcClient.GetDefaultSquadIDByMapname(this.m_prcClient.CurrentServerInfo.Map), true);
                 
@@ -1985,10 +1985,10 @@ namespace PRoCon {
                     
                     // this.statsLookupToolStripMenuItem1.Tag = this.statsLookupToolStripMenuItem2.Tag = this.statsLookupToolStripMenuItem3.Tag = this.statsLookupToolStripMenuItem4.Tag = this.statsLookupToolStripMenuItem.Tag;
                     this.statsLookupToolStripMenuItem.DropDownItems.Clear();
-                    if (Program.m_application.OptionsSettings.StatsLinkNameUrl.Count > 0)
+                    if (Program.ProconApplication.OptionsSettings.StatsLinkNameUrl.Count > 0)
                     {
                         // _PK_
-                        foreach (StatsLinkNameUrl statsLink in Program.m_application.OptionsSettings.StatsLinkNameUrl) {
+                        foreach (StatsLinkNameUrl statsLink in Program.ProconApplication.OptionsSettings.StatsLinkNameUrl) {
                             ToolStripMenuItem statsLookup = new ToolStripMenuItem(statsLink.LinkName);
                             statsLookup.Tag = new object[] { player, statsLink.LinkUrl };
                             statsLookup.Click += new EventHandler(statsLookupToolStripMenuItemCustom_Click);
@@ -2204,7 +2204,7 @@ namespace PRoCon {
 
         private void cboEndRound_SelectedIndexChanged(object sender, EventArgs e) {
             if (this.cboEndRound.SelectedIndex > 0) {
-                if (Program.m_application.OptionsSettings.ShowCfmMsgRoundRestartNext == true)
+                if (Program.ProconApplication.OptionsSettings.ShowCfmMsgRoundRestartNext == true)
                 { //End this round with {0} winning? this.m_clocLanguage.GetLocalized("uscPlayerListPanel.MessageBox.EndRound")
                     DialogResult cfmEndRound = MessageBox.Show(this.m_clocLanguage.GetLocalized("uscPlayerListPanel.MessageBox.EndRound", new String[] { this.cboEndRound.Text }), 
                         "PRoCon Frostbite", MessageBoxButtons.YesNo, MessageBoxIcon.Question);

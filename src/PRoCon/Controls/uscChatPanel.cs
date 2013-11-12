@@ -426,7 +426,7 @@ namespace PRoCon {
                         sayOutput = this.txtChat.Text;
                     }
                     else {
-                        if (Program.m_application.OptionsSettings.ChatDisplayAdminName)
+                        if (Program.ProconApplication.OptionsSettings.ChatDisplayAdminName)
                         {
                             sayOutput = String.Format("{0}: {1}", this.m_prcClient.Username.Length > 0 ? this.m_prcClient.Username : "Admin", this.txtChat.Text);
                         }
@@ -650,7 +650,7 @@ namespace PRoCon {
         private void chatUpdTxtLength()
         {
             // update max length
-            if (Program.m_application.OptionsSettings.ChatDisplayAdminName)
+            if (Program.ProconApplication.OptionsSettings.ChatDisplayAdminName)
             {
                 if (this.m_prcClient.Username.Length > 0)
                 {

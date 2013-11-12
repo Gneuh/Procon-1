@@ -511,7 +511,7 @@ namespace PRoCon {
             m_strReasonAdmin = m_strReasonAdmin.Replace("%player_name%", this.m_strSoldierName);
 
             string accountName = this.m_prcClient.Username;
-            if (Program.m_application.OptionsSettings.EnableAdminReason && accountName.Length > 0) {
+            if (Program.ProconApplication.OptionsSettings.EnableAdminReason && accountName.Length > 0) {
                 int iBanInfo = (80 - 5 - (accountName.Length + 3));
                 if (m_strReasonAdmin.Length > iBanInfo)
                 {

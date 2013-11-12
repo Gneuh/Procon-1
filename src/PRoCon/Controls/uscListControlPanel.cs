@@ -1376,7 +1376,7 @@ namespace PRoCon {
 
             string m_strReasonAdmin = this.cboBanlistReason.Text;
             string accountName = this.m_prcClient.Username;
-            if (Program.m_application.OptionsSettings.EnableAdminReason && accountName.Length > 0)
+            if (Program.ProconApplication.OptionsSettings.EnableAdminReason && accountName.Length > 0)
             {
                 int iBanInfo = (80 - 5 - (accountName.Length + 3));
                 if (m_strReasonAdmin.Length > iBanInfo)

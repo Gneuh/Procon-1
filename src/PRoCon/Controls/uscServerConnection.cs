@@ -263,7 +263,7 @@ namespace PRoCon {
         //private bool m_blFormLoaded = false;
         private void uscServerConnection_Load(object sender, EventArgs e) {
 
-            if (Program.m_application.OptionsSettings.ShowRoundTimerConstantly) {
+            if (Program.ProconApplication.OptionsSettings.ShowRoundTimerConstantly) {
                 this.lblRoundTime.Visible = true;
             } 
             else {
@@ -947,7 +947,7 @@ namespace PRoCon {
         private void lblCurrentRound_MouseLeave(object sender, EventArgs e) {
             if (this.m_prcConnection != null) {
                 if (this.m_prcConnection.CurrentServerInfo != null && this.m_prcConnection.CurrentServerInfo.RoundTime >= 0) {
-                    if (!Program.m_application.OptionsSettings.ShowRoundTimerConstantly)
+                    if (!Program.ProconApplication.OptionsSettings.ShowRoundTimerConstantly)
                     {
                         this.lblRoundTime.Visible = false;
                     }

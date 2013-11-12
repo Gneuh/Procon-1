@@ -55,8 +55,8 @@ namespace PRoCon.Controls.ServerSettings.BF3 {
             this.AsyncSettingControls.Add("vars.gamepassword", new AsyncStyleSetting(this.picSettingsGamePassword, this.txtSettingsGamePassword, new Control[] { this.lblSettingsGamePassword, this.txtSettingsGamePassword, this.lnkSettingsSetGamePassword }, true));
             this.AsyncSettingControls.Add("vars.adminpassword", new AsyncStyleSetting(this.picSettingsAdminPassword, this.txtSettingsAdminPassword, new Control[] { this.lblSettingsAdminPassword, this.txtSettingsAdminPassword, this.lnkSettingsSetAdminPassword }, true));
 
-            if (Program.m_application.OptionsSettings.ShowDICESpecialOptions == true) {
-                this.chkSettingsPremiumStatus.Enabled = Program.m_application.OptionsSettings.ShowDICESpecialOptions;
+            if (Program.ProconApplication.OptionsSettings.ShowDICESpecialOptions == true) {
+                this.chkSettingsPremiumStatus.Enabled = Program.ProconApplication.OptionsSettings.ShowDICESpecialOptions;
                 this.AsyncSettingControls.Add("vars.premiumstatus", new AsyncStyleSetting(this.picSettingsPremiumStatus, this.chkSettingsPremiumStatus, new Control[] { this.chkSettingsPremiumStatus }, true));
             }
             
