@@ -280,6 +280,7 @@ namespace PRoCon.Core.Plugin {
         public virtual void OnHardcore(bool isEnabled) { }
 
         public virtual void OnUnlockMode(string mode) { } //BF3
+        public virtual void OnPreset(string mode) { } // BF4
 
         #region BFBC2
 

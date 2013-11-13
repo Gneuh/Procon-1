@@ -134,6 +134,7 @@ namespace PRoCon.Core.Remote {
             ResponseDelegates.Add("vars.roundRestartPlayerCount", DispatchVarsRoundRestartPlayerCountResponse);
             ResponseDelegates.Add("vars.onlySquadLeaderSpawn", DispatchVarsOnlySquadLeaderSpawnResponse);
             ResponseDelegates.Add("vars.unlockMode", DispatchVarsUnlockModeResponse);
+            ResponseDelegates.Add("vars.preset", DispatchVarsPresetResponse);
             ResponseDelegates.Add("vars.gunMasterWeaponsPreset", DispatchVarsGunMasterWeaponsPresetResponse);
             ResponseDelegates.Add("vars.soldierHealth", DispatchVarsSoldierHealthResponse);
             ResponseDelegates.Add("vars.hud", DispatchVarsHudResponse);
@@ -219,6 +220,7 @@ namespace PRoCon.Core.Remote {
             SendGetVarsOnlySquadLeaderSpawnPacket();
 
             SendGetVarsUnlockModePacket();
+            SendGetVarsPresetPacket();
 
             SendGetVarsSoldierHealthPacket();
 
@@ -322,6 +324,7 @@ namespace PRoCon.Core.Remote {
         public override event IsEnabledHandler OnlySquadLeaderSpawn;
 
         public override event UnlockModeHandler UnlockMode;
+        public override event BF4presetHandler BF4preset;
         public override event GunMasterWeaponsPresetHandler GunMasterWeaponsPreset;
 
         public override event LimitHandler SoldierHealth;
@@ -1295,7 +1298,21 @@ namespace PRoCon.Core.Remote {
             }
         }
 
-        protected virtual void DispatchVarsGunMasterWeaponsPresetResponse(FrostbiteConnection sender, Packet cpRecievedPacket, Packet cpRequestPacket) {
+        protected virtual void DispatchVarsPresetResponse(FrostbiteConnection sender, Packet cpRecievedPacket, Packet cpRequestPacket) {
+            if (cpRequestPacket.Words.Count >= 1) {
+                if (BF4preset != null) {
+                    if (cpRecievedPacket.Words.Count == 2) {
+                        FrostbiteConnection.RaiseEvent(BF4preset.GetInvocationList(), this, Convert.ToString(cpRecievedPacket.Words[1]));
+                    } 
+                    else if (cpRequestPacket.Words.Count >= 2) {
+                        FrostbiteConnection.RaiseEvent(BF4preset.GetInvocationList(), this, Convert.ToString(cpRequestPacket.Words[1]));
+                    }
+                }
+            }
+        }
+
+        protected virtual void DispatchVarsGunMasterWeaponsPresetResponse(FrostbiteConnection sender, Packet cpRecievedPacket, Packet cpRequestPacket)
+        {
             if (cpRequestPacket.Words.Count >= 1) {
                 if (VehicleSpawnDelay != null) {
                     if (cpRecievedPacket.Words.Count == 2) {

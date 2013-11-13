@@ -95,6 +95,7 @@
     <Compile Include="Battlemap\ZoneTagList.cs" />
     <Compile Include="CBanInfo.cs" />
     <Compile Include="CDownloadFile.cs" />
+    <Compile Include="BF4preset.cs" />
     <Compile Include="GunMasterWeaponsPreset.cs" />
     <Compile Include="PlaylistMOHW.cs" />
     <Compile Include="Options\StatsLinkNameUrl.cs" />

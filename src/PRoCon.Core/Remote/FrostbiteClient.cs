@@ -1367,6 +1367,18 @@ namespace PRoCon.Core.Remote {
             }
         }
 
+        public virtual void SendSetVarsPresetPacket(string mode) {
+            if (IsLoggedIn == true) {
+                BuildSendPacket("vars.preset", mode);
+            }
+        }
+
+        public virtual void SendGetVarsPresetPacket() {
+            if (IsLoggedIn == true) {
+                BuildSendPacket("vars.preset");
+            }
+        }
+
         public virtual void SendSetVarsGunMasterWeaponsPresetPacket(int preset) {
             if (IsLoggedIn == true) {
                 BuildSendPacket("vars.gunMasterWeaponsPreset", preset.ToString(CultureInfo.InvariantCulture));
@@ -1986,6 +1998,8 @@ namespace PRoCon.Core.Remote {
         public delegate void TextChatModerationModeHandler(FrostbiteClient sender, ServerModerationModeType mode);
 
         public delegate void UnlockModeHandler(FrostbiteClient sender, string mode);
+
+        public delegate void BF4presetHandler(FrostbiteClient sender, string mode);
 
         public delegate void UpperLowerLimitHandler(FrostbiteClient sender, int upperLimit, int lowerLimit);
 
@@ -3715,6 +3729,7 @@ namespace PRoCon.Core.Remote {
         public virtual event LimitHandler GameModeCounter;
         public virtual event LimitHandler CtfRoundTimeModifier;
         public virtual event UnlockModeHandler UnlockMode;
+        public virtual event BF4presetHandler BF4preset;
         public virtual event GunMasterWeaponsPresetHandler GunMasterWeaponsPreset;
         public virtual event IsEnabledHandler ReservedSlotsListAggressiveJoin;
         public virtual event LimitHandler RoundLockdownCountdown;

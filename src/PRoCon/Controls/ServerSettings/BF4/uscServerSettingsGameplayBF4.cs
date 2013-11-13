@@ -11,6 +11,7 @@ namespace PRoCon.Controls.ServerSettings.BF4 {
     using Core;
     using Core.Remote;
     using Core.UnlockMode;
+    using Core.BF4preset;
     using Core.GunMasterWeaponsPreset;
     public partial class uscServerSettingsGameplayBF4 : uscServerSettingsGameplay {
 
@@ -36,6 +37,7 @@ namespace PRoCon.Controls.ServerSettings.BF4 {
             
             this.AsyncSettingControls.Add("vars.unlockmode", new AsyncStyleSetting(this.picSettingsUnlockMode, this.cboSettingsUnlockMode, new Control[] { this.cboSettingsUnlockMode }, true));
             // not used in BF4 //this.AsyncSettingControls.Add("vars.gunMasterWeaponsPreset", new AsyncStyleSetting(this.picSettingsGunMasterWeaponsPreset, this.cboSettingsGunMasterWeaponsPreset, new Control[] { this.cboSettingsGunMasterWeaponsPreset }, true));
+            this.AsyncSettingControls.Add("vars.preset", new AsyncStyleSetting(this.picSettingsBF4preset, this.cboSettingsBF4preset, new Control[] { this.cboSettingsBF4preset }, true));
 
             this.AsyncSettingControls.Add("vars.vehiclespawnallowed", new AsyncStyleSetting(this.picSettingsVehicleSpawnAllowed, this.chkSettingsVehicleSpawnAllowed, new Control[] { this.chkSettingsVehicleSpawnAllowed }, true));
             this.AsyncSettingControls.Add("vars.vehiclespawndelay", new AsyncStyleSetting(this.picSettingsVehicleSpawnDelay, this.numSettingsVehicleSpawnDelay, new Control[] { this.numSettingsVehicleSpawnDelay, this.lnkSettingsVehicleSpawnDelay }, true));
@@ -120,6 +122,19 @@ namespace PRoCon.Controls.ServerSettings.BF4 {
             this.cboSettingsUnlockMode.DisplayMember = "LongName";
             this.cboSettingsUnlockMode.ValueMember = "ShortName";
 
+            this.lblSettingsBF4preset.Text = this.Language.GetLocalized("uscServerSettingsPanel.lblSettingsBF4preset");
+            this.lnkSettingsBF4preset.Text = this.Language.GetLocalized("uscServerSettingsPanel.lnkSettingsBF4preset");
+            
+            ArrayList BF4preset = new ArrayList();
+            BF4preset.Add(new UnlockMode(this.Language.GetDefaultLocalized("Normal", "uscServerSettingsPanel.cboSettingsBF4preset.Normal"), BF4presetType.NORMAL.ToString()));
+            BF4preset.Add(new UnlockMode(this.Language.GetDefaultLocalized("Hardcore", "uscServerSettingsPanel.cboSettingsBF4preset.Hardcore"), BF4presetType.HARDCORE.ToString()));
+            BF4preset.Add(new UnlockMode(this.Language.GetDefaultLocalized("Custom", "uscServerSettingsPanel.cboSettingsBF4preset.Custom"), BF4presetType.CUSTOM.ToString()));
+
+            this.cboSettingsBF4preset.DataSource = BF4preset;
+            this.cboSettingsBF4preset.DisplayMember = "LongName";
+            this.cboSettingsBF4preset.ValueMember = "ShortName";
+
+
             this.lblSettingsGunMasterWeaponsPreset.Text = this.Language.GetDefaultLocalized(this.lblSettingsGunMasterWeaponsPreset.Text, "uscServerSettingsPanel.lblSettingsGunMasterWeaponsPreset");
             this.lnkSettingsGunMasterWeaponsPreset.Text = this.Language.GetDefaultLocalized(this.lnkSettingsGunMasterWeaponsPreset.Text, "uscServerSettingsPanel.lnkSettingsGunMasterWeaponsPreset");
 
@@ -174,6 +189,7 @@ namespace PRoCon.Controls.ServerSettings.BF4 {
             this.Client.Game.Hud += new FrostbiteClient.IsEnabledHandler(Game_Hud);
             
             this.Client.Game.UnlockMode += new FrostbiteClient.UnlockModeHandler(Game_UnlockMode);
+            this.Client.Game.BF4preset += new FrostbiteClient.BF4presetHandler(Game_BF4preset);
             // not used in BF4 //this.Client.Game.GunMasterWeaponsPreset += new FrostbiteClient.GunMasterWeaponsPresetHandler(Game_GunMasterWeaponsPreset);
 
             this.Client.Game.VehicleSpawnAllowed += new FrostbiteClient.IsEnabledHandler(Game_VehicleSpawnAllowed);
@@ -422,6 +438,34 @@ namespace PRoCon.Controls.ServerSettings.BF4 {
                     this.WaitForSettingResponse("vars.unlockmode", this.cboSettingsUnlockMode.SelectedValue.ToString());
 
                     this.Client.Game.SendSetVarsUnlockModePacket(this.cboSettingsUnlockMode.SelectedValue.ToString());
+                }
+            }
+        }
+
+        #endregion
+
+        #region BF4preset
+
+        private string m_strPreviousSuccessBF4preset;
+
+        private void Game_BF4preset(FrostbiteClient sender, string mode)
+        {
+            this.m_strPreviousSuccessBF4preset = mode.ToString();
+            this.OnSettingResponse("vars.preset", mode.ToString(), true);
+
+            this.cboSettingsBF4preset.SelectedValue = mode.ToString();
+        }
+
+        private void lnkSettingsBF4preset_LinkClicked(object sender, EventArgs e)
+        {
+            // see line 126 uscServerSettingsTextChatModeration.cs
+            if (this.Client != null && this.Client.Game != null)
+            {
+                if (this.IgnoreEvents == false && this.AsyncSettingControls["vars.preset"].IgnoreEvent == false)
+                {
+                    this.WaitForSettingResponse("vars.preset", this.cboSettingsBF4preset.SelectedValue.ToString());
+
+                    this.Client.Game.SendSetVarsPresetPacket(this.cboSettingsBF4preset.SelectedValue.ToString());
                 }
             }
         }
@@ -817,6 +861,11 @@ namespace PRoCon.Controls.ServerSettings.BF4 {
                 this.Client.Game.SendSetVarsBulletDamagePacket(100);
                 this.Client.Game.SendSetVarsOnlySquadLeaderSpawnPacket(onlySquadLeaderSpawn);
             }
+        }
+
+        private void lnkSettingsUnlockMode_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+
         }
     }
 }

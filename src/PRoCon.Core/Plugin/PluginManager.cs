@@ -962,6 +962,7 @@ namespace PRoCon.Core.Plugin {
             ProconClient.Game.TextChatSpamTriggerCount -= new FrostbiteClient.LimitHandler(Game_TextChatSpamTriggerCount);
 
             ProconClient.Game.UnlockMode -= new FrostbiteClient.UnlockModeHandler(m_prcClient_UnlockMode);
+            ProconClient.Game.BF4preset -= new FrostbiteClient.BF4presetHandler(m_prcClient_BF4preset);
             ProconClient.Game.GunMasterWeaponsPreset -= new FrostbiteClient.GunMasterWeaponsPresetHandler(Game_GunMasterWeaponsPreset);
 
             ProconClient.Game.ReservedSlotsListAggressiveJoin -= new FrostbiteClient.IsEnabledHandler(Game_ReservedSlotsListAggressiveJoin);
@@ -1201,6 +1202,7 @@ namespace PRoCon.Core.Plugin {
             ProconClient.Game.TextChatSpamTriggerCount += new FrostbiteClient.LimitHandler(Game_TextChatSpamTriggerCount);
 
             ProconClient.Game.UnlockMode += new FrostbiteClient.UnlockModeHandler(m_prcClient_UnlockMode);
+            ProconClient.Game.BF4preset += new FrostbiteClient.BF4presetHandler(m_prcClient_BF4preset);
             ProconClient.Game.GunMasterWeaponsPreset += new FrostbiteClient.GunMasterWeaponsPresetHandler(Game_GunMasterWeaponsPreset);
 
             ProconClient.Game.ReservedSlotsListAggressiveJoin += new FrostbiteClient.IsEnabledHandler(Game_ReservedSlotsListAggressiveJoin);
@@ -1951,6 +1953,10 @@ namespace PRoCon.Core.Plugin {
             InvokeOnAllEnabled("OnUnlockMode", new object[] {mode});
         }
 
+        private void m_prcClient_BF4preset(FrostbiteClient sender, string mode) {
+            InvokeOnAllEnabled("OnPreset", new object[] { mode });
+        }
+        
         private void Game_GunMasterWeaponsPreset(FrostbiteClient sender, int preset) {
             InvokeOnAllEnabled("OnGunMasterWeaponsPreset", new object[] {preset});
         }
