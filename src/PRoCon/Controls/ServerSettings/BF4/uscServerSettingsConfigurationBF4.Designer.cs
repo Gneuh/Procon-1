@@ -67,6 +67,8 @@
             this.picSettingsCommander = new System.Windows.Forms.PictureBox();
             this.lblSettingsServerType = new System.Windows.Forms.Label();
             this.txtSettingsServerType = new System.Windows.Forms.TextBox();
+            this.chkSettingsAlwaysAllowSpectators = new System.Windows.Forms.CheckBox();
+            this.picSettingsAlwaysAllowSpectators = new System.Windows.Forms.PictureBox();
             this.pnlSettingsSetidleKickLimit.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numSettingsIdleBanRoundsLimit)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsNoIdleBanRoundsLimit)).BeginInit();
@@ -86,6 +88,7 @@
             this.pnlSettingsSpectatorPassword.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsSpectatorPassword)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsCommander)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picSettingsAlwaysAllowSpectators)).BeginInit();
             this.SuspendLayout();
             // 
             // pnlSettingsSetidleKickLimit
@@ -602,10 +605,32 @@
             this.txtSettingsServerType.Size = new System.Drawing.Size(200, 23);
             this.txtSettingsServerType.TabIndex = 304;
             // 
+            // chkSettingsAlwaysAllowSpectators
+            // 
+            this.chkSettingsAlwaysAllowSpectators.AutoSize = true;
+            this.chkSettingsAlwaysAllowSpectators.Location = new System.Drawing.Point(184, 152);
+            this.chkSettingsAlwaysAllowSpectators.Name = "chkSettingsAlwaysAllowSpectators";
+            this.chkSettingsAlwaysAllowSpectators.Size = new System.Drawing.Size(116, 19);
+            this.chkSettingsAlwaysAllowSpectators.TabIndex = 306;
+            this.chkSettingsAlwaysAllowSpectators.Text = "Public spectators";
+            this.chkSettingsAlwaysAllowSpectators.UseVisualStyleBackColor = true;
+            this.chkSettingsAlwaysAllowSpectators.CheckedChanged += new System.EventHandler(this.chkSettingsAlwaysAllowSpectators_CheckedChanged);
+            // 
+            // picSettingsAlwaysAllowSpectators
+            // 
+            this.picSettingsAlwaysAllowSpectators.Location = new System.Drawing.Point(158, 152);
+            this.picSettingsAlwaysAllowSpectators.Name = "picSettingsAlwaysAllowSpectators";
+            this.picSettingsAlwaysAllowSpectators.Size = new System.Drawing.Size(16, 16);
+            this.picSettingsAlwaysAllowSpectators.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.picSettingsAlwaysAllowSpectators.TabIndex = 305;
+            this.picSettingsAlwaysAllowSpectators.TabStop = false;
+            // 
             // uscServerSettingsConfigurationBF4
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.chkSettingsAlwaysAllowSpectators);
+            this.Controls.Add(this.picSettingsAlwaysAllowSpectators);
             this.Controls.Add(this.lblSettingsServerType);
             this.Controls.Add(this.txtSettingsServerType);
             this.Controls.Add(this.chkSettingsCommander);
@@ -659,6 +684,7 @@
             this.pnlSettingsSpectatorPassword.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsSpectatorPassword)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsCommander)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picSettingsAlwaysAllowSpectators)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -710,5 +736,7 @@
         private System.Windows.Forms.PictureBox picSettingsCommander;
         private System.Windows.Forms.Label lblSettingsServerType;
         private System.Windows.Forms.TextBox txtSettingsServerType;
+        private System.Windows.Forms.CheckBox chkSettingsAlwaysAllowSpectators;
+        private System.Windows.Forms.PictureBox picSettingsAlwaysAllowSpectators;
     }
 }

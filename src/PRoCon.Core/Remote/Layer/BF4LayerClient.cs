@@ -101,6 +101,7 @@ namespace PRoCon.Core.Remote.Layer {
             this.RequestDelegates.Add("vars.commander", this.DispatchVarsRequest);
             this.RequestDelegates.Add("vars.serverType", this.DispatchVarsRequest);
             this.RequestDelegates.Add("vars.forceReloadWholeMags", this.DispatchVarsRequest);
+            this.RequestDelegates.Add("vars.alwaysAllowSpectators", this.DispatchVarsRequest);
 
             this.RequestDelegates.Add("vars.roundTimeLimit", this.DispatchVarsRequest);
             this.RequestDelegates.Add("vars.mpExperience", this.DispatchVarsRequest);

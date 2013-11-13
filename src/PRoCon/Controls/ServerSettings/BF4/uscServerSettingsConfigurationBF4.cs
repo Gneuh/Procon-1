@@ -61,6 +61,7 @@ namespace PRoCon.Controls.ServerSettings.BF4 {
             this.AsyncSettingControls.Add("fairFight.isActive", new AsyncStyleSetting(this.picSettingsFairFight, this.chkSettingsFairFight, new Control[] { this.chkSettingsFairFight }, true));
 
             this.AsyncSettingControls.Add("vars.commander", new AsyncStyleSetting(this.picSettingsCommander, this.chkSettingsCommander, new Control[] { this.chkSettingsCommander }, true));
+            this.AsyncSettingControls.Add("vars.alwaysAllowSpectators", new AsyncStyleSetting(this.picSettingsAlwaysAllowSpectators, this.chkSettingsAlwaysAllowSpectators, new Control[] { this.chkSettingsAlwaysAllowSpectators }, true));
             
             this.AsyncSettingControls.Add("reservedslotslist.aggressivejoin", new AsyncStyleSetting(this.picSettingsAggressiveJoin, this.chkSettingsAggressiveJoin, new Control[] { this.chkSettingsAggressiveJoin }, true));
 
@@ -77,6 +78,7 @@ namespace PRoCon.Controls.ServerSettings.BF4 {
             this.chkSettingsPunkbuster.Text = this.Language.GetLocalized("uscServerSettingsPanel.chkSettingsPunkbuster");
             this.lblSettingsServerType.Text = this.Language.GetLocalized("uscServerSettingsPanel.lblSettingsServerType");
             this.chkSettingsCommander.Text = this.Language.GetLocalized("uscServerSettingsPanel.chkSettingsCommander");
+            this.chkSettingsAlwaysAllowSpectators.Text = this.Language.GetDefaultLocalized("Public spectators", "uscServerSettingsPanel.chkSettingsAlwaysAllowSpectators");
 
             this.chkSettingsFairFight.Text = this.Language.GetDefaultLocalized("use FairFight", "uscServerSettingsPanel.chkSettingsFairFight");
 
@@ -132,6 +134,7 @@ namespace PRoCon.Controls.ServerSettings.BF4 {
             this.Client.Game.CurrentPlayerLimit += new FrostbiteClient.LimitHandler(m_prcClient_CurrentPlayerLimit);
 
             this.Client.Game.MaxSpectators += new FrostbiteClient.LimitHandler(Game_MaxSpectators);
+            this.Client.Game.AlwaysAllowSpectators += new FrostbiteClient.IsEnabledHandler(Game_AlwaysAllowSpectators);
 
             this.Client.Game.IdleTimeout += new FrostbiteClient.LimitHandler(m_prcClient_IdleTimeout);
             this.Client.Game.IdleBanRounds += new FrostbiteClient.LimitHandler(m_prcClient_IdleBanRounds);
@@ -416,6 +419,23 @@ namespace PRoCon.Controls.ServerSettings.BF4 {
                     this.WaitForSettingResponse("vars.commander", this.chkSettingsCommander.Checked);
                     
                     this.Client.Game.SendSetVarsCommander(this.chkSettingsCommander.Checked);
+                }
+            }
+        }
+
+        #endregion
+
+        #region AlwaysAllowSpectators
+
+        private void Game_AlwaysAllowSpectators(FrostbiteClient sender, bool isEnabled) {
+            this.OnSettingResponse("vars.alwaysAllowSpectators", isEnabled, true);
+        }
+        private void chkSettingsAlwaysAllowSpectators_CheckedChanged(object sender, EventArgs e) {
+            if (this.Client != null && this.Client.Game != null) {
+                if (this.IgnoreEvents == false && this.AsyncSettingControls["vars.alwaysAllowSpectators"].IgnoreEvent == false) {
+                    this.WaitForSettingResponse("vars.alwaysAllowSpectators", this.chkSettingsAlwaysAllowSpectators.Checked);
+
+                    this.Client.Game.SendSetVarsAlwaysAllowSpectators(this.chkSettingsAlwaysAllowSpectators.Checked);
                 }
             }
         }

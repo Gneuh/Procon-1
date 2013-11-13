@@ -86,6 +86,8 @@ namespace PRoCon.Controls.ServerSettings.BF4 {
             this.Client.Game.IsCommander += new FrostbiteClient.IsEnabledHandler(Game_IsCommander);
             this.Client.Game.ServerType += new FrostbiteClient.VarsStringHandler(Game_ServerType);
 
+            this.Client.Game.AlwaysAllowSpectators += new FrostbiteClient.IsEnabledHandler(Game_AlwaysAllowSpectators);
+            
             this.Client.Game.ReservedSlotsListAggressiveJoin += new FrostbiteClient.IsEnabledHandler(Game_ReservedSlotsListAggressiveJoin);
             this.Client.Game.RoundLockdownCountdown += new FrostbiteClient.LimitHandler(Game_RoundLockdownCountdown);
             this.Client.Game.RoundWarmupTimeout += new FrostbiteClient.LimitHandler(Game_RoundWarmupTimeout);
@@ -264,6 +266,10 @@ namespace PRoCon.Controls.ServerSettings.BF4 {
 
         void Game_IsCommander(FrostbiteClient sender, bool isEnabled) {
             this.AppendSetting("vars.commander", isEnabled.ToString());
+        }
+
+        void Game_AlwaysAllowSpectators(FrostbiteClient sender, bool isEnabled) {
+            this.AppendSetting("vars.alwaysAllowSpectators", isEnabled.ToString());
         }
 
         void Game_FairFight(FrostbiteClient sender, bool isEnabled)

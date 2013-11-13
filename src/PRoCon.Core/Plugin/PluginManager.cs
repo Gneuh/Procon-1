@@ -1083,6 +1083,7 @@ namespace PRoCon.Core.Plugin {
             ProconClient.Game.IsHitIndicator -= new FrostbiteClient.IsEnabledHandler(Game_IsHitIndicator);
 
             ProconClient.Game.IsCommander -= new FrostbiteClient.IsEnabledHandler(Game_IsCommander);
+            ProconClient.Game.AlwaysAllowSpectators -= new FrostbiteClient.IsEnabledHandler(Game_AlwaysAllowSpectators);
             ProconClient.Game.IsForceReloadWholeMags -= new FrostbiteClient.IsEnabledHandler(Game_IsForceReloadWholeMags);
             ProconClient.Game.ServerType -= new FrostbiteClient.VarsStringHandler(Game_ServerType);
 
@@ -1325,6 +1326,7 @@ namespace PRoCon.Core.Plugin {
             ProconClient.Game.IsHitIndicator += new FrostbiteClient.IsEnabledHandler(Game_IsHitIndicator);
 
             ProconClient.Game.IsCommander += new FrostbiteClient.IsEnabledHandler(Game_IsCommander);
+            ProconClient.Game.AlwaysAllowSpectators += new FrostbiteClient.IsEnabledHandler(Game_AlwaysAllowSpectators);
             ProconClient.Game.IsForceReloadWholeMags += new FrostbiteClient.IsEnabledHandler(Game_IsForceReloadWholeMags);
             ProconClient.Game.ServerType += new FrostbiteClient.VarsStringHandler(Game_ServerType);
 
@@ -1345,6 +1347,10 @@ namespace PRoCon.Core.Plugin {
             InvokeOnAllEnabled("OnCommander", isEnabled);
         }
 
+        void Game_AlwaysAllowSpectators(FrostbiteClient sender, bool isEnabled) {
+            InvokeOnAllEnabled("OnAlwaysAllowSpectators", isEnabled);
+        }
+        
         void Game_IsForceReloadWholeMags(FrostbiteClient sender, bool isEnabled) {
             InvokeOnAllEnabled("OnForceReloadWholeMags", isEnabled);
         }

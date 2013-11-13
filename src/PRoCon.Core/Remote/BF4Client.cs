@@ -117,6 +117,7 @@ namespace PRoCon.Core.Remote {
             ResponseDelegates.Add("vars.commander", DispatchVarsCommander);
             ResponseDelegates.Add("vars.forceReloadWholeMags", DispatchVarsForceReloadWholeMags);
 
+            ResponseDelegates.Add("vars.alwaysAllowSpectators", DispatchVarsAlwaysAllowSpectators);
             
             ResponseDelegates.Add("vars.serverType", DispatchVarsServerType);
 
@@ -250,6 +251,7 @@ namespace PRoCon.Core.Remote {
 
             SendGetVarsServerType();
             SendGetVarsCommander();
+            SendGetVarsAlwaysAllowSpectators();
             SendGetVarsForceReloadWholeMags();
         }
 
@@ -353,7 +355,9 @@ namespace PRoCon.Core.Remote {
 
         public override event IsEnabledHandler IsCommander;
         public override event IsEnabledHandler IsForceReloadWholeMags;
-        
+
+        public override event IsEnabledHandler AlwaysAllowSpectators;
+
         public override event VarsStringHandler ServerType;
 
         #region player/squad cmd_handler
@@ -1471,6 +1475,20 @@ namespace PRoCon.Core.Remote {
                 }
             }
         }
+
+        protected virtual void DispatchVarsAlwaysAllowSpectators(FrostbiteConnection sender, Packet cpRecievedPacket, Packet cpRequestPacket) {
+            if (cpRequestPacket.Words.Count >= 1) {
+                if (AlwaysAllowSpectators != null) {
+                    if (cpRecievedPacket.Words.Count == 2) {
+                        FrostbiteConnection.RaiseEvent(AlwaysAllowSpectators.GetInvocationList(), this, Convert.ToBoolean(cpRecievedPacket.Words[1]));
+                    }
+                    else if (cpRequestPacket.Words.Count >= 2) {
+                        FrostbiteConnection.RaiseEvent(AlwaysAllowSpectators.GetInvocationList(), this, Convert.ToBoolean(cpRequestPacket.Words[1]));
+                    }
+                }
+            }
+        }
+
 
         #endregion
 

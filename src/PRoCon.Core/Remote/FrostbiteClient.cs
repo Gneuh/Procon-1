@@ -1584,6 +1584,18 @@ namespace PRoCon.Core.Remote {
             }
         }
 
+        public virtual void SendSetVarsAlwaysAllowSpectators(bool enabled) {
+            if (IsLoggedIn == true) {
+                BuildSendPacket("vars.alwaysAllowSpectators", Packet.Bltos(enabled));
+            }
+        }
+
+        public virtual void SendGetVarsAlwaysAllowSpectators() {
+            if (IsLoggedIn == true) {
+                BuildSendPacket("vars.alwaysAllowSpectators");
+            }
+        }
+
         public virtual void SendSetVarsForceReloadWholeMags(bool enabled) {
             if (IsLoggedIn == true) {
                 BuildSendPacket("vars.forceReloadWholeMags", Packet.Bltos(enabled));
@@ -3762,6 +3774,8 @@ namespace PRoCon.Core.Remote {
         public virtual event IsEnabledHandler IsCommander;
 
         public virtual event IsEnabledHandler IsForceReloadWholeMags;
+
+        public virtual event IsEnabledHandler AlwaysAllowSpectators;
 
         public virtual event VarsStringHandler ServerType;
 

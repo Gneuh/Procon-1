@@ -146,6 +146,7 @@ namespace PRoCon.Core.Plugin {
         public virtual void OnIsHitIndicator(bool isEnabled) { }
         
         public virtual void OnCommander(bool isEnabled) { }
+        public virtual void OnAlwaysAllowSpectators(bool isEnabled) { }
         public virtual void OnForceReloadWholeMags(bool isEnabled) { }
         public virtual void OnServerType(string value) { }
 
