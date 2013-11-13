@@ -46,11 +46,11 @@ function fnUpdateConnectionsList(jsonConnectionData) {
 					jQuery('<tr>')
 					.unbind().mouseenter(
 						function() {
-							jQuery(this).find('.connectionOptions').fadeIn('fast');
+							jQuery(this).find('.connectionOptions').show();
 						}
 					).mouseleave(
 						function() {
-							jQuery(this).find('.connectionOptions').fadeOut('fast');
+							jQuery(this).find('.connectionOptions').hide();
 						}
 					)
 					.append(
