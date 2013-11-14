@@ -347,6 +347,7 @@ namespace PRoCon {
             // Player Context Menu
             this.textChatModerationToolStripMenuItem.Text = this.m_clocLanguage.GetLocalized("uscPlayerListPanel.ctxPlayerOptions.textChatModerationToolStripMenuItem");
             this.reservedSlotToolStripMenuItem.Text = this.m_clocLanguage.GetLocalized("uscPlayerListPanel.ctxPlayerOptions.reservedSlotToolStripMenuItem");
+            this.spectatorListToolStripMenuItem.Text = this.m_clocLanguage.GetDefaultLocalized("Spectator list", "uscPlayerListPanel.ctxPlayerOptions.spectatorListToolStripMenuItem");
 
             this.statsLookupToolStripMenuItem.Text = this.m_clocLanguage.GetDefaultLocalized("Stats Lookup", "uscPlayerListPanel.ctxPlayerOptions.statsLookupToolStripMenuItem");
             this.punkBusterScreenshotToolStripMenuItem.Text = this.m_clocLanguage.GetDefaultLocalized("PunkBuster Screenshot", "uscPlayerListPanel.ctxPlayerOptions.punkBusterScreenshotToolStripMenuItem");
@@ -1962,6 +1963,9 @@ namespace PRoCon {
                     this.reservedSlotToolStripMenuItem.Checked = this.m_prcClient.ReservedSlotList.Contains(player.SoldierName);
                     this.reservedSlotToolStripMenuItem.Tag = player;
 
+                    this.spectatorListToolStripMenuItem.Checked = this.m_prcClient.SpectatorList.Contains(player.SoldierName);
+                    this.spectatorListToolStripMenuItem.Tag = player;
+                    
                     if (this.m_prcClient.FullTextChatModerationList.Contains(player.SoldierName) == true) {
 
                         TextChatModerationEntry entry = this.m_prcClient.FullTextChatModerationList[player.SoldierName];
@@ -2002,6 +2006,14 @@ namespace PRoCon {
 
                     if (this.m_prcClient != null && this.m_prcClient.GameType == "MOH") {
                         this.reservedSlotToolStripMenuItem.Enabled = false;
+                    }
+
+                    if (this.m_prcClient != null && (this.m_prcClient.GameType == "BFBC2" || this.m_prcClient.GameType == "MOH" || this.m_prcClient.GameType == "MOHW" || this.m_prcClient.GameType == "BF3")) {
+                        this.spectatorListToolStripMenuItem.Enabled = false;
+                    }
+
+                    if (this.m_prcClient != null && (this.m_prcClient.GameType == "MOHW" || this.m_prcClient.GameType == "BF3" || this.m_prcClient.GameType == "BF4")) {
+                        textChatModerationToolStripMenuItem.Enabled = false;
                     }
 
                     //show the context menu strip
@@ -2047,7 +2059,22 @@ namespace PRoCon {
             }
         }
 
-        private void mutedToolStripMenuItem_Click(object sender, EventArgs e) {
+        private void spectatorListToolStripMenuItem_Click(object sender, EventArgs e) {
+
+            if (this.spectatorListToolStripMenuItem.Tag is CPlayerInfo) {
+                if (this.spectatorListToolStripMenuItem.Checked == false) {
+                    this.m_prcClient.Game.SendSpectatorListAddPlayerPacket(((CPlayerInfo)this.spectatorListToolStripMenuItem.Tag).SoldierName);
+                }
+                else {
+                    this.m_prcClient.Game.SendSpectatorListRemovePlayerPacket(((CPlayerInfo)this.spectatorListToolStripMenuItem.Tag).SoldierName);
+                }
+
+                this.m_prcClient.Game.SendSpectatorListSavePacket();
+            }
+        }
+
+        private void mutedToolStripMenuItem_Click(object sender, EventArgs e)
+        {
             if (this.mutedToolStripMenuItem.Tag is CPlayerInfo) {
                 this.m_prcClient.Game.SendTextChatModerationListAddPacket(new TextChatModerationEntry(PlayerModerationLevelType.Muted, ((CPlayerInfo)this.reservedSlotToolStripMenuItem.Tag).SoldierName));
 

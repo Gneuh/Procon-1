@@ -179,6 +179,7 @@
             this.voiceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.adminToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.reservedSlotToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.spectatorListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
             this.statsLookupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statsLookupToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
@@ -1105,6 +1106,7 @@
             this.moveToSquadToolStripMenuItem,
             this.textChatModerationToolStripMenuItem,
             this.reservedSlotToolStripMenuItem,
+            this.spectatorListToolStripMenuItem,
             this.toolStripMenuItem2,
             this.statsLookupToolStripMenuItem,
             this.punkBusterScreenshotToolStripMenuItem});
@@ -1213,6 +1215,13 @@
             this.reservedSlotToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
             this.reservedSlotToolStripMenuItem.Text = "Reserved Slot";
             this.reservedSlotToolStripMenuItem.Click += new System.EventHandler(this.reservedSlotToolStripMenuItem_Click);
+            // 
+            // spectatorListToolStripMenuItem
+            // 
+            this.spectatorListToolStripMenuItem.Name = "spectatorListToolStripMenuItem";
+            this.spectatorListToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
+            this.spectatorListToolStripMenuItem.Text = "Spectator list";
+            this.spectatorListToolStripMenuItem.Click += new System.EventHandler(this.spectatorListToolStripMenuItem_Click);
             // 
             // toolStripMenuItem2
             // 
@@ -1385,6 +1394,7 @@
         private System.Windows.Forms.ToolStripMenuItem betaToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem charlieToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem reservedSlotToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem spectatorListToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem textChatModerationToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem mutedToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem normalToolStripMenuItem;

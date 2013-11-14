@@ -514,6 +514,10 @@ namespace PRoCon.Core.Remote {
                 Game.ReservedSlotsPlayerAdded += new FrostbiteClient.ReservedSlotsPlayerHandler(PRoConClient_ReservedSlotsPlayerAdded);
                 Game.ReservedSlotsPlayerRemoved += new FrostbiteClient.ReservedSlotsPlayerHandler(PRoConClient_ReservedSlotsPlayerRemoved);
 
+                Game.SpectatorListList += new FrostbiteClient.SpectatorListListHandler(PRoConClient_SpectatorListList);
+                Game.SpectatorListPlayerAdded += new FrostbiteClient.SpectatorListPlayerHandler(PRoConClient_SpectatorListPlayerAdded);
+                Game.SpectatorListPlayerRemoved += new FrostbiteClient.SpectatorListPlayerHandler(PRoConClient_SpectatorListPlayerRemoved);
+
                 Game.ResponseError += new FrostbiteClient.ResponseErrorHandler(PRoConClient_ResponseError);
 
                 PluginsCompiled += new EmptyParamterHandler(ProConClient_PluginsCompiled);
@@ -593,6 +597,7 @@ namespace PRoCon.Core.Remote {
                 TeamNameList = new List<CTeamName>();
                 MapListPool = new NotificationList<CMap>();
                 ReservedSlotList = new NotificationList<string>();
+                SpectatorList = new NotificationList<string>();
                 Variables = new VariableDictionary();
                 SV_Variables = new VariableDictionary();
                 Reasons = new NotificationList<string>();
@@ -2569,7 +2574,40 @@ namespace PRoCon.Core.Remote {
             }
         }
 
-        protected void OnServerInfo(FrostbiteClient sender, CServerInfo csiServerInfo) {
+        private void PRoConClient_SpectatorListPlayerRemoved(FrostbiteClient sender, string strSoldierName) {
+            if (SpectatorList.Contains(strSoldierName) == true) {
+                SpectatorList.Remove(strSoldierName);
+            }
+        }
+
+        private void PRoConClient_SpectatorListPlayerAdded(FrostbiteClient sender, string strSoldierName) {
+            if (SpectatorList.Contains(strSoldierName) == false) {
+                SpectatorList.Add(strSoldierName);
+            }
+        }
+
+        private void PRoConClient_SpectatorListList(FrostbiteClient sender, List<string> soldierNames) {
+            if (sender is BF4Client) {
+                SpectatorList.Clear();
+            }
+
+            if (soldierNames.Count != 0) {
+                foreach (string strSoldierName in soldierNames) {
+                    if (SpectatorList.Contains(strSoldierName) == false) {
+                        SpectatorList.Add(strSoldierName);
+                    }
+                }
+
+                foreach (string strSoldierName in ReservedSlotList) {
+                    if (soldierNames.Contains(strSoldierName) == false) {
+                        SpectatorList.Remove(strSoldierName);
+                    }
+                }
+            }
+        }
+
+        protected void OnServerInfo(FrostbiteClient sender, CServerInfo csiServerInfo)
+        {
             GameMods oldGameMod = CurrentServerInfo != null ? CurrentServerInfo.GameMod : GameMods.None;
 
             // Initial loading..
