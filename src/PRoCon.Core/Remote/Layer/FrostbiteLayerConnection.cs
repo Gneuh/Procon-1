@@ -174,6 +174,9 @@ namespace PRoCon.Core.Remote.Layer {
                     Shutdown();
                 }
             }
+            else {
+                Shutdown();
+            }
         }
 
         /// <summary>
@@ -223,7 +226,8 @@ namespace PRoCon.Core.Remote.Layer {
                 catch (SocketException) {
                     // TO DO: Error reporting, possibly in a log file.
                 }
-                catch (Exception) {
+                catch (Exception e) {
+                    FrostbiteConnection.LogError("FrostbiteLayerConnection.Shutdown", "catch (Exception e)", e);
                 }
             }
         }

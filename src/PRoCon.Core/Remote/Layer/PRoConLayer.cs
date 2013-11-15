@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Net;
 using System.Net.Sockets;
-using System.IO;
 
 namespace PRoCon.Core.Remote.Layer {
     using Core;
@@ -296,8 +294,8 @@ namespace PRoCon.Core.Remote.Layer {
 
                     //cbfAccountsPanel.OnLayerServerSocketError(skeError);
                 }
-                catch (Exception) {
-
+                catch (Exception e) {
+                    FrostbiteConnection.LogError("ListenIncommingLayerConnections", "catch (Exception e)", e);
                 }
             }
         }
