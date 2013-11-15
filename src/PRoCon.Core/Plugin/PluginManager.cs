@@ -795,11 +795,12 @@ namespace PRoCon.Core.Plugin {
 
 
                 var pluginsDirectoryInfo = new DirectoryInfo(PluginBaseDirectory);
+                string className = string.Empty;
 
                 foreach (FileInfo pluginFile in pluginsDirectoryInfo.GetFiles("*.cs")) {
                     try
                     {
-                        string className = Regex.Replace(pluginFile.Name, "\\.cs$", "");
+                        className = Regex.Replace(pluginFile.Name, "\\.cs$", "");
 
                         if (IgnoredPluginClassNames.Contains(className) == false)
                         {
@@ -814,7 +815,8 @@ namespace PRoCon.Core.Plugin {
                     }
                     catch (Exception e)
                     {
-                        WritePluginConsole("Caught exception while compiling {0}: {1}", Regex.Replace(pluginFile.Name, "\\.cs$", ""), e.Message);
+                        WritePluginConsole("Compiling {0}... ^1^bException", className);
+                        WritePluginConsole(e.ToString());
                     }
                 }
 
