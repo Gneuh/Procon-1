@@ -905,6 +905,7 @@ namespace PRoCon.Core {
 
                 string strUnescapedNewlines = lstWords[3].Replace(@"\n", "\n");
                 strUnescapedNewlines = strUnescapedNewlines.Replace(@"\r", "\r");
+                strUnescapedNewlines = strUnescapedNewlines.Replace(@"\""", "\"");
 
                 ((PRoConClient)objSender).ProconProtectedPluginSetVariable(lstWords[1], lstWords[2], strUnescapedNewlines);
             }
@@ -1668,6 +1669,7 @@ namespace PRoCon.Core {
 
                 string strUnescapedNewlines = lstWords[3].Replace(@"\n", "\n");
                 strUnescapedNewlines = strUnescapedNewlines.Replace(@"\r", "\r");
+                strUnescapedNewlines = strUnescapedNewlines.Replace(@"\""", "\"");
 
                 ((PRoConClient)objSender).ProconProtectedPluginSetVariableCon(lstWords[1], lstWords[2], strUnescapedNewlines);
             }

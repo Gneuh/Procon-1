@@ -118,6 +118,7 @@ namespace PRoCon.Core.Remote {
                     }
                     else {
                         strFullWord += '"';
+                        blEscaped = false;
                     }
                 }
                 else if (cInput == '\\') {
