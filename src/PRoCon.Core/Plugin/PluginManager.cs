@@ -26,6 +26,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Security;
+using System.Security.Permissions;
 using System.Security.Policy;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -716,6 +717,17 @@ namespace PRoCon.Core.Plugin {
             }
         }
 
+        /// <summary>
+        /// Builds the strong name of a loaded assembly
+        /// </summary>
+        /// <param name="assembly">The assembly to fetch the strong name of</param>
+        /// <returns></returns>
+        protected static StrongName GetStrongName(Assembly assembly) {
+            AssemblyName name = assembly.GetName();
+
+            return new StrongName(new StrongNamePublicKeyBlob(name.GetPublicKey()), name.Name, name.Version);
+        }
+
         public void CompilePlugins(PermissionSet pluginSandboxPermissions, List<String> ignoredPluginClassNames = null) {
             try {
 
@@ -784,7 +796,7 @@ namespace PRoCon.Core.Plugin {
                 var hostEvidence = new Evidence();
                 hostEvidence.AddHost(new Zone(SecurityZone.MyComputer));
 
-                AppDomainSandbox = AppDomain.CreateDomain(ProconClient.HostName + ProconClient.Port + "Engine", hostEvidence, domainSetup, pluginSandboxPermissions);
+                AppDomainSandbox = AppDomain.CreateDomain(ProconClient.HostName + ProconClient.Port + "Engine", hostEvidence, domainSetup, pluginSandboxPermissions, PluginManager.GetStrongName(AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(assembly => assembly.GetName().Name == "MySql.Data")));
 
                 WritePluginConsole("Configuring sandbox..");
                 // create the factory class in the secondary app-domain
