@@ -465,6 +465,10 @@ namespace PRoCon.Controls.ServerSettings.BF4 {
                     this.WaitForSettingResponse("vars.preset", this.chkSettingsBF4presetLock.Checked);
 
                     this.Client.Game.SendSetVarsPresetPacket(this.cboSettingsBF4preset.SelectedValue.ToString(), this.chkSettingsBF4presetLock.Checked);
+
+                    if (this.chkSettingsBF4presetLock.Checked == true) {
+                        this.Client.Game.FetchStartupVariables();
+                    }
                 }
             }
         }
