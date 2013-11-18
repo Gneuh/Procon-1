@@ -1019,7 +1019,7 @@ namespace PRoCon {
                             if (String.Compare(playerListItem.SubItems["ping"].Text, cpiPlayer.Ping.ToString()) != 0) { playerListItem.SubItems["ping"].Text = cpiPlayer.Ping.ToString(); }
                         }
                         
-                        if (String.Compare(playerListItem.SubItems["rank"].Text, cpiPlayer.Rank.ToString()) != 0) { playerListItem.SubItems["rank"].Text = cpiPlayer.Ping.ToString(); }
+                        if (String.Compare(playerListItem.SubItems["rank"].Text, cpiPlayer.Rank.ToString()) != 0) { playerListItem.SubItems["rank"].Text = cpiPlayer.Rank.ToString(); }
 
                         AdditionalPlayerInfo sapiAdditional;
 
