@@ -22,26 +22,28 @@ Please refer to the [issues section](https://github.com/Myrcon/Procon-1/issues?l
 ## Changelog ##
 To check out older changelogs, please refer to our [full changelogs list](https://forum.myrcon.com/showthread.php?240-Full-Change-Log "Full changelog of Procon 1") on the Myrcon Community forums.
 
-### 1.4.1.0 to 1.4.1.1 ###
+### 1.4.1.1 to 1.4.1.2 ###
 #### Battlefield 4 ####
-- Added the hit indicator var to plugin events & the bf4 gameplay settings panel
-- Removes the spectator slot list if client is not bf4
-- Added the settings panel controls and plugin events for command & server type, replacing the ranked checkbox.
-- Added new variables to CServerInfo for blaze.
-- Added support through out for vars.forceReloadWholeMags
-- Added in vars pass through for vars we have not implemented in the server settings panel yet.
+- Changed representation of "commo rose" messages in chat tab and added option to hide them
+- Fixed bug displaying current round one value too low (now shows 1/1 rounds)
+- Hid banner URL option and map tab since they are no longer functional
+- Removed unknown/old commands being fired on startup
+- Added setting for vars.alwaysAllowSpectators and vars.preset
+- Updated and fixed weapon definitions and localisation
 
 #### UI ####
-- Moved minimum size of frm main to 800x600, down from 1024x768
+- Fixed bug displaying a player's rank as their ping
+- Added "add player to spectator slot list" via right click in playerlist
+- Removed smooth fading animation of connect/disconnect buttons on start page
+- Changed ping to be shown as -1 if above 5000 to filter out invalid responses from the gameserver
 
 #### Core ####
-- Cleanup the layer connection handling a little bit
-- Fix for new reconnection handler not locking modifcation from other threads before checking a collection of sent packets.
+- Fixed bug triggering a reconnect even after pressing "disconnect"
+- Fixed bug preventing the MySQL connector from working with sandbox enabled
 
 #### Plugin ####
-- Removed deprecated OnPlayerKilled(name, name) method from plugins. It's been marked as deprecated for two years (Since BFBC2 R9)
-- Removed deprecated maplist plugin command that would break the maplist back into a simple list of map names, passing them (Since BFBC2 R9)
-- Sort of reverted a change where we cache the reflection lookup of a method. Instead we've met it half way, it's still improved on what we had originally but only marginally.
+- Fixed bug preventing all plugins from loading if one of them crashed during compilation
+- Fixed bug parsing string-values of plugin settings not properly
 
 
 ## Credits & contributions ##
