@@ -134,8 +134,8 @@ namespace PRoCon.Controls.ServerSettings.BF4 {
             this.AppendSetting("vars.unlockMode", mode.ToLower());
         }
 
-        void Game_BF4preset(FrostbiteClient sender, string mode) {
-            this.AppendSetting("vars.preset", mode);
+        void Game_BF4preset(FrostbiteClient sender, string mode, bool isLocked) {
+            this.AppendSetting("vars.preset", mode, isLocked.ToString());
         }
 
         /* not used in BF-4

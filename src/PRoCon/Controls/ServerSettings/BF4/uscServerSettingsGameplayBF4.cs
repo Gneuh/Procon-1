@@ -122,8 +122,9 @@ namespace PRoCon.Controls.ServerSettings.BF4 {
             this.cboSettingsUnlockMode.DisplayMember = "LongName";
             this.cboSettingsUnlockMode.ValueMember = "ShortName";
 
-            this.lblSettingsBF4preset.Text = this.Language.GetLocalized("uscServerSettingsPanel.lblSettingsBF4preset");
-            this.lnkSettingsBF4preset.Text = this.Language.GetLocalized("uscServerSettingsPanel.lnkSettingsBF4preset");
+            this.lblSettingsBF4preset.Text = this.Language.GetDefaultLocalized("Game preset (server side)", "uscServerSettingsPanel.lblSettingsBF4preset");
+            this.lnkSettingsBF4preset.Text = this.Language.GetDefaultLocalized("Apply", "uscServerSettingsPanel.lnkSettingsBF4preset");
+            this.chkSettingsBF4presetLock.Text = this.Language.GetDefaultLocalized("Lock preset related values", "uscServerSettingsPanel.chkSettingsBF4presetLock");
             
             ArrayList BF4preset = new ArrayList();
             BF4preset.Add(new UnlockMode(this.Language.GetDefaultLocalized("Normal", "uscServerSettingsPanel.cboSettingsBF4preset.Normal"), BF4presetType.NORMAL.ToString()));
@@ -448,24 +449,22 @@ namespace PRoCon.Controls.ServerSettings.BF4 {
 
         private string m_strPreviousSuccessBF4preset;
 
-        private void Game_BF4preset(FrostbiteClient sender, string mode)
-        {
+        private void Game_BF4preset(FrostbiteClient sender, string mode, bool locked) {
             this.m_strPreviousSuccessBF4preset = mode.ToString();
             this.OnSettingResponse("vars.preset", mode.ToString(), true);
 
             this.cboSettingsBF4preset.SelectedValue = mode.ToString();
+            this.chkSettingsBF4presetLock.Checked = locked;
         }
 
-        private void lnkSettingsBF4preset_LinkClicked(object sender, EventArgs e)
-        {
+        private void lnkSettingsBF4preset_LinkClicked(object sender, EventArgs e) {
             // see line 126 uscServerSettingsTextChatModeration.cs
-            if (this.Client != null && this.Client.Game != null)
-            {
-                if (this.IgnoreEvents == false && this.AsyncSettingControls["vars.preset"].IgnoreEvent == false)
-                {
+            if (this.Client != null && this.Client.Game != null) {
+                if (this.IgnoreEvents == false && this.AsyncSettingControls["vars.preset"].IgnoreEvent == false) {
                     this.WaitForSettingResponse("vars.preset", this.cboSettingsBF4preset.SelectedValue.ToString());
+                    this.WaitForSettingResponse("vars.preset", this.chkSettingsBF4presetLock.Checked);
 
-                    this.Client.Game.SendSetVarsPresetPacket(this.cboSettingsBF4preset.SelectedValue.ToString());
+                    this.Client.Game.SendSetVarsPresetPacket(this.cboSettingsBF4preset.SelectedValue.ToString(), this.chkSettingsBF4presetLock.Checked);
                 }
             }
         }

@@ -1367,9 +1367,9 @@ namespace PRoCon.Core.Remote {
             }
         }
 
-        public virtual void SendSetVarsPresetPacket(string mode) {
+        public virtual void SendSetVarsPresetPacket(string mode, bool locked) {
             if (IsLoggedIn == true) {
-                BuildSendPacket("vars.preset", mode);
+                BuildSendPacket("vars.preset", mode, Packet.Bltos(locked));
             }
         }
 
@@ -2011,7 +2011,7 @@ namespace PRoCon.Core.Remote {
 
         public delegate void UnlockModeHandler(FrostbiteClient sender, string mode);
 
-        public delegate void BF4presetHandler(FrostbiteClient sender, string mode);
+        public delegate void BF4presetHandler(FrostbiteClient sender, string mode, bool isLocked);
 
         public delegate void UpperLowerLimitHandler(FrostbiteClient sender, int upperLimit, int lowerLimit);
 

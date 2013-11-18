@@ -1305,11 +1305,11 @@ namespace PRoCon.Core.Remote {
         protected virtual void DispatchVarsPresetResponse(FrostbiteConnection sender, Packet cpRecievedPacket, Packet cpRequestPacket) {
             if (cpRequestPacket.Words.Count >= 1) {
                 if (BF4preset != null) {
-                    if (cpRecievedPacket.Words.Count == 2) {
-                        FrostbiteConnection.RaiseEvent(BF4preset.GetInvocationList(), this, Convert.ToString(cpRecievedPacket.Words[1]));
+                    if (cpRecievedPacket.Words.Count == 3) {
+                        FrostbiteConnection.RaiseEvent(BF4preset.GetInvocationList(), this, Convert.ToString(cpRecievedPacket.Words[1]), Convert.ToBoolean(cpRecievedPacket.Words[2]));
                     } 
-                    else if (cpRequestPacket.Words.Count >= 2) {
-                        FrostbiteConnection.RaiseEvent(BF4preset.GetInvocationList(), this, Convert.ToString(cpRequestPacket.Words[1]));
+                    else if (cpRequestPacket.Words.Count >= 3) {
+                        FrostbiteConnection.RaiseEvent(BF4preset.GetInvocationList(), this, Convert.ToString(cpRequestPacket.Words[1]), Convert.ToBoolean(cpRequestPacket.Words[2]));
                     }
                 }
             }

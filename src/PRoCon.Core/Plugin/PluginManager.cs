@@ -1970,8 +1970,8 @@ namespace PRoCon.Core.Plugin {
             InvokeOnAllEnabled("OnUnlockMode", new object[] {mode});
         }
 
-        private void m_prcClient_BF4preset(FrostbiteClient sender, string mode) {
-            InvokeOnAllEnabled("OnPreset", new object[] { mode });
+        private void m_prcClient_BF4preset(FrostbiteClient sender, string mode, bool isLocked) {
+            InvokeOnAllEnabled("OnPreset", new object[] { mode, isLocked });
         }
         
         private void Game_GunMasterWeaponsPreset(FrostbiteClient sender, int preset) {
