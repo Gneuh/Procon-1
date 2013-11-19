@@ -98,10 +98,10 @@
             this.lnkSettingsGunMasterWeaponsPreset = new System.Windows.Forms.LinkLabel();
             this.lblSettingsGunMasterWeaponsPreset = new System.Windows.Forms.Label();
             this.cboSettingsGunMasterWeaponsPreset = new System.Windows.Forms.ComboBox();
-            this.lnkSettingsCtfRoundTimeModifier = new System.Windows.Forms.LinkLabel();
-            this.picSettingsCtfRoundTimeModifier = new System.Windows.Forms.PictureBox();
-            this.numSettingsCtfRoundTimeModifier = new System.Windows.Forms.NumericUpDown();
-            this.lblSettingsCtfRoundTimeModifier = new System.Windows.Forms.Label();
+            this.lnkSettingsRoundTimeLimit = new System.Windows.Forms.LinkLabel();
+            this.picSettingsRoundTimeLimit = new System.Windows.Forms.PictureBox();
+            this.numSettingsRoundTimeLimit = new System.Windows.Forms.NumericUpDown();
+            this.lblSettingsRoundTimeLimit = new System.Windows.Forms.Label();
             this.chkSettingsIsHitIndicators = new System.Windows.Forms.CheckBox();
             this.picSettingsIsHitIndicators = new System.Windows.Forms.PictureBox();
             this.chkSettingsIsForceReloadWholeMags = new System.Windows.Forms.CheckBox();
@@ -148,8 +148,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsWarmupTimeout)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numSettingsWarmupTimeout)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsGunMasterWeaponsPreset)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picSettingsCtfRoundTimeModifier)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numSettingsCtfRoundTimeModifier)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picSettingsRoundTimeLimit)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numSettingsRoundTimeLimit)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsIsHitIndicators)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsIsForceReloadWholeMags)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsBF4preset)).BeginInit();
@@ -1090,65 +1090,61 @@
             this.cboSettingsGunMasterWeaponsPreset.TabIndex = 299;
             this.cboSettingsGunMasterWeaponsPreset.Visible = false;
             // 
-            // lnkSettingsCtfRoundTimeModifier
+            // lnkSettingsRoundTimeLimit
             // 
-            this.lnkSettingsCtfRoundTimeModifier.ActiveLinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(220)))));
-            this.lnkSettingsCtfRoundTimeModifier.AutoSize = true;
-            this.lnkSettingsCtfRoundTimeModifier.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
-            this.lnkSettingsCtfRoundTimeModifier.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(220)))));
-            this.lnkSettingsCtfRoundTimeModifier.Location = new System.Drawing.Point(642, 498);
-            this.lnkSettingsCtfRoundTimeModifier.Name = "lnkSettingsCtfRoundTimeModifier";
-            this.lnkSettingsCtfRoundTimeModifier.Size = new System.Drawing.Size(38, 15);
-            this.lnkSettingsCtfRoundTimeModifier.TabIndex = 306;
-            this.lnkSettingsCtfRoundTimeModifier.TabStop = true;
-            this.lnkSettingsCtfRoundTimeModifier.Text = "Apply";
-            this.lnkSettingsCtfRoundTimeModifier.Visible = false;
-            this.lnkSettingsCtfRoundTimeModifier.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkSettingsCtfRoundTimeModifier_LinkClicked);
+            this.lnkSettingsRoundTimeLimit.ActiveLinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(220)))));
+            this.lnkSettingsRoundTimeLimit.AutoSize = true;
+            this.lnkSettingsRoundTimeLimit.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
+            this.lnkSettingsRoundTimeLimit.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(220)))));
+            this.lnkSettingsRoundTimeLimit.Location = new System.Drawing.Point(642, 498);
+            this.lnkSettingsRoundTimeLimit.Name = "lnkSettingsRoundTimeLimit";
+            this.lnkSettingsRoundTimeLimit.Size = new System.Drawing.Size(38, 15);
+            this.lnkSettingsRoundTimeLimit.TabIndex = 306;
+            this.lnkSettingsRoundTimeLimit.TabStop = true;
+            this.lnkSettingsRoundTimeLimit.Text = "Apply";
+            this.lnkSettingsRoundTimeLimit.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkSettingsRoundTimeLimit_LinkClicked);
             // 
-            // picSettingsCtfRoundTimeModifier
+            // picSettingsRoundTimeLimit
             // 
-            this.picSettingsCtfRoundTimeModifier.Location = new System.Drawing.Point(550, 477);
-            this.picSettingsCtfRoundTimeModifier.Name = "picSettingsCtfRoundTimeModifier";
-            this.picSettingsCtfRoundTimeModifier.Size = new System.Drawing.Size(16, 16);
-            this.picSettingsCtfRoundTimeModifier.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.picSettingsCtfRoundTimeModifier.TabIndex = 305;
-            this.picSettingsCtfRoundTimeModifier.TabStop = false;
-            this.picSettingsCtfRoundTimeModifier.Visible = false;
+            this.picSettingsRoundTimeLimit.Location = new System.Drawing.Point(550, 477);
+            this.picSettingsRoundTimeLimit.Name = "picSettingsRoundTimeLimit";
+            this.picSettingsRoundTimeLimit.Size = new System.Drawing.Size(16, 16);
+            this.picSettingsRoundTimeLimit.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.picSettingsRoundTimeLimit.TabIndex = 305;
+            this.picSettingsRoundTimeLimit.TabStop = false;
             // 
-            // numSettingsCtfRoundTimeModifier
+            // numSettingsRoundTimeLimit
             // 
-            this.numSettingsCtfRoundTimeModifier.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.numSettingsCtfRoundTimeModifier.Increment = new decimal(new int[] {
+            this.numSettingsRoundTimeLimit.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.numSettingsRoundTimeLimit.Increment = new decimal(new int[] {
             15,
             0,
             0,
             0});
-            this.numSettingsCtfRoundTimeModifier.Location = new System.Drawing.Point(580, 496);
-            this.numSettingsCtfRoundTimeModifier.Maximum = new decimal(new int[] {
+            this.numSettingsRoundTimeLimit.Location = new System.Drawing.Point(580, 496);
+            this.numSettingsRoundTimeLimit.Maximum = new decimal(new int[] {
             1000,
             0,
             0,
             0});
-            this.numSettingsCtfRoundTimeModifier.Name = "numSettingsCtfRoundTimeModifier";
-            this.numSettingsCtfRoundTimeModifier.Size = new System.Drawing.Size(56, 23);
-            this.numSettingsCtfRoundTimeModifier.TabIndex = 304;
-            this.numSettingsCtfRoundTimeModifier.Value = new decimal(new int[] {
+            this.numSettingsRoundTimeLimit.Name = "numSettingsRoundTimeLimit";
+            this.numSettingsRoundTimeLimit.Size = new System.Drawing.Size(56, 23);
+            this.numSettingsRoundTimeLimit.TabIndex = 304;
+            this.numSettingsRoundTimeLimit.Value = new decimal(new int[] {
             50,
             0,
             0,
             0});
-            this.numSettingsCtfRoundTimeModifier.Visible = false;
             // 
-            // lblSettingsCtfRoundTimeModifier
+            // lblSettingsRoundTimeLimit
             // 
-            this.lblSettingsCtfRoundTimeModifier.AutoSize = true;
-            this.lblSettingsCtfRoundTimeModifier.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSettingsCtfRoundTimeModifier.Location = new System.Drawing.Point(577, 478);
-            this.lblSettingsCtfRoundTimeModifier.Name = "lblSettingsCtfRoundTimeModifier";
-            this.lblSettingsCtfRoundTimeModifier.Size = new System.Drawing.Size(144, 15);
-            this.lblSettingsCtfRoundTimeModifier.TabIndex = 303;
-            this.lblSettingsCtfRoundTimeModifier.Text = "CTF Round Time Modifier";
-            this.lblSettingsCtfRoundTimeModifier.Visible = false;
+            this.lblSettingsRoundTimeLimit.AutoSize = true;
+            this.lblSettingsRoundTimeLimit.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblSettingsRoundTimeLimit.Location = new System.Drawing.Point(577, 478);
+            this.lblSettingsRoundTimeLimit.Name = "lblSettingsRoundTimeLimit";
+            this.lblSettingsRoundTimeLimit.Size = new System.Drawing.Size(102, 15);
+            this.lblSettingsRoundTimeLimit.TabIndex = 303;
+            this.lblSettingsRoundTimeLimit.Text = "Round Time Limit";
             // 
             // chkSettingsIsHitIndicators
             // 
@@ -1236,11 +1232,10 @@
             this.chkSettingsBF4presetLock.AutoSize = true;
             this.chkSettingsBF4presetLock.Location = new System.Drawing.Point(578, 130);
             this.chkSettingsBF4presetLock.Name = "chkSettingsBF4presetLock";
-            this.chkSettingsBF4presetLock.Size = new System.Drawing.Size(122, 19);
+            this.chkSettingsBF4presetLock.Size = new System.Drawing.Size(161, 19);
             this.chkSettingsBF4presetLock.TabIndex = 316;
             this.chkSettingsBF4presetLock.Text = "Lock preset related values";
             this.chkSettingsBF4presetLock.UseVisualStyleBackColor = true;
-            //this.chkSettingsBF4presetLock.CheckedChanged += new System.EventHandler(this.chkSettingsBF4presetLock_CheckedChanged);
             // 
             // picSettingsBF4presetLock
             // 
@@ -1265,10 +1260,10 @@
             this.Controls.Add(this.picSettingsIsForceReloadWholeMags);
             this.Controls.Add(this.chkSettingsIsHitIndicators);
             this.Controls.Add(this.picSettingsIsHitIndicators);
-            this.Controls.Add(this.lnkSettingsCtfRoundTimeModifier);
-            this.Controls.Add(this.picSettingsCtfRoundTimeModifier);
-            this.Controls.Add(this.numSettingsCtfRoundTimeModifier);
-            this.Controls.Add(this.lblSettingsCtfRoundTimeModifier);
+            this.Controls.Add(this.lnkSettingsRoundTimeLimit);
+            this.Controls.Add(this.picSettingsRoundTimeLimit);
+            this.Controls.Add(this.numSettingsRoundTimeLimit);
+            this.Controls.Add(this.lblSettingsRoundTimeLimit);
             this.Controls.Add(this.picSettingsGunMasterWeaponsPreset);
             this.Controls.Add(this.lnkSettingsGunMasterWeaponsPreset);
             this.Controls.Add(this.lblSettingsGunMasterWeaponsPreset);
@@ -1425,10 +1420,10 @@
             this.Controls.SetChildIndex(this.lblSettingsGunMasterWeaponsPreset, 0);
             this.Controls.SetChildIndex(this.lnkSettingsGunMasterWeaponsPreset, 0);
             this.Controls.SetChildIndex(this.picSettingsGunMasterWeaponsPreset, 0);
-            this.Controls.SetChildIndex(this.lblSettingsCtfRoundTimeModifier, 0);
-            this.Controls.SetChildIndex(this.numSettingsCtfRoundTimeModifier, 0);
-            this.Controls.SetChildIndex(this.picSettingsCtfRoundTimeModifier, 0);
-            this.Controls.SetChildIndex(this.lnkSettingsCtfRoundTimeModifier, 0);
+            this.Controls.SetChildIndex(this.lblSettingsRoundTimeLimit, 0);
+            this.Controls.SetChildIndex(this.numSettingsRoundTimeLimit, 0);
+            this.Controls.SetChildIndex(this.picSettingsRoundTimeLimit, 0);
+            this.Controls.SetChildIndex(this.lnkSettingsRoundTimeLimit, 0);
             this.Controls.SetChildIndex(this.picSettingsIsHitIndicators, 0);
             this.Controls.SetChildIndex(this.chkSettingsIsHitIndicators, 0);
             this.Controls.SetChildIndex(this.picSettingsIsForceReloadWholeMags, 0);
@@ -1475,8 +1470,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsWarmupTimeout)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numSettingsWarmupTimeout)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsGunMasterWeaponsPreset)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picSettingsCtfRoundTimeModifier)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numSettingsCtfRoundTimeModifier)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picSettingsRoundTimeLimit)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numSettingsRoundTimeLimit)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsIsHitIndicators)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsIsForceReloadWholeMags)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsBF4preset)).EndInit();
@@ -1563,10 +1558,10 @@
         private System.Windows.Forms.LinkLabel lnkSettingsGunMasterWeaponsPreset;
         private System.Windows.Forms.Label lblSettingsGunMasterWeaponsPreset;
         private System.Windows.Forms.ComboBox cboSettingsGunMasterWeaponsPreset;
-        private System.Windows.Forms.LinkLabel lnkSettingsCtfRoundTimeModifier;
-        private System.Windows.Forms.PictureBox picSettingsCtfRoundTimeModifier;
-        private System.Windows.Forms.NumericUpDown numSettingsCtfRoundTimeModifier;
-        private System.Windows.Forms.Label lblSettingsCtfRoundTimeModifier;
+        private System.Windows.Forms.LinkLabel lnkSettingsRoundTimeLimit;
+        private System.Windows.Forms.PictureBox picSettingsRoundTimeLimit;
+        private System.Windows.Forms.NumericUpDown numSettingsRoundTimeLimit;
+        private System.Windows.Forms.Label lblSettingsRoundTimeLimit;
         private System.Windows.Forms.CheckBox chkSettingsIsHitIndicators;
         private System.Windows.Forms.PictureBox picSettingsIsHitIndicators;
         private System.Windows.Forms.CheckBox chkSettingsIsForceReloadWholeMags;

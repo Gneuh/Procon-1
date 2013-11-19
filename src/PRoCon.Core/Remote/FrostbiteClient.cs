@@ -1465,6 +1465,19 @@ namespace PRoCon.Core.Remote {
             }
         }
 
+
+        public virtual void SendSetVarsRoundTimeLimitPacket(int limit)         {
+            if (IsLoggedIn == true) {
+                BuildSendPacket("vars.roundTimeLimit", limit.ToString(CultureInfo.InvariantCulture));
+            }
+        }
+
+        public virtual void SendGetVarsRoundTimeLimitPacket() {
+            if (IsLoggedIn == true) {
+                BuildSendPacket("vars.roundTimeLimit");
+            }
+        }
+
         public virtual void SendSetReservedSlotsListAggressiveJoinPacket(bool enabled) {
             if (IsLoggedIn == true) {
                 BuildSendPacket("reservedSlotsList.aggressiveJoin", Packet.Bltos(enabled));
@@ -3741,7 +3754,6 @@ namespace PRoCon.Core.Remote {
         public virtual event LimitHandler GameModeCounter;
         public virtual event LimitHandler CtfRoundTimeModifier;
         public virtual event UnlockModeHandler UnlockMode;
-        public virtual event BF4presetHandler BF4preset;
         public virtual event GunMasterWeaponsPresetHandler GunMasterWeaponsPreset;
         public virtual event IsEnabledHandler ReservedSlotsListAggressiveJoin;
         public virtual event LimitHandler RoundLockdownCountdown;
@@ -3766,18 +3778,14 @@ namespace PRoCon.Core.Remote {
         #region BF4
 
         public virtual event IsEnabledHandler FairFight;
-
         public virtual event LimitHandler MaxSpectators;
-
         public virtual event IsEnabledHandler IsHitIndicator;
-
         public virtual event IsEnabledHandler IsCommander;
-
         public virtual event IsEnabledHandler IsForceReloadWholeMags;
-
         public virtual event IsEnabledHandler AlwaysAllowSpectators;
-
         public virtual event VarsStringHandler ServerType;
+        public virtual event LimitHandler RoundTimeLimit;
+        public virtual event BF4presetHandler BF4preset;
 
         #endregion
 

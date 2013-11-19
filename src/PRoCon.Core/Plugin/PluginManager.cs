@@ -978,6 +978,7 @@ namespace PRoCon.Core.Plugin {
             ProconClient.Game.RoundStartPlayerCount -= new FrostbiteClient.LimitHandler(m_prcClient_RoundStartPlayerCount);
             ProconClient.Game.GameModeCounter -= new FrostbiteClient.LimitHandler(m_prcClient_GameModeCounter);
             ProconClient.Game.CtfRoundTimeModifier -= new FrostbiteClient.LimitHandler(m_prcClient_CtfRoundTimeModifier);
+            ProconClient.Game.RoundTimeLimit -= new FrostbiteClient.LimitHandler(m_prcClient_RoundTimeLimit);
 
             ProconClient.Game.TextChatModerationMode -= new FrostbiteClient.TextChatModerationModeHandler(Game_TextChatModerationMode);
             ProconClient.Game.TextChatSpamCoolDownTime -= new FrostbiteClient.LimitHandler(Game_TextChatSpamCoolDownTime);
@@ -1219,6 +1220,7 @@ namespace PRoCon.Core.Plugin {
             ProconClient.Game.RoundStartPlayerCount += new FrostbiteClient.LimitHandler(m_prcClient_RoundStartPlayerCount);
             ProconClient.Game.GameModeCounter += new FrostbiteClient.LimitHandler(m_prcClient_GameModeCounter);
             ProconClient.Game.CtfRoundTimeModifier += new FrostbiteClient.LimitHandler(m_prcClient_CtfRoundTimeModifier);
+            ProconClient.Game.RoundTimeLimit += new FrostbiteClient.LimitHandler(m_prcClient_RoundTimeLimit);
 
             ProconClient.Game.TextChatModerationMode += new FrostbiteClient.TextChatModerationModeHandler(Game_TextChatModerationMode);
             ProconClient.Game.TextChatSpamCoolDownTime += new FrostbiteClient.LimitHandler(Game_TextChatSpamCoolDownTime);
@@ -1970,7 +1972,12 @@ namespace PRoCon.Core.Plugin {
             InvokeOnAllEnabled("OnCtfRoundTimeModifier", new object[] {limit});
         }
 
-        private void m_prcClient_RoundRestartPlayerCount(FrostbiteClient sender, int limit) {
+        private void m_prcClient_RoundTimeLimit(FrostbiteClient sender, int limit) {
+            InvokeOnAllEnabled("OnRoundTimeLimit", new object[] { limit });
+        }
+
+        private void m_prcClient_RoundRestartPlayerCount(FrostbiteClient sender, int limit)
+        {
             InvokeOnAllEnabled("OnRoundRestartPlayerCount", new object[] {limit});
         }
 

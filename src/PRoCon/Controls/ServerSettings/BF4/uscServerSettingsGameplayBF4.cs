@@ -50,7 +50,7 @@ namespace PRoCon.Controls.ServerSettings.BF4 {
             this.AsyncSettingControls.Add("vars.playerrespawntime", new AsyncStyleSetting(this.picSettingsPlayerRespawnTime, this.numSettingsPlayerRespawnTime, new Control[] { this.numSettingsPlayerRespawnTime, this.lnkSettingsPlayerRespawnTime }, true));
             
             this.AsyncSettingControls.Add("vars.gameModeCounter", new AsyncStyleSetting(this.picSettingsGameModeCounter, this.numSettingsGameModeCounter, new Control[] { this.numSettingsGameModeCounter, this.lnkSettingsGameModeCounter }, true));
-            // not used in BF4 //this.AsyncSettingControls.Add("vars.ctfRoundTimeModifier", new AsyncStyleSetting(this.picSettingsCtfRoundTimeModifier, this.numSettingsCtfRoundTimeModifier, new Control[] { this.numSettingsCtfRoundTimeModifier, this.lnkSettingsCtfRoundTimeModifier }, true));
+            this.AsyncSettingControls.Add("vars.roundTimeLimit", new AsyncStyleSetting(this.picSettingsRoundTimeLimit, this.numSettingsRoundTimeLimit, new Control[] { this.numSettingsRoundTimeLimit, this.lnkSettingsRoundTimeLimit }, true));
             this.AsyncSettingControls.Add("vars.roundLockdownCountdown", new AsyncStyleSetting(this.picSettingsLockdownCountdown, this.numSettingsLockdownCountdown, new Control[] { this.numSettingsLockdownCountdown, this.lnkSettingsLockdownCountdown }, true));
             this.AsyncSettingControls.Add("vars.roundWarmupTimeout", new AsyncStyleSetting(this.picSettingsWarmupTimeout, this.numSettingsWarmupTimeout, new Control[] { this.numSettingsWarmupTimeout, this.lnkSettingsWarmupTimeout }, true));
 
@@ -92,8 +92,8 @@ namespace PRoCon.Controls.ServerSettings.BF4 {
             this.lnkSettingsPlayerRespawnTime.Text = this.Language.GetLocalized("uscServerSettingsPanel.lnkSettingsPlayerRespawnTime");
             this.lblSettingsGameModeCounter.Text = this.Language.GetLocalized("uscServerSettingsPanel.lblSettingsGameModeCounter");
             this.lnkSettingsGameModeCounter.Text = this.Language.GetLocalized("uscServerSettingsPanel.lnkSettingsGameModeCounter");
-            this.lblSettingsCtfRoundTimeModifier.Text = this.Language.GetLocalized("uscServerSettingsPanel.lblSettingsCtfRoundTimeModifier");
-            this.lnkSettingsCtfRoundTimeModifier.Text = this.Language.GetLocalized("uscServerSettingsPanel.lnkSettingsCtfRoundTimeModifier");
+            this.lblSettingsRoundTimeLimit.Text = this.Language.GetDefaultLocalized("Round Time Limit", "uscServerSettingsPanel.lblSettingsRoundTimeLimit");
+            this.lnkSettingsRoundTimeLimit.Text = this.Language.GetDefaultLocalized("Apply", "uscServerSettingsPanel.lnkSettingsRoundTimeLimit");
             this.lblSettingsLockdownCountdown.Text = this.Language.GetLocalized("uscServerSettingsPanel.lblSettingsLockdownCountdown");
             this.lnkSettingsLockdownCountdown.Text = this.Language.GetLocalized("uscServerSettingsPanel.lnkSettingsLockdownCountdown");
             this.lblSettingsWarmupTimeout.Text = this.Language.GetLocalized("uscServerSettingsPanel.lblSettingsWarmupTimeout");
@@ -206,7 +206,7 @@ namespace PRoCon.Controls.ServerSettings.BF4 {
             this.Client.Game.PlayerRespawnTime += new FrostbiteClient.LimitHandler(Game_PlayerRespawnTime);
 
             this.Client.Game.GameModeCounter += new FrostbiteClient.LimitHandler(Game_GameModeCounter);
-            // not used in BF4 //this.Client.Game.CtfRoundTimeModifier +=new FrostbiteClient.LimitHandler(Game_CtfRoundTimeModifier);
+            this.Client.Game.RoundTimeLimit +=new FrostbiteClient.LimitHandler(Game_RoundTimeLimit);
             this.Client.Game.RoundLockdownCountdown += new FrostbiteClient.LimitHandler(Game_RoundLockdownCountdown);
             this.Client.Game.RoundWarmupTimeout += new FrostbiteClient.LimitHandler(Game_RoundWarmupTimeout);
 
@@ -695,25 +695,22 @@ namespace PRoCon.Controls.ServerSettings.BF4 {
 
         #endregion
 
-        #region CtfRoundTimeModifier
+        #region RoundTimeLimit
 
-        private int m_iPreviousSuccessCtfRoundTimeModifierPacket;
+        private int m_iPreviousSuccessRoundTimeLimitPacket;
 
-        void Game_CtfRoundTimeModifier(FrostbiteClient sender, int limit)
-        {
-            this.m_iPreviousSuccessCtfRoundTimeModifierPacket = limit;
+        void Game_RoundTimeLimit(FrostbiteClient sender, int limit) {
+            this.m_iPreviousSuccessRoundTimeLimitPacket = limit;
 
-            this.OnSettingResponse("vars.ctfRoundTimeModifier", (decimal)limit, true);
+            this.OnSettingResponse("vars.roundTimeLimit", (decimal)limit, true);
         }
 
-        private void lnkSettingsCtfRoundTimeModifier_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            if (this.Client != null && this.Client.Game != null)
-            {
-                this.numSettingsCtfRoundTimeModifier.Focus();
-                this.WaitForSettingResponse("vars.ctfRoundTimeModifier", (decimal)this.m_iPreviousSuccessCtfRoundTimeModifierPacket);
+        private void lnkSettingsRoundTimeLimit_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
+            if (this.Client != null && this.Client.Game != null) {
+                this.numSettingsRoundTimeLimit.Focus();
+                this.WaitForSettingResponse("vars.roundTimeLimit", (decimal)this.m_iPreviousSuccessRoundTimeLimitPacket);
 
-                this.Client.Game.SendSetVarsCtfRoundTimeModifierPacket((int)this.numSettingsCtfRoundTimeModifier.Value);
+                this.Client.Game.SendSetVarsRoundTimeLimitPacket((int)this.numSettingsRoundTimeLimit.Value);
             }
         }
 
