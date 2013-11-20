@@ -22,40 +22,40 @@ namespace PRoCon.Controls.ServerSettings.BF4 {
             this.chkSettingsHardcore.Enabled = false;
             this.chkSettingsCrosshair.Enabled = false;
 
-            this.AsyncSettingControls.Add("vars.teambalance", new AsyncStyleSetting(this.picSettingsTeamBalance, this.chkSettingsTeamBalance, new Control[] { this.chkSettingsTeamBalance }, true));
-            this.AsyncSettingControls.Add("vars.killcam", new AsyncStyleSetting(this.picSettingsKillCam, this.chkSettingsKillCam, new Control[] { this.chkSettingsKillCam }, true));
-            this.AsyncSettingControls.Add("vars.minimap", new AsyncStyleSetting(this.picSettingsMinimap, this.chkSettingsMinimap, new Control[] { this.chkSettingsMinimap }, true));
+            this.AsyncSettingControls.Add("vars.teambalance", new AsyncStyleSetting(this.picSettingsTeamBalance, this.chkSettingsTeamBalance, new Control[] { this.chkSettingsTeamBalance }, false));
+            this.AsyncSettingControls.Add("vars.killcam", new AsyncStyleSetting(this.picSettingsKillCam, this.chkSettingsKillCam, new Control[] { this.chkSettingsKillCam }, false));
+            this.AsyncSettingControls.Add("vars.minimap", new AsyncStyleSetting(this.picSettingsMinimap, this.chkSettingsMinimap, new Control[] { this.chkSettingsMinimap }, false));
             //this.AsyncSettingControls.Add("vars.crosshair", new AsyncStyleSetting(this.picSettingsCrosshair, this.chkSettingsCrosshair, new Control[] { this.chkSettingsCrosshair }, true));
-            this.AsyncSettingControls.Add("vars.3dspotting", new AsyncStyleSetting(this.picSettings3DSpotting, this.chkSettings3DSpotting, new Control[] { this.chkSettings3DSpotting }, true));
-            this.AsyncSettingControls.Add("vars.minimapspotting", new AsyncStyleSetting(this.picSettingsMinimapSpotting, this.chkSettingsMinimapSpotting, new Control[] { this.chkSettingsMinimapSpotting }, true));
-            this.AsyncSettingControls.Add("vars.thirdpersonvehiclecameras", new AsyncStyleSetting(this.picSettingsThirdPersonVehicleCameras, this.chkSettingsThirdPersonVehicleCameras, new Control[] { this.chkSettingsThirdPersonVehicleCameras }, true));
+            this.AsyncSettingControls.Add("vars.3dspotting", new AsyncStyleSetting(this.picSettings3DSpotting, this.chkSettings3DSpotting, new Control[] { this.chkSettings3DSpotting }, false));
+            this.AsyncSettingControls.Add("vars.minimapspotting", new AsyncStyleSetting(this.picSettingsMinimapSpotting, this.chkSettingsMinimapSpotting, new Control[] { this.chkSettingsMinimapSpotting }, false));
+            this.AsyncSettingControls.Add("vars.thirdpersonvehiclecameras", new AsyncStyleSetting(this.picSettingsThirdPersonVehicleCameras, this.chkSettingsThirdPersonVehicleCameras, new Control[] { this.chkSettingsThirdPersonVehicleCameras }, false));
 
-            this.AsyncSettingControls.Add("vars.nametag", new AsyncStyleSetting(this.picSettingsNameTag, this.chkSettingsNameTag, new Control[] { this.chkSettingsNameTag }, true));
-            this.AsyncSettingControls.Add("vars.regeneratehealth", new AsyncStyleSetting(this.picSettingsRegenerateHealth, this.chkSettingsRegenerateHealth, new Control[] { this.chkSettingsRegenerateHealth }, true));
-            this.AsyncSettingControls.Add("vars.hud", new AsyncStyleSetting(this.picSettingsHud, this.chkSettingsHud, new Control[] { this.chkSettingsHud }, true));
-            this.AsyncSettingControls.Add("vars.onlysquadleaderspawn", new AsyncStyleSetting(this.picSettingsOnlySquadLeaderSpawn, this.chkSettingsOnlySquadLeaderSpawn, new Control[] { this.chkSettingsOnlySquadLeaderSpawn }, true));
+            this.AsyncSettingControls.Add("vars.nametag", new AsyncStyleSetting(this.picSettingsNameTag, this.chkSettingsNameTag, new Control[] { this.chkSettingsNameTag }, false));
+            this.AsyncSettingControls.Add("vars.regeneratehealth", new AsyncStyleSetting(this.picSettingsRegenerateHealth, this.chkSettingsRegenerateHealth, new Control[] { this.chkSettingsRegenerateHealth }, false));
+            this.AsyncSettingControls.Add("vars.hud", new AsyncStyleSetting(this.picSettingsHud, this.chkSettingsHud, new Control[] { this.chkSettingsHud }, false));
+            this.AsyncSettingControls.Add("vars.onlysquadleaderspawn", new AsyncStyleSetting(this.picSettingsOnlySquadLeaderSpawn, this.chkSettingsOnlySquadLeaderSpawn, new Control[] { this.chkSettingsOnlySquadLeaderSpawn }, false));
             
             this.AsyncSettingControls.Add("vars.unlockmode", new AsyncStyleSetting(this.picSettingsUnlockMode, this.cboSettingsUnlockMode, new Control[] { this.cboSettingsUnlockMode }, true));
             // not used in BF4 //this.AsyncSettingControls.Add("vars.gunMasterWeaponsPreset", new AsyncStyleSetting(this.picSettingsGunMasterWeaponsPreset, this.cboSettingsGunMasterWeaponsPreset, new Control[] { this.cboSettingsGunMasterWeaponsPreset }, true));
             this.AsyncSettingControls.Add("vars.preset", new AsyncStyleSetting(this.picSettingsBF4preset, this.cboSettingsBF4preset, new Control[] { this.cboSettingsBF4preset }, true));
 
-            this.AsyncSettingControls.Add("vars.vehiclespawnallowed", new AsyncStyleSetting(this.picSettingsVehicleSpawnAllowed, this.chkSettingsVehicleSpawnAllowed, new Control[] { this.chkSettingsVehicleSpawnAllowed }, true));
+            this.AsyncSettingControls.Add("vars.vehiclespawnallowed", new AsyncStyleSetting(this.picSettingsVehicleSpawnAllowed, this.chkSettingsVehicleSpawnAllowed, new Control[] { this.chkSettingsVehicleSpawnAllowed }, false));
             this.AsyncSettingControls.Add("vars.vehiclespawndelay", new AsyncStyleSetting(this.picSettingsVehicleSpawnDelay, this.numSettingsVehicleSpawnDelay, new Control[] { this.numSettingsVehicleSpawnDelay, this.lnkSettingsVehicleSpawnDelay }, true));
 
-            this.AsyncSettingControls.Add("vars.bulletdamage", new AsyncStyleSetting(this.picSettingsBulletDamage, this.numSettingsBulletDamage, new Control[] { this.numSettingsBulletDamage, this.lnkSettingsBulletDamage }, true));
+            this.AsyncSettingControls.Add("vars.bulletdamage", new AsyncStyleSetting(this.picSettingsBulletDamage, this.numSettingsBulletDamage, new Control[] { this.numSettingsBulletDamage, this.lnkSettingsBulletDamage }, false));
             this.AsyncSettingControls.Add("vars.roundrestartplayercount", new AsyncStyleSetting(this.picSettingsRoundRestartPlayerCount, this.numSettingsRoundRestartPlayerCount, new Control[] { this.numSettingsRoundRestartPlayerCount, this.lnkSettingsRoundRestartPlayerCount }, true));
-            this.AsyncSettingControls.Add("vars.roundstartplayercount", new AsyncStyleSetting(this.picSettingsRoundStartPlayerCount, this.numSettingsRoundStartPlayerCount, new Control[] { this.numSettingsRoundStartPlayerCount, this.lnkSettingsRoundStartPlayerCount }, true));
-            this.AsyncSettingControls.Add("vars.soldierhealth", new AsyncStyleSetting(this.picSettingsSoldierHealth, this.numSettingsSoldierHealth, new Control[] { this.numSettingsSoldierHealth, this.lnkSettingsSoldierHealth }, true));
+            this.AsyncSettingControls.Add("vars.roundstartplayercount", new AsyncStyleSetting(this.picSettingsRoundStartPlayerCount, this.numSettingsRoundStartPlayerCount, new Control[] { this.numSettingsRoundStartPlayerCount, this.lnkSettingsRoundStartPlayerCount }, false));
+            this.AsyncSettingControls.Add("vars.soldierhealth", new AsyncStyleSetting(this.picSettingsSoldierHealth, this.numSettingsSoldierHealth, new Control[] { this.numSettingsSoldierHealth, this.lnkSettingsSoldierHealth }, false));
             this.AsyncSettingControls.Add("vars.playermandowntime", new AsyncStyleSetting(this.picSettingsPlayerManDownTime, this.numSettingsPlayerManDownTime, new Control[] { this.numSettingsPlayerManDownTime, this.lnkSettingsPlayerManDownTime }, true));
             this.AsyncSettingControls.Add("vars.playerrespawntime", new AsyncStyleSetting(this.picSettingsPlayerRespawnTime, this.numSettingsPlayerRespawnTime, new Control[] { this.numSettingsPlayerRespawnTime, this.lnkSettingsPlayerRespawnTime }, true));
-            
-            this.AsyncSettingControls.Add("vars.gameModeCounter", new AsyncStyleSetting(this.picSettingsGameModeCounter, this.numSettingsGameModeCounter, new Control[] { this.numSettingsGameModeCounter, this.lnkSettingsGameModeCounter }, true));
+
+            this.AsyncSettingControls.Add("vars.gameModeCounter", new AsyncStyleSetting(this.picSettingsGameModeCounter, this.numSettingsGameModeCounter, new Control[] { this.numSettingsGameModeCounter, this.lnkSettingsGameModeCounter }, false));
             this.AsyncSettingControls.Add("vars.roundTimeLimit", new AsyncStyleSetting(this.picSettingsRoundTimeLimit, this.numSettingsRoundTimeLimit, new Control[] { this.numSettingsRoundTimeLimit, this.lnkSettingsRoundTimeLimit }, true));
             this.AsyncSettingControls.Add("vars.roundLockdownCountdown", new AsyncStyleSetting(this.picSettingsLockdownCountdown, this.numSettingsLockdownCountdown, new Control[] { this.numSettingsLockdownCountdown, this.lnkSettingsLockdownCountdown }, true));
             this.AsyncSettingControls.Add("vars.roundWarmupTimeout", new AsyncStyleSetting(this.picSettingsWarmupTimeout, this.numSettingsWarmupTimeout, new Control[] { this.numSettingsWarmupTimeout, this.lnkSettingsWarmupTimeout }, true));
 
-            this.AsyncSettingControls.Add("vars.hitIndicatorsEnabled", new AsyncStyleSetting(this.picSettingsIsHitIndicators, this.chkSettingsIsHitIndicators, new Control[] { this.chkSettingsIsHitIndicators }, true));
-            this.AsyncSettingControls.Add("vars.forceReloadWholeMags", new AsyncStyleSetting(this.picSettingsIsForceReloadWholeMags, this.chkSettingsIsForceReloadWholeMags, new Control[] { this.chkSettingsIsForceReloadWholeMags }, true));
+            this.AsyncSettingControls.Add("vars.hitIndicatorsEnabled", new AsyncStyleSetting(this.picSettingsIsHitIndicators, this.chkSettingsIsHitIndicators, new Control[] { this.chkSettingsIsHitIndicators }, false));
+            this.AsyncSettingControls.Add("vars.forceReloadWholeMags", new AsyncStyleSetting(this.picSettingsIsForceReloadWholeMags, this.chkSettingsIsForceReloadWholeMags, new Control[] { this.chkSettingsIsForceReloadWholeMags }, false));
         }
 
         public override void SetLocalization(CLocalization clocLanguage) {
@@ -457,6 +457,32 @@ namespace PRoCon.Controls.ServerSettings.BF4 {
             this.chkSettingsBF4presetLock.Checked = locked;
 
             // make all related values readOnly if locked is true
+            this.chkSettingsFriendlyFire.Enabled = !locked;
+            this.chkSettingsKillCam.Enabled = !locked;
+            this.chkSettingsMinimap.Enabled = !locked;
+            this.chkSettingsNameTag.Enabled = !locked;
+            this.chkSettingsRegenerateHealth.Enabled = !locked;
+            this.chkSettingsHud.Enabled = !locked;
+            this.chkSettingsOnlySquadLeaderSpawn.Enabled = !locked;
+            this.chkSettingsVehicleSpawnAllowed.Enabled = !locked;
+            this.chkSettings3DSpotting.Enabled = !locked;
+            this.chkSettingsIsHitIndicators.Enabled = !locked;
+            this.chkSettingsIsForceReloadWholeMags.Enabled = !locked;
+            this.chkSettings3DSpotting.Enabled = !locked;
+            this.chkSettingsMinimapSpotting.Enabled = !locked;
+            this.chkSettingsThirdPersonVehicleCameras.Enabled = !locked;
+            this.chkSettingsTeamBalance.Enabled = !locked;
+            //
+            this.numSettingsBulletDamage.Enabled = !locked;
+            this.lnkSettingsBulletDamage.Enabled = !locked;
+            this.numSettingsRoundStartPlayerCount.Enabled = !locked;
+            this.lnkSettingsRoundStartPlayerCount.Enabled = !locked;
+            this.numSettingsSoldierHealth.Enabled = !locked;
+            this.lnkSettingsSoldierHealth.Enabled = !locked;
+            this.numSettingsPlayerRespawnTime.Enabled = !locked;
+            this.lnkSettingsPlayerRespawnTime.Enabled = !locked;
+            this.numSettingsGameModeCounter.Enabled = !locked;
+            this.lnkSettingsGameModeCounter.Enabled = !locked;
 
         }
 

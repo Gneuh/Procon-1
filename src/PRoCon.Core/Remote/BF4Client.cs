@@ -225,7 +225,6 @@ namespace PRoCon.Core.Remote {
             SendGetVarsOnlySquadLeaderSpawnPacket();
 
             SendGetVarsUnlockModePacket();
-            SendGetVarsPresetPacket();
 
             SendGetVarsSoldierHealthPacket();
 
@@ -258,6 +257,8 @@ namespace PRoCon.Core.Remote {
             SendGetVarsAlwaysAllowSpectators();
             SendGetVarsForceReloadWholeMags();
             SendGetVarsRoundTimeLimitPacket();
+
+            SendGetVarsPresetPacket();
         }
 
         #region Overridden Events

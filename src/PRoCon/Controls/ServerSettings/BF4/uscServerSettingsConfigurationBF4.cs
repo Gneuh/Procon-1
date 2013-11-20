@@ -49,8 +49,8 @@ namespace PRoCon.Controls.ServerSettings.BF4 {
 
             this.AsyncSettingControls.Add("vars.maxSpectators", new AsyncStyleSetting(this.picSettingsMaxSpectators, this.numSettingsMaxSpectators, new Control[] { this.numSettingsMaxSpectators, this.lnkSettingsSetMaxSpectators }, true));
 
-            this.AsyncSettingControls.Add("vars.idletimeout 0", new AsyncStyleSetting(this.picSettingsIdleKickLimit, this.chkSettingsNoIdleKickLimit, new Control[] { this.chkSettingsNoIdleKickLimit }, true));
-            this.AsyncSettingControls.Add("vars.idletimeout", new AsyncStyleSetting(this.picSettingsIdleKickLimit, this.numSettingsIdleKickLimit, new Control[] { this.numSettingsIdleKickLimit, this.lnkSettingsSetidleKickLimit }, true));
+            this.AsyncSettingControls.Add("vars.idletimeout 0", new AsyncStyleSetting(this.picSettingsIdleKickLimit, this.chkSettingsNoIdleKickLimit, new Control[] { this.chkSettingsNoIdleKickLimit }, false));
+            this.AsyncSettingControls.Add("vars.idletimeout", new AsyncStyleSetting(this.picSettingsIdleKickLimit, this.numSettingsIdleKickLimit, new Control[] { this.numSettingsIdleKickLimit, this.lnkSettingsSetidleKickLimit }, false));
 
             this.AsyncSettingControls.Add("vars.idlebanrounds 0", new AsyncStyleSetting(this.picSettingsNoIdleBanRoundsLimit, this.chkSettingsNoIdleBanRoundsLimit, new Control[] { this.chkSettingsNoIdleBanRoundsLimit }, true));
             this.AsyncSettingControls.Add("vars.idlebanrounds", new AsyncStyleSetting(this.picSettingsNoIdleBanRoundsLimit, this.numSettingsIdleBanRoundsLimit, new Control[] { this.numSettingsIdleBanRoundsLimit, this.lnkSettingsSetIdleBanRoundsLimit }, true));
@@ -60,7 +60,7 @@ namespace PRoCon.Controls.ServerSettings.BF4 {
 
             this.AsyncSettingControls.Add("fairFight.isActive", new AsyncStyleSetting(this.picSettingsFairFight, this.chkSettingsFairFight, new Control[] { this.chkSettingsFairFight }, true));
 
-            this.AsyncSettingControls.Add("vars.commander", new AsyncStyleSetting(this.picSettingsCommander, this.chkSettingsCommander, new Control[] { this.chkSettingsCommander }, true));
+            this.AsyncSettingControls.Add("vars.commander", new AsyncStyleSetting(this.picSettingsCommander, this.chkSettingsCommander, new Control[] { this.chkSettingsCommander }, false));
             this.AsyncSettingControls.Add("vars.alwaysAllowSpectators", new AsyncStyleSetting(this.picSettingsAlwaysAllowSpectators, this.chkSettingsAlwaysAllowSpectators, new Control[] { this.chkSettingsAlwaysAllowSpectators }, true));
             
             this.AsyncSettingControls.Add("reservedslotslist.aggressivejoin", new AsyncStyleSetting(this.picSettingsAggressiveJoin, this.chkSettingsAggressiveJoin, new Control[] { this.chkSettingsAggressiveJoin }, true));
@@ -142,6 +142,8 @@ namespace PRoCon.Controls.ServerSettings.BF4 {
             this.Client.Game.ReservedSlotsListAggressiveJoin += new FrostbiteClient.IsEnabledHandler(Game_ReservedSlotsAggressiveJoin);
 
             this.Client.Game.ServerInfo += new FrostbiteClient.ServerInfoHandler(m_prcClient_ServerInfo);
+
+            this.Client.Game.BF4preset += new FrostbiteClient.BF4presetHandler(Tab_BF4preset);
         }
 
         private void m_prcClient_ServerInfo(FrostbiteClient sender, CServerInfo csiServerInfo) {
@@ -152,6 +154,13 @@ namespace PRoCon.Controls.ServerSettings.BF4 {
 
             this.chkSettingsPunkbuster.Checked = csiServerInfo.PunkBuster;
             //this.chkSettingsRanked.Checked = csiServerInfo.Ranked;
+        }
+
+        private void Tab_BF4preset(FrostbiteClient sender, string mode, bool locked) {
+            this.numSettingsIdleKickLimit.Enabled = !locked;
+            this.lnkSettingsSetidleKickLimit.Enabled = !locked;
+            this.chkSettingsNoIdleKickLimit.Enabled = !locked;
+            this.chkSettingsCommander.Enabled = !locked;
         }
 
         #region Server Type
