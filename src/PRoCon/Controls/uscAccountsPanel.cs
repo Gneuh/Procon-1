@@ -467,7 +467,7 @@ namespace PRoCon {
             this.lnkStartStopLayer.Text = this.m_clocLanguage.GetLocalized("uscAccountsPanel.lnkStartStopLayer.Stop", null);
             //this.lnkStartStopLayer.LinkArea = new LinkArea(0, this.lnkStartStopLayer.Text.Length);
 
-            this.pnlLayerServerTester.Visible = true;
+            this.pnlLayerServerTester.Visible = false; // service not provided at the moment
             //this.picLayerForwardedTestStatus.Image = this.m_frmParent.iglPRoConLayerIcons.Images[uscServerConnection.INT_ICON_LAYERSERVER_PORTCHECK_UNKNOWN];
             this.picLayerForwardedTestStatus.Image = this.m_frmMain.picPortCheckerUnknown.Image;
             this.lblLayerForwardedTestStatus.Text = this.m_clocLanguage.GetLocalized("uscAccountsPanel.lblLayerForwardedTestStatus.Unknown", null);
