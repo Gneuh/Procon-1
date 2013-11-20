@@ -159,6 +159,8 @@ namespace PRoCon.Core.Remote {
 
             ResponseDelegates.Add("vars.maxSpectators", DispatchVarsMaxSpectatorsResponse);
 
+            ResponseDelegates.Add("vars.teamKillKickForBan", DispatchVarsTeamKillKickForBanResponse);
+
 
             #endregion
 
@@ -201,6 +203,8 @@ namespace PRoCon.Core.Remote {
         
         public override void FetchStartupVariables() {
             base.FetchStartupVariables();
+
+            SendGetVarsTeamKillKickForBanPacket();
 
             SendGetVarsPlayerLimitPacket();
 

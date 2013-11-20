@@ -853,6 +853,18 @@ namespace PRoCon.Core.Remote {
             }
         }
 
+        public virtual void SendSetVarsTeamKillKickForBanPacket(int limit) {
+            if (IsLoggedIn == true) {
+                BuildSendPacket("vars.teamKillKickForBan", limit.ToString(CultureInfo.InvariantCulture));
+            }
+        }
+
+        public virtual void SendGetVarsTeamKillKickForBanPacket() {
+            if (IsLoggedIn == true) {
+                BuildSendPacket("vars.teamKillKickForBan");
+            }
+        }
+
         public virtual void SendSetVarsTeamKillValueForKickPacket(int limit) {
             if (IsLoggedIn == true) {
                 BuildSendPacket("vars.teamKillValueForKick", limit.ToString(CultureInfo.InvariantCulture));
@@ -3000,7 +3012,20 @@ namespace PRoCon.Core.Remote {
             }
         }
 
-        protected virtual void DispatchVarsTeamKillValueForKickResponse(FrostbiteConnection sender, Packet cpRecievedPacket, Packet cpRequestPacket) {
+        protected virtual void DispatchVarsTeamKillKickForBanResponse(FrostbiteConnection sender, Packet cpRecievedPacket, Packet cpRequestPacket) {
+            if (cpRequestPacket.Words.Count >= 1) {
+                if (TeamKillKickForBan != null) {
+                    if (cpRecievedPacket.Words.Count == 2) {
+                        FrostbiteConnection.RaiseEvent(TeamKillKickForBan.GetInvocationList(), this, (int)Convert.ToDecimal(cpRecievedPacket.Words[1]));
+                    } else if (cpRequestPacket.Words.Count >= 2) {
+                        FrostbiteConnection.RaiseEvent(TeamKillKickForBan.GetInvocationList(), this, (int)Convert.ToDecimal(cpRequestPacket.Words[1]));
+                    }
+                }
+            }
+        }
+
+        protected virtual void DispatchVarsTeamKillValueForKickResponse(FrostbiteConnection sender, Packet cpRecievedPacket, Packet cpRequestPacket)
+        {
             if (cpRequestPacket.Words.Count >= 1) {
                 if (TeamKillValueForKick != null) {
                     if (cpRecievedPacket.Words.Count == 2) {
@@ -3822,6 +3847,7 @@ namespace PRoCon.Core.Remote {
         #region Team Killing
 
         public virtual event LimitHandler TeamKillCountForKick;
+        public virtual event LimitHandler TeamKillKickForBan;
         public virtual event LimitHandler TeamKillValueForKick;
         public virtual event LimitHandler TeamKillValueIncrease;
         public virtual event LimitHandler TeamKillValueDecreasePerSecond;

@@ -171,6 +171,7 @@ namespace PRoCon.Core.Remote.Layer {
                 #region Team Killing
 
                 { "vars.teamKillCountForKick", this.DispatchVarsRequest },
+                { "vars.teamKillKickForBan", this.DispatchVarsRequest },
                 { "vars.teamKillValueForKick", this.DispatchVarsRequest },
                 { "vars.teamKillValueIncrease", this.DispatchVarsRequest },
                 { "vars.teamKillValueDecreasePerSecond", this.DispatchVarsRequest },

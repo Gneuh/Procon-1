@@ -142,7 +142,11 @@ namespace PRoCon {
                 this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsLevelVariables());
             }
 
-            this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsTeamKills());
+            if (sender.Game is BF4Client) {
+                this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsTeamKillsBF4());
+            } else {
+                this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsTeamKills());
+            }
             
             if (sender.Game is BFBC2Client) {
                 this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsConfigGeneratorBFBC2());

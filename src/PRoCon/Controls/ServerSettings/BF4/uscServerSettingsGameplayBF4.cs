@@ -455,6 +455,9 @@ namespace PRoCon.Controls.ServerSettings.BF4 {
 
             this.cboSettingsBF4preset.SelectedValue = mode.ToString();
             this.chkSettingsBF4presetLock.Checked = locked;
+
+            // make all related values readOnly if locked is true
+
         }
 
         private void lnkSettingsBF4preset_LinkClicked(object sender, EventArgs e) {

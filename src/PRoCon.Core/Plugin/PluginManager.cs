@@ -1036,6 +1036,7 @@ namespace PRoCon.Core.Plugin {
             // R13
             ProconClient.Game.ServerName -= new FrostbiteClient.ServerNameHandler(m_prcClient_ServerName);
             ProconClient.Game.TeamKillCountForKick -= new FrostbiteClient.LimitHandler(m_prcClient_TeamKillCountForKick);
+            ProconClient.Game.TeamKillKickForBan -= new FrostbiteClient.LimitHandler(m_prcClient_TeamKillKickForBan);
             ProconClient.Game.TeamKillValueIncrease -= new FrostbiteClient.LimitHandler(m_prcClient_TeamKillValueIncrease);
             ProconClient.Game.TeamKillValueDecreasePerSecond -= new FrostbiteClient.LimitHandler(m_prcClient_TeamKillValueDecreasePerSecond);
             ProconClient.Game.TeamKillValueForKick -= new FrostbiteClient.LimitHandler(m_prcClient_TeamKillValueForKick);
@@ -1278,6 +1279,7 @@ namespace PRoCon.Core.Plugin {
             // R13
             ProconClient.Game.ServerName += new FrostbiteClient.ServerNameHandler(m_prcClient_ServerName);
             ProconClient.Game.TeamKillCountForKick += new FrostbiteClient.LimitHandler(m_prcClient_TeamKillCountForKick);
+            ProconClient.Game.TeamKillKickForBan += new FrostbiteClient.LimitHandler(m_prcClient_TeamKillKickForBan);
             ProconClient.Game.TeamKillValueIncrease += new FrostbiteClient.LimitHandler(m_prcClient_TeamKillValueIncrease);
             ProconClient.Game.TeamKillValueDecreasePerSecond += new FrostbiteClient.LimitHandler(m_prcClient_TeamKillValueDecreasePerSecond);
             ProconClient.Game.TeamKillValueForKick += new FrostbiteClient.LimitHandler(m_prcClient_TeamKillValueForKick);
@@ -1949,6 +1951,10 @@ namespace PRoCon.Core.Plugin {
 
         private void m_prcClient_TeamKillValueForKick(FrostbiteClient sender, int limit) {
             InvokeOnAllEnabled("OnTeamKillValueForKick", new object[] {limit});
+        }
+
+        private void m_prcClient_TeamKillKickForBan(FrostbiteClient sender, int limit) {
+            InvokeOnAllEnabled("OnTeamKillKickForBan", new object[] { limit });
         }
 
         private void m_prcClient_TeamKillValueDecreasePerSecond(FrostbiteClient sender, int limit) {

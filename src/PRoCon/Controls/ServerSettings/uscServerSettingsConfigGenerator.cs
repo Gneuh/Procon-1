@@ -100,6 +100,7 @@ namespace PRoCon.Controls.ServerSettings {
             //this.Client.Game.MiniMapSpotting += new FrostbiteClient.IsEnabledHandler(Client_MiniMapSpotting);
 
             this.Client.Game.TeamKillCountForKick += new FrostbiteClient.LimitHandler(Client_TeamKillCountForKick);
+            this.Client.Game.TeamKillKickForBan += new FrostbiteClient.LimitHandler(Client_TeamKillKickForBan);
             this.Client.Game.TeamKillValueForKick += new FrostbiteClient.LimitHandler(Client_TeamKillValueForKick);
             this.Client.Game.TeamKillValueIncrease += new FrostbiteClient.LimitHandler(Client_TeamKillValueIncrease);
             this.Client.Game.TeamKillValueDecreasePerSecond += new FrostbiteClient.LimitHandler(Client_TeamKillValueDecreasePerSecond);
@@ -166,7 +167,12 @@ namespace PRoCon.Controls.ServerSettings {
             this.AppendSetting("vars.teamKillCountForKick", limit.ToString());
         }
 
-        protected virtual void Client_TeamKillValueDecreasePerSecond(FrostbiteClient sender, int limit) {
+        protected virtual void Client_TeamKillKickForBan(FrostbiteClient sender, int limit) {
+            this.AppendSetting("vars.teamKillKickForBan", limit.ToString());
+        }
+
+        protected virtual void Client_TeamKillValueDecreasePerSecond(FrostbiteClient sender, int limit)
+        {
             this.AppendSetting("vars.teamKillValueDecreasePerSecond", limit.ToString());
         }
 
