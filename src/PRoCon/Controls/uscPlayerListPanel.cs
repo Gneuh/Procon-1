@@ -2119,7 +2119,7 @@ namespace PRoCon {
                     System.Diagnostics.Process.Start("http://bf3stats.com/stats_pc/" + ((CPlayerInfo)this.voiceToolStripMenuItem.Tag).SoldierName);
                 }
                 else if (this.m_prcClient.Game is BF4Client) {
-                    System.Diagnostics.Process.Start("http://bf4stats.com/stats_pc/" + ((CPlayerInfo)this.voiceToolStripMenuItem.Tag).SoldierName);
+                    System.Diagnostics.Process.Start("http://bf4stats.com/pc/" + ((CPlayerInfo)this.voiceToolStripMenuItem.Tag).SoldierName);
                 }
                 else if (this.m_prcClient.Game is MOHWClient)
                 {
