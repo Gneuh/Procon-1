@@ -49,7 +49,7 @@ namespace PRoCon.Controls.ServerSettings.BF4 {
 
             this.AsyncSettingControls.Add("vars.maxSpectators", new AsyncStyleSetting(this.picSettingsMaxSpectators, this.numSettingsMaxSpectators, new Control[] { this.numSettingsMaxSpectators, this.lnkSettingsSetMaxSpectators }, true));
 
-            this.AsyncSettingControls.Add("vars.idletimeout 0", new AsyncStyleSetting(this.picSettingsIdleKickLimit, this.chkSettingsNoIdleKickLimit, new Control[] { this.chkSettingsNoIdleKickLimit }, false));
+            this.AsyncSettingControls.Add("vars.idletimeout 86400", new AsyncStyleSetting(this.picSettingsIdleKickLimit, this.chkSettingsNoIdleKickLimit, new Control[] { this.chkSettingsNoIdleKickLimit }, false));
             this.AsyncSettingControls.Add("vars.idletimeout", new AsyncStyleSetting(this.picSettingsIdleKickLimit, this.numSettingsIdleKickLimit, new Control[] { this.numSettingsIdleKickLimit, this.lnkSettingsSetidleKickLimit }, false));
 
             this.AsyncSettingControls.Add("vars.idlebanrounds 0", new AsyncStyleSetting(this.picSettingsNoIdleBanRoundsLimit, this.chkSettingsNoIdleBanRoundsLimit, new Control[] { this.chkSettingsNoIdleBanRoundsLimit }, true));
@@ -304,12 +304,12 @@ namespace PRoCon.Controls.ServerSettings.BF4 {
         private void m_prcClient_IdleTimeout(FrostbiteClient sender, int limit) {
             this.m_iPreviousSuccessIdleTimeoutLimit = limit;
 
-            if (this.m_iPreviousSuccessIdleTimeoutLimit == 0) {
-                this.OnSettingResponse("vars.idletimeout 0", true, true);
+            if (this.m_iPreviousSuccessIdleTimeoutLimit == 0 || this.m_iPreviousSuccessIdleTimeoutLimit == 86400) {
+                this.OnSettingResponse("vars.idletimeout 86400", true, true);
             }
             else {
                 this.OnSettingResponse("vars.idletimeout", (decimal)this.m_iPreviousSuccessIdleTimeoutLimit, true);
-                this.OnSettingResponse("vars.idletimeout 0", false, true);
+                this.OnSettingResponse("vars.idletimeout 86400", false, true);
             }
         }
 
@@ -320,11 +320,12 @@ namespace PRoCon.Controls.ServerSettings.BF4 {
             this.chkSettingsNoIdleBanRoundsLimit.Enabled = !this.chkSettingsNoIdleKickLimit.Checked; 
             this.chkSettingsNoIdleBanRoundsLimit.Visible = !this.chkSettingsNoIdleKickLimit.Checked;
 
-            if (this.IgnoreEvents == false && this.AsyncSettingControls["vars.idletimeout 0"].IgnoreEvent == false) {
+            if (this.IgnoreEvents == false && this.AsyncSettingControls["vars.idletimeout 86400"].IgnoreEvent == false)
+            {
                 if (this.chkSettingsNoIdleKickLimit.Checked == true) {
-                    this.WaitForSettingResponse("vars.idletimeout 0", !this.chkSettingsNoIdleKickLimit.Checked);
+                    this.WaitForSettingResponse("vars.idletimeout 86400", !this.chkSettingsNoIdleKickLimit.Checked);
 
-                    this.Client.Game.SendSetVarsIdleTimeoutPacket(0);
+                    this.Client.Game.SendSetVarsIdleTimeoutPacket(86400);
                     //this.SendCommand("vars.idleTimeout", "0");
                 }
                 if (this.chkSettingsNoIdleKickLimit.Checked == false)

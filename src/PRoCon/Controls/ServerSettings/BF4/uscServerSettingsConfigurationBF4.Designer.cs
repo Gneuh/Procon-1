@@ -181,7 +181,7 @@
             0});
             this.numSettingsIdleKickLimit.Location = new System.Drawing.Point(9, 5);
             this.numSettingsIdleKickLimit.Maximum = new decimal(new int[] {
-            3600,
+            86400,
             0,
             0,
             0});
