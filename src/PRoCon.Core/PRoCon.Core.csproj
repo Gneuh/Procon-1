@@ -146,7 +146,7 @@
     <Compile Include="Remote\Layer\FrostbiteLayerClient.cs" />
     <Compile Include="Remote\Layer\MoHLayerClient.cs" />
     <Compile Include="Remote\Layer\FrostbiteLayerConnection.cs" />
-    <Compile Include="Localization\Logging\LogEntry.cs" />
+    <Compile Include="Logging\LogEntry.cs" />
     <Compile Include="Battlemap\MapGeometry.cs" />
     <Compile Include="Maps\MaplistEntry.cs" />
     <Compile Include="Players\Items\DamageTypes.cs" />
@@ -180,7 +180,7 @@
     <Compile Include="Localization\CLocalization.cs" />
     <Compile Include="Localization\LocalizationDictionary.cs" />
     <Compile Include="CMap.cs" />
-    <Compile Include="Localization\Logging\Loggable.cs" />
+    <Compile Include="Logging\Loggable.cs" />
     <Compile Include="Options\OptionsSettings.cs" />
     <Compile Include="Options\TrustedHostWebsitePort.cs" />
     <Compile Include="Players\CPlayerInfo.cs" />
