@@ -26,6 +26,7 @@ namespace PRoCon.Core.BF4preset
     {
         NORMAL,
         HARDCORE,
+        INFANTRY,
         CUSTOM
     }
 
