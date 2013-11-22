@@ -522,7 +522,7 @@ namespace PRoCon {
                 }
             }
             // BF3 & MOHW goes here cause it has ConnectionState parameter is empty
-            if (this.Client.Game is BF3Client || this.Client.Game is BF4Client) {
+            if (this.Client.Game is BF3Client) {
                 this.toolTipPlasma.SetToolTip(this.lblPlasmaStatus,
                     this.m_clocLanguage.GetLocalized("uscServerConnection.lblPlasmaStatus.AcceptingPlayers.ToolTip")
                         + Environment.NewLine + Environment.NewLine +
@@ -543,6 +543,35 @@ namespace PRoCon {
                     this.m_clocLanguage.GetDefaultLocalized(csiServerInfo.PingSite, String.Format("uscServerConnection.extServerInfo.PingSite.{0}.ToolTip", csiServerInfo.PingSite))
                     + Environment.NewLine + Environment.NewLine +
                     this.m_clocLanguage.GetLocalized("uscServerConnection.extServerInfo.PunkBusterVersion.ToolTip") + "\t" + csiServerInfo.PunkBusterVersion
+                    + Environment.NewLine
+                    + Environment.NewLine
+                );
+            }
+            if (this.Client.Game is BF4Client) {
+                this.toolTipPlasma.SetToolTip(this.lblPlasmaStatus,
+                    this.m_clocLanguage.GetLocalized("uscServerConnection.lblPlasmaStatus.AcceptingPlayers.ToolTip")
+                        + Environment.NewLine + Environment.NewLine +
+                    this.m_clocLanguage.GetLocalized("uscServerConnection.extServerInfo.ExternalGameIpandPort.ToolTip") + "\t" + csiServerInfo.ExternalGameIpandPort
+                    + Environment.NewLine +
+                    this.m_clocLanguage.GetLocalized("uscServerConnection.extServerInfo.JoinQueueEnabled.ToolTip") + "\t"
+                    + this.m_clocLanguage.GetLocalized(String.Format("uscServerConnection.extServerInfo.JoinQueueEnabled.{0}.ToolTip", csiServerInfo.JoinQueueEnabled))
+                    + Environment.NewLine +
+                    this.m_clocLanguage.GetDefaultLocalized("MatchMaking Enabled:", "uscServerConnection.extServerInfo.MatchMaking.ToolTip") + "\t"
+                    + this.m_clocLanguage.GetDefaultLocalized(csiServerInfo.QuickMatch.ToString(), String.Format("uscServerConnection.extServerInfo.QuickMatch.{0}.ToolTip", csiServerInfo.QuickMatch.ToString()))
+                    + Environment.NewLine + Environment.NewLine +
+                    this.m_clocLanguage.GetLocalized("uscServerConnection.extServerInfo.ServerRegion.ToolTip") + "\t\t"
+                    + this.m_clocLanguage.GetLocalized(String.Format("uscServerConnection.extServerInfo.ServerRegion.{0}.ToolTip", csiServerInfo.ServerRegion))
+                    + Environment.NewLine +
+                    this.m_clocLanguage.GetDefaultLocalized("Server Country:", "uscServerConnection.extServerInfo.ServerCountry.ToolTip") + "\t\t" + csiServerInfo.ServerCountry
+                    + Environment.NewLine +
+                    this.m_clocLanguage.GetDefaultLocalized("Closest Ping Site:", "uscServerConnection.extServerInfo.PingSite.ToolTip") + "\t\t" +
+                    this.m_clocLanguage.GetDefaultLocalized(csiServerInfo.PingSite, String.Format("uscServerConnection.extServerInfo.PingSite.{0}.ToolTip", csiServerInfo.PingSite))
+                    + Environment.NewLine + Environment.NewLine +
+                    this.m_clocLanguage.GetLocalized("uscServerConnection.extServerInfo.PunkBusterVersion.ToolTip") + "\t" + csiServerInfo.PunkBusterVersion
+                    + Environment.NewLine + Environment.NewLine +
+                    this.m_clocLanguage.GetDefaultLocalized("Blaze Player Count:", "uscServerConnection.extServerInfo.BlazePlayerCount.ToolTip") + "\t\t" + csiServerInfo.BlazePlayerCount
+                    + Environment.NewLine +
+                    this.m_clocLanguage.GetDefaultLocalized("Blaze Game State:", "uscServerConnection.extServerInfo.BlazeGameState.ToolTip") + "\t\t" + csiServerInfo.BlazeGameState
                     + Environment.NewLine
                     + Environment.NewLine
                 );
