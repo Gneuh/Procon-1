@@ -828,6 +828,7 @@ namespace PRoCon.Forms {
 
         private void btnAddStatsLink_Click(object sender, EventArgs e)
         {
+            this.txtStatsLinkName.Text = this.txtStatsLinkName.Text.Replace(" ", "_");
             this.m_praApplication.OptionsSettings.StatsLinkNameUrl.Add(new StatsLinkNameUrl(this.txtStatsLinkName.Text, this.txtStatsLinkUrl.Text));
         }
 
