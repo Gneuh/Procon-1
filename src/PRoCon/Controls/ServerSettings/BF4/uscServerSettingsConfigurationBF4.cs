@@ -315,7 +315,11 @@ namespace PRoCon.Controls.ServerSettings.BF4 {
 
         private void chkSettingsNoIdleKickLimit_CheckedChanged(object sender, EventArgs e) {
             this.pnlSettingsSetidleKickLimit.Enabled = !this.chkSettingsNoIdleKickLimit.Checked;
-            this.pnlSettingsSetidleKickLimit.Visible = !this.chkSettingsNoIdleKickLimit.Checked;
+            // for BF4 86400s are max and this is not disabled, so it has to be visulized in a propper way
+            if (this.chkSettingsNoIdleKickLimit.Checked == true) {
+                this.numSettingsIdleKickLimit.Value = 86400;
+            }
+            //this.pnlSettingsSetidleKickLimit.Visible = !this.chkSettingsNoIdleKickLimit.Checked;
 
             this.chkSettingsNoIdleBanRoundsLimit.Enabled = !this.chkSettingsNoIdleKickLimit.Checked; 
             this.chkSettingsNoIdleBanRoundsLimit.Visible = !this.chkSettingsNoIdleKickLimit.Checked;
