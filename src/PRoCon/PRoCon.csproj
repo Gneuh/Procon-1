@@ -663,7 +663,18 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>mkdir "$(SolutionDir)..\builds\$(ConfigurationName)"
+      <PostBuildEvent Condition=" '$(OS)' == 'Unix' ">mkdir -p "$(SolutionDir)..\builds\$(ConfigurationName)"
+cp -a "$(SolutionDir)Resources\Media" "$(SolutionDir)..\builds\$(ConfigurationName)\Media"
+cp -a "$(SolutionDir)Resources\Configs" "$(SolutionDir)..\builds\$(ConfigurationName)\Configs"
+cp -a "$(SolutionDir)Resources\Localization" "$(SolutionDir)..\builds\$(ConfigurationName)\Localization"
+cp -a "$(SolutionDir)Resources\DefaultPlugins" "$(SolutionDir)..\builds\$(ConfigurationName)\Plugins"
+cp -a "$(SolutionDir)Resources\GeoIP\GeoIP.dat" "$(SolutionDir)..\builds\$(ConfigurationName)"
+mkdir -p "$(SolutionDir)..\builds\$(ConfigurationName)\docs_licenses"
+cp -a "$(SolutionDir)..\doc\procon.doc" "$(SolutionDir)..\builds\$(ConfigurationName)\docs_licenses"
+cp -a "$(SolutionDir)..\doc\myrcon.pdf" "$(SolutionDir)..\builds\$(ConfigurationName)\docs_licenses"
+cp -a "$(SolutionDir)..\doc\LICENSES.txt" "$(SolutionDir)..\builds\$(ConfigurationName)\docs_licenses"
+</PostBuildEvent>
+    <PostBuildEvent Condition=" '$(OS)' != 'Unix' ">mkdir "$(SolutionDir)..\builds\$(ConfigurationName)"
 xcopy "$(SolutionDir)Resources\Media" "$(SolutionDir)..\builds\$(ConfigurationName)\Media" /Y /E /I
 xcopy "$(SolutionDir)Resources\Configs" "$(SolutionDir)..\builds\$(ConfigurationName)\Configs" /Y /E /I
 xcopy "$(SolutionDir)Resources\Localization" "$(SolutionDir)..\builds\$(ConfigurationName)\Localization" /Y /E /I
