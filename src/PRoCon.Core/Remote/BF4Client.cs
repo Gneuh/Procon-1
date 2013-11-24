@@ -536,7 +536,7 @@ namespace PRoCon.Core.Remote {
             }
         }
 
-        public virtual void SendGetVarsPunkBusterPacket() {
+        public override void SendGetVarsPunkBusterPacket() {
             if (IsLoggedIn == true) {
                 BuildSendPacket("punkBuster.isActive");
             }
