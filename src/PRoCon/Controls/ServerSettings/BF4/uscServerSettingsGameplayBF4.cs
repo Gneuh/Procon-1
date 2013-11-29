@@ -893,9 +893,5 @@ namespace PRoCon.Controls.ServerSettings.BF4 {
             }
         }
 
-        private void lnkSettingsUnlockMode_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-
-        }
     }
 }
