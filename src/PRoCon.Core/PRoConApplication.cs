@@ -42,7 +42,6 @@ namespace PRoCon.Core {
     using Core.Battlemap;
     using Core.HttpServer;
     using Core.Remote;
-    using Core.Packages;
     using Core.Events;
     using Microsoft.Win32;
     // This, renamed or whatever, will eventually be the core app.
@@ -205,8 +204,6 @@ namespace PRoCon.Core {
                 this.m_praIsPluginMaxRuntimeLocked = value;
             }
         }
-
-        public PackageManager PackageManager { get; private set; }
 
         #region Regex
 
@@ -413,8 +410,6 @@ namespace PRoCon.Core {
             }
 
             this.GetGspSettings();
-
-            this.PackageManager = new PackageManager();
 
             this.Connections = new ConnectionDictionary();
             this.Connections.ConnectionAdded += new ConnectionDictionary.ConnectionAlteredHandler(Connections_ConnectionAdded);

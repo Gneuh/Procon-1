@@ -31,7 +31,6 @@ namespace PRoCon.Core.Remote.Layer {
     using Core.Accounts;
     using Core.Battlemap;
     using Core.Remote;
-    using Core.Packages;
 
     public class PRoConLayerClient {
 
@@ -165,7 +164,6 @@ namespace PRoCon.Core.Remote.Layer {
                     { "procon.plugin.setVariable", this.DispatchProconPluginSetVariableRequest  },
 
                     { "procon.exec", this.DispatchProconExecRequest },
-                    { "procon.packages.install", this.DispatchProconPackagesInstallRequest },
 
                     { "procon.admin.say", this.DispatchProconAdminSayRequest },
                     { "procon.admin.yell", this.DispatchProconAdminYellRequest },
@@ -243,13 +241,6 @@ namespace PRoCon.Core.Remote.Layer {
 
             this.m_prcClient.Variables.VariableAdded += new PRoCon.Core.Variables.VariableDictionary.PlayerAlteredHandler(Variables_VariableAdded);
             this.m_prcClient.Variables.VariableUpdated += new PRoCon.Core.Variables.VariableDictionary.PlayerAlteredHandler(Variables_VariableUpdated);
-
-            // Packages
-            this.m_praApplication.PackageManager.PackageAwaitingRestart += new PackageManager.PackageEventHandler(PackageManager_PackageAwaitingRestart);
-            this.m_praApplication.PackageManager.PackageBeginningDownload += new PackageManager.PackageEventHandler(PackageManager_PackageBeginningDownload);
-            this.m_praApplication.PackageManager.PackageDownloaded += new PackageManager.PackageEventHandler(PackageManager_PackageDownloaded);
-            this.m_praApplication.PackageManager.PackageDownloadFail += new PackageManager.PackageEventHandler(PackageManager_PackageDownloadFail);
-            this.m_praApplication.PackageManager.PackageInstalling += new PackageManager.PackageEventHandler(PackageManager_PackageInstalling);
         }
 
         private void UnregisterEvents() {
@@ -319,13 +310,6 @@ namespace PRoCon.Core.Remote.Layer {
 
             this.m_prcClient.Variables.VariableAdded -= new PRoCon.Core.Variables.VariableDictionary.PlayerAlteredHandler(Variables_VariableAdded);
             this.m_prcClient.Variables.VariableUpdated -= new PRoCon.Core.Variables.VariableDictionary.PlayerAlteredHandler(Variables_VariableUpdated);
-
-            // Packages
-            this.m_praApplication.PackageManager.PackageAwaitingRestart -= new PackageManager.PackageEventHandler(PackageManager_PackageAwaitingRestart);
-            this.m_praApplication.PackageManager.PackageBeginningDownload -= new PackageManager.PackageEventHandler(PackageManager_PackageBeginningDownload);
-            this.m_praApplication.PackageManager.PackageDownloaded -= new PackageManager.PackageEventHandler(PackageManager_PackageDownloaded);
-            this.m_praApplication.PackageManager.PackageDownloadFail -= new PackageManager.PackageEventHandler(PackageManager_PackageDownloadFail);
-            this.m_praApplication.PackageManager.PackageInstalling -= new PackageManager.PackageEventHandler(PackageManager_PackageInstalling);
 
 
         }
@@ -574,36 +558,6 @@ namespace PRoCon.Core.Remote.Layer {
                     this.GzipCompression = enableCompress;
                     
                     sender.SendResponse(packet, PRoConLayerClient.RESPONSE_OK);
-                }
-                else {
-                    sender.SendResponse(packet, PRoConLayerClient.RESPONSE_INVALID_ARGUMENTS);
-                }
-            }
-            else {
-                sender.SendResponse(packet, PRoConLayerClient.RESPONSE_LOGIN_REQUIRED);
-            }
-        }
-
-        private void DispatchProconPackagesInstallRequest(FrostbiteLayerClient sender, Packet packet) {
-            if (this.IsLoggedIn == true) {
-                if (packet.Words.Count == 4) {
-                    if (this.m_sprvPrivileges.CanIssueAllProconCommands == true) {
-
-                        // Register the package as psuedo-known
-                        this.m_praApplication.PackageManager.RemotePackages.AddPackage(new Package(packet.Words[1], packet.Words[2], packet.Words[3]));
-
-                        if (this.m_praApplication.PackageManager.CanDownloadPackage(packet.Words[1]) == true) {
-                            sender.SendResponse(packet, PRoConLayerClient.RESPONSE_OK);
-
-                            this.m_praApplication.PackageManager.DownloadInstallPackage(packet.Words[1], false);
-                        }
-                        else {
-                            sender.SendResponse(packet, PRoConLayerClient.RESPONSE_PACKAGE_ALREADYINSTALLED);
-                        }
-                    }
-                    else {
-                        sender.SendResponse(packet, PRoConLayerClient.RESPONSE_INSUFFICIENT_PRIVILEGES);
-                    }
                 }
                 else {
                     sender.SendResponse(packet, PRoConLayerClient.RESPONSE_INVALID_ARGUMENTS);
@@ -1749,40 +1703,6 @@ namespace PRoCon.Core.Remote.Layer {
             if (this.IsLoggedIn == true && this.m_blEventsEnabled == true && this.Game != null) {
                 this.Game.SendRequest("procon.vars.onAltered", item.Name, item.Value);
                 //this.send(new Packet(true, false, this.AcquireSequenceNumber, new List<string>() { "procon.vars.onAltered", item.Name, item.Value }));
-            }
-        }
-
-        #endregion
-
-        #region Packages
-
-        private void PackageManager_PackageBeginningDownload(PackageManager sender, Package target) {
-            if (this.IsLoggedIn == true && this.m_blEventsEnabled == true) {
-                this.Game.SendRequest("procon.packages.onDownloading", target.Uid);
-            }
-        }
-
-        private void PackageManager_PackageDownloaded(PackageManager sender, Package target) {
-            if (this.IsLoggedIn == true && this.m_blEventsEnabled == true) {
-                this.Game.SendRequest("procon.packages.onDownloaded", target.Uid);
-            }
-        }
-
-        private void PackageManager_PackageDownloadFail(PackageManager sender, Package target) {
-            if (this.IsLoggedIn == true && this.m_blEventsEnabled == true) {
-                this.Game.SendRequest("procon.packages.onDownloadError", target.Uid, target.Error);
-            }
-        }
-        
-        private void PackageManager_PackageInstalling(PackageManager sender, Package target) {
-            if (this.IsLoggedIn == true && this.m_blEventsEnabled == true) {
-                this.Game.SendRequest("procon.packages.onInstalling", target.Uid);
-            }
-        }
-
-        private void PackageManager_PackageAwaitingRestart(PackageManager sender, Package target) {
-            if (this.IsLoggedIn == true && this.m_blEventsEnabled == true) {
-                this.Game.SendRequest("procon.packages.onInstalled", target.Uid, Packet.Bltos(true));
             }
         }
 

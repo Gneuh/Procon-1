@@ -128,10 +128,6 @@
     <Compile Include="HttpServer\HttpWebServerRequestData.cs" />
     <Compile Include="HttpServer\HttpWebServerResponseData.cs" />
     <Compile Include="JSON.cs" />
-    <Compile Include="Packages\Package.cs" />
-    <Compile Include="Packages\PackageDictionary.cs" />
-    <Compile Include="Packages\PackageManager.cs" />
-    <Compile Include="Packages\PackageType.cs" />
     <Compile Include="Plugin\PRoConPluginAPI.cs" />
     <Compile Include="Plugin\Plugin.cs" />
     <Compile Include="Plugin\PluginDetails.cs" />
