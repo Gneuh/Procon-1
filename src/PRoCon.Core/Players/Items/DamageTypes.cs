@@ -42,5 +42,7 @@ namespace PRoCon.Core.Players.Items {
         VehicleStationary,
         VehicleLight,
         VehicleHeavy,
+        DMR,
+        Carbine
     }
 }
