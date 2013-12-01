@@ -56,7 +56,7 @@ namespace PRoCon.Core {
             this.m_dicLocalizedStrings = new Dictionary<string, string>();
 
             try {
-                string strFullLocalizationFile = Encoding.Unicode.GetString(File.ReadAllBytes(this.m_strLocalizationFilePath));
+                String strFullLocalizationFile = File.ReadAllText(this.m_strLocalizationFilePath);
 
                 MatchCollection mtcAllVariables = Regex.Matches(strFullLocalizationFile, "^(.*?)=(.*?)[\\r]?$", RegexOptions.Multiline);
                 
