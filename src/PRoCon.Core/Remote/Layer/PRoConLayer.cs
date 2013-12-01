@@ -275,7 +275,17 @@ namespace PRoCon.Core.Remote.Layer {
                     TcpClient tcpNewConnection = plLayer.m_tclLayerListener.EndAcceptTcpClient(ar);
 
                     PRoConLayerClient cplcNewConnection = new PRoConLayerClient(new FrostbiteLayerConnection(tcpNewConnection), plLayer.m_praApplication, plLayer.m_prcClient);
-                    
+
+                    // Issue #24. Somewhere the end port connection+port isn't being removed.
+                    if (plLayer.LayerClients.Contains(cplcNewConnection.IPPort) == true) {
+                        plLayer.LayerClients[cplcNewConnection.IPPort].Shutdown();
+
+                        // If, for some reason, the client wasn't removed during shutdown..
+                        if (plLayer.LayerClients.Contains(cplcNewConnection.IPPort) == true) {
+                            plLayer.LayerClients.Remove(cplcNewConnection.IPPort);
+                        }
+                    }
+
                     plLayer.LayerClients.Add(cplcNewConnection);
 
                     if (plLayer.ClientConnected != null) {
