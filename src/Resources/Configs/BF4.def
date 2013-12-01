@@ -335,6 +335,47 @@ procon.protected.maps.add "TeamDeathMatch0" "MP_Siege" "Team Deathmatch" "Siege 
 procon.protected.maps.add "TeamDeathMatch0" "MP_TheDish" "Team Deathmatch" "Rogue Transmission" 0
 procon.protected.maps.add "TeamDeathMatch0" "MP_Tremors" "Team Deathmatch" "Dawnbreaker" 0
 
+// XP1 (China Rising)
+procon.protected.maps.add "ConquestLarge0" "XP1_001" "Conquest Large" "Silk Road" 0
+procon.protected.maps.add "ConquestLarge0" "XP1_002" "Conquest Large" "Altai Range" 0
+procon.protected.maps.add "ConquestLarge0" "XP1_003" "Conquest Large" "Guilin Peaks" 0
+procon.protected.maps.add "ConquestLarge0" "XP1_004" "Conquest Large" "Dragon Pass" 0
+
+procon.protected.maps.add "ConquestSmall0" "XP1_001" "Conquest Small" "Silk Road" 0
+procon.protected.maps.add "ConquestSmall0" "XP1_002" "Conquest Small" "Altai Range" 0
+procon.protected.maps.add "ConquestSmall0" "XP1_003" "Conquest Small" "Guilin Peaks" 0
+procon.protected.maps.add "ConquestSmall0" "XP1_004" "Conquest Small" "Dragon Pass" 0
+
+procon.protected.maps.add "Domination0" "XP1_001" "Domination" "Silk Road" 0
+procon.protected.maps.add "Domination0" "XP1_002" "Domination" "Altai Range" 0
+procon.protected.maps.add "Domination0" "XP1_003" "Domination" "Guilin Peaks" 0
+procon.protected.maps.add "Domination0" "XP1_004" "Domination" "Dragon Pass" 0
+
+procon.protected.maps.add "Elimination0" "XP1_001" "Defuse" "Silk Road" 0
+procon.protected.maps.add "Elimination0" "XP1_002" "Defuse" "Altai Range" 0
+procon.protected.maps.add "Elimination0" "XP1_003" "Defuse" "Guilin Peaks" 0
+procon.protected.maps.add "Elimination0" "XP1_004" "Defuse" "Dragon Pass" 0
+
+procon.protected.maps.add "Obliteration" "XP1_001" "Obliteration" "Silk Road" 0
+procon.protected.maps.add "Obliteration" "XP1_002" "Obliteration" "Altai Range" 0
+procon.protected.maps.add "Obliteration" "XP1_003" "Obliteration" "Guilin Peaks" 0
+procon.protected.maps.add "Obliteration" "XP1_004" "Obliteration" "Dragon Pass" 0
+
+procon.protected.maps.add "RushLarge0" "XP1_001" "Rush" "Silk Road" 0
+procon.protected.maps.add "RushLarge0" "XP1_002" "Rush" "Altai Range" 0
+procon.protected.maps.add "RushLarge0" "XP1_003" "Rush" "Guilin Peaks" 0
+procon.protected.maps.add "RushLarge0" "XP1_004" "Rush" "Dragon Pass" 0
+
+procon.protected.maps.add "SquadDeathMatch0" "XP1_001" "Squad Deathmatch" "Silk Road" 0
+procon.protected.maps.add "SquadDeathMatch0" "XP1_002" "Squad Deathmatch" "Altai Range" 0
+procon.protected.maps.add "SquadDeathMatch0" "XP1_003" "Squad Deathmatch" "Guilin Peaks" 0
+procon.protected.maps.add "SquadDeathMatch0" "XP1_004" "Squad Deathmatch" "Dragon Pass" 0
+
+procon.protected.maps.add "TeamDeathMatch0" "XP1_001" "Team Deathmatch" "Silk Road" 0
+procon.protected.maps.add "TeamDeathMatch0" "XP1_002" "Team Deathmatch" "Altai Range" 0
+procon.protected.maps.add "TeamDeathMatch0" "XP1_003" "Team Deathmatch" "Guilin Peaks" 0
+procon.protected.maps.add "TeamDeathMatch0" "XP1_004" "Team Deathmatch" "Dragon Pass" 0
+
 procon.protected.teamnames.clear
 
 // Conquest Large
@@ -380,6 +421,23 @@ procon.protected.teamnames.add "MP_Tremors" 0 "global.conquest.neutral" "" "Conq
 procon.protected.teamnames.add "MP_Tremors" 1 "global.conquest.us" "us.png" "ConquestLarge0"
 procon.protected.teamnames.add "MP_Tremors" 2 "global.conquest.cn" "cn.png" "ConquestLarge0"
 
+// XP1 (China Rising)
+procon.protected.teamnames.add "XP1_001" 0 "global.conquest.neutral" "" "ConquestLarge0"
+procon.protected.teamnames.add "XP1_001" 1 "global.conquest.us" "us.png" "ConquestLarge0"
+procon.protected.teamnames.add "XP1_001" 2 "global.conquest.cn" "cn.png" "ConquestLarge0"
+
+procon.protected.teamnames.add "XP1_002" 0 "global.conquest.neutral" "" "ConquestLarge0"
+procon.protected.teamnames.add "XP1_002" 1 "global.conquest.us" "us.png" "ConquestLarge0"
+procon.protected.teamnames.add "XP1_002" 2 "global.conquest.cn" "cn.png" "ConquestLarge0"
+
+procon.protected.teamnames.add "XP1_003" 0 "global.conquest.neutral" "" "ConquestLarge0"
+procon.protected.teamnames.add "XP1_003" 1 "global.conquest.us" "us.png" "ConquestLarge0"
+procon.protected.teamnames.add "XP1_003" 2 "global.conquest.cn" "cn.png" "ConquestLarge0"
+
+procon.protected.teamnames.add "XP1_004" 0 "global.conquest.neutral" "" "ConquestLarge0"
+procon.protected.teamnames.add "XP1_004" 1 "global.conquest.us" "us.png" "ConquestLarge0"
+procon.protected.teamnames.add "XP1_004" 2 "global.conquest.cn" "cn.png" "ConquestLarge0"
+
 
 // Conquest Small
 ///////////////////////////////////////////////////////////////////////////////
@@ -423,6 +481,23 @@ procon.protected.teamnames.add "MP_TheDish" 2 "global.conquest.cn" "cn.png" "Con
 procon.protected.teamnames.add "MP_Tremors" 0 "global.conquest.neutral" "" "ConquestSmall0"
 procon.protected.teamnames.add "MP_Tremors" 1 "global.conquest.us" "us.png" "ConquestSmall0"
 procon.protected.teamnames.add "MP_Tremors" 2 "global.conquest.cn" "cn.png" "ConquestSmall0"
+
+// XP1 (China Rising)
+procon.protected.teamnames.add "XP1_001" 0 "global.conquest.neutral" "" "ConquestSmall0"
+procon.protected.teamnames.add "XP1_001" 1 "global.conquest.us" "us.png" "ConquestSmall0"
+procon.protected.teamnames.add "XP1_001" 2 "global.conquest.cn" "cn.png" "ConquestSmall0"
+
+procon.protected.teamnames.add "XP1_002" 0 "global.conquest.neutral" "" "ConquestSmall0"
+procon.protected.teamnames.add "XP1_002" 1 "global.conquest.us" "us.png" "ConquestSmall0"
+procon.protected.teamnames.add "XP1_002" 2 "global.conquest.cn" "cn.png" "ConquestSmall0"
+
+procon.protected.teamnames.add "XP1_003" 0 "global.conquest.neutral" "" "ConquestSmall0"
+procon.protected.teamnames.add "XP1_003" 1 "global.conquest.us" "us.png" "ConquestSmall0"
+procon.protected.teamnames.add "XP1_003" 2 "global.conquest.cn" "cn.png" "ConquestSmall0"
+
+procon.protected.teamnames.add "XP1_004" 0 "global.conquest.neutral" "" "ConquestSmall0"
+procon.protected.teamnames.add "XP1_004" 1 "global.conquest.us" "us.png" "ConquestSmall0"
+procon.protected.teamnames.add "XP1_004" 2 "global.conquest.cn" "cn.png" "ConquestSmall0"
 
 
 // Domination
@@ -468,6 +543,23 @@ procon.protected.teamnames.add "MP_Tremors" 0 "global.conquest.neutral" "" "Domi
 procon.protected.teamnames.add "MP_Tremors" 1 "global.conquest.us" "us.png" "Domination0"
 procon.protected.teamnames.add "MP_Tremors" 2 "global.conquest.cn" "cn.png" "Domination0"
 
+// XP1 (China Rising)
+procon.protected.teamnames.add "XP1_001" 0 "global.conquest.neutral" "" "Domination0"
+procon.protected.teamnames.add "XP1_001" 1 "global.conquest.us" "us.png" "Domination0"
+procon.protected.teamnames.add "XP1_001" 2 "global.conquest.cn" "cn.png" "Domination0"
+
+procon.protected.teamnames.add "XP1_002" 0 "global.conquest.neutral" "" "Domination0"
+procon.protected.teamnames.add "XP1_002" 1 "global.conquest.us" "us.png" "Domination0"
+procon.protected.teamnames.add "XP1_002" 2 "global.conquest.cn" "cn.png" "Domination0"
+
+procon.protected.teamnames.add "XP1_003" 0 "global.conquest.neutral" "" "Domination0"
+procon.protected.teamnames.add "XP1_003" 1 "global.conquest.us" "us.png" "Domination0"
+procon.protected.teamnames.add "XP1_003" 2 "global.conquest.cn" "cn.png" "Domination0"
+
+procon.protected.teamnames.add "XP1_004" 0 "global.conquest.neutral" "" "Domination0"
+procon.protected.teamnames.add "XP1_004" 1 "global.conquest.us" "us.png" "Domination0"
+procon.protected.teamnames.add "XP1_004" 2 "global.conquest.cn" "cn.png" "Domination0"
+
 
 // Defuse
 ///////////////////////////////////////////////////////////////////////////////
@@ -511,6 +603,23 @@ procon.protected.teamnames.add "MP_TheDish" 2 "global.conquest.cn" "cn.png" "Eli
 procon.protected.teamnames.add "MP_Tremors" 0 "global.conquest.neutral" "" "Elimination0"
 procon.protected.teamnames.add "MP_Tremors" 1 "global.conquest.us" "us.png" "Elimination0"
 procon.protected.teamnames.add "MP_Tremors" 2 "global.conquest.cn" "cn.png" "Elimination0"
+
+// XP1 (China Rising)
+procon.protected.teamnames.add "XP1_001" 0 "global.conquest.neutral" "" "Elimination0"
+procon.protected.teamnames.add "XP1_001" 1 "global.conquest.us" "us.png" "Elimination0"
+procon.protected.teamnames.add "XP1_001" 2 "global.conquest.cn" "cn.png" "Elimination0"
+
+procon.protected.teamnames.add "XP1_002" 0 "global.conquest.neutral" "" "Elimination0"
+procon.protected.teamnames.add "XP1_002" 1 "global.conquest.us" "us.png" "Elimination0"
+procon.protected.teamnames.add "XP1_002" 2 "global.conquest.cn" "cn.png" "Elimination0"
+
+procon.protected.teamnames.add "XP1_003" 0 "global.conquest.neutral" "" "Elimination0"
+procon.protected.teamnames.add "XP1_003" 1 "global.conquest.us" "us.png" "Elimination0"
+procon.protected.teamnames.add "XP1_003" 2 "global.conquest.cn" "cn.png" "Elimination0"
+
+procon.protected.teamnames.add "XP1_004" 0 "global.conquest.neutral" "" "Elimination0"
+procon.protected.teamnames.add "XP1_004" 1 "global.conquest.us" "us.png" "Elimination0"
+procon.protected.teamnames.add "XP1_004" 2 "global.conquest.cn" "cn.png" "Elimination0"
 
 
 // Obliteration
@@ -556,6 +665,23 @@ procon.protected.teamnames.add "MP_Tremors" 0 "global.conquest.neutral" "" "Obli
 procon.protected.teamnames.add "MP_Tremors" 1 "global.conquest.us" "us.png" "Obliteration"
 procon.protected.teamnames.add "MP_Tremors" 2 "global.conquest.cn" "cn.png" "Obliteration"
 
+// XP1 (China Rising)
+procon.protected.teamnames.add "XP1_001" 0 "global.conquest.neutral" "" "Obliteration"
+procon.protected.teamnames.add "XP1_001" 1 "global.conquest.us" "us.png" "Obliteration"
+procon.protected.teamnames.add "XP1_001" 2 "global.conquest.cn" "cn.png" "Obliteration"
+
+procon.protected.teamnames.add "XP1_002" 0 "global.conquest.neutral" "" "Obliteration"
+procon.protected.teamnames.add "XP1_002" 1 "global.conquest.us" "us.png" "Obliteration"
+procon.protected.teamnames.add "XP1_002" 2 "global.conquest.cn" "cn.png" "Obliteration"
+
+procon.protected.teamnames.add "XP1_003" 0 "global.conquest.neutral" "" "Obliteration"
+procon.protected.teamnames.add "XP1_003" 1 "global.conquest.us" "us.png" "Obliteration"
+procon.protected.teamnames.add "XP1_003" 2 "global.conquest.cn" "cn.png" "Obliteration"
+
+procon.protected.teamnames.add "XP1_004" 0 "global.conquest.neutral" "" "Obliteration"
+procon.protected.teamnames.add "XP1_004" 1 "global.conquest.us" "us.png" "Obliteration"
+procon.protected.teamnames.add "XP1_004" 2 "global.conquest.cn" "cn.png" "Obliteration"
+
 
 // Rush
 ///////////////////////////////////////////////////////////////////////////////
@@ -599,6 +725,23 @@ procon.protected.teamnames.add "MP_TheDish" 2 "global.rush.defenders" "cn.png" "
 procon.protected.teamnames.add "MP_Tremors" 0 "global.rush.neutral" "" "RushLarge0"
 procon.protected.teamnames.add "MP_Tremors" 1 "global.rush.attackers" "us.png" "RushLarge0"
 procon.protected.teamnames.add "MP_Tremors" 2 "global.rush.defenders" "cn.png" "RushLarge0"
+
+// XP1 (China Rising)
+procon.protected.teamnames.add "XP1_001" 0 "global.rush.neutral" "" "RushLarge0"
+procon.protected.teamnames.add "XP1_001" 1 "global.rush.attackers" "us.png" "RushLarge0"
+procon.protected.teamnames.add "XP1_001" 2 "global.rush.defenders" "cn.png" "RushLarge0"
+
+procon.protected.teamnames.add "XP1_002" 0 "global.rush.neutral" "" "RushLarge0"
+procon.protected.teamnames.add "XP1_002" 1 "global.rush.attackers" "us.png" "RushLarge0"
+procon.protected.teamnames.add "XP1_002" 2 "global.rush.defenders" "cn.png" "RushLarge0"
+
+procon.protected.teamnames.add "XP1_003" 0 "global.rush.neutral" "" "RushLarge0"
+procon.protected.teamnames.add "XP1_003" 1 "global.rush.attackers" "us.png" "RushLarge0"
+procon.protected.teamnames.add "XP1_003" 2 "global.rush.defenders" "cn.png" "RushLarge0"
+
+procon.protected.teamnames.add "XP1_004" 0 "global.rush.neutral" "" "RushLarge0"
+procon.protected.teamnames.add "XP1_004" 1 "global.rush.attackers" "us.png" "RushLarge0"
+procon.protected.teamnames.add "XP1_004" 2 "global.rush.defenders" "cn.png" "RushLarge0"
 
 
 // Squad Deathmatch
@@ -664,6 +807,31 @@ procon.protected.teamnames.add "MP_Tremors" 2 "global.Squad2" "cn.png" "SquadDea
 procon.protected.teamnames.add "MP_Tremors" 3 "global.Squad3" "cn.png" "SquadDeathMatch0"
 procon.protected.teamnames.add "MP_Tremors" 4 "global.Squad4" "cn.png" "SquadDeathMatch0"
 
+// XP1 (China Rising)
+procon.protected.teamnames.add "XP1_001" 0 "global.conquest.neutral" "" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP1_001" 1 "global.Squad1" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP1_001" 2 "global.Squad2" "cn.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP1_001" 3 "global.Squad3" "cn.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP1_001" 4 "global.Squad4" "cn.png" "SquadDeathMatch0"
+
+procon.protected.teamnames.add "XP1_002" 0 "global.conquest.neutral" "" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP1_002" 1 "global.Squad1" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP1_002" 2 "global.Squad2" "cn.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP1_002" 3 "global.Squad3" "cn.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP1_002" 4 "global.Squad4" "cn.png" "SquadDeathMatch0"
+
+procon.protected.teamnames.add "XP1_003" 0 "global.conquest.neutral" "" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP1_003" 1 "global.Squad1" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP1_003" 2 "global.Squad2" "cn.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP1_003" 3 "global.Squad3" "cn.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP1_003" 4 "global.Squad4" "cn.png" "SquadDeathMatch0"
+
+procon.protected.teamnames.add "XP1_004" 0 "global.conquest.neutral" "" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP1_004" 1 "global.Squad1" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP1_004" 2 "global.Squad2" "cn.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP1_004" 3 "global.Squad3" "cn.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP1_004" 4 "global.Squad4" "cn.png" "SquadDeathMatch0"
+
 
 // Team Deathmatch
 ///////////////////////////////////////////////////////////////////////////////
@@ -707,6 +875,24 @@ procon.protected.teamnames.add "MP_TheDish" 2 "global.tdm.cn" "cn.png" "TeamDeat
 procon.protected.teamnames.add "MP_Tremors" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
 procon.protected.teamnames.add "MP_Tremors" 1 "global.tdm.us" "us.png" "TeamDeathMatch0"
 procon.protected.teamnames.add "MP_Tremors" 2 "global.tdm.cn" "cn.png" "TeamDeathMatch0"
+
+// XP1 (China Rising)
+procon.protected.teamnames.add "XP1_001" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP1_001" 1 "global.tdm.us" "us.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP1_001" 2 "global.tdm.cn" "cn.png" "TeamDeathMatch0"
+
+procon.protected.teamnames.add "XP1_002" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP1_002" 1 "global.tdm.us" "us.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP1_002" 2 "global.tdm.cn" "cn.png" "TeamDeathMatch0"
+
+procon.protected.teamnames.add "XP1_003" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP1_003" 1 "global.tdm.us" "us.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP1_003" 2 "global.tdm.cn" "cn.png" "TeamDeathMatch0"
+
+procon.protected.teamnames.add "XP1_004" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP1_004" 1 "global.tdm.us" "us.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP1_004" 2 "global.tdm.cn" "cn.png" "TeamDeathMatch0"
+
 
 ///////////////////////////////////////////////////////////////////////////////
 procon.protected.tasks.clear
