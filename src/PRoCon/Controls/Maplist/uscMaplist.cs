@@ -222,7 +222,12 @@ namespace PRoCon.Controls.Maplist {
         private void m_prcClient_ProconPrivileges(PRoConClient sender, CPrivileges spPrivs) {
             this.m_privileges = spPrivs;
 
-            this.Enabled = true && this.m_privileges.CanEditMapList;
+            this.lsvMaplistPool.Enabled = this.m_privileges.CanEditMapList;
+            this.pnlMaplistAddMap.Enabled = this.m_privileges.CanEditMapList;
+            this.lnkMaplistChangePlaylist.Enabled = this.m_privileges.CanEditMapList;
+
+            // The main map list though can be used if the user can use map functions (skip map, restart etc)
+            this.lsvMaplist.Enabled = this.m_privileges.CanEditMapList || this.m_privileges.CanUseMapFunctions;
         }
 
         private void MapListPool_ItemAdded(int iIndex, CMap item) {
