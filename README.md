@@ -22,28 +22,30 @@ Please refer to the [issues section](https://github.com/Myrcon/Procon-1/issues?l
 ## Changelog ##
 To check out older changelogs, please refer to our [full changelogs list](https://forum.myrcon.com/showthread.php?240-Full-Change-Log "Full changelog of Procon 1") on the Myrcon Community forums.
 
-### 1.4.1.1 to 1.4.1.2 ###
+### 1.4.1.2 to 1.4.1.3 ###
 #### Battlefield 4 ####
-- Changed representation of "commo rose" messages in chat tab and added option to hide them
-- Fixed bug displaying current round one value too low (now shows 1/1 rounds)
-- Hid banner URL option and map tab since they are no longer functional
-- Removed unknown/old commands being fired on startup
-- Added setting for vars.alwaysAllowSpectators and vars.preset
-- Updated and fixed weapon definitions and localisation
+- Added re-fetching of all server-variables if "vars.preset" is triggered with the "override" setting
+- Added missing settings for "vars.roundTimeLimit" and "vars.teamKillKickForBan"
+- Updated missing weapon definitions and added *China Rising* maps to maplist
+- Added DamageTypes for DMRs and Carbines
+- Changed "Disable idle kick" to send "vars.idleTimeout 86400" instead of "vars.idleTimeout 0"
 
 #### UI ####
-- Fixed bug displaying a player's rank as their ping
-- Added "add player to spectator slot list" via right click in playerlist
-- Removed smooth fading animation of connect/disconnect buttons on start page
-- Changed ping to be shown as -1 if above 5000 to filter out invalid responses from the gameserver
+- Adapted limit for "vars.idleTimeout" setting to allow new maximum value
+- Fixed default URL for bf4stats.com
+- Removed the "test connection" link when starting a Procon Layer since it hasn't been functional in ages
+- Fixed "Unlock mode" setting not working properly
 
 #### Core ####
-- Fixed bug triggering a reconnect even after pressing "disconnect"
-- Fixed bug preventing the MySQL connector from working with sandbox enabled
+- Added check to shut down existing client-connection to a Procon Layer if another connection from the same IP/port is being opened
+- Improved linux compatibility a bit and removed a compiler warning
+- Slightly modified account permissions to allow users with "Use map functions" permissions to select/run maps, but not modify the maplist
+- Changed encoding of some definition files from UTF-16LE to UTF-8
+- Added support for different encodings for localisation files
+- Updated GeoIP database used for displaying a user's country
 
-#### Plugin ####
-- Fixed bug preventing all plugins from loading if one of them crashed during compilation
-- Fixed bug parsing string-values of plugin settings not properly
+#### Plugins ####
+- Updated default plugins to use the latest plugin API
 
 
 ## Credits & contributions ##
