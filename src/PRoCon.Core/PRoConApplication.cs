@@ -2825,15 +2825,16 @@ namespace PRoCon.Core {
 
                 this.m_dtDayCheck = DateTime.Now;
 
-                // If it's been 30 mins (this ticks every 20 seconds) and we're checking for updates..
+                // If it's been 3 hours (this ticks every 20 seconds) and we're checking for updates..
 
-                if (this.m_iVersionTicks >= 90 && this.OptionsSettings.AutoCheckDownloadUpdates == true) {
+                if (this.m_iVersionTicks >= 540 && this.OptionsSettings.AutoCheckDownloadUpdates == true) {
 
                     this.AutoUpdater.CheckVersion();
 
                     this.m_iVersionTicks = 0;
                 }
 
+                // Still sends usage data every 30 minutes
                 if (this.m_iUsageDataTicks >= 90 && this.OptionsSettings.AllowAnonymousUsageData == true) {
 
                     this.SendUsageData();
