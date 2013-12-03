@@ -18,6 +18,7 @@ procon.protected.serverversions.add BF4 "90165" "R9"
 procon.protected.serverversions.add BF4 "90519" "R10"
 procon.protected.serverversions.add BF4 "91697" "R11"
 procon.protected.serverversions.add BF4 "93111" "R12"
+procon.protected.serverversions.add BF4 "94318" "R12"
 
 procon.protected.specialization.clear
 
@@ -375,6 +376,11 @@ procon.protected.maps.add "TeamDeathMatch0" "XP1_001" "Team Deathmatch" "Silk Ro
 procon.protected.maps.add "TeamDeathMatch0" "XP1_002" "Team Deathmatch" "Altai Range" 0
 procon.protected.maps.add "TeamDeathMatch0" "XP1_003" "Team Deathmatch" "Guilin Peaks" 0
 procon.protected.maps.add "TeamDeathMatch0" "XP1_004" "Team Deathmatch" "Dragon Pass" 0
+
+procon.protected.maps.add "AirSuperiority0" "XP1_001" "Air Superiority" "Silk Road" 0
+procon.protected.maps.add "AirSuperiority0" "XP1_002" "Air Superiority" "Altai Range" 0
+procon.protected.maps.add "AirSuperiority0" "XP1_003" "Air Superiority" "Guilin Peaks" 0
+procon.protected.maps.add "AirSuperiority0" "XP1_004" "Air Superiority" "Dragon Pass" 0
 
 procon.protected.teamnames.clear
 
@@ -892,6 +898,26 @@ procon.protected.teamnames.add "XP1_003" 2 "global.tdm.cn" "cn.png" "TeamDeathMa
 procon.protected.teamnames.add "XP1_004" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
 procon.protected.teamnames.add "XP1_004" 1 "global.tdm.us" "us.png" "TeamDeathMatch0"
 procon.protected.teamnames.add "XP1_004" 2 "global.tdm.cn" "cn.png" "TeamDeathMatch0"
+
+
+// Air Superiority (XP1 - China Rising)
+///////////////////////////////////////////////////////////////////////////////
+
+procon.protected.teamnames.add "XP1_001" 0 "global.conquest.neutral" "" "AirSuperiority0"
+procon.protected.teamnames.add "XP1_001" 1 "global.conquest.us" "us.png" "AirSuperiority0"
+procon.protected.teamnames.add "XP1_001" 2 "global.conquest.cn" "cn.png" "AirSuperiority0"
+
+procon.protected.teamnames.add "XP1_002" 0 "global.conquest.neutral" "" "AirSuperiority0"
+procon.protected.teamnames.add "XP1_002" 1 "global.conquest.us" "us.png" "AirSuperiority0"
+procon.protected.teamnames.add "XP1_002" 2 "global.conquest.cn" "cn.png" "AirSuperiority0"
+
+procon.protected.teamnames.add "XP1_003" 0 "global.conquest.neutral" "" "AirSuperiority0"
+procon.protected.teamnames.add "XP1_003" 1 "global.conquest.us" "us.png" "AirSuperiority0"
+procon.protected.teamnames.add "XP1_003" 2 "global.conquest.cn" "cn.png" "AirSuperiority0"
+
+procon.protected.teamnames.add "XP1_004" 0 "global.conquest.neutral" "" "AirSuperiority0"
+procon.protected.teamnames.add "XP1_004" 1 "global.conquest.us" "us.png" "AirSuperiority0"
+procon.protected.teamnames.add "XP1_004" 2 "global.conquest.cn" "cn.png" "AirSuperiority0"
 
 
 ///////////////////////////////////////////////////////////////////////////////
