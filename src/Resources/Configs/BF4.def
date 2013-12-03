@@ -388,11 +388,11 @@ procon.protected.teamnames.clear
 ///////////////////////////////////////////////////////////////////////////////
 
 procon.protected.teamnames.add "MP_Abandoned" 0 "global.conquest.neutral" "" "ConquestLarge0"
-procon.protected.teamnames.add "MP_Abandoned" 1 "global.conquest.us" "us.png" "ConquestLarge0"
-procon.protected.teamnames.add "MP_Abandoned" 2 "global.conquest.cn" "cn.png" "ConquestLarge0"
+procon.protected.teamnames.add "MP_Abandoned" 1 "global.conquest.ru" "ru.png" "ConquestLarge0"
+procon.protected.teamnames.add "MP_Abandoned" 2 "global.conquest.us" "us.png" "ConquestLarge0"
 
 procon.protected.teamnames.add "MP_Damage" 0 "global.conquest.neutral" "" "ConquestLarge0"
-procon.protected.teamnames.add "MP_Damage" 1 "global.conquest.us" "us.png" "ConquestLarge0"
+procon.protected.teamnames.add "MP_Damage" 1 "global.conquest.ru" "ru.png" "ConquestLarge0"
 procon.protected.teamnames.add "MP_Damage" 2 "global.conquest.cn" "cn.png" "ConquestLarge0"
 
 procon.protected.teamnames.add "MP_Flooded" 0 "global.conquest.neutral" "" "ConquestLarge0"
@@ -400,7 +400,7 @@ procon.protected.teamnames.add "MP_Flooded" 1 "global.conquest.us" "us.png" "Con
 procon.protected.teamnames.add "MP_Flooded" 2 "global.conquest.cn" "cn.png" "ConquestLarge0"
 
 procon.protected.teamnames.add "MP_Journey" 0 "global.conquest.neutral" "" "ConquestLarge0"
-procon.protected.teamnames.add "MP_Journey" 1 "global.conquest.us" "us.png" "ConquestLarge0"
+procon.protected.teamnames.add "MP_Journey" 1 "global.conquest.ru" "ru.png" "ConquestLarge0"
 procon.protected.teamnames.add "MP_Journey" 2 "global.conquest.cn" "cn.png" "ConquestLarge0"
 
 procon.protected.teamnames.add "MP_Naval" 0 "global.conquest.neutral" "" "ConquestLarge0"
@@ -409,7 +409,7 @@ procon.protected.teamnames.add "MP_Naval" 2 "global.conquest.cn" "cn.png" "Conqu
 
 procon.protected.teamnames.add "MP_Prison" 0 "global.conquest.neutral" "" "ConquestLarge0"
 procon.protected.teamnames.add "MP_Prison" 1 "global.conquest.us" "us.png" "ConquestLarge0"
-procon.protected.teamnames.add "MP_Prison" 2 "global.conquest.cn" "cn.png" "ConquestLarge0"
+procon.protected.teamnames.add "MP_Prison" 2 "global.conquest.ru" "ru.png" "ConquestLarge0"
 
 procon.protected.teamnames.add "MP_Resort" 0 "global.conquest.neutral" "" "ConquestLarge0"
 procon.protected.teamnames.add "MP_Resort" 1 "global.conquest.us" "us.png" "ConquestLarge0"
@@ -420,7 +420,7 @@ procon.protected.teamnames.add "MP_Siege" 1 "global.conquest.us" "us.png" "Conqu
 procon.protected.teamnames.add "MP_Siege" 2 "global.conquest.cn" "cn.png" "ConquestLarge0"
 
 procon.protected.teamnames.add "MP_TheDish" 0 "global.conquest.neutral" "" "ConquestLarge0"
-procon.protected.teamnames.add "MP_TheDish" 1 "global.conquest.us" "us.png" "ConquestLarge0"
+procon.protected.teamnames.add "MP_TheDish" 1 "global.conquest.ru" "ru.png" "ConquestLarge0"
 procon.protected.teamnames.add "MP_TheDish" 2 "global.conquest.cn" "cn.png" "ConquestLarge0"
 
 procon.protected.teamnames.add "MP_Tremors" 0 "global.conquest.neutral" "" "ConquestLarge0"
@@ -449,11 +449,11 @@ procon.protected.teamnames.add "XP1_004" 2 "global.conquest.cn" "cn.png" "Conque
 ///////////////////////////////////////////////////////////////////////////////
 
 procon.protected.teamnames.add "MP_Abandoned" 0 "global.conquest.neutral" "" "ConquestSmall0"
-procon.protected.teamnames.add "MP_Abandoned" 1 "global.conquest.us" "us.png" "ConquestSmall0"
-procon.protected.teamnames.add "MP_Abandoned" 2 "global.conquest.cn" "cn.png" "ConquestSmall0"
+procon.protected.teamnames.add "MP_Abandoned" 1 "global.conquest.ru" "ru.png" "ConquestSmall0"
+procon.protected.teamnames.add "MP_Abandoned" 2 "global.conquest.us" "us.png" "ConquestSmall0"
 
 procon.protected.teamnames.add "MP_Damage" 0 "global.conquest.neutral" "" "ConquestSmall0"
-procon.protected.teamnames.add "MP_Damage" 1 "global.conquest.us" "us.png" "ConquestSmall0"
+procon.protected.teamnames.add "MP_Damage" 1 "global.conquest.ru" "ru.png" "ConquestSmall0"
 procon.protected.teamnames.add "MP_Damage" 2 "global.conquest.cn" "cn.png" "ConquestSmall0"
 
 procon.protected.teamnames.add "MP_Flooded" 0 "global.conquest.neutral" "" "ConquestSmall0"
@@ -461,7 +461,7 @@ procon.protected.teamnames.add "MP_Flooded" 1 "global.conquest.us" "us.png" "Con
 procon.protected.teamnames.add "MP_Flooded" 2 "global.conquest.cn" "cn.png" "ConquestSmall0"
 
 procon.protected.teamnames.add "MP_Journey" 0 "global.conquest.neutral" "" "ConquestSmall0"
-procon.protected.teamnames.add "MP_Journey" 1 "global.conquest.us" "us.png" "ConquestSmall0"
+procon.protected.teamnames.add "MP_Journey" 1 "global.conquest.ru" "ru.png" "ConquestSmall0"
 procon.protected.teamnames.add "MP_Journey" 2 "global.conquest.cn" "cn.png" "ConquestSmall0"
 
 procon.protected.teamnames.add "MP_Naval" 0 "global.conquest.neutral" "" "ConquestSmall0"
@@ -470,7 +470,7 @@ procon.protected.teamnames.add "MP_Naval" 2 "global.conquest.cn" "cn.png" "Conqu
 
 procon.protected.teamnames.add "MP_Prison" 0 "global.conquest.neutral" "" "ConquestSmall0"
 procon.protected.teamnames.add "MP_Prison" 1 "global.conquest.us" "us.png" "ConquestSmall0"
-procon.protected.teamnames.add "MP_Prison" 2 "global.conquest.cn" "cn.png" "ConquestSmall0"
+procon.protected.teamnames.add "MP_Prison" 2 "global.conquest.ru" "ru.png" "ConquestSmall0"
 
 procon.protected.teamnames.add "MP_Resort" 0 "global.conquest.neutral" "" "ConquestSmall0"
 procon.protected.teamnames.add "MP_Resort" 1 "global.conquest.us" "us.png" "ConquestSmall0"
@@ -481,7 +481,7 @@ procon.protected.teamnames.add "MP_Siege" 1 "global.conquest.us" "us.png" "Conqu
 procon.protected.teamnames.add "MP_Siege" 2 "global.conquest.cn" "cn.png" "ConquestSmall0"
 
 procon.protected.teamnames.add "MP_TheDish" 0 "global.conquest.neutral" "" "ConquestSmall0"
-procon.protected.teamnames.add "MP_TheDish" 1 "global.conquest.us" "us.png" "ConquestSmall0"
+procon.protected.teamnames.add "MP_TheDish" 1 "global.conquest.ru" "ru.png" "ConquestSmall0"
 procon.protected.teamnames.add "MP_TheDish" 2 "global.conquest.cn" "cn.png" "ConquestSmall0"
 
 procon.protected.teamnames.add "MP_Tremors" 0 "global.conquest.neutral" "" "ConquestSmall0"
@@ -510,11 +510,11 @@ procon.protected.teamnames.add "XP1_004" 2 "global.conquest.cn" "cn.png" "Conque
 ///////////////////////////////////////////////////////////////////////////////
 
 procon.protected.teamnames.add "MP_Abandoned" 0 "global.conquest.neutral" "" "Domination0"
-procon.protected.teamnames.add "MP_Abandoned" 1 "global.conquest.us" "us.png" "Domination0"
-procon.protected.teamnames.add "MP_Abandoned" 2 "global.conquest.cn" "cn.png" "Domination0"
+procon.protected.teamnames.add "MP_Abandoned" 1 "global.conquest.ru" "ru.png" "Domination0"
+procon.protected.teamnames.add "MP_Abandoned" 2 "global.conquest.us" "us.png" "Domination0"
 
 procon.protected.teamnames.add "MP_Damage" 0 "global.conquest.neutral" "" "Domination0"
-procon.protected.teamnames.add "MP_Damage" 1 "global.conquest.us" "us.png" "Domination0"
+procon.protected.teamnames.add "MP_Damage" 1 "global.conquest.ru" "ru.png" "Domination0"
 procon.protected.teamnames.add "MP_Damage" 2 "global.conquest.cn" "cn.png" "Domination0"
 
 procon.protected.teamnames.add "MP_Flooded" 0 "global.conquest.neutral" "" "Domination0"
@@ -522,7 +522,7 @@ procon.protected.teamnames.add "MP_Flooded" 1 "global.conquest.us" "us.png" "Dom
 procon.protected.teamnames.add "MP_Flooded" 2 "global.conquest.cn" "cn.png" "Domination0"
 
 procon.protected.teamnames.add "MP_Journey" 0 "global.conquest.neutral" "" "Domination0"
-procon.protected.teamnames.add "MP_Journey" 1 "global.conquest.us" "us.png" "Domination0"
+procon.protected.teamnames.add "MP_Journey" 1 "global.conquest.ru" "ru.png" "Domination0"
 procon.protected.teamnames.add "MP_Journey" 2 "global.conquest.cn" "cn.png" "Domination0"
 
 procon.protected.teamnames.add "MP_Naval" 0 "global.conquest.neutral" "" "Domination0"
@@ -531,7 +531,7 @@ procon.protected.teamnames.add "MP_Naval" 2 "global.conquest.cn" "cn.png" "Domin
 
 procon.protected.teamnames.add "MP_Prison" 0 "global.conquest.neutral" "" "Domination0"
 procon.protected.teamnames.add "MP_Prison" 1 "global.conquest.us" "us.png" "Domination0"
-procon.protected.teamnames.add "MP_Prison" 2 "global.conquest.cn" "cn.png" "Domination0"
+procon.protected.teamnames.add "MP_Prison" 2 "global.conquest.ru" "ru.png" "Domination0"
 
 procon.protected.teamnames.add "MP_Resort" 0 "global.conquest.neutral" "" "Domination0"
 procon.protected.teamnames.add "MP_Resort" 1 "global.conquest.us" "us.png" "Domination0"
@@ -542,7 +542,7 @@ procon.protected.teamnames.add "MP_Siege" 1 "global.conquest.us" "us.png" "Domin
 procon.protected.teamnames.add "MP_Siege" 2 "global.conquest.cn" "cn.png" "Domination0"
 
 procon.protected.teamnames.add "MP_TheDish" 0 "global.conquest.neutral" "" "Domination0"
-procon.protected.teamnames.add "MP_TheDish" 1 "global.conquest.us" "us.png" "Domination0"
+procon.protected.teamnames.add "MP_TheDish" 1 "global.conquest.ru" "ru.png" "Domination0"
 procon.protected.teamnames.add "MP_TheDish" 2 "global.conquest.cn" "cn.png" "Domination0"
 
 procon.protected.teamnames.add "MP_Tremors" 0 "global.conquest.neutral" "" "Domination0"
@@ -571,11 +571,11 @@ procon.protected.teamnames.add "XP1_004" 2 "global.conquest.cn" "cn.png" "Domina
 ///////////////////////////////////////////////////////////////////////////////
 
 procon.protected.teamnames.add "MP_Abandoned" 0 "global.conquest.neutral" "" "Elimination0"
-procon.protected.teamnames.add "MP_Abandoned" 1 "global.conquest.us" "us.png" "Elimination0"
-procon.protected.teamnames.add "MP_Abandoned" 2 "global.conquest.cn" "cn.png" "Elimination0"
+procon.protected.teamnames.add "MP_Abandoned" 1 "global.conquest.ru" "ru.png" "Elimination0"
+procon.protected.teamnames.add "MP_Abandoned" 2 "global.conquest.us" "us.png" "Elimination0"
 
 procon.protected.teamnames.add "MP_Damage" 0 "global.conquest.neutral" "" "Elimination0"
-procon.protected.teamnames.add "MP_Damage" 1 "global.conquest.us" "us.png" "Elimination0"
+procon.protected.teamnames.add "MP_Damage" 1 "global.conquest.ru" "ru.png" "Elimination0"
 procon.protected.teamnames.add "MP_Damage" 2 "global.conquest.cn" "cn.png" "Elimination0"
 
 procon.protected.teamnames.add "MP_Flooded" 0 "global.conquest.neutral" "" "Elimination0"
@@ -583,7 +583,7 @@ procon.protected.teamnames.add "MP_Flooded" 1 "global.conquest.us" "us.png" "Eli
 procon.protected.teamnames.add "MP_Flooded" 2 "global.conquest.cn" "cn.png" "Elimination0"
 
 procon.protected.teamnames.add "MP_Journey" 0 "global.conquest.neutral" "" "Elimination0"
-procon.protected.teamnames.add "MP_Journey" 1 "global.conquest.us" "us.png" "Elimination0"
+procon.protected.teamnames.add "MP_Journey" 1 "global.conquest.ru" "ru.png" "Elimination0"
 procon.protected.teamnames.add "MP_Journey" 2 "global.conquest.cn" "cn.png" "Elimination0"
 
 procon.protected.teamnames.add "MP_Naval" 0 "global.conquest.neutral" "" "Elimination0"
@@ -592,7 +592,7 @@ procon.protected.teamnames.add "MP_Naval" 2 "global.conquest.cn" "cn.png" "Elimi
 
 procon.protected.teamnames.add "MP_Prison" 0 "global.conquest.neutral" "" "Elimination0"
 procon.protected.teamnames.add "MP_Prison" 1 "global.conquest.us" "us.png" "Elimination0"
-procon.protected.teamnames.add "MP_Prison" 2 "global.conquest.cn" "cn.png" "Elimination0"
+procon.protected.teamnames.add "MP_Prison" 2 "global.conquest.ru" "ru.png" "Elimination0"
 
 procon.protected.teamnames.add "MP_Resort" 0 "global.conquest.neutral" "" "Elimination0"
 procon.protected.teamnames.add "MP_Resort" 1 "global.conquest.us" "us.png" "Elimination0"
@@ -603,7 +603,7 @@ procon.protected.teamnames.add "MP_Siege" 1 "global.conquest.us" "us.png" "Elimi
 procon.protected.teamnames.add "MP_Siege" 2 "global.conquest.cn" "cn.png" "Elimination0"
 
 procon.protected.teamnames.add "MP_TheDish" 0 "global.conquest.neutral" "" "Elimination0"
-procon.protected.teamnames.add "MP_TheDish" 1 "global.conquest.us" "us.png" "Elimination0"
+procon.protected.teamnames.add "MP_TheDish" 1 "global.conquest.ru" "ru.png" "Elimination0"
 procon.protected.teamnames.add "MP_TheDish" 2 "global.conquest.cn" "cn.png" "Elimination0"
 
 procon.protected.teamnames.add "MP_Tremors" 0 "global.conquest.neutral" "" "Elimination0"
@@ -632,11 +632,11 @@ procon.protected.teamnames.add "XP1_004" 2 "global.conquest.cn" "cn.png" "Elimin
 ///////////////////////////////////////////////////////////////////////////////
 
 procon.protected.teamnames.add "MP_Abandoned" 0 "global.conquest.neutral" "" "Obliteration"
-procon.protected.teamnames.add "MP_Abandoned" 1 "global.conquest.us" "us.png" "Obliteration"
-procon.protected.teamnames.add "MP_Abandoned" 2 "global.conquest.cn" "cn.png" "Obliteration"
+procon.protected.teamnames.add "MP_Abandoned" 1 "global.conquest.ru" "ru.png" "Obliteration"
+procon.protected.teamnames.add "MP_Abandoned" 2 "global.conquest.us" "us.png" "Obliteration"
 
 procon.protected.teamnames.add "MP_Damage" 0 "global.conquest.neutral" "" "Obliteration"
-procon.protected.teamnames.add "MP_Damage" 1 "global.conquest.us" "us.png" "Obliteration"
+procon.protected.teamnames.add "MP_Damage" 1 "global.conquest.ru" "ru.png" "Obliteration"
 procon.protected.teamnames.add "MP_Damage" 2 "global.conquest.cn" "cn.png" "Obliteration"
 
 procon.protected.teamnames.add "MP_Flooded" 0 "global.conquest.neutral" "" "Obliteration"
@@ -644,7 +644,7 @@ procon.protected.teamnames.add "MP_Flooded" 1 "global.conquest.us" "us.png" "Obl
 procon.protected.teamnames.add "MP_Flooded" 2 "global.conquest.cn" "cn.png" "Obliteration"
 
 procon.protected.teamnames.add "MP_Journey" 0 "global.conquest.neutral" "" "Obliteration"
-procon.protected.teamnames.add "MP_Journey" 1 "global.conquest.us" "us.png" "Obliteration"
+procon.protected.teamnames.add "MP_Journey" 1 "global.conquest.ru" "ru.png" "Obliteration"
 procon.protected.teamnames.add "MP_Journey" 2 "global.conquest.cn" "cn.png" "Obliteration"
 
 procon.protected.teamnames.add "MP_Naval" 0 "global.conquest.neutral" "" "Obliteration"
@@ -653,7 +653,7 @@ procon.protected.teamnames.add "MP_Naval" 2 "global.conquest.cn" "cn.png" "Oblit
 
 procon.protected.teamnames.add "MP_Prison" 0 "global.conquest.neutral" "" "Obliteration"
 procon.protected.teamnames.add "MP_Prison" 1 "global.conquest.us" "us.png" "Obliteration"
-procon.protected.teamnames.add "MP_Prison" 2 "global.conquest.cn" "cn.png" "Obliteration"
+procon.protected.teamnames.add "MP_Prison" 2 "global.conquest.ru" "ru.png" "Obliteration"
 
 procon.protected.teamnames.add "MP_Resort" 0 "global.conquest.neutral" "" "Obliteration"
 procon.protected.teamnames.add "MP_Resort" 1 "global.conquest.us" "us.png" "Obliteration"
@@ -664,7 +664,7 @@ procon.protected.teamnames.add "MP_Siege" 1 "global.conquest.us" "us.png" "Oblit
 procon.protected.teamnames.add "MP_Siege" 2 "global.conquest.cn" "cn.png" "Obliteration"
 
 procon.protected.teamnames.add "MP_TheDish" 0 "global.conquest.neutral" "" "Obliteration"
-procon.protected.teamnames.add "MP_TheDish" 1 "global.conquest.us" "us.png" "Obliteration"
+procon.protected.teamnames.add "MP_TheDish" 1 "global.conquest.ru" "ru.png" "Obliteration"
 procon.protected.teamnames.add "MP_TheDish" 2 "global.conquest.cn" "cn.png" "Obliteration"
 
 procon.protected.teamnames.add "MP_Tremors" 0 "global.conquest.neutral" "" "Obliteration"
@@ -754,88 +754,88 @@ procon.protected.teamnames.add "XP1_004" 2 "global.rush.defenders" "cn.png" "Rus
 ///////////////////////////////////////////////////////////////////////////////
 
 procon.protected.teamnames.add "MP_Abandoned" 0 "global.conquest.neutral" "" "SquadDeathMatch0"
-procon.protected.teamnames.add "MP_Abandoned" 1 "global.Squad1" "us.png" "SquadDeathMatch0"
-procon.protected.teamnames.add "MP_Abandoned" 2 "global.Squad2" "cn.png" "SquadDeathMatch0"
-procon.protected.teamnames.add "MP_Abandoned" 3 "global.Squad3" "cn.png" "SquadDeathMatch0"
-procon.protected.teamnames.add "MP_Abandoned" 4 "global.Squad4" "cn.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "MP_Abandoned" 1 "global.Squad1" "ru.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "MP_Abandoned" 2 "global.Squad2" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "MP_Abandoned" 3 "global.Squad3" "ru.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "MP_Abandoned" 4 "global.Squad4" "us.png" "SquadDeathMatch0"
 
 procon.protected.teamnames.add "MP_Damage" 0 "global.conquest.neutral" "" "SquadDeathMatch0"
-procon.protected.teamnames.add "MP_Damage" 1 "global.Squad1" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "MP_Damage" 1 "global.Squad1" "ru.png" "SquadDeathMatch0"
 procon.protected.teamnames.add "MP_Damage" 2 "global.Squad2" "cn.png" "SquadDeathMatch0"
-procon.protected.teamnames.add "MP_Damage" 3 "global.Squad3" "cn.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "MP_Damage" 3 "global.Squad3" "ru.png" "SquadDeathMatch0"
 procon.protected.teamnames.add "MP_Damage" 4 "global.Squad4" "cn.png" "SquadDeathMatch0"
 
 procon.protected.teamnames.add "MP_Flooded" 0 "global.conquest.neutral" "" "SquadDeathMatch0"
 procon.protected.teamnames.add "MP_Flooded" 1 "global.Squad1" "us.png" "SquadDeathMatch0"
 procon.protected.teamnames.add "MP_Flooded" 2 "global.Squad2" "cn.png" "SquadDeathMatch0"
-procon.protected.teamnames.add "MP_Flooded" 3 "global.Squad3" "cn.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "MP_Flooded" 3 "global.Squad3" "us.png" "SquadDeathMatch0"
 procon.protected.teamnames.add "MP_Flooded" 4 "global.Squad4" "cn.png" "SquadDeathMatch0"
 
 procon.protected.teamnames.add "MP_Journey" 0 "global.conquest.neutral" "" "SquadDeathMatch0"
-procon.protected.teamnames.add "MP_Journey" 1 "global.Squad1" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "MP_Journey" 1 "global.Squad1" "ru.png" "SquadDeathMatch0"
 procon.protected.teamnames.add "MP_Journey" 2 "global.Squad2" "cn.png" "SquadDeathMatch0"
-procon.protected.teamnames.add "MP_Journey" 3 "global.Squad3" "cn.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "MP_Journey" 3 "global.Squad3" "ru.png" "SquadDeathMatch0"
 procon.protected.teamnames.add "MP_Journey" 4 "global.Squad4" "cn.png" "SquadDeathMatch0"
 
 procon.protected.teamnames.add "MP_Naval" 0 "global.conquest.neutral" "" "SquadDeathMatch0"
 procon.protected.teamnames.add "MP_Naval" 1 "global.Squad1" "us.png" "SquadDeathMatch0"
 procon.protected.teamnames.add "MP_Naval" 2 "global.Squad2" "cn.png" "SquadDeathMatch0"
-procon.protected.teamnames.add "MP_Naval" 3 "global.Squad3" "cn.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "MP_Naval" 3 "global.Squad3" "us.png" "SquadDeathMatch0"
 procon.protected.teamnames.add "MP_Naval" 4 "global.Squad4" "cn.png" "SquadDeathMatch0"
 
 procon.protected.teamnames.add "MP_Prison" 0 "global.conquest.neutral" "" "SquadDeathMatch0"
 procon.protected.teamnames.add "MP_Prison" 1 "global.Squad1" "us.png" "SquadDeathMatch0"
-procon.protected.teamnames.add "MP_Prison" 2 "global.Squad2" "cn.png" "SquadDeathMatch0"
-procon.protected.teamnames.add "MP_Prison" 3 "global.Squad3" "cn.png" "SquadDeathMatch0"
-procon.protected.teamnames.add "MP_Prison" 4 "global.Squad4" "cn.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "MP_Prison" 2 "global.Squad2" "ru.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "MP_Prison" 3 "global.Squad3" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "MP_Prison" 4 "global.Squad4" "ru.png" "SquadDeathMatch0"
 
 procon.protected.teamnames.add "MP_Resort" 0 "global.conquest.neutral" "" "SquadDeathMatch0"
 procon.protected.teamnames.add "MP_Resort" 1 "global.Squad1" "us.png" "SquadDeathMatch0"
 procon.protected.teamnames.add "MP_Resort" 2 "global.Squad2" "cn.png" "SquadDeathMatch0"
-procon.protected.teamnames.add "MP_Resort" 3 "global.Squad4" "cn.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "MP_Resort" 3 "global.Squad4" "us.png" "SquadDeathMatch0"
 procon.protected.teamnames.add "MP_Resort" 4 "global.Squad4" "cn.png" "SquadDeathMatch0"
 
 procon.protected.teamnames.add "MP_Siege" 0 "global.conquest.neutral" "" "SquadDeathMatch0"
 procon.protected.teamnames.add "MP_Siege" 1 "global.Squad1" "us.png" "SquadDeathMatch0"
 procon.protected.teamnames.add "MP_Siege" 2 "global.Squad2" "cn.png" "SquadDeathMatch0"
-procon.protected.teamnames.add "MP_Siege" 3 "global.Squad3" "cn.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "MP_Siege" 3 "global.Squad3" "us.png" "SquadDeathMatch0"
 procon.protected.teamnames.add "MP_Siege" 4 "global.Squad4" "cn.png" "SquadDeathMatch0"
 
 procon.protected.teamnames.add "MP_TheDish" 0 "global.conquest.neutral" "" "SquadDeathMatch0"
-procon.protected.teamnames.add "MP_TheDish" 1 "global.Squad1" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "MP_TheDish" 1 "global.Squad1" "ru.png" "SquadDeathMatch0"
 procon.protected.teamnames.add "MP_TheDish" 2 "global.Squad2" "cn.png" "SquadDeathMatch0"
-procon.protected.teamnames.add "MP_TheDish" 3 "global.Squad3" "cn.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "MP_TheDish" 3 "global.Squad3" "ru.png" "SquadDeathMatch0"
 procon.protected.teamnames.add "MP_TheDish" 4 "global.Squad4" "cn.png" "SquadDeathMatch0"
 
 procon.protected.teamnames.add "MP_Tremors" 0 "global.conquest.neutral" "" "SquadDeathMatch0"
 procon.protected.teamnames.add "MP_Tremors" 1 "global.Squad1" "us.png" "SquadDeathMatch0"
 procon.protected.teamnames.add "MP_Tremors" 2 "global.Squad2" "cn.png" "SquadDeathMatch0"
-procon.protected.teamnames.add "MP_Tremors" 3 "global.Squad3" "cn.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "MP_Tremors" 3 "global.Squad3" "us.png" "SquadDeathMatch0"
 procon.protected.teamnames.add "MP_Tremors" 4 "global.Squad4" "cn.png" "SquadDeathMatch0"
 
 // XP1 (China Rising)
 procon.protected.teamnames.add "XP1_001" 0 "global.conquest.neutral" "" "SquadDeathMatch0"
 procon.protected.teamnames.add "XP1_001" 1 "global.Squad1" "us.png" "SquadDeathMatch0"
 procon.protected.teamnames.add "XP1_001" 2 "global.Squad2" "cn.png" "SquadDeathMatch0"
-procon.protected.teamnames.add "XP1_001" 3 "global.Squad3" "cn.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP1_001" 3 "global.Squad3" "us.png" "SquadDeathMatch0"
 procon.protected.teamnames.add "XP1_001" 4 "global.Squad4" "cn.png" "SquadDeathMatch0"
 
 procon.protected.teamnames.add "XP1_002" 0 "global.conquest.neutral" "" "SquadDeathMatch0"
 procon.protected.teamnames.add "XP1_002" 1 "global.Squad1" "us.png" "SquadDeathMatch0"
 procon.protected.teamnames.add "XP1_002" 2 "global.Squad2" "cn.png" "SquadDeathMatch0"
-procon.protected.teamnames.add "XP1_002" 3 "global.Squad3" "cn.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP1_002" 3 "global.Squad3" "us.png" "SquadDeathMatch0"
 procon.protected.teamnames.add "XP1_002" 4 "global.Squad4" "cn.png" "SquadDeathMatch0"
 
 procon.protected.teamnames.add "XP1_003" 0 "global.conquest.neutral" "" "SquadDeathMatch0"
 procon.protected.teamnames.add "XP1_003" 1 "global.Squad1" "us.png" "SquadDeathMatch0"
 procon.protected.teamnames.add "XP1_003" 2 "global.Squad2" "cn.png" "SquadDeathMatch0"
-procon.protected.teamnames.add "XP1_003" 3 "global.Squad3" "cn.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP1_003" 3 "global.Squad3" "us.png" "SquadDeathMatch0"
 procon.protected.teamnames.add "XP1_003" 4 "global.Squad4" "cn.png" "SquadDeathMatch0"
 
 procon.protected.teamnames.add "XP1_004" 0 "global.conquest.neutral" "" "SquadDeathMatch0"
 procon.protected.teamnames.add "XP1_004" 1 "global.Squad1" "us.png" "SquadDeathMatch0"
 procon.protected.teamnames.add "XP1_004" 2 "global.Squad2" "cn.png" "SquadDeathMatch0"
-procon.protected.teamnames.add "XP1_004" 3 "global.Squad3" "cn.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP1_004" 3 "global.Squad3" "us.png" "SquadDeathMatch0"
 procon.protected.teamnames.add "XP1_004" 4 "global.Squad4" "cn.png" "SquadDeathMatch0"
 
 
@@ -843,11 +843,11 @@ procon.protected.teamnames.add "XP1_004" 4 "global.Squad4" "cn.png" "SquadDeathM
 ///////////////////////////////////////////////////////////////////////////////
 
 procon.protected.teamnames.add "MP_Abandoned" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
-procon.protected.teamnames.add "MP_Abandoned" 1 "global.tdm.us" "us.png" "TeamDeathMatch0"
-procon.protected.teamnames.add "MP_Abandoned" 2 "global.tdm.cn" "cn.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "MP_Abandoned" 1 "global.tdm.ru" "ru.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "MP_Abandoned" 2 "global.tdm.us" "us.png" "TeamDeathMatch0"
 
 procon.protected.teamnames.add "MP_Damage" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
-procon.protected.teamnames.add "MP_Damage" 1 "global.tdm.us" "us.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "MP_Damage" 1 "global.tdm.ru" "ru.png" "TeamDeathMatch0"
 procon.protected.teamnames.add "MP_Damage" 2 "global.tdm.cn" "cn.png" "TeamDeathMatch0"
 
 procon.protected.teamnames.add "MP_Flooded" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
@@ -855,7 +855,7 @@ procon.protected.teamnames.add "MP_Flooded" 1 "global.tdm.us" "us.png" "TeamDeat
 procon.protected.teamnames.add "MP_Flooded" 2 "global.tdm.cn" "cn.png" "TeamDeathMatch0"
 
 procon.protected.teamnames.add "MP_Journey" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
-procon.protected.teamnames.add "MP_Journey" 1 "global.tdm.us" "us.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "MP_Journey" 1 "global.tdm.ru" "ru.png" "TeamDeathMatch0"
 procon.protected.teamnames.add "MP_Journey" 2 "global.tdm.cn" "cn.png" "TeamDeathMatch0"
 
 procon.protected.teamnames.add "MP_Naval" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
@@ -864,7 +864,7 @@ procon.protected.teamnames.add "MP_Naval" 2 "global.tdm.cn" "cn.png" "TeamDeathM
 
 procon.protected.teamnames.add "MP_Prison" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
 procon.protected.teamnames.add "MP_Prison" 1 "global.tdm.us" "us.png" "TeamDeathMatch0"
-procon.protected.teamnames.add "MP_Prison" 2 "global.tdm.cn" "cn.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "MP_Prison" 2 "global.tdm.ru" "ru.png" "TeamDeathMatch0"
 
 procon.protected.teamnames.add "MP_Resort" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
 procon.protected.teamnames.add "MP_Resort" 1 "global.tdm.us" "us.png" "TeamDeathMatch0"
@@ -875,7 +875,7 @@ procon.protected.teamnames.add "MP_Siege" 1 "global.tdm.us" "us.png" "TeamDeathM
 procon.protected.teamnames.add "MP_Siege" 2 "global.tdm.cn" "cn.png" "TeamDeathMatch0"
 
 procon.protected.teamnames.add "MP_TheDish" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
-procon.protected.teamnames.add "MP_TheDish" 1 "global.tdm.us" "us.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "MP_TheDish" 1 "global.tdm.ru" "ru.png" "TeamDeathMatch0"
 procon.protected.teamnames.add "MP_TheDish" 2 "global.tdm.cn" "cn.png" "TeamDeathMatch0"
 
 procon.protected.teamnames.add "MP_Tremors" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
