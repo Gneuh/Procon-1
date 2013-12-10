@@ -28,7 +28,7 @@ namespace PRoCon.Core {
         private string m_strVariableName;
         private string m_strVariableType;
         private string m_strVariableValue;
-        private bool m_blVariableReadonly;
+        private bool m_blVariableReadonly = false;
 
         public CPluginVariable(string strVariableName, string strVariable, string strValue) {
             this.m_strVariableName = strVariableName;
