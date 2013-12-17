@@ -53,6 +53,9 @@
                 else if (String.Compare(lstParameters[i], "rank", true) == 0 && int.TryParse(lstVariables[i], out iValue)) {
                     this.Rank = iValue;
                 }
+                else if (String.Compare(lstParameters[i], "type", true) == 0 && int.TryParse(lstVariables[i], out iValue)) {
+                    this.Type = iValue;
+                }
             }
 
             if (this.Deaths > 0) {
@@ -91,6 +94,8 @@
         public int Ping { get; set; }
 
         public int Rank { get; set; }
+
+        public int Type { get; set; }
 
         public float Kdr { get; set; }
 
