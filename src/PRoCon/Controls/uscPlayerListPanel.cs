@@ -1045,7 +1045,21 @@ namespace PRoCon {
                         }
                         
                         if (String.Compare(playerListItem.SubItems["rank"].Text, cpiPlayer.Rank.ToString()) != 0) { playerListItem.SubItems["rank"].Text = cpiPlayer.Rank.ToString(); }
-                        if (String.Compare(playerListItem.SubItems["type"].Text, cpiPlayer.Type.ToString()) != 0) { playerListItem.SubItems["type"].Text = cpiPlayer.Type.ToString(); }
+                        if (String.Compare(playerListItem.SubItems["type"].Text, cpiPlayer.Type.ToString()) != 0) { 
+                            if (cpiPlayer.Type == 0) {
+                                // lviType.Text = this.m_clocLanguage.GetDefaultLocalized("Player", "uscPlayerListPanel.lsvPlayers.Type.Player", null);
+                                playerListItem.SubItems["type"].Text = String.Empty;
+                            }
+                            else if (cpiPlayer.Type == 1) {
+                                playerListItem.SubItems["type"].Text = this.m_clocLanguage.GetDefaultLocalized("Spectator", "uscPlayerListPanel.lsvPlayers.Type.Spectator", null);
+                            }
+                            else if (cpiPlayer.Type == 2) {
+                                playerListItem.SubItems["type"].Text = this.m_clocLanguage.GetDefaultLocalized("Commander (PC)", "uscPlayerListPanel.lsvPlayers.Type.CommanderPC", null);
+                            }
+                            else if (cpiPlayer.Type == 3) {
+                                playerListItem.SubItems["type"].Text = this.m_clocLanguage.GetDefaultLocalized("Commander (Tablet)", "uscPlayerListPanel.lsvPlayers.Type.CommanderTablet", null);
+                            }
+                        }
 
                         AdditionalPlayerInfo sapiAdditional;
 
