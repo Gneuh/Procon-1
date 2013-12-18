@@ -483,7 +483,21 @@ namespace PRoCon {
 
             ListViewItem.ListViewSubItem lviType = new ListViewItem.ListViewSubItem();
             lviType.Name = "type";
-            lviType.Text = cpiPlayer.Type.ToString();
+
+            if (cpiPlayer.Type == 0) {
+                // lviType.Text = this.m_clocLanguage.GetDefaultLocalized("Player", "uscPlayerListPanel.lsvPlayers.Type.Player", null);
+                lviType.Text = String.Empty;
+            }
+            else if (cpiPlayer.Type == 1) {
+                lviType.Text = this.m_clocLanguage.GetDefaultLocalized("Spectator", "uscPlayerListPanel.lsvPlayers.Type.Spectator", null);
+            }
+            else if (cpiPlayer.Type == 2) {
+                lviType.Text = this.m_clocLanguage.GetDefaultLocalized("Commander (PC)", "uscPlayerListPanel.lsvPlayers.Type.CommanderPC", null);
+            }
+            else if (cpiPlayer.Type == 3) {
+                lviType.Text = this.m_clocLanguage.GetDefaultLocalized("Commander (Tablet)", "uscPlayerListPanel.lsvPlayers.Type.CommanderTablet", null);
+            }
+            
             lviNewPlayer.SubItems.Add(lviType);
 
             return lviNewPlayer;
