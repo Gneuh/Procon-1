@@ -65,6 +65,11 @@ namespace PRoCon.Controls.ServerSettings.BF4 {
             
             this.AsyncSettingControls.Add("reservedslotslist.aggressivejoin", new AsyncStyleSetting(this.picSettingsAggressiveJoin, this.chkSettingsAggressiveJoin, new Control[] { this.chkSettingsAggressiveJoin }, true));
 
+            this.AsyncSettingControls.Add("vars.team1FactionOverride", new AsyncStyleSetting(this.picSettingsTeam1FactionOverride, this.cboSettingsTeam1FactionOverride, new Control[] { this.cboSettingsTeam1FactionOverride }, true));
+            this.AsyncSettingControls.Add("vars.team2FactionOverride", new AsyncStyleSetting(this.picSettingsTeam2FactionOverride, this.cboSettingsTeam2FactionOverride, new Control[] { this.cboSettingsTeam2FactionOverride }, true));
+            this.AsyncSettingControls.Add("vars.team3FactionOverride", new AsyncStyleSetting(this.picSettingsTeam3FactionOverride, this.cboSettingsTeam3FactionOverride, new Control[] { this.cboSettingsTeam3FactionOverride }, true));
+            this.AsyncSettingControls.Add("vars.team4FactionOverride", new AsyncStyleSetting(this.picSettingsTeam4FactionOverride, this.cboSettingsTeam4FactionOverride, new Control[] { this.cboSettingsTeam4FactionOverride }, true));
+
             this.m_iPreviousSuccessPlayerLimit = 50;
             this.m_iPreviousSuccessIdleTimeoutLimit = 0;
             this.m_iPreviousSuccessIdleBanRoundsLimit = 0;
@@ -103,6 +108,38 @@ namespace PRoCon.Controls.ServerSettings.BF4 {
             this.chkSettingsAggressiveJoin.Text = this.Language.GetLocalized("uscServerSettingsPanel.chkSettingsAggressiveJoin");
 
             this.DisplayName = this.Language.GetLocalized("uscServerSettingsPanel.lblSettingsConfiguration");
+
+            this.lblSettingsTeam1FactionOverride.Text = this.Language.GetDefaultLocalized("Team 1 Faction Override", "uscServerSettingsPanel.lblSettingsTeam1FactionOverride");
+            this.lblSettingsTeam2FactionOverride.Text = this.Language.GetDefaultLocalized("Team 2 Faction Override", "uscServerSettingsPanel.lblSettingsTeam2FactionOverride");
+            this.lblSettingsTeam3FactionOverride.Text = this.Language.GetDefaultLocalized("Team 3 Faction Override", "uscServerSettingsPanel.lblSettingsTeam3FactionOverride");
+            this.lblSettingsTeam4FactionOverride.Text = this.Language.GetDefaultLocalized("Team 4 Faction Override", "uscServerSettingsPanel.lblSettingsTeam4FactionOverride");
+            this.lnkSettingsTeam1FactionOverride.Text = this.lnkSettingsTeam2FactionOverride.Text = this.lnkSettingsTeam3FactionOverride.Text = this.lnkSettingsTeam4FactionOverride.Text = this.Language.GetDefaultLocalized("Apply", "uscServerSettingsPanel.lnkSettingsTeamFactionOverride");
+            // 0 = US, 1 = RU, 2 = CN
+
+            this.cboSettingsTeam1FactionOverride.Items.Clear();
+            this.cboSettingsTeam1FactionOverride.Items.Add(this.Language.GetDefaultLocalized("US Army", "uscServerSettingsPanel.TeamFactions.US"));
+            this.cboSettingsTeam1FactionOverride.Items.Add(this.Language.GetDefaultLocalized("Russian Army", "uscServerSettingsPanel.TeamFactions.RU"));
+            this.cboSettingsTeam1FactionOverride.Items.Add(this.Language.GetDefaultLocalized("Chinese Army", "uscServerSettingsPanel.TeamFactions.CN"));
+            this.cboSettingsTeam1FactionOverride.SelectedIndex = 0;
+
+            this.cboSettingsTeam2FactionOverride.Items.Clear();
+            this.cboSettingsTeam2FactionOverride.Items.Add(this.Language.GetDefaultLocalized("US Army", "uscServerSettingsPanel.TeamFactions.US"));
+            this.cboSettingsTeam2FactionOverride.Items.Add(this.Language.GetDefaultLocalized("Russian Army", "uscServerSettingsPanel.TeamFactions.RU"));
+            this.cboSettingsTeam2FactionOverride.Items.Add(this.Language.GetDefaultLocalized("Chinese Army", "uscServerSettingsPanel.TeamFactions.CN"));
+            this.cboSettingsTeam2FactionOverride.SelectedIndex = 0;
+
+            this.cboSettingsTeam3FactionOverride.Items.Clear();
+            this.cboSettingsTeam3FactionOverride.Items.Add(this.Language.GetDefaultLocalized("US Army", "uscServerSettingsPanel.TeamFactions.US"));
+            this.cboSettingsTeam3FactionOverride.Items.Add(this.Language.GetDefaultLocalized("Russian Army", "uscServerSettingsPanel.TeamFactions.RU"));
+            this.cboSettingsTeam3FactionOverride.Items.Add(this.Language.GetDefaultLocalized("Chinese Army", "uscServerSettingsPanel.TeamFactions.CN"));
+            this.cboSettingsTeam3FactionOverride.SelectedIndex = 0;
+
+            this.cboSettingsTeam4FactionOverride.Items.Clear();
+            this.cboSettingsTeam4FactionOverride.Items.Add(this.Language.GetDefaultLocalized("US Army", "uscServerSettingsPanel.TeamFactions.US"));
+            this.cboSettingsTeam4FactionOverride.Items.Add(this.Language.GetDefaultLocalized("Russian Army", "uscServerSettingsPanel.TeamFactions.RU"));
+            this.cboSettingsTeam4FactionOverride.Items.Add(this.Language.GetDefaultLocalized("Chinese Army", "uscServerSettingsPanel.TeamFactions.CN"));
+            this.cboSettingsTeam4FactionOverride.SelectedIndex = 0;
+
         }
 
         public override void SetConnection(Core.Remote.PRoConClient prcClient) {

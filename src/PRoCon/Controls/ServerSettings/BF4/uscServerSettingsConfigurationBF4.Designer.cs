@@ -58,17 +58,33 @@
             this.picSettingsMaxSpectators = new System.Windows.Forms.PictureBox();
             this.numSettingsMaxSpectators = new System.Windows.Forms.NumericUpDown();
             this.lblSettingsMaxSpectators = new System.Windows.Forms.Label();
-            this.pnlSettingsSpectatorPassword = new System.Windows.Forms.Panel();
-            this.lnkSettingsSetSpectatorPassword = new System.Windows.Forms.LinkLabel();
-            this.picSettingsSpectatorPassword = new System.Windows.Forms.PictureBox();
-            this.txtSettingsSpectatorPassword = new System.Windows.Forms.TextBox();
-            this.lblSettingsSpectatorPassword = new System.Windows.Forms.Label();
             this.chkSettingsCommander = new System.Windows.Forms.CheckBox();
             this.picSettingsCommander = new System.Windows.Forms.PictureBox();
             this.lblSettingsServerType = new System.Windows.Forms.Label();
             this.txtSettingsServerType = new System.Windows.Forms.TextBox();
             this.chkSettingsAlwaysAllowSpectators = new System.Windows.Forms.CheckBox();
             this.picSettingsAlwaysAllowSpectators = new System.Windows.Forms.PictureBox();
+            this.pnlSettingsSpectatorPassword = new System.Windows.Forms.Panel();
+            this.lnkSettingsSetSpectatorPassword = new System.Windows.Forms.LinkLabel();
+            this.picSettingsSpectatorPassword = new System.Windows.Forms.PictureBox();
+            this.txtSettingsSpectatorPassword = new System.Windows.Forms.TextBox();
+            this.lblSettingsSpectatorPassword = new System.Windows.Forms.Label();
+            this.picSettingsTeam1FactionOverride = new System.Windows.Forms.PictureBox();
+            this.lnkSettingsTeam1FactionOverride = new System.Windows.Forms.LinkLabel();
+            this.lblSettingsTeam1FactionOverride = new System.Windows.Forms.Label();
+            this.cboSettingsTeam1FactionOverride = new System.Windows.Forms.ComboBox();
+            this.picSettingsTeam3FactionOverride = new System.Windows.Forms.PictureBox();
+            this.lnkSettingsTeam3FactionOverride = new System.Windows.Forms.LinkLabel();
+            this.lblSettingsTeam3FactionOverride = new System.Windows.Forms.Label();
+            this.cboSettingsTeam3FactionOverride = new System.Windows.Forms.ComboBox();
+            this.picSettingsTeam4FactionOverride = new System.Windows.Forms.PictureBox();
+            this.lnkSettingsTeam4FactionOverride = new System.Windows.Forms.LinkLabel();
+            this.lblSettingsTeam4FactionOverride = new System.Windows.Forms.Label();
+            this.cboSettingsTeam4FactionOverride = new System.Windows.Forms.ComboBox();
+            this.picSettingsTeam2FactionOverride = new System.Windows.Forms.PictureBox();
+            this.lnkSettingsTeam2FactionOverride = new System.Windows.Forms.LinkLabel();
+            this.lblSettingsTeam2FactionOverride = new System.Windows.Forms.Label();
+            this.cboSettingsTeam2FactionOverride = new System.Windows.Forms.ComboBox();
             this.pnlSettingsSetidleKickLimit.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numSettingsIdleBanRoundsLimit)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsNoIdleBanRoundsLimit)).BeginInit();
@@ -85,10 +101,14 @@
             ((System.ComponentModel.ISupportInitialize)(this.numSettingsEffectivePlayerLimit)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsMaxSpectators)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numSettingsMaxSpectators)).BeginInit();
-            this.pnlSettingsSpectatorPassword.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picSettingsSpectatorPassword)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsCommander)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsAlwaysAllowSpectators)).BeginInit();
+            this.pnlSettingsSpectatorPassword.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picSettingsSpectatorPassword)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picSettingsTeam1FactionOverride)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picSettingsTeam3FactionOverride)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picSettingsTeam4FactionOverride)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picSettingsTeam2FactionOverride)).BeginInit();
             this.SuspendLayout();
             // 
             // pnlSettingsSetidleKickLimit
@@ -300,7 +320,7 @@
             // 
             // picSettingsGamePassword
             // 
-            this.picSettingsGamePassword.Location = new System.Drawing.Point(9, 219);
+            this.picSettingsGamePassword.Location = new System.Drawing.Point(9, 311);
             this.picSettingsGamePassword.Name = "picSettingsGamePassword";
             this.picSettingsGamePassword.Size = new System.Drawing.Size(16, 16);
             this.picSettingsGamePassword.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -310,7 +330,7 @@
             // lblSettingsGamePassword
             // 
             this.lblSettingsGamePassword.AutoSize = true;
-            this.lblSettingsGamePassword.Location = new System.Drawing.Point(31, 218);
+            this.lblSettingsGamePassword.Location = new System.Drawing.Point(31, 310);
             this.lblSettingsGamePassword.Name = "lblSettingsGamePassword";
             this.lblSettingsGamePassword.Size = new System.Drawing.Size(91, 15);
             this.lblSettingsGamePassword.TabIndex = 226;
@@ -322,7 +342,7 @@
             this.lnkSettingsSetGamePassword.AutoSize = true;
             this.lnkSettingsSetGamePassword.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
             this.lnkSettingsSetGamePassword.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(220)))));
-            this.lnkSettingsSetGamePassword.Location = new System.Drawing.Point(243, 245);
+            this.lnkSettingsSetGamePassword.Location = new System.Drawing.Point(243, 337);
             this.lnkSettingsSetGamePassword.Name = "lnkSettingsSetGamePassword";
             this.lnkSettingsSetGamePassword.Size = new System.Drawing.Size(38, 15);
             this.lnkSettingsSetGamePassword.TabIndex = 230;
@@ -333,7 +353,7 @@
             // txtSettingsGamePassword
             // 
             this.txtSettingsGamePassword.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtSettingsGamePassword.Location = new System.Drawing.Point(35, 240);
+            this.txtSettingsGamePassword.Location = new System.Drawing.Point(35, 332);
             this.txtSettingsGamePassword.Name = "txtSettingsGamePassword";
             this.txtSettingsGamePassword.Size = new System.Drawing.Size(200, 23);
             this.txtSettingsGamePassword.TabIndex = 228;
@@ -344,7 +364,7 @@
             this.pnlSettingsAdminPassword.Controls.Add(this.picSettingsAdminPassword);
             this.pnlSettingsAdminPassword.Controls.Add(this.txtSettingsAdminPassword);
             this.pnlSettingsAdminPassword.Controls.Add(this.lblSettingsAdminPassword);
-            this.pnlSettingsAdminPassword.Location = new System.Drawing.Point(367, 205);
+            this.pnlSettingsAdminPassword.Location = new System.Drawing.Point(351, 295);
             this.pnlSettingsAdminPassword.Name = "pnlSettingsAdminPassword";
             this.pnlSettingsAdminPassword.Size = new System.Drawing.Size(432, 72);
             this.pnlSettingsAdminPassword.TabIndex = 231;
@@ -516,57 +536,6 @@
             this.lblSettingsMaxSpectators.TabIndex = 297;
             this.lblSettingsMaxSpectators.Text = "Spectator limit";
             // 
-            // pnlSettingsSpectatorPassword
-            // 
-            this.pnlSettingsSpectatorPassword.Controls.Add(this.lnkSettingsSetSpectatorPassword);
-            this.pnlSettingsSpectatorPassword.Controls.Add(this.picSettingsSpectatorPassword);
-            this.pnlSettingsSpectatorPassword.Controls.Add(this.txtSettingsSpectatorPassword);
-            this.pnlSettingsSpectatorPassword.Controls.Add(this.lblSettingsSpectatorPassword);
-            this.pnlSettingsSpectatorPassword.Location = new System.Drawing.Point(1, 278);
-            this.pnlSettingsSpectatorPassword.Name = "pnlSettingsSpectatorPassword";
-            this.pnlSettingsSpectatorPassword.Size = new System.Drawing.Size(319, 72);
-            this.pnlSettingsSpectatorPassword.TabIndex = 232;
-            this.pnlSettingsSpectatorPassword.Visible = false;
-            // 
-            // lnkSettingsSetSpectatorPassword
-            // 
-            this.lnkSettingsSetSpectatorPassword.ActiveLinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(220)))));
-            this.lnkSettingsSetSpectatorPassword.AutoSize = true;
-            this.lnkSettingsSetSpectatorPassword.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
-            this.lnkSettingsSetSpectatorPassword.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(220)))));
-            this.lnkSettingsSetSpectatorPassword.Location = new System.Drawing.Point(242, 37);
-            this.lnkSettingsSetSpectatorPassword.Name = "lnkSettingsSetSpectatorPassword";
-            this.lnkSettingsSetSpectatorPassword.Size = new System.Drawing.Size(38, 15);
-            this.lnkSettingsSetSpectatorPassword.TabIndex = 139;
-            this.lnkSettingsSetSpectatorPassword.TabStop = true;
-            this.lnkSettingsSetSpectatorPassword.Text = "Apply";
-            // 
-            // picSettingsSpectatorPassword
-            // 
-            this.picSettingsSpectatorPassword.Location = new System.Drawing.Point(8, 12);
-            this.picSettingsSpectatorPassword.Name = "picSettingsSpectatorPassword";
-            this.picSettingsSpectatorPassword.Size = new System.Drawing.Size(16, 16);
-            this.picSettingsSpectatorPassword.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.picSettingsSpectatorPassword.TabIndex = 131;
-            this.picSettingsSpectatorPassword.TabStop = false;
-            // 
-            // txtSettingsSpectatorPassword
-            // 
-            this.txtSettingsSpectatorPassword.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtSettingsSpectatorPassword.Location = new System.Drawing.Point(37, 35);
-            this.txtSettingsSpectatorPassword.Name = "txtSettingsSpectatorPassword";
-            this.txtSettingsSpectatorPassword.Size = new System.Drawing.Size(200, 23);
-            this.txtSettingsSpectatorPassword.TabIndex = 130;
-            // 
-            // lblSettingsSpectatorPassword
-            // 
-            this.lblSettingsSpectatorPassword.AutoSize = true;
-            this.lblSettingsSpectatorPassword.Location = new System.Drawing.Point(34, 11);
-            this.lblSettingsSpectatorPassword.Name = "lblSettingsSpectatorPassword";
-            this.lblSettingsSpectatorPassword.Size = new System.Drawing.Size(110, 15);
-            this.lblSettingsSpectatorPassword.TabIndex = 129;
-            this.lblSettingsSpectatorPassword.Text = "Spectator password";
-            // 
             // chkSettingsCommander
             // 
             this.chkSettingsCommander.AutoSize = true;
@@ -625,17 +594,244 @@
             this.picSettingsAlwaysAllowSpectators.TabIndex = 305;
             this.picSettingsAlwaysAllowSpectators.TabStop = false;
             // 
+            // pnlSettingsSpectatorPassword
+            // 
+            this.pnlSettingsSpectatorPassword.Controls.Add(this.lnkSettingsSetSpectatorPassword);
+            this.pnlSettingsSpectatorPassword.Controls.Add(this.picSettingsSpectatorPassword);
+            this.pnlSettingsSpectatorPassword.Controls.Add(this.txtSettingsSpectatorPassword);
+            this.pnlSettingsSpectatorPassword.Controls.Add(this.lblSettingsSpectatorPassword);
+            this.pnlSettingsSpectatorPassword.Location = new System.Drawing.Point(3, 218);
+            this.pnlSettingsSpectatorPassword.Name = "pnlSettingsSpectatorPassword";
+            this.pnlSettingsSpectatorPassword.Size = new System.Drawing.Size(319, 72);
+            this.pnlSettingsSpectatorPassword.TabIndex = 307;
+            this.pnlSettingsSpectatorPassword.Visible = false;
+            // 
+            // lnkSettingsSetSpectatorPassword
+            // 
+            this.lnkSettingsSetSpectatorPassword.ActiveLinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(220)))));
+            this.lnkSettingsSetSpectatorPassword.AutoSize = true;
+            this.lnkSettingsSetSpectatorPassword.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
+            this.lnkSettingsSetSpectatorPassword.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(220)))));
+            this.lnkSettingsSetSpectatorPassword.Location = new System.Drawing.Point(242, 37);
+            this.lnkSettingsSetSpectatorPassword.Name = "lnkSettingsSetSpectatorPassword";
+            this.lnkSettingsSetSpectatorPassword.Size = new System.Drawing.Size(38, 15);
+            this.lnkSettingsSetSpectatorPassword.TabIndex = 139;
+            this.lnkSettingsSetSpectatorPassword.TabStop = true;
+            this.lnkSettingsSetSpectatorPassword.Text = "Apply";
+            // 
+            // picSettingsSpectatorPassword
+            // 
+            this.picSettingsSpectatorPassword.Location = new System.Drawing.Point(8, 12);
+            this.picSettingsSpectatorPassword.Name = "picSettingsSpectatorPassword";
+            this.picSettingsSpectatorPassword.Size = new System.Drawing.Size(16, 16);
+            this.picSettingsSpectatorPassword.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.picSettingsSpectatorPassword.TabIndex = 131;
+            this.picSettingsSpectatorPassword.TabStop = false;
+            // 
+            // txtSettingsSpectatorPassword
+            // 
+            this.txtSettingsSpectatorPassword.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtSettingsSpectatorPassword.Location = new System.Drawing.Point(37, 35);
+            this.txtSettingsSpectatorPassword.Name = "txtSettingsSpectatorPassword";
+            this.txtSettingsSpectatorPassword.Size = new System.Drawing.Size(200, 23);
+            this.txtSettingsSpectatorPassword.TabIndex = 130;
+            // 
+            // lblSettingsSpectatorPassword
+            // 
+            this.lblSettingsSpectatorPassword.AutoSize = true;
+            this.lblSettingsSpectatorPassword.Location = new System.Drawing.Point(34, 11);
+            this.lblSettingsSpectatorPassword.Name = "lblSettingsSpectatorPassword";
+            this.lblSettingsSpectatorPassword.Size = new System.Drawing.Size(110, 15);
+            this.lblSettingsSpectatorPassword.TabIndex = 129;
+            this.lblSettingsSpectatorPassword.Text = "Spectator password";
+            // 
+            // picSettingsTeam1FactionOverride
+            // 
+            this.picSettingsTeam1FactionOverride.Location = new System.Drawing.Point(346, 154);
+            this.picSettingsTeam1FactionOverride.Name = "picSettingsTeam1FactionOverride";
+            this.picSettingsTeam1FactionOverride.Size = new System.Drawing.Size(16, 16);
+            this.picSettingsTeam1FactionOverride.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.picSettingsTeam1FactionOverride.TabIndex = 292;
+            this.picSettingsTeam1FactionOverride.TabStop = false;
+            // 
+            // lnkSettingsTeam1FactionOverride
+            // 
+            this.lnkSettingsTeam1FactionOverride.ActiveLinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(220)))));
+            this.lnkSettingsTeam1FactionOverride.AutoSize = true;
+            this.lnkSettingsTeam1FactionOverride.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
+            this.lnkSettingsTeam1FactionOverride.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(220)))));
+            this.lnkSettingsTeam1FactionOverride.Location = new System.Drawing.Point(527, 178);
+            this.lnkSettingsTeam1FactionOverride.Name = "lnkSettingsTeam1FactionOverride";
+            this.lnkSettingsTeam1FactionOverride.Size = new System.Drawing.Size(38, 15);
+            this.lnkSettingsTeam1FactionOverride.TabIndex = 291;
+            this.lnkSettingsTeam1FactionOverride.TabStop = true;
+            this.lnkSettingsTeam1FactionOverride.Text = "Apply";
+            // 
+            // lblSettingsTeam1FactionOverride
+            // 
+            this.lblSettingsTeam1FactionOverride.AutoSize = true;
+            this.lblSettingsTeam1FactionOverride.Location = new System.Drawing.Point(370, 154);
+            this.lblSettingsTeam1FactionOverride.Name = "lblSettingsTeam1FactionOverride";
+            this.lblSettingsTeam1FactionOverride.Size = new System.Drawing.Size(136, 15);
+            this.lblSettingsTeam1FactionOverride.TabIndex = 290;
+            this.lblSettingsTeam1FactionOverride.Text = "Team 1 Faction Override";
+            // 
+            // cboSettingsTeam1FactionOverride
+            // 
+            this.cboSettingsTeam1FactionOverride.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboSettingsTeam1FactionOverride.FormattingEnabled = true;
+            this.cboSettingsTeam1FactionOverride.Location = new System.Drawing.Point(373, 175);
+            this.cboSettingsTeam1FactionOverride.Name = "cboSettingsTeam1FactionOverride";
+            this.cboSettingsTeam1FactionOverride.Size = new System.Drawing.Size(150, 23);
+            this.cboSettingsTeam1FactionOverride.TabIndex = 289;
+            // 
+            // picSettingsTeam2FactionOverride
+            // 
+            this.picSettingsTeam2FactionOverride.Location = new System.Drawing.Point(581, 153);
+            this.picSettingsTeam2FactionOverride.Name = "picSettingsTeam2FactionOverride";
+            this.picSettingsTeam2FactionOverride.Size = new System.Drawing.Size(16, 16);
+            this.picSettingsTeam2FactionOverride.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.picSettingsTeam2FactionOverride.TabIndex = 315;
+            this.picSettingsTeam2FactionOverride.TabStop = false;
+            // 
+            // lnkSettingsTeam2FactionOverride
+            // 
+            this.lnkSettingsTeam2FactionOverride.ActiveLinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(220)))));
+            this.lnkSettingsTeam2FactionOverride.AutoSize = true;
+            this.lnkSettingsTeam2FactionOverride.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
+            this.lnkSettingsTeam2FactionOverride.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(220)))));
+            this.lnkSettingsTeam2FactionOverride.Location = new System.Drawing.Point(762, 177);
+            this.lnkSettingsTeam2FactionOverride.Name = "lnkSettingsTeam2FactionOverride";
+            this.lnkSettingsTeam2FactionOverride.Size = new System.Drawing.Size(38, 15);
+            this.lnkSettingsTeam2FactionOverride.TabIndex = 314;
+            this.lnkSettingsTeam2FactionOverride.TabStop = true;
+            this.lnkSettingsTeam2FactionOverride.Text = "Apply";
+            // 
+            // lblSettingsTeam2FactionOverride
+            // 
+            this.lblSettingsTeam2FactionOverride.AutoSize = true;
+            this.lblSettingsTeam2FactionOverride.Location = new System.Drawing.Point(605, 153);
+            this.lblSettingsTeam2FactionOverride.Name = "lblSettingsTeam2FactionOverride";
+            this.lblSettingsTeam2FactionOverride.Size = new System.Drawing.Size(136, 15);
+            this.lblSettingsTeam2FactionOverride.TabIndex = 313;
+            this.lblSettingsTeam2FactionOverride.Text = "Team 2 Faction Override";
+            // 
+            // cboSettingsTeam2FactionOverride
+            // 
+            this.cboSettingsTeam2FactionOverride.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboSettingsTeam2FactionOverride.FormattingEnabled = true;
+            this.cboSettingsTeam2FactionOverride.Location = new System.Drawing.Point(608, 174);
+            this.cboSettingsTeam2FactionOverride.Name = "cboSettingsTeam2FactionOverride";
+            this.cboSettingsTeam2FactionOverride.Size = new System.Drawing.Size(150, 23);
+            this.cboSettingsTeam2FactionOverride.TabIndex = 312;
+            // 
+            // picSettingsTeam3FactionOverride
+            // 
+            this.picSettingsTeam3FactionOverride.Location = new System.Drawing.Point(346, 211);
+            this.picSettingsTeam3FactionOverride.Name = "picSettingsTeam3FactionOverride";
+            this.picSettingsTeam3FactionOverride.Size = new System.Drawing.Size(16, 16);
+            this.picSettingsTeam3FactionOverride.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.picSettingsTeam3FactionOverride.TabIndex = 311;
+            this.picSettingsTeam3FactionOverride.TabStop = false;
+            // 
+            // lnkSettingsTeam3FactionOverride
+            // 
+            this.lnkSettingsTeam3FactionOverride.ActiveLinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(220)))));
+            this.lnkSettingsTeam3FactionOverride.AutoSize = true;
+            this.lnkSettingsTeam3FactionOverride.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
+            this.lnkSettingsTeam3FactionOverride.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(220)))));
+            this.lnkSettingsTeam3FactionOverride.Location = new System.Drawing.Point(527, 235);
+            this.lnkSettingsTeam3FactionOverride.Name = "lnkSettingsTeam3FactionOverride";
+            this.lnkSettingsTeam3FactionOverride.Size = new System.Drawing.Size(38, 15);
+            this.lnkSettingsTeam3FactionOverride.TabIndex = 310;
+            this.lnkSettingsTeam3FactionOverride.TabStop = true;
+            this.lnkSettingsTeam3FactionOverride.Text = "Apply";
+            // 
+            // lblSettingsTeam3FactionOverride
+            // 
+            this.lblSettingsTeam3FactionOverride.AutoSize = true;
+            this.lblSettingsTeam3FactionOverride.Location = new System.Drawing.Point(370, 211);
+            this.lblSettingsTeam3FactionOverride.Name = "lblSettingsTeam3FactionOverride";
+            this.lblSettingsTeam3FactionOverride.Size = new System.Drawing.Size(136, 15);
+            this.lblSettingsTeam3FactionOverride.TabIndex = 309;
+            this.lblSettingsTeam3FactionOverride.Text = "Team 3 Faction Override";
+            // 
+            // cboSettingsTeam3FactionOverride
+            // 
+            this.cboSettingsTeam3FactionOverride.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboSettingsTeam3FactionOverride.FormattingEnabled = true;
+            this.cboSettingsTeam3FactionOverride.Location = new System.Drawing.Point(373, 232);
+            this.cboSettingsTeam3FactionOverride.Name = "cboSettingsTeam3FactionOverride";
+            this.cboSettingsTeam3FactionOverride.Size = new System.Drawing.Size(150, 23);
+            this.cboSettingsTeam3FactionOverride.TabIndex = 308;
+            // 
+            // picSettingsTeam4FactionOverride
+            // 
+            this.picSettingsTeam4FactionOverride.Location = new System.Drawing.Point(581, 210);
+            this.picSettingsTeam4FactionOverride.Name = "picSettingsTeam4FactionOverride";
+            this.picSettingsTeam4FactionOverride.Size = new System.Drawing.Size(16, 16);
+            this.picSettingsTeam4FactionOverride.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.picSettingsTeam4FactionOverride.TabIndex = 319;
+            this.picSettingsTeam4FactionOverride.TabStop = false;
+            // 
+            // lnkSettingsTeam4FactionOverride
+            // 
+            this.lnkSettingsTeam4FactionOverride.ActiveLinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(220)))));
+            this.lnkSettingsTeam4FactionOverride.AutoSize = true;
+            this.lnkSettingsTeam4FactionOverride.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
+            this.lnkSettingsTeam4FactionOverride.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(220)))));
+            this.lnkSettingsTeam4FactionOverride.Location = new System.Drawing.Point(762, 234);
+            this.lnkSettingsTeam4FactionOverride.Name = "lnkSettingsTeam4FactionOverride";
+            this.lnkSettingsTeam4FactionOverride.Size = new System.Drawing.Size(38, 15);
+            this.lnkSettingsTeam4FactionOverride.TabIndex = 318;
+            this.lnkSettingsTeam4FactionOverride.TabStop = true;
+            this.lnkSettingsTeam4FactionOverride.Text = "Apply";
+            // 
+            // lblSettingsTeam4FactionOverride
+            // 
+            this.lblSettingsTeam4FactionOverride.AutoSize = true;
+            this.lblSettingsTeam4FactionOverride.Location = new System.Drawing.Point(605, 210);
+            this.lblSettingsTeam4FactionOverride.Name = "lblSettingsTeam4FactionOverride";
+            this.lblSettingsTeam4FactionOverride.Size = new System.Drawing.Size(136, 15);
+            this.lblSettingsTeam4FactionOverride.TabIndex = 317;
+            this.lblSettingsTeam4FactionOverride.Text = "Team 4 Faction Override";
+            // 
+            // cboSettingsTeam4FactionOverride
+            // 
+            this.cboSettingsTeam4FactionOverride.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboSettingsTeam4FactionOverride.FormattingEnabled = true;
+            this.cboSettingsTeam4FactionOverride.Location = new System.Drawing.Point(608, 231);
+            this.cboSettingsTeam4FactionOverride.Name = "cboSettingsTeam4FactionOverride";
+            this.cboSettingsTeam4FactionOverride.Size = new System.Drawing.Size(150, 23);
+            this.cboSettingsTeam4FactionOverride.TabIndex = 316;
+            // 
             // uscServerSettingsConfigurationBF4
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.picSettingsTeam4FactionOverride);
+            this.Controls.Add(this.lnkSettingsTeam4FactionOverride);
+            this.Controls.Add(this.lblSettingsTeam4FactionOverride);
+            this.Controls.Add(this.cboSettingsTeam4FactionOverride);
+            this.Controls.Add(this.picSettingsTeam2FactionOverride);
+            this.Controls.Add(this.lnkSettingsTeam2FactionOverride);
+            this.Controls.Add(this.lblSettingsTeam2FactionOverride);
+            this.Controls.Add(this.cboSettingsTeam2FactionOverride);
+            this.Controls.Add(this.picSettingsTeam3FactionOverride);
+            this.Controls.Add(this.lnkSettingsTeam3FactionOverride);
+            this.Controls.Add(this.lblSettingsTeam3FactionOverride);
+            this.Controls.Add(this.cboSettingsTeam3FactionOverride);
+            this.Controls.Add(this.picSettingsTeam1FactionOverride);
+            this.Controls.Add(this.pnlSettingsSpectatorPassword);
+            this.Controls.Add(this.lnkSettingsTeam1FactionOverride);
             this.Controls.Add(this.chkSettingsAlwaysAllowSpectators);
+            this.Controls.Add(this.lblSettingsTeam1FactionOverride);
+            this.Controls.Add(this.cboSettingsTeam1FactionOverride);
             this.Controls.Add(this.picSettingsAlwaysAllowSpectators);
             this.Controls.Add(this.lblSettingsServerType);
             this.Controls.Add(this.txtSettingsServerType);
             this.Controls.Add(this.chkSettingsCommander);
             this.Controls.Add(this.picSettingsCommander);
-            this.Controls.Add(this.pnlSettingsSpectatorPassword);
             this.Controls.Add(this.lnkSettingsSetMaxSpectators);
             this.Controls.Add(this.picSettingsMaxSpectators);
             this.Controls.Add(this.numSettingsMaxSpectators);
@@ -680,11 +876,15 @@
             ((System.ComponentModel.ISupportInitialize)(this.numSettingsEffectivePlayerLimit)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsMaxSpectators)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numSettingsMaxSpectators)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picSettingsCommander)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picSettingsAlwaysAllowSpectators)).EndInit();
             this.pnlSettingsSpectatorPassword.ResumeLayout(false);
             this.pnlSettingsSpectatorPassword.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsSpectatorPassword)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picSettingsCommander)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picSettingsAlwaysAllowSpectators)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picSettingsTeam1FactionOverride)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picSettingsTeam3FactionOverride)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picSettingsTeam4FactionOverride)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picSettingsTeam2FactionOverride)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -727,16 +927,32 @@
         private System.Windows.Forms.PictureBox picSettingsMaxSpectators;
         private System.Windows.Forms.NumericUpDown numSettingsMaxSpectators;
         private System.Windows.Forms.Label lblSettingsMaxSpectators;
-        private System.Windows.Forms.Panel pnlSettingsSpectatorPassword;
-        private System.Windows.Forms.LinkLabel lnkSettingsSetSpectatorPassword;
-        private System.Windows.Forms.PictureBox picSettingsSpectatorPassword;
-        private System.Windows.Forms.TextBox txtSettingsSpectatorPassword;
-        private System.Windows.Forms.Label lblSettingsSpectatorPassword;
         private System.Windows.Forms.CheckBox chkSettingsCommander;
         private System.Windows.Forms.PictureBox picSettingsCommander;
         private System.Windows.Forms.Label lblSettingsServerType;
         private System.Windows.Forms.TextBox txtSettingsServerType;
         private System.Windows.Forms.CheckBox chkSettingsAlwaysAllowSpectators;
         private System.Windows.Forms.PictureBox picSettingsAlwaysAllowSpectators;
+        private System.Windows.Forms.Panel pnlSettingsSpectatorPassword;
+        private System.Windows.Forms.LinkLabel lnkSettingsSetSpectatorPassword;
+        private System.Windows.Forms.PictureBox picSettingsSpectatorPassword;
+        private System.Windows.Forms.TextBox txtSettingsSpectatorPassword;
+        private System.Windows.Forms.Label lblSettingsSpectatorPassword;
+        private System.Windows.Forms.PictureBox picSettingsTeam1FactionOverride;
+        private System.Windows.Forms.LinkLabel lnkSettingsTeam1FactionOverride;
+        private System.Windows.Forms.Label lblSettingsTeam1FactionOverride;
+        private System.Windows.Forms.ComboBox cboSettingsTeam1FactionOverride;
+        private System.Windows.Forms.PictureBox picSettingsTeam3FactionOverride;
+        private System.Windows.Forms.LinkLabel lnkSettingsTeam3FactionOverride;
+        private System.Windows.Forms.Label lblSettingsTeam3FactionOverride;
+        private System.Windows.Forms.ComboBox cboSettingsTeam3FactionOverride;
+        private System.Windows.Forms.PictureBox picSettingsTeam4FactionOverride;
+        private System.Windows.Forms.LinkLabel lnkSettingsTeam4FactionOverride;
+        private System.Windows.Forms.Label lblSettingsTeam4FactionOverride;
+        private System.Windows.Forms.ComboBox cboSettingsTeam4FactionOverride;
+        private System.Windows.Forms.PictureBox picSettingsTeam2FactionOverride;
+        private System.Windows.Forms.LinkLabel lnkSettingsTeam2FactionOverride;
+        private System.Windows.Forms.Label lblSettingsTeam2FactionOverride;
+        private System.Windows.Forms.ComboBox cboSettingsTeam2FactionOverride;
     }
 }
