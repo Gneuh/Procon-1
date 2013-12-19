@@ -1015,6 +1015,11 @@ namespace PRoCon.Core.Plugin {
             ProconClient.Game.SquadListPlayers -= new FrostbiteClient.SquadListPlayersHandler(Game_SquadListPlayers);
             ProconClient.Game.SquadIsPrivate -= new FrostbiteClient.SquadIsPrivateHandler(Game_SquadIsPrivate);
 
+            ProconClient.Game.Team1FactionOverride -= new FrostbiteClient.LimitHandler(Game_Team1FactionOverride);
+            ProconClient.Game.Team2FactionOverride -= new FrostbiteClient.LimitHandler(Game_Team2FactionOverride);
+            ProconClient.Game.Team3FactionOverride -= new FrostbiteClient.LimitHandler(Game_Team3FactionOverride);
+            ProconClient.Game.Team4FactionOverride -= new FrostbiteClient.LimitHandler(Game_Team4FactionOverride);
+
             #region MoHW
 
             ProconClient.Game.AllUnlocksUnlocked -= new FrostbiteClient.IsEnabledHandler(Game_AllUnlocksUnlocked);
@@ -2004,8 +2009,28 @@ namespace PRoCon.Core.Plugin {
         private void m_prcClient_BF4preset(FrostbiteClient sender, string mode, bool isLocked) {
             InvokeOnAllEnabled("OnPreset", new object[] { mode, isLocked });
         }
-        
-        private void Game_GunMasterWeaponsPreset(FrostbiteClient sender, int preset) {
+
+        private void Game_Team1FactionOverride(FrostbiteClient sender, int faction) {
+            InvokeOnAllEnabled("OnTeam1FactionOverride", new object[] { faction });
+        }
+
+        private void Game_Team2FactionOverride(FrostbiteClient sender, int faction)
+        {
+            InvokeOnAllEnabled("OnTeam2FactionOverride", new object[] { faction });
+        }
+
+        private void Game_Team3FactionOverride(FrostbiteClient sender, int faction)
+        {
+            InvokeOnAllEnabled("OnTeam3FactionOverride", new object[] { faction });
+        }
+
+        private void Game_Team4FactionOverride(FrostbiteClient sender, int faction)
+        {
+            InvokeOnAllEnabled("OnTeam4FactionOverride", new object[] { faction });
+        }
+
+        private void Game_GunMasterWeaponsPreset(FrostbiteClient sender, int preset)
+        {
             InvokeOnAllEnabled("OnGunMasterWeaponsPreset", new object[] {preset});
         }
 

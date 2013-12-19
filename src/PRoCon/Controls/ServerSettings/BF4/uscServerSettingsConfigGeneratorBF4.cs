@@ -93,6 +93,10 @@ namespace PRoCon.Controls.ServerSettings.BF4 {
             this.Client.Game.RoundLockdownCountdown += new FrostbiteClient.LimitHandler(Game_RoundLockdownCountdown);
             this.Client.Game.RoundWarmupTimeout += new FrostbiteClient.LimitHandler(Game_RoundWarmupTimeout);
 
+            this.Client.Game.Team1FactionOverride += new FrostbiteClient.LimitHandler(Game_Team1FactionOverride);
+            this.Client.Game.Team2FactionOverride += new FrostbiteClient.LimitHandler(Game_Team2FactionOverride);
+            this.Client.Game.Team3FactionOverride += new FrostbiteClient.LimitHandler(Game_Team3FactionOverride);
+            this.Client.Game.Team4FactionOverride += new FrostbiteClient.LimitHandler(Game_Team4FactionOverride);
             // not used in BF4 //this.Client.Game.PremiumStatus += new FrostbiteClient.IsEnabledHandler(Game_PremiumStatus);
             
         }
@@ -287,5 +291,20 @@ namespace PRoCon.Controls.ServerSettings.BF4 {
             }
         }
 
+        void Game_Team1FactionOverride(FrostbiteClient sender, int faction) {
+            this.AppendSetting("vars.team1FactionOverride", faction.ToString());
+        }
+
+        void Game_Team2FactionOverride(FrostbiteClient sender, int faction) {
+            this.AppendSetting("vars.team2FactionOverride", faction.ToString());
+        }
+
+        void Game_Team3FactionOverride(FrostbiteClient sender, int faction) {
+            this.AppendSetting("vars.team3FactionOverride", faction.ToString());
+        }
+
+        void Game_Team4FactionOverride(FrostbiteClient sender, int faction) {
+            this.AppendSetting("vars.team4FactionOverride", faction.ToString());
+        }
     }
 }

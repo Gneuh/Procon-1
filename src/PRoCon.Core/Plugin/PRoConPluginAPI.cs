@@ -257,6 +257,11 @@ namespace PRoCon.Core.Plugin {
         public virtual void OnHud(bool isEnabled) { }
         public virtual void OnNameTag(bool isEnabled) { }
 
+        public virtual void OnTeam1FactionOverride(int faction) { }
+        public virtual void OnTeam2FactionOverride(int faction) { }
+        public virtual void OnTeam3FactionOverride(int faction) { }
+        public virtual void OnTeam4FactionOverride(int faction) { }
+
 
         #region MoHW
         public virtual void OnAllUnlocksUnlocked(bool isEnabled) { }

@@ -666,6 +666,7 @@
             this.lnkSettingsTeam1FactionOverride.TabIndex = 291;
             this.lnkSettingsTeam1FactionOverride.TabStop = true;
             this.lnkSettingsTeam1FactionOverride.Text = "Apply";
+            this.lnkSettingsTeam1FactionOverride.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkSettingsTeam1FactionOverride_LinkClicked);
             // 
             // lblSettingsTeam1FactionOverride
             // 
@@ -706,6 +707,7 @@
             this.lnkSettingsTeam2FactionOverride.TabIndex = 314;
             this.lnkSettingsTeam2FactionOverride.TabStop = true;
             this.lnkSettingsTeam2FactionOverride.Text = "Apply";
+            this.lnkSettingsTeam2FactionOverride.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkSettingsTeam2FactionOverride_LinkClicked);
             // 
             // lblSettingsTeam2FactionOverride
             // 
@@ -746,6 +748,7 @@
             this.lnkSettingsTeam3FactionOverride.TabIndex = 310;
             this.lnkSettingsTeam3FactionOverride.TabStop = true;
             this.lnkSettingsTeam3FactionOverride.Text = "Apply";
+            this.lnkSettingsTeam3FactionOverride.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkSettingsTeam3FactionOverride_LinkClicked);
             // 
             // lblSettingsTeam3FactionOverride
             // 
@@ -786,6 +789,7 @@
             this.lnkSettingsTeam4FactionOverride.TabIndex = 318;
             this.lnkSettingsTeam4FactionOverride.TabStop = true;
             this.lnkSettingsTeam4FactionOverride.Text = "Apply";
+            this.lnkSettingsTeam4FactionOverride.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkSettingsTeam4FactionOverride_LinkClicked);
             // 
             // lblSettingsTeam4FactionOverride
             // 
