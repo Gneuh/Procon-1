@@ -50,10 +50,11 @@ namespace PRoCon.Controls.ServerSettings.BF4 {
             this.AsyncSettingControls.Add("vars.playerrespawntime", new AsyncStyleSetting(this.picSettingsPlayerRespawnTime, this.numSettingsPlayerRespawnTime, new Control[] { this.numSettingsPlayerRespawnTime, this.lnkSettingsPlayerRespawnTime }, true));
 
             this.AsyncSettingControls.Add("vars.gameModeCounter", new AsyncStyleSetting(this.picSettingsGameModeCounter, this.numSettingsGameModeCounter, new Control[] { this.numSettingsGameModeCounter, this.lnkSettingsGameModeCounter }, false));
-            this.AsyncSettingControls.Add("vars.roundTimeLimit", new AsyncStyleSetting(this.picSettingsRoundTimeLimit, this.numSettingsRoundTimeLimit, new Control[] { this.numSettingsRoundTimeLimit, this.lnkSettingsRoundTimeLimit }, true));
+            this.AsyncSettingControls.Add("vars.roundTimeLimit", new AsyncStyleSetting(this.picSettingsRoundTimeLimit, this.numSettingsRoundTimeLimit, new Control[] { this.numSettingsRoundTimeLimit, this.lnkSettingsRoundTimeLimit }, false));
             this.AsyncSettingControls.Add("vars.roundLockdownCountdown", new AsyncStyleSetting(this.picSettingsLockdownCountdown, this.numSettingsLockdownCountdown, new Control[] { this.numSettingsLockdownCountdown, this.lnkSettingsLockdownCountdown }, true));
             this.AsyncSettingControls.Add("vars.roundWarmupTimeout", new AsyncStyleSetting(this.picSettingsWarmupTimeout, this.numSettingsWarmupTimeout, new Control[] { this.numSettingsWarmupTimeout, this.lnkSettingsWarmupTimeout }, true));
-
+            this.AsyncSettingControls.Add("vars.ticketBleedRate", new AsyncStyleSetting(this.picSettingsTicketBleedRate, this.numSettingsTicketBleedRate, new Control[] { this.numSettingsTicketBleedRate, this.lnkSettingsTicketBleedRate }, false));
+            
             this.AsyncSettingControls.Add("vars.hitIndicatorsEnabled", new AsyncStyleSetting(this.picSettingsIsHitIndicators, this.chkSettingsIsHitIndicators, new Control[] { this.chkSettingsIsHitIndicators }, false));
             this.AsyncSettingControls.Add("vars.forceReloadWholeMags", new AsyncStyleSetting(this.picSettingsIsForceReloadWholeMags, this.chkSettingsIsForceReloadWholeMags, new Control[] { this.chkSettingsIsForceReloadWholeMags }, false));
         }
@@ -98,6 +99,8 @@ namespace PRoCon.Controls.ServerSettings.BF4 {
             this.lnkSettingsLockdownCountdown.Text = this.Language.GetLocalized("uscServerSettingsPanel.lnkSettingsLockdownCountdown");
             this.lblSettingsWarmupTimeout.Text = this.Language.GetLocalized("uscServerSettingsPanel.lblSettingsWarmupTimeout");
             this.lnkSettingsWarmupTimeout.Text = this.Language.GetLocalized("uscServerSettingsPanel.lnkSettingsWarmupTimeout");
+            this.lblSettingsTicketBleedRate.Text = this.Language.GetDefaultLocalized("Ticket Bleed Rate", "uscServerSettingsPanel.lblSettingsTicketBleedRate");
+            this.lnkSettingsTicketBleedRate.Text = this.Language.GetDefaultLocalized("Apply", "uscServerSettingsPanel.lnkSettingsTicketBleedRate");
 
             this.lblSettingsUnlockMode.Text = this.Language.GetLocalized("uscServerSettingsPanel.lblSettingsUnlockMode");
             this.lnkSettingsUnlockMode.Text = this.Language.GetLocalized("uscServerSettingsPanel.lnkSettingsUnlockMode");
@@ -210,6 +213,7 @@ namespace PRoCon.Controls.ServerSettings.BF4 {
             this.Client.Game.RoundTimeLimit +=new FrostbiteClient.LimitHandler(Game_RoundTimeLimit);
             this.Client.Game.RoundLockdownCountdown += new FrostbiteClient.LimitHandler(Game_RoundLockdownCountdown);
             this.Client.Game.RoundWarmupTimeout += new FrostbiteClient.LimitHandler(Game_RoundWarmupTimeout);
+            this.Client.Game.TicketBleedRate += new FrostbiteClient.LimitHandler(Game_TicketBleedRate);
 
             this.Client.Game.IsHitIndicator += new FrostbiteClient.IsEnabledHandler(Game_IsHitIndicator);
 
@@ -484,7 +488,10 @@ namespace PRoCon.Controls.ServerSettings.BF4 {
             this.lnkSettingsPlayerRespawnTime.Enabled = !locked;
             this.numSettingsGameModeCounter.Enabled = !locked;
             this.lnkSettingsGameModeCounter.Enabled = !locked;
-
+            this.numSettingsRoundTimeLimit.Enabled = !locked;
+            this.lnkSettingsRoundTimeLimit.Enabled = !locked;
+            this.numSettingsTicketBleedRate.Enabled = !locked;
+            this.lnkSettingsTicketBleedRate.Enabled = !locked;
         }
 
         private void lnkSettingsBF4preset_LinkClicked(object sender, EventArgs e) {
@@ -741,6 +748,27 @@ namespace PRoCon.Controls.ServerSettings.BF4 {
                 this.WaitForSettingResponse("vars.roundTimeLimit", (decimal)this.m_iPreviousSuccessRoundTimeLimitPacket);
 
                 this.Client.Game.SendSetVarsRoundTimeLimitPacket((int)this.numSettingsRoundTimeLimit.Value);
+            }
+        }
+
+        #endregion
+
+        #region TicketBleedRate
+
+        private int m_iPreviousSuccessTicketBleedRatePacket;
+
+        void Game_TicketBleedRate(FrostbiteClient sender, int limit) {
+            this.m_iPreviousSuccessTicketBleedRatePacket = limit;
+
+            this.OnSettingResponse("vars.ticketBleedRate", (decimal)limit, true);
+        }
+
+        private void lnkSettingsTicketBleedRate_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
+            if (this.Client != null && this.Client.Game != null) {
+                this.numSettingsTicketBleedRate.Focus();
+                this.WaitForSettingResponse("vars.ticketBleedRate", (decimal)this.m_iPreviousSuccessTicketBleedRatePacket);
+
+                this.Client.Game.SendSetVarsTicketBleedRatePacket((int)this.numSettingsTicketBleedRate.Value);
             }
         }
 

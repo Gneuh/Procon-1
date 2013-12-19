@@ -1490,6 +1490,18 @@ namespace PRoCon.Core.Remote {
             }
         }
 
+        public virtual void SendSetVarsTicketBleedRatePacket(int limit) {
+            if (IsLoggedIn == true) {
+                BuildSendPacket("vars.ticketBleedRate", limit.ToString(CultureInfo.InvariantCulture));
+            }
+        }
+
+        public virtual void SendGetVarsTicketBleedRatePacket() {
+            if (IsLoggedIn == true) {
+                BuildSendPacket("vars.ticketBleedRate");
+            }
+        }
+
         public virtual void SendSetReservedSlotsListAggressiveJoinPacket(bool enabled) {
             if (IsLoggedIn == true) {
                 BuildSendPacket("reservedSlotsList.aggressiveJoin", Packet.Bltos(enabled));
@@ -3810,6 +3822,7 @@ namespace PRoCon.Core.Remote {
         public virtual event IsEnabledHandler AlwaysAllowSpectators;
         public virtual event VarsStringHandler ServerType;
         public virtual event LimitHandler RoundTimeLimit;
+        public virtual event LimitHandler TicketBleedRate;
         public virtual event BF4presetHandler BF4preset;
 
         #endregion

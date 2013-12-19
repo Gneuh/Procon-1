@@ -144,6 +144,7 @@ namespace PRoCon.Core.Remote {
             ResponseDelegates.Add("vars.playerRespawnTime", DispatchVarsPlayerRespawnTimeResponse);
             ResponseDelegates.Add("vars.gameModeCounter", DispatchVarsGameModeCounterResponse);
             ResponseDelegates.Add("vars.roundTimeLimit", DispatchVarsRoundTimeLimitResponse);
+            ResponseDelegates.Add("vars.ticketBleedRate", DispatchVarsTicketBleedRateResponse);
             ResponseDelegates.Add("vars.idleBanRounds", DispatchVarsIdleBanRoundsResponse);
 
             ResponseDelegates.Add("vars.serverMessage", DispatchVarsServerMessageResponse);
@@ -257,6 +258,7 @@ namespace PRoCon.Core.Remote {
             SendGetVarsAlwaysAllowSpectators();
             SendGetVarsForceReloadWholeMags();
             SendGetVarsRoundTimeLimitPacket();
+            SendGetVarsTicketBleedRatePacket();
 
             SendGetVarsPresetPacket();
         }
@@ -348,6 +350,7 @@ namespace PRoCon.Core.Remote {
 
         public override event LimitHandler GameModeCounter;
         public override event LimitHandler RoundTimeLimit;
+        public override event LimitHandler TicketBleedRate;
         public override event LimitHandler IdleBanRounds;
 
         public override event ServerMessageHandler ServerMessage;
@@ -1216,7 +1219,22 @@ namespace PRoCon.Core.Remote {
             }
         }
 
-        protected virtual void DispatchVarsIdleBanRoundsResponse(FrostbiteConnection sender, Packet cpRecievedPacket, Packet cpRequestPacket) {
+        protected virtual void DispatchVarsTicketBleedRateResponse(FrostbiteConnection sender, Packet cpRecievedPacket, Packet cpRequestPacket)
+        {
+            if (cpRequestPacket.Words.Count >= 1) {
+                if (TicketBleedRate != null) {
+                    if (cpRecievedPacket.Words.Count == 2) {
+                        FrostbiteConnection.RaiseEvent(TicketBleedRate.GetInvocationList(), this, Convert.ToInt32(cpRecievedPacket.Words[1]));
+                    }
+                    else if (cpRequestPacket.Words.Count >= 2) {
+                        FrostbiteConnection.RaiseEvent(TicketBleedRate.GetInvocationList(), this, Convert.ToInt32(cpRequestPacket.Words[1]));
+                    }
+                }
+            }
+        }
+
+        protected virtual void DispatchVarsIdleBanRoundsResponse(FrostbiteConnection sender, Packet cpRecievedPacket, Packet cpRequestPacket)
+        {
             if (cpRequestPacket.Words.Count >= 1) {
                 if (IdleBanRounds != null) {
                     if (cpRecievedPacket.Words.Count == 2) {

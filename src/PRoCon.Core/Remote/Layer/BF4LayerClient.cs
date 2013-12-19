@@ -104,6 +104,7 @@ namespace PRoCon.Core.Remote.Layer {
             this.RequestDelegates.Add("vars.alwaysAllowSpectators", this.DispatchVarsRequest);
 
             this.RequestDelegates.Add("vars.roundTimeLimit", this.DispatchVarsRequest);
+            this.RequestDelegates.Add("vars.ticketBleedRate", this.DispatchVarsRequest);
             this.RequestDelegates.Add("vars.mpExperience", this.DispatchVarsRequest);
             this.RequestDelegates.Add("vars.team1FactionOverride", this.DispatchVarsRequest);
             this.RequestDelegates.Add("vars.team2FactionOverride", this.DispatchVarsRequest);
