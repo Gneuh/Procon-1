@@ -303,10 +303,10 @@ namespace PRoCon.Core.AutoUpdates {
             }
             else {
                 if (CustomDownloadError != null) {
-                    FrostbiteConnection.RaiseEvent(CustomDownloadError.GetInvocationList(), "Downloaded file failed checksum, please try again or download direct from http://phogue.net");
+                    FrostbiteConnection.RaiseEvent(CustomDownloadError.GetInvocationList(), "Downloaded file failed checksum, please try again or download direct from https://myrcon.com");
                 }
 
-                //this.Invoke(new DownloadErrorDelegate(DownloadError_Callback), "Downloaded file failed checksum, please try again or download direct from http://phogue.net");
+                //this.Invoke(new DownloadErrorDelegate(DownloadError_Callback), "Downloaded file failed checksum, please try again or download direct from https://myrcon.com");
             }
         }
 
