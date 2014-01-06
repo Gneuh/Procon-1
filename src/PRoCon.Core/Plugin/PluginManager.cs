@@ -1364,6 +1364,11 @@ namespace PRoCon.Core.Plugin {
             ProconClient.Game.IsForceReloadWholeMags += new FrostbiteClient.IsEnabledHandler(Game_IsForceReloadWholeMags);
             ProconClient.Game.ServerType += new FrostbiteClient.VarsStringHandler(Game_ServerType);
 
+            ProconClient.Game.Team1FactionOverride += new FrostbiteClient.LimitHandler(Game_Team1FactionOverride);
+            ProconClient.Game.Team2FactionOverride += new FrostbiteClient.LimitHandler(Game_Team2FactionOverride);
+            ProconClient.Game.Team3FactionOverride += new FrostbiteClient.LimitHandler(Game_Team3FactionOverride);
+            ProconClient.Game.Team4FactionOverride += new FrostbiteClient.LimitHandler(Game_Team4FactionOverride);
+
             #endregion
         }
 
