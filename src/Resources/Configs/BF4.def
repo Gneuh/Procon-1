@@ -215,7 +215,7 @@ procon.protected.weapons.add Recon "U_Scout" Primary SniperRifle
 procon.protected.weapons.add None "U_SerbuShorty" Auxiliary Shotgun
 procon.protected.weapons.add None "U_SG553LB" Primary Carbine
 procon.protected.weapons.add None "U_SKS" Primary DMR
-procon.protected.weapons.add None "U_SLAM" Auxiliary Explosive
+procon.protected.weapons.add Demolition "U_SLAM" Auxiliary Explosive
 procon.protected.weapons.add Demolition "U_SMAW" Secondary ProjectileExplosive
 procon.protected.weapons.add None "U_SPAS12" Primary Shotgun
 procon.protected.weapons.add Demolition "U_SRAW" Secondary ProjectileExplosive
