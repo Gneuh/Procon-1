@@ -100,7 +100,7 @@ namespace PRoCon {
 
             this.m_regIP = new Regex(@"^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$", RegexOptions.Compiled);
             this.m_regPbGUID = new Regex("^[A-Fa-f0-9]{32}$", RegexOptions.Compiled);
-            this.m_regBc2GUID = new Regex("^EA_[A-Fa-f0-9]{32}$", RegexOptions.Compiled);
+            this.m_regBc2GUID = new Regex("^(?:E|e)(?:A|a)_[A-Fa-f0-9]{32}$", RegexOptions.Compiled);
             
             this.m_lvwReservedSlotsColumnSorter = new ListViewColumnSorter();
             this.lsvReservedList.ListViewItemSorter = this.m_lvwReservedSlotsColumnSorter;
@@ -1407,10 +1407,10 @@ namespace PRoCon {
             }
             else if (this.rdoBanlistBc2GUID.Checked == true) {
                 if (this.rdoBanlistPermanent.Checked == true) {
-                    this.SendCommand("banList.add", "guid", this.txtBanlistManualBanGUID.Text, "perm", m_strReasonAdmin);
+                    this.SendCommand("banList.add", "guid", this.txtBanlistManualBanGUID.Text.ToUpper(), "perm", m_strReasonAdmin);
                 }
                 else {
-                    this.SendCommand("banList.add", "guid", this.txtBanlistManualBanGUID.Text, "seconds", (uscPlayerPunishPanel.GetBanLength(this.txtBanlistTime, this.cboBanlistTimeMultiplier) * 60).ToString(), m_strReasonAdmin);
+                    this.SendCommand("banList.add", "guid", this.txtBanlistManualBanGUID.Text.ToUpper(), "seconds", (uscPlayerPunishPanel.GetBanLength(this.txtBanlistTime, this.cboBanlistTimeMultiplier) * 60).ToString(), m_strReasonAdmin);
                 }
             }
             else if (this.rdoBanlistPbGUID.Checked == true) {
@@ -1482,8 +1482,11 @@ namespace PRoCon {
 
             string strBanDescription = String.Empty;
 
-            if (this.rdoBanlistPbGUID.Checked == true || this.rdoBanlistBc2GUID.Checked == true) {
+            if (this.rdoBanlistPbGUID.Checked == true) {
                 strBanDescription = this.txtBanlistManualBanGUID.Text;
+            }
+            else if (this.rdoBanlistBc2GUID.Checked == true) {
+                strBanDescription = this.txtBanlistManualBanGUID.Text.ToUpper();
             }
             else if (this.rdoBanlistIP.Checked == true) {
                 strBanDescription = this.txtBanlistManualBanIP.Text;
