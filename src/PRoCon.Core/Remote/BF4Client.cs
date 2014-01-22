@@ -162,10 +162,7 @@ namespace PRoCon.Core.Remote {
 
             ResponseDelegates.Add("vars.teamKillKickForBan", DispatchVarsTeamKillKickForBanResponse);
 
-            ResponseDelegates.Add("vars.team1FactionOverride", DispatchVarsTeam1FactionOverrideResponse);
-            ResponseDelegates.Add("vars.team2FactionOverride", DispatchVarsTeam2FactionOverrideResponse);
-            ResponseDelegates.Add("vars.team3FactionOverride", DispatchVarsTeam3FactionOverrideResponse);
-            ResponseDelegates.Add("vars.team4FactionOverride", DispatchVarsTeam4FactionOverrideResponse);
+            ResponseDelegates.Add("vars.teamFactionOverride", DispatchVarsTeamFactionOverrideResponse);
 
             #endregion
 
@@ -264,10 +261,7 @@ namespace PRoCon.Core.Remote {
             SendGetVarsRoundTimeLimitPacket();
             SendGetVarsTicketBleedRatePacket();
 
-            SendGetVarsTeam1FactionOverridePacket();
-            SendGetVarsTeam2FactionOverridePacket();
-            SendGetVarsTeam3FactionOverridePacket();
-            SendGetVarsTeam4FactionOverridePacket();
+            SendGetVarsTeamFactionOverridePacket();
 
             SendGetVarsPresetPacket();
         }
@@ -378,10 +372,7 @@ namespace PRoCon.Core.Remote {
 
         public override event VarsStringHandler ServerType;
 
-        public override event LimitHandler Team1FactionOverride;
-        public override event LimitHandler Team2FactionOverride;
-        public override event LimitHandler Team3FactionOverride;
-        public override event LimitHandler Team4FactionOverride;
+        public override event TeamFactionOverrideHandler TeamFactionOverride;
 
         #region player/squad cmd_handler
 
@@ -1529,58 +1520,22 @@ namespace PRoCon.Core.Remote {
 
         #region TeamFactionOverride
 
-        protected virtual void DispatchVarsTeam1FactionOverrideResponse(FrostbiteConnection sender, Packet cpRecievedPacket, Packet cpRequestPacket) {
+        protected virtual void DispatchVarsTeamFactionOverrideResponse(FrostbiteConnection sender, Packet cpRecievedPacket, Packet cpRequestPacket)
+        {
             if (cpRequestPacket.Words.Count >= 1) {
-                if (Team1FactionOverride != null) {
-                    if (cpRecievedPacket.Words.Count == 2) {
-                        FrostbiteConnection.RaiseEvent(Team1FactionOverride.GetInvocationList(), this, Convert.ToInt32(cpRecievedPacket.Words[1]));
+                if (TeamFactionOverride != null) {
+                    if (cpRecievedPacket.Words.Count == 5) {
+                        FrostbiteConnection.RaiseEvent(TeamFactionOverride.GetInvocationList(), this, 1, Convert.ToInt32(cpRecievedPacket.Words[1]));
+                        FrostbiteConnection.RaiseEvent(TeamFactionOverride.GetInvocationList(), this, 2, Convert.ToInt32(cpRecievedPacket.Words[2]));
+                        FrostbiteConnection.RaiseEvent(TeamFactionOverride.GetInvocationList(), this, 3, Convert.ToInt32(cpRecievedPacket.Words[3]));
+                        FrostbiteConnection.RaiseEvent(TeamFactionOverride.GetInvocationList(), this, 4, Convert.ToInt32(cpRecievedPacket.Words[4]));
                     }
-                    else if (cpRequestPacket.Words.Count >= 2) {
-                        FrostbiteConnection.RaiseEvent(Team1FactionOverride.GetInvocationList(), this, Convert.ToInt32(cpRequestPacket.Words[1]));
+                    else if (cpRequestPacket.Words.Count == 3) {
+                        FrostbiteConnection.RaiseEvent(TeamFactionOverride.GetInvocationList(), this, Convert.ToInt32(cpRequestPacket.Words[1]), Convert.ToInt32(cpRequestPacket.Words[2]));
                     }
                 }
             }
         }
-
-        protected virtual void DispatchVarsTeam2FactionOverrideResponse(FrostbiteConnection sender, Packet cpRecievedPacket, Packet cpRequestPacket) {
-            if (cpRequestPacket.Words.Count >= 1) {
-                if (Team2FactionOverride != null) {
-                    if (cpRecievedPacket.Words.Count == 2) {
-                        FrostbiteConnection.RaiseEvent(Team2FactionOverride.GetInvocationList(), this, Convert.ToInt32(cpRecievedPacket.Words[1]));
-                    }
-                    else if (cpRequestPacket.Words.Count >= 2) {
-                        FrostbiteConnection.RaiseEvent(Team2FactionOverride.GetInvocationList(), this, Convert.ToInt32(cpRequestPacket.Words[1]));
-                    }
-                }
-            }
-        }
-
-        protected virtual void DispatchVarsTeam3FactionOverrideResponse(FrostbiteConnection sender, Packet cpRecievedPacket, Packet cpRequestPacket) {
-            if (cpRequestPacket.Words.Count >= 1) {
-                if (Team3FactionOverride != null) {
-                    if (cpRecievedPacket.Words.Count == 2) {
-                        FrostbiteConnection.RaiseEvent(Team3FactionOverride.GetInvocationList(), this, Convert.ToInt32(cpRecievedPacket.Words[1]));
-                    }
-                    else if (cpRequestPacket.Words.Count >= 2) {
-                        FrostbiteConnection.RaiseEvent(Team3FactionOverride.GetInvocationList(), this, Convert.ToInt32(cpRequestPacket.Words[1]));
-                    }
-                }
-            }
-        }
-
-        protected virtual void DispatchVarsTeam4FactionOverrideResponse(FrostbiteConnection sender, Packet cpRecievedPacket, Packet cpRequestPacket) {
-            if (cpRequestPacket.Words.Count >= 1) {
-                if (Team4FactionOverride != null) {
-                    if (cpRecievedPacket.Words.Count == 2) {
-                        FrostbiteConnection.RaiseEvent(Team4FactionOverride.GetInvocationList(), this, Convert.ToInt32(cpRecievedPacket.Words[1]));
-                    }
-                    else if (cpRequestPacket.Words.Count >= 2) {
-                        FrostbiteConnection.RaiseEvent(Team4FactionOverride.GetInvocationList(), this, Convert.ToInt32(cpRequestPacket.Words[1]));
-                    }
-                }
-            }
-        }
-
 
         #endregion
 

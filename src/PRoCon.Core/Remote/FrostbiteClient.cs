@@ -1645,54 +1645,17 @@ namespace PRoCon.Core.Remote {
             }
         }
 
-        public virtual void SendSetVarsTeam1FactionOverridePacket(int faction) {
+        public virtual void SendSetVarsTeamFactionOverridePacket(int teamId, int faction) {
             if (IsLoggedIn == true) {
-                BuildSendPacket("vars.team1FactionOverride", faction.ToString(CultureInfo.InvariantCulture));
+                BuildSendPacket("vars.teamFactionOverride", teamId.ToString(CultureInfo.InvariantCulture), faction.ToString(CultureInfo.InvariantCulture));
             }
         }
 
-        public virtual void SendSetVarsTeam2FactionOverridePacket(int faction) {
+        public virtual void SendGetVarsTeamFactionOverridePacket() {
             if (IsLoggedIn == true) {
-                BuildSendPacket("vars.team2FactionOverride", faction.ToString(CultureInfo.InvariantCulture));
+                BuildSendPacket("vars.teamFactionOverride");
             }
         }
-
-        public virtual void SendSetVarsTeam3FactionOverridePacket(int faction) {
-            if (IsLoggedIn == true) {
-                BuildSendPacket("vars.team3FactionOverride", faction.ToString(CultureInfo.InvariantCulture));
-            }
-        }
-
-        public virtual void SendSetVarsTeam4FactionOverridePacket(int faction) {
-            if (IsLoggedIn == true) {
-                BuildSendPacket("vars.team4FactionOverride", faction.ToString(CultureInfo.InvariantCulture));
-            }
-        }
-
-        public virtual void SendGetVarsTeam1FactionOverridePacket() {
-            if (IsLoggedIn == true) {
-                BuildSendPacket("vars.team1FactionOverride");
-            }
-        }
-
-        public virtual void SendGetVarsTeam2FactionOverridePacket() {
-            if (IsLoggedIn == true) {
-                BuildSendPacket("vars.team2FactionOverride");
-            }
-        }
-
-        public virtual void SendGetVarsTeam3FactionOverridePacket() {
-            if (IsLoggedIn == true) {
-                BuildSendPacket("vars.team3FactionOverride");
-            }
-        }
-
-        public virtual void SendGetVarsTeam4FactionOverridePacket() {
-            if (IsLoggedIn == true) {
-                BuildSendPacket("vars.team4FactionOverride");
-            }
-        }
-
 
         #endregion
 
@@ -2086,6 +2049,8 @@ namespace PRoCon.Core.Remote {
         public delegate void SupportedMapsHandler(FrostbiteClient sender, string strPlaylist, List<string> lstSupportedMaps);
 
         public delegate void TeamChatHandler(FrostbiteClient sender, string playerName, string message, int teamId);
+
+        public delegate void TeamFactionOverrideHandler(FrostbiteClient sender, int teamId, int faction);
 
         public delegate void TextChatModerationListAddPlayerHandler(FrostbiteClient sender, TextChatModerationEntry playerEntry);
 
@@ -3874,10 +3839,7 @@ namespace PRoCon.Core.Remote {
         public virtual event LimitHandler TicketBleedRate;
         public virtual event BF4presetHandler BF4preset;
 
-        public virtual event LimitHandler Team1FactionOverride;
-        public virtual event LimitHandler Team2FactionOverride;
-        public virtual event LimitHandler Team3FactionOverride;
-        public virtual event LimitHandler Team4FactionOverride;
+        public virtual event TeamFactionOverrideHandler TeamFactionOverride;
 
         #endregion
 

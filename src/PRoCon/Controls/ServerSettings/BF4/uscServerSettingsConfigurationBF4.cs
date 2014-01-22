@@ -65,10 +65,10 @@ namespace PRoCon.Controls.ServerSettings.BF4 {
             
             this.AsyncSettingControls.Add("reservedslotslist.aggressivejoin", new AsyncStyleSetting(this.picSettingsAggressiveJoin, this.chkSettingsAggressiveJoin, new Control[] { this.chkSettingsAggressiveJoin }, true));
 
-            this.AsyncSettingControls.Add("vars.team1FactionOverride", new AsyncStyleSetting(this.picSettingsTeam1FactionOverride, this.cboSettingsTeam1FactionOverride, new Control[] { this.cboSettingsTeam1FactionOverride }, true));
-            this.AsyncSettingControls.Add("vars.team2FactionOverride", new AsyncStyleSetting(this.picSettingsTeam2FactionOverride, this.cboSettingsTeam2FactionOverride, new Control[] { this.cboSettingsTeam2FactionOverride }, true));
-            this.AsyncSettingControls.Add("vars.team3FactionOverride", new AsyncStyleSetting(this.picSettingsTeam3FactionOverride, this.cboSettingsTeam3FactionOverride, new Control[] { this.cboSettingsTeam3FactionOverride }, true));
-            this.AsyncSettingControls.Add("vars.team4FactionOverride", new AsyncStyleSetting(this.picSettingsTeam4FactionOverride, this.cboSettingsTeam4FactionOverride, new Control[] { this.cboSettingsTeam4FactionOverride }, true));
+            this.AsyncSettingControls.Add("vars.teamFactionOverride 1", new AsyncStyleSetting(this.picSettingsTeam1FactionOverride, this.cboSettingsTeam1FactionOverride, new Control[] { this.cboSettingsTeam1FactionOverride }, true));
+            this.AsyncSettingControls.Add("vars.teamFactionOverride 2", new AsyncStyleSetting(this.picSettingsTeam2FactionOverride, this.cboSettingsTeam2FactionOverride, new Control[] { this.cboSettingsTeam2FactionOverride }, true));
+            this.AsyncSettingControls.Add("vars.teamFactionOverride 3", new AsyncStyleSetting(this.picSettingsTeam3FactionOverride, this.cboSettingsTeam3FactionOverride, new Control[] { this.cboSettingsTeam3FactionOverride }, true));
+            this.AsyncSettingControls.Add("vars.teamFactionOverride 4", new AsyncStyleSetting(this.picSettingsTeam4FactionOverride, this.cboSettingsTeam4FactionOverride, new Control[] { this.cboSettingsTeam4FactionOverride }, true));
 
             this.m_iPreviousSuccessPlayerLimit = 50;
             this.m_iPreviousSuccessIdleTimeoutLimit = 0;
@@ -182,10 +182,7 @@ namespace PRoCon.Controls.ServerSettings.BF4 {
 
             this.Client.Game.BF4preset += new FrostbiteClient.BF4presetHandler(Tab_BF4preset);
 
-            this.Client.Game.Team1FactionOverride += new FrostbiteClient.LimitHandler(Game_Team1FactionOverride);
-            this.Client.Game.Team2FactionOverride += new FrostbiteClient.LimitHandler(Game_Team2FactionOverride);
-            this.Client.Game.Team3FactionOverride += new FrostbiteClient.LimitHandler(Game_Team3FactionOverride);
-            this.Client.Game.Team4FactionOverride += new FrostbiteClient.LimitHandler(Game_Team4FactionOverride);
+            this.Client.Game.TeamFactionOverride += new FrostbiteClient.TeamFactionOverrideHandler(Game_TeamFactionOverride);
         }
 
         private void m_prcClient_ServerInfo(FrostbiteClient sender, CServerInfo csiServerInfo) {
@@ -505,63 +502,61 @@ namespace PRoCon.Controls.ServerSettings.BF4 {
         private int m_strPreviousSuccessTeam3FactionOverride;
         private int m_strPreviousSuccessTeam4FactionOverride;
 
-        private void Game_Team1FactionOverride(FrostbiteClient sender, int faction) {
-            this.OnSettingResponse("vars.team1FactionOverride", faction, true);
-            this.m_strPreviousSuccessTeam1FactionOverride = faction;
-            this.cboSettingsTeam1FactionOverride.SelectedIndex = faction;
+        private void Game_TeamFactionOverride(FrostbiteClient sender, int teamId, int faction) {
+            this.OnSettingResponse("vars.teamFactionOverride " + teamId, faction, true);
+            switch (teamId) {
+                case 1:
+                    this.m_strPreviousSuccessTeam1FactionOverride = faction;
+                    this.cboSettingsTeam1FactionOverride.SelectedIndex = faction;
+                    break;
+                case 2:
+                    this.m_strPreviousSuccessTeam2FactionOverride = faction;
+                    this.cboSettingsTeam2FactionOverride.SelectedIndex = faction;
+                    break;
+                case 3:
+                    this.m_strPreviousSuccessTeam3FactionOverride = faction;
+                    this.cboSettingsTeam3FactionOverride.SelectedIndex = faction;
+                    break;
+                case 4:
+                    this.m_strPreviousSuccessTeam4FactionOverride = faction;
+                    this.cboSettingsTeam4FactionOverride.SelectedIndex = faction;
+                    break;
+            }
         }
 
         private void lnkSettingsTeam1FactionOverride_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
             if (this.Client != null && this.Client.Game != null) {
                 this.cboSettingsTeam1FactionOverride.Focus();
-                this.WaitForSettingResponse("vars.team1FactionOverride", this.m_strPreviousSuccessTeam1FactionOverride);
+                this.WaitForSettingResponse("vars.teamFactionOverride 1", this.m_strPreviousSuccessTeam1FactionOverride);
 
-                this.Client.Game.SendSetVarsTeam1FactionOverridePacket(this.cboSettingsTeam1FactionOverride.SelectedIndex);
+                this.Client.Game.SendSetVarsTeamFactionOverridePacket(1, this.cboSettingsTeam1FactionOverride.SelectedIndex);
             }
-        }
-
-        private void Game_Team2FactionOverride(FrostbiteClient sender, int faction) {
-            this.OnSettingResponse("vars.team2FactionOverride", faction, true);
-            this.m_strPreviousSuccessTeam2FactionOverride = faction;
-            this.cboSettingsTeam2FactionOverride.SelectedIndex = faction;
         }
 
         private void lnkSettingsTeam2FactionOverride_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
             if (this.Client != null && this.Client.Game != null) {
                 this.cboSettingsTeam2FactionOverride.Focus();
-                this.WaitForSettingResponse("vars.team2FactionOverride", this.m_strPreviousSuccessTeam2FactionOverride);
+                this.WaitForSettingResponse("vars.teamFactionOverride 2", this.m_strPreviousSuccessTeam2FactionOverride);
 
-                this.Client.Game.SendSetVarsTeam2FactionOverridePacket(this.cboSettingsTeam2FactionOverride.SelectedIndex);
+                this.Client.Game.SendSetVarsTeamFactionOverridePacket(2, this.cboSettingsTeam2FactionOverride.SelectedIndex);
             }
-        }
-
-        private void Game_Team3FactionOverride(FrostbiteClient sender, int faction) {
-            this.OnSettingResponse("vars.team3FactionOverride", faction, true);
-            this.m_strPreviousSuccessTeam3FactionOverride = faction;
-            this.cboSettingsTeam3FactionOverride.SelectedIndex = faction;
         }
 
         private void lnkSettingsTeam3FactionOverride_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
             if (this.Client != null && this.Client.Game != null) {
                 this.cboSettingsTeam3FactionOverride.Focus();
-                this.WaitForSettingResponse("vars.team3FactionOverride", this.m_strPreviousSuccessTeam3FactionOverride);
+                this.WaitForSettingResponse("vars.teamFactionOverride 3", this.m_strPreviousSuccessTeam3FactionOverride);
 
-                this.Client.Game.SendSetVarsTeam3FactionOverridePacket(this.cboSettingsTeam3FactionOverride.SelectedIndex);
+                this.Client.Game.SendSetVarsTeamFactionOverridePacket(3, this.cboSettingsTeam3FactionOverride.SelectedIndex);
             }
-        }
-
-        private void Game_Team4FactionOverride(FrostbiteClient sender, int faction) {
-            this.OnSettingResponse("vars.team4FactionOverride", faction, true);
-            this.m_strPreviousSuccessTeam4FactionOverride = faction;
-            this.cboSettingsTeam4FactionOverride.SelectedIndex = faction;
         }
 
         private void lnkSettingsTeam4FactionOverride_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
             if (this.Client != null && this.Client.Game != null) {
                 this.cboSettingsTeam4FactionOverride.Focus();
-                this.WaitForSettingResponse("vars.team4FactionOverride", this.m_strPreviousSuccessTeam4FactionOverride);
+                this.WaitForSettingResponse("vars.teamFactionOverride 4", this.m_strPreviousSuccessTeam4FactionOverride);
 
-                this.Client.Game.SendSetVarsTeam4FactionOverridePacket(this.cboSettingsTeam4FactionOverride.SelectedIndex);
+                this.Client.Game.SendSetVarsTeamFactionOverridePacket(4, this.cboSettingsTeam4FactionOverride.SelectedIndex);
             }
         }
         

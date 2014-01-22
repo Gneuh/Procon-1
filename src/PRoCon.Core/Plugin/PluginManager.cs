@@ -1015,10 +1015,7 @@ namespace PRoCon.Core.Plugin {
             ProconClient.Game.SquadListPlayers -= new FrostbiteClient.SquadListPlayersHandler(Game_SquadListPlayers);
             ProconClient.Game.SquadIsPrivate -= new FrostbiteClient.SquadIsPrivateHandler(Game_SquadIsPrivate);
 
-            ProconClient.Game.Team1FactionOverride -= new FrostbiteClient.LimitHandler(Game_Team1FactionOverride);
-            ProconClient.Game.Team2FactionOverride -= new FrostbiteClient.LimitHandler(Game_Team2FactionOverride);
-            ProconClient.Game.Team3FactionOverride -= new FrostbiteClient.LimitHandler(Game_Team3FactionOverride);
-            ProconClient.Game.Team4FactionOverride -= new FrostbiteClient.LimitHandler(Game_Team4FactionOverride);
+            ProconClient.Game.TeamFactionOverride -= new FrostbiteClient.TeamFactionOverrideHandler(Game_TeamFactionOverride);
 
             #region MoHW
 
@@ -1364,10 +1361,7 @@ namespace PRoCon.Core.Plugin {
             ProconClient.Game.IsForceReloadWholeMags += new FrostbiteClient.IsEnabledHandler(Game_IsForceReloadWholeMags);
             ProconClient.Game.ServerType += new FrostbiteClient.VarsStringHandler(Game_ServerType);
 
-            ProconClient.Game.Team1FactionOverride += new FrostbiteClient.LimitHandler(Game_Team1FactionOverride);
-            ProconClient.Game.Team2FactionOverride += new FrostbiteClient.LimitHandler(Game_Team2FactionOverride);
-            ProconClient.Game.Team3FactionOverride += new FrostbiteClient.LimitHandler(Game_Team3FactionOverride);
-            ProconClient.Game.Team4FactionOverride += new FrostbiteClient.LimitHandler(Game_Team4FactionOverride);
+            ProconClient.Game.TeamFactionOverride += new FrostbiteClient.TeamFactionOverrideHandler(Game_TeamFactionOverride);
 
             #endregion
         }
@@ -2015,23 +2009,8 @@ namespace PRoCon.Core.Plugin {
             InvokeOnAllEnabled("OnPreset", new object[] { mode, isLocked });
         }
 
-        private void Game_Team1FactionOverride(FrostbiteClient sender, int faction) {
-            InvokeOnAllEnabled("OnTeam1FactionOverride", new object[] { faction });
-        }
-
-        private void Game_Team2FactionOverride(FrostbiteClient sender, int faction)
-        {
-            InvokeOnAllEnabled("OnTeam2FactionOverride", new object[] { faction });
-        }
-
-        private void Game_Team3FactionOverride(FrostbiteClient sender, int faction)
-        {
-            InvokeOnAllEnabled("OnTeam3FactionOverride", new object[] { faction });
-        }
-
-        private void Game_Team4FactionOverride(FrostbiteClient sender, int faction)
-        {
-            InvokeOnAllEnabled("OnTeam4FactionOverride", new object[] { faction });
+        private void Game_TeamFactionOverride(FrostbiteClient sender, int teamId, int faction) {
+            InvokeOnAllEnabled("OnTeamFactionOverride", new object[] { teamId, faction });
         }
 
         private void Game_GunMasterWeaponsPreset(FrostbiteClient sender, int preset)
