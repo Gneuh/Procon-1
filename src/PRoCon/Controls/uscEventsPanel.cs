@@ -59,6 +59,7 @@ namespace PRoCon {
 
             this.m_prcClient.EventsLogging.MaximumDisplayedEventsChange += new EventCaptures.MaximumDisplayedEventsChangeHandler(LoggedEvents_MaximumDisplayedEventsChange);
             this.m_prcClient.EventsLogging.OptionsVisibleChange += new EventCaptures.OptionsVisibleChangeHandler(LoggedEvents_OptionsHiddenChange);
+            this.m_prcClient.EventsLogging.ScrollingEnabledChange += new EventCaptures.ScrollingEnabledChangeHandler(LoggedEvents_ScrollingEnabledChange);
 
             this.m_prcClient.EventsLogging.LoggedEvent += new EventCaptures.LoggedEventHandler(LoggedEvents_LoggedEvent);
         }
@@ -81,6 +82,7 @@ namespace PRoCon {
                 this.lblCapturingEvents.Text = this.m_clocLanguage.GetLocalized("uscEvents.gpbCaptures.lblCapturingEvents", null);
                 this.lnkAddCapture.Text = this.m_clocLanguage.GetLocalized("uscEvents.gpbCaptures.lnkAddCapture", null);
                 this.btncleareventbox.Text = this.m_clocLanguage.GetLocalized("uscEvents.gpbCaptures.btncleareventbox", null);
+                this.chkEventsEnableScrolling.Text = this.m_clocLanguage.GetLocalized("uscEvents.gpbCaptures.chkEventsEnableScrolling", null);
             }
         }
 
@@ -112,6 +114,7 @@ namespace PRoCon {
                 // it just fires the events again, saves messy coding elsewhere.
                 this.m_prcClient.EventsLogging.OptionsVisible = this.m_prcClient.EventsLogging.OptionsVisible;
                 this.m_prcClient.EventsLogging.MaximumDisplayedEvents = this.m_prcClient.EventsLogging.MaximumDisplayedEvents;
+                this.m_prcClient.EventsLogging.ScrollingEnabled = this.m_prcClient.EventsLogging.ScrollingEnabled;
 
                 this.lsvCapturedEvents.Items.Clear();
 
@@ -226,7 +229,10 @@ namespace PRoCon {
             }
 
             this.lsvEvents.Sort();
-            newEventItem.EnsureVisible();
+
+            if (this.m_prcClient.EventsLogging.ScrollingEnabled == true) {
+                newEventItem.EnsureVisible();
+            }
 
             foreach (ColumnHeader ch in this.lsvEvents.Columns) {
                 ch.Width = -2;
@@ -282,6 +288,10 @@ namespace PRoCon {
 
                 this.lsvEvents.EndUpdate();
             }
+        }
+
+        private void LoggedEvents_ScrollingEnabledChange(bool isEnabled) {
+            this.chkEventsEnableScrolling.Checked = isEnabled;
         }
 
         private void picOpenCloseCaptures_Click(object sender, EventArgs e) {
@@ -385,6 +395,10 @@ namespace PRoCon {
             }
 
             this.lsvEvents.EndUpdate();
+        }
+
+        private void chkEventsEnableScrolling_CheckedChanged(object sender, EventArgs e) {
+            this.m_prcClient.EventsLogging.ScrollingEnabled = this.chkEventsEnableScrolling.Checked;
         }
     }
 }

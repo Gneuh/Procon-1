@@ -21,6 +21,9 @@ namespace PRoCon.Core.Events {
         public delegate void MaximumDisplayedEventsChangeHandler(int maximumDisplayedEvents);
         public event MaximumDisplayedEventsChangeHandler MaximumDisplayedEventsChange;
 
+        public delegate void ScrollingEnabledChangeHandler(bool isEnabled);
+        public event ScrollingEnabledChangeHandler ScrollingEnabledChange;
+
         public NotificationList<CapturableEvents> CapturedEvents {
             get;
             private set;
@@ -61,12 +64,26 @@ namespace PRoCon.Core.Events {
             }
         }
 
+        private bool m_blScrollingEnabled;
+
+        public bool ScrollingEnabled {
+            get { return this.m_blScrollingEnabled; }
+            set {
+                this.m_blScrollingEnabled = value;
+
+                if (this.ScrollingEnabledChange != null) {
+                    FrostbiteConnection.RaiseEvent(this.ScrollingEnabledChange.GetInvocationList(), this.m_blScrollingEnabled);
+                }
+            }
+        }
+
         public List<string> Settings {
             get {
                 List<string> lstReturnSettings = new List<string>();
                 lstReturnSettings.Add(this.OptionsVisible.ToString());
                 lstReturnSettings.Add(this.MaximumDisplayedEvents.ToString());
                 lstReturnSettings.Add(this.IsListModified.ToString());
+                lstReturnSettings.Add(this.ScrollingEnabled.ToString());
 
                 if (this.IsListModified == true) {
                     foreach (CapturableEvents ceEvent in this.CapturedEvents) {
@@ -80,8 +97,9 @@ namespace PRoCon.Core.Events {
                 int iMaximumCaptures = 200;
                 bool isCollapsed = false;
                 bool isModified = false;
+                bool scrollingEnabled = false;
 
-                if (value.Count >= 3) {
+                if (value.Count >= 4) {
 
                     if (bool.TryParse(value[0], out isCollapsed) == true) {
                         this.OptionsVisible = isCollapsed;
@@ -93,6 +111,10 @@ namespace PRoCon.Core.Events {
 
                     if (bool.TryParse(value[2], out isModified) == true) {
                         this.IsListModified = isModified;
+                    }
+
+                    if (bool.TryParse(value[3], out scrollingEnabled) == true) {
+                        this.ScrollingEnabled = scrollingEnabled;
                     }
 
                     if (this.IsListModified == true) {
