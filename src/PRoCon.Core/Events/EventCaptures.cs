@@ -120,7 +120,7 @@ namespace PRoCon.Core.Events {
                     if (this.IsListModified == true) {
                         this.CapturedEvents.Clear();
 
-                        for (int i = 3; i < value.Count; i++) {
+                        for (int i = 4; i < value.Count; i++) {
                             if (Enum.IsDefined(typeof(CapturableEvents), value[i]) == true && this.m_prcClient.EventsLogging.CapturedEvents.Contains((CapturableEvents)Enum.Parse(typeof(CapturableEvents), value[i])) == false) {
                                 this.CapturedEvents.Add((CapturableEvents)Enum.Parse(typeof(CapturableEvents), value[i]));
                             }
