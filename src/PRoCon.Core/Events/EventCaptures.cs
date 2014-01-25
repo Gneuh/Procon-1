@@ -99,21 +99,21 @@ namespace PRoCon.Core.Events {
                 bool isModified = false;
                 bool scrollingEnabled = false;
 
-                if (value.Count >= 4) {
+                if (value.Count > 0) {
 
-                    if (bool.TryParse(value[0], out isCollapsed) == true) {
+                    if (value.Count >= 1 && bool.TryParse(value[0], out isCollapsed) == true) {
                         this.OptionsVisible = isCollapsed;
                     }
 
-                    if (int.TryParse(value[1], out iMaximumCaptures) == true) {
+                    if (value.Count >= 2 && int.TryParse(value[1], out iMaximumCaptures) == true) {
                         this.MaximumDisplayedEvents = iMaximumCaptures;
                     }
 
-                    if (bool.TryParse(value[2], out isModified) == true) {
+                    if (value.Count >= 3 && bool.TryParse(value[2], out isModified) == true) {
                         this.IsListModified = isModified;
                     }
 
-                    if (bool.TryParse(value[3], out scrollingEnabled) == true) {
+                    if (value.Count >= 4 && bool.TryParse(value[3], out scrollingEnabled) == true) {
                         this.ScrollingEnabled = scrollingEnabled;
                     }
 
