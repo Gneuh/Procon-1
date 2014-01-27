@@ -115,6 +115,10 @@ namespace PRoCon.Controls.ServerSettings.BF4 {
             this.cboGameplayPresets.Items.Add("Infantry Only");
             this.cboGameplayPresets.SelectedIndex = 0;
 
+            this.cboGameplayPresets.Visible = false;
+            this.lblGameplayPresets.Visible = false;
+            this.btnGameplayPresets.Visible = false;
+
             ArrayList UnlockModes = new ArrayList();
             UnlockModes.Add(new UnlockMode(this.Language.GetLocalized("uscServerSettingsPanel.cboSettingsUnlockMode.None"), UnlockModeType.none.ToString()));
             UnlockModes.Add(new UnlockMode(this.Language.GetLocalized("uscServerSettingsPanel.cboSettingsUnlockMode.All"), UnlockModeType.all.ToString()));
