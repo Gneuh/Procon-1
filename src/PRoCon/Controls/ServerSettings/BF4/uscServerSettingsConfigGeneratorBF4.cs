@@ -289,7 +289,20 @@ namespace PRoCon.Controls.ServerSettings.BF4 {
         }
 
         void Game_TeamFactionOverride(FrostbiteClient sender, int teamId, int faction) {
-            this.AppendSetting("vars.teamFactionOverride", teamId.ToString(), faction.ToString());
+            switch (teamId) {
+                case 1:
+                    this.AppendSetting("vars.teamFactionOverride 1", faction.ToString());
+                    break;
+                case 2:
+                    this.AppendSetting("vars.teamFactionOverride 2", faction.ToString());
+                    break;
+                case 3:
+                    this.AppendSetting("vars.teamFactionOverride 3", faction.ToString());
+                    break;
+                case 4:
+                    this.AppendSetting("vars.teamFactionOverride 4", faction.ToString());
+                    break;
+            }
         }
     }
 }
