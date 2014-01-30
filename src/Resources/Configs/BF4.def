@@ -26,6 +26,7 @@ procon.protected.serverversions.add BF4 "99392" "R17"
 procon.protected.serverversions.add BF4 "101684" "R18"
 procon.protected.serverversions.add BF4 "102560" "R19"
 procon.protected.serverversions.add BF4 "103064" "R20"
+procon.protected.serverversions.add BF4 "106318" "R21"
 
 procon.protected.specialization.clear
 
