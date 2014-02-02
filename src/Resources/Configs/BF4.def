@@ -66,6 +66,7 @@ procon.protected.weapons.add None "U_AKU12" Primary Carbine
 procon.protected.weapons.add None "U_AMR2" Primary SniperRifle
 procon.protected.weapons.add None "U_AMR2_CQB" Primary SniperRifle
 procon.protected.weapons.add None "U_AMR2_MED" Primary SniperRifle
+procon.protected.weapons.add Demolition "U_ASVAL" Primary SMG
 procon.protected.weapons.add Demolition "U_AT4" Secondary ProjectileExplosive
 procon.protected.weapons.add Recon "U_C4" Secondary Explosive
 procon.protected.weapons.add Support "U_C4_Support" Secondary Explosive
@@ -84,8 +85,10 @@ procon.protected.weapons.add Assault "U_CZ805_M320_LVG" Secondary ProjectileExpl
 procon.protected.weapons.add Assault "U_CZ805_M320_SHG" Secondary Shotgun
 procon.protected.weapons.add Assault "U_CZ805_M320_SMK" Secondary Impact
 procon.protected.weapons.add None "U_CZ75" Auxiliary Handgun
+procon.protected.weapons.add None "U_DAO12" Primary Shotgun
 procon.protected.weapons.add None "U_DBV12" Primary Shotgun
 procon.protected.weapons.add Assault "U_Defib" Secondary Melee
+procon.protected.weapons.add Assault "U_F2000" Primary AssaultRifle
 procon.protected.weapons.add Assault "U_FAMAS" Primary AssaultRifle
 procon.protected.weapons.add Demolition "U_FGM148" Secondary ProjectileExplosive
 procon.protected.weapons.add Demolition "U_FIM92" Secondary ProjectileExplosive
@@ -98,6 +101,7 @@ procon.protected.weapons.add Assault "U_GalilACE23" Primary AssaultRifle
 procon.protected.weapons.add None "U_GalilACE52" Primary Carbine
 procon.protected.weapons.add None "U_GalilACE53" Primary DMR
 procon.protected.weapons.add None "U_Glock18" Auxiliary Handgun
+procon.protected.weapons.add Recon "U_GOL" Primary SniperRifle
 procon.protected.weapons.add None "U_Grenade_RGO" Auxiliary Explosive
 procon.protected.weapons.add None "U_HAWK" Primary Shotgun
 procon.protected.weapons.add None "U_HK45C" Auxiliary Handgun
@@ -150,6 +154,7 @@ procon.protected.weapons.add Assault "U_M416_M320_LVG" Secondary ProjectileExplo
 procon.protected.weapons.add Assault "U_M416_M320_SHG" Secondary Shotgun
 procon.protected.weapons.add Assault "U_M416_M320_SMK" Secondary Impact
 procon.protected.weapons.add None "U_M4A1" Primary Carbine
+procon.protected.weapons.add Support "U_M60E4" Primary LMG
 procon.protected.weapons.add None "U_M67" Auxiliary Explosive
 procon.protected.weapons.add None "U_M82A3" Primary SniperRifle
 procon.protected.weapons.add None "U_M82A3_CQB" Primary SniperRifle
