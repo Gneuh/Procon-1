@@ -91,7 +91,7 @@ namespace PRoConEvents {
             this.m_strGameMod = lstPluginEnv[2];
             this.m_strServerVersion = lstPluginEnv[3];
 
-            if (this.m_strServerGameType == "bf3") {
+            if (this.m_strServerGameType == "bf3" || this.m_strServerGameType == "bf4") {
                 this.m_iYellDivider = 1000;
             }
             if (this.m_strServerGameType == "mohw") {
