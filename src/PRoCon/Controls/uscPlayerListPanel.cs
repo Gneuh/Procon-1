@@ -1959,7 +1959,7 @@ namespace PRoCon {
                     this.moveToSquadToolStripMenuItem.DropDownItems.Clear();
 
                     foreach (CTeamName team in this.m_prcClient.TeamNameList) {
-                        if (String.Compare(team.MapFilename, this.m_prcClient.CurrentServerInfo.Map, true) == 0 && team.TeamID != uscPlayerListPanel.INT_NEUTRAL_TEAM) {
+                        if (String.Compare(team.MapFilename, this.m_prcClient.CurrentServerInfo.Map, true) == 0 && String.Compare(team.Playlist, this.m_prcClient.CurrentServerInfo.GameMode, true) == 0 && team.TeamID != uscPlayerListPanel.INT_NEUTRAL_TEAM) {
                             
                             ToolStripMenuItem teamChange = new ToolStripMenuItem(this.m_clocLanguage.GetDefaultLocalized(String.Format("Team {0}", team.TeamID), "uscPlayerListPanel.ctxPlayerOptions.moveToSquadToolStripMenuItem.Team", this.m_clocLanguage.GetLocalized(team.LocalizationKey)));
                             teamChange.Tag = new object[] { player, team };
