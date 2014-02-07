@@ -21,10 +21,10 @@ namespace PRoCon.Core.Remote.Layer {
         public event LayerAccountHandler ClientConnected;
         //public event LayerAccountHandler LayerAccountLogout;
 
-        private TcpListener m_tclLayerListener;
+        private TcpListener _layerListener;
 
-        private PRoConApplication m_praApplication;
-        private PRoConClient m_prcClient;
+        private PRoConApplication _application;
+        private PRoConClient _client;
 
         public AccountPrivilegeDictionary AccountPrivileges {
             get;
@@ -58,7 +58,7 @@ namespace PRoCon.Core.Remote.Layer {
 
         public bool IsLayerOnline {
             get {
-                return (this.m_tclLayerListener != null);
+                return (this._layerListener != null);
             }
         }
 
@@ -68,7 +68,7 @@ namespace PRoCon.Core.Remote.Layer {
             this.ListeningPort = 27260;
             this.BindingAddress = "0.0.0.0";
             this.LayerNameFormat = "PRoCon[%servername%]";
-            this.m_tclLayerListener = null;
+            this._layerListener = null;
             this.LayerClients = new LayerClientDictionary();
             
             this.LayerEnabled = false;
@@ -76,8 +76,8 @@ namespace PRoCon.Core.Remote.Layer {
         }
 
         public void Initialize(PRoConApplication praApplication, PRoConClient prcClient) {
-            this.m_praApplication = praApplication;
-            foreach (Account accAccount in this.m_praApplication.AccountsList) {
+            this._application = praApplication;
+            foreach (Account accAccount in this._application.AccountsList) {
 
                 if (this.AccountPrivileges.Contains(accAccount.Name) == false) {
                     AccountPrivilege apPrivs = new AccountPrivilege(accAccount, new CPrivileges());
@@ -89,15 +89,15 @@ namespace PRoCon.Core.Remote.Layer {
                 }
 
             }
-            this.m_praApplication.AccountsList.AccountAdded += new AccountDictionary.AccountAlteredHandler(AccountsList_AccountAdded);
-            this.m_praApplication.AccountsList.AccountRemoved += new AccountDictionary.AccountAlteredHandler(AccountsList_AccountRemoved);
+            this._application.AccountsList.AccountAdded += new AccountDictionary.AccountAlteredHandler(AccountsList_AccountAdded);
+            this._application.AccountsList.AccountRemoved += new AccountDictionary.AccountAlteredHandler(AccountsList_AccountRemoved);
 
-            this.m_prcClient = prcClient;
+            this._client = prcClient;
 
-            this.m_prcClient.SocketException += new PRoConClient.SocketExceptionHandler(m_prcClient_SocketException);
-            this.m_prcClient.ConnectionFailure += new PRoConClient.FailureHandler(m_prcClient_ConnectionFailure);
-            this.m_prcClient.ConnectionClosed += new PRoConClient.EmptyParamterHandler(m_prcClient_ConnectionClosed);
-            this.m_prcClient.Game.Login += new FrostbiteClient.EmptyParamterHandler(m_prcClient_CommandLogin);
+            this._client.SocketException += new PRoConClient.SocketExceptionHandler(m_prcClient_SocketException);
+            this._client.ConnectionFailure += new PRoConClient.FailureHandler(m_prcClient_ConnectionFailure);
+            this._client.ConnectionClosed += new PRoConClient.EmptyParamterHandler(m_prcClient_ConnectionClosed);
+            this._client.Game.Login += new FrostbiteClient.EmptyParamterHandler(m_prcClient_CommandLogin);
 
             this.ClientConnected += new LayerAccountHandler(PRoConLayer_ClientConnected);
 
@@ -210,7 +210,7 @@ namespace PRoCon.Core.Remote.Layer {
             List<PRoConLayerClient> lstShutDownClients = new List<PRoConLayerClient>();
 
             foreach (PRoConLayerClient plcConnection in new List<PRoConLayerClient>(this.LayerClients)) {
-                if (String.Compare(plcConnection.Username, strAccountName) == 0) {
+                if (String.CompareOrdinal(plcConnection.Username, strAccountName) == 0) {
                     lstShutDownClients.Add(plcConnection);
                 }
             }
@@ -269,12 +269,12 @@ namespace PRoCon.Core.Remote.Layer {
 
             PRoConLayer plLayer = (PRoConLayer)ar.AsyncState;
 
-            if (plLayer.m_tclLayerListener != null) {
+            if (plLayer._layerListener != null) {
 
                 try {
-                    TcpClient tcpNewConnection = plLayer.m_tclLayerListener.EndAcceptTcpClient(ar);
+                    TcpClient tcpNewConnection = plLayer._layerListener.EndAcceptTcpClient(ar);
 
-                    PRoConLayerClient cplcNewConnection = new PRoConLayerClient(new FrostbiteLayerConnection(tcpNewConnection), plLayer.m_praApplication, plLayer.m_prcClient);
+                    PRoConLayerClient cplcNewConnection = new PRoConLayerClient(new FrostbiteLayerConnection(tcpNewConnection), plLayer._application, plLayer._client);
 
                     // Issue #24. Somewhere the end port connection+port isn't being removed.
                     if (plLayer.LayerClients.Contains(cplcNewConnection.IPPort) == true) {
@@ -292,7 +292,7 @@ namespace PRoCon.Core.Remote.Layer {
                         FrostbiteConnection.RaiseEvent(plLayer.ClientConnected.GetInvocationList(), cplcNewConnection);
                     }
 
-                    plLayer.m_tclLayerListener.BeginAcceptTcpClient(plLayer.m_asyncAcceptCallback, plLayer);
+                    plLayer._layerListener.BeginAcceptTcpClient(plLayer.m_asyncAcceptCallback, plLayer);
                 }
                 catch (SocketException exception) {
 
@@ -347,9 +347,9 @@ namespace PRoCon.Core.Remote.Layer {
             try {
                 IPAddress ipBinding = this.ResolveHostName(this.BindingAddress);
 
-                this.m_tclLayerListener = new TcpListener(ipBinding, this.ListeningPort);
+                this._layerListener = new TcpListener(ipBinding, this.ListeningPort);
 
-                this.m_tclLayerListener.Start();
+                this._layerListener.Start();
 
                 if (this.LayerOnline != null) {
                     FrostbiteConnection.RaiseEvent(this.LayerOnline.GetInvocationList());
@@ -357,7 +357,7 @@ namespace PRoCon.Core.Remote.Layer {
 
                 //this.OnLayerServerOnline();
 
-                this.m_tclLayerListener.BeginAcceptTcpClient(this.m_asyncAcceptCallback, this);
+                this._layerListener.BeginAcceptTcpClient(this.m_asyncAcceptCallback, this);
             }
             catch (SocketException skeError) {
 
@@ -372,7 +372,7 @@ namespace PRoCon.Core.Remote.Layer {
 
         public void ShutdownLayerListener() {
 
-            if (this.m_tclLayerListener != null) {
+            if (this._layerListener != null) {
 
                 try {
 
@@ -386,8 +386,8 @@ namespace PRoCon.Core.Remote.Layer {
                     }
 
                     //if (this.m_tclLayerListener != null) {
-                        this.m_tclLayerListener.Stop();
-                        this.m_tclLayerListener = null;
+                        this._layerListener.Stop();
+                        this._layerListener = null;
                     //}
                 }
                 catch (Exception) { }

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace PRoCon.Core.Remote.Layer {
+﻿namespace PRoCon.Core.Remote.Layer {
     public class BF4LayerClient : FrostbiteLayerClient {
 
         public BF4LayerClient(FrostbiteLayerConnection connection) : base(connection) {

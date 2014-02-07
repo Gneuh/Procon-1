@@ -158,7 +158,6 @@ namespace PRoCon.Core.Remote.Layer {
 
                         // If we've recieved 16 kb's and still don't have a full command then shutdown the connection.
                         if (ReceivedBuffer.Length >= MaxGarbageBytes) {
-                            ReceivedBuffer = null;
                             Shutdown();
                         }
 

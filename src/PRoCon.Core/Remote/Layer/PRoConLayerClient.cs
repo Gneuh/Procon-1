@@ -131,7 +131,7 @@ namespace PRoCon.Core.Remote.Layer {
                 }
                 else if (prcClient.Game is MOHWClient)
                 {
-                    this.Game = new MOHWLayerClient(newConnection);
+                    this.Game = new MohwLayerClient(newConnection);
                 }
 
                 this.m_requestDelegates = new Dictionary<string, RequestPacketHandler>() {
