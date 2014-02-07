@@ -294,7 +294,7 @@ namespace PRoCon.Core.Remote {
 
         public Version ConnectedLayerVersion { get; private set; }
 
-        public PRoConLayer Layer { get; private set; }
+        public LayerInstance Layer { get; private set; }
 
         public NotificationList<string> Reasons { get; private set; }
 
@@ -458,7 +458,7 @@ namespace PRoCon.Core.Remote {
 
         internal struct SOriginalForwardedPacket {
             public List<string> m_lstWords;
-            public PRoConLayerClient m_sender;
+            public LayerClient m_sender;
             public UInt32 m_ui32OriginalSequence;
         }
 
@@ -479,7 +479,7 @@ namespace PRoCon.Core.Remote {
             Tasks = new List<Task>();
             VersionNumber = String.Empty;
 
-            Layer = new PRoConLayer();
+            Layer = new LayerInstance();
 
             m_dicUsernamesToUids = new Dictionary<string, string>() {
                 {"SYSOP", ""}
@@ -566,8 +566,8 @@ namespace PRoCon.Core.Remote {
                 Layer.Initialize(Parent, this);
 
                 // I may move these events to within Layer, depends on the end of the restructure.
-                Layer.LayerOnline += new PRoConLayer.LayerEmptyParameterHandler(Layer_LayerOnline);
-                Layer.LayerOffline += new PRoConLayer.LayerEmptyParameterHandler(Layer_LayerOffline);
+                Layer.LayerOnline += new LayerInstance.LayerEmptyParameterHandler(Layer_LayerOnline);
+                Layer.LayerOffline += new LayerInstance.LayerEmptyParameterHandler(Layer_LayerOffline);
                 Layer.AccountPrivileges.AccountPrivilegeAdded += new AccountPrivilegeDictionary.AccountPrivilegeAlteredHandler(AccountPrivileges_AccountPrivilegeAdded);
                 Layer.AccountPrivileges.AccountPrivilegeRemoved += new AccountPrivilegeDictionary.AccountPrivilegeAlteredHandler(AccountPrivileges_AccountPrivilegeRemoved);
 
@@ -2304,7 +2304,7 @@ namespace PRoCon.Core.Remote {
             }
         }
 
-        public void SendProconLayerPacket(PRoConLayerClient sender, Packet cpPassOn) {
+        public void SendProconLayerPacket(LayerClient sender, Packet cpPassOn) {
             lock (new object()) {
                 UInt32 ui32MainConnSequence = Game.Connection.AcquireSequenceNumber;
 

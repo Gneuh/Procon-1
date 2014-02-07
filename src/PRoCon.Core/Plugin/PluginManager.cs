@@ -1082,11 +1082,11 @@ namespace PRoCon.Core.Plugin {
 
             #region Layer Accounts
 
-            foreach (PRoConLayerClient client in ProconClient.Layer.LayerClients.Values) {
-                client.Login -= new PRoConLayerClient.LayerClientHandler(client_LayerClientLogin);
-                client.Logout -= new PRoConLayerClient.LayerClientHandler(client_LayerClientLogout);
+            foreach (LayerClient client in ProconClient.Layer.LayerClients.Values) {
+                client.Login -= new LayerClient.LayerClientHandler(client_LayerClientLogin);
+                client.Logout -= new LayerClient.LayerClientHandler(client_LayerClientLogout);
             }
-            ProconClient.Layer.ClientConnected -= new PRoConLayer.LayerAccountHandler(Layer_ClientConnected);
+            ProconClient.Layer.ClientConnected -= new LayerInstance.LayerAccountHandler(Layer_ClientConnected);
 
             #region BF4
 
@@ -1326,11 +1326,11 @@ namespace PRoCon.Core.Plugin {
 
             #region Layer Accounts
 
-            foreach (PRoConLayerClient client in ProconClient.Layer.LayerClients.Values) {
-                client.Login += new PRoConLayerClient.LayerClientHandler(client_LayerClientLogin);
-                client.Logout += new PRoConLayerClient.LayerClientHandler(client_LayerClientLogout);
+            foreach (LayerClient client in ProconClient.Layer.LayerClients.Values) {
+                client.Login += new LayerClient.LayerClientHandler(client_LayerClientLogin);
+                client.Logout += new LayerClient.LayerClientHandler(client_LayerClientLogout);
             }
-            ProconClient.Layer.ClientConnected += new PRoConLayer.LayerAccountHandler(Layer_ClientConnected);
+            ProconClient.Layer.ClientConnected += new LayerInstance.LayerAccountHandler(Layer_ClientConnected);
 
             #endregion
 
@@ -1453,16 +1453,16 @@ namespace PRoCon.Core.Plugin {
 
         #region Layer Accounts
 
-        private void Layer_ClientConnected(PRoConLayerClient client) {
-            client.Login += new PRoConLayerClient.LayerClientHandler(client_LayerClientLogin);
-            client.Logout += new PRoConLayerClient.LayerClientHandler(client_LayerClientLogout);
+        private void Layer_ClientConnected(LayerClient client) {
+            client.Login += new LayerClient.LayerClientHandler(client_LayerClientLogin);
+            client.Logout += new LayerClient.LayerClientHandler(client_LayerClientLogout);
         }
 
-        private void client_LayerClientLogout(PRoConLayerClient sender) {
+        private void client_LayerClientLogout(LayerClient sender) {
             InvokeOnAllEnabled("OnAccountLogout", sender.Username, sender.IPPort, sender.Privileges);
         }
 
-        private void client_LayerClientLogin(PRoConLayerClient sender) {
+        private void client_LayerClientLogin(LayerClient sender) {
             InvokeOnAllEnabled("OnAccountLogin", sender.Username, sender.IPPort, sender.Privileges);
         }
 

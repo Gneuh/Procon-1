@@ -1,7 +1,7 @@
 ﻿namespace PRoCon.Core.Remote.Layer {
-    public class MoHLayerClient : FrostbiteLayerClient {
+    public class MohClient : FrostbiteLayerClient {
 
-        public MoHLayerClient(FrostbiteLayerConnection connection)
+        public MohClient(FrostbiteLayerConnection connection)
             : base(connection) {
 
             this.RequestDelegates.Add("vars.clanTeams", this.DispatchVarsRequest);

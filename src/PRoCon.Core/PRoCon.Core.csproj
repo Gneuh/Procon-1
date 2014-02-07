@@ -103,8 +103,8 @@
     <Compile Include="Plugin\PluginCacheEntry.cs" />
     <Compile Include="Plugin\PluginInvocation.cs" />
     <Compile Include="Remote\BF4Client.cs" />
-    <Compile Include="Remote\Layer\BF4LayerClient.cs" />
-    <Compile Include="Remote\Layer\MohwLayerClient.cs" />
+    <Compile Include="Remote\Layer\Bf4Client.cs" />
+    <Compile Include="Remote\Layer\MohwClient.cs" />
     <Compile Include="Remote\MOHWClient.cs" />
     <Compile Include="UnlockMode.cs" />
     <Compile Include="ConnectionDictionary.cs" />
@@ -136,11 +136,11 @@
     <Compile Include="Players\BF3PlayerInfo.cs" />
     <Compile Include="Remote\BFClient.cs" />
     <Compile Include="Remote\ConnectionState.cs" />
-    <Compile Include="Remote\Layer\BF3LayerClient.cs" />
+    <Compile Include="Remote\Layer\Bf3Client.cs" />
     <Compile Include="TextChatModeration\PlayerModerationLevelType.cs" />
-    <Compile Include="Remote\Layer\BFBC2LayerClient.cs" />
+    <Compile Include="Remote\Layer\Bfbc2Client.cs" />
     <Compile Include="Remote\Layer\FrostbiteLayerClient.cs" />
-    <Compile Include="Remote\Layer\MoHLayerClient.cs" />
+    <Compile Include="Remote\Layer\MohClient.cs" />
     <Compile Include="Remote\Layer\FrostbiteLayerConnection.cs" />
     <Compile Include="Logging\LogEntry.cs" />
     <Compile Include="Battlemap\MapGeometry.cs" />
@@ -166,9 +166,8 @@
     <Compile Include="Plugin\IPRoConPluginInterface2.cs" />
     <Compile Include="Kill.cs" />
     <Compile Include="Players\Inventory.cs" />
-    <Compile Include="Remote\Layer\PRoConLayerClient.cs" />
-    <Compile Include="Remote\Layer\LayerClientDictionary.cs" />
-    <Compile Include="Remote\Layer\PRoConLayer.cs" />
+    <Compile Include="Remote\Layer\LayerClient.cs" />
+    <Compile Include="Remote\Layer\LayerInstance.cs" />
     <Compile Include="LevelVariable.cs" />
     <Compile Include="LevelVariableContext.cs" />
     <Compile Include="LevelVariableContextType.cs" />

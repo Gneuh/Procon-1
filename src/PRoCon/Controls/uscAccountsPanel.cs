@@ -135,16 +135,16 @@ namespace PRoCon {
                 }
             }
 
-            this.m_prcClient.Layer.LayerOnline += new PRoConLayer.LayerEmptyParameterHandler(Layer_LayerOnline);
-            this.m_prcClient.Layer.LayerOffline += new PRoConLayer.LayerEmptyParameterHandler(Layer_LayerOffline);
-            this.m_prcClient.Layer.LayerSocketError += new PRoConLayer.LayerSocketErrorHandler(Layer_LayerSocketError);
+            this.m_prcClient.Layer.LayerOnline += new LayerInstance.LayerEmptyParameterHandler(Layer_LayerOnline);
+            this.m_prcClient.Layer.LayerOffline += new LayerInstance.LayerEmptyParameterHandler(Layer_LayerOffline);
+            this.m_prcClient.Layer.LayerSocketError += new LayerInstance.LayerSocketErrorHandler(Layer_LayerSocketError);
 
-            this.m_prcClient.Layer.ClientConnected += new PRoConLayer.LayerAccountHandler(Layer_ClientConnected);
+            this.m_prcClient.Layer.ClientConnected += new LayerInstance.LayerAccountHandler(Layer_ClientConnected);
         }
 
-        void Layer_ClientConnected(PRoConLayerClient client) {
-            client.Login += new PRoConLayerClient.LayerClientHandler(client_LayerClientLogin);
-            client.Logout += new PRoConLayerClient.LayerClientHandler(client_LayerClientLogout);
+        void Layer_ClientConnected(LayerClient client) {
+            client.Login += new LayerClient.LayerClientHandler(client_LayerClientLogin);
+            client.Logout += new LayerClient.LayerClientHandler(client_LayerClientLogout);
         }
 
         //public void m_prcClient_ProconPrivileges(CPrivileges spPrivs) {
@@ -501,7 +501,7 @@ namespace PRoCon {
             this.pnlLayerServerTester.Visible = false;
         }
 
-        void client_LayerClientLogin(PRoConLayerClient sender) {
+        void client_LayerClientLogin(LayerClient sender) {
 
             if (this.lsvLayerAccounts.Items.ContainsKey(sender.Username) == true) {
                 // TO DO: Change Icon
@@ -532,7 +532,7 @@ namespace PRoCon {
             }
         }
 
-        private void client_LayerClientLogout(PRoConLayerClient sender) {
+        private void client_LayerClientLogout(LayerClient sender) {
 
             if (this.lsvLayerAccounts.Items.ContainsKey(sender.Username) == true) {
                 // TO DO: Change Icon
