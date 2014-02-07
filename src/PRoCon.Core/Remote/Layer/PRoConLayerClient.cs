@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Reflection;
 using System.Text.RegularExpressions;
@@ -483,7 +484,7 @@ namespace PRoCon.Core.Remote.Layer {
                     }
                     else if (packet.Words.Count >= 3) {
 
-                        if (this.m_prcClient.Layer.LayerClients.IsUidUnique(packet.Words[2]) == true) {
+                        if (this.m_prcClient.Layer.LayerClients.Any(client => client.Value.ProconEventsUid == packet.Words[2]) == false) {
                             sender.SendResponse(packet, PRoConLayerClient.RESPONSE_OK);
 
                             this.ProconEventsUid = packet.Words[2];
