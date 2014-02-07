@@ -4,12 +4,12 @@ using System.Collections.Generic;
 namespace PRoCon.Core.Remote.Layer {
     public class FrostbiteLayerClient {
 
-        public FrostbiteLayerConnection Connection { get; set; }
+        public ILayerConnection Connection { get; set; }
 
         #region Packet Management
 
-        protected delegate void RequestPacketHandler(FrostbiteLayerConnection sender, Packet cpRecievedPacket);
-        //protected delegate void ResponsePacketHandler(FrostbiteLayerConnection sender, Packet cpRecievedPacket);
+        protected delegate void RequestPacketHandler(ILayerConnection sender, Packet cpRecievedPacket);
+        //protected delegate void ResponsePacketHandler(ILayerConnection sender, Packet cpRecievedPacket);
         //protected Dictionary<string, ResponsePacketHandler> m_responseDelegates = new Dictionary<string, ResponsePacketHandler>();
         protected Dictionary<string, RequestPacketHandler> RequestDelegates = new Dictionary<string, RequestPacketHandler>();
 
@@ -78,7 +78,7 @@ namespace PRoCon.Core.Remote.Layer {
             }
         }
 
-        public FrostbiteLayerClient(FrostbiteLayerConnection connection) {
+        public FrostbiteLayerClient(ILayerConnection connection) {
             this.Connection = connection;
 
             this.RequestDelegates = new Dictionary<string, RequestPacketHandler>() {
@@ -204,24 +204,24 @@ namespace PRoCon.Core.Remote.Layer {
                 { "admin.shutDown", this.DispatchAdminShutDownRequest },
             };
 
-            this.Connection.PacketReceived += new FrostbiteLayerConnection.PacketDispatchHandler(m_connection_PacketReceived);
-            this.Connection.ConnectionClosed += new FrostbiteLayerConnection.EmptyParameterHandler(m_connection_ConnectionClosed);
+            this.Connection.PacketReceived = Connection_PacketReceived;
+            this.Connection.ConnectionClosed = Connection_ConnectionClosed;
         }
 
 
-        protected virtual void DispatchPunkbusterRequest(FrostbiteLayerConnection sender, Packet cpRecievedPacket) {
+        protected virtual void DispatchPunkbusterRequest(ILayerConnection sender, Packet cpRecievedPacket) {
             if (this.RequestPacketPunkbusterRecieved != null) {
                 FrostbiteConnection.RaiseEvent(this.RequestPacketPunkbusterRecieved.GetInvocationList(), this, cpRecievedPacket);
             }
         }
 
-        protected virtual void DispatchUseMapFunctionRequest(FrostbiteLayerConnection sender, Packet cpRecievedPacket) {
+        protected virtual void DispatchUseMapFunctionRequest(ILayerConnection sender, Packet cpRecievedPacket) {
             if (this.RequestPacketUseMapFunctionRecieved != null) {
                 FrostbiteConnection.RaiseEvent(this.RequestPacketUseMapFunctionRecieved.GetInvocationList(), this, cpRecievedPacket);
             }
         }
 
-        protected virtual void DispatchBanListAddRequest(FrostbiteLayerConnection sender, Packet cpRecievedPacket) {
+        protected virtual void DispatchBanListAddRequest(ILayerConnection sender, Packet cpRecievedPacket) {
 
             if (cpRecievedPacket.Words.Count >= 4) {
 
@@ -233,41 +233,41 @@ namespace PRoCon.Core.Remote.Layer {
             }
         }
 
-        protected virtual void DispatchAlterTextMonderationListRequest(FrostbiteLayerConnection sender, Packet cpRecievedPacket) {
+        protected virtual void DispatchAlterTextMonderationListRequest(ILayerConnection sender, Packet cpRecievedPacket) {
             if (this.RequestPacketAlterTextMonderationListRecieved != null) {
                 FrostbiteConnection.RaiseEvent(this.RequestPacketAlterTextMonderationListRecieved.GetInvocationList(), this, cpRecievedPacket);
             }
         }
 
-        protected virtual void DispatchAlterBanListRequest(FrostbiteLayerConnection sender, Packet cpRecievedPacket) {
+        protected virtual void DispatchAlterBanListRequest(ILayerConnection sender, Packet cpRecievedPacket) {
             if (this.RequestPacketAlterBanListRecieved != null) {
                 FrostbiteConnection.RaiseEvent(this.RequestPacketAlterBanListRecieved.GetInvocationList(), this, cpRecievedPacket);
             }
         }
 
-        protected virtual void DispatchAlterReservedSlotsListRequest(FrostbiteLayerConnection sender, Packet cpRecievedPacket) {
+        protected virtual void DispatchAlterReservedSlotsListRequest(ILayerConnection sender, Packet cpRecievedPacket) {
             if (this.RequestPacketAlterReservedSlotsListRecieved != null) {
                 FrostbiteConnection.RaiseEvent(this.RequestPacketAlterReservedSlotsListRecieved.GetInvocationList(), this, cpRecievedPacket);
             }
         }
 
-        protected virtual void DispatchAlterMaplistRequest(FrostbiteLayerConnection sender, Packet cpRecievedPacket) {
+        protected virtual void DispatchAlterMaplistRequest(ILayerConnection sender, Packet cpRecievedPacket) {
             if (this.RequestPacketAlterMaplistRecieved != null) {
                 FrostbiteConnection.RaiseEvent(this.RequestPacketAlterMaplistRecieved.GetInvocationList(), this, cpRecievedPacket);
             }
         }
 
-        protected virtual void DispatchVarsAdminPasswordRequest(FrostbiteLayerConnection sender, Packet cpRecievedPacket) {
+        protected virtual void DispatchVarsAdminPasswordRequest(ILayerConnection sender, Packet cpRecievedPacket) {
             this.SendResponse(cpRecievedPacket, "UnknownCommand");
         }
 
-        protected virtual void DispatchUnsecureSafeListedRequest(FrostbiteLayerConnection sender, Packet cpRecievedPacket) {
+        protected virtual void DispatchUnsecureSafeListedRequest(ILayerConnection sender, Packet cpRecievedPacket) {
             if (this.RequestPacketUnsecureSafeListedRecieved != null) {
                 FrostbiteConnection.RaiseEvent(this.RequestPacketUnsecureSafeListedRecieved.GetInvocationList(), this, cpRecievedPacket);
             }
         }
 
-        protected virtual void DispatchVarsRequest(FrostbiteLayerConnection sender, Packet cpRecievedPacket) {
+        protected virtual void DispatchVarsRequest(ILayerConnection sender, Packet cpRecievedPacket) {
 
             if (cpRecievedPacket.Words.Count == 1) {
                 if (this.RequestPacketSecureSafeListedRecieved != null) {
@@ -281,7 +281,7 @@ namespace PRoCon.Core.Remote.Layer {
             }
         }
 
-        protected virtual void DispatchSecureSafeListedRequest(FrostbiteLayerConnection sender, Packet cpRecievedPacket) {
+        protected virtual void DispatchSecureSafeListedRequest(ILayerConnection sender, Packet cpRecievedPacket) {
             if (this.RequestPacketSecureSafeListedRecieved != null) {
                 FrostbiteConnection.RaiseEvent(this.RequestPacketSecureSafeListedRecieved.GetInvocationList(), this, cpRecievedPacket);
             }
@@ -289,20 +289,20 @@ namespace PRoCon.Core.Remote.Layer {
 
         #region Player Events
 
-        protected virtual void DispatchAdminKickPlayerRequest(FrostbiteLayerConnection sender, Packet cpRecievedPacket) {
+        protected virtual void DispatchAdminKickPlayerRequest(ILayerConnection sender, Packet cpRecievedPacket) {
             if (this.RequestPacketAdminKickPlayerRecieved != null) {
                 FrostbiteConnection.RaiseEvent(this.RequestPacketAdminKickPlayerRecieved.GetInvocationList(), this, cpRecievedPacket);
             }
         }
 
-        protected virtual void DispatchAdminMovePlayerRequest(FrostbiteLayerConnection sender, Packet cpRecievedPacket) {
+        protected virtual void DispatchAdminMovePlayerRequest(ILayerConnection sender, Packet cpRecievedPacket) {
 
             if (this.RequestPacketAdminPlayerMoveRecieved != null) {
                 FrostbiteConnection.RaiseEvent(this.RequestPacketAdminPlayerMoveRecieved.GetInvocationList(), this, cpRecievedPacket);
             }
         }
 
-        protected virtual void DispatchAdminKillPlayerRequest(FrostbiteLayerConnection sender, Packet cpRecievedPacket) {
+        protected virtual void DispatchAdminKillPlayerRequest(ILayerConnection sender, Packet cpRecievedPacket) {
             if (this.RequestPacketAdminPlayerKillRecieved != null) {
                 FrostbiteConnection.RaiseEvent(this.RequestPacketAdminPlayerKillRecieved.GetInvocationList(), this, cpRecievedPacket);
             }
@@ -312,13 +312,13 @@ namespace PRoCon.Core.Remote.Layer {
 
         #region player/squad cmds
 
-        protected virtual void DispatchSquadLeaderRequest(FrostbiteLayerConnection sender, Packet cpRecievedPacket) {
+        protected virtual void DispatchSquadLeaderRequest(ILayerConnection sender, Packet cpRecievedPacket) {
             if (this.RequestPacketSquadLeaderRecieved != null) {
                 FrostbiteConnection.RaiseEvent(this.RequestPacketSquadLeaderRecieved.GetInvocationList(), this, cpRecievedPacket);
             }
         }
 
-        protected virtual void DispatchSquadIsPrivateRequest(FrostbiteLayerConnection sender, Packet cpRecievedPacket)
+        protected virtual void DispatchSquadIsPrivateRequest(ILayerConnection sender, Packet cpRecievedPacket)
         {
             if (this.RequestPacketSquadIsPrivateReceived != null)
             {
@@ -330,7 +330,7 @@ namespace PRoCon.Core.Remote.Layer {
 
         #region Basic Universal Commands
 
-        protected virtual void DispatchLoginPlainTextRequest(FrostbiteLayerConnection sender, Packet cpRecievedPacket) {
+        protected virtual void DispatchLoginPlainTextRequest(ILayerConnection sender, Packet cpRecievedPacket) {
 
             if (cpRecievedPacket.Words.Count >= 2) {
                 if (this.RequestLoginPlainText != null) {
@@ -342,7 +342,7 @@ namespace PRoCon.Core.Remote.Layer {
             }
         }
 
-        protected virtual void DispatchLoginHashedRequest(FrostbiteLayerConnection sender, Packet cpRecievedPacket) {
+        protected virtual void DispatchLoginHashedRequest(ILayerConnection sender, Packet cpRecievedPacket) {
             if (cpRecievedPacket.Words.Count == 1) {
                 if (this.RequestLoginHashed != null) {
                     FrostbiteConnection.RaiseEvent(this.RequestLoginHashed.GetInvocationList(), this, cpRecievedPacket);
@@ -358,19 +358,19 @@ namespace PRoCon.Core.Remote.Layer {
             }
         }
 
-        protected virtual void DispatchLogoutRequest(FrostbiteLayerConnection sender, Packet cpRecievedPacket) {
+        protected virtual void DispatchLogoutRequest(ILayerConnection sender, Packet cpRecievedPacket) {
             if (this.RequestLogout != null) {
                 FrostbiteConnection.RaiseEvent(this.RequestLogout.GetInvocationList(), this, cpRecievedPacket);
             }
         }
 
-        protected virtual void DispatchQuitRequest(FrostbiteLayerConnection sender, Packet cpRecievedPacket) {
+        protected virtual void DispatchQuitRequest(ILayerConnection sender, Packet cpRecievedPacket) {
             if (this.RequestQuit != null) {
                 FrostbiteConnection.RaiseEvent(this.RequestQuit.GetInvocationList(), this, cpRecievedPacket);
             }
         }
 
-        protected virtual void DispatchEventsEnabledRequest(FrostbiteLayerConnection sender, Packet cpRecievedPacket) {
+        protected virtual void DispatchEventsEnabledRequest(ILayerConnection sender, Packet cpRecievedPacket) {
             if (this.RequestEventsEnabled != null) {
                 bool blEnabled = true;
 
@@ -383,13 +383,13 @@ namespace PRoCon.Core.Remote.Layer {
             }
         }
 
-        protected virtual void DispatchHelpRequest(FrostbiteLayerConnection sender, Packet cpRecievedPacket) {
+        protected virtual void DispatchHelpRequest(ILayerConnection sender, Packet cpRecievedPacket) {
             if (this.RequestHelp != null) {
                 FrostbiteConnection.RaiseEvent(this.RequestHelp.GetInvocationList(), this, cpRecievedPacket);
             }
         }
 
-        protected virtual void DispatchAdminShutDownRequest(FrostbiteLayerConnection sender, Packet cpRecievedPacket) {
+        protected virtual void DispatchAdminShutDownRequest(ILayerConnection sender, Packet cpRecievedPacket) {
             if (this.RequestPacketAdminShutdown != null) {
                 FrostbiteConnection.RaiseEvent(this.RequestPacketAdminShutdown.GetInvocationList(), this, cpRecievedPacket);
             }
@@ -397,7 +397,7 @@ namespace PRoCon.Core.Remote.Layer {
 
         #endregion
 
-        public virtual void DispatchRequestPacket(FrostbiteLayerConnection sender, Packet cpRequestPacket) {
+        public virtual void DispatchRequestPacket(ILayerConnection sender, Packet cpRequestPacket) {
             if (cpRequestPacket.Words.Count >= 1) {
                 if (this.RequestDelegates.ContainsKey(cpRequestPacket.Words[0]) == true) {
                     this.RequestDelegates[cpRequestPacket.Words[0]](sender, cpRequestPacket);
@@ -410,7 +410,7 @@ namespace PRoCon.Core.Remote.Layer {
             }
         }
 
-        private void m_connection_PacketReceived(FrostbiteLayerConnection sender, Packet packet) {
+        private void Connection_PacketReceived(ILayerConnection sender, Packet packet) {
 
             if (packet.OriginatedFromServer == false && packet.IsResponse == false) {
 
@@ -421,7 +421,7 @@ namespace PRoCon.Core.Remote.Layer {
             //}
         }
 
-        private void m_connection_ConnectionClosed(FrostbiteLayerConnection sender) {
+        private void Connection_ConnectionClosed(ILayerConnection sender) {
             if (this.ConnectionClosed != null) {
                 FrostbiteConnection.RaiseEvent(this.ConnectionClosed.GetInvocationList(), this);
             }
@@ -429,13 +429,13 @@ namespace PRoCon.Core.Remote.Layer {
 
         public void SendPacket(Packet packet) {
             if (this.Connection != null) {
-                this.Connection.SendAsync(packet);
+                this.Connection.Send(packet);
             }
         }
 
         public void SendRequest(List<string> words) {
             if (this.Connection != null) {
-                this.Connection.SendAsync(new Packet(true, false, this.Connection.AcquireSequenceNumber, words));
+                this.Connection.Send(new Packet(true, false, this.Connection.AcquireSequenceNumber, words));
             }
         }
 
@@ -446,7 +446,7 @@ namespace PRoCon.Core.Remote.Layer {
         public void SendResponse(Packet packet, List<string> words) {
 
             if (this.Connection != null) {
-                this.Connection.SendAsync(new Packet(false, true, packet.SequenceNumber, words));
+                this.Connection.Send(new Packet(false, true, packet.SequenceNumber, words));
             }
         }
 

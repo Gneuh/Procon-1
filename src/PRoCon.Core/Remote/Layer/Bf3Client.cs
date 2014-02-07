@@ -1,7 +1,7 @@
 ﻿namespace PRoCon.Core.Remote.Layer {
     public class Bf3Client : FrostbiteLayerClient {
 
-        public Bf3Client(FrostbiteLayerConnection connection) : base(connection) {
+        public Bf3Client(ILayerConnection connection) : base(connection) {
 
             this.RequestDelegates.Add("admin.eventsEnabled", this.DispatchEventsEnabledRequest);
 

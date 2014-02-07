@@ -5,7 +5,7 @@ using System.Net.Sockets;
 using System.Text;
 
 namespace PRoCon.Core.Remote.Layer {
-    public class FrostbiteLayerConnection {
+    public class FrostbiteLayerConnection : ILayerConnection {
         protected const UInt32 MaxGarbageBytes = 4194304;
 
         /// <summary>
@@ -13,25 +13,40 @@ namespace PRoCon.Core.Remote.Layer {
         /// </summary>
         protected readonly Object AcquireSequenceNumberLock = new Object();
 
+        /// <summary>
+        /// The underlying tcp client
+        /// </summary>
         protected TcpClient Client;
+
+        /// <summary>
+        /// Buffer to hold chunks of recieved data in the order they were recieved
+        /// </summary>
         protected byte[] PacketStream;
+
+        /// <summary>
+        /// Buffer to accept recieved data into (chunk)
+        /// </summary>
         protected byte[] ReceivedBuffer;
+        /// <summary>
+        /// The current sequence number (or last sequence number sent)
+        /// </summary>
         protected UInt32 SequenceNumber;
+
+        /// <summary>
+        /// Lock used when shutting down the connection
+        /// </summary>
         protected Object ShutdownConnectionLock = new Object();
+
+        /// <summary>
+        /// The stream from Client
+        /// </summary>
         protected NetworkStream NetworkStream;
 
-        #region Events
+        public Action<ILayerConnection> ConnectionClosed { get; set; }
 
-        public delegate void EmptyParameterHandler(FrostbiteLayerConnection sender);
+        public Action<ILayerConnection, Packet> PacketSent { get; set; }
 
-        public delegate void PacketDispatchHandler(FrostbiteLayerConnection sender, Packet packet);
-
-        public event EmptyParameterHandler ConnectionClosed;
-
-        public event PacketDispatchHandler PacketSent;
-        public event PacketDispatchHandler PacketReceived;
-
-        #endregion
+        public Action<ILayerConnection, Packet> PacketReceived { get; set; }
 
         public FrostbiteLayerConnection(TcpClient acceptedConnection) {
             ReceivedBuffer = new byte[4096];
@@ -62,8 +77,7 @@ namespace PRoCon.Core.Remote.Layer {
             }
         }
 
-        //private string m_strClientIPPort = String.Empty;
-        public string IPPort {
+        public String IPPort {
             get {
                 string strClientIPPort = String.Empty;
 
@@ -94,7 +108,7 @@ namespace PRoCon.Core.Remote.Layer {
             }
         }
 
-        public void SendAsync(Packet packet) {
+        public void Send(Packet packet) {
             try {
                 if (NetworkStream != null) {
                     byte[] bytePacket = packet.EncodePacket();
@@ -178,18 +192,6 @@ namespace PRoCon.Core.Remote.Layer {
             }
         }
 
-        /// <summary>
-        ///     Pokes the connection, ensuring that the connection is still alive. If
-        ///     this method determines that the connection is dead then it will call for
-        ///     a shutdown.
-        /// </summary>
-        /// <remarks>
-        ///     <para>
-        ///         This method is a final check to make sure communications are proceeding in both directions in
-        ///         the last five minutes. If nothing has been sent and received in the last five minutes then the connection is assumed
-        ///         dead and a shutdown is initiated.
-        ///     </para>
-        /// </remarks>
         public virtual void Poke() {
             bool downstreamDead = this.LastPacketReceived != null && this.LastPacketReceived.Stamp < DateTime.Now.AddMinutes(-2);
             bool upstreamDead = this.LastPacketSent != null && this.LastPacketSent.Stamp < DateTime.Now.AddMinutes(-2);

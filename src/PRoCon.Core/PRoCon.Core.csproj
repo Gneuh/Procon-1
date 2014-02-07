@@ -104,6 +104,7 @@
     <Compile Include="Plugin\PluginInvocation.cs" />
     <Compile Include="Remote\BF4Client.cs" />
     <Compile Include="Remote\Layer\Bf4Client.cs" />
+    <Compile Include="Remote\Layer\ILayerConnection.cs" />
     <Compile Include="Remote\Layer\MohwClient.cs" />
     <Compile Include="Remote\MOHWClient.cs" />
     <Compile Include="UnlockMode.cs" />

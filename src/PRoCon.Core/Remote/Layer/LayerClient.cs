@@ -89,7 +89,7 @@ namespace PRoCon.Core.Remote.Layer {
         private CPrivileges m_sprvPrivileges = new CPrivileges();
         private string m_strUsername = String.Empty;
 
-        public LayerClient(FrostbiteLayerConnection newConnection, PRoConApplication praApplication, PRoConClient prcClient) {
+        public LayerClient(ILayerConnection newConnection, PRoConApplication praApplication, PRoConClient prcClient) {
 
             this.IsLoggedIn = false;
             this.GzipCompression = false;
