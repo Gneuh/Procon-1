@@ -16,25 +16,16 @@ namespace PRoCon.Core.Remote.Layer {
 
     public class LayerClient {
 
-        #region Constants
-
-        public static string RESPONSE_OK = "OK";
+        public static string ResponseOk = "OK";
         
-        public static string RESPONSE_INVALID_PASSWORD_HASH = "InvalidPasswordHash";
-        public static string RESPONSE_INVALID_PASSWORD = "InvalidPassword";
-        public static string RESPONSE_INVALID_USERNAME = "InvalidUsername";
-        public static string RESPONSE_LOGIN_REQUIRED = "LogInRequired";
-        public static string RESPONSE_INSUFFICIENT_PRIVILEGES = "InsufficientPrivileges";
-        public static string RESPONSE_INVALID_ARGUMENTS = "InvalidArguments";
-        public static string RESPONSE_UNKNOWN_COMMAND = "UnknownCommand";
+        public static string ResponseInvalidPasswordHash = "InvalidPasswordHash";
+        public static string ResponseInvalidPassword = "InvalidPassword";
+        public static string ResponseInvalidUsername = "InvalidUsername";
+        public static string ResponseLoginRequired = "LogInRequired";
+        public static string ResponseInsufficientPrivileges = "InsufficientPrivileges";
+        public static string ResponseInvalidArguments = "InvalidArguments";
+        public static string ResponseUnknownCommand = "UnknownCommand";
 
-        // Packages
-        public static string RESPONSE_PACKAGE_ALREADYINSTALLED = "AlreadyInstalled";
-
-        #endregion
-
-        //private uscServerConnection m_uscConnectionPanel;
-        //private uscAccountsPanel m_uscParent;
         public delegate void LayerClientHandler(LayerClient sender);
         public event LayerClientHandler ClientShutdown;
         public event LayerClientHandler Login;
@@ -48,49 +39,53 @@ namespace PRoCon.Core.Remote.Layer {
         protected delegate void RequestPacketHandler(ILayerPacketDispatcher sender, Packet packet);
         protected Dictionary<string, RequestPacketHandler> m_requestDelegates;
 
-        public ILayerPacketDispatcher PacketDispatcher {
-            get;
-            private set;
-        }
+        /// <summary>
+        /// The game dependant packet dispatcher to use
+        /// </summary>
+        public ILayerPacketDispatcher PacketDispatcher { get; set; }
 
-        public bool IsLoggedIn { get; private set; }
+        /// <summary>
+        /// If the client has authenticated yet
+        /// </summary>
+        protected bool IsLoggedIn { get; set; }
 
-        private bool m_blEventsEnabled = false;
-        public bool EventsClient {
-            get {
-                return this.m_blEventsEnabled;
-            }
-        }
+        /// <summary>
+        /// If the client has events enabled (wants to recieve events)
+        /// </summary>
+        protected bool EventsEnabled { get; set; }
 
-        // If = "" = events disabled, if != "" then procon events enabled.
-        //private string m_strProconEventsUid = String.Empty;
-        public string ProconEventsUid { get;  private set; }
+        /// <summary>
+        /// Uid the client has chosen to identify them selves as
+        /// </summary>
+        public String ProconEventsUid { get; protected set; }
 
-        //public bool IsLoggedIn {
-        //    get {
-        //        return this.IsLoggedIn;
-        //    }
-        //}
+        /// <summary>
+        /// The username the client has authenticated with. See IsLoggedIn.
+        /// </summary>
+        public String Username { get; private set; }
 
-        public string Username {
-            get {
-                return this.m_strUsername;
-            }
-        }
+        /// <summary>
+        /// The privileges of the authenticated user
+        /// </summary>
+        public CPrivileges Privileges { get; private set; }
 
-        public CPrivileges Privileges {
-            get {
-                return this.m_sprvPrivileges;
-            }
-        }
-
+        /// <summary>
+        /// If gzip compression should be used during transport
+        /// </summary>
         public bool GzipCompression { get; private set; }
 
-        private string m_strSalt = DateTime.Now.ToString("HH:mm:ss ff");
-        private CPrivileges m_sprvPrivileges = new CPrivileges();
-        private string m_strUsername = String.Empty;
+        /// <summary>
+        /// The salt issued to the client for authentication
+        /// </summary>
+        protected String Salt { get; set; }
 
         public LayerClient(ILayerConnection newConnection, PRoConApplication praApplication, PRoConClient prcClient) {
+            Privileges = new CPrivileges();
+            Username = String.Empty;
+
+            // This is just a default value so we never accidently pass through an empty
+            // string for authentication. We generate a better salt later on.
+            this.Salt = DateTime.Now.ToString("HH:mm:ss ff");
 
             this.IsLoggedIn = false;
             this.GzipCompression = false;
@@ -276,21 +271,16 @@ namespace PRoCon.Core.Remote.Layer {
 
         #region Account Authentication
 
-        protected string GeneratePasswordHash(byte[] a_bSalt, string strData) {
+        protected string GeneratePasswordHash(byte[] salt, string data) {
             MD5 md5Hasher = MD5.Create();
 
-            byte[] a_bCombined = new byte[a_bSalt.Length + strData.Length];
-            a_bSalt.CopyTo(a_bCombined, 0);
-            Encoding.Default.GetBytes(strData).CopyTo(a_bCombined, a_bSalt.Length);
+            byte[] combined = new byte[salt.Length + data.Length];
+            salt.CopyTo(combined, 0);
+            Encoding.Default.GetBytes(data).CopyTo(combined, salt.Length);
 
-            byte[] a_bHash = md5Hasher.ComputeHash(a_bCombined);
+            byte[] hash = md5Hasher.ComputeHash(combined);
 
-            StringBuilder sbStringifyHash = new StringBuilder();
-            for (int i = 0; i < a_bHash.Length; i++) {
-                sbStringifyHash.Append(a_bHash[i].ToString("X2"));
-            }
-
-            return sbStringifyHash.ToString();
+            return hash.Select(x => x.ToString("X2")).Aggregate((a, b) => a + b);
         }
 
         protected byte[] HashToByteArray(string strHexString) {
@@ -315,16 +305,22 @@ namespace PRoCon.Core.Remote.Layer {
 
         private bool AuthenticateHashedAccount(string strUsername, string strHashedPassword) {
             if (String.Compare(this.GetAccountPassword(strUsername), String.Empty) != 0) {
-                return (String.Compare(GeneratePasswordHash(HashToByteArray(this.m_strSalt), this.GetAccountPassword(strUsername)), strHashedPassword) == 0);
+                return (String.Compare(GeneratePasswordHash(HashToByteArray(this.Salt), this.GetAccountPassword(strUsername)), strHashedPassword) == 0);
             }
             else {
                 return false;
             }
         }
 
-        private string GenerateSalt() {
-            Random random = new Random();
-            return (this.m_strSalt = this.GeneratePasswordHash(Encoding.ASCII.GetBytes(DateTime.Now.ToString("HH:mm:ss ff") + Convert.ToString(random.NextDouble() * Double.MaxValue)), this.m_strUsername));
+        private String GenerateSalt() {
+            var provider = new RNGCryptoServiceProvider();
+            byte[] buffer = new byte[1024];
+            provider.GetBytes(buffer);
+
+            // Note that frostbite sends back a md5 for salt, so we must too.
+            this.Salt = this.GeneratePasswordHash(buffer, Convert.ToBase64String(buffer));
+
+            return this.Salt;
         }
 
         #endregion
@@ -359,7 +355,7 @@ namespace PRoCon.Core.Remote.Layer {
 
         private void m_prcClient_PassLayerEvent(PRoConClient sender, Packet packet) {
 
-            if (this.PacketDispatcher != null && this.IsLoggedIn == true && this.m_blEventsEnabled == true) {
+            if (this.PacketDispatcher != null && this.IsLoggedIn == true && this.EventsEnabled == true) {
                 this.PacketDispatcher.SendPacket(packet);
             }
             /*
@@ -380,37 +376,37 @@ namespace PRoCon.Core.Remote.Layer {
         private void DispatchProconApplicationShutdownRequest(ILayerPacketDispatcher sender, Packet packet)
         {
             if (this.IsLoggedIn == true) {
-                if (this.m_sprvPrivileges.CanShutdownServer == true) {
-                    sender.SendResponse(packet, LayerClient.RESPONSE_OK, "but nothing will happen");
+                if (this.Privileges.CanShutdownServer == true) {
+                    sender.SendResponse(packet, LayerClient.ResponseOk, "but nothing will happen");
                     // shutdowns only the connection not the whole procon... this.m_praApplication.Shutdown();
                 } else {
-                    sender.SendResponse(packet, LayerClient.RESPONSE_INSUFFICIENT_PRIVILEGES);
+                    sender.SendResponse(packet, LayerClient.ResponseInsufficientPrivileges);
                 }
             } else {
-                sender.SendResponse(packet, LayerClient.RESPONSE_LOGIN_REQUIRED);
+                sender.SendResponse(packet, LayerClient.ResponseLoginRequired);
             }
         }
 
         #endregion
 
         private void DispatchProconLoginUsernameRequest(ILayerPacketDispatcher sender, Packet packet) {
-            this.m_strUsername = packet.Words[1];
+            this.Username = packet.Words[1];
 
             // We send back any errors in the login process after they attempt to login.
-            if (this.m_praApplication.AccountsList.Contains(this.m_strUsername) == true) {
-                this.m_sprvPrivileges = this.GetAccountPrivileges(this.m_strUsername);
+            if (this.m_praApplication.AccountsList.Contains(this.Username) == true) {
+                this.Privileges = this.GetAccountPrivileges(this.Username);
 
-                this.m_sprvPrivileges.SetLowestPrivileges(this.m_prcClient.Privileges);
+                this.Privileges.SetLowestPrivileges(this.m_prcClient.Privileges);
 
-                if (this.m_sprvPrivileges.CanLogin == true) {
-                    sender.SendResponse(packet, LayerClient.RESPONSE_OK);
+                if (this.Privileges.CanLogin == true) {
+                    sender.SendResponse(packet, LayerClient.ResponseOk);
                 }
                 else {
-                    sender.SendResponse(packet, LayerClient.RESPONSE_INSUFFICIENT_PRIVILEGES);
+                    sender.SendResponse(packet, LayerClient.ResponseInsufficientPrivileges);
                 }
             }
             else {
-                sender.SendResponse(packet, LayerClient.RESPONSE_INVALID_USERNAME);
+                sender.SendResponse(packet, LayerClient.ResponseInvalidUsername);
             }
         }
 
@@ -423,14 +419,14 @@ namespace PRoCon.Core.Remote.Layer {
                 if (bool.TryParse(packet.Words[1], out blEnabled) == true) {
 
                     if (blEnabled == false) {
-                        sender.SendResponse(packet, LayerClient.RESPONSE_OK);
+                        sender.SendResponse(packet, LayerClient.ResponseOk);
 
                         this.ProconEventsUid = String.Empty;
                     }
                     else if (packet.Words.Count >= 3) {
 
                         if (this.m_prcClient.Layer.LayerClients.Any(client => client.Value.ProconEventsUid == packet.Words[2]) == false) {
-                            sender.SendResponse(packet, LayerClient.RESPONSE_OK);
+                            sender.SendResponse(packet, LayerClient.ResponseOk);
 
                             this.ProconEventsUid = packet.Words[2];
 
@@ -445,16 +441,16 @@ namespace PRoCon.Core.Remote.Layer {
                     }
                 }
                 else {
-                    sender.SendResponse(packet, LayerClient.RESPONSE_INVALID_ARGUMENTS);
+                    sender.SendResponse(packet, LayerClient.ResponseInvalidArguments);
                 }
             }
             else {
-                sender.SendResponse(packet, LayerClient.RESPONSE_LOGIN_REQUIRED);
+                sender.SendResponse(packet, LayerClient.ResponseLoginRequired);
             }
         }
 
         private void DispatchProconVersionRequest(ILayerPacketDispatcher sender, Packet packet) {
-            sender.SendResponse(packet, LayerClient.RESPONSE_OK, Assembly.GetExecutingAssembly().GetName().Version.ToString());
+            sender.SendResponse(packet, LayerClient.ResponseOk, Assembly.GetExecutingAssembly().GetName().Version.ToString());
         }
 
         private void DispatchProconVarsRequest(ILayerPacketDispatcher sender, Packet packet) {
@@ -462,36 +458,36 @@ namespace PRoCon.Core.Remote.Layer {
             if (this.IsLoggedIn == true) {
 
                 if (packet.Words.Count == 2) {
-                    sender.SendResponse(packet, LayerClient.RESPONSE_OK, packet.Words[1], this.m_prcClient.Variables.GetVariable<string>(packet.Words[1], ""));
+                    sender.SendResponse(packet, LayerClient.ResponseOk, packet.Words[1], this.m_prcClient.Variables.GetVariable<string>(packet.Words[1], ""));
                 }
                 else if (packet.Words.Count > 2) {
 
-                    if (this.m_sprvPrivileges.CanIssueLimitedProconCommands == true) {
+                    if (this.Privileges.CanIssueLimitedProconCommands == true) {
 
                         this.m_prcClient.Variables.SetVariable(packet.Words[1], packet.Words[2]);
 
-                        sender.SendResponse(packet, LayerClient.RESPONSE_OK, packet.Words[1], this.m_prcClient.Variables.GetVariable<string>(packet.Words[1], ""));
+                        sender.SendResponse(packet, LayerClient.ResponseOk, packet.Words[1], this.m_prcClient.Variables.GetVariable<string>(packet.Words[1], ""));
                     }
                     else {
-                        sender.SendResponse(packet, LayerClient.RESPONSE_INSUFFICIENT_PRIVILEGES);
+                        sender.SendResponse(packet, LayerClient.ResponseInsufficientPrivileges);
                     }
                 }
                 else {
-                    sender.SendResponse(packet, LayerClient.RESPONSE_INVALID_ARGUMENTS);
+                    sender.SendResponse(packet, LayerClient.ResponseInvalidArguments);
                 }
             }
             else {
-                sender.SendResponse(packet, LayerClient.RESPONSE_LOGIN_REQUIRED);
+                sender.SendResponse(packet, LayerClient.ResponseLoginRequired);
             }
         }
 
         private void DispatchProconPrivilegesRequest(ILayerPacketDispatcher sender, Packet packet) {
 
             if (this.IsLoggedIn == true) {
-                sender.SendResponse(packet, LayerClient.RESPONSE_OK, this.m_sprvPrivileges.PrivilegesFlags.ToString());
+                sender.SendResponse(packet, LayerClient.ResponseOk, this.Privileges.PrivilegesFlags.ToString());
             }
             else {
-                sender.SendResponse(packet, LayerClient.RESPONSE_LOGIN_REQUIRED);
+                sender.SendResponse(packet, LayerClient.ResponseLoginRequired);
             }
         }
 
@@ -503,31 +499,31 @@ namespace PRoCon.Core.Remote.Layer {
                 if (packet.Words.Count == 2 && bool.TryParse(packet.Words[1], out enableCompress) == true) {
                     this.GzipCompression = enableCompress;
                     
-                    sender.SendResponse(packet, LayerClient.RESPONSE_OK);
+                    sender.SendResponse(packet, LayerClient.ResponseOk);
                 }
                 else {
-                    sender.SendResponse(packet, LayerClient.RESPONSE_INVALID_ARGUMENTS);
+                    sender.SendResponse(packet, LayerClient.ResponseInvalidArguments);
                 }
             }
             else {
-                sender.SendResponse(packet, LayerClient.RESPONSE_LOGIN_REQUIRED);
+                sender.SendResponse(packet, LayerClient.ResponseLoginRequired);
             }
         }
 
         private void DispatchProconExecRequest(ILayerPacketDispatcher sender, Packet packet) {
             if (this.IsLoggedIn == true) {
-                if (this.m_sprvPrivileges.CanIssueAllProconCommands == true) {
-                    sender.SendResponse(packet, LayerClient.RESPONSE_OK);
+                if (this.Privileges.CanIssueAllProconCommands == true) {
+                    sender.SendResponse(packet, LayerClient.ResponseOk);
 
                     packet.Words.RemoveAt(0);
                     this.m_praApplication.ExecutePRoConCommand(this.m_prcClient, packet.Words, 0);
                 }
                 else {
-                    sender.SendResponse(packet, LayerClient.RESPONSE_INSUFFICIENT_PRIVILEGES);
+                    sender.SendResponse(packet, LayerClient.ResponseInsufficientPrivileges);
                 }
             }
             else {
-                sender.SendResponse(packet, LayerClient.RESPONSE_LOGIN_REQUIRED);
+                sender.SendResponse(packet, LayerClient.ResponseLoginRequired);
             }
         }
 
@@ -535,10 +531,10 @@ namespace PRoCon.Core.Remote.Layer {
 
         private void DispatchProconAccountListAccountsRequest(ILayerPacketDispatcher sender, Packet packet) {
             if (this.IsLoggedIn == true) {
-                if (this.m_sprvPrivileges.CanIssueLimitedProconCommands == true) {
+                if (this.Privileges.CanIssueLimitedProconCommands == true) {
 
                     List<string> lstAccounts = new List<string>();
-                    lstAccounts.Add(LayerClient.RESPONSE_OK);
+                    lstAccounts.Add(LayerClient.ResponseOk);
 
                     foreach (string strAccountName in this.m_praApplication.AccountsList.ListAccountNames()) {
                         if (this.m_prcClient.Layer.AccountPrivileges.Contains(strAccountName) == true) {
@@ -550,41 +546,41 @@ namespace PRoCon.Core.Remote.Layer {
                     sender.SendResponse(packet, lstAccounts);
                 }
                 else {
-                    sender.SendResponse(packet, LayerClient.RESPONSE_INSUFFICIENT_PRIVILEGES);
+                    sender.SendResponse(packet, LayerClient.ResponseInsufficientPrivileges);
                 }
             }
             else {
-                sender.SendResponse(packet, LayerClient.RESPONSE_LOGIN_REQUIRED);
+                sender.SendResponse(packet, LayerClient.ResponseLoginRequired);
             }
         }
 
         private void DispatchProconAccountListLoggedInRequest(ILayerPacketDispatcher sender, Packet packet) {
-            if (this.m_sprvPrivileges.CanIssueLimitedProconCommands == true) {
+            if (this.Privileges.CanIssueLimitedProconCommands == true) {
 
                 List<string> lstLoggedInAccounts = this.m_prcClient.Layer.GetLoggedInAccounts((packet.Words.Count >= 2 && String.Compare(packet.Words[1], "uids") == 0));
 
                 //List<string> lstLoggedInAccounts = this.m_prcClient.Layer.GetLoggedInAccounts();
-                lstLoggedInAccounts.Insert(0, LayerClient.RESPONSE_OK);
+                lstLoggedInAccounts.Insert(0, LayerClient.ResponseOk);
 
                 sender.SendResponse(packet, lstLoggedInAccounts);
             }
             else {
-                sender.SendResponse(packet, LayerClient.RESPONSE_INSUFFICIENT_PRIVILEGES);
+                sender.SendResponse(packet, LayerClient.ResponseInsufficientPrivileges);
             }
         }
 
         private void DispatchProconAccountCreateRequest(ILayerPacketDispatcher sender, Packet packet) {
             if (this.IsLoggedIn == true) {
-                if (this.m_sprvPrivileges.CanIssueLimitedProconCommands == true) {
+                if (this.Privileges.CanIssueLimitedProconCommands == true) {
 
                     if (this.m_praApplication.AccountsList.Contains(packet.Words[1]) == false) {
                         if (packet.Words[2].Length > 0) {
-                            sender.SendResponse(packet, LayerClient.RESPONSE_OK);
+                            sender.SendResponse(packet, LayerClient.ResponseOk);
                             this.m_praApplication.AccountsList.CreateAccount(packet.Words[1], packet.Words[2]);
                             //this.m_uscParent.LayerCreateAccount(
                         }
                         else {
-                            sender.SendResponse(packet, LayerClient.RESPONSE_INVALID_ARGUMENTS);
+                            sender.SendResponse(packet, LayerClient.ResponseInvalidArguments);
                         }
                     }
                     else {
@@ -592,21 +588,21 @@ namespace PRoCon.Core.Remote.Layer {
                     }
                 }
                 else {
-                    sender.SendResponse(packet, LayerClient.RESPONSE_INSUFFICIENT_PRIVILEGES);
+                    sender.SendResponse(packet, LayerClient.ResponseInsufficientPrivileges);
                 }
             }
             else {
-                sender.SendResponse(packet, LayerClient.RESPONSE_LOGIN_REQUIRED);
+                sender.SendResponse(packet, LayerClient.ResponseLoginRequired);
             }
         }
 
         private void DispatchProconAccountDeleteRequest(ILayerPacketDispatcher sender, Packet packet) {
             if (this.IsLoggedIn == true) {
-                if (this.m_sprvPrivileges.CanIssueLimitedProconCommands == true) {
+                if (this.Privileges.CanIssueLimitedProconCommands == true) {
                     if (packet.Words.Count >= 2) {
 
                         if (this.m_praApplication.AccountsList.Contains(packet.Words[1]) == true) {
-                            sender.SendResponse(packet, LayerClient.RESPONSE_OK);
+                            sender.SendResponse(packet, LayerClient.ResponseOk);
 
                             this.m_praApplication.AccountsList.Remove(packet.Words[1]);
                             //this.m_uscParent.LayerDeleteAccount(cpPacket.Words[1]);
@@ -616,26 +612,26 @@ namespace PRoCon.Core.Remote.Layer {
                         }
                     }
                     else {
-                        sender.SendResponse(packet, LayerClient.RESPONSE_INVALID_ARGUMENTS);
+                        sender.SendResponse(packet, LayerClient.ResponseInvalidArguments);
                     }
                 }
                 else {
-                    sender.SendResponse(packet, LayerClient.RESPONSE_INSUFFICIENT_PRIVILEGES);
+                    sender.SendResponse(packet, LayerClient.ResponseInsufficientPrivileges);
                 }
             }
             else {
-                sender.SendResponse(packet, LayerClient.RESPONSE_LOGIN_REQUIRED);
+                sender.SendResponse(packet, LayerClient.ResponseLoginRequired);
             }
         }
 
         private void DispatchProconAccountSetPasswordRequest(ILayerPacketDispatcher sender, Packet packet) {
             if (this.IsLoggedIn == true) {
-                if (this.m_sprvPrivileges.CanIssueLimitedProconCommands == true) {
+                if (this.Privileges.CanIssueLimitedProconCommands == true) {
 
                     if (packet.Words.Count >= 3 && packet.Words[2].Length > 0) {
 
                         if (this.m_praApplication.AccountsList.Contains(packet.Words[1]) == true) {
-                            sender.SendResponse(packet, LayerClient.RESPONSE_OK);
+                            sender.SendResponse(packet, LayerClient.ResponseOk);
 
                             this.m_praApplication.AccountsList[packet.Words[1]].Password = packet.Words[2];
                         }
@@ -644,15 +640,15 @@ namespace PRoCon.Core.Remote.Layer {
                         }
                     }
                     else {
-                        sender.SendResponse(packet, LayerClient.RESPONSE_INVALID_ARGUMENTS);
+                        sender.SendResponse(packet, LayerClient.ResponseInvalidArguments);
                     }
                 }
                 else {
-                    sender.SendResponse(packet, LayerClient.RESPONSE_INSUFFICIENT_PRIVILEGES);
+                    sender.SendResponse(packet, LayerClient.ResponseInsufficientPrivileges);
                 }
             }
             else {
-                sender.SendResponse(packet, LayerClient.RESPONSE_LOGIN_REQUIRED);
+                sender.SendResponse(packet, LayerClient.ResponseLoginRequired);
             }
         }
 
@@ -663,25 +659,25 @@ namespace PRoCon.Core.Remote.Layer {
         private void DispatchProconBattlemapDeleteZoneRequest(ILayerPacketDispatcher sender, Packet packet) {
 
             if (this.IsLoggedIn == true) {
-                if (this.m_sprvPrivileges.CanEditMapZones == true) {
+                if (this.Privileges.CanEditMapZones == true) {
                     if (this.m_prcClient.MapGeometry.MapZones.Contains(packet.Words[1]) == true) {
                         this.m_prcClient.MapGeometry.MapZones.Remove(packet.Words[1]);
                     }
 
-                    sender.SendResponse(packet, LayerClient.RESPONSE_OK);
+                    sender.SendResponse(packet, LayerClient.ResponseOk);
                 }
                 else {
-                    sender.SendResponse(packet, LayerClient.RESPONSE_INSUFFICIENT_PRIVILEGES);
+                    sender.SendResponse(packet, LayerClient.ResponseInsufficientPrivileges);
                 }
             }
             else {
-                sender.SendResponse(packet, LayerClient.RESPONSE_LOGIN_REQUIRED);
+                sender.SendResponse(packet, LayerClient.ResponseLoginRequired);
             }
         }
 
         private void DispatchProconBattlemapCreateZoneRequest(ILayerPacketDispatcher sender, Packet packet) {
             if (this.IsLoggedIn == true) {
-                if (this.m_sprvPrivileges.CanEditMapZones == true) {
+                if (this.Privileges.CanEditMapZones == true) {
 
                     if (packet.Words.Count >= 3) {
 
@@ -698,24 +694,24 @@ namespace PRoCon.Core.Remote.Layer {
                             this.m_prcClient.MapGeometry.MapZones.CreateMapZone(packet.Words[1], points);
                         }
 
-                        sender.SendResponse(packet, LayerClient.RESPONSE_OK);
+                        sender.SendResponse(packet, LayerClient.ResponseOk);
                     }
                     else {
-                        sender.SendResponse(packet, LayerClient.RESPONSE_INVALID_ARGUMENTS);
+                        sender.SendResponse(packet, LayerClient.ResponseInvalidArguments);
                     }
                 }
                 else {
-                    sender.SendResponse(packet, LayerClient.RESPONSE_INSUFFICIENT_PRIVILEGES);
+                    sender.SendResponse(packet, LayerClient.ResponseInsufficientPrivileges);
                 }
             }
             else {
-                sender.SendResponse(packet, LayerClient.RESPONSE_LOGIN_REQUIRED);
+                sender.SendResponse(packet, LayerClient.ResponseLoginRequired);
             }
         }
 
         private void DispatchProconBattlemapModifyZoneTagsRequest(ILayerPacketDispatcher sender, Packet packet) {
             if (this.IsLoggedIn == true) {
-                if (this.m_sprvPrivileges.CanEditMapZones == true) {
+                if (this.Privileges.CanEditMapZones == true) {
 
                     if (packet.Words.Count >= 3) {
 
@@ -723,25 +719,25 @@ namespace PRoCon.Core.Remote.Layer {
                             this.m_prcClient.MapGeometry.MapZones[packet.Words[1]].Tags.FromString(packet.Words[2]);
                         }
 
-                        sender.SendResponse(packet, LayerClient.RESPONSE_OK);
+                        sender.SendResponse(packet, LayerClient.ResponseOk);
                     }
                     else {
-                        sender.SendResponse(packet, LayerClient.RESPONSE_INVALID_ARGUMENTS);
+                        sender.SendResponse(packet, LayerClient.ResponseInvalidArguments);
                     }
                 }
                 else {
-                    sender.SendResponse(packet, LayerClient.RESPONSE_INSUFFICIENT_PRIVILEGES);
+                    sender.SendResponse(packet, LayerClient.ResponseInsufficientPrivileges);
                 }
             }
             else {
-                sender.SendResponse(packet, LayerClient.RESPONSE_LOGIN_REQUIRED);
+                sender.SendResponse(packet, LayerClient.ResponseLoginRequired);
             }
         }
 
         private void DispatchProconBattlemapModifyZonePointsRequest(ILayerPacketDispatcher sender, Packet packet) {
             
             if (this.IsLoggedIn == true) {
-                if (this.m_sprvPrivileges.CanEditMapZones == true) {
+                if (this.Privileges.CanEditMapZones == true) {
 
                     if (packet.Words.Count >= 3) {
 
@@ -760,18 +756,18 @@ namespace PRoCon.Core.Remote.Layer {
                             }
                         }
 
-                        sender.SendResponse(packet, LayerClient.RESPONSE_OK);
+                        sender.SendResponse(packet, LayerClient.ResponseOk);
                     }
                     else {
-                        sender.SendResponse(packet, LayerClient.RESPONSE_INVALID_ARGUMENTS);
+                        sender.SendResponse(packet, LayerClient.ResponseInvalidArguments);
                     }
                 }
                 else {
-                    sender.SendResponse(packet, LayerClient.RESPONSE_INSUFFICIENT_PRIVILEGES);
+                    sender.SendResponse(packet, LayerClient.ResponseInsufficientPrivileges);
                 }
             }
             else {
-                sender.SendResponse(packet, LayerClient.RESPONSE_LOGIN_REQUIRED);
+                sender.SendResponse(packet, LayerClient.ResponseLoginRequired);
             }
         }
 
@@ -779,7 +775,7 @@ namespace PRoCon.Core.Remote.Layer {
 
             if (this.IsLoggedIn == true) {
 
-                List<string> listPacket = new List<string>() { LayerClient.RESPONSE_OK };
+                List<string> listPacket = new List<string>() { LayerClient.ResponseOk };
 
                 listPacket.Add(this.m_prcClient.MapGeometry.MapZones.Count.ToString());
 
@@ -796,7 +792,7 @@ namespace PRoCon.Core.Remote.Layer {
                 sender.SendResponse(packet, listPacket);
             }
             else {
-                sender.SendResponse(packet, LayerClient.RESPONSE_LOGIN_REQUIRED);
+                sender.SendResponse(packet, LayerClient.ResponseLoginRequired);
             }
         }
 
@@ -806,7 +802,7 @@ namespace PRoCon.Core.Remote.Layer {
 
         private void DispatchProconLayerSetPrivilegesRequest(ILayerPacketDispatcher sender, Packet packet) {
             if (this.IsLoggedIn == true) {
-                if (this.m_sprvPrivileges.CanIssueLimitedProconCommands == true) {
+                if (this.Privileges.CanIssueLimitedProconCommands == true) {
 
                     UInt32 ui32Privileges = 0;
 
@@ -816,7 +812,7 @@ namespace PRoCon.Core.Remote.Layer {
 
                             CPrivileges sprvPrivs = new CPrivileges();
 
-                            sender.SendResponse(packet, LayerClient.RESPONSE_OK);
+                            sender.SendResponse(packet, LayerClient.ResponseOk);
 
                             sprvPrivs.PrivilegesFlags = ui32Privileges;
                             this.m_prcClient.Layer.AccountPrivileges[packet.Words[1]].SetPrivileges(sprvPrivs);
@@ -826,15 +822,15 @@ namespace PRoCon.Core.Remote.Layer {
                         }
                     }
                     else {
-                        sender.SendResponse(packet, LayerClient.RESPONSE_INVALID_ARGUMENTS);
+                        sender.SendResponse(packet, LayerClient.ResponseInvalidArguments);
                     }
                 }
                 else {
-                    sender.SendResponse(packet, LayerClient.RESPONSE_INSUFFICIENT_PRIVILEGES);
+                    sender.SendResponse(packet, LayerClient.ResponseInsufficientPrivileges);
                 }
             }
             else {
-                sender.SendResponse(packet, LayerClient.RESPONSE_LOGIN_REQUIRED);
+                sender.SendResponse(packet, LayerClient.ResponseLoginRequired);
             }
         }
 
@@ -844,52 +840,52 @@ namespace PRoCon.Core.Remote.Layer {
 
         private void DispatchProconPluginListLoadedRequest(ILayerPacketDispatcher sender, Packet packet) {
             if (this.IsLoggedIn == true) {
-                if (this.m_sprvPrivileges.CanIssueLimitedProconPluginCommands == true) {
+                if (this.Privileges.CanIssueLimitedProconPluginCommands == true) {
 
                     if (packet.Words.Count == 1) {
                         List<string> lstLoadedPlugins = this.GetListLoadedPlugins();
 
-                        lstLoadedPlugins.Insert(0, LayerClient.RESPONSE_OK);
+                        lstLoadedPlugins.Insert(0, LayerClient.ResponseOk);
 
                         sender.SendResponse(packet, lstLoadedPlugins);
                     }
                     else {
-                        sender.SendResponse(packet, LayerClient.RESPONSE_INVALID_ARGUMENTS);
+                        sender.SendResponse(packet, LayerClient.ResponseInvalidArguments);
                     }
                 }
                 else {
-                    sender.SendResponse(packet, LayerClient.RESPONSE_INSUFFICIENT_PRIVILEGES);
+                    sender.SendResponse(packet, LayerClient.ResponseInsufficientPrivileges);
                 }
             }
             else {
-                sender.SendResponse(packet, LayerClient.RESPONSE_LOGIN_REQUIRED);
+                sender.SendResponse(packet, LayerClient.ResponseLoginRequired);
             }
         }
 
         private void DispatchProconPluginListEnabledRequest(ILayerPacketDispatcher sender, Packet packet) {
             if (this.IsLoggedIn == true) {
-                if (this.m_sprvPrivileges.CanIssueLimitedProconPluginCommands == true) {
+                if (this.Privileges.CanIssueLimitedProconPluginCommands == true) {
                     List<string> lstEnabledPlugins = this.m_prcClient.PluginsManager.Plugins.EnabledClassNames;
-                    lstEnabledPlugins.Insert(0, LayerClient.RESPONSE_OK);
+                    lstEnabledPlugins.Insert(0, LayerClient.ResponseOk);
 
                     sender.SendResponse(packet, lstEnabledPlugins);
                 }
                 else {
-                    sender.SendResponse(packet, LayerClient.RESPONSE_INSUFFICIENT_PRIVILEGES);
+                    sender.SendResponse(packet, LayerClient.ResponseInsufficientPrivileges);
                 }
             }
             else {
-                sender.SendResponse(packet, LayerClient.RESPONSE_LOGIN_REQUIRED);
+                sender.SendResponse(packet, LayerClient.ResponseLoginRequired);
             }
         }
 
         private void DispatchProconPluginEnableRequest(ILayerPacketDispatcher sender, Packet packet) {
             if (this.IsLoggedIn == true) {
-                if (this.m_sprvPrivileges.CanIssueLimitedProconPluginCommands == true) {
+                if (this.Privileges.CanIssueLimitedProconPluginCommands == true) {
                     bool blEnabled = false;
 
                     if (packet.Words.Count >= 3 && bool.TryParse(packet.Words[2], out blEnabled) == true) {
-                        sender.SendResponse(packet, LayerClient.RESPONSE_OK);
+                        sender.SendResponse(packet, LayerClient.ResponseOk);
 
                         if (blEnabled == true) {
                             this.m_prcClient.PluginsManager.EnablePlugin(packet.Words[1]);
@@ -899,38 +895,38 @@ namespace PRoCon.Core.Remote.Layer {
                         }
                     }
                     else {
-                        sender.SendResponse(packet, LayerClient.RESPONSE_INVALID_ARGUMENTS);
+                        sender.SendResponse(packet, LayerClient.ResponseInvalidArguments);
                     }
                 }
                 else {
-                    sender.SendResponse(packet, LayerClient.RESPONSE_INSUFFICIENT_PRIVILEGES);
+                    sender.SendResponse(packet, LayerClient.ResponseInsufficientPrivileges);
                 }
             }
             else {
-                sender.SendResponse(packet, LayerClient.RESPONSE_LOGIN_REQUIRED);
+                sender.SendResponse(packet, LayerClient.ResponseLoginRequired);
             }
         }
 
         private void DispatchProconPluginSetVariableRequest(ILayerPacketDispatcher sender, Packet packet) {
             if (this.IsLoggedIn == true) {
-                if (this.m_sprvPrivileges.CanIssueLimitedProconPluginCommands == true) {
+                if (this.Privileges.CanIssueLimitedProconPluginCommands == true) {
 
                     if (packet.Words.Count >= 4) {
 
-                        sender.SendResponse(packet, LayerClient.RESPONSE_OK);
+                        sender.SendResponse(packet, LayerClient.ResponseOk);
 
                         this.m_prcClient.PluginsManager.SetPluginVariable(packet.Words[1], packet.Words[2], packet.Words[3]);
                     }
                     else {
-                        sender.SendResponse(packet, LayerClient.RESPONSE_INVALID_ARGUMENTS);
+                        sender.SendResponse(packet, LayerClient.ResponseInvalidArguments);
                     }
                 }
                 else {
-                    sender.SendResponse(packet, LayerClient.RESPONSE_INSUFFICIENT_PRIVILEGES);
+                    sender.SendResponse(packet, LayerClient.ResponseInsufficientPrivileges);
                 }
             }
             else {
-                sender.SendResponse(packet, LayerClient.RESPONSE_LOGIN_REQUIRED);
+                sender.SendResponse(packet, LayerClient.ResponseLoginRequired);
             }
         }
 
@@ -945,22 +941,22 @@ namespace PRoCon.Core.Remote.Layer {
 
                     // Append the admin to the adminstack and send it on its way..
                     if (packet.Words[1].Length > 0) {
-                        packet.Words[1] = String.Format("{0}|{1}", packet.Words[1], CPluginVariable.Encode(this.m_strUsername));
+                        packet.Words[1] = String.Format("{0}|{1}", packet.Words[1], CPluginVariable.Encode(this.Username));
                     }
                     else {
-                        packet.Words[1] = CPluginVariable.Encode(this.m_strUsername);
+                        packet.Words[1] = CPluginVariable.Encode(this.Username);
                     }
 
-                    sender.SendResponse(packet, LayerClient.RESPONSE_OK);
+                    sender.SendResponse(packet, LayerClient.ResponseOk);
 
                     this.m_prcClient.SendProconLayerPacket(this, packet);
                 }
                 else {
-                    sender.SendResponse(packet, LayerClient.RESPONSE_INVALID_ARGUMENTS);
+                    sender.SendResponse(packet, LayerClient.ResponseInvalidArguments);
                 }
             }
             else {
-                sender.SendResponse(packet, LayerClient.RESPONSE_LOGIN_REQUIRED);
+                sender.SendResponse(packet, LayerClient.ResponseLoginRequired);
             }
         }
 
@@ -970,22 +966,22 @@ namespace PRoCon.Core.Remote.Layer {
                 if (packet.Words.Count >= 5) {
                     // Append the admin to the adminstack and send it on its way..
                     if (packet.Words[1].Length > 0) {
-                        packet.Words[1] = String.Format("{0}|{1}", packet.Words[1], CPluginVariable.Encode(this.m_strUsername));
+                        packet.Words[1] = String.Format("{0}|{1}", packet.Words[1], CPluginVariable.Encode(this.Username));
                     }
                     else {
-                        packet.Words[1] = CPluginVariable.Encode(this.m_strUsername);
+                        packet.Words[1] = CPluginVariable.Encode(this.Username);
                     }
 
-                    sender.SendResponse(packet, LayerClient.RESPONSE_OK);
+                    sender.SendResponse(packet, LayerClient.ResponseOk);
 
                     this.m_prcClient.SendProconLayerPacket(this, packet);
                 }
                 else {
-                    sender.SendResponse(packet, LayerClient.RESPONSE_INVALID_ARGUMENTS);
+                    sender.SendResponse(packet, LayerClient.ResponseInvalidArguments);
                 }
             }
             else {
-                sender.SendResponse(packet, LayerClient.RESPONSE_LOGIN_REQUIRED);
+                sender.SendResponse(packet, LayerClient.ResponseLoginRequired);
             }
         }
 
@@ -998,7 +994,7 @@ namespace PRoCon.Core.Remote.Layer {
                     this.m_requestDelegates[packet.Words[0]](sender, packet);
                 }
                 else {
-                    sender.SendResponse(packet, LayerClient.RESPONSE_UNKNOWN_COMMAND);
+                    sender.SendResponse(packet, LayerClient.ResponseUnknownCommand);
                 }
             }
         }
@@ -1008,62 +1004,62 @@ namespace PRoCon.Core.Remote.Layer {
         #region Overridden Protocol Handling
 
         private void PacketDispatcher_RequestLoginHashed(ILayerPacketDispatcher sender, Packet packet) {
-            sender.SendResponse(packet, LayerClient.RESPONSE_OK, this.GenerateSalt());
+            sender.SendResponse(packet, LayerClient.ResponseOk, this.GenerateSalt());
         }
 
         private void PacketDispatcher_RequestLoginHashedPassword(ILayerPacketDispatcher sender, Packet packet, string hashedPassword) {
 
-            if (this.m_praApplication.AccountsList.Contains(this.m_strUsername) == false) {
-                sender.SendResponse(packet, LayerClient.RESPONSE_INVALID_USERNAME);
+            if (this.m_praApplication.AccountsList.Contains(this.Username) == false) {
+                sender.SendResponse(packet, LayerClient.ResponseInvalidUsername);
             }
             else {
-                if (this.AuthenticateHashedAccount(this.m_strUsername, hashedPassword) == true) {
+                if (this.AuthenticateHashedAccount(this.Username, hashedPassword) == true) {
 
-                    this.m_sprvPrivileges = this.GetAccountPrivileges(this.m_strUsername);
-                    this.m_sprvPrivileges.SetLowestPrivileges(this.m_prcClient.Privileges);
+                    this.Privileges = this.GetAccountPrivileges(this.Username);
+                    this.Privileges.SetLowestPrivileges(this.m_prcClient.Privileges);
 
-                    if (this.m_sprvPrivileges.CanLogin == true) {
+                    if (this.Privileges.CanLogin == true) {
                         this.IsLoggedIn = true;
-                        sender.SendResponse(packet, LayerClient.RESPONSE_OK);
+                        sender.SendResponse(packet, LayerClient.ResponseOk);
 
                         if (this.Login != null) {
                             FrostbiteConnection.RaiseEvent(this.Login.GetInvocationList(), this);
                         }
                     }
                     else {
-                        sender.SendResponse(packet, LayerClient.RESPONSE_INSUFFICIENT_PRIVILEGES);
+                        sender.SendResponse(packet, LayerClient.ResponseInsufficientPrivileges);
                     }
                 }
                 else {
-                    sender.SendResponse(packet, LayerClient.RESPONSE_INVALID_PASSWORD_HASH);
+                    sender.SendResponse(packet, LayerClient.ResponseInvalidPasswordHash);
                 }
             }
         }
 
         private void PacketDispatcher_RequestLoginPlainText(ILayerPacketDispatcher sender, Packet packet, string password) {
 
-            if (this.m_praApplication.AccountsList.Contains(this.m_strUsername) == false) {
-                sender.SendResponse(packet, LayerClient.RESPONSE_INVALID_USERNAME);
+            if (this.m_praApplication.AccountsList.Contains(this.Username) == false) {
+                sender.SendResponse(packet, LayerClient.ResponseInvalidUsername);
             }
             else {
 
-                if (this.AuthenticatePlaintextAccount(this.m_strUsername, password) == true) {
+                if (this.AuthenticatePlaintextAccount(this.Username, password) == true) {
 
                     this.IsLoggedIn = true;
-                    sender.SendResponse(packet, LayerClient.RESPONSE_OK);
+                    sender.SendResponse(packet, LayerClient.ResponseOk);
 
                     if (this.Login != null) {
                         FrostbiteConnection.RaiseEvent(this.Login.GetInvocationList(), this);
                     }
                 }
                 else {
-                    sender.SendResponse(packet, LayerClient.RESPONSE_INVALID_PASSWORD);
+                    sender.SendResponse(packet, LayerClient.ResponseInvalidPassword);
                 }
             } 
         }
 
         private void PacketDispatcher_RequestLogout(ILayerPacketDispatcher sender, Packet packet) {
-            sender.SendResponse(packet, LayerClient.RESPONSE_OK);
+            sender.SendResponse(packet, LayerClient.ResponseOk);
             
             this.IsLoggedIn = false;
 
@@ -1073,7 +1069,7 @@ namespace PRoCon.Core.Remote.Layer {
         }
 
         private void PacketDispatcher_RequestQuit(ILayerPacketDispatcher sender, Packet packet) {
-            sender.SendResponse(packet, LayerClient.RESPONSE_OK);
+            sender.SendResponse(packet, LayerClient.ResponseOk);
 
             if (this.Logout != null) {
                 FrostbiteConnection.RaiseEvent(this.Logout.GetInvocationList(), this);
@@ -1088,12 +1084,12 @@ namespace PRoCon.Core.Remote.Layer {
 
         private void PacketDispatcher_RequestEventsEnabled(ILayerPacketDispatcher sender, Packet packet, bool eventsEnabled) {
             if (this.IsLoggedIn == true) {
-                sender.SendResponse(packet, LayerClient.RESPONSE_OK);
+                sender.SendResponse(packet, LayerClient.ResponseOk);
 
-                this.m_blEventsEnabled = eventsEnabled;
+                this.EventsEnabled = eventsEnabled;
             }
             else {
-                sender.SendResponse(packet, LayerClient.RESPONSE_LOGIN_REQUIRED);
+                sender.SendResponse(packet, LayerClient.ResponseLoginRequired);
             }
         }
 
@@ -1104,15 +1100,15 @@ namespace PRoCon.Core.Remote.Layer {
 
         private void PacketDispatcher_RequestPacketAdminShutdown(ILayerPacketDispatcher sender, Packet packet) {
             if (this.IsLoggedIn == true) {
-                if (this.m_sprvPrivileges.CanShutdownServer == true) {
+                if (this.Privileges.CanShutdownServer == true) {
                     this.m_prcClient.SendProconLayerPacket(this, packet);
                 }
                 else {
-                    sender.SendResponse(packet, LayerClient.RESPONSE_INSUFFICIENT_PRIVILEGES);
+                    sender.SendResponse(packet, LayerClient.ResponseInsufficientPrivileges);
                 }
             }
             else {
-                sender.SendResponse(packet, LayerClient.RESPONSE_LOGIN_REQUIRED);
+                sender.SendResponse(packet, LayerClient.ResponseLoginRequired);
             }
         }
 
@@ -1125,7 +1121,7 @@ namespace PRoCon.Core.Remote.Layer {
                 this.m_prcClient.SendProconLayerPacket(this, packet);
             }
             else {
-                sender.SendResponse(packet, LayerClient.RESPONSE_LOGIN_REQUIRED);
+                sender.SendResponse(packet, LayerClient.ResponseLoginRequired);
             }
         }
 
@@ -1145,8 +1141,8 @@ namespace PRoCon.Core.Remote.Layer {
                     
                     bool blCommandProcessed = false;
                     
-                    if (this.m_sprvPrivileges.CannotIssuePunkbusterCommands == true) {
-                        sender.SendResponse(packet, LayerClient.RESPONSE_INSUFFICIENT_PRIVILEGES);
+                    if (this.Privileges.CannotIssuePunkbusterCommands == true) {
+                        sender.SendResponse(packet, LayerClient.ResponseInsufficientPrivileges);
 
                         blCommandProcessed = true;
                     }
@@ -1154,18 +1150,18 @@ namespace PRoCon.Core.Remote.Layer {
                         Match mtcMatch = Regex.Match(packet.Words[1], "^(?=(?<pb_sv_command>pb_sv_plist))|(?=(?<pb_sv_command>pb_sv_ban))|(?=(?<pb_sv_command>pb_sv_banguid))|(?=(?<pb_sv_command>pb_sv_banlist))|(?=(?<pb_sv_command>pb_sv_getss))|(?=(?<pb_sv_command>pb_sv_kick)[ ]+?.*?[ ]+?(?<pb_sv_kick_time>[0-9]+)[ ]+)|(?=(?<pb_sv_command>pb_sv_unban))|(?=(?<pb_sv_command>pb_sv_unbanguid))|(?=(?<pb_sv_command>pb_sv_reban))", RegexOptions.IgnoreCase);
 
                         // IF they tried to issue a pb_sv_command that isn't on the safe list AND they don't have full access.
-                        if (mtcMatch.Success == false && this.m_sprvPrivileges.CanIssueAllPunkbusterCommands == false) {
-                            sender.SendResponse(packet, LayerClient.RESPONSE_INSUFFICIENT_PRIVILEGES);
+                        if (mtcMatch.Success == false && this.Privileges.CanIssueAllPunkbusterCommands == false) {
+                            sender.SendResponse(packet, LayerClient.ResponseInsufficientPrivileges);
                             blCommandProcessed = true;
                         }
                         else {
 
-                            if (this.m_sprvPrivileges.CanPermanentlyBanPlayers == false && (String.Compare(mtcMatch.Groups["pb_sv_command"].Value, "pb_sv_ban", true) == 0 || String.Compare(mtcMatch.Groups["pb_sv_command"].Value, "pb_sv_banguid", true) == 0 || String.Compare(mtcMatch.Groups["pb_sv_command"].Value, "pb_sv_reban", true) == 0)) {
-                                sender.SendResponse(packet, LayerClient.RESPONSE_INSUFFICIENT_PRIVILEGES);
+                            if (this.Privileges.CanPermanentlyBanPlayers == false && (String.Compare(mtcMatch.Groups["pb_sv_command"].Value, "pb_sv_ban", true) == 0 || String.Compare(mtcMatch.Groups["pb_sv_command"].Value, "pb_sv_banguid", true) == 0 || String.Compare(mtcMatch.Groups["pb_sv_command"].Value, "pb_sv_reban", true) == 0)) {
+                                sender.SendResponse(packet, LayerClient.ResponseInsufficientPrivileges);
                                 blCommandProcessed = true;
                             }
-                            else if (this.m_sprvPrivileges.CanEditBanList == false && (String.Compare(mtcMatch.Groups["pb_sv_command"].Value, "pb_sv_unban", true) == 0 || String.Compare(mtcMatch.Groups["pb_sv_command"].Value, "pb_sv_unbanguid", true) == 0)) {
-                                sender.SendResponse(packet, LayerClient.RESPONSE_INSUFFICIENT_PRIVILEGES);
+                            else if (this.Privileges.CanEditBanList == false && (String.Compare(mtcMatch.Groups["pb_sv_command"].Value, "pb_sv_unban", true) == 0 || String.Compare(mtcMatch.Groups["pb_sv_command"].Value, "pb_sv_unbanguid", true) == 0)) {
+                                sender.SendResponse(packet, LayerClient.ResponseInsufficientPrivileges);
                                 blCommandProcessed = true;
                             }
                             else if (String.Compare(mtcMatch.Groups["pb_sv_command"].Value, "pb_sv_kick", true) == 0) {
@@ -1176,24 +1172,24 @@ namespace PRoCon.Core.Remote.Layer {
                                 if (int.TryParse(mtcMatch.Groups["pb_sv_kick_time"].Value, out iBanLength) == true) {
 
                                     // If they cannot punish players at all..
-                                    if (this.m_sprvPrivileges.CannotPunishPlayers == true) {
-                                        sender.SendResponse(packet, LayerClient.RESPONSE_INSUFFICIENT_PRIVILEGES);
+                                    if (this.Privileges.CannotPunishPlayers == true) {
+                                        sender.SendResponse(packet, LayerClient.ResponseInsufficientPrivileges);
                                         blCommandProcessed = true;
                                     }
                                     // If they can temporary ban but not permanently ban BUT the banlength is over an hour (default)
-                                    else if (this.m_sprvPrivileges.CanTemporaryBanPlayers == true && this.m_sprvPrivileges.CanPermanentlyBanPlayers == false && iBanLength > (this.m_prcClient.Variables.GetVariable<int>("TEMP_BAN_CEILING", 3600) / 60)) {
-                                        sender.SendResponse(packet, LayerClient.RESPONSE_INSUFFICIENT_PRIVILEGES);
+                                    else if (this.Privileges.CanTemporaryBanPlayers == true && this.Privileges.CanPermanentlyBanPlayers == false && iBanLength > (this.m_prcClient.Variables.GetVariable<int>("TEMP_BAN_CEILING", 3600) / 60)) {
+                                        sender.SendResponse(packet, LayerClient.ResponseInsufficientPrivileges);
                                         blCommandProcessed = true;
                                     }
                                     // If they can kick but not temp or perm ban players AND the banlength is over 0 (no ban time)
-                                    else if (this.m_sprvPrivileges.CanKickPlayers == true && this.m_sprvPrivileges.CanTemporaryBanPlayers == false && this.m_sprvPrivileges.CanPermanentlyBanPlayers == false && iBanLength > 0) {
-                                        sender.SendResponse(packet, LayerClient.RESPONSE_INSUFFICIENT_PRIVILEGES);
+                                    else if (this.Privileges.CanKickPlayers == true && this.Privileges.CanTemporaryBanPlayers == false && this.Privileges.CanPermanentlyBanPlayers == false && iBanLength > 0) {
+                                        sender.SendResponse(packet, LayerClient.ResponseInsufficientPrivileges);
                                         blCommandProcessed = true;
                                     }
                                     // ELSE they have punkbuster access and full ban privs.. issue the command.
                                 }
                                 else { // Would rather stop it here than pass it on
-                                    sender.SendResponse(packet, LayerClient.RESPONSE_INVALID_ARGUMENTS);
+                                    sender.SendResponse(packet, LayerClient.ResponseInvalidArguments);
 
                                     blCommandProcessed = true;
                                 }
@@ -1208,167 +1204,167 @@ namespace PRoCon.Core.Remote.Layer {
                     }
                 }
                 else {
-                    sender.SendResponse(packet, LayerClient.RESPONSE_INVALID_ARGUMENTS);
+                    sender.SendResponse(packet, LayerClient.ResponseInvalidArguments);
                 }
             }
             else {
-                sender.SendResponse(packet, LayerClient.RESPONSE_LOGIN_REQUIRED);
+                sender.SendResponse(packet, LayerClient.ResponseLoginRequired);
             }
         }
 
         private void PacketDispatcher_RequestPacketUseMapFunctionRecieved(ILayerPacketDispatcher sender, Packet packet) {
             if (this.IsLoggedIn == true) {
-                if (this.m_sprvPrivileges.CanUseMapFunctions == true) {
+                if (this.Privileges.CanUseMapFunctions == true) {
                     this.m_prcClient.SendProconLayerPacket(this, packet);
                 }
                 else {
-                    sender.SendResponse(packet, LayerClient.RESPONSE_INSUFFICIENT_PRIVILEGES);
+                    sender.SendResponse(packet, LayerClient.ResponseInsufficientPrivileges);
                 }
             }
             else {
-                sender.SendResponse(packet, LayerClient.RESPONSE_LOGIN_REQUIRED);
+                sender.SendResponse(packet, LayerClient.ResponseLoginRequired);
             }
         }
 
         private void PacketDispatcher_RequestPacketAlterMaplistRecieved(ILayerPacketDispatcher sender, Packet packet) {
             if (this.IsLoggedIn == true) {
-                if (this.m_sprvPrivileges.CanEditMapList == true) {
+                if (this.Privileges.CanEditMapList == true) {
                     this.m_prcClient.SendProconLayerPacket(this, packet);
                 }
                 else {
-                    sender.SendResponse(packet, LayerClient.RESPONSE_INSUFFICIENT_PRIVILEGES);
+                    sender.SendResponse(packet, LayerClient.ResponseInsufficientPrivileges);
                 }
             }
             else {
-                sender.SendResponse(packet, LayerClient.RESPONSE_LOGIN_REQUIRED);
+                sender.SendResponse(packet, LayerClient.ResponseLoginRequired);
             }
         }
 
         private void PacketDispatcher_RequestPacketAdminPlayerMoveRecieved(ILayerPacketDispatcher sender, Packet packet) {
             if (this.IsLoggedIn == true) {
-                if (this.m_sprvPrivileges.CanMovePlayers == true) {
+                if (this.Privileges.CanMovePlayers == true) {
                     this.m_prcClient.SendProconLayerPacket(this, packet);
                 }
                 else {
-                    sender.SendResponse(packet, LayerClient.RESPONSE_INSUFFICIENT_PRIVILEGES);
+                    sender.SendResponse(packet, LayerClient.ResponseInsufficientPrivileges);
                 }
             }
             else {
-                sender.SendResponse(packet, LayerClient.RESPONSE_LOGIN_REQUIRED);
+                sender.SendResponse(packet, LayerClient.ResponseLoginRequired);
             }
         }
 
         private void PacketDispatcher_RequestPacketAdminPlayerKillRecieved(ILayerPacketDispatcher sender, Packet packet) {
             if (this.IsLoggedIn == true) {
-                if (this.m_sprvPrivileges.CanKillPlayers == true) {
+                if (this.Privileges.CanKillPlayers == true) {
                     this.m_prcClient.SendProconLayerPacket(this, packet);
                 }
                 else {
-                    sender.SendResponse(packet, LayerClient.RESPONSE_INSUFFICIENT_PRIVILEGES);
+                    sender.SendResponse(packet, LayerClient.ResponseInsufficientPrivileges);
                 }
             }
             else {
-                sender.SendResponse(packet, LayerClient.RESPONSE_LOGIN_REQUIRED);
+                sender.SendResponse(packet, LayerClient.ResponseLoginRequired);
             }
         }
 
         private void PacketDispatcher_RequestPacketAdminKickPlayerRecieved(ILayerPacketDispatcher sender, Packet packet) {
             if (this.IsLoggedIn == true) {
-                if (this.m_sprvPrivileges.CanKickPlayers == true) {
+                if (this.Privileges.CanKickPlayers == true) {
                     this.m_prcClient.SendProconLayerPacket(this, packet);
                 }
                 else {
-                    sender.SendResponse(packet, LayerClient.RESPONSE_INSUFFICIENT_PRIVILEGES);
+                    sender.SendResponse(packet, LayerClient.ResponseInsufficientPrivileges);
                 }
             }
             else {
-                sender.SendResponse(packet, LayerClient.RESPONSE_LOGIN_REQUIRED);
+                sender.SendResponse(packet, LayerClient.ResponseLoginRequired);
             }
         }
 
         private void PacketDispatcher_RequestBanListAddRecieved(ILayerPacketDispatcher sender, Packet packet, CBanInfo newBan) {
             if (this.IsLoggedIn == true) {
 
-                if (newBan.BanLength.Subset == TimeoutSubset.TimeoutSubsetType.Permanent && this.m_sprvPrivileges.CanPermanentlyBanPlayers == true) {
+                if (newBan.BanLength.Subset == TimeoutSubset.TimeoutSubsetType.Permanent && this.Privileges.CanPermanentlyBanPlayers == true) {
                     this.m_prcClient.SendProconLayerPacket(this, packet);
                 }
-                else if (newBan.BanLength.Subset == TimeoutSubset.TimeoutSubsetType.Round && this.m_sprvPrivileges.CanTemporaryBanPlayers == true) {
+                else if (newBan.BanLength.Subset == TimeoutSubset.TimeoutSubsetType.Round && this.Privileges.CanTemporaryBanPlayers == true) {
                     this.m_prcClient.SendProconLayerPacket(this, packet);
                 }
-                else if (newBan.BanLength.Subset == TimeoutSubset.TimeoutSubsetType.Seconds && this.m_sprvPrivileges.CanPermanentlyBanPlayers == true) {
+                else if (newBan.BanLength.Subset == TimeoutSubset.TimeoutSubsetType.Seconds && this.Privileges.CanPermanentlyBanPlayers == true) {
                     this.m_prcClient.SendProconLayerPacket(this, packet);
                 }
-                else if (newBan.BanLength.Subset == TimeoutSubset.TimeoutSubsetType.Seconds && this.m_sprvPrivileges.CanTemporaryBanPlayers == true) {
+                else if (newBan.BanLength.Subset == TimeoutSubset.TimeoutSubsetType.Seconds && this.Privileges.CanTemporaryBanPlayers == true) {
                     
                     if (newBan.BanLength.Seconds <= this.m_prcClient.Variables.GetVariable<int>("TEMP_BAN_CEILING", 3600)) {
                         this.m_prcClient.SendProconLayerPacket(this, packet);
                     }
                     else {
-                        sender.SendResponse(packet, LayerClient.RESPONSE_INSUFFICIENT_PRIVILEGES);
+                        sender.SendResponse(packet, LayerClient.ResponseInsufficientPrivileges);
                     }
                 }
                 else {
-                    sender.SendResponse(packet, LayerClient.RESPONSE_INSUFFICIENT_PRIVILEGES);
+                    sender.SendResponse(packet, LayerClient.ResponseInsufficientPrivileges);
                 }
             }
             else {
-                sender.SendResponse(packet, LayerClient.RESPONSE_LOGIN_REQUIRED);
+                sender.SendResponse(packet, LayerClient.ResponseLoginRequired);
             }
         }
 
         private void PacketDispatcher_RequestPacketAlterBanListRecieved(ILayerPacketDispatcher sender, Packet packet) {
             if (this.IsLoggedIn == true) {
-                if (this.m_sprvPrivileges.CanEditBanList == true) {
+                if (this.Privileges.CanEditBanList == true) {
                     this.m_prcClient.SendProconLayerPacket(this, packet);
                 }
                 else {
-                    sender.SendResponse(packet, LayerClient.RESPONSE_INSUFFICIENT_PRIVILEGES);
+                    sender.SendResponse(packet, LayerClient.ResponseInsufficientPrivileges);
                 }
             }
             else {
-                sender.SendResponse(packet, LayerClient.RESPONSE_LOGIN_REQUIRED);
+                sender.SendResponse(packet, LayerClient.ResponseLoginRequired);
             }
         }
 
         private void PacketDispatcher_RequestPacketAlterTextMonderationListRecieved(ILayerPacketDispatcher sender, Packet packet) {
             if (this.IsLoggedIn == true) {
-                if (this.m_sprvPrivileges.CanEditTextChatModerationList == true) {
+                if (this.Privileges.CanEditTextChatModerationList == true) {
                     this.m_prcClient.SendProconLayerPacket(this, packet);
                 }
                 else {
-                    sender.SendResponse(packet, LayerClient.RESPONSE_INSUFFICIENT_PRIVILEGES);
+                    sender.SendResponse(packet, LayerClient.ResponseInsufficientPrivileges);
                 }
             }
             else {
-                sender.SendResponse(packet, LayerClient.RESPONSE_LOGIN_REQUIRED);
+                sender.SendResponse(packet, LayerClient.ResponseLoginRequired);
             }
         }
 
         private void PacketDispatcher_RequestPacketAlterReservedSlotsListRecieved(ILayerPacketDispatcher sender, Packet packet) {
             if (this.IsLoggedIn == true) {
-                if (this.m_sprvPrivileges.CanEditReservedSlotsList == true) {
+                if (this.Privileges.CanEditReservedSlotsList == true) {
                     this.m_prcClient.SendProconLayerPacket(this, packet);
                 }
                 else {
-                    sender.SendResponse(packet, LayerClient.RESPONSE_INSUFFICIENT_PRIVILEGES);
+                    sender.SendResponse(packet, LayerClient.ResponseInsufficientPrivileges);
                 }
             }
             else {
-                sender.SendResponse(packet, LayerClient.RESPONSE_LOGIN_REQUIRED);
+                sender.SendResponse(packet, LayerClient.ResponseLoginRequired);
             }
         }
 
         private void PacketDispatcher_RequestPacketVarsRecieved(ILayerPacketDispatcher sender, Packet packet) {
             if (this.IsLoggedIn == true) {
-                if (this.m_sprvPrivileges.CanAlterServerSettings == true) {
+                if (this.Privileges.CanAlterServerSettings == true) {
                     this.m_prcClient.SendProconLayerPacket(this, packet);
                 }
                 else {
-                    sender.SendResponse(packet, LayerClient.RESPONSE_INSUFFICIENT_PRIVILEGES);
+                    sender.SendResponse(packet, LayerClient.ResponseInsufficientPrivileges);
                 }
             }
             else {
-                sender.SendResponse(packet, LayerClient.RESPONSE_LOGIN_REQUIRED);
+                sender.SendResponse(packet, LayerClient.ResponseLoginRequired);
             }
         }
 
@@ -1380,25 +1376,25 @@ namespace PRoCon.Core.Remote.Layer {
 
         private void PacketDispatcher_RequestPacketSquadLeaderRecieved(ILayerPacketDispatcher sender, Packet packet) {
             if (this.IsLoggedIn == true) {
-                if (this.m_sprvPrivileges.CanMovePlayers == true) {
+                if (this.Privileges.CanMovePlayers == true) {
                     this.m_prcClient.SendProconLayerPacket(this, packet);
                 } else {
-                    sender.SendResponse(packet, LayerClient.RESPONSE_INSUFFICIENT_PRIVILEGES);
+                    sender.SendResponse(packet, LayerClient.ResponseInsufficientPrivileges);
                 }
             } else {
-                sender.SendResponse(packet, LayerClient.RESPONSE_LOGIN_REQUIRED);
+                sender.SendResponse(packet, LayerClient.ResponseLoginRequired);
             }
         }
 
         private void PacketDispatcher_RequestPacketSquadIsPrivateReceived(ILayerPacketDispatcher sender, Packet packet) {
             if (this.IsLoggedIn == true) {
-                if (this.m_sprvPrivileges.CanMovePlayers == true) {
+                if (this.Privileges.CanMovePlayers == true) {
                     this.m_prcClient.SendProconLayerPacket(this, packet);
                 } else {
-                    sender.SendResponse(packet, LayerClient.RESPONSE_INSUFFICIENT_PRIVILEGES);
+                    sender.SendResponse(packet, LayerClient.ResponseInsufficientPrivileges);
                 }
             } else {
-                sender.SendResponse(packet, LayerClient.RESPONSE_LOGIN_REQUIRED);
+                sender.SendResponse(packet, LayerClient.ResponseLoginRequired);
             }
         }
 
@@ -1442,7 +1438,7 @@ namespace PRoCon.Core.Remote.Layer {
 
         // TO DO: Implement event once available
         public void OnAccountLogin(string strUsername, CPrivileges sprvPrivileges) {
-            if (this.IsLoggedIn == true && this.m_blEventsEnabled == true && this.PacketDispatcher != null) {
+            if (this.IsLoggedIn == true && this.EventsEnabled == true && this.PacketDispatcher != null) {
                 this.PacketDispatcher.SendRequest("procon.account.onLogin", strUsername, sprvPrivileges.PrivilegesFlags.ToString());
                 //this.send(new Packet(true, false, this.AcquireSequenceNumber, new List<string>() { "procon.account.onLogin", strUsername, sprvPrivileges.PrivilegesFlags.ToString() }));
             }
@@ -1450,7 +1446,7 @@ namespace PRoCon.Core.Remote.Layer {
 
         // TO DO: Implement event once available
         public void OnAccountLogout(string strUsername) {
-            if (this.IsLoggedIn == true && String.Compare(strUsername, this.m_strUsername) != 0 && this.m_blEventsEnabled == true && this.PacketDispatcher != null) {
+            if (this.IsLoggedIn == true && String.Compare(strUsername, this.Username) != 0 && this.EventsEnabled == true && this.PacketDispatcher != null) {
                 this.PacketDispatcher.SendRequest("procon.account.onLogout", strUsername);
                 //this.send(new Packet(true, false, this.AcquireSequenceNumber, new List<string>() { "procon.account.onLogout", strUsername }));
             }
@@ -1462,19 +1458,19 @@ namespace PRoCon.Core.Remote.Layer {
 
             cpPrivs.SetLowestPrivileges(this.m_prcClient.Privileges);
 
-            if (this.IsLoggedIn == true && this.m_blEventsEnabled == true && this.PacketDispatcher != null) {
+            if (this.IsLoggedIn == true && this.EventsEnabled == true && this.PacketDispatcher != null) {
                 this.PacketDispatcher.SendRequest("procon.account.onAltered", item.Owner.Name, cpPrivs.PrivilegesFlags.ToString());
                 //this.send(new Packet(true, false, this.AcquireSequenceNumber, new List<string>() { "procon.account.onAltered", item.Owner.Name, cpPrivs.PrivilegesFlags.ToString() }));
             }
 
-            if (String.Compare(this.m_strUsername, item.Owner.Name) == 0) {
-                this.m_sprvPrivileges = cpPrivs;
+            if (String.Compare(this.Username, item.Owner.Name) == 0) {
+                this.Privileges = cpPrivs;
             }
         }
 
         private void AccountsList_AccountRemoved(Account item) {
 
-            if (this.IsLoggedIn == true && this.m_blEventsEnabled == true && this.PacketDispatcher != null) {
+            if (this.IsLoggedIn == true && this.EventsEnabled == true && this.PacketDispatcher != null) {
                 this.PacketDispatcher.SendRequest("procon.account.onDeleted", item.Name);
                 //this.send(new Packet(true, false, this.AcquireSequenceNumber, new List<string>() { "procon.account.onDeleted", item.Name }));
             }
@@ -1484,14 +1480,14 @@ namespace PRoCon.Core.Remote.Layer {
 
             this.m_prcClient.Layer.AccountPrivileges[item.Name].AccountPrivilegesChanged += new AccountPrivilege.AccountPrivilegesChangedHandler(CPRoConLayerClient_AccountPrivilegesChanged);
 
-            if (this.IsLoggedIn == true && this.m_blEventsEnabled == true && this.PacketDispatcher != null) {
+            if (this.IsLoggedIn == true && this.EventsEnabled == true && this.PacketDispatcher != null) {
                 this.PacketDispatcher.SendRequest("procon.account.onCreated", item.Name);
                 //this.send(new Packet(true, false, this.AcquireSequenceNumber, new List<string>() { "procon.account.onCreated", item.Name }));
             }
         }
 
         public void OnRegisteredUid(string uid, string strUsername) {
-            if (this.IsLoggedIn == true && this.m_blEventsEnabled == true && this.PacketDispatcher != null) {
+            if (this.IsLoggedIn == true && this.EventsEnabled == true && this.PacketDispatcher != null) {
                 this.PacketDispatcher.SendRequest("procon.account.onUidRegistered", uid, strUsername);
                 //this.send(new Packet(true, false, this.AcquireSequenceNumber, new List<string>() { "procon.account.onLogin", strUsername, sprvPrivileges.PrivilegesFlags.ToString() }));
             }
@@ -1542,7 +1538,7 @@ namespace PRoCon.Core.Remote.Layer {
         private void Plugins_PluginLoaded(string strClassName) {
             PluginDetails spdDetails = this.m_prcClient.PluginsManager.GetPluginDetails(strClassName);
 
-            if (this.IsLoggedIn == true && this.m_blEventsEnabled == true && this.PacketDispatcher != null) {
+            if (this.IsLoggedIn == true && this.EventsEnabled == true && this.PacketDispatcher != null) {
 
                 List<string> lstOnPluginLoaded = new List<string>() { "procon.plugin.onLoaded", spdDetails.ClassName, spdDetails.Name, spdDetails.Author, spdDetails.Website, spdDetails.Version, spdDetails.Description, spdDetails.DisplayPluginVariables.Count.ToString() };
 
@@ -1556,7 +1552,7 @@ namespace PRoCon.Core.Remote.Layer {
         }
 
         private void Plugins_PluginVariableAltered(PluginDetails spdNewDetails) {
-            if (this.IsLoggedIn == true && this.m_blEventsEnabled == true && this.PacketDispatcher != null) {
+            if (this.IsLoggedIn == true && this.EventsEnabled == true && this.PacketDispatcher != null) {
 
                 List<string> lstWords = new List<string>() { "procon.plugin.onVariablesAltered", spdNewDetails.ClassName, (spdNewDetails.DisplayPluginVariables.Count).ToString() };
 
@@ -1570,21 +1566,21 @@ namespace PRoCon.Core.Remote.Layer {
         }
 
         private void Plugins_PluginEnabled(string strClassName) {
-            if (this.IsLoggedIn == true && this.m_blEventsEnabled == true && this.PacketDispatcher != null) {
+            if (this.IsLoggedIn == true && this.EventsEnabled == true && this.PacketDispatcher != null) {
                 this.PacketDispatcher.SendRequest("procon.plugin.onEnabled", strClassName, Packet.Bltos(true));
                 //this.send(new Packet(true, false, this.AcquireSequenceNumber, new List<string>() { "procon.plugin.onEnabled", strClassName, bool.TrueString }));
             }
         }
 
         private void Plugins_PluginDisabled(string strClassName) {
-            if (this.IsLoggedIn == true && this.m_blEventsEnabled == true && this.PacketDispatcher != null) {
+            if (this.IsLoggedIn == true && this.EventsEnabled == true && this.PacketDispatcher != null) {
                 this.PacketDispatcher.SendRequest("procon.plugin.onEnabled", strClassName, Packet.Bltos(false));
                 //this.send(new Packet(true, false, this.AcquireSequenceNumber, new List<string>() { "procon.plugin.onEnabled", strClassName, bool.FalseString }));
             }
         }
 
         public void PluginConsole_WriteConsole(DateTime dtLoggedTime, string strLoggedText) {
-            if (this.IsLoggedIn == true && this.m_blEventsEnabled == true && this.PacketDispatcher != null) {
+            if (this.IsLoggedIn == true && this.EventsEnabled == true && this.PacketDispatcher != null) {
                 this.PacketDispatcher.SendRequest("procon.plugin.onConsole", dtLoggedTime.ToBinary().ToString(), strLoggedText);
                 //this.send(new Packet(true, false, this.AcquireSequenceNumber, new List<string>() { "procon.plugin.onConsole", dtLoggedTime.ToBinary().ToString(), strLoggedText }));
             }
@@ -1595,7 +1591,7 @@ namespace PRoCon.Core.Remote.Layer {
         #region Chat
 
         public void ChatConsole_WriteConsoleViaCommand(DateTime dtLoggedTime, string strLoggedText) {
-            if (this.IsLoggedIn == true && this.m_blEventsEnabled == true && this.PacketDispatcher != null) {
+            if (this.IsLoggedIn == true && this.EventsEnabled == true && this.PacketDispatcher != null) {
                 this.PacketDispatcher.SendRequest("procon.chat.onConsole", dtLoggedTime.ToBinary().ToString(), strLoggedText);
                 //this.send(new Packet(true, false, this.AcquireSequenceNumber, new List<string>() { "procon.chat.onConsole", dtLoggedTime.ToBinary().ToString(), strLoggedText }));
             }
@@ -1606,14 +1602,14 @@ namespace PRoCon.Core.Remote.Layer {
         #region Map Zones
 
         private void MapZones_MapZoneRemoved(PRoCon.Core.Battlemap.MapZoneDrawing item) {
-            if (this.IsLoggedIn == true && this.m_blEventsEnabled == true && this.PacketDispatcher != null) {
+            if (this.IsLoggedIn == true && this.EventsEnabled == true && this.PacketDispatcher != null) {
                 this.PacketDispatcher.SendRequest("procon.battlemap.onZoneRemoved", item.UID);
                 //this.send(new Packet(true, false, this.AcquireSequenceNumber, new List<string>() { "procon.battlemap.onZoneRemoved", item.UID }));
             }
         }
 
         private void MapZones_MapZoneChanged(PRoCon.Core.Battlemap.MapZoneDrawing item) {
-            if (this.IsLoggedIn == true && this.m_blEventsEnabled == true && this.PacketDispatcher != null) {
+            if (this.IsLoggedIn == true && this.EventsEnabled == true && this.PacketDispatcher != null) {
                 List<string> packet = new List<string>() { "procon.battlemap.onZoneModified", item.UID, item.Tags.ToString(), item.ZonePolygon.Length.ToString() };
 
                 packet.AddRange(Point3D.ToStringList(item.ZonePolygon));
@@ -1624,7 +1620,7 @@ namespace PRoCon.Core.Remote.Layer {
         }
 
         private void MapZones_MapZoneAdded(PRoCon.Core.Battlemap.MapZoneDrawing item) {
-            if (this.IsLoggedIn == true && this.m_blEventsEnabled == true && this.PacketDispatcher != null) {
+            if (this.IsLoggedIn == true && this.EventsEnabled == true && this.PacketDispatcher != null) {
                 List<string> packet = new List<string>() { "procon.battlemap.onZoneCreated", item.UID, item.LevelFileName, item.ZonePolygon.Length.ToString() };
 
                 packet.AddRange(Point3D.ToStringList(item.ZonePolygon));
@@ -1639,14 +1635,14 @@ namespace PRoCon.Core.Remote.Layer {
         #region Variables
 
         private void Variables_VariableUpdated(PRoCon.Core.Variables.Variable item) {
-            if (this.IsLoggedIn == true && this.m_blEventsEnabled == true && this.PacketDispatcher != null) {
+            if (this.IsLoggedIn == true && this.EventsEnabled == true && this.PacketDispatcher != null) {
                 this.PacketDispatcher.SendRequest("procon.vars.onAltered", item.Name, item.Value);
                 //this.send(new Packet(true, false, this.AcquireSequenceNumber, new List<string>() { "procon.vars.onAltered", item.Name, item.Value }));
             }
         }
 
         private void Variables_VariableAdded(PRoCon.Core.Variables.Variable item) {
-            if (this.IsLoggedIn == true && this.m_blEventsEnabled == true && this.PacketDispatcher != null) {
+            if (this.IsLoggedIn == true && this.EventsEnabled == true && this.PacketDispatcher != null) {
                 this.PacketDispatcher.SendRequest("procon.vars.onAltered", item.Name, item.Value);
                 //this.send(new Packet(true, false, this.AcquireSequenceNumber, new List<string>() { "procon.vars.onAltered", item.Name, item.Value }));
             }
