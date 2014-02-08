@@ -99,7 +99,6 @@ namespace PRoCon {
             this.m_uscConnectionPanel = uscConnectionPanel;
             //this.m_uscParentPanel = uscParentPanel;
 
-            this.picLayerForwardedTestStatus.Image = this.m_frmMain.picPortCheckerUnknown.Image; //  .iglPRoConLayerIcons.Images[uscServerConnection.INT_ICON_LAYERSERVER_PORTCHECK_UNKNOWN];
             this.picLayerServerStatus.Image = this.m_frmMain.picLayerOffline.Image; // .iglPRoConLayerIcons.Images[uscServerConnection.INT_ICON_LAYERSERVER_OFFLINE];
 
             this.pnlMainLayerServer.Dock = DockStyle.Fill;
@@ -162,12 +161,6 @@ namespace PRoCon {
                 //this.lnkStartStopLayer.LinkArea = new LinkArea(0, this.lnkStartStopLayer.Text.Length);
                 this.lblLayerServerStatus.Text = this.m_clocLanguage.GetLocalized("uscAccountsPanel.lblLayerServerStatus.Offline", null);
 
-                this.lnkLayerForwardedTest.Text = this.m_clocLanguage.GetLocalized("uscAccountsPanel.lnkLayerForwardedTest", null);
-                //this.lnkLayerForwardedTest.LinkArea = new LinkArea(0, this.lnkLayerForwardedTest.Text.Length);
-                this.lblLayerForwardedTestStatus.Text = this.m_clocLanguage.GetLocalized("uscAccountsPanel.lblLayerForwardedTestStatus.Unknown", null);
-
-
-                this.lnkWhatIsPRoConLayer.Text = this.m_clocLanguage.GetLocalized("uscAccountsPanel.lnkWhatIsPRoConLayer", null);
                 //this.lnkWhatIsPRoConLayer.LinkArea = new LinkArea(0, this.lnkWhatIsPRoConLayer.Text.Length);
 
                 this.lblLayerAssignAccountPrivilegesTitle.Text = this.m_clocLanguage.GetLocalized("uscAccountsPanel.lblLayerAssignAccountPrivilegesTitle", null);
@@ -409,53 +402,7 @@ namespace PRoCon {
             this.ManageAccountsRequest(this, new EventArgs());
         }
 
-        private void lnkLayerForwardedTest_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
-            //this.PortCheck("http://www.phogue.net/procon/testport.php?port=" + this.txtLayerStartPort.Text);
-            this.PortCheck("https://repo.myrcon.com/procon1/testport.php?port=" + this.txtLayerStartPort.Text);
-        }
-
         #region Layer Events and Helper Methods
-
-        public delegate void UpdatePortCheckerFeedbackDelegate(string strCheckerFeedback);
-        private void OnPortCheckerFeedback(string strCheckerFeedback) {
-            this.Invoke(new UpdatePortCheckerFeedbackDelegate(OnPortCheckerFeedback_Callback), new object[] { strCheckerFeedback });
-        }
-        private void OnPortCheckerFeedback_Callback(string strCheckerFeedback) {
-
-            // Do not environment this \n.  It's from the php script and will always be just \n
-            string[] a_strResponses = strCheckerFeedback.Split('\n');
-
-            if (a_strResponses.Length >= 1) {
-                if (a_strResponses[0].CompareTo("open") == 0) {
-                    //this.picLayerForwardedTestStatus.Image = this.m_frmParent.iglPRoConLayerIcons.Images[uscServerConnection.INT_ICON_LAYERSERVER_PORTCHECK_OPEN];
-                    this.picLayerForwardedTestStatus.Image = this.m_frmMain.picPortCheckerOpen.Image;
-                    if (a_strResponses.Length >= 2) {
-                        this.lblLayerForwardedTestStatus.Text = this.m_clocLanguage.GetLocalized("uscAccountsPanel.lblLayerForwardedTestStatus.Open", new string[] { this.m_prcClient.Layer.ListeningPort.ToString(), a_strResponses[1] });
-                    }
-                    else {
-                        this.lblLayerForwardedTestStatus.Text = this.m_clocLanguage.GetLocalized("uscAccountsPanel.lblLayerForwardedTestStatus.Open", new string[] { this.m_prcClient.Layer.ListeningPort.ToString(), String.Empty });
-                    }
-                    this.lblLayerForwardedTestStatus.ForeColor = Color.ForestGreen;
-                    //this.tmrPortCheckTester.Enabled = false;
-                    this.lnkLayerForwardedTest.Enabled = true;
-                }
-                else if (a_strResponses[0].CompareTo("closed") == 0 || strCheckerFeedback.CompareTo("error") == 0 || a_strResponses[0].CompareTo("denied") == 0) {
-                    this.picLayerForwardedTestStatus.Image = this.m_frmMain.picPortCheckerClosed.Image;
-                    //this.picLayerForwardedTestStatus.Image = this.m_frmParent.iglPRoConLayerIcons.Images[uscServerConnection.INT_ICON_LAYERSERVER_PORTCHECK_CLOSED];
-                    this.lblLayerForwardedTestStatus.Text = this.m_clocLanguage.GetLocalized("uscAccountsPanel.lblLayerForwardedTestStatus.Closed", new string[] { this.m_prcClient.Layer.ListeningPort.ToString() });
-                    this.lblLayerForwardedTestStatus.ForeColor = Color.Maroon;
-                    //this.tmrPortCheckTester.Enabled = false;
-                    this.lnkLayerForwardedTest.Enabled = true;
-                }
-                else if (a_strResponses[0].CompareTo("checking") == 0) {
-                    this.picLayerForwardedTestStatus.Image = this.m_frmMain.picAjaxStyleLoading.Image;
-                    //this.tmrPortCheckTester.Enabled = true;
-                    this.lnkLayerForwardedTest.Enabled = false;
-                    this.lblLayerForwardedTestStatus.Text = this.m_clocLanguage.GetLocalized("uscAccountsPanel.lblLayerForwardedTestStatus.Running", new string[] { this.m_prcClient.Layer.ListeningPort.ToString() });
-                    this.lblLayerForwardedTestStatus.ForeColor = Color.Black;
-                }
-            }
-        }
 
         private void Layer_LayerOnline() {
             this.InvokeIfRequired(() => {
@@ -467,11 +414,6 @@ namespace PRoCon {
 
                 this.lnkStartStopLayer.Text = this.m_clocLanguage.GetLocalized("uscAccountsPanel.lnkStartStopLayer.Stop", null);
                 //this.lnkStartStopLayer.LinkArea = new LinkArea(0, this.lnkStartStopLayer.Text.Length);
-
-                this.pnlLayerServerTester.Visible = false; // service not provided at the moment
-                //this.picLayerForwardedTestStatus.Image = this.m_frmParent.iglPRoConLayerIcons.Images[uscServerConnection.INT_ICON_LAYERSERVER_PORTCHECK_UNKNOWN];
-                this.picLayerForwardedTestStatus.Image = this.m_frmMain.picPortCheckerUnknown.Image;
-                this.lblLayerForwardedTestStatus.Text = this.m_clocLanguage.GetLocalized("uscAccountsPanel.lblLayerForwardedTestStatus.Unknown", null);
             });
         }
 
@@ -484,8 +426,6 @@ namespace PRoCon {
 
                 this.lnkStartStopLayer.Text = this.m_clocLanguage.GetLocalized("uscAccountsPanel.lnkStartStopLayer.Start", null);
                 //this.lnkStartStopLayer.LinkArea = new LinkArea(0, this.lnkStartStopLayer.Text.Length);
-
-                this.pnlLayerServerTester.Visible = false;
             });
         }
 
@@ -501,8 +441,6 @@ namespace PRoCon {
 
                 this.lnkStartStopLayer.Text = this.m_clocLanguage.GetLocalized("uscAccountsPanel.lnkStartStopLayer.Start", null);
                 //this.lnkStartStopLayer.LinkArea = new LinkArea(0, this.lnkStartStopLayer.Text.Length);
-
-                this.pnlLayerServerTester.Visible = false;
             });
         }
 
@@ -574,98 +512,6 @@ namespace PRoCon {
 
         #endregion
 
-        #region Port forward checker
-
-        private struct SAsyncRequestState {
-            public HttpWebRequest WebRequest;
-            public uscAccountsPanel uscAccounts;
-        }
-
-        private void PortCheckTimeoutCallback(object objState, bool blTimedOut) {
-            if (blTimedOut) {
-                HttpWebRequest request = ((SAsyncRequestState)objState).WebRequest;
-                if (request != null) {
-                    //    Console.WriteLine("[" + DateTime.Now.ToString("HH:mm:ss ff") + "] PostCallback -> http://phogue.net Timedout.");
-                    request.Abort();
-                    ((SAsyncRequestState)objState).uscAccounts.OnPortCheckerFeedback("error");
-                }
-            }
-        }
-
-        private static void PortCheckResponseCallback(IAsyncResult asynchronousResult) {
-            try {
-
-                WebResponse wbResponse = ((SAsyncRequestState)asynchronousResult.AsyncState).WebRequest.EndGetResponse(asynchronousResult);
-
-                StreamReader stmReadCheck = new StreamReader(wbResponse.GetResponseStream(), Encoding.UTF8);
-
-                string strResponse = stmReadCheck.ReadToEnd();
-
-                ((SAsyncRequestState)asynchronousResult.AsyncState).uscAccounts.OnPortCheckerFeedback(strResponse);
-
-                stmReadCheck.Close();
-                wbResponse.Close();
-            }
-            catch (WebException) {
-                ((SAsyncRequestState)asynchronousResult.AsyncState).uscAccounts.OnPortCheckerFeedback("error");
-            }
-        }
-
-        private static void PortCheckPostCallback(IAsyncResult asynchronousResult) {
-
-            try {
-
-                HttpWebRequest request = ((SAsyncRequestState)asynchronousResult.AsyncState).WebRequest;
-
-                // End the operation.
-                Stream postStream = request.EndGetRequestStream(asynchronousResult);
-
-                // Convert the string into a byte array.
-                //byte[] byteArray = Encoding.UTF8.GetBytes(((SAsyncRequestState)asynchronousResult.AsyncState).strPostData);
-                // Write to the request stream.
-                //postStream.Write(byteArray, 0, ((SAsyncRequestState)asynchronousResult.AsyncState).strPostData.Length);
-                postStream.Close();
-
-                request.BeginGetResponse(new AsyncCallback(PortCheckResponseCallback), asynchronousResult.AsyncState);
-            }
-            catch (WebException) {
-                ((SAsyncRequestState)asynchronousResult.AsyncState).uscAccounts.OnPortCheckerFeedback("error");
-            }
-        }
-
-        public void PortCheck(string strUrl) {
-
-            this.OnPortCheckerFeedback("checking");
-
-            // Open a connection
-            HttpWebRequest WebRequestObject = (HttpWebRequest)HttpWebRequest.Create(strUrl);
-            //SAsyncRequestState arsPostData = new SAsyncRequestState();
-
-            // You can also specify additional header values like 
-            // the user agent or the referer:
-            WebRequestObject.UserAgent = ".NET Framework/2.0";
-            WebRequestObject.Referer = "http://prconserver.phogue.net";
-            //WebRequestObject.KeepAlive = false;
-
-            // Set values for the request back 
-            WebRequestObject.Method = "POST";
-            WebRequestObject.ContentType = "application/x-www-form-urlencoded";
-            WebRequestObject.Proxy = null;
-
-            //arsPostData.WebRequest = WebRequestObject;
-
-            SAsyncRequestState sarState = new SAsyncRequestState();
-            sarState.uscAccounts = this;
-            sarState.WebRequest = WebRequestObject;
-
-            IAsyncResult iarResult = WebRequestObject.BeginGetRequestStream(new AsyncCallback(PortCheckPostCallback), sarState);
-
-            // Set a timeout on our Request for a stream.  Timeout in 20 seconds.
-            ThreadPool.RegisterWaitForSingleObject(iarResult.AsyncWaitHandle, new WaitOrTimerCallback(PortCheckTimeoutCallback), sarState, 15000, true);
-        }
-
-        #endregion
-
         private void txtLayerName_TextChanged(object sender, EventArgs e) {
             this.lblExampleLayerName.Text = this.txtLayerName.Text.Replace("%servername%", this.m_strServerName);
         }
@@ -676,11 +522,6 @@ namespace PRoCon {
 
             this.txtLayerName.Text = this.txtLayerName.Text.Remove(iInsertPosition, this.txtLayerName.SelectionLength);
             this.txtLayerName.Text = this.txtLayerName.Text.Insert(iInsertPosition, "%servername%");
-        }
-
-        private void lnkWhatIsPRoConLayer_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
-            //System.Diagnostics.Process.Start("http://phogue.net/procon/whatis.php");
-            System.Diagnostics.Process.Start("https://repo.myrcon.com/procon1/whatis.php");
         }
 
         private void txtLayerStartPort_KeyPress(object sender, KeyPressEventArgs e) {
