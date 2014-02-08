@@ -24,6 +24,7 @@
         /// </summary>
         private void InitializeComponent() {
             this.pnlAccountPrivileges = new System.Windows.Forms.Panel();
+            this.uscPrivileges = new PRoCon.uscPrivilegesSelection();
             this.pnlStartPRoConLayer = new System.Windows.Forms.Panel();
             this.btnInsertName = new System.Windows.Forms.Button();
             this.lblBindingExplanation = new System.Windows.Forms.Label();
@@ -47,14 +48,12 @@
             this.picLayerServerStatus = new System.Windows.Forms.PictureBox();
             this.lblLayerServerStatus = new System.Windows.Forms.Label();
             this.lnkManageAccounts = new System.Windows.Forms.LinkLabel();
-            this.lblLayerAssignAccountPrivilegesTitle = new System.Windows.Forms.Label();
-            this.panel2 = new System.Windows.Forms.Panel();
-            this.uscPrivileges = new PRoCon.uscPrivilegesSelection();
             this.lsvLayerAccounts = new PRoCon.Controls.ControlsEx.ListViewNF();
             this.colAccounts = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colRConAccess = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colPrivileges = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.colIPPort = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.lblLayerAssignAccountPrivilegesTitle = new System.Windows.Forms.Label();
+            this.panel2 = new System.Windows.Forms.Panel();
             this.pnlAccountPrivileges.SuspendLayout();
             this.pnlStartPRoConLayer.SuspendLayout();
             this.pnlMainLayerServer.SuspendLayout();
@@ -72,6 +71,15 @@
             this.pnlAccountPrivileges.Size = new System.Drawing.Size(567, 517);
             this.pnlAccountPrivileges.TabIndex = 30;
             this.pnlAccountPrivileges.Visible = false;
+            // 
+            // uscPrivileges
+            // 
+            this.uscPrivileges.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.uscPrivileges.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.uscPrivileges.Location = new System.Drawing.Point(0, 0);
+            this.uscPrivileges.Name = "uscPrivileges";
+            this.uscPrivileges.Size = new System.Drawing.Size(567, 517);
+            this.uscPrivileges.TabIndex = 0;
             // 
             // pnlStartPRoConLayer
             // 
@@ -343,43 +351,13 @@
             this.lnkManageAccounts.Text = "Manage Accounts";
             this.lnkManageAccounts.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkManageAccounts_LinkClicked);
             // 
-            // lblLayerAssignAccountPrivilegesTitle
-            // 
-            this.lblLayerAssignAccountPrivilegesTitle.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.lblLayerAssignAccountPrivilegesTitle.AutoSize = true;
-            this.lblLayerAssignAccountPrivilegesTitle.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblLayerAssignAccountPrivilegesTitle.Location = new System.Drawing.Point(30, 6);
-            this.lblLayerAssignAccountPrivilegesTitle.Name = "lblLayerAssignAccountPrivilegesTitle";
-            this.lblLayerAssignAccountPrivilegesTitle.Size = new System.Drawing.Size(233, 15);
-            this.lblLayerAssignAccountPrivilegesTitle.TabIndex = 21;
-            this.lblLayerAssignAccountPrivilegesTitle.Text = "Choose an account to assign privileges to";
-            // 
-            // panel2
-            // 
-            this.panel2.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.panel2.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.panel2.Location = new System.Drawing.Point(34, 15);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(495, 1);
-            this.panel2.TabIndex = 22;
-            // 
-            // uscPrivileges
-            // 
-            this.uscPrivileges.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.uscPrivileges.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.uscPrivileges.Location = new System.Drawing.Point(0, 0);
-            this.uscPrivileges.Name = "uscPrivileges";
-            this.uscPrivileges.Size = new System.Drawing.Size(567, 517);
-            this.uscPrivileges.TabIndex = 0;
-            // 
             // lsvLayerAccounts
             // 
             this.lsvLayerAccounts.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
             this.lsvLayerAccounts.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.colAccounts,
             this.colRConAccess,
-            this.colPrivileges,
-            this.colIPPort});
+            this.colPrivileges});
             this.lsvLayerAccounts.FullRowSelect = true;
             this.lsvLayerAccounts.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.lsvLayerAccounts.Location = new System.Drawing.Point(56, 33);
@@ -408,11 +386,25 @@
             this.colPrivileges.Text = "Local Privileges";
             this.colPrivileges.Width = 108;
             // 
-            // colIPPort
+            // lblLayerAssignAccountPrivilegesTitle
             // 
-            this.colIPPort.Tag = "colIPPort";
-            this.colIPPort.Text = "IpAddress:Port";
-            this.colIPPort.Width = 118;
+            this.lblLayerAssignAccountPrivilegesTitle.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.lblLayerAssignAccountPrivilegesTitle.AutoSize = true;
+            this.lblLayerAssignAccountPrivilegesTitle.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblLayerAssignAccountPrivilegesTitle.Location = new System.Drawing.Point(30, 6);
+            this.lblLayerAssignAccountPrivilegesTitle.Name = "lblLayerAssignAccountPrivilegesTitle";
+            this.lblLayerAssignAccountPrivilegesTitle.Size = new System.Drawing.Size(233, 15);
+            this.lblLayerAssignAccountPrivilegesTitle.TabIndex = 21;
+            this.lblLayerAssignAccountPrivilegesTitle.Text = "Choose an account to assign privileges to";
+            // 
+            // panel2
+            // 
+            this.panel2.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.panel2.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.panel2.Location = new System.Drawing.Point(34, 15);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(495, 1);
+            this.panel2.TabIndex = 22;
             // 
             // uscAccountsPanel
             // 
@@ -469,7 +461,6 @@
         private System.Windows.Forms.ColumnHeader colAccounts;
         private System.Windows.Forms.ColumnHeader colRConAccess;
         private System.Windows.Forms.ColumnHeader colPrivileges;
-        private System.Windows.Forms.ColumnHeader colIPPort;
         private System.Windows.Forms.Label lblLayerAssignAccountPrivilegesTitle;
         private System.Windows.Forms.Panel panel2;
         private uscPrivilegesSelection uscPrivileges;
