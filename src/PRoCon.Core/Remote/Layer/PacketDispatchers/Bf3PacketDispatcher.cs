@@ -1,8 +1,6 @@
 ﻿namespace PRoCon.Core.Remote.Layer.PacketDispatchers {
     public class Bf3PacketDispatcher : LayerPacketDispatcher {
-
         public Bf3PacketDispatcher(ILayerConnection connection) : base(connection) {
-
             this.RequestDelegates.Add("admin.eventsEnabled", this.DispatchEventsEnabledRequest);
 
             // vars.idleTimeout is already included in FrostbiteLayerClient
@@ -68,6 +66,5 @@
             this.RequestDelegates.Add("squad.listPlayers", this.DispatchSecureSafeListedRequest);
             this.RequestDelegates.Add("squad.private", this.DispatchSquadIsPrivateRequest);
         }
-
     }
 }

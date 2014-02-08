@@ -103,6 +103,7 @@
     <Compile Include="Plugin\PluginCacheEntry.cs" />
     <Compile Include="Plugin\PluginInvocation.cs" />
     <Compile Include="Remote\BF4Client.cs" />
+    <Compile Include="Remote\Layer\ILayerPacketDispatcher.cs" />
     <Compile Include="Remote\Layer\PacketDispatchers\Bf4PacketDispatcher.cs" />
     <Compile Include="Remote\Layer\ILayerConnection.cs" />
     <Compile Include="Remote\Layer\PacketDispatchers\MohwPacketDispatcher.cs" />

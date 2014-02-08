@@ -1,9 +1,6 @@
 ﻿namespace PRoCon.Core.Remote.Layer.PacketDispatchers {
     public class MohwPacketDispatcher : LayerPacketDispatcher {
-
-        public MohwPacketDispatcher(ILayerConnection connection)
-            : base(connection) {
-
+        public MohwPacketDispatcher(ILayerConnection connection) : base(connection) {
             this.RequestDelegates.Add("admin.eventsEnabled", this.DispatchEventsEnabledRequest);
 
             #region FrostbiteLayerClient delegates

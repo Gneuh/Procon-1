@@ -2,86 +2,73 @@
 using System.Collections.Generic;
 
 namespace PRoCon.Core.Remote.Layer {
-    public class LayerPacketDispatcher {
-
+    public abstract class LayerPacketDispatcher : ILayerPacketDispatcher {
+        /// <summary>
+        /// The connection to dispatch incoming packets from
+        /// </summary>
         public ILayerConnection Connection { get; set; }
 
-        #region Packet Management
+        /// <summary>
+        /// A list of handlers to handle requests from the connection
+        /// </summary>
+        protected Dictionary<String, Action<ILayerConnection, Packet>> RequestDelegates = new Dictionary<String, Action<ILayerConnection, Packet>>();
 
-        protected delegate void RequestPacketHandler(ILayerConnection sender, Packet cpRecievedPacket);
-        //protected delegate void ResponsePacketHandler(ILayerConnection sender, Packet cpRecievedPacket);
-        //protected Dictionary<string, ResponsePacketHandler> m_responseDelegates = new Dictionary<string, ResponsePacketHandler>();
-        protected Dictionary<string, RequestPacketHandler> RequestDelegates = new Dictionary<string, RequestPacketHandler>();
+        public Action<ILayerPacketDispatcher> ConnectionClosed { get; set; }
 
-        #endregion
+        public Action<ILayerPacketDispatcher, Packet> RequestPacketUnsecureSafeListedRecieved { get; set; } // Harmless packets that do not require login.
+        public Action<ILayerPacketDispatcher, Packet> RequestPacketSecureSafeListedRecieved { get; set; } // Harmless recieved packets for logged in users
 
-        #region Events
+        public Action<ILayerPacketDispatcher, Packet> RequestPacketPunkbusterRecieved { get; set; }
 
-        public delegate void EmptyParameterHandler(LayerPacketDispatcher sender);
-        public event EmptyParameterHandler ConnectionClosed;
+        public Action<ILayerPacketDispatcher, Packet> RequestPacketAlterTextMonderationListRecieved { get; set; }
+        public Action<ILayerPacketDispatcher, Packet> RequestPacketAlterBanListRecieved { get; set; }
+        public Action<ILayerPacketDispatcher, Packet> RequestPacketAlterReservedSlotsListRecieved { get; set; }
+        public Action<ILayerPacketDispatcher, Packet> RequestPacketAlterMaplistRecieved { get; set; }
 
-        public delegate void RequestPacketDispatchHandler(LayerPacketDispatcher sender, Packet packet);
-        public virtual event RequestPacketDispatchHandler RequestPacketUnsecureSafeListedRecieved; // Harmless packets that do not require login.
-        public virtual event RequestPacketDispatchHandler RequestPacketSecureSafeListedRecieved; // Harmless recieved packets for logged in users
+        public Action<ILayerPacketDispatcher, Packet> RequestPacketUseMapFunctionRecieved { get; set; }
 
-        public virtual event RequestPacketDispatchHandler RequestPacketPunkbusterRecieved;
+        public Action<ILayerPacketDispatcher, Packet> RequestPacketVarsRecieved { get; set; }
 
-        public virtual event RequestPacketDispatchHandler RequestPacketAlterTextMonderationListRecieved;
-        public virtual event RequestPacketDispatchHandler RequestPacketAlterBanListRecieved;
-        public virtual event RequestPacketDispatchHandler RequestPacketAlterReservedSlotsListRecieved;
-        public virtual event RequestPacketDispatchHandler RequestPacketAlterMaplistRecieved;
+        public Action<ILayerPacketDispatcher, Packet> RequestPacketAdminShutdown { get; set; }
 
-        public virtual event RequestPacketDispatchHandler RequestPacketUseMapFunctionRecieved;
+        public Action<ILayerPacketDispatcher, Packet> RequestPacketAdminPlayerKillRecieved { get; set; }
+        public Action<ILayerPacketDispatcher, Packet> RequestPacketAdminKickPlayerRecieved { get; set; }
+        public Action<ILayerPacketDispatcher, Packet> RequestPacketAdminPlayerMoveRecieved { get; set; }
 
-        public virtual event RequestPacketDispatchHandler RequestPacketVarsRecieved;
+        public Action<ILayerPacketDispatcher, Packet> RequestPacketUnknownRecieved { get; set; }
 
-        public virtual event RequestPacketDispatchHandler RequestPacketAdminShutdown;
+        public Action<ILayerPacketDispatcher, Packet, CBanInfo> RequestBanListAddRecieved { get; set; }
 
-        public virtual event RequestPacketDispatchHandler RequestPacketAdminPlayerKillRecieved;
-        public virtual event RequestPacketDispatchHandler RequestPacketAdminKickPlayerRecieved;
-        public virtual event RequestPacketDispatchHandler RequestPacketAdminPlayerMoveRecieved;
+        public Action<ILayerPacketDispatcher, Packet, String> RequestLoginPlainText { get; set; }
 
-        public virtual event RequestPacketDispatchHandler RequestPacketUnknownRecieved;
+        public Action<ILayerPacketDispatcher, Packet> RequestQuit { get; set; }
+        public Action<ILayerPacketDispatcher, Packet> RequestLogout { get; set; }
+        public Action<ILayerPacketDispatcher, Packet> RequestHelp { get; set; }
+        public Action<ILayerPacketDispatcher, Packet> RequestLoginHashed { get; set; }
 
-        public delegate void RequestBanListAddHandler(LayerPacketDispatcher sender, Packet packet, CBanInfo newBan);
-        public virtual event RequestBanListAddHandler RequestBanListAddRecieved;
+        public Action<ILayerPacketDispatcher, Packet, bool> RequestEventsEnabled { get; set; }
 
-        public delegate void RequestLoginPlainTextHandler(LayerPacketDispatcher sender, Packet packet, string password);
-        public virtual event RequestLoginPlainTextHandler RequestLoginPlainText;
+        public Action<ILayerPacketDispatcher, Packet, String> RequestLoginHashedPassword { get; set; }
 
-        public virtual event RequestPacketDispatchHandler RequestQuit;
-        public virtual event RequestPacketDispatchHandler RequestLogout;
-        public virtual event RequestPacketDispatchHandler RequestHelp;
-        public virtual event RequestPacketDispatchHandler RequestLoginHashed;
+        public Action<ILayerPacketDispatcher, Packet> RequestPacketSquadLeaderRecieved { get; set; }
+        public Action<ILayerPacketDispatcher, Packet> RequestPacketSquadIsPrivateReceived { get; set; }
 
-        public delegate void RequestEventsEnabledHandler(LayerPacketDispatcher sender, Packet packet, bool eventsEnabled);
-        public virtual event RequestEventsEnabledHandler RequestEventsEnabled;
-
-        public delegate void RequestLoginHashedPasswordHandler(LayerPacketDispatcher sender, Packet packet, string hashedPassword);
-        public virtual event RequestLoginHashedPasswordHandler RequestLoginHashedPassword;
-
-        public virtual event RequestPacketDispatchHandler RequestPacketSquadLeaderRecieved;
-        public virtual event RequestPacketDispatchHandler RequestPacketSquadIsPrivateReceived;
-
-
-        #endregion
-
-        public string IPPort {
+        public String IPPort {
             get {
-                string returnIpPort = String.Empty;
+                String ipPort = String.Empty;
 
                 if (this.Connection != null) {
-                    returnIpPort = this.Connection.IPPort;
+                    ipPort = this.Connection.IPPort;
                 }
 
-                return returnIpPort;
+                return ipPort;
             }
         }
 
-        public LayerPacketDispatcher(ILayerConnection connection) {
+        protected LayerPacketDispatcher(ILayerConnection connection) {
             this.Connection = connection;
 
-            this.RequestDelegates = new Dictionary<string, RequestPacketHandler>() {
+            this.RequestDelegates = new Dictionary<String, Action<ILayerConnection, Packet>>() {
                 { "login.plainText", this.DispatchLoginPlainTextRequest },
                 { "login.hashed", this.DispatchLoginHashedRequest },
                 { "logout", this.DispatchLogoutRequest },
@@ -209,211 +196,214 @@ namespace PRoCon.Core.Remote.Layer {
         }
 
 
-        protected virtual void DispatchPunkbusterRequest(ILayerConnection sender, Packet cpRecievedPacket) {
-            if (this.RequestPacketPunkbusterRecieved != null) {
-                FrostbiteConnection.RaiseEvent(this.RequestPacketPunkbusterRecieved.GetInvocationList(), this, cpRecievedPacket);
+        protected virtual void DispatchPunkbusterRequest(ILayerConnection sender, Packet request) {
+            var handler = this.RequestPacketPunkbusterRecieved;
+            if (handler != null) {
+                handler(this, request);
             }
         }
 
-        protected virtual void DispatchUseMapFunctionRequest(ILayerConnection sender, Packet cpRecievedPacket) {
-            if (this.RequestPacketUseMapFunctionRecieved != null) {
-                FrostbiteConnection.RaiseEvent(this.RequestPacketUseMapFunctionRecieved.GetInvocationList(), this, cpRecievedPacket);
+        protected virtual void DispatchUseMapFunctionRequest(ILayerConnection sender, Packet request) {
+            var handler = this.RequestPacketUseMapFunctionRecieved;
+            if (handler != null) {
+                handler(this, request);
             }
         }
 
-        protected virtual void DispatchBanListAddRequest(ILayerConnection sender, Packet cpRecievedPacket) {
+        protected virtual void DispatchBanListAddRequest(ILayerConnection sender, Packet request) {
+            if (request.Words.Count >= 4) {
+                CBanInfo newBan = new CBanInfo(request.Words[1], request.Words[2], new TimeoutSubset(request.Words.GetRange(3, TimeoutSubset.RequiredLength(request.Words[3]))), request.Words.Count >= (4 + TimeoutSubset.RequiredLength(request.Words[3])) ? request.Words[(3 + TimeoutSubset.RequiredLength(request.Words[3]))] : "");
 
-            if (cpRecievedPacket.Words.Count >= 4) {
-
-                CBanInfo newBan = new CBanInfo(cpRecievedPacket.Words[1], cpRecievedPacket.Words[2], new TimeoutSubset(cpRecievedPacket.Words.GetRange(3, TimeoutSubset.RequiredLength(cpRecievedPacket.Words[3]))), cpRecievedPacket.Words.Count >= (4 + TimeoutSubset.RequiredLength(cpRecievedPacket.Words[3])) ? cpRecievedPacket.Words[(3 + TimeoutSubset.RequiredLength(cpRecievedPacket.Words[3]))] : "");
-
-                if (this.RequestBanListAddRecieved != null) {
-                    FrostbiteConnection.RaiseEvent(this.RequestBanListAddRecieved.GetInvocationList(), this, cpRecievedPacket, newBan);
+                var handler = this.RequestBanListAddRecieved;
+                if (handler != null) {
+                    handler(this, request, newBan);
                 }
             }
         }
 
-        protected virtual void DispatchAlterTextMonderationListRequest(ILayerConnection sender, Packet cpRecievedPacket) {
-            if (this.RequestPacketAlterTextMonderationListRecieved != null) {
-                FrostbiteConnection.RaiseEvent(this.RequestPacketAlterTextMonderationListRecieved.GetInvocationList(), this, cpRecievedPacket);
+        protected virtual void DispatchAlterTextMonderationListRequest(ILayerConnection sender, Packet request) {
+            var handler = this.RequestPacketAlterTextMonderationListRecieved;
+            if (handler != null) {
+                handler(this, request);
             }
         }
 
-        protected virtual void DispatchAlterBanListRequest(ILayerConnection sender, Packet cpRecievedPacket) {
-            if (this.RequestPacketAlterBanListRecieved != null) {
-                FrostbiteConnection.RaiseEvent(this.RequestPacketAlterBanListRecieved.GetInvocationList(), this, cpRecievedPacket);
+        protected virtual void DispatchAlterBanListRequest(ILayerConnection sender, Packet request) {
+            var handler = this.RequestPacketAlterBanListRecieved;
+            if (handler != null) {
+                handler(this, request);
             }
         }
 
-        protected virtual void DispatchAlterReservedSlotsListRequest(ILayerConnection sender, Packet cpRecievedPacket) {
-            if (this.RequestPacketAlterReservedSlotsListRecieved != null) {
-                FrostbiteConnection.RaiseEvent(this.RequestPacketAlterReservedSlotsListRecieved.GetInvocationList(), this, cpRecievedPacket);
+        protected virtual void DispatchAlterReservedSlotsListRequest(ILayerConnection sender, Packet request) {
+            var handler = this.RequestPacketAlterReservedSlotsListRecieved;
+            if (handler != null) {
+                handler(this, request);
             }
         }
 
-        protected virtual void DispatchAlterMaplistRequest(ILayerConnection sender, Packet cpRecievedPacket) {
-            if (this.RequestPacketAlterMaplistRecieved != null) {
-                FrostbiteConnection.RaiseEvent(this.RequestPacketAlterMaplistRecieved.GetInvocationList(), this, cpRecievedPacket);
+        protected virtual void DispatchAlterMaplistRequest(ILayerConnection sender, Packet request) {
+            var handler = this.RequestPacketAlterMaplistRecieved;
+            if (handler != null) {
+                handler(this, request);
             }
         }
 
-        protected virtual void DispatchVarsAdminPasswordRequest(ILayerConnection sender, Packet cpRecievedPacket) {
-            this.SendResponse(cpRecievedPacket, "UnknownCommand");
+        protected virtual void DispatchVarsAdminPasswordRequest(ILayerConnection sender, Packet request) {
+            this.SendResponse(request, "UnknownCommand");
         }
 
-        protected virtual void DispatchUnsecureSafeListedRequest(ILayerConnection sender, Packet cpRecievedPacket) {
-            if (this.RequestPacketUnsecureSafeListedRecieved != null) {
-                FrostbiteConnection.RaiseEvent(this.RequestPacketUnsecureSafeListedRecieved.GetInvocationList(), this, cpRecievedPacket);
+        protected virtual void DispatchUnsecureSafeListedRequest(ILayerConnection sender, Packet request) {
+            var handler = this.RequestPacketUnsecureSafeListedRecieved;
+            if (handler != null) {
+                handler(this, request);
             }
         }
 
-        protected virtual void DispatchVarsRequest(ILayerConnection sender, Packet cpRecievedPacket) {
+        protected virtual void DispatchVarsRequest(ILayerConnection sender, Packet request) {
+            var handler = this.RequestPacketVarsRecieved;
 
-            if (cpRecievedPacket.Words.Count == 1) {
-                if (this.RequestPacketSecureSafeListedRecieved != null) {
-                    FrostbiteConnection.RaiseEvent(this.RequestPacketSecureSafeListedRecieved.GetInvocationList(), this, cpRecievedPacket);
-                }
+            if (request.Words.Count == 1) {
+                handler = this.RequestPacketSecureSafeListedRecieved;
             }
-            else {
-                if (this.RequestPacketVarsRecieved != null) {
-                    FrostbiteConnection.RaiseEvent(this.RequestPacketVarsRecieved.GetInvocationList(), this, cpRecievedPacket);
-                }
+
+            if (handler != null) {
+                handler(this, request);
             }
         }
 
-        protected virtual void DispatchSecureSafeListedRequest(ILayerConnection sender, Packet cpRecievedPacket) {
-            if (this.RequestPacketSecureSafeListedRecieved != null) {
-                FrostbiteConnection.RaiseEvent(this.RequestPacketSecureSafeListedRecieved.GetInvocationList(), this, cpRecievedPacket);
+        protected virtual void DispatchSecureSafeListedRequest(ILayerConnection sender, Packet request) {
+            var handler = this.RequestPacketSecureSafeListedRecieved;
+            if (handler != null) {
+                handler(this, request);
             }
         }
 
-        #region Player Events
-
-        protected virtual void DispatchAdminKickPlayerRequest(ILayerConnection sender, Packet cpRecievedPacket) {
-            if (this.RequestPacketAdminKickPlayerRecieved != null) {
-                FrostbiteConnection.RaiseEvent(this.RequestPacketAdminKickPlayerRecieved.GetInvocationList(), this, cpRecievedPacket);
+        protected virtual void DispatchAdminKickPlayerRequest(ILayerConnection sender, Packet request) {
+            var handler = this.RequestPacketAdminKickPlayerRecieved;
+            if (handler != null) {
+                handler(this, request);
             }
         }
 
-        protected virtual void DispatchAdminMovePlayerRequest(ILayerConnection sender, Packet cpRecievedPacket) {
-
-            if (this.RequestPacketAdminPlayerMoveRecieved != null) {
-                FrostbiteConnection.RaiseEvent(this.RequestPacketAdminPlayerMoveRecieved.GetInvocationList(), this, cpRecievedPacket);
+        protected virtual void DispatchAdminMovePlayerRequest(ILayerConnection sender, Packet request) {
+            var handler = this.RequestPacketAdminPlayerMoveRecieved;
+            if (handler != null) {
+                handler(this, request);
             }
         }
 
-        protected virtual void DispatchAdminKillPlayerRequest(ILayerConnection sender, Packet cpRecievedPacket) {
-            if (this.RequestPacketAdminPlayerKillRecieved != null) {
-                FrostbiteConnection.RaiseEvent(this.RequestPacketAdminPlayerKillRecieved.GetInvocationList(), this, cpRecievedPacket);
+        protected virtual void DispatchAdminKillPlayerRequest(ILayerConnection sender, Packet request) {
+            var handler = this.RequestPacketAdminPlayerKillRecieved;
+            if (handler != null) {
+                handler(this, request);
             }
         }
 
-        #endregion
-
-        #region player/squad cmds
-
-        protected virtual void DispatchSquadLeaderRequest(ILayerConnection sender, Packet cpRecievedPacket) {
-            if (this.RequestPacketSquadLeaderRecieved != null) {
-                FrostbiteConnection.RaiseEvent(this.RequestPacketSquadLeaderRecieved.GetInvocationList(), this, cpRecievedPacket);
+        protected virtual void DispatchSquadLeaderRequest(ILayerConnection sender, Packet request) {
+            var handler = this.RequestPacketSquadLeaderRecieved;
+            if (handler != null) {
+                handler(this, request);
             }
         }
 
-        protected virtual void DispatchSquadIsPrivateRequest(ILayerConnection sender, Packet cpRecievedPacket)
-        {
-            if (this.RequestPacketSquadIsPrivateReceived != null)
-            {
-                FrostbiteConnection.RaiseEvent(this.RequestPacketSquadIsPrivateReceived.GetInvocationList(), this, cpRecievedPacket);
+        protected virtual void DispatchSquadIsPrivateRequest(ILayerConnection sender, Packet request) {
+            var handler = this.RequestPacketSquadIsPrivateReceived;
+            if (handler != null) {
+                handler(this, request);
             }
         }
 
-        #endregion
-
-        #region Basic Universal Commands
-
-        protected virtual void DispatchLoginPlainTextRequest(ILayerConnection sender, Packet cpRecievedPacket) {
-
-            if (cpRecievedPacket.Words.Count >= 2) {
-                if (this.RequestLoginPlainText != null) {
-                    FrostbiteConnection.RaiseEvent(this.RequestLoginPlainText.GetInvocationList(), this, cpRecievedPacket, cpRecievedPacket.Words[1]);
+        protected virtual void DispatchLoginPlainTextRequest(ILayerConnection sender, Packet request) {
+            if (request.Words.Count >= 2) {
+                var handler = this.RequestLoginPlainText;
+                if (handler != null) {
+                    handler(this, request, request.Words[1]);
                 }
             }
             else {
-                this.SendResponse(cpRecievedPacket, "InvalidArguments");
+                this.SendResponse(request, "InvalidArguments");
             }
         }
 
-        protected virtual void DispatchLoginHashedRequest(ILayerConnection sender, Packet cpRecievedPacket) {
-            if (cpRecievedPacket.Words.Count == 1) {
-                if (this.RequestLoginHashed != null) {
-                    FrostbiteConnection.RaiseEvent(this.RequestLoginHashed.GetInvocationList(), this, cpRecievedPacket);
+        protected virtual void DispatchLoginHashedRequest(ILayerConnection sender, Packet request) {
+            if (request.Words.Count == 1) {
+                var handler = this.RequestLoginHashed;
+                if (handler != null) {
+                    handler(this, request);
                 }
             }
-            else if (cpRecievedPacket.Words.Count >= 2) {
-                if (this.RequestLoginHashedPassword != null) {
-                    FrostbiteConnection.RaiseEvent(this.RequestLoginHashedPassword.GetInvocationList(), this, cpRecievedPacket, cpRecievedPacket.Words[1]);
+            else if (request.Words.Count >= 2) {
+                var handler = this.RequestLoginHashedPassword;
+                if (handler != null) {
+                    handler(this, request, request.Words[1]);
                 }
             }
             else {
-                this.SendResponse(cpRecievedPacket, "InvalidArguments");
+                this.SendResponse(request, "InvalidArguments");
             }
         }
 
-        protected virtual void DispatchLogoutRequest(ILayerConnection sender, Packet cpRecievedPacket) {
-            if (this.RequestLogout != null) {
-                FrostbiteConnection.RaiseEvent(this.RequestLogout.GetInvocationList(), this, cpRecievedPacket);
+        protected virtual void DispatchLogoutRequest(ILayerConnection sender, Packet request) {
+            var handler = this.RequestLogout;
+            if (handler != null) {
+                handler(this, request);
             }
         }
 
-        protected virtual void DispatchQuitRequest(ILayerConnection sender, Packet cpRecievedPacket) {
-            if (this.RequestQuit != null) {
-                FrostbiteConnection.RaiseEvent(this.RequestQuit.GetInvocationList(), this, cpRecievedPacket);
+        protected virtual void DispatchQuitRequest(ILayerConnection sender, Packet request) {
+            var handler = this.RequestQuit;
+            if (handler != null) {
+                handler(this, request);
             }
         }
 
-        protected virtual void DispatchEventsEnabledRequest(ILayerConnection sender, Packet cpRecievedPacket) {
+        protected virtual void DispatchEventsEnabledRequest(ILayerConnection sender, Packet request) {
             if (this.RequestEventsEnabled != null) {
                 bool blEnabled = true;
 
-                if (cpRecievedPacket.Words.Count == 2 && bool.TryParse(cpRecievedPacket.Words[1], out blEnabled) == true) {
-                    FrostbiteConnection.RaiseEvent(this.RequestEventsEnabled.GetInvocationList(), this, cpRecievedPacket, blEnabled);
+                if (request.Words.Count == 2 && bool.TryParse(request.Words[1], out blEnabled) == true) {
+                    var handler = this.RequestEventsEnabled;
+                    if (handler != null) {
+                        handler(this, request, blEnabled);
+                    }
                 }
                 else {
-                    this.SendResponse(cpRecievedPacket, "InvalidArguments");
+                    this.SendResponse(request, "InvalidArguments");
                 }
             }
         }
 
-        protected virtual void DispatchHelpRequest(ILayerConnection sender, Packet cpRecievedPacket) {
-            if (this.RequestHelp != null) {
-                FrostbiteConnection.RaiseEvent(this.RequestHelp.GetInvocationList(), this, cpRecievedPacket);
+        protected virtual void DispatchHelpRequest(ILayerConnection sender, Packet request) {
+            var handler = this.RequestHelp;
+            if (handler != null) {
+                handler(this, request);
             }
         }
 
-        protected virtual void DispatchAdminShutDownRequest(ILayerConnection sender, Packet cpRecievedPacket) {
-            if (this.RequestPacketAdminShutdown != null) {
-                FrostbiteConnection.RaiseEvent(this.RequestPacketAdminShutdown.GetInvocationList(), this, cpRecievedPacket);
+        protected virtual void DispatchAdminShutDownRequest(ILayerConnection sender, Packet request) {
+            var handler = this.RequestPacketAdminShutdown;
+            if (handler != null) {
+                handler(this, request);
             }
         }
 
-        #endregion
-
-        public virtual void DispatchRequestPacket(ILayerConnection sender, Packet cpRequestPacket) {
-            if (cpRequestPacket.Words.Count >= 1) {
-                if (this.RequestDelegates.ContainsKey(cpRequestPacket.Words[0]) == true) {
-                    this.RequestDelegates[cpRequestPacket.Words[0]](sender, cpRequestPacket);
+        public virtual void DispatchRequestPacket(ILayerConnection sender, Packet request) {
+            if (request.Words.Count >= 1) {
+                if (this.RequestDelegates.ContainsKey(request.Words[0]) == true) {
+                    this.RequestDelegates[request.Words[0]](sender, request);
                 }
                 else {
-                    if (this.RequestPacketUnknownRecieved != null) {
-                        FrostbiteConnection.RaiseEvent(this.RequestPacketUnknownRecieved.GetInvocationList(), this, cpRequestPacket);
+                    var handler = this.RequestPacketUnknownRecieved;
+                    if (handler != null) {
+                        handler(this, request);
                     }
                 }
             }
         }
 
         private void Connection_PacketReceived(ILayerConnection sender, Packet packet) {
-
             if (packet.OriginatedFromServer == false && packet.IsResponse == false) {
-
                 this.DispatchRequestPacket(sender, packet);
             }
             //else if (packet.OriginatedFromServer == true && packet.IsResponse == true) {
@@ -422,8 +412,17 @@ namespace PRoCon.Core.Remote.Layer {
         }
 
         private void Connection_ConnectionClosed(ILayerConnection sender) {
-            if (this.ConnectionClosed != null) {
-                FrostbiteConnection.RaiseEvent(this.ConnectionClosed.GetInvocationList(), this);
+            var handler = this.ConnectionClosed;
+            if (handler != null) {
+                handler(this);
+            }
+
+            this.NullActions();
+        }
+
+        public void Poke() {
+            if (this.Connection != null) {
+                this.Connection.Poke();
             }
         }
 
@@ -433,33 +432,78 @@ namespace PRoCon.Core.Remote.Layer {
             }
         }
 
-        public void SendRequest(List<string> words) {
+        public void SendRequest(List<String> words) {
             if (this.Connection != null) {
                 this.Connection.Send(new Packet(true, false, this.Connection.AcquireSequenceNumber, words));
             }
         }
 
-        public void SendRequest(params string[] words) {
-            this.SendRequest(new List<string>(words));
+        public void SendRequest(params String[] words) {
+            this.SendRequest(new List<String>(words));
         }
 
-        public void SendResponse(Packet packet, List<string> words) {
-
+        public void SendResponse(Packet packet, List<String> words) {
             if (this.Connection != null) {
                 this.Connection.Send(new Packet(false, true, packet.SequenceNumber, words));
             }
         }
 
-        public void SendResponse(Packet packet, params string[] words) {
-            this.SendResponse(packet, new List<string>(words));
+        public void SendResponse(Packet packet, params String[] words) {
+            this.SendResponse(packet, new List<String>(words));
+        }
+
+        /// <summary>
+        /// Nulls out all of the actions, 
+        /// </summary>
+        protected void NullActions() {
+            this.ConnectionClosed = null;
+
+            this.RequestPacketUnsecureSafeListedRecieved = null;
+            this.RequestPacketSecureSafeListedRecieved = null;
+
+            this.RequestPacketPunkbusterRecieved = null;
+
+            this.RequestPacketAlterTextMonderationListRecieved = null;
+            this.RequestPacketAlterBanListRecieved = null;
+            this.RequestPacketAlterReservedSlotsListRecieved = null;
+            this.RequestPacketAlterMaplistRecieved = null;
+
+            this.RequestPacketUseMapFunctionRecieved = null;
+
+            this.RequestPacketVarsRecieved = null;
+
+            this.RequestPacketAdminShutdown = null;
+
+            this.RequestPacketAdminPlayerKillRecieved = null;
+            this.RequestPacketAdminKickPlayerRecieved = null;
+            this.RequestPacketAdminPlayerMoveRecieved = null;
+
+            this.RequestPacketUnknownRecieved = null;
+
+            this.RequestBanListAddRecieved = null;
+
+            this.RequestLoginPlainText = null;
+
+            this.RequestQuit = null;
+            this.RequestLogout = null;
+            this.RequestHelp = null;
+            this.RequestLoginHashed = null;
+
+            this.RequestEventsEnabled = null;
+
+            this.RequestLoginHashedPassword = null;
+
+            this.RequestPacketSquadLeaderRecieved = null;
+            this.RequestPacketSquadIsPrivateReceived = null;
         }
 
         public void Shutdown() {
-
             if (this.Connection != null) {
                 this.Connection.Shutdown();
                 this.Connection = null;
             }
+
+            this.NullActions();
         }
     }
 }

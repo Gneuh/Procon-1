@@ -1,9 +1,6 @@
 ﻿namespace PRoCon.Core.Remote.Layer.PacketDispatchers {
     public class Bf4PacketDispatcher : LayerPacketDispatcher {
-
-        public Bf4PacketDispatcher(ILayerConnection connection)
-            : base(connection) {
-
+        public Bf4PacketDispatcher(ILayerConnection connection) : base(connection) {
             this.RequestDelegates.Add("admin.eventsEnabled", this.DispatchEventsEnabledRequest);
 
             // vars.idleTimeout is already included in FrostbiteLayerClient

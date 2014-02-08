@@ -317,7 +317,7 @@ namespace PRoCon.Core.Remote.Layer {
         public void Poke() {
 
             foreach (LayerClient client in new List<LayerClient>(this.LayerClients.Values)) {
-                client.Game.Connection.Poke();
+                client.PacketDispatcher.Poke();
             }
         }
 
