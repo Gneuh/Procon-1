@@ -801,7 +801,7 @@ namespace PRoCon.Core.Plugin {
                 WritePluginConsole("Configuring sandbox..");
                 // create the factory class in the secondary app-domain
                 PluginFactory = (CPRoConPluginLoaderFactory) AppDomainSandbox.CreateInstance("PRoCon.Core", "PRoCon.Core.Plugin.CPRoConPluginLoaderFactory").Unwrap();
-                PluginCallbacks = new CPRoConPluginCallbacks(ProconClient.ExecuteCommand, ProconClient.GetAccountPrivileges, ProconClient.GetVariable, ProconClient.GetSvVariable, ProconClient.GetMapDefines, ProconClient.TryGetLocalized, RegisterCommand, UnregisterCommand, GetRegisteredCommands, ProconClient.GetWeaponDefines, ProconClient.GetSpecializationDefines, ProconClient.Layer.GetLoggedInAccounts, RegisterPluginEvents);
+                PluginCallbacks = new CPRoConPluginCallbacks(ProconClient.ExecuteCommand, ProconClient.GetAccountPrivileges, ProconClient.GetVariable, ProconClient.GetSvVariable, ProconClient.GetMapDefines, ProconClient.TryGetLocalized, RegisterCommand, UnregisterCommand, GetRegisteredCommands, ProconClient.GetWeaponDefines, ProconClient.GetSpecializationDefines, ProconClient.Layer.GetLoggedInAccountUsernames, RegisterPluginEvents);
 
                 WritePluginConsole("Compiling and loading plugins..");
 
@@ -1082,11 +1082,11 @@ namespace PRoCon.Core.Plugin {
 
             #region Layer Accounts
 
-            foreach (LayerClient client in ProconClient.Layer.LayerClients.Values) {
-                client.Login -= new LayerClient.LayerClientHandler(client_LayerClientLogin);
-                client.Logout -= new LayerClient.LayerClientHandler(client_LayerClientLogout);
+            foreach (ILayerClient client in new List<ILayerClient>(ProconClient.Layer.LayerClients.Values)) {
+                client.Login -= Layer_LayerClientLogin;
+                client.Logout -= Layer_LayerClientLogout;
             }
-            ProconClient.Layer.ClientConnected -= new LayerInstance.LayerAccountHandler(Layer_ClientConnected);
+            ProconClient.Layer.ClientConnected -= Layer_ClientConnected;
 
             #region BF4
 
@@ -1326,9 +1326,9 @@ namespace PRoCon.Core.Plugin {
 
             #region Layer Accounts
 
-            foreach (LayerClient client in ProconClient.Layer.LayerClients.Values) {
-                client.Login += new LayerClient.LayerClientHandler(client_LayerClientLogin);
-                client.Logout += new LayerClient.LayerClientHandler(client_LayerClientLogout);
+            foreach (ILayerClient client in new List<ILayerClient>(ProconClient.Layer.LayerClients.Values)) {
+                client.Login += Layer_LayerClientLogin;
+                client.Logout += Layer_LayerClientLogout;
             }
             ProconClient.Layer.ClientConnected += new LayerInstance.LayerAccountHandler(Layer_ClientConnected);
 
@@ -1453,16 +1453,16 @@ namespace PRoCon.Core.Plugin {
 
         #region Layer Accounts
 
-        private void Layer_ClientConnected(LayerClient client) {
-            client.Login += new LayerClient.LayerClientHandler(client_LayerClientLogin);
-            client.Logout += new LayerClient.LayerClientHandler(client_LayerClientLogout);
+        private void Layer_ClientConnected(ILayerClient client) {
+            client.Login += Layer_LayerClientLogin;
+            client.Logout += Layer_LayerClientLogout;
         }
 
-        private void client_LayerClientLogout(LayerClient sender) {
+        private void Layer_LayerClientLogout(ILayerClient sender) {
             InvokeOnAllEnabled("OnAccountLogout", sender.Username, sender.IPPort, sender.Privileges);
         }
 
-        private void client_LayerClientLogin(LayerClient sender) {
+        private void Layer_LayerClientLogin(ILayerClient sender) {
             InvokeOnAllEnabled("OnAccountLogin", sender.Username, sender.IPPort, sender.Privileges);
         }
 

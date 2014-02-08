@@ -458,7 +458,7 @@ namespace PRoCon.Core.Remote {
 
         internal struct SOriginalForwardedPacket {
             public List<string> m_lstWords;
-            public LayerClient m_sender;
+            public ILayerClient m_sender;
             public UInt32 m_ui32OriginalSequence;
         }
 
@@ -1627,7 +1627,7 @@ namespace PRoCon.Core.Remote {
                         // If a layer client sent this packet..
                         if (m_dicForwardedPackets.ContainsKey(cpBeforePacketDispatch.SequenceNumber) == true) {
                             if (m_dicForwardedPackets[cpBeforePacketDispatch.SequenceNumber].m_sender != null) {
-                                (m_dicForwardedPackets[cpBeforePacketDispatch.SequenceNumber].m_sender).OnServerForwardedResponse(new Packet(false, true, m_dicForwardedPackets[cpBeforePacketDispatch.SequenceNumber].m_ui32OriginalSequence, new List<string>(cpBeforePacketDispatch.Words)));
+                                (m_dicForwardedPackets[cpBeforePacketDispatch.SequenceNumber].m_sender).Forward(new Packet(false, true, m_dicForwardedPackets[cpBeforePacketDispatch.SequenceNumber].m_ui32OriginalSequence, new List<string>(cpBeforePacketDispatch.Words)));
 
                                 strProconEventsUid = (m_dicForwardedPackets[cpBeforePacketDispatch.SequenceNumber].m_sender).ProconEventsUid;
 
@@ -2304,7 +2304,7 @@ namespace PRoCon.Core.Remote {
             }
         }
 
-        public void SendProconLayerPacket(LayerClient sender, Packet cpPassOn) {
+        public void SendProconLayerPacket(ILayerClient sender, Packet cpPassOn) {
             lock (new object()) {
                 UInt32 ui32MainConnSequence = Game.Connection.AcquireSequenceNumber;
 

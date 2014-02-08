@@ -142,9 +142,9 @@ namespace PRoCon {
             this.m_prcClient.Layer.ClientConnected += new LayerInstance.LayerAccountHandler(Layer_ClientConnected);
         }
 
-        void Layer_ClientConnected(LayerClient client) {
-            client.Login += new LayerClient.LayerClientHandler(client_LayerClientLogin);
-            client.Logout += new LayerClient.LayerClientHandler(client_LayerClientLogout);
+        void Layer_ClientConnected(ILayerClient client) {
+            client.Login += Layer_LayerClientLogin;
+            client.Logout += Layer_LayerClientLogout;
         }
 
         //public void m_prcClient_ProconPrivileges(CPrivileges spPrivs) {
@@ -501,7 +501,7 @@ namespace PRoCon {
             this.pnlLayerServerTester.Visible = false;
         }
 
-        void client_LayerClientLogin(LayerClient sender) {
+        private void Layer_LayerClientLogin(ILayerClient sender) {
 
             if (this.lsvLayerAccounts.Items.ContainsKey(sender.Username) == true) {
                 // TO DO: Change Icon
@@ -532,7 +532,7 @@ namespace PRoCon {
             }
         }
 
-        private void client_LayerClientLogout(LayerClient sender) {
+        private void Layer_LayerClientLogout(ILayerClient sender) {
 
             if (this.lsvLayerAccounts.Items.ContainsKey(sender.Username) == true) {
                 // TO DO: Change Icon
