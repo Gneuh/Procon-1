@@ -95,9 +95,7 @@ namespace PRoCon.Core.Remote.Layer {
                 if (NetworkStream != null) {
                     NetworkStream.EndWrite(ar);
 
-                    if (PacketSent != null) {
-                        FrostbiteConnection.RaiseEvent(PacketSent.GetInvocationList(), this, (Packet)ar.AsyncState);
-                    }
+                    this.OnPacketSent((Packet)ar.AsyncState);
                 }
             }
             catch (SocketException) {
@@ -157,10 +155,7 @@ namespace PRoCon.Core.Remote.Layer {
                             LastPacketReceived = deserializedPacket;
 
                             // Dispatch the completed packet.
-                            if (PacketReceived != null) {
-                                FrostbiteConnection.RaiseEvent(PacketReceived.GetInvocationList(), this, deserializedPacket);
-                            }
-                            //this.DispatchPacket(cpCompletePacket);
+                            this.OnPacketReceived(deserializedPacket);
 
                             // Now remove the completed packet from the beginning of the stream
                             var updatedSteam = new byte[PacketStream.Length - packetSize];
@@ -205,6 +200,36 @@ namespace PRoCon.Core.Remote.Layer {
             }
         }
 
+        protected void OnPacketSent(Packet packet) {
+            var handler = this.PacketSent;
+            if (handler != null) {
+                handler(this, packet);
+            }
+        }
+
+        protected void OnPacketReceived(Packet packet) {
+            var handler = this.PacketReceived;
+            if (handler != null) {
+                handler(this, packet);
+            }
+        }
+
+        protected void OnConnectionClosed() {
+            var handler = this.ConnectionClosed;
+            if (handler != null) {
+                handler(this);
+            }
+        }
+
+        /// <summary>
+        /// Nulls out all of the actions, 
+        /// </summary>
+        protected void NullActions() {
+            this.ConnectionClosed = null;
+            this.PacketReceived = null;
+            this.PacketSent = null;
+        }
+
         // TO DO: Better error reporting on this method.
         public void Shutdown() {
             if (Client != null) {
@@ -219,9 +244,7 @@ namespace PRoCon.Core.Remote.Layer {
                         Client.Close();
                         Client = null;
 
-                        if (ConnectionClosed != null) {
-                            FrostbiteConnection.RaiseEvent(ConnectionClosed.GetInvocationList(), this);
-                        }
+                        this.OnConnectionClosed();
                     }
                 }
                 catch (SocketException) {
@@ -229,6 +252,9 @@ namespace PRoCon.Core.Remote.Layer {
                 }
                 catch (Exception e) {
                     FrostbiteConnection.LogError("FrostbiteLayerConnection.Shutdown", "catch (Exception e)", e);
+                }
+                finally {
+                    this.NullActions();
                 }
             }
         }
