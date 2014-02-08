@@ -566,8 +566,8 @@ namespace PRoCon.Core.Remote {
                 Layer.Initialize(Parent, this);
 
                 // I may move these events to within Layer, depends on the end of the restructure.
-                Layer.LayerOnline += Layer_LayerOnline;
-                Layer.LayerOffline += Layer_LayerOffline;
+                Layer.LayerStarted += Layer_LayerOnline;
+                Layer.LayerShutdown += Layer_LayerOffline;
                 Layer.AccountPrivileges.AccountPrivilegeAdded += new AccountPrivilegeDictionary.AccountPrivilegeAlteredHandler(AccountPrivileges_AccountPrivilegeAdded);
                 Layer.AccountPrivileges.AccountPrivilegeRemoved += new AccountPrivilegeDictionary.AccountPrivilegeAlteredHandler(AccountPrivileges_AccountPrivilegeRemoved);
 

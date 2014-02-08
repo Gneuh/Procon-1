@@ -94,6 +94,7 @@
     <Compile Include="..\VersionInfo.cs">
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
+    <Compile Include="ControlHelpers.cs" />
     <Compile Include="Controls\Battlemap\BattlemapRoundChange.cs" />
     <Compile Include="Controls\Battlemap\BattlemapViewTools.cs" />
     <Compile Include="Controls\Battlemap\KillDisplayDetails.cs" />
@@ -663,7 +664,7 @@
   </Target>
   -->
   <PropertyGroup>
-      <PostBuildEvent Condition=" '$(OS)' == 'Unix' ">mkdir -p "$(SolutionDir)..\builds\$(ConfigurationName)"
+    <PostBuildEvent Condition=" '$(OS)' == 'Unix' ">mkdir -p "$(SolutionDir)..\builds\$(ConfigurationName)"
 cp -a "$(SolutionDir)Resources\Media" "$(SolutionDir)..\builds\$(ConfigurationName)\Media"
 cp -a "$(SolutionDir)Resources\Configs" "$(SolutionDir)..\builds\$(ConfigurationName)\Configs"
 cp -a "$(SolutionDir)Resources\Localization" "$(SolutionDir)..\builds\$(ConfigurationName)\Localization"

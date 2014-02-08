@@ -135,9 +135,9 @@ namespace PRoCon {
                 }
             }
 
-            this.m_prcClient.Layer.LayerOnline += Layer_LayerOnline;
-            this.m_prcClient.Layer.LayerOffline += Layer_LayerOffline;
-            this.m_prcClient.Layer.LayerSocketError += Layer_LayerSocketError;
+            this.m_prcClient.Layer.LayerStarted += Layer_LayerOnline;
+            this.m_prcClient.Layer.LayerShutdown += Layer_LayerOffline;
+            this.m_prcClient.Layer.SocketError += Layer_LayerSocketError;
 
             this.m_prcClient.Layer.ClientConnected += Layer_ClientConnected;
         }
@@ -458,98 +458,72 @@ namespace PRoCon {
         }
 
         private void Layer_LayerOnline() {
-            //this.picLayerServerStatus.Image = this.m_frmParent.iglPRoConLayerIcons.Images[uscServerConnection.INT_ICON_LAYERSERVER_ONLINE];
-            this.picLayerServerStatus.Image = this.m_frmMain.picLayerOnline.Image;
+            this.InvokeIfRequired(() => {
+                //this.picLayerServerStatus.Image = this.m_frmParent.iglPRoConLayerIcons.Images[uscServerConnection.INT_ICON_LAYERSERVER_ONLINE];
+                this.picLayerServerStatus.Image = this.m_frmMain.picLayerOnline.Image;
 
-            this.lblLayerServerStatus.Text = this.m_clocLanguage.GetLocalized("uscAccountsPanel.lblLayerServerStatus.Online", new string[] { this.m_prcClient.Layer.ListeningPort.ToString() });
-            this.lblLayerServerStatus.ForeColor = Color.ForestGreen;
+                this.lblLayerServerStatus.Text = this.m_clocLanguage.GetLocalized("uscAccountsPanel.lblLayerServerStatus.Online", new string[] {this.m_prcClient.Layer.ListeningPort.ToString()});
+                this.lblLayerServerStatus.ForeColor = Color.ForestGreen;
 
-            this.lnkStartStopLayer.Text = this.m_clocLanguage.GetLocalized("uscAccountsPanel.lnkStartStopLayer.Stop", null);
-            //this.lnkStartStopLayer.LinkArea = new LinkArea(0, this.lnkStartStopLayer.Text.Length);
+                this.lnkStartStopLayer.Text = this.m_clocLanguage.GetLocalized("uscAccountsPanel.lnkStartStopLayer.Stop", null);
+                //this.lnkStartStopLayer.LinkArea = new LinkArea(0, this.lnkStartStopLayer.Text.Length);
 
-            this.pnlLayerServerTester.Visible = false; // service not provided at the moment
-            //this.picLayerForwardedTestStatus.Image = this.m_frmParent.iglPRoConLayerIcons.Images[uscServerConnection.INT_ICON_LAYERSERVER_PORTCHECK_UNKNOWN];
-            this.picLayerForwardedTestStatus.Image = this.m_frmMain.picPortCheckerUnknown.Image;
-            this.lblLayerForwardedTestStatus.Text = this.m_clocLanguage.GetLocalized("uscAccountsPanel.lblLayerForwardedTestStatus.Unknown", null);
-
+                this.pnlLayerServerTester.Visible = false; // service not provided at the moment
+                //this.picLayerForwardedTestStatus.Image = this.m_frmParent.iglPRoConLayerIcons.Images[uscServerConnection.INT_ICON_LAYERSERVER_PORTCHECK_UNKNOWN];
+                this.picLayerForwardedTestStatus.Image = this.m_frmMain.picPortCheckerUnknown.Image;
+                this.lblLayerForwardedTestStatus.Text = this.m_clocLanguage.GetLocalized("uscAccountsPanel.lblLayerForwardedTestStatus.Unknown", null);
+            });
         }
 
         private void Layer_LayerOffline() {
-            this.picLayerServerStatus.Image = this.m_frmMain.picLayerOffline.Image;//this.m_frmParent.iglPRoConLayerIcons.Images[uscServerConnection.INT_ICON_LAYERSERVER_OFFLINE];
+            this.InvokeIfRequired(() => {
+                this.picLayerServerStatus.Image = this.m_frmMain.picLayerOffline.Image;//this.m_frmParent.iglPRoConLayerIcons.Images[uscServerConnection.INT_ICON_LAYERSERVER_OFFLINE];
 
-            this.lblLayerServerStatus.Text = this.m_clocLanguage.GetLocalized("uscAccountsPanel.lblLayerServerStatus.Offline", null);
-            this.lblLayerServerStatus.ForeColor = Color.Maroon;
+                this.lblLayerServerStatus.Text = this.m_clocLanguage.GetLocalized("uscAccountsPanel.lblLayerServerStatus.Offline", null);
+                this.lblLayerServerStatus.ForeColor = Color.Maroon;
 
-            this.lnkStartStopLayer.Text = this.m_clocLanguage.GetLocalized("uscAccountsPanel.lnkStartStopLayer.Start", null);
-            //this.lnkStartStopLayer.LinkArea = new LinkArea(0, this.lnkStartStopLayer.Text.Length);
+                this.lnkStartStopLayer.Text = this.m_clocLanguage.GetLocalized("uscAccountsPanel.lnkStartStopLayer.Start", null);
+                //this.lnkStartStopLayer.LinkArea = new LinkArea(0, this.lnkStartStopLayer.Text.Length);
 
-            this.pnlLayerServerTester.Visible = false;
+                this.pnlLayerServerTester.Visible = false;
+            });
         }
 
         private void Layer_LayerSocketError(SocketException se) {
-            //this.ShutdownLayerListener();
+            this.InvokeIfRequired(() => {
+                //this.ShutdownLayerListener();
 
-            this.picLayerServerStatus.Image = this.m_frmMain.picLayerOffline.Image;
-            //this.picLayerServerStatus.Image = this.m_frmParent.iglPRoConLayerIcons.Images[uscServerConnection.INT_ICON_LAYERSERVER_OFFLINE];
+                this.picLayerServerStatus.Image = this.m_frmMain.picLayerOffline.Image;
+                //this.picLayerServerStatus.Image = this.m_frmParent.iglPRoConLayerIcons.Images[uscServerConnection.INT_ICON_LAYERSERVER_OFFLINE];
 
-            this.lblLayerServerStatus.Text = this.m_clocLanguage.GetLocalized("uscAccountsPanel.lblLayerServerStatus.Error", new string[] { se.Message });
-            this.lblLayerServerStatus.ForeColor = Color.Maroon;
+                this.lblLayerServerStatus.Text = this.m_clocLanguage.GetLocalized("uscAccountsPanel.lblLayerServerStatus.Error", new string[] { se.Message });
+                this.lblLayerServerStatus.ForeColor = Color.Maroon;
 
-            this.lnkStartStopLayer.Text = this.m_clocLanguage.GetLocalized("uscAccountsPanel.lnkStartStopLayer.Start", null);
-            //this.lnkStartStopLayer.LinkArea = new LinkArea(0, this.lnkStartStopLayer.Text.Length);
+                this.lnkStartStopLayer.Text = this.m_clocLanguage.GetLocalized("uscAccountsPanel.lnkStartStopLayer.Start", null);
+                //this.lnkStartStopLayer.LinkArea = new LinkArea(0, this.lnkStartStopLayer.Text.Length);
 
-            this.pnlLayerServerTester.Visible = false;
+                this.pnlLayerServerTester.Visible = false;
+            });
         }
 
         private void Layer_LayerClientLogin(ILayerClient sender) {
+            this.InvokeIfRequired(() => {
+                if (this.lsvLayerAccounts.Items.ContainsKey(sender.Username) == true) {
+                    // TO DO: Change Icon
 
-            if (this.lsvLayerAccounts.Items.ContainsKey(sender.Username) == true) {
-                // TO DO: Change Icon
+                    // TODO: Fix
+                    //this.m_uscConnectionPanel.ThrowEvent(this, uscEventsPanel.CapturableEvents.AccountLogin, new string[] { strUsername, sender.ClientIPPort });
 
-                // TODO: Fix
-                //this.m_uscConnectionPanel.ThrowEvent(this, uscEventsPanel.CapturableEvents.AccountLogin, new string[] { strUsername, sender.ClientIPPort });
-
-                if (this.lsvLayerAccounts.Items[sender.Username].SubItems["ip"].Tag == null) {
-                    this.lsvLayerAccounts.Items[sender.Username].SubItems["ip"].Tag = new List<string>() { sender.IPPort };
-                }
-                else {
-                    ((List<string>)this.lsvLayerAccounts.Items[sender.Username].SubItems["ip"].Tag).Add(sender.IPPort);
-                }
-
-                this.lsvLayerAccounts.Items[sender.Username].ImageKey = "status_online.png";
-
-                this.lsvLayerAccounts.Items[sender.Username].SubItems["ip"].Text = String.Format("({0} CMD/EVNT) ", Math.Floor(((List<string>)this.lsvLayerAccounts.Items[sender.Username].SubItems["ip"].Tag).Count / 2.0));
-
-                for (int i = 0; i < ((List<string>)this.lsvLayerAccounts.Items[sender.Username].SubItems["ip"].Tag).Count; i++) {
-                    if (i > 0) {
-                        this.lsvLayerAccounts.Items[sender.Username].SubItems["ip"].Text += ", ";
-                    }
-
-                    this.lsvLayerAccounts.Items[sender.Username].SubItems["ip"].Text += ((List<string>)this.lsvLayerAccounts.Items[sender.Username].SubItems["ip"].Tag)[i];
-                }
-
-                //this.lsvLayerAccounts.Items[strUsername].SubItems["ip"].Text = sender.ClientIPPort;
-            }
-        }
-
-        private void Layer_LayerClientLogout(ILayerClient sender) {
-
-            if (this.lsvLayerAccounts.Items.ContainsKey(sender.Username) == true) {
-                // TO DO: Change Icon
-                // TODO: Fix
-                //this.m_uscConnectionPanel.ThrowEvent(this, uscEventsPanel.CapturableEvents.AccountLogout, new string[] { strUsername });
-
-                if (this.lsvLayerAccounts.Items[sender.Username].SubItems["ip"].Tag != null) {
-
-                    ((List<string>)this.lsvLayerAccounts.Items[sender.Username].SubItems["ip"].Tag).Remove(sender.IPPort);
-
-                    if (Math.Floor(((List<string>)this.lsvLayerAccounts.Items[sender.Username].SubItems["ip"].Tag).Count / 2.0) > 0) {
-                        this.lsvLayerAccounts.Items[sender.Username].SubItems["ip"].Text = String.Format("({0} CMD/EVNT) ", Math.Floor(((List<string>)this.lsvLayerAccounts.Items[sender.Username].SubItems["ip"].Tag).Count / 2.0));
+                    if (this.lsvLayerAccounts.Items[sender.Username].SubItems["ip"].Tag == null) {
+                        this.lsvLayerAccounts.Items[sender.Username].SubItems["ip"].Tag = new List<string>() { sender.IPPort };
                     }
                     else {
-                        this.lsvLayerAccounts.Items[sender.Username].ImageKey = "status_offline.png";
-                        this.lsvLayerAccounts.Items[sender.Username].SubItems["ip"].Text = String.Empty;
+                        ((List<string>)this.lsvLayerAccounts.Items[sender.Username].SubItems["ip"].Tag).Add(sender.IPPort);
                     }
+
+                    this.lsvLayerAccounts.Items[sender.Username].ImageKey = "status_online.png";
+
+                    this.lsvLayerAccounts.Items[sender.Username].SubItems["ip"].Text = String.Format("({0} CMD/EVNT) ", Math.Floor(((List<string>)this.lsvLayerAccounts.Items[sender.Username].SubItems["ip"].Tag).Count / 2.0));
 
                     for (int i = 0; i < ((List<string>)this.lsvLayerAccounts.Items[sender.Username].SubItems["ip"].Tag).Count; i++) {
                         if (i > 0) {
@@ -558,11 +532,44 @@ namespace PRoCon {
 
                         this.lsvLayerAccounts.Items[sender.Username].SubItems["ip"].Text += ((List<string>)this.lsvLayerAccounts.Items[sender.Username].SubItems["ip"].Tag)[i];
                     }
+
+                    //this.lsvLayerAccounts.Items[strUsername].SubItems["ip"].Text = sender.ClientIPPort;
                 }
-                else {
-                    this.lsvLayerAccounts.Items[sender.Username].SubItems["ip"].Text = String.Empty;
+            });
+        }
+
+        private void Layer_LayerClientLogout(ILayerClient sender) {
+            this.InvokeIfRequired(() => {
+                if (this.lsvLayerAccounts.Items.ContainsKey(sender.Username) == true) {
+                    // TO DO: Change Icon
+                    // TODO: Fix
+                    //this.m_uscConnectionPanel.ThrowEvent(this, uscEventsPanel.CapturableEvents.AccountLogout, new string[] { strUsername });
+
+                    if (this.lsvLayerAccounts.Items[sender.Username].SubItems["ip"].Tag != null) {
+
+                        ((List<string>) this.lsvLayerAccounts.Items[sender.Username].SubItems["ip"].Tag).Remove(sender.IPPort);
+
+                        if (Math.Floor(((List<string>) this.lsvLayerAccounts.Items[sender.Username].SubItems["ip"].Tag).Count / 2.0) > 0) {
+                            this.lsvLayerAccounts.Items[sender.Username].SubItems["ip"].Text = String.Format("({0} CMD/EVNT) ", Math.Floor(((List<string>) this.lsvLayerAccounts.Items[sender.Username].SubItems["ip"].Tag).Count / 2.0));
+                        }
+                        else {
+                            this.lsvLayerAccounts.Items[sender.Username].ImageKey = "status_offline.png";
+                            this.lsvLayerAccounts.Items[sender.Username].SubItems["ip"].Text = String.Empty;
+                        }
+
+                        for (int i = 0; i < ((List<string>) this.lsvLayerAccounts.Items[sender.Username].SubItems["ip"].Tag).Count; i++) {
+                            if (i > 0) {
+                                this.lsvLayerAccounts.Items[sender.Username].SubItems["ip"].Text += ", ";
+                            }
+
+                            this.lsvLayerAccounts.Items[sender.Username].SubItems["ip"].Text += ((List<string>) this.lsvLayerAccounts.Items[sender.Username].SubItems["ip"].Tag)[i];
+                        }
+                    }
+                    else {
+                        this.lsvLayerAccounts.Items[sender.Username].SubItems["ip"].Text = String.Empty;
+                    }
                 }
-            }
+            });
         }
 
         #endregion

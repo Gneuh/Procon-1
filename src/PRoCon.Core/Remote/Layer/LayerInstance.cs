@@ -15,11 +15,9 @@ namespace PRoCon.Core.Remote.Layer {
         private PRoConApplication _application;
         private PRoConClient _client;
 
-        public event Action LayerOnline;
-        public event Action LayerOffline;
-
-        public event Action<SocketException> LayerSocketError;
-
+        public event Action LayerStarted;
+        public event Action LayerShutdown;
+        public event Action<SocketException> SocketError;
         public event Action<ILayerClient> ClientConnected;
 
         public AccountPrivilegeDictionary AccountPrivileges { get; protected set; }
@@ -81,6 +79,34 @@ namespace PRoCon.Core.Remote.Layer {
 
             if (this.IsEnabled == true && this.IsOnline == false) {
                 this.Start();
+            }
+        }
+
+        protected void OnLayerStarted() {
+            var handler = this.LayerStarted;
+            if (handler != null) {
+                handler();
+            }
+        }
+
+        protected void OnLayerShutdown() {
+            var handler = this.LayerShutdown;
+            if (handler != null) {
+                handler();
+            }
+        }
+
+        protected void OnSocketError(SocketException exception) {
+            var handler = this.SocketError;
+            if (handler != null) {
+                handler(exception);
+            }
+        }
+
+        protected void OnClientConnected(ILayerClient client) {
+            var handler = this.ClientConnected;
+            if (handler != null) {
+                handler(client);
             }
         }
 
@@ -245,17 +271,13 @@ namespace PRoCon.Core.Remote.Layer {
 
                     this.Clients.Add(client.IPPort, client);
 
-                    if (this.ClientConnected != null) {
-                        FrostbiteConnection.RaiseEvent(this.ClientConnected.GetInvocationList(), client);
-                    }
+
+                    this.OnClientConnected(client);
 
                     this._layerListener.BeginAcceptTcpClient(this.ListenIncommingLayerConnections, this);
                 }
                 catch (SocketException exception) {
-
-                    if (this.LayerSocketError != null) {
-                        FrostbiteConnection.RaiseEvent(this.LayerSocketError.GetInvocationList(), exception);
-                    }
+                    this.OnSocketError(exception);
 
                     this.Shutdown();
 
@@ -307,16 +329,12 @@ namespace PRoCon.Core.Remote.Layer {
 
                 this._layerListener.Start();
 
-                if (this.LayerOnline != null) {
-                    FrostbiteConnection.RaiseEvent(this.LayerOnline.GetInvocationList());
-                }
+                this.OnLayerStarted();
 
                 this._layerListener.BeginAcceptTcpClient(this.ListenIncommingLayerConnections, this);
             }
-            catch (SocketException skeError) {
-                if (this.LayerSocketError != null) {
-                    FrostbiteConnection.RaiseEvent(this.LayerSocketError.GetInvocationList(), skeError);
-                }
+            catch (SocketException exception) {
+                this.OnSocketError(exception);
 
                 this.Shutdown();
             }
@@ -336,9 +354,7 @@ namespace PRoCon.Core.Remote.Layer {
                 }
                 catch (Exception) { }
 
-                if (this.LayerOffline != null) {
-                    FrostbiteConnection.RaiseEvent(this.LayerOffline.GetInvocationList());
-                }
+                this.OnLayerShutdown();
             }
             //this.OnLayerServerOffline();
         }

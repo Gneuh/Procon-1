@@ -44,17 +44,17 @@ namespace PRoCon.Core.Remote.Layer {
         /// <summary>
         /// Called when the layer begins accepting incoming connections 
         /// </summary>
-        event Action LayerOnline;
+        event Action LayerStarted;
 
         /// <summary>
         /// Fired when the layer is no longer accepting connections
         /// </summary>
-        event Action LayerOffline;
+        event Action LayerShutdown;
 
         /// <summary>
         /// Fired when a socket error occurs when setting up the listener
         /// </summary>
-        event Action<SocketException> LayerSocketError;
+        event Action<SocketException> SocketError;
 
         /// <summary>
         /// Called whenever a client has connected to the layer
