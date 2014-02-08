@@ -5,6 +5,7 @@ using System.Text;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Security.Cryptography;
+using PRoCon.Core.Remote.Layer.PacketDispatchers;
 
 namespace PRoCon.Core.Remote.Layer {
     using Core;
@@ -44,10 +45,10 @@ namespace PRoCon.Core.Remote.Layer {
         private PRoConApplication m_praApplication;
         private PRoConClient m_prcClient;
 
-        protected delegate void RequestPacketHandler(FrostbiteLayerClient sender, Packet packet);
+        protected delegate void RequestPacketHandler(LayerPacketDispatcher sender, Packet packet);
         protected Dictionary<string, RequestPacketHandler> m_requestDelegates;
 
-        public FrostbiteLayerClient Game {
+        public LayerPacketDispatcher Game {
             get;
             private set;
         }
@@ -99,20 +100,20 @@ namespace PRoCon.Core.Remote.Layer {
             if (prcClient.Game != null) {
 
                 if (prcClient.Game is BFBC2Client) {
-                    this.Game = new Bfbc2Client(newConnection);
+                    this.Game = new Bfbc2PacketDispatcher(newConnection);
                 }
                 else if (prcClient.Game is MoHClient) {
-                    this.Game = new MohClient(newConnection);
+                    this.Game = new MohPacketDispatcher(newConnection);
                 }
                 else if (prcClient.Game is BF3Client) {
-                    this.Game = new Bf3Client(newConnection);
+                    this.Game = new Bf3PacketDispatcher(newConnection);
                 }
                 else if (prcClient.Game is BF4Client) {
-                    this.Game = new Bf4Client(newConnection);
+                    this.Game = new Bf4PacketDispatcher(newConnection);
                 }
                 else if (prcClient.Game is MOHWClient)
                 {
-                    this.Game = new MohwClient(newConnection);
+                    this.Game = new MohwPacketDispatcher(newConnection);
                 }
 
                 this.m_requestDelegates = new Dictionary<string, RequestPacketHandler>() {
@@ -159,36 +160,36 @@ namespace PRoCon.Core.Remote.Layer {
         private void RegisterEvents() {
             if (this.Game != null) {
 
-                this.Game.ConnectionClosed += new FrostbiteLayerClient.EmptyParameterHandler(Game_ConnectionClosed);
+                this.Game.ConnectionClosed += new LayerPacketDispatcher.EmptyParameterHandler(Game_ConnectionClosed);
 
-                this.Game.RequestPacketUnknownRecieved += new FrostbiteLayerClient.RequestPacketDispatchHandler(Game_RequestPacketUnknownRecieved);
-                this.Game.RequestLoginHashed += new FrostbiteLayerClient.RequestPacketDispatchHandler(Game_RequestLoginHashed);
-                this.Game.RequestLoginHashedPassword += new FrostbiteLayerClient.RequestLoginHashedPasswordHandler(Game_RequestLoginHashedPassword);
-                this.Game.RequestLoginPlainText += new FrostbiteLayerClient.RequestLoginPlainTextHandler(Game_RequestLoginPlainText);
-                this.Game.RequestLogout += new FrostbiteLayerClient.RequestPacketDispatchHandler(Game_RequestLogout);
-                this.Game.RequestQuit += new FrostbiteLayerClient.RequestPacketDispatchHandler(Game_RequestQuit);
-                this.Game.RequestHelp += new FrostbiteLayerClient.RequestPacketDispatchHandler(Game_RequestHelp);
-                this.Game.RequestPacketAdminShutdown += new FrostbiteLayerClient.RequestPacketDispatchHandler(Game_RequestPacketAdminShutdown);
+                this.Game.RequestPacketUnknownRecieved += new LayerPacketDispatcher.RequestPacketDispatchHandler(Game_RequestPacketUnknownRecieved);
+                this.Game.RequestLoginHashed += new LayerPacketDispatcher.RequestPacketDispatchHandler(Game_RequestLoginHashed);
+                this.Game.RequestLoginHashedPassword += new LayerPacketDispatcher.RequestLoginHashedPasswordHandler(Game_RequestLoginHashedPassword);
+                this.Game.RequestLoginPlainText += new LayerPacketDispatcher.RequestLoginPlainTextHandler(Game_RequestLoginPlainText);
+                this.Game.RequestLogout += new LayerPacketDispatcher.RequestPacketDispatchHandler(Game_RequestLogout);
+                this.Game.RequestQuit += new LayerPacketDispatcher.RequestPacketDispatchHandler(Game_RequestQuit);
+                this.Game.RequestHelp += new LayerPacketDispatcher.RequestPacketDispatchHandler(Game_RequestHelp);
+                this.Game.RequestPacketAdminShutdown += new LayerPacketDispatcher.RequestPacketDispatchHandler(Game_RequestPacketAdminShutdown);
 
-                this.Game.RequestEventsEnabled += new FrostbiteLayerClient.RequestEventsEnabledHandler(Game_RequestEventsEnabled);
+                this.Game.RequestEventsEnabled += new LayerPacketDispatcher.RequestEventsEnabledHandler(Game_RequestEventsEnabled);
 
-                this.Game.RequestPacketSecureSafeListedRecieved += new FrostbiteLayerClient.RequestPacketDispatchHandler(Game_RequestPacketSecureSafeListedRecieved);
-                this.Game.RequestPacketUnsecureSafeListedRecieved += new FrostbiteLayerClient.RequestPacketDispatchHandler(Game_RequestPacketUnsecureSafeListedRecieved);
+                this.Game.RequestPacketSecureSafeListedRecieved += new LayerPacketDispatcher.RequestPacketDispatchHandler(Game_RequestPacketSecureSafeListedRecieved);
+                this.Game.RequestPacketUnsecureSafeListedRecieved += new LayerPacketDispatcher.RequestPacketDispatchHandler(Game_RequestPacketUnsecureSafeListedRecieved);
 
-                this.Game.RequestPacketPunkbusterRecieved += new FrostbiteLayerClient.RequestPacketDispatchHandler(Game_RequestPacketPunkbusterRecieved);
-                this.Game.RequestPacketUseMapFunctionRecieved += new FrostbiteLayerClient.RequestPacketDispatchHandler(Game_RequestPacketUseMapFunctionRecieved);
-                this.Game.RequestPacketAlterMaplistRecieved += new FrostbiteLayerClient.RequestPacketDispatchHandler(Game_RequestPacketAlterMaplistRecieved);
-                this.Game.RequestPacketAdminPlayerMoveRecieved += new FrostbiteLayerClient.RequestPacketDispatchHandler(Game_RequestPacketAdminPlayerMoveRecieved);
-                this.Game.RequestPacketAdminPlayerKillRecieved += new FrostbiteLayerClient.RequestPacketDispatchHandler(Game_RequestPacketAdminPlayerKillRecieved);
-                this.Game.RequestPacketAdminKickPlayerRecieved += new FrostbiteLayerClient.RequestPacketDispatchHandler(Game_RequestPacketAdminKickPlayerRecieved);
-                this.Game.RequestBanListAddRecieved += new FrostbiteLayerClient.RequestBanListAddHandler(Game_RequestBanListAddRecieved);
-                this.Game.RequestPacketAlterBanListRecieved += new FrostbiteLayerClient.RequestPacketDispatchHandler(Game_RequestPacketAlterBanListRecieved);
-                this.Game.RequestPacketAlterReservedSlotsListRecieved += new FrostbiteLayerClient.RequestPacketDispatchHandler(Game_RequestPacketAlterReservedSlotsListRecieved);
-                this.Game.RequestPacketAlterTextMonderationListRecieved += new FrostbiteLayerClient.RequestPacketDispatchHandler(Game_RequestPacketAlterTextMonderationListRecieved);
-                this.Game.RequestPacketVarsRecieved += new FrostbiteLayerClient.RequestPacketDispatchHandler(Game_RequestPacketVarsRecieved);
+                this.Game.RequestPacketPunkbusterRecieved += new LayerPacketDispatcher.RequestPacketDispatchHandler(Game_RequestPacketPunkbusterRecieved);
+                this.Game.RequestPacketUseMapFunctionRecieved += new LayerPacketDispatcher.RequestPacketDispatchHandler(Game_RequestPacketUseMapFunctionRecieved);
+                this.Game.RequestPacketAlterMaplistRecieved += new LayerPacketDispatcher.RequestPacketDispatchHandler(Game_RequestPacketAlterMaplistRecieved);
+                this.Game.RequestPacketAdminPlayerMoveRecieved += new LayerPacketDispatcher.RequestPacketDispatchHandler(Game_RequestPacketAdminPlayerMoveRecieved);
+                this.Game.RequestPacketAdminPlayerKillRecieved += new LayerPacketDispatcher.RequestPacketDispatchHandler(Game_RequestPacketAdminPlayerKillRecieved);
+                this.Game.RequestPacketAdminKickPlayerRecieved += new LayerPacketDispatcher.RequestPacketDispatchHandler(Game_RequestPacketAdminKickPlayerRecieved);
+                this.Game.RequestBanListAddRecieved += new LayerPacketDispatcher.RequestBanListAddHandler(Game_RequestBanListAddRecieved);
+                this.Game.RequestPacketAlterBanListRecieved += new LayerPacketDispatcher.RequestPacketDispatchHandler(Game_RequestPacketAlterBanListRecieved);
+                this.Game.RequestPacketAlterReservedSlotsListRecieved += new LayerPacketDispatcher.RequestPacketDispatchHandler(Game_RequestPacketAlterReservedSlotsListRecieved);
+                this.Game.RequestPacketAlterTextMonderationListRecieved += new LayerPacketDispatcher.RequestPacketDispatchHandler(Game_RequestPacketAlterTextMonderationListRecieved);
+                this.Game.RequestPacketVarsRecieved += new LayerPacketDispatcher.RequestPacketDispatchHandler(Game_RequestPacketVarsRecieved);
 
-                this.Game.RequestPacketSquadLeaderRecieved += new FrostbiteLayerClient.RequestPacketDispatchHandler(Game_RequestPacketSquadLeaderRecieved);
-                this.Game.RequestPacketSquadIsPrivateReceived += new FrostbiteLayerClient.RequestPacketDispatchHandler(Game_RequestPacketSquadIsPrivateReceived);
+                this.Game.RequestPacketSquadLeaderRecieved += new LayerPacketDispatcher.RequestPacketDispatchHandler(Game_RequestPacketSquadLeaderRecieved);
+                this.Game.RequestPacketSquadIsPrivateReceived += new LayerPacketDispatcher.RequestPacketDispatchHandler(Game_RequestPacketSquadIsPrivateReceived);
                 
             }
 
@@ -228,36 +229,36 @@ namespace PRoCon.Core.Remote.Layer {
 
             if (this.Game != null) {
 
-                this.Game.ConnectionClosed -= new FrostbiteLayerClient.EmptyParameterHandler(Game_ConnectionClosed);
+                this.Game.ConnectionClosed -= new LayerPacketDispatcher.EmptyParameterHandler(Game_ConnectionClosed);
 
-                this.Game.RequestPacketUnknownRecieved -= new FrostbiteLayerClient.RequestPacketDispatchHandler(Game_RequestPacketUnknownRecieved);
-                this.Game.RequestLoginHashed -= new FrostbiteLayerClient.RequestPacketDispatchHandler(Game_RequestLoginHashed);
-                this.Game.RequestLoginHashedPassword -= new FrostbiteLayerClient.RequestLoginHashedPasswordHandler(Game_RequestLoginHashedPassword);
-                this.Game.RequestLoginPlainText -= new FrostbiteLayerClient.RequestLoginPlainTextHandler(Game_RequestLoginPlainText);
-                this.Game.RequestLogout -= new FrostbiteLayerClient.RequestPacketDispatchHandler(Game_RequestLogout);
-                this.Game.RequestQuit -= new FrostbiteLayerClient.RequestPacketDispatchHandler(Game_RequestQuit);
-                this.Game.RequestHelp -= new FrostbiteLayerClient.RequestPacketDispatchHandler(Game_RequestHelp);
-                this.Game.RequestPacketAdminShutdown -= new FrostbiteLayerClient.RequestPacketDispatchHandler(Game_RequestPacketAdminShutdown);
+                this.Game.RequestPacketUnknownRecieved -= new LayerPacketDispatcher.RequestPacketDispatchHandler(Game_RequestPacketUnknownRecieved);
+                this.Game.RequestLoginHashed -= new LayerPacketDispatcher.RequestPacketDispatchHandler(Game_RequestLoginHashed);
+                this.Game.RequestLoginHashedPassword -= new LayerPacketDispatcher.RequestLoginHashedPasswordHandler(Game_RequestLoginHashedPassword);
+                this.Game.RequestLoginPlainText -= new LayerPacketDispatcher.RequestLoginPlainTextHandler(Game_RequestLoginPlainText);
+                this.Game.RequestLogout -= new LayerPacketDispatcher.RequestPacketDispatchHandler(Game_RequestLogout);
+                this.Game.RequestQuit -= new LayerPacketDispatcher.RequestPacketDispatchHandler(Game_RequestQuit);
+                this.Game.RequestHelp -= new LayerPacketDispatcher.RequestPacketDispatchHandler(Game_RequestHelp);
+                this.Game.RequestPacketAdminShutdown -= new LayerPacketDispatcher.RequestPacketDispatchHandler(Game_RequestPacketAdminShutdown);
 
-                this.Game.RequestEventsEnabled -= new FrostbiteLayerClient.RequestEventsEnabledHandler(Game_RequestEventsEnabled);
+                this.Game.RequestEventsEnabled -= new LayerPacketDispatcher.RequestEventsEnabledHandler(Game_RequestEventsEnabled);
 
-                this.Game.RequestPacketSecureSafeListedRecieved -= new FrostbiteLayerClient.RequestPacketDispatchHandler(Game_RequestPacketSecureSafeListedRecieved);
-                this.Game.RequestPacketUnsecureSafeListedRecieved -= new FrostbiteLayerClient.RequestPacketDispatchHandler(Game_RequestPacketUnsecureSafeListedRecieved);
+                this.Game.RequestPacketSecureSafeListedRecieved -= new LayerPacketDispatcher.RequestPacketDispatchHandler(Game_RequestPacketSecureSafeListedRecieved);
+                this.Game.RequestPacketUnsecureSafeListedRecieved -= new LayerPacketDispatcher.RequestPacketDispatchHandler(Game_RequestPacketUnsecureSafeListedRecieved);
 
-                this.Game.RequestPacketPunkbusterRecieved -= new FrostbiteLayerClient.RequestPacketDispatchHandler(Game_RequestPacketPunkbusterRecieved);
-                this.Game.RequestPacketUseMapFunctionRecieved -= new FrostbiteLayerClient.RequestPacketDispatchHandler(Game_RequestPacketUseMapFunctionRecieved);
-                this.Game.RequestPacketAlterMaplistRecieved -= new FrostbiteLayerClient.RequestPacketDispatchHandler(Game_RequestPacketAlterMaplistRecieved);
-                this.Game.RequestPacketAdminPlayerMoveRecieved -= new FrostbiteLayerClient.RequestPacketDispatchHandler(Game_RequestPacketAdminPlayerMoveRecieved);
-                this.Game.RequestPacketAdminPlayerKillRecieved -= new FrostbiteLayerClient.RequestPacketDispatchHandler(Game_RequestPacketAdminPlayerKillRecieved);
-                this.Game.RequestPacketAdminKickPlayerRecieved -= new FrostbiteLayerClient.RequestPacketDispatchHandler(Game_RequestPacketAdminKickPlayerRecieved);
-                this.Game.RequestBanListAddRecieved -= new FrostbiteLayerClient.RequestBanListAddHandler(Game_RequestBanListAddRecieved);
-                this.Game.RequestPacketAlterBanListRecieved -= new FrostbiteLayerClient.RequestPacketDispatchHandler(Game_RequestPacketAlterBanListRecieved);
-                this.Game.RequestPacketAlterReservedSlotsListRecieved -= new FrostbiteLayerClient.RequestPacketDispatchHandler(Game_RequestPacketAlterReservedSlotsListRecieved);
-                this.Game.RequestPacketAlterTextMonderationListRecieved -= new FrostbiteLayerClient.RequestPacketDispatchHandler(Game_RequestPacketAlterTextMonderationListRecieved);
-                this.Game.RequestPacketVarsRecieved -= new FrostbiteLayerClient.RequestPacketDispatchHandler(Game_RequestPacketVarsRecieved);
+                this.Game.RequestPacketPunkbusterRecieved -= new LayerPacketDispatcher.RequestPacketDispatchHandler(Game_RequestPacketPunkbusterRecieved);
+                this.Game.RequestPacketUseMapFunctionRecieved -= new LayerPacketDispatcher.RequestPacketDispatchHandler(Game_RequestPacketUseMapFunctionRecieved);
+                this.Game.RequestPacketAlterMaplistRecieved -= new LayerPacketDispatcher.RequestPacketDispatchHandler(Game_RequestPacketAlterMaplistRecieved);
+                this.Game.RequestPacketAdminPlayerMoveRecieved -= new LayerPacketDispatcher.RequestPacketDispatchHandler(Game_RequestPacketAdminPlayerMoveRecieved);
+                this.Game.RequestPacketAdminPlayerKillRecieved -= new LayerPacketDispatcher.RequestPacketDispatchHandler(Game_RequestPacketAdminPlayerKillRecieved);
+                this.Game.RequestPacketAdminKickPlayerRecieved -= new LayerPacketDispatcher.RequestPacketDispatchHandler(Game_RequestPacketAdminKickPlayerRecieved);
+                this.Game.RequestBanListAddRecieved -= new LayerPacketDispatcher.RequestBanListAddHandler(Game_RequestBanListAddRecieved);
+                this.Game.RequestPacketAlterBanListRecieved -= new LayerPacketDispatcher.RequestPacketDispatchHandler(Game_RequestPacketAlterBanListRecieved);
+                this.Game.RequestPacketAlterReservedSlotsListRecieved -= new LayerPacketDispatcher.RequestPacketDispatchHandler(Game_RequestPacketAlterReservedSlotsListRecieved);
+                this.Game.RequestPacketAlterTextMonderationListRecieved -= new LayerPacketDispatcher.RequestPacketDispatchHandler(Game_RequestPacketAlterTextMonderationListRecieved);
+                this.Game.RequestPacketVarsRecieved -= new LayerPacketDispatcher.RequestPacketDispatchHandler(Game_RequestPacketVarsRecieved);
 
-                this.Game.RequestPacketSquadLeaderRecieved -= new FrostbiteLayerClient.RequestPacketDispatchHandler(Game_RequestPacketSquadLeaderRecieved);
-                this.Game.RequestPacketSquadIsPrivateReceived -= new FrostbiteLayerClient.RequestPacketDispatchHandler(Game_RequestPacketSquadIsPrivateReceived);
+                this.Game.RequestPacketSquadLeaderRecieved -= new LayerPacketDispatcher.RequestPacketDispatchHandler(Game_RequestPacketSquadLeaderRecieved);
+                this.Game.RequestPacketSquadIsPrivateReceived -= new LayerPacketDispatcher.RequestPacketDispatchHandler(Game_RequestPacketSquadIsPrivateReceived);
 
             }
 
@@ -412,7 +413,7 @@ namespace PRoCon.Core.Remote.Layer {
         #region Procon.Application.Shutdown
         
         // DispatchProconApplicationShutdownRequest
-        private void DispatchProconApplicationShutdownRequest(FrostbiteLayerClient sender, Packet packet)
+        private void DispatchProconApplicationShutdownRequest(LayerPacketDispatcher sender, Packet packet)
         {
             if (this.IsLoggedIn == true) {
                 if (this.m_sprvPrivileges.CanShutdownServer == true) {
@@ -428,7 +429,7 @@ namespace PRoCon.Core.Remote.Layer {
 
         #endregion
 
-        private void DispatchProconLoginUsernameRequest(FrostbiteLayerClient sender, Packet packet) {
+        private void DispatchProconLoginUsernameRequest(LayerPacketDispatcher sender, Packet packet) {
             this.m_strUsername = packet.Words[1];
 
             // We send back any errors in the login process after they attempt to login.
@@ -449,7 +450,7 @@ namespace PRoCon.Core.Remote.Layer {
             }
         }
 
-        private void DispatchProconRegisterUidRequest(FrostbiteLayerClient sender, Packet packet) {
+        private void DispatchProconRegisterUidRequest(LayerPacketDispatcher sender, Packet packet) {
             
             if (this.IsLoggedIn == true) {
             
@@ -488,11 +489,11 @@ namespace PRoCon.Core.Remote.Layer {
             }
         }
 
-        private void DispatchProconVersionRequest(FrostbiteLayerClient sender, Packet packet) {
+        private void DispatchProconVersionRequest(LayerPacketDispatcher sender, Packet packet) {
             sender.SendResponse(packet, LayerClient.RESPONSE_OK, Assembly.GetExecutingAssembly().GetName().Version.ToString());
         }
 
-        private void DispatchProconVarsRequest(FrostbiteLayerClient sender, Packet packet) {
+        private void DispatchProconVarsRequest(LayerPacketDispatcher sender, Packet packet) {
 
             if (this.IsLoggedIn == true) {
 
@@ -520,7 +521,7 @@ namespace PRoCon.Core.Remote.Layer {
             }
         }
 
-        private void DispatchProconPrivilegesRequest(FrostbiteLayerClient sender, Packet packet) {
+        private void DispatchProconPrivilegesRequest(LayerPacketDispatcher sender, Packet packet) {
 
             if (this.IsLoggedIn == true) {
                 sender.SendResponse(packet, LayerClient.RESPONSE_OK, this.m_sprvPrivileges.PrivilegesFlags.ToString());
@@ -530,7 +531,7 @@ namespace PRoCon.Core.Remote.Layer {
             }
         }
 
-        private void DispatchProconCompressionRequest(FrostbiteLayerClient sender, Packet packet) {
+        private void DispatchProconCompressionRequest(LayerPacketDispatcher sender, Packet packet) {
             if (this.IsLoggedIn == true) {
 
                 bool enableCompress = false;
@@ -549,7 +550,7 @@ namespace PRoCon.Core.Remote.Layer {
             }
         }
 
-        private void DispatchProconExecRequest(FrostbiteLayerClient sender, Packet packet) {
+        private void DispatchProconExecRequest(LayerPacketDispatcher sender, Packet packet) {
             if (this.IsLoggedIn == true) {
                 if (this.m_sprvPrivileges.CanIssueAllProconCommands == true) {
                     sender.SendResponse(packet, LayerClient.RESPONSE_OK);
@@ -568,7 +569,7 @@ namespace PRoCon.Core.Remote.Layer {
 
         #region Accounts
 
-        private void DispatchProconAccountListAccountsRequest(FrostbiteLayerClient sender, Packet packet) {
+        private void DispatchProconAccountListAccountsRequest(LayerPacketDispatcher sender, Packet packet) {
             if (this.IsLoggedIn == true) {
                 if (this.m_sprvPrivileges.CanIssueLimitedProconCommands == true) {
 
@@ -593,7 +594,7 @@ namespace PRoCon.Core.Remote.Layer {
             }
         }
 
-        private void DispatchProconAccountListLoggedInRequest(FrostbiteLayerClient sender, Packet packet) {
+        private void DispatchProconAccountListLoggedInRequest(LayerPacketDispatcher sender, Packet packet) {
             if (this.m_sprvPrivileges.CanIssueLimitedProconCommands == true) {
 
                 List<string> lstLoggedInAccounts = this.m_prcClient.Layer.GetLoggedInAccounts((packet.Words.Count >= 2 && String.Compare(packet.Words[1], "uids") == 0));
@@ -608,7 +609,7 @@ namespace PRoCon.Core.Remote.Layer {
             }
         }
 
-        private void DispatchProconAccountCreateRequest(FrostbiteLayerClient sender, Packet packet) {
+        private void DispatchProconAccountCreateRequest(LayerPacketDispatcher sender, Packet packet) {
             if (this.IsLoggedIn == true) {
                 if (this.m_sprvPrivileges.CanIssueLimitedProconCommands == true) {
 
@@ -635,7 +636,7 @@ namespace PRoCon.Core.Remote.Layer {
             }
         }
 
-        private void DispatchProconAccountDeleteRequest(FrostbiteLayerClient sender, Packet packet) {
+        private void DispatchProconAccountDeleteRequest(LayerPacketDispatcher sender, Packet packet) {
             if (this.IsLoggedIn == true) {
                 if (this.m_sprvPrivileges.CanIssueLimitedProconCommands == true) {
                     if (packet.Words.Count >= 2) {
@@ -663,7 +664,7 @@ namespace PRoCon.Core.Remote.Layer {
             }
         }
 
-        private void DispatchProconAccountSetPasswordRequest(FrostbiteLayerClient sender, Packet packet) {
+        private void DispatchProconAccountSetPasswordRequest(LayerPacketDispatcher sender, Packet packet) {
             if (this.IsLoggedIn == true) {
                 if (this.m_sprvPrivileges.CanIssueLimitedProconCommands == true) {
 
@@ -695,7 +696,7 @@ namespace PRoCon.Core.Remote.Layer {
 
         #region Battlemap
 
-        private void DispatchProconBattlemapDeleteZoneRequest(FrostbiteLayerClient sender, Packet packet) {
+        private void DispatchProconBattlemapDeleteZoneRequest(LayerPacketDispatcher sender, Packet packet) {
 
             if (this.IsLoggedIn == true) {
                 if (this.m_sprvPrivileges.CanEditMapZones == true) {
@@ -714,7 +715,7 @@ namespace PRoCon.Core.Remote.Layer {
             }
         }
 
-        private void DispatchProconBattlemapCreateZoneRequest(FrostbiteLayerClient sender, Packet packet) {
+        private void DispatchProconBattlemapCreateZoneRequest(LayerPacketDispatcher sender, Packet packet) {
             if (this.IsLoggedIn == true) {
                 if (this.m_sprvPrivileges.CanEditMapZones == true) {
 
@@ -748,7 +749,7 @@ namespace PRoCon.Core.Remote.Layer {
             }
         }
 
-        private void DispatchProconBattlemapModifyZoneTagsRequest(FrostbiteLayerClient sender, Packet packet) {
+        private void DispatchProconBattlemapModifyZoneTagsRequest(LayerPacketDispatcher sender, Packet packet) {
             if (this.IsLoggedIn == true) {
                 if (this.m_sprvPrivileges.CanEditMapZones == true) {
 
@@ -773,7 +774,7 @@ namespace PRoCon.Core.Remote.Layer {
             }
         }
 
-        private void DispatchProconBattlemapModifyZonePointsRequest(FrostbiteLayerClient sender, Packet packet) {
+        private void DispatchProconBattlemapModifyZonePointsRequest(LayerPacketDispatcher sender, Packet packet) {
             
             if (this.IsLoggedIn == true) {
                 if (this.m_sprvPrivileges.CanEditMapZones == true) {
@@ -810,7 +811,7 @@ namespace PRoCon.Core.Remote.Layer {
             }
         }
 
-        private void DispatchProconBattlemapListZonesRequest(FrostbiteLayerClient sender, Packet packet) {
+        private void DispatchProconBattlemapListZonesRequest(LayerPacketDispatcher sender, Packet packet) {
 
             if (this.IsLoggedIn == true) {
 
@@ -839,7 +840,7 @@ namespace PRoCon.Core.Remote.Layer {
 
         #region Layer
 
-        private void DispatchProconLayerSetPrivilegesRequest(FrostbiteLayerClient sender, Packet packet) {
+        private void DispatchProconLayerSetPrivilegesRequest(LayerPacketDispatcher sender, Packet packet) {
             if (this.IsLoggedIn == true) {
                 if (this.m_sprvPrivileges.CanIssueLimitedProconCommands == true) {
 
@@ -877,7 +878,7 @@ namespace PRoCon.Core.Remote.Layer {
 
         #region Plugin
 
-        private void DispatchProconPluginListLoadedRequest(FrostbiteLayerClient sender, Packet packet) {
+        private void DispatchProconPluginListLoadedRequest(LayerPacketDispatcher sender, Packet packet) {
             if (this.IsLoggedIn == true) {
                 if (this.m_sprvPrivileges.CanIssueLimitedProconPluginCommands == true) {
 
@@ -901,7 +902,7 @@ namespace PRoCon.Core.Remote.Layer {
             }
         }
 
-        private void DispatchProconPluginListEnabledRequest(FrostbiteLayerClient sender, Packet packet) {
+        private void DispatchProconPluginListEnabledRequest(LayerPacketDispatcher sender, Packet packet) {
             if (this.IsLoggedIn == true) {
                 if (this.m_sprvPrivileges.CanIssueLimitedProconPluginCommands == true) {
                     List<string> lstEnabledPlugins = this.m_prcClient.PluginsManager.Plugins.EnabledClassNames;
@@ -918,7 +919,7 @@ namespace PRoCon.Core.Remote.Layer {
             }
         }
 
-        private void DispatchProconPluginEnableRequest(FrostbiteLayerClient sender, Packet packet) {
+        private void DispatchProconPluginEnableRequest(LayerPacketDispatcher sender, Packet packet) {
             if (this.IsLoggedIn == true) {
                 if (this.m_sprvPrivileges.CanIssueLimitedProconPluginCommands == true) {
                     bool blEnabled = false;
@@ -946,7 +947,7 @@ namespace PRoCon.Core.Remote.Layer {
             }
         }
 
-        private void DispatchProconPluginSetVariableRequest(FrostbiteLayerClient sender, Packet packet) {
+        private void DispatchProconPluginSetVariableRequest(LayerPacketDispatcher sender, Packet packet) {
             if (this.IsLoggedIn == true) {
                 if (this.m_sprvPrivileges.CanIssueLimitedProconPluginCommands == true) {
 
@@ -973,7 +974,7 @@ namespace PRoCon.Core.Remote.Layer {
 
         #region Communication
 
-        private void DispatchProconAdminSayRequest(FrostbiteLayerClient sender, Packet packet) {
+        private void DispatchProconAdminSayRequest(LayerPacketDispatcher sender, Packet packet) {
             if (this.IsLoggedIn == true) {
                 
                 if (packet.Words.Count >= 4) {
@@ -999,7 +1000,7 @@ namespace PRoCon.Core.Remote.Layer {
             }
         }
 
-        private void DispatchProconAdminYellRequest(FrostbiteLayerClient sender, Packet packet) {
+        private void DispatchProconAdminYellRequest(LayerPacketDispatcher sender, Packet packet) {
             if (this.IsLoggedIn == true) {
                 
                 if (packet.Words.Count >= 5) {
@@ -1026,7 +1027,7 @@ namespace PRoCon.Core.Remote.Layer {
 
         #endregion
 
-        private void Game_RequestPacketUnknownRecieved(FrostbiteLayerClient sender, Packet packet) {
+        private void Game_RequestPacketUnknownRecieved(LayerPacketDispatcher sender, Packet packet) {
 
             if (packet.Words.Count >= 1) {
                 if (this.m_requestDelegates.ContainsKey(packet.Words[0]) == true) {
@@ -1042,11 +1043,11 @@ namespace PRoCon.Core.Remote.Layer {
 
         #region Overridden Protocol Handling
 
-        private void Game_RequestLoginHashed(FrostbiteLayerClient sender, Packet packet) {
+        private void Game_RequestLoginHashed(LayerPacketDispatcher sender, Packet packet) {
             sender.SendResponse(packet, LayerClient.RESPONSE_OK, this.GenerateSalt());
         }
 
-        private void Game_RequestLoginHashedPassword(FrostbiteLayerClient sender, Packet packet, string hashedPassword) {
+        private void Game_RequestLoginHashedPassword(LayerPacketDispatcher sender, Packet packet, string hashedPassword) {
 
             if (this.m_praApplication.AccountsList.Contains(this.m_strUsername) == false) {
                 sender.SendResponse(packet, LayerClient.RESPONSE_INVALID_USERNAME);
@@ -1075,7 +1076,7 @@ namespace PRoCon.Core.Remote.Layer {
             }
         }
 
-        private void Game_RequestLoginPlainText(FrostbiteLayerClient sender, Packet packet, string password) {
+        private void Game_RequestLoginPlainText(LayerPacketDispatcher sender, Packet packet, string password) {
 
             if (this.m_praApplication.AccountsList.Contains(this.m_strUsername) == false) {
                 sender.SendResponse(packet, LayerClient.RESPONSE_INVALID_USERNAME);
@@ -1097,7 +1098,7 @@ namespace PRoCon.Core.Remote.Layer {
             } 
         }
 
-        private void Game_RequestLogout(FrostbiteLayerClient sender, Packet packet) {
+        private void Game_RequestLogout(LayerPacketDispatcher sender, Packet packet) {
             sender.SendResponse(packet, LayerClient.RESPONSE_OK);
             
             this.IsLoggedIn = false;
@@ -1107,7 +1108,7 @@ namespace PRoCon.Core.Remote.Layer {
             }
         }
 
-        private void Game_RequestQuit(FrostbiteLayerClient sender, Packet packet) {
+        private void Game_RequestQuit(LayerPacketDispatcher sender, Packet packet) {
             sender.SendResponse(packet, LayerClient.RESPONSE_OK);
 
             if (this.Logout != null) {
@@ -1121,7 +1122,7 @@ namespace PRoCon.Core.Remote.Layer {
             this.Shutdown();
         }
 
-        private void Game_RequestEventsEnabled(FrostbiteLayerClient sender, Packet packet, bool eventsEnabled) {
+        private void Game_RequestEventsEnabled(LayerPacketDispatcher sender, Packet packet, bool eventsEnabled) {
             if (this.IsLoggedIn == true) {
                 sender.SendResponse(packet, LayerClient.RESPONSE_OK);
 
@@ -1132,12 +1133,12 @@ namespace PRoCon.Core.Remote.Layer {
             }
         }
 
-        private void Game_RequestHelp(FrostbiteLayerClient sender, Packet packet) {
+        private void Game_RequestHelp(LayerPacketDispatcher sender, Packet packet) {
             // TO DO: Edit on way back with additional commands IF NOT PRESENT.
             this.m_prcClient.SendProconLayerPacket(this, packet);
         }
 
-        private void Game_RequestPacketAdminShutdown(FrostbiteLayerClient sender, Packet packet) {
+        private void Game_RequestPacketAdminShutdown(LayerPacketDispatcher sender, Packet packet) {
             if (this.IsLoggedIn == true) {
                 if (this.m_sprvPrivileges.CanShutdownServer == true) {
                     this.m_prcClient.SendProconLayerPacket(this, packet);
@@ -1155,7 +1156,7 @@ namespace PRoCon.Core.Remote.Layer {
 
         #region Game Protocol Handling
 
-        private void Game_RequestPacketSecureSafeListedRecieved(FrostbiteLayerClient sender, Packet packet) {
+        private void Game_RequestPacketSecureSafeListedRecieved(LayerPacketDispatcher sender, Packet packet) {
             if (this.IsLoggedIn == true) {
                 this.m_prcClient.SendProconLayerPacket(this, packet);
             }
@@ -1164,7 +1165,7 @@ namespace PRoCon.Core.Remote.Layer {
             }
         }
 
-        private void Game_RequestPacketUnsecureSafeListedRecieved(FrostbiteLayerClient sender, Packet packet) {
+        private void Game_RequestPacketUnsecureSafeListedRecieved(LayerPacketDispatcher sender, Packet packet) {
             
             if (packet.Words.Count >= 1 && String.Compare(packet.Words[0], "serverInfo", true) == 0) {
                 this.m_ui32ServerInfoSequenceNumber = packet.SequenceNumber;
@@ -1173,7 +1174,7 @@ namespace PRoCon.Core.Remote.Layer {
             this.m_prcClient.SendProconLayerPacket(this, packet);
         }
 
-        private void Game_RequestPacketPunkbusterRecieved(FrostbiteLayerClient sender, Packet packet) {
+        private void Game_RequestPacketPunkbusterRecieved(LayerPacketDispatcher sender, Packet packet) {
  	        if (this.IsLoggedIn == true) {
 
                 if (packet.Words.Count >= 2) {
@@ -1251,7 +1252,7 @@ namespace PRoCon.Core.Remote.Layer {
             }
         }
 
-        private void Game_RequestPacketUseMapFunctionRecieved(FrostbiteLayerClient sender, Packet packet) {
+        private void Game_RequestPacketUseMapFunctionRecieved(LayerPacketDispatcher sender, Packet packet) {
             if (this.IsLoggedIn == true) {
                 if (this.m_sprvPrivileges.CanUseMapFunctions == true) {
                     this.m_prcClient.SendProconLayerPacket(this, packet);
@@ -1265,7 +1266,7 @@ namespace PRoCon.Core.Remote.Layer {
             }
         }
 
-        private void Game_RequestPacketAlterMaplistRecieved(FrostbiteLayerClient sender, Packet packet) {
+        private void Game_RequestPacketAlterMaplistRecieved(LayerPacketDispatcher sender, Packet packet) {
             if (this.IsLoggedIn == true) {
                 if (this.m_sprvPrivileges.CanEditMapList == true) {
                     this.m_prcClient.SendProconLayerPacket(this, packet);
@@ -1279,7 +1280,7 @@ namespace PRoCon.Core.Remote.Layer {
             }
         }
 
-        private void Game_RequestPacketAdminPlayerMoveRecieved(FrostbiteLayerClient sender, Packet packet) {
+        private void Game_RequestPacketAdminPlayerMoveRecieved(LayerPacketDispatcher sender, Packet packet) {
             if (this.IsLoggedIn == true) {
                 if (this.m_sprvPrivileges.CanMovePlayers == true) {
                     this.m_prcClient.SendProconLayerPacket(this, packet);
@@ -1293,7 +1294,7 @@ namespace PRoCon.Core.Remote.Layer {
             }
         }
 
-        private void Game_RequestPacketAdminPlayerKillRecieved(FrostbiteLayerClient sender, Packet packet) {
+        private void Game_RequestPacketAdminPlayerKillRecieved(LayerPacketDispatcher sender, Packet packet) {
             if (this.IsLoggedIn == true) {
                 if (this.m_sprvPrivileges.CanKillPlayers == true) {
                     this.m_prcClient.SendProconLayerPacket(this, packet);
@@ -1307,7 +1308,7 @@ namespace PRoCon.Core.Remote.Layer {
             }
         }
 
-        private void Game_RequestPacketAdminKickPlayerRecieved(FrostbiteLayerClient sender, Packet packet) {
+        private void Game_RequestPacketAdminKickPlayerRecieved(LayerPacketDispatcher sender, Packet packet) {
             if (this.IsLoggedIn == true) {
                 if (this.m_sprvPrivileges.CanKickPlayers == true) {
                     this.m_prcClient.SendProconLayerPacket(this, packet);
@@ -1321,7 +1322,7 @@ namespace PRoCon.Core.Remote.Layer {
             }
         }
 
-        private void Game_RequestBanListAddRecieved(FrostbiteLayerClient sender, Packet packet, CBanInfo newBan) {
+        private void Game_RequestBanListAddRecieved(LayerPacketDispatcher sender, Packet packet, CBanInfo newBan) {
             if (this.IsLoggedIn == true) {
 
                 if (newBan.BanLength.Subset == TimeoutSubset.TimeoutSubsetType.Permanent && this.m_sprvPrivileges.CanPermanentlyBanPlayers == true) {
@@ -1351,7 +1352,7 @@ namespace PRoCon.Core.Remote.Layer {
             }
         }
 
-        private void Game_RequestPacketAlterBanListRecieved(FrostbiteLayerClient sender, Packet packet) {
+        private void Game_RequestPacketAlterBanListRecieved(LayerPacketDispatcher sender, Packet packet) {
             if (this.IsLoggedIn == true) {
                 if (this.m_sprvPrivileges.CanEditBanList == true) {
                     this.m_prcClient.SendProconLayerPacket(this, packet);
@@ -1365,7 +1366,7 @@ namespace PRoCon.Core.Remote.Layer {
             }
         }
 
-        private void Game_RequestPacketAlterTextMonderationListRecieved(FrostbiteLayerClient sender, Packet packet) {
+        private void Game_RequestPacketAlterTextMonderationListRecieved(LayerPacketDispatcher sender, Packet packet) {
             if (this.IsLoggedIn == true) {
                 if (this.m_sprvPrivileges.CanEditTextChatModerationList == true) {
                     this.m_prcClient.SendProconLayerPacket(this, packet);
@@ -1379,7 +1380,7 @@ namespace PRoCon.Core.Remote.Layer {
             }
         }
 
-        private void Game_RequestPacketAlterReservedSlotsListRecieved(FrostbiteLayerClient sender, Packet packet) {
+        private void Game_RequestPacketAlterReservedSlotsListRecieved(LayerPacketDispatcher sender, Packet packet) {
             if (this.IsLoggedIn == true) {
                 if (this.m_sprvPrivileges.CanEditReservedSlotsList == true) {
                     this.m_prcClient.SendProconLayerPacket(this, packet);
@@ -1393,7 +1394,7 @@ namespace PRoCon.Core.Remote.Layer {
             }
         }
 
-        private void Game_RequestPacketVarsRecieved(FrostbiteLayerClient sender, Packet packet) {
+        private void Game_RequestPacketVarsRecieved(LayerPacketDispatcher sender, Packet packet) {
             if (this.IsLoggedIn == true) {
                 if (this.m_sprvPrivileges.CanAlterServerSettings == true) {
                     this.m_prcClient.SendProconLayerPacket(this, packet);
@@ -1413,7 +1414,7 @@ namespace PRoCon.Core.Remote.Layer {
 
         #region player/squad cmds
 
-        private void Game_RequestPacketSquadLeaderRecieved(FrostbiteLayerClient sender, Packet packet) {
+        private void Game_RequestPacketSquadLeaderRecieved(LayerPacketDispatcher sender, Packet packet) {
             if (this.IsLoggedIn == true) {
                 if (this.m_sprvPrivileges.CanMovePlayers == true) {
                     this.m_prcClient.SendProconLayerPacket(this, packet);
@@ -1425,7 +1426,7 @@ namespace PRoCon.Core.Remote.Layer {
             }
         }
 
-        private void Game_RequestPacketSquadIsPrivateReceived(FrostbiteLayerClient sender, Packet packet) {
+        private void Game_RequestPacketSquadIsPrivateReceived(LayerPacketDispatcher sender, Packet packet) {
             if (this.IsLoggedIn == true) {
                 if (this.m_sprvPrivileges.CanMovePlayers == true) {
                     this.m_prcClient.SendProconLayerPacket(this, packet);
@@ -1689,7 +1690,7 @@ namespace PRoCon.Core.Remote.Layer {
 
         #endregion
 
-        private void Game_ConnectionClosed(FrostbiteLayerClient sender) {
+        private void Game_ConnectionClosed(LayerPacketDispatcher sender) {
             if (this.ClientShutdown != null) {
                 FrostbiteConnection.RaiseEvent(this.ClientShutdown.GetInvocationList(), this);
             }

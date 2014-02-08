@@ -274,7 +274,7 @@ namespace PRoCon.Core.Remote.Layer {
                 try {
                     TcpClient tcpNewConnection = plLayer._layerListener.EndAcceptTcpClient(ar);
 
-                    LayerClient cplcNewConnection = new LayerClient(new FrostbiteLayerConnection(tcpNewConnection), plLayer._application, plLayer._client);
+                    LayerClient cplcNewConnection = new LayerClient(new LayerConnection(tcpNewConnection), plLayer._application, plLayer._client);
 
                     // Issue #24. Somewhere the end port connection+port isn't being removed.
                     if (plLayer.LayerClients.ContainsKey(cplcNewConnection.IPPort) == true) {

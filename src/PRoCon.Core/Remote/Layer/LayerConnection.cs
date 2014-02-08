@@ -5,7 +5,7 @@ using System.Net.Sockets;
 using System.Text;
 
 namespace PRoCon.Core.Remote.Layer {
-    public class FrostbiteLayerConnection : ILayerConnection {
+    public class LayerConnection : ILayerConnection {
         protected const UInt32 MaxGarbageBytes = 4194304;
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace PRoCon.Core.Remote.Layer {
 
         public Action<ILayerConnection, Packet> PacketReceived { get; set; }
 
-        public FrostbiteLayerConnection(TcpClient acceptedConnection) {
+        public LayerConnection(TcpClient acceptedConnection) {
             ReceivedBuffer = new byte[4096];
             PacketStream = null;
 

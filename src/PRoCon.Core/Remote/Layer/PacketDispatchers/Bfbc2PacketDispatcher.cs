@@ -1,7 +1,7 @@
-﻿namespace PRoCon.Core.Remote.Layer {
-    public class Bfbc2Client : FrostbiteLayerClient {
+﻿namespace PRoCon.Core.Remote.Layer.PacketDispatchers {
+    public class Bfbc2PacketDispatcher : LayerPacketDispatcher {
 
-        public Bfbc2Client(ILayerConnection connection)
+        public Bfbc2PacketDispatcher(ILayerConnection connection)
             : base(connection) {
 
             this.RequestDelegates.Add("vars.killCam", this.DispatchVarsRequest);

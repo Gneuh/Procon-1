@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 namespace PRoCon.Core.Remote.Layer {
-    public class FrostbiteLayerClient {
+    public class LayerPacketDispatcher {
 
         public ILayerConnection Connection { get; set; }
 
@@ -17,10 +17,10 @@ namespace PRoCon.Core.Remote.Layer {
 
         #region Events
 
-        public delegate void EmptyParameterHandler(FrostbiteLayerClient sender);
+        public delegate void EmptyParameterHandler(LayerPacketDispatcher sender);
         public event EmptyParameterHandler ConnectionClosed;
 
-        public delegate void RequestPacketDispatchHandler(FrostbiteLayerClient sender, Packet packet);
+        public delegate void RequestPacketDispatchHandler(LayerPacketDispatcher sender, Packet packet);
         public virtual event RequestPacketDispatchHandler RequestPacketUnsecureSafeListedRecieved; // Harmless packets that do not require login.
         public virtual event RequestPacketDispatchHandler RequestPacketSecureSafeListedRecieved; // Harmless recieved packets for logged in users
 
@@ -43,10 +43,10 @@ namespace PRoCon.Core.Remote.Layer {
 
         public virtual event RequestPacketDispatchHandler RequestPacketUnknownRecieved;
 
-        public delegate void RequestBanListAddHandler(FrostbiteLayerClient sender, Packet packet, CBanInfo newBan);
+        public delegate void RequestBanListAddHandler(LayerPacketDispatcher sender, Packet packet, CBanInfo newBan);
         public virtual event RequestBanListAddHandler RequestBanListAddRecieved;
 
-        public delegate void RequestLoginPlainTextHandler(FrostbiteLayerClient sender, Packet packet, string password);
+        public delegate void RequestLoginPlainTextHandler(LayerPacketDispatcher sender, Packet packet, string password);
         public virtual event RequestLoginPlainTextHandler RequestLoginPlainText;
 
         public virtual event RequestPacketDispatchHandler RequestQuit;
@@ -54,10 +54,10 @@ namespace PRoCon.Core.Remote.Layer {
         public virtual event RequestPacketDispatchHandler RequestHelp;
         public virtual event RequestPacketDispatchHandler RequestLoginHashed;
 
-        public delegate void RequestEventsEnabledHandler(FrostbiteLayerClient sender, Packet packet, bool eventsEnabled);
+        public delegate void RequestEventsEnabledHandler(LayerPacketDispatcher sender, Packet packet, bool eventsEnabled);
         public virtual event RequestEventsEnabledHandler RequestEventsEnabled;
 
-        public delegate void RequestLoginHashedPasswordHandler(FrostbiteLayerClient sender, Packet packet, string hashedPassword);
+        public delegate void RequestLoginHashedPasswordHandler(LayerPacketDispatcher sender, Packet packet, string hashedPassword);
         public virtual event RequestLoginHashedPasswordHandler RequestLoginHashedPassword;
 
         public virtual event RequestPacketDispatchHandler RequestPacketSquadLeaderRecieved;
@@ -78,7 +78,7 @@ namespace PRoCon.Core.Remote.Layer {
             }
         }
 
-        public FrostbiteLayerClient(ILayerConnection connection) {
+        public LayerPacketDispatcher(ILayerConnection connection) {
             this.Connection = connection;
 
             this.RequestDelegates = new Dictionary<string, RequestPacketHandler>() {
