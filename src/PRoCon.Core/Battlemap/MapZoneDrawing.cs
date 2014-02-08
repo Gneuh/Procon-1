@@ -98,7 +98,7 @@ namespace PRoCon.Core.Battlemap {
 
         private void Tags_TagsEdited(ZoneTagList sender) {
             if (TagsEdited != null) {
-                FrostbiteConnection.RaiseEvent(TagsEdited.GetInvocationList(), this);
+                this.TagsEdited(this);
             }
         }
     }

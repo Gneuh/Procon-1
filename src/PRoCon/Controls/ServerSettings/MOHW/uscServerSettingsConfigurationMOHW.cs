@@ -111,34 +111,37 @@ namespace PRoCon.Controls.ServerSettings.MOHW {
         }
 
         private void m_prcClient_GameTypeDiscovered(PRoConClient sender) {
+            this.InvokeIfRequired(() => {
+                this.Client.Game.Punkbuster += new FrostbiteClient.IsEnabledHandler(m_prcClient_Punkbuster);
+                this.Client.Game.Ranked += new FrostbiteClient.IsEnabledHandler(m_prcClient_Ranked);
 
-            this.Client.Game.Punkbuster += new FrostbiteClient.IsEnabledHandler(m_prcClient_Punkbuster);
-            this.Client.Game.Ranked += new FrostbiteClient.IsEnabledHandler(m_prcClient_Ranked);
+                // this.Client.Game.PremiumStatus += new FrostbiteClient.IsEnabledHandler(Game_PremiumStatus);
 
-            // this.Client.Game.PremiumStatus += new FrostbiteClient.IsEnabledHandler(Game_PremiumStatus);
+                this.Client.Game.GamePassword += new FrostbiteClient.PasswordHandler(m_prcClient_GamePassword);
+                this.Client.Game.AdminPassword += new FrostbiteClient.PasswordHandler(m_prcClient_AdminPassword);
 
-            this.Client.Game.GamePassword += new FrostbiteClient.PasswordHandler(m_prcClient_GamePassword);
-            this.Client.Game.AdminPassword += new FrostbiteClient.PasswordHandler(m_prcClient_AdminPassword);
+                this.Client.Game.PlayerLimit += new FrostbiteClient.LimitHandler(m_prcClient_PlayerLimit);
+                this.Client.Game.MaxPlayerLimit += new FrostbiteClient.LimitHandler(m_prcClient_MaxPlayerLimit);
+                this.Client.Game.CurrentPlayerLimit += new FrostbiteClient.LimitHandler(m_prcClient_CurrentPlayerLimit);
+                this.Client.Game.IdleTimeout += new FrostbiteClient.LimitHandler(m_prcClient_IdleTimeout);
+                this.Client.Game.IdleBanRounds += new FrostbiteClient.LimitHandler(m_prcClient_IdleBanRounds);
 
-            this.Client.Game.PlayerLimit += new FrostbiteClient.LimitHandler(m_prcClient_PlayerLimit);
-            this.Client.Game.MaxPlayerLimit += new FrostbiteClient.LimitHandler(m_prcClient_MaxPlayerLimit);
-            this.Client.Game.CurrentPlayerLimit += new FrostbiteClient.LimitHandler(m_prcClient_CurrentPlayerLimit);
-            this.Client.Game.IdleTimeout += new FrostbiteClient.LimitHandler(m_prcClient_IdleTimeout);
-            this.Client.Game.IdleBanRounds += new FrostbiteClient.LimitHandler(m_prcClient_IdleBanRounds);
+                // this.Client.Game.ReservedSlotsListAggressiveJoin += new FrostbiteClient.IsEnabledHandler(Game_ReservedSlotsAggressiveJoin);
 
-            // this.Client.Game.ReservedSlotsListAggressiveJoin += new FrostbiteClient.IsEnabledHandler(Game_ReservedSlotsAggressiveJoin);
-
-            this.Client.Game.ServerInfo += new FrostbiteClient.ServerInfoHandler(m_prcClient_ServerInfo);
+                this.Client.Game.ServerInfo += new FrostbiteClient.ServerInfoHandler(m_prcClient_ServerInfo);
+            });
         }
 
         private void m_prcClient_ServerInfo(FrostbiteClient sender, CServerInfo csiServerInfo) {
-            if (csiServerInfo.MaxPlayerCount > 0 && csiServerInfo.MaxPlayerCount <= this.numSettingsPlayerLimit.Maximum) {
-                //this.numSettingsPlayerLimit.Value = (decimal)csiServerInfo.MaxPlayerCount;
-                this.numSettingsEffectivePlayerLimit.Value = (decimal)csiServerInfo.MaxPlayerCount;
-            }
+            this.InvokeIfRequired(() => {
+                if (csiServerInfo.MaxPlayerCount > 0 && csiServerInfo.MaxPlayerCount <= this.numSettingsPlayerLimit.Maximum) {
+                    //this.numSettingsPlayerLimit.Value = (decimal)csiServerInfo.MaxPlayerCount;
+                    this.numSettingsEffectivePlayerLimit.Value = (decimal) csiServerInfo.MaxPlayerCount;
+                }
 
-            this.chkSettingsPunkbuster.Checked = csiServerInfo.PunkBuster;
-            this.chkSettingsRanked.Checked = csiServerInfo.Ranked;
+                this.chkSettingsPunkbuster.Checked = csiServerInfo.PunkBuster;
+                this.chkSettingsRanked.Checked = csiServerInfo.Ranked;
+            });
         }
 
         #region Passwords
@@ -176,8 +179,10 @@ namespace PRoCon.Controls.ServerSettings.MOHW {
         #region Punkbuster
 
         private void m_prcClient_Punkbuster(FrostbiteClient sender, bool isEnabled) {
-            this.chkSettingsPunkbuster.Checked = isEnabled;
-            //this.OnSettingResponse("vars.punkbuster", isEnabled, true);
+            this.InvokeIfRequired(() => {
+                this.chkSettingsPunkbuster.Checked = isEnabled;
+                //this.OnSettingResponse("vars.punkbuster", isEnabled, true);
+            });
         }
 
         /*
@@ -200,8 +205,10 @@ namespace PRoCon.Controls.ServerSettings.MOHW {
         #region Ranked
 
         private void m_prcClient_Ranked(FrostbiteClient sender, bool isEnabled) {
-            this.chkSettingsRanked.Checked = isEnabled;
-            //this.OnSettingResponse("vars.ranked", isEnabled, true);
+            this.InvokeIfRequired(() => {
+                this.chkSettingsRanked.Checked = isEnabled;
+                //this.OnSettingResponse("vars.ranked", isEnabled, true);
+            });
         }
 
         /*
@@ -240,13 +247,15 @@ namespace PRoCon.Controls.ServerSettings.MOHW {
         #region Player Limit
 
         private void m_prcClient_CurrentPlayerLimit(FrostbiteClient sender, int limit) {
-            if (limit > 0 && limit <= this.numSettingsPlayerLimit.Maximum) {
-                this.numSettingsPlayerLimit.Value = (decimal)limit;
-            }
+            this.InvokeIfRequired(() => {
+                if (limit > 0 && limit <= this.numSettingsPlayerLimit.Maximum) {
+                    this.numSettingsPlayerLimit.Value = (decimal) limit;
+                }
+            });
         }
 
         private void m_prcClient_MaxPlayerLimit(FrostbiteClient sender, int limit) {
-            this.numSettingsPlayerLimit.Maximum = (decimal)limit;
+            this.InvokeIfRequired(() => { this.numSettingsPlayerLimit.Maximum = (decimal) limit; });
         }
 
         private void m_prcClient_PlayerLimit(FrostbiteClient sender, int limit) {

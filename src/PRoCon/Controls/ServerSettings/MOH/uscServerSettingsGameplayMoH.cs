@@ -97,34 +97,37 @@ namespace PRoCon.Controls.ServerSettings.MOH {
         }
 
         private void m_prcClient_GameTypeDiscovered(PRoConClient sender) {
-            this.Client.Game.ClanTeams += new FrostbiteClient.IsEnabledHandler(Game_ClanTeams);
-            this.Client.Game.NoCrosshairs += new FrostbiteClient.IsEnabledHandler(Game_NoCrosshairs);
-            this.Client.Game.RealisticHealth += new FrostbiteClient.IsEnabledHandler(Game_RealisticHealth);
-            this.Client.Game.NoUnlocks += new FrostbiteClient.IsEnabledHandler(Game_NoUnlocks);
-            this.Client.Game.NoAmmoPickups += new FrostbiteClient.IsEnabledHandler(Game_NoAmmoPickups);
+            this.InvokeIfRequired(() => {
+                this.Client.Game.ClanTeams += new FrostbiteClient.IsEnabledHandler(Game_ClanTeams);
+                this.Client.Game.NoCrosshairs += new FrostbiteClient.IsEnabledHandler(Game_NoCrosshairs);
+                this.Client.Game.RealisticHealth += new FrostbiteClient.IsEnabledHandler(Game_RealisticHealth);
+                this.Client.Game.NoUnlocks += new FrostbiteClient.IsEnabledHandler(Game_NoUnlocks);
+                this.Client.Game.NoAmmoPickups += new FrostbiteClient.IsEnabledHandler(Game_NoAmmoPickups);
 
-            this.Client.Game.TdmScoreCounterMaxScore += new FrostbiteClient.LimitHandler(Game_TdmScoreCounterMaxScore);
-            this.Client.Game.SkillLimit += new FrostbiteClient.UpperLowerLimitHandler(Game_SkillLimit);
-            this.Client.Game.PreRoundLimit += new FrostbiteClient.UpperLowerLimitHandler(Game_PreRoundLimit);
-            this.Client.Game.RoundStartTimer += new FrostbiteClient.IsEnabledHandler(Game_RoundStartTimer);
-            this.Client.Game.RoundStartTimerDelay += new FrostbiteClient.LimitHandler(Game_RoundStartTimerDelay);
-            this.Client.Game.RoundStartTimerPlayerLimit += new FrostbiteClient.LimitHandler(Game_RoundStartTimerPlayerLimit);
+                this.Client.Game.TdmScoreCounterMaxScore += new FrostbiteClient.LimitHandler(Game_TdmScoreCounterMaxScore);
+                this.Client.Game.SkillLimit += new FrostbiteClient.UpperLowerLimitHandler(Game_SkillLimit);
+                this.Client.Game.PreRoundLimit += new FrostbiteClient.UpperLowerLimitHandler(Game_PreRoundLimit);
+                this.Client.Game.RoundStartTimer += new FrostbiteClient.IsEnabledHandler(Game_RoundStartTimer);
+                this.Client.Game.RoundStartTimerDelay += new FrostbiteClient.LimitHandler(Game_RoundStartTimerDelay);
+                this.Client.Game.RoundStartTimerPlayerLimit += new FrostbiteClient.LimitHandler(Game_RoundStartTimerPlayerLimit);
 
-            this.Client.Game.Ranked += new FrostbiteClient.IsEnabledHandler(Game_Ranked);
+                this.Client.Game.Ranked += new FrostbiteClient.IsEnabledHandler(Game_Ranked);
+            });
         }
 
         private void SetNumberPickerValue(NumericUpDown control, int value) {
+            this.InvokeIfRequired(() => {
 
-            if (value < control.Minimum) {
-                control.Value = control.Minimum;
-            }
-            else if (value > control.Maximum) {
-                control.Value = control.Maximum;
-            }
-            else {
-                control.Value = value;
-            }
-
+                if (value < control.Minimum) {
+                    control.Value = control.Minimum;
+                }
+                else if (value > control.Maximum) {
+                    control.Value = control.Maximum;
+                }
+                else {
+                    control.Value = value;
+                }
+            });
         }
 
         #region Clan Teams
@@ -415,18 +418,19 @@ namespace PRoCon.Controls.ServerSettings.MOH {
 
         // Kinda belongs here..
         private void Game_Ranked(FrostbiteClient sender, bool isEnabled) {
+            this.InvokeIfRequired(() => {
+                this.lblSettingsPreroundLimitExplanation.Visible = isEnabled;
 
-            this.lblSettingsPreroundLimitExplanation.Visible = isEnabled;
-
-            if (isEnabled == true) {
-                this.numSettingsPreroundLimitLower.Minimum = 2;
-                this.numSettingsPreroundLimitUpper.Minimum = 4;
-            }
-            else {
-                // They should use the checkbox if they want 1-1.
-                this.numSettingsPreroundLimitLower.Minimum = 1;
-                this.numSettingsPreroundLimitUpper.Minimum = 2;
-            }
+                if (isEnabled == true) {
+                    this.numSettingsPreroundLimitLower.Minimum = 2;
+                    this.numSettingsPreroundLimitUpper.Minimum = 4;
+                }
+                else {
+                    // They should use the checkbox if they want 1-1.
+                    this.numSettingsPreroundLimitLower.Minimum = 1;
+                    this.numSettingsPreroundLimitUpper.Minimum = 2;
+                }
+            });
         }
 
         private void numSettingsPreroundLimitLower_ValueChanged(object sender, EventArgs e) {

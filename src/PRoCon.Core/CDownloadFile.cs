@@ -213,7 +213,7 @@ namespace PRoCon.Core {
                     if (cdfParent.DownloadDiscoveredFileSize != null) {
                         //cdfParent.DownloadDiscoveredFileSize(cdfParent);
 
-                        FrostbiteConnection.RaiseEvent(cdfParent.DownloadDiscoveredFileSize.GetInvocationList(), cdfParent);
+                        cdfParent.DownloadDiscoveredFileSize(cdfParent);
                     }
                 }
 
@@ -230,7 +230,7 @@ namespace PRoCon.Core {
                 if (cdfParent.DownloadError != null) {
                     cdfParent.m_strLastError = e.Message;
 
-                    FrostbiteConnection.RaiseEvent(cdfParent.DownloadError.GetInvocationList(), cdfParent);
+                    cdfParent.DownloadError(cdfParent);
                     //cdfParent.DownloadError(cdfParent);
                 }
             }
@@ -245,7 +245,7 @@ namespace PRoCon.Core {
                     if (cdfParent.DownloadError != null) {
                         cdfParent.m_strLastError = "Read Timeout";
 
-                        FrostbiteConnection.RaiseEvent(cdfParent.DownloadError.GetInvocationList(), cdfParent);
+                        cdfParent.DownloadError(cdfParent);
                         //cdfParent.DownloadError(cdfParent);
                     }
                 }
@@ -281,7 +281,7 @@ namespace PRoCon.Core {
 
                         cdfParent.m_blFileDownloading = false;
                         if (cdfParent.DownloadComplete != null) {
-                            FrostbiteConnection.RaiseEvent(cdfParent.DownloadComplete.GetInvocationList(), cdfParent);
+                            cdfParent.DownloadComplete(cdfParent);
                             //cdfParent.DownloadComplete(cdfParent);
                         }
 
@@ -295,7 +295,7 @@ namespace PRoCon.Core {
                     if (cdfParent.DownloadError != null) {
                         cdfParent.m_strLastError = e.Message;
 
-                        FrostbiteConnection.RaiseEvent(cdfParent.DownloadError.GetInvocationList(), cdfParent);
+                        cdfParent.DownloadError(cdfParent);
                         //cdfParent.DownloadError(cdfParent);
                     }
                 }
@@ -327,7 +327,7 @@ namespace PRoCon.Core {
                 if (cdfParent.DownloadProgressUpdate != null && iPreviousTickReadBytes > 0) {
                     //cdfParent.DownloadProgressUpdate(cdfParent);
 
-                    FrostbiteConnection.RaiseEvent(cdfParent.DownloadProgressUpdate.GetInvocationList(), cdfParent);
+                    cdfParent.DownloadProgressUpdate(cdfParent);
                 }
 
                 Thread.Sleep(100);

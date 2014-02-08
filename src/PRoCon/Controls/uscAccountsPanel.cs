@@ -89,23 +89,24 @@ namespace PRoCon.Controls {
         }
 
         void m_prcClient_GameTypeDiscovered(PRoConClient sender) {
+            this.InvokeIfRequired(() => {
+                this._application.AccountsList.AccountAdded += new PRoCon.Core.Accounts.AccountDictionary.AccountAlteredHandler(AccountsList_AccountAdded);
+                this._application.AccountsList.AccountRemoved += new PRoCon.Core.Accounts.AccountDictionary.AccountAlteredHandler(AccountsList_AccountRemoved);
 
-            this._application.AccountsList.AccountAdded += new PRoCon.Core.Accounts.AccountDictionary.AccountAlteredHandler(AccountsList_AccountAdded);
-            this._application.AccountsList.AccountRemoved += new PRoCon.Core.Accounts.AccountDictionary.AccountAlteredHandler(AccountsList_AccountRemoved);
+                foreach (Account acAccount in this._application.AccountsList) {
+                    acAccount.AccountPasswordChanged += new Account.AccountPasswordChangedHandler(acAccount_AccountPasswordChanged);
 
-            foreach (Account acAccount in this._application.AccountsList) {
-                acAccount.AccountPasswordChanged += new Account.AccountPasswordChangedHandler(acAccount_AccountPasswordChanged);
-
-                if (this._client.Layer.AccountPrivileges.Contains(acAccount.Name) == true) {
-                    this._client.Layer.AccountPrivileges[acAccount.Name].AccountPrivilegesChanged += new AccountPrivilege.AccountPrivilegesChangedHandler(uscAccountsPanel_AccountPrivilegesChanged);
+                    if (this._client.Layer.AccountPrivileges.Contains(acAccount.Name) == true) {
+                        this._client.Layer.AccountPrivileges[acAccount.Name].AccountPrivilegesChanged += new AccountPrivilege.AccountPrivilegesChangedHandler(uscAccountsPanel_AccountPrivilegesChanged);
+                    }
                 }
-            }
 
-            this._client.Layer.LayerStarted += Layer_LayerOnline;
-            this._client.Layer.LayerShutdown += Layer_LayerOffline;
-            this._client.Layer.SocketError += Layer_LayerSocketError;
+                this._client.Layer.LayerStarted += Layer_LayerOnline;
+                this._client.Layer.LayerShutdown += Layer_LayerOffline;
+                this._client.Layer.SocketError += Layer_LayerSocketError;
 
-            this._client.Layer.ClientConnected += Layer_ClientConnected;
+                this._client.Layer.ClientConnected += Layer_ClientConnected;
+            });
         }
 
         void Layer_ClientConnected(ILayerClient client) {
@@ -331,8 +332,6 @@ namespace PRoCon.Controls {
             this.ManageAccountsRequest(this, new EventArgs());
         }
 
-        #region Layer Events and Helper Methods
-
         private void Layer_LayerOnline() {
             this.InvokeIfRequired(() => {
                 this.picLayerServerStatus.Image = this._main.picLayerOnline.Image;
@@ -381,8 +380,6 @@ namespace PRoCon.Controls {
                 }
             });
         }
-
-        #endregion
 
         private void txtLayerName_TextChanged(object sender, EventArgs e) {
             this.lblExampleLayerName.Text = this.txtLayerName.Text.Replace("%servername%", this._serverName);

@@ -18,7 +18,7 @@ namespace PRoCon.Core.Variables {
 
         protected override void InsertItem(int index, Variable item) {
             if (this.VariableAdded != null) {
-                FrostbiteConnection.RaiseEvent(this.VariableAdded.GetInvocationList(), item);
+                this.VariableAdded(item);
             }
 
             base.InsertItem(index, item);
@@ -27,7 +27,7 @@ namespace PRoCon.Core.Variables {
         protected override void RemoveItem(int index) {
 
             if (this.VariableRemoved != null) {
-                FrostbiteConnection.RaiseEvent(this.VariableRemoved.GetInvocationList(), this[index]);
+                this.VariableRemoved(this[index]);
             }
 
             base.RemoveItem(index);
@@ -35,7 +35,7 @@ namespace PRoCon.Core.Variables {
         
         protected override void SetItem(int index, Variable item) {
             if (this.VariableUpdated != null) {
-                FrostbiteConnection.RaiseEvent(this.VariableUpdated.GetInvocationList(), item);
+                this.VariableUpdated(item);
             }
 
             base.SetItem(index, item);
@@ -67,7 +67,7 @@ namespace PRoCon.Core.Variables {
                 this[strVariable].Value = strValue;
 
                 if (this.VariableUpdated != null) {
-                    FrostbiteConnection.RaiseEvent(this.VariableUpdated.GetInvocationList(), this[strVariable]);
+                    this.VariableUpdated(this[strVariable]);
                 }
             }
             else {

@@ -41,13 +41,13 @@ namespace PRoCon.Core.Battlemap {
             item.TagsEdited += new MapZoneDrawing.TagsEditedHandler(item_TagsEdited);
 
             if (MapZoneAdded != null) {
-                FrostbiteConnection.RaiseEvent(MapZoneAdded.GetInvocationList(), item);
+                this.MapZoneAdded(item);
             }
         }
 
         private void item_TagsEdited(MapZoneDrawing sender) {
             if (MapZoneChanged != null) {
-                FrostbiteConnection.RaiseEvent(MapZoneChanged.GetInvocationList(), sender);
+                this.MapZoneChanged(sender);
             }
         }
 
@@ -58,13 +58,13 @@ namespace PRoCon.Core.Battlemap {
             base.RemoveItem(index);
 
             if (MapZoneRemoved != null) {
-                FrostbiteConnection.RaiseEvent(MapZoneRemoved.GetInvocationList(), apRemoved);
+                this.MapZoneRemoved(apRemoved);
             }
         }
 
         protected override void SetItem(int index, MapZoneDrawing item) {
             if (MapZoneChanged != null) {
-                FrostbiteConnection.RaiseEvent(MapZoneChanged.GetInvocationList(), item);
+                this.MapZoneChanged(item);
             }
 
             base.SetItem(index, item);
@@ -89,7 +89,7 @@ namespace PRoCon.Core.Battlemap {
                 this[strUid].ZonePolygon = points;
 
                 if (MapZoneChanged != null) {
-                    FrostbiteConnection.RaiseEvent(MapZoneChanged.GetInvocationList(), this[strUid]);
+                    this.MapZoneChanged(this[strUid]);
                 }
             }
         }

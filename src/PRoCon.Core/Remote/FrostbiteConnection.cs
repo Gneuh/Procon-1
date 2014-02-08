@@ -169,44 +169,6 @@ namespace PRoCon.Core.Remote {
             this.PacketStream = null;
         }
 
-        // TO DO: Move out of FrostbiteClient.
-        public static void RaiseEvent(Delegate[] invokes, params object[] arguments) {
-            for (int i = 0; i < invokes.Length; i++) {
-
-                try {
-                    if (invokes[i].Target is Form) {
-                        if (((Form)invokes[i].Target).Disposing == false && ((Form)invokes[i].Target).IsDisposed == false && ((Form)invokes[i].Target).IsHandleCreated == true) {
-                            try {
-                                ((Control)invokes[i].Target).Invoke(invokes[i], arguments);
-                            }
-                            catch (InvalidOperationException) { }
-                        }
-                    }
-                    else if (invokes[i].Target is Control) {
-                        if (((Control)invokes[i].Target).Disposing == false && ((Control)invokes[i].Target).IsDisposed == false) {//
-                            try {
-                                ((Control)invokes[i].Target).Invoke(invokes[i], arguments);
-                            }
-                            catch (InvalidOperationException) { }
-                        }
-                    }
-                    else {
-                        invokes[i].DynamicInvoke(arguments);
-                    }
-                }
-                catch (Exception e) {
-
-                    string strParams = String.Empty;
-
-                    if (arguments != null) {
-                        strParams = arguments.Aggregate(strParams, (current, objParam) => current + ("---" + objParam.ToString()));
-                    }
-
-                    FrostbiteConnection.LogError(String.Format("{0} ::: {1} ::: {2}", invokes[i].Target, invokes[i].Method, strParams), String.Empty, e);
-                }
-            }
-        }
-
         public static void LogError(string strPacket, string strAdditional, Exception e) {
             try {
                 string strOutput = "=======================================" + Environment.NewLine + Environment.NewLine;
@@ -264,7 +226,7 @@ namespace PRoCon.Core.Remote {
                         response = true;
 
                         if (this.PacketQueued != null) {
-                            FrostbiteConnection.RaiseEvent(this.PacketQueued.GetInvocationList(), this, packet, Thread.CurrentThread.ManagedThreadId);
+                            this.PacketQueued(this, packet, Thread.CurrentThread.ManagedThreadId);
                         }
                     }
                     // else - response = false
@@ -285,7 +247,7 @@ namespace PRoCon.Core.Remote {
                         response = true;
 
                         if (this.PacketDequeued != null) {
-                            FrostbiteConnection.RaiseEvent(this.PacketDequeued.GetInvocationList(), this, nextPacket, Thread.CurrentThread.ManagedThreadId);
+                            this.PacketDequeued(this, nextPacket, Thread.CurrentThread.ManagedThreadId);
                         }
                     }
                     else {
@@ -309,7 +271,7 @@ namespace PRoCon.Core.Remote {
 
                         this.LastPacketSent = packet;
 
-                        FrostbiteConnection.RaiseEvent(this.PacketSent.GetInvocationList(), this, false, packet);
+                        this.PacketSent(this, false, packet);
                     }
                 }
             }
@@ -426,7 +388,7 @@ namespace PRoCon.Core.Remote {
                                 if (this.PacketReceived != null) {
                                     this.LastPacketReceived = packet;
 
-                                    FrostbiteConnection.RaiseEvent(this.PacketReceived.GetInvocationList(), this, isProcessed, packet);
+                                    this.PacketReceived(this, isProcessed, packet);
                                 }
 
                                 if (packet.OriginatedFromServer == true && packet.IsResponse == false) {
@@ -546,7 +508,7 @@ namespace PRoCon.Core.Remote {
 
                 // Alert the ProconClient of the error, explaining why the connection has been shut down.
                 if (this.ConnectionFailure != null) {
-                    FrostbiteConnection.RaiseEvent(this.ConnectionFailure.GetInvocationList(), this, new Exception("Connection timed out with two minutes of inactivity."));
+                    this.ConnectionFailure(this, new Exception("Connection timed out with two minutes of inactivity."));
                 }
             }
         }
@@ -558,14 +520,14 @@ namespace PRoCon.Core.Remote {
                 this.Client.NoDelay = true;
 
                 if (this.ConnectSuccess != null) {
-                    FrostbiteConnection.RaiseEvent(this.ConnectSuccess.GetInvocationList(), this);
+                    this.ConnectSuccess(this);
                 }
 
                 this.NetworkStream = this.Client.GetStream();
                 this.NetworkStream.BeginRead(this.ReceivedBuffer, 0, this.ReceivedBuffer.Length, this.ReceiveCallback, this);
 
                 if (this.ConnectionReady != null) {
-                    FrostbiteConnection.RaiseEvent(this.ConnectionReady.GetInvocationList(), this);
+                    this.ConnectionReady(this);
                 }
             }
             catch (SocketException se) {
@@ -611,7 +573,7 @@ namespace PRoCon.Core.Remote {
                 this.Client.BeginConnect(this.Hostname, this.Port, this.ConnectedCallback, this);
 
                 if (this.ConnectAttempt != null) {
-                    FrostbiteConnection.RaiseEvent(this.ConnectAttempt.GetInvocationList(), this);
+                    this.ConnectAttempt(this);
                 }
             }
             catch (SocketException se) {
@@ -626,7 +588,7 @@ namespace PRoCon.Core.Remote {
             this.ShutdownConnection();
 
             if (this.ConnectionFailure != null) {
-                FrostbiteConnection.RaiseEvent(this.ConnectionFailure.GetInvocationList(), this, e);
+                this.ConnectionFailure(this, e);
             }
             
         }
@@ -635,7 +597,7 @@ namespace PRoCon.Core.Remote {
             this.ShutdownConnection();
 
             if (this.SocketException != null) {
-                FrostbiteConnection.RaiseEvent(this.SocketException.GetInvocationList(), this, se);
+                this.SocketException(this, se);
             }
         }
 
@@ -661,18 +623,18 @@ namespace PRoCon.Core.Remote {
                         this.Client = null;
 
                         if (this.ConnectionClosed != null) {
-                            FrostbiteConnection.RaiseEvent(this.ConnectionClosed.GetInvocationList(), this);
+                            this.ConnectionClosed(this);
                         }
                     }
                     catch (SocketException se) {
                         if (this.SocketException != null) {
-                            FrostbiteConnection.RaiseEvent(this.SocketException.GetInvocationList(), this, se);
+                            this.SocketException(this, se);
                             //this.SocketException(se);
                         }
                     }
                     catch (Exception e) {
                         if (this.ConnectionFailure != null) {
-                            FrostbiteConnection.RaiseEvent(this.ConnectionFailure.GetInvocationList(), this, e);
+                            this.ConnectionFailure(this, e);
                         }
                     }
                 }

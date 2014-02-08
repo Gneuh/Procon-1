@@ -52,14 +52,16 @@ namespace PRoCon.Controls {
         }
 
         private void m_prcClient_GameTypeDiscovered(PRoConClient sender) {
-            this.m_prcClient.EventsLogging.CapturedEvents.ItemAdded += new NotificationList<CapturableEvents>.ItemModifiedHandler(CapturedEvents_ItemAdded);
-            this.m_prcClient.EventsLogging.CapturedEvents.ItemRemoved += new NotificationList<CapturableEvents>.ItemModifiedHandler(CapturedEvents_ItemRemoved);
+            this.InvokeIfRequired(() => {
+                this.m_prcClient.EventsLogging.CapturedEvents.ItemAdded += new NotificationList<CapturableEvents>.ItemModifiedHandler(CapturedEvents_ItemAdded);
+                this.m_prcClient.EventsLogging.CapturedEvents.ItemRemoved += new NotificationList<CapturableEvents>.ItemModifiedHandler(CapturedEvents_ItemRemoved);
 
-            this.m_prcClient.EventsLogging.MaximumDisplayedEventsChange += new EventCaptures.MaximumDisplayedEventsChangeHandler(LoggedEvents_MaximumDisplayedEventsChange);
-            this.m_prcClient.EventsLogging.OptionsVisibleChange += new EventCaptures.OptionsVisibleChangeHandler(LoggedEvents_OptionsHiddenChange);
-            this.m_prcClient.EventsLogging.ScrollingEnabledChange += new EventCaptures.ScrollingEnabledChangeHandler(LoggedEvents_ScrollingEnabledChange);
+                this.m_prcClient.EventsLogging.MaximumDisplayedEventsChange += new EventCaptures.MaximumDisplayedEventsChangeHandler(LoggedEvents_MaximumDisplayedEventsChange);
+                this.m_prcClient.EventsLogging.OptionsVisibleChange += new EventCaptures.OptionsVisibleChangeHandler(LoggedEvents_OptionsHiddenChange);
+                this.m_prcClient.EventsLogging.ScrollingEnabledChange += new EventCaptures.ScrollingEnabledChangeHandler(LoggedEvents_ScrollingEnabledChange);
 
-            this.m_prcClient.EventsLogging.LoggedEvent += new EventCaptures.LoggedEventHandler(LoggedEvents_LoggedEvent);
+                this.m_prcClient.EventsLogging.LoggedEvent += new EventCaptures.LoggedEventHandler(LoggedEvents_LoggedEvent);
+            });
         }
 
         public void SetLocalization(CLocalization clocLanguage) {

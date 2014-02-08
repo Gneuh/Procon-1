@@ -73,58 +73,54 @@ namespace PRoCon.Controls.TextChatModeration {
         }
         
         private void m_prcClient_GameTypeDiscovered(PRoConClient sender) {
-            this.m_client.ProconPrivileges += new PRoConClient.ProconPrivilegesHandler(m_client_ProconPrivileges);
-            this.m_client.FullTextChatModerationListList += new PRoConClient.FullTextChatModerationListListHandler(m_client_FullTextChatModerationListList);
+            this.InvokeIfRequired(() => {
+                this.m_client.ProconPrivileges += new PRoConClient.ProconPrivilegesHandler(m_client_ProconPrivileges);
+                this.m_client.FullTextChatModerationListList += new PRoConClient.FullTextChatModerationListListHandler(m_client_FullTextChatModerationListList);
 
-            this.m_client.Game.TextChatModerationListAddPlayer += new FrostbiteClient.TextChatModerationListAddPlayerHandler(Game_TextChatModerationListAddPlayer);
-            this.m_client.Game.TextChatModerationListRemovePlayer += new FrostbiteClient.TextChatModerationListRemovePlayerHandler(Game_TextChatModerationListRemovePlayer);
+                this.m_client.Game.TextChatModerationListAddPlayer += new FrostbiteClient.TextChatModerationListAddPlayerHandler(Game_TextChatModerationListAddPlayer);
+                this.m_client.Game.TextChatModerationListRemovePlayer += new FrostbiteClient.TextChatModerationListRemovePlayerHandler(Game_TextChatModerationListRemovePlayer);
+            });
         }
 
         private void m_client_ProconPrivileges(PRoConClient sender, CPrivileges spPrivs) {
-            this.Enabled = spPrivs.CanEditTextChatModerationList;
+            this.InvokeIfRequired(() => { this.Enabled = spPrivs.CanEditTextChatModerationList; });
         }
 
         private void Game_TextChatModerationListAddPlayer(FrostbiteClient sender, TextChatModerationEntry playerEntry) {
-            if (this.lsvTextChatModerationList.Items.ContainsKey(playerEntry.SoldierName.ToLower()) == false) {
+            this.InvokeIfRequired(() => {
+                if (this.lsvTextChatModerationList.Items.ContainsKey(playerEntry.SoldierName.ToLower()) == false) {
 
-                ListViewItem lsvNewSoldier = new ListViewItem(playerEntry.SoldierName);
-                lsvNewSoldier.Group = this.lsvTextChatModerationList.Groups[playerEntry.PlayerModerationLevel.ToString().ToLower()];
-                lsvNewSoldier.Name = playerEntry.SoldierName.ToLower();
+                    ListViewItem lsvNewSoldier = new ListViewItem(playerEntry.SoldierName);
+                    lsvNewSoldier.Group = this.lsvTextChatModerationList.Groups[playerEntry.PlayerModerationLevel.ToString().ToLower()];
+                    lsvNewSoldier.Name = playerEntry.SoldierName.ToLower();
 
-                this.lsvTextChatModerationList.Items.Add(lsvNewSoldier);
-            }
-            else {
-                this.lsvTextChatModerationList.Items[playerEntry.SoldierName.ToLower()].Group = this.lsvTextChatModerationList.Groups[playerEntry.PlayerModerationLevel.ToString().ToLower()];
-            }
+                    this.lsvTextChatModerationList.Items.Add(lsvNewSoldier);
+                }
+                else {
+                    this.lsvTextChatModerationList.Items[playerEntry.SoldierName.ToLower()].Group = this.lsvTextChatModerationList.Groups[playerEntry.PlayerModerationLevel.ToString().ToLower()];
+                }
+            });
         }
 
         private void m_client_FullTextChatModerationListList(PRoConClient sender, TextChatModerationDictionary moderationList) {
-            foreach (TextChatModerationEntry playerEntry in moderationList) {
+            this.InvokeIfRequired(() => {
+                foreach (TextChatModerationEntry playerEntry in moderationList) {
 
-                this.Game_TextChatModerationListAddPlayer(null, playerEntry);
+                    this.Game_TextChatModerationListAddPlayer(null, playerEntry);
 
-                foreach (ColumnHeader column in this.lsvTextChatModerationList.Columns) {
-                    column.Width = -2;
+                    foreach (ColumnHeader column in this.lsvTextChatModerationList.Columns) {
+                        column.Width = -2;
+                    }
                 }
-
-                /*
-                if (this.lsvTextChatModerationList.Items.ContainsKey(playerEntry.SoldierName) == false) {
-
-                    ListViewItem lsvNewSoldier = new ListViewItem(playerEntry.SoldierName);
-                    lsvNewSoldier.Group = this.lsvTextChatModerationList.Groups[playerEntry.PlayerModerationLevel.ToString()];
-                    lsvNewSoldier.Name = playerEntry.SoldierName;
-
-                    this.lsvTextChatModerationList.Items.Add(lsvNewSoldier);
-                    
-                }
-                */
-            }
+            });
         }
 
         private void Game_TextChatModerationListRemovePlayer(FrostbiteClient sender, TextChatModerationEntry playerEntry) {
-            if (this.lsvTextChatModerationList.Items.ContainsKey(playerEntry.SoldierName.ToLower()) == true) {
-                this.lsvTextChatModerationList.Items.RemoveByKey(playerEntry.SoldierName.ToLower());
-            }
+            this.InvokeIfRequired(() => {
+                if (this.lsvTextChatModerationList.Items.ContainsKey(playerEntry.SoldierName.ToLower()) == true) {
+                    this.lsvTextChatModerationList.Items.RemoveByKey(playerEntry.SoldierName.ToLower());
+                }
+            });
         }
 
         private void lsvTextChatModerationList_ColumnClick(object sender, ColumnClickEventArgs e) {

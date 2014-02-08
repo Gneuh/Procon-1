@@ -79,14 +79,15 @@ namespace PRoCon.Controls.ServerSettings.BF4 {
         }
 
         private void m_prcClient_GameTypeDiscovered(PRoConClient sender) {
+            this.InvokeIfRequired(() => {
+                this.Client.Game.TeamKillCountForKick += new FrostbiteClient.LimitHandler(m_prcClient_TeamKillCountForKick);
+                this.Client.Game.TeamKillValueForKick += new FrostbiteClient.LimitHandler(m_prcClient_TeamKillValueForKick);
+                this.Client.Game.TeamKillKickForBan += new FrostbiteClient.LimitHandler(m_prcClient_TeamKillKickForBan);
+                this.Client.Game.TeamKillValueIncrease += new FrostbiteClient.LimitHandler(m_prcClient_TeamKillValueIncrease);
+                this.Client.Game.TeamKillValueDecreasePerSecond += new FrostbiteClient.LimitHandler(m_prcClient_TeamKillValueDecreasePerSecond);
 
-            this.Client.Game.TeamKillCountForKick += new FrostbiteClient.LimitHandler(m_prcClient_TeamKillCountForKick);
-            this.Client.Game.TeamKillValueForKick += new FrostbiteClient.LimitHandler(m_prcClient_TeamKillValueForKick);
-            this.Client.Game.TeamKillKickForBan += new FrostbiteClient.LimitHandler(m_prcClient_TeamKillKickForBan);
-            this.Client.Game.TeamKillValueIncrease += new FrostbiteClient.LimitHandler(m_prcClient_TeamKillValueIncrease);
-            this.Client.Game.TeamKillValueDecreasePerSecond += new FrostbiteClient.LimitHandler(m_prcClient_TeamKillValueDecreasePerSecond);
-
-            this.Client.Game.BF4preset += new FrostbiteClient.BF4presetHandler(Tab_BF4preset);
+                this.Client.Game.BF4preset += new FrostbiteClient.BF4presetHandler(Tab_BF4preset);
+            });
         }
 
         private void Tab_BF4preset(FrostbiteClient sender, string mode, bool locked) {

@@ -20,7 +20,7 @@ namespace PRoCon.Core.Localization {
             base.InsertItem(index, item);
 
             if (this.LanguageAdded != null) {
-                FrostbiteConnection.RaiseEvent(this.LanguageAdded.GetInvocationList(), item);
+                this.LanguageAdded(item);
             }
         }
 
@@ -30,7 +30,7 @@ namespace PRoCon.Core.Localization {
             base.RemoveItem(index);
 
             if (this.LanguageRemoved != null) {
-                FrostbiteConnection.RaiseEvent(this.LanguageRemoved.GetInvocationList(), clocRemoved);
+                this.LanguageRemoved(clocRemoved);
             }
         }
 

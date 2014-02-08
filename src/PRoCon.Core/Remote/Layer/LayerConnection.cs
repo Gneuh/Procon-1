@@ -232,30 +232,29 @@ namespace PRoCon.Core.Remote.Layer {
 
         // TO DO: Better error reporting on this method.
         public void Shutdown() {
-            if (Client != null) {
-                try {
-                    lock (ShutdownConnectionLock) {
-                        if (NetworkStream != null) {
-                            NetworkStream.Close();
-                            NetworkStream.Dispose();
-                            NetworkStream = null;
-                        }
-
+            try {
+                lock (ShutdownConnectionLock) {
+                    if (NetworkStream != null) {
+                        NetworkStream.Close();
+                        NetworkStream.Dispose();
+                        NetworkStream = null;
+                    }
+                    if (Client != null) {
                         Client.Close();
                         Client = null;
-
-                        this.OnConnectionClosed();
                     }
+
+                    this.OnConnectionClosed();
                 }
-                catch (SocketException) {
-                    // TO DO: Error reporting, possibly in a log file.
-                }
-                catch (Exception e) {
-                    FrostbiteConnection.LogError("FrostbiteLayerConnection.Shutdown", "catch (Exception e)", e);
-                }
-                finally {
-                    this.NullActions();
-                }
+            }
+            catch (SocketException) {
+                // TO DO: Error reporting, possibly in a log file.
+            }
+            catch (Exception e) {
+                FrostbiteConnection.LogError("FrostbiteLayerConnection.Shutdown", "catch (Exception e)", e);
+            }
+            finally {
+                this.NullActions();
             }
         }
 

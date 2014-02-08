@@ -41,7 +41,7 @@ namespace PRoCon.Controls.Battlemap.MapImagePacks {
             base.InsertItem(index, item);
 
             if (this.ImagePackAdded != null) {
-                FrostbiteConnection.RaiseEvent(this.ImagePackAdded.GetInvocationList(), item);
+                this.ImagePackAdded(item);
             }
         }
 
@@ -51,7 +51,7 @@ namespace PRoCon.Controls.Battlemap.MapImagePacks {
             base.RemoveItem(index);
 
             if (this.ImagePackRemoved != null) {
-                FrostbiteConnection.RaiseEvent(this.ImagePackRemoved.GetInvocationList(), clocRemoved);
+                this.ImagePackRemoved(clocRemoved);
             }
         }
     }

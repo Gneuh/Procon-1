@@ -6,12 +6,17 @@ namespace PRoCon {
         private readonly static object[] Empty = new object[0];
 
         public static void InvokeIfRequired(this ISynchronizeInvoke control, Action action) {
-            if (control.InvokeRequired) {
-                control.Invoke(action, Empty);
+            try {
+                if (control.InvokeRequired) {
+                    control.Invoke(action, Empty);
+                }
+                else {
+                    action();
+                }
             }
-            else {
-                action();
-            }
+            // Suppress object disposed which can occur while we are shutting down.
+            catch (ObjectDisposedException) { }
+            catch (InvalidOperationException) { }
         }
     }
 }

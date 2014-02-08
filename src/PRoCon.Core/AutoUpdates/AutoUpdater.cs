@@ -72,7 +72,7 @@ namespace PRoCon.Core.AutoUpdates {
         public void CheckVersion() {
             if (Application.BlockUpdateChecks == false) {
                 if (CheckingUpdates != null) {
-                    FrostbiteConnection.RaiseEvent(CheckingUpdates.GetInvocationList());
+                    this.CheckingUpdates();
                 }
 
                 VersionChecker.BeginDownload();
@@ -141,7 +141,7 @@ namespace PRoCon.Core.AutoUpdates {
         private void GameConfigInfo() {
             GameConfigHint = true;
             if (GameConfigUpdated != null) {
-                FrostbiteConnection.RaiseEvent(GameConfigUpdated.GetInvocationList());
+                this.GameConfigUpdated();
             }
         }
 
@@ -202,14 +202,14 @@ namespace PRoCon.Core.AutoUpdates {
                         ProconUpdate.DownloadComplete += new CDownloadFile.DownloadFileEventDelegate(cdfPRoConUpdate_DownloadComplete);
 
                         if (UpdateDownloading != null) {
-                            FrostbiteConnection.RaiseEvent(UpdateDownloading.GetInvocationList(), ProconUpdate);
+                            this.UpdateDownloading(ProconUpdate);
                         }
 
                         ProconUpdate.BeginDownload();
                     }
                     else {
                         if (NoVersionAvailable != null) {
-                            FrostbiteConnection.RaiseEvent(NoVersionAvailable.GetInvocationList());
+                            this.NoVersionAvailable();
                         }
 
                         lock (DownloadingLocalizationsLock) {
@@ -295,7 +295,7 @@ namespace PRoCon.Core.AutoUpdates {
                 }
                 catch (Exception e) {
                     if (CustomDownloadError != null) {
-                        FrostbiteConnection.RaiseEvent(CustomDownloadError.GetInvocationList(), e.Message);
+                        this.CustomDownloadError(e.Message);
                     }
 
                     //this.Invoke(new DownloadErrorDelegate(DownloadError_Callback), e.Message);
@@ -303,7 +303,7 @@ namespace PRoCon.Core.AutoUpdates {
             }
             else {
                 if (CustomDownloadError != null) {
-                    FrostbiteConnection.RaiseEvent(CustomDownloadError.GetInvocationList(), "Downloaded file failed checksum, please try again or download direct from https://myrcon.com");
+                    this.CustomDownloadError("Downloaded file failed checksum, please try again or download direct from https://myrcon.com");
                 }
 
                 //this.Invoke(new DownloadErrorDelegate(DownloadError_Callback), "Downloaded file failed checksum, please try again or download direct from https://myrcon.com");
@@ -316,7 +316,7 @@ namespace PRoCon.Core.AutoUpdates {
             }
             else {
                 if (DownloadUnzipComplete != null) {
-                    FrostbiteConnection.RaiseEvent(DownloadUnzipComplete.GetInvocationList());
+                    this.DownloadUnzipComplete();
                 }
             }
         }

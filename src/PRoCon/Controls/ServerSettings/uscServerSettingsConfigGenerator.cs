@@ -78,40 +78,42 @@ namespace PRoCon.Controls.ServerSettings {
         }
 
         private void Client_GameTypeDiscovered(PRoConClient sender) {
-            this.Client.Game.Ranked += new FrostbiteClient.IsEnabledHandler(Client_Ranked);
-            this.Client.Game.Punkbuster += new FrostbiteClient.IsEnabledHandler(Client_Punkbuster);
-            this.Client.Game.ServerName += new FrostbiteClient.ServerNameHandler(Client_ServerName);
-            this.Client.Game.GamePassword += new FrostbiteClient.PasswordHandler(Client_GamePassword);
-            
-            this.Client.Game.Hardcore += new FrostbiteClient.IsEnabledHandler(Client_Hardcore);
-            
-            //this.Client.Game.RankLimit += new FrostbiteClient.LimitHandler(Client_RankLimit);
-            //this.Client.Game.TeamBalance += new FrostbiteClient.IsEnabledHandler(Client_TeamBalance);
-            this.Client.Game.FriendlyFire += new FrostbiteClient.IsEnabledHandler(Client_FriendlyFire);
-            this.Client.Game.PlayerLimit += new FrostbiteClient.LimitHandler(Client_PlayerLimit);
-            this.Client.Game.BannerUrl += new FrostbiteClient.BannerUrlHandler(Client_BannerUrl);
-            this.Client.Game.ServerDescription += new FrostbiteClient.ServerDescriptionHandler(Client_ServerDescription);
+            this.InvokeIfRequired(() => {
+                this.Client.Game.Ranked += new FrostbiteClient.IsEnabledHandler(Client_Ranked);
+                this.Client.Game.Punkbuster += new FrostbiteClient.IsEnabledHandler(Client_Punkbuster);
+                this.Client.Game.ServerName += new FrostbiteClient.ServerNameHandler(Client_ServerName);
+                this.Client.Game.GamePassword += new FrostbiteClient.PasswordHandler(Client_GamePassword);
 
-            //this.Client.Game.KillCam += new FrostbiteClient.IsEnabledHandler(Client_KillCam);
-            //this.Client.Game.MiniMap += new FrostbiteClient.IsEnabledHandler(Client_MiniMap);
-            //this.Client.Game.CrossHair += new FrostbiteClient.IsEnabledHandler(Client_CrossHair);
-            //this.Client.Game.ThreeDSpotting += new FrostbiteClient.IsEnabledHandler(Client_ThreeDSpotting);
-            //this.Client.Game.ThirdPersonVehicleCameras += new FrostbiteClient.IsEnabledHandler(Client_ThirdPersonVehicleCameras);
-            //this.Client.Game.MiniMapSpotting += new FrostbiteClient.IsEnabledHandler(Client_MiniMapSpotting);
+                this.Client.Game.Hardcore += new FrostbiteClient.IsEnabledHandler(Client_Hardcore);
 
-            this.Client.Game.TeamKillCountForKick += new FrostbiteClient.LimitHandler(Client_TeamKillCountForKick);
-            this.Client.Game.TeamKillKickForBan += new FrostbiteClient.LimitHandler(Client_TeamKillKickForBan);
-            this.Client.Game.TeamKillValueForKick += new FrostbiteClient.LimitHandler(Client_TeamKillValueForKick);
-            this.Client.Game.TeamKillValueIncrease += new FrostbiteClient.LimitHandler(Client_TeamKillValueIncrease);
-            this.Client.Game.TeamKillValueDecreasePerSecond += new FrostbiteClient.LimitHandler(Client_TeamKillValueDecreasePerSecond);
+                //this.Client.Game.RankLimit += new FrostbiteClient.LimitHandler(Client_RankLimit);
+                //this.Client.Game.TeamBalance += new FrostbiteClient.IsEnabledHandler(Client_TeamBalance);
+                this.Client.Game.FriendlyFire += new FrostbiteClient.IsEnabledHandler(Client_FriendlyFire);
+                this.Client.Game.PlayerLimit += new FrostbiteClient.LimitHandler(Client_PlayerLimit);
+                this.Client.Game.BannerUrl += new FrostbiteClient.BannerUrlHandler(Client_BannerUrl);
+                this.Client.Game.ServerDescription += new FrostbiteClient.ServerDescriptionHandler(Client_ServerDescription);
 
-            this.Client.Game.IdleTimeout += new FrostbiteClient.LimitHandler(Client_IdleTimeout);
-            this.Client.Game.ProfanityFilter += new FrostbiteClient.IsEnabledHandler(Client_ProfanityFilter);
+                //this.Client.Game.KillCam += new FrostbiteClient.IsEnabledHandler(Client_KillCam);
+                //this.Client.Game.MiniMap += new FrostbiteClient.IsEnabledHandler(Client_MiniMap);
+                //this.Client.Game.CrossHair += new FrostbiteClient.IsEnabledHandler(Client_CrossHair);
+                //this.Client.Game.ThreeDSpotting += new FrostbiteClient.IsEnabledHandler(Client_ThreeDSpotting);
+                //this.Client.Game.ThirdPersonVehicleCameras += new FrostbiteClient.IsEnabledHandler(Client_ThirdPersonVehicleCameras);
+                //this.Client.Game.MiniMapSpotting += new FrostbiteClient.IsEnabledHandler(Client_MiniMapSpotting);
 
-            this.Client.Game.LevelVariablesList += new FrostbiteClient.LevelVariableListHandler(Client_LevelVariablesList);
+                this.Client.Game.TeamKillCountForKick += new FrostbiteClient.LimitHandler(Client_TeamKillCountForKick);
+                this.Client.Game.TeamKillKickForBan += new FrostbiteClient.LimitHandler(Client_TeamKillKickForBan);
+                this.Client.Game.TeamKillValueForKick += new FrostbiteClient.LimitHandler(Client_TeamKillValueForKick);
+                this.Client.Game.TeamKillValueIncrease += new FrostbiteClient.LimitHandler(Client_TeamKillValueIncrease);
+                this.Client.Game.TeamKillValueDecreasePerSecond += new FrostbiteClient.LimitHandler(Client_TeamKillValueDecreasePerSecond);
 
-            this.Client.Game.ListPlaylists += new FrostbiteClient.ListPlaylistsHandler(Client_ListPlaylists);
-            this.Client.Game.SupportedMaps += new FrostbiteClient.SupportedMapsHandler(Client_SupportedMaps);
+                this.Client.Game.IdleTimeout += new FrostbiteClient.LimitHandler(Client_IdleTimeout);
+                this.Client.Game.ProfanityFilter += new FrostbiteClient.IsEnabledHandler(Client_ProfanityFilter);
+
+                this.Client.Game.LevelVariablesList += new FrostbiteClient.LevelVariableListHandler(Client_LevelVariablesList);
+
+                this.Client.Game.ListPlaylists += new FrostbiteClient.ListPlaylistsHandler(Client_ListPlaylists);
+                this.Client.Game.SupportedMaps += new FrostbiteClient.SupportedMapsHandler(Client_SupportedMaps);
+            });
         }
 
         protected virtual void Game_Login(FrostbiteClient sender) {
@@ -193,32 +195,38 @@ namespace PRoCon.Controls.ServerSettings {
         }
 
         protected virtual void Client_LevelVariablesList(FrostbiteClient sender, LevelVariable lvRequestedContext, List<LevelVariable> lstReturnedValues) {
-            foreach (LevelVariable variable in lstReturnedValues) {
-                if (variable.Context.ContextTarget.Length > 0) {
-                    this.AppendSetting(String.Format("levelVars.set {0} {1} {2}", variable.Context.ContextType.ToString().ToLower(), variable.Context.ContextTarget, variable.VariableName), variable.RawValue);
+            this.InvokeIfRequired(() => {
+                foreach (LevelVariable variable in lstReturnedValues) {
+                    if (variable.Context.ContextTarget.Length > 0) {
+                        this.AppendSetting(String.Format("levelVars.set {0} {1} {2}", variable.Context.ContextType.ToString().ToLower(), variable.Context.ContextTarget, variable.VariableName), variable.RawValue);
+                    }
+                    else {
+                        this.AppendSetting(String.Format("levelVars.set {0} {1}", variable.Context.ContextType.ToString().ToLower(), variable.VariableName), variable.RawValue);
+                    }
                 }
-                else {
-                    this.AppendSetting(String.Format("levelVars.set {0} {1}", variable.Context.ContextType.ToString().ToLower(), variable.VariableName), variable.RawValue);
-                }
-            }
+            });
         }
 
         protected virtual void Client_ListPlaylists(FrostbiteClient sender, List<string> lstPlaylists) {
-            foreach (string playList in lstPlaylists) {
+            this.InvokeIfRequired(() => {
+                foreach (string playList in lstPlaylists) {
 
-                this.Client.Game.SendLevelVarsListPacket(new LevelVariableContext(LevelVariableContextType.GameMode, playList));
-                //this.Client.SendRequest("levelVars.list", "gamemode", playList);
+                    this.Client.Game.SendLevelVarsListPacket(new LevelVariableContext(LevelVariableContextType.GameMode, playList));
+                    //this.Client.SendRequest("levelVars.list", "gamemode", playList);
 
-                this.Client.Game.SendAdminSupportedMapsPacket(playList);
-                //this.Client.SendRequest("admin.supportedMaps", playList);
-            }
+                    this.Client.Game.SendAdminSupportedMapsPacket(playList);
+                    //this.Client.SendRequest("admin.supportedMaps", playList);
+                }
+            });
         }
 
         protected virtual void Client_SupportedMaps(FrostbiteClient sender, string strPlaylist, List<string> lstSupportedMaps) {
-            foreach (string map in lstSupportedMaps) {
-                this.Client.Game.SendLevelVarsListPacket(new LevelVariableContext(LevelVariableContextType.Level, map));
-                //this.Client.SendRequest("levelVars.list", "level", map);
-            }
+            this.InvokeIfRequired(() => {
+                foreach (string map in lstSupportedMaps) {
+                    this.Client.Game.SendLevelVarsListPacket(new LevelVariableContext(LevelVariableContextType.Level, map));
+                    //this.Client.SendRequest("levelVars.list", "level", map);
+                }
+            });
         }
 
         private string SettingToSafeString(string[] valueList) {
@@ -245,34 +253,36 @@ namespace PRoCon.Controls.ServerSettings {
         }
 
         protected void AppendSetting(string settingName, params string[] settingValue) {
-            if (this.m_dicSettings.ContainsKey(settingName) == true) {
-                this.m_dicSettings[settingName] = settingValue;
-                
-                // Full update
+            this.InvokeIfRequired(() => {
+                if (this.m_dicSettings.ContainsKey(settingName) == true) {
+                    this.m_dicSettings[settingName] = settingValue;
 
-                StringBuilder rewriteConfig = new StringBuilder();
+                    // Full update
 
-                rewriteConfig.Append(this.HeaderText);
-                //this.txtConfig.Text = this.HeaderText;
+                    StringBuilder rewriteConfig = new StringBuilder();
 
-                foreach (KeyValuePair<string, string[]> kvpSetting in this.m_dicSettings) {
-                    rewriteConfig.AppendFormat("{0} {1}{2}", kvpSetting.Key, this.SettingToSafeString(kvpSetting.Value), Environment.NewLine);
-                    //this.txtConfig.AppendText(String.Format());
+                    rewriteConfig.Append(this.HeaderText);
+                    //this.txtConfig.Text = this.HeaderText;
+
+                    foreach (KeyValuePair<string, string[]> kvpSetting in this.m_dicSettings) {
+                        rewriteConfig.AppendFormat("{0} {1}{2}", kvpSetting.Key, this.SettingToSafeString(kvpSetting.Value), Environment.NewLine);
+                        //this.txtConfig.AppendText(String.Format());
+                    }
+
+                    this.txtConfig.Text = rewriteConfig.ToString();
                 }
+                else {
 
-                this.txtConfig.Text = rewriteConfig.ToString();
-            }
-            else {
+                    this.m_dicSettings.Add(settingName, settingValue);
 
-                this.m_dicSettings.Add(settingName, settingValue);
+                    if (this.txtConfig.Text.Length == 0) {
+                        this.txtConfig.Text = this.HeaderText;
+                    }
 
-                if (this.txtConfig.Text.Length == 0) {
-                    this.txtConfig.Text = this.HeaderText;
+                    // Append it, we have not seen it yet..
+                    this.txtConfig.AppendText(String.Format("{0} {1}{2}", settingName, this.SettingToSafeString(settingValue), Environment.NewLine));
                 }
-
-                // Append it, we have not seen it yet..
-                this.txtConfig.AppendText(String.Format("{0} {1}{2}", settingName, this.SettingToSafeString(settingValue), Environment.NewLine));
-            }
+            });
         }
 
         private void btnCopyToClipboard_Click(object sender, EventArgs e) {

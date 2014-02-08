@@ -229,91 +229,27 @@ namespace PRoCon.Controls {
         }
 
         private void m_prcClient_GameTypeDiscovered(PRoConClient sender) {
+            this.InvokeIfRequired(() => {
+                this.MapImagePacks = new MapImagePackDictionary();
+                this.MapPath = Path.Combine(Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Media"), sender.GameType), "Maps");
+                this.LoadMapImagePacks();
 
-            this.MapImagePacks = new MapImagePackDictionary();
-            this.MapPath = Path.Combine(Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Media"), sender.GameType), "Maps");
-            this.LoadMapImagePacks();
-
-            if (this.MapImagePacks.Count > 0) {
-                this.LoadedMapImagePack = this.MapImagePacks[0];
-            }
-
-            this.uscBattlemap.SetLocalization(this.m_prcClient.Language);
-
-            //this.m_prcClient.ServerInfo += new FrostbiteConnection.ServerInfoHandler(m_prcClient_ServerInfo);
-            this.m_prcClient.PlayerKilled += new PRoConClient.PlayerKilledHandler(m_prcClient_PlayerKilled);
-            this.m_prcClient.Game.PlayerLeft += new FrostbiteClient.PlayerLeaveHandler(m_prcClient_PlayerLeft);
-            this.m_prcClient.Game.PlayerJoin += new FrostbiteClient.PlayerEventHandler(m_prcClient_PlayerJoin);
-            this.m_prcClient.Game.ListPlayers += new FrostbiteClient.ListPlayersHandler(m_prcClient_ListPlayers);
-            this.m_prcClient.Game.LoadingLevel += new FrostbiteClient.LoadingLevelHandler(m_prcClient_LoadingLevel);
-            this.m_prcClient.Game.LevelLoaded += new FrostbiteClient.LevelLoadedHandler(m_prcClient_LevelLoaded);
-            //this.m_prcClient.MapGeometry.MapLoaded += new MapGeometry.MapLoadedHandler(MapGeometry_MapLoaded);
-
-            this.uscBattlemap.MapDetails = new List<CMap>(this.m_prcClient.MapListPool);
-
-            this.cboPlayers.Items.Clear();
-            foreach (CPlayerInfo cpiPlayer in this.m_prcClient.PlayerList) {
-                if (this.cboPlayers.Items.Contains(cpiPlayer.SoldierName) == false) {
-                    this.cboPlayers.Items.Add(cpiPlayer.SoldierName);
+                if (this.MapImagePacks.Count > 0) {
+                    this.LoadedMapImagePack = this.MapImagePacks[0];
                 }
-            }
 
-            this.m_prcClient.Game.ServerInfo += new FrostbiteClient.ServerInfoHandler(m_prcClient_ServerInfo);
+                this.uscBattlemap.SetLocalization(this.m_prcClient.Language);
 
-            this.m_prcClient.Variables.VariableAdded += new PRoCon.Core.Variables.VariableDictionary.PlayerAlteredHandler(Variables_VariableAdded);
-            this.m_prcClient.Variables.VariableRemoved += new PRoCon.Core.Variables.VariableDictionary.PlayerAlteredHandler(Variables_VariableRemoved);
-            this.m_prcClient.Variables.VariableUpdated += new PRoCon.Core.Variables.VariableDictionary.PlayerAlteredHandler(Variables_VariableUpdated);
-            this.m_prcClient.SV_Variables.VariableRemoved += new PRoCon.Core.Variables.VariableDictionary.PlayerAlteredHandler(SV_Variables_VariableRemoved);
-            this.m_prcClient.SV_Variables.VariableUpdated += new PRoCon.Core.Variables.VariableDictionary.PlayerAlteredHandler(SV_Variables_VariableUpdated);
-            this.m_prcClient.SV_Variables.VariableAdded += new PRoCon.Core.Variables.VariableDictionary.PlayerAlteredHandler(SV_Variables_VariableAdded);
+                //this.m_prcClient.ServerInfo += new FrostbiteConnection.ServerInfoHandler(m_prcClient_ServerInfo);
+                this.m_prcClient.PlayerKilled += new PRoConClient.PlayerKilledHandler(m_prcClient_PlayerKilled);
+                this.m_prcClient.Game.PlayerLeft += new FrostbiteClient.PlayerLeaveHandler(m_prcClient_PlayerLeft);
+                this.m_prcClient.Game.PlayerJoin += new FrostbiteClient.PlayerEventHandler(m_prcClient_PlayerJoin);
+                this.m_prcClient.Game.ListPlayers += new FrostbiteClient.ListPlayersHandler(m_prcClient_ListPlayers);
+                this.m_prcClient.Game.LoadingLevel += new FrostbiteClient.LoadingLevelHandler(m_prcClient_LoadingLevel);
+                this.m_prcClient.Game.LevelLoaded += new FrostbiteClient.LevelLoadedHandler(m_prcClient_LevelLoaded);
+                //this.m_prcClient.MapGeometry.MapLoaded += new MapGeometry.MapLoadedHandler(MapGeometry_MapLoaded);
 
-            this.m_prcClient.MapGeometry.MapZones.MapZoneAdded += new MapZoneDictionary.MapZoneAlteredHandler(MapZones_MapZoneAdded);
-            this.m_prcClient.MapGeometry.MapZones.MapZoneRemoved += new MapZoneDictionary.MapZoneAlteredHandler(MapZones_MapZoneRemoved);
-            this.m_prcClient.MapGeometry.MapZones.MapZoneChanged += new MapZoneDictionary.MapZoneAlteredHandler(MapZones_MapZoneChanged);
-
-            this.m_prcClient.MapZoneDeleted += new PRoConClient.MapZoneEditedHandler(m_prcClient_MapZoneDeleted);
-            this.m_prcClient.MapZoneCreated += new PRoConClient.MapZoneEditedHandler(m_prcClient_MapZoneCreated);
-            this.m_prcClient.MapZoneModified += new PRoConClient.MapZoneEditedHandler(m_prcClient_MapZoneModified);
-
-            this.m_prcClient.ListMapZones += new PRoConClient.ListMapZonesHandler(m_prcClient_ListMapZones);
-
-            this.m_prcClient.ProconPrivileges += new PRoConClient.ProconPrivilegesHandler(m_prcClient_ProconPrivileges);
-
-        }
-
-        private void m_prcClient_ServerInfo(FrostbiteClient sender, CServerInfo csiServerInfo) {
-
-            if (this.LoadedMapImagePack != null) {
-
-                if (this.LoadedMapImagePack.LoadedMapFileName.Length == 0 && String.Compare(this.LoadedMapImagePack.LoadedMapFileName, csiServerInfo.Map, true) != 0) {
-                    // Load new map.
-                    //this.CurrentMapFilename = csiServerInfo.Map.ToLower();
-
-                    if (this.LoadedMapImagePack != null) {
-                        this.LoadedMapImagePack.LoadMap(csiServerInfo.Map.ToLower(), this.FullyLoadMap);
-
-                        this.MapLoaded(csiServerInfo.Map.ToLower());
-                    }
-
-                }
-            }
-
-            //this.CurrentMapFilename = csiServerInfo.Map.ToLower();
-        }
-
-        private void m_prcClient_ProconPrivileges(PRoConClient sender, CPrivileges spPrivs) {
-            this.m_prcClient.SendProconBattlemapListZonesPacket();
-            this.m_prcClient.SendGetProconVarsPacket("ZONE_TAG_LIST");
-
-            if ((this.tsbMapZonesTools.Enabled = spPrivs.CanEditMapZones) == false) {
-                this.tsbPointer.Checked = true;
-            }
-        }
-
-        private void m_prcClient_ListPlayers(FrostbiteClient sender, List<CPlayerInfo> lstPlayers, CPlayerSubset cpsSubset) {
-            if (cpsSubset.Subset == CPlayerSubset.PlayerSubsetType.All) {
-
-                string strSelectedName = (string)this.cboPlayers.SelectedItem;
+                this.uscBattlemap.MapDetails = new List<CMap>(this.m_prcClient.MapListPool);
 
                 this.cboPlayers.Items.Clear();
                 foreach (CPlayerInfo cpiPlayer in this.m_prcClient.PlayerList) {
@@ -322,37 +258,112 @@ namespace PRoCon.Controls {
                     }
                 }
 
-                if (strSelectedName != null && this.cboPlayers.Items.Contains(strSelectedName) == true) {
-                    this.cboPlayers.SelectedItem = strSelectedName;
+                this.m_prcClient.Game.ServerInfo += new FrostbiteClient.ServerInfoHandler(m_prcClient_ServerInfo);
+
+                this.m_prcClient.Variables.VariableAdded += new PRoCon.Core.Variables.VariableDictionary.PlayerAlteredHandler(Variables_VariableAdded);
+                this.m_prcClient.Variables.VariableRemoved += new PRoCon.Core.Variables.VariableDictionary.PlayerAlteredHandler(Variables_VariableRemoved);
+                this.m_prcClient.Variables.VariableUpdated += new PRoCon.Core.Variables.VariableDictionary.PlayerAlteredHandler(Variables_VariableUpdated);
+                this.m_prcClient.SV_Variables.VariableRemoved += new PRoCon.Core.Variables.VariableDictionary.PlayerAlteredHandler(SV_Variables_VariableRemoved);
+                this.m_prcClient.SV_Variables.VariableUpdated += new PRoCon.Core.Variables.VariableDictionary.PlayerAlteredHandler(SV_Variables_VariableUpdated);
+                this.m_prcClient.SV_Variables.VariableAdded += new PRoCon.Core.Variables.VariableDictionary.PlayerAlteredHandler(SV_Variables_VariableAdded);
+
+                this.m_prcClient.MapGeometry.MapZones.MapZoneAdded += new MapZoneDictionary.MapZoneAlteredHandler(MapZones_MapZoneAdded);
+                this.m_prcClient.MapGeometry.MapZones.MapZoneRemoved += new MapZoneDictionary.MapZoneAlteredHandler(MapZones_MapZoneRemoved);
+                this.m_prcClient.MapGeometry.MapZones.MapZoneChanged += new MapZoneDictionary.MapZoneAlteredHandler(MapZones_MapZoneChanged);
+
+                this.m_prcClient.MapZoneDeleted += new PRoConClient.MapZoneEditedHandler(m_prcClient_MapZoneDeleted);
+                this.m_prcClient.MapZoneCreated += new PRoConClient.MapZoneEditedHandler(m_prcClient_MapZoneCreated);
+                this.m_prcClient.MapZoneModified += new PRoConClient.MapZoneEditedHandler(m_prcClient_MapZoneModified);
+
+                this.m_prcClient.ListMapZones += new PRoConClient.ListMapZonesHandler(m_prcClient_ListMapZones);
+
+                this.m_prcClient.ProconPrivileges += new PRoConClient.ProconPrivilegesHandler(m_prcClient_ProconPrivileges);
+            });
+        }
+
+        private void m_prcClient_ServerInfo(FrostbiteClient sender, CServerInfo csiServerInfo) {
+            this.InvokeIfRequired(() => {
+                if (this.LoadedMapImagePack != null) {
+
+                    if (this.LoadedMapImagePack.LoadedMapFileName.Length == 0 && String.Compare(this.LoadedMapImagePack.LoadedMapFileName, csiServerInfo.Map, true) != 0) {
+                        // Load new map.
+                        //this.CurrentMapFilename = csiServerInfo.Map.ToLower();
+
+                        if (this.LoadedMapImagePack != null) {
+                            this.LoadedMapImagePack.LoadMap(csiServerInfo.Map.ToLower(), this.FullyLoadMap);
+
+                            this.MapLoaded(csiServerInfo.Map.ToLower());
+                        }
+
+                    }
                 }
 
-            }
+                //this.CurrentMapFilename = csiServerInfo.Map.ToLower();
+            });
+        }
+
+        private void m_prcClient_ProconPrivileges(PRoConClient sender, CPrivileges spPrivs) {
+            this.InvokeIfRequired(() => {
+                this.m_prcClient.SendProconBattlemapListZonesPacket();
+                this.m_prcClient.SendGetProconVarsPacket("ZONE_TAG_LIST");
+
+                if ((this.tsbMapZonesTools.Enabled = spPrivs.CanEditMapZones) == false) {
+                    this.tsbPointer.Checked = true;
+                }
+            });
+        }
+
+        private void m_prcClient_ListPlayers(FrostbiteClient sender, List<CPlayerInfo> lstPlayers, CPlayerSubset cpsSubset) {
+            this.InvokeIfRequired(() => {
+                if (cpsSubset.Subset == CPlayerSubset.PlayerSubsetType.All) {
+
+                    string strSelectedName = (string) this.cboPlayers.SelectedItem;
+
+                    this.cboPlayers.Items.Clear();
+                    foreach (CPlayerInfo cpiPlayer in this.m_prcClient.PlayerList) {
+                        if (this.cboPlayers.Items.Contains(cpiPlayer.SoldierName) == false) {
+                            this.cboPlayers.Items.Add(cpiPlayer.SoldierName);
+                        }
+                    }
+
+                    if (strSelectedName != null && this.cboPlayers.Items.Contains(strSelectedName) == true) {
+                        this.cboPlayers.SelectedItem = strSelectedName;
+                    }
+
+                }
+            });
         }
 
         private void m_prcClient_PlayerJoin(FrostbiteClient sender, string playerName) {
-            if (this.cboPlayers.Items.Contains(playerName) == false) {
-                this.cboPlayers.Items.Add(playerName);
-            }
+            this.InvokeIfRequired(() => {
+                if (this.cboPlayers.Items.Contains(playerName) == false) {
+                    this.cboPlayers.Items.Add(playerName);
+                }
+            });
         }
 
         private void m_prcClient_PlayerLeft(FrostbiteClient sender, string playerName, CPlayerInfo cpiPlayer) {
-            if (this.cboPlayers.Items.Contains(playerName) == true) {
+            this.InvokeIfRequired(() => {
+                if (this.cboPlayers.Items.Contains(playerName) == true) {
 
-                if (String.Compare((string)this.cboPlayers.SelectedItem, playerName) == 0) {
-                    this.uscBattlemap.CalibrationMarkers.Clear();
+                    if (String.Compare((string) this.cboPlayers.SelectedItem, playerName) == 0) {
+                        this.uscBattlemap.CalibrationMarkers.Clear();
+                    }
+
+                    this.cboPlayers.Items.Remove(playerName);
                 }
-
-                this.cboPlayers.Items.Remove(playerName);
-            }
+            });
         }
 
         private void m_prcClient_PlayerKilled(PRoConClient sender, Kill kKillerVictimDetails) {
-            this.uscBattlemap.AddKill(kKillerVictimDetails);
+            this.InvokeIfRequired(() => {
+                this.uscBattlemap.AddKill(kKillerVictimDetails);
 
-            // If suicide and monitoring for suicides for this player.
-            if (this.spltCalibration.Panel2Collapsed == false && String.Compare(kKillerVictimDetails.Killer.SoldierName, kKillerVictimDetails.Victim.SoldierName) == 0 && String.Compare((string)this.cboPlayers.SelectedItem, kKillerVictimDetails.Killer.SoldierName) == 0) {
-                this.uscBattlemap.CalibrationMarkers.Add(kKillerVictimDetails);
-            }
+                // If suicide and monitoring for suicides for this player.
+                if (this.spltCalibration.Panel2Collapsed == false && String.Compare(kKillerVictimDetails.Killer.SoldierName, kKillerVictimDetails.Victim.SoldierName) == 0 && String.Compare((string) this.cboPlayers.SelectedItem, kKillerVictimDetails.Killer.SoldierName) == 0) {
+                    this.uscBattlemap.CalibrationMarkers.Add(kKillerVictimDetails);
+                }
+            });
         }
 
         private CMap GetMap(string strFileName) {
@@ -369,12 +380,11 @@ namespace PRoCon.Controls {
         }
 
         private void m_prcClient_LoadingLevel(FrostbiteClient sender, string mapFileName, int roundsPlayed, int roundsTotal) {
-            this.uscBattlemap.AddRoundChange(this.GetMap(mapFileName));
+            this.InvokeIfRequired(() => this.uscBattlemap.AddRoundChange(this.GetMap(mapFileName)));
         }
 
-        private void m_prcClient_LevelLoaded(FrostbiteClient sender, string mapFileName, string Gamemode, int roundsPlayed, int roundsTotal)
-        {
-            this.uscBattlemap.AddRoundChange(this.GetMap(mapFileName));
+        private void m_prcClient_LevelLoaded(FrostbiteClient sender, string mapFileName, string Gamemode, int roundsPlayed, int roundsTotal) {
+            this.InvokeIfRequired(() => this.uscBattlemap.AddRoundChange(this.GetMap(mapFileName)));
         }
 
         private void SetMapDetails()
@@ -499,7 +509,7 @@ namespace PRoCon.Controls {
                 this.MapLoaded(strCurrentMapFileName);
 
                 //if (this.MapLoaded != null) {
-                //    FrostbiteConnection.RaiseEvent(this.MapLoaded.GetInvocationList(), strCurrentMapFileName);
+                //    this.MapLoaded(strCurrentMapFileName);
                 //}
             }
         }
@@ -829,21 +839,23 @@ namespace PRoCon.Controls {
         }
 
         private void m_prcClient_ListMapZones(PRoConClient sender, List<MapZoneDrawing> zones) {
-            foreach (MapZoneDrawing zone in zones) {
-                this.uscBattlemap.AddMapZone(zone);
-            }
+            this.InvokeIfRequired(() => {
+                foreach (MapZoneDrawing zone in zones) {
+                    this.uscBattlemap.AddMapZone(zone);
+                }
+            });
         }
 
         void m_prcClient_MapZoneModified(PRoConClient sender, MapZoneDrawing zone) {
-            this.MapZones_MapZoneChanged(zone);
+            this.InvokeIfRequired(() => this.MapZones_MapZoneChanged(zone));
         }
 
         void m_prcClient_MapZoneCreated(PRoConClient sender, MapZoneDrawing zone) {
-            this.MapZones_MapZoneAdded(zone);
+            this.InvokeIfRequired(() => this.MapZones_MapZoneAdded(zone));
         }
 
         void m_prcClient_MapZoneDeleted(PRoConClient sender, MapZoneDrawing zone) {
-            this.MapZones_MapZoneRemoved(zone);
+            this.InvokeIfRequired(() => this.MapZones_MapZoneRemoved(zone));
         }
 
         #endregion

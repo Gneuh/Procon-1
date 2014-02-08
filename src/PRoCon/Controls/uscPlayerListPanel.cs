@@ -146,12 +146,14 @@ namespace PRoCon.Controls {
 
         // If we disconnect clear the player list so it's fresh on reconnection.
         private void m_prcClient_ConnectionClosed(PRoConClient sender) {
-            foreach (KeyValuePair<string, ListViewItem> kvpPlayer in this.m_dicPlayers) {
-                kvpPlayer.Value.Remove();
-            }
+            this.InvokeIfRequired(() => {
+                foreach (KeyValuePair<string, ListViewItem> kvpPlayer in this.m_dicPlayers) {
+                    kvpPlayer.Value.Remove();
+                }
 
-            this.m_dicPlayers.Clear();
-            this.m_dicPings.Clear();
+                this.m_dicPlayers.Clear();
+                this.m_dicPings.Clear();
+            });
         }
 
         //public void OnConnectionClosed() {
@@ -213,59 +215,60 @@ namespace PRoCon.Controls {
         }
 
         private void m_prcClient_GameTypeDiscovered(PRoConClient sender) {
+            this.InvokeIfRequired(() => {
+                this.m_prcClient.Game.ListPlayers += new FrostbiteClient.ListPlayersHandler(m_prcClient_ListPlayers);
+                if (this.m_prcClient.Game.GameType.Equals("BF3") == true) {
+                    this.m_prcClient.Game.PlayerPingedByAdmin += new FrostbiteClient.PlayerPingedByAdminHandler(Game_PlayerPingedByAdmin);
+                    this.m_prcClient.ProconAdminPinging += new PRoConClient.ProconAdminPlayerPinged(Game_PlayerPingedByAdmin);
+                }
+                this.m_prcClient.Game.PlayerJoin += new FrostbiteClient.PlayerEventHandler(m_prcClient_PlayerJoin);
+                this.m_prcClient.Game.PlayerLeft += new FrostbiteClient.PlayerLeaveHandler(m_prcClient_PlayerLeft);
+                this.m_prcClient.PunkbusterPlayerInfo += new PRoConClient.PunkbusterPlayerInfoHandler(m_prcClient_PunkbusterPlayerInfo);
+                this.m_prcClient.PlayerKilled += new PRoConClient.PlayerKilledHandler(m_prcClient_PlayerKilled);
 
-            this.m_prcClient.Game.ListPlayers += new FrostbiteClient.ListPlayersHandler(m_prcClient_ListPlayers);
-            if (this.m_prcClient.Game.GameType.Equals("BF3") == true) {
-                this.m_prcClient.Game.PlayerPingedByAdmin += new FrostbiteClient.PlayerPingedByAdminHandler(Game_PlayerPingedByAdmin);
-                this.m_prcClient.ProconAdminPinging += new PRoConClient.ProconAdminPlayerPinged(Game_PlayerPingedByAdmin);
-            }
-            this.m_prcClient.Game.PlayerJoin += new FrostbiteClient.PlayerEventHandler(m_prcClient_PlayerJoin);
-            this.m_prcClient.Game.PlayerLeft += new FrostbiteClient.PlayerLeaveHandler(m_prcClient_PlayerLeft);
-            this.m_prcClient.PunkbusterPlayerInfo += new PRoConClient.PunkbusterPlayerInfoHandler(m_prcClient_PunkbusterPlayerInfo);
-            this.m_prcClient.PlayerKilled += new PRoConClient.PlayerKilledHandler(m_prcClient_PlayerKilled);
+                this.m_prcClient.Game.PlayerChangedTeam += new FrostbiteClient.PlayerTeamChangeHandler(m_prcClient_PlayerChangedTeam);
+                this.m_prcClient.Game.PlayerChangedSquad += new FrostbiteClient.PlayerTeamChangeHandler(m_prcClient_PlayerChangedSquad);
 
-            this.m_prcClient.Game.PlayerChangedTeam += new FrostbiteClient.PlayerTeamChangeHandler(m_prcClient_PlayerChangedTeam);
-            this.m_prcClient.Game.PlayerChangedSquad += new FrostbiteClient.PlayerTeamChangeHandler(m_prcClient_PlayerChangedSquad);
+                this.m_prcClient.Game.ServerInfo += new FrostbiteClient.ServerInfoHandler(m_prcClient_Serverinfo_EndRound_Update);
 
-            this.m_prcClient.Game.ServerInfo += new FrostbiteClient.ServerInfoHandler(m_prcClient_Serverinfo_EndRound_Update);
+                this.m_prcClient.ProconPrivileges += new PRoConClient.ProconPrivilegesHandler(m_prcClient_ProconPrivileges);
 
-            this.m_prcClient.ProconPrivileges += new PRoConClient.ProconPrivilegesHandler(m_prcClient_ProconPrivileges);
+                this.m_prcClient.ConnectionClosed += new PRoConClient.EmptyParamterHandler(m_prcClient_ConnectionClosed);
 
-            this.m_prcClient.ConnectionClosed += new PRoConClient.EmptyParamterHandler(m_prcClient_ConnectionClosed);
+                this.m_prcClient.Game.LevelStarted += new FrostbiteClient.EmptyParamterHandler(m_prcClient_LevelStarted);
 
-            this.m_prcClient.Game.LevelStarted += new FrostbiteClient.EmptyParamterHandler(m_prcClient_LevelStarted);
+                this.kbpPunkbusterPunishPanel.SetConnection(this.m_prcClient);
+                this.kbpBfbcPunishPanel.SetConnection(this.m_prcClient);
 
-            this.kbpPunkbusterPunishPanel.SetConnection(this.m_prcClient);
-            this.kbpBfbcPunishPanel.SetConnection(this.m_prcClient);
+                this.m_prcClient.Reasons.ItemAdded += new NotificationList<string>.ItemModifiedHandler(Reasons_ItemAdded);
+                this.m_prcClient.Reasons.ItemRemoved += new NotificationList<string>.ItemModifiedHandler(Reasons_ItemRemoved);
 
-            this.m_prcClient.Reasons.ItemAdded += new NotificationList<string>.ItemModifiedHandler(Reasons_ItemAdded);
-            this.m_prcClient.Reasons.ItemRemoved += new NotificationList<string>.ItemModifiedHandler(Reasons_ItemRemoved);
+                this.m_prcClient.PlayerListSettings.SplitTypeChanged += new PlayerListSettings.IndexChangedHandler(PlayerListSettings_SplitTypeChanged);
+                this.m_prcClient.PlayerListSettings.TwoSplitterPercentageChanged += new PlayerListSettings.PercentageChangedHandler(PlayerListSettings_TwoSplitterPercentageChanged);
+                this.m_prcClient.PlayerListSettings.FourSplitterPercentageChanged += new PlayerListSettings.PercentageChangedHandler(PlayerListSettings_FourSplitterPercentageChanged);
 
-            this.m_prcClient.PlayerListSettings.SplitTypeChanged += new PlayerListSettings.IndexChangedHandler(PlayerListSettings_SplitTypeChanged);
-            this.m_prcClient.PlayerListSettings.TwoSplitterPercentageChanged += new PlayerListSettings.PercentageChangedHandler(PlayerListSettings_TwoSplitterPercentageChanged);
-            this.m_prcClient.PlayerListSettings.FourSplitterPercentageChanged += new PlayerListSettings.PercentageChangedHandler(PlayerListSettings_FourSplitterPercentageChanged);
+                this.m_prcClient.PlayerSpawned += new PRoConClient.PlayerSpawnedHandler(m_prcClient_PlayerSpawned);
 
-            this.m_prcClient.PlayerSpawned += new PRoConClient.PlayerSpawnedHandler(m_prcClient_PlayerSpawned);
+                foreach (string strReason in this.m_prcClient.Reasons) {
+                    this.Reasons_ItemAdded(0, strReason);
+                }
 
-            foreach (string strReason in this.m_prcClient.Reasons) {
-                this.Reasons_ItemAdded(0, strReason);
-            }
+                this.m_prcClient.PlayerListSettings.SplitType = this.m_prcClient.PlayerListSettings.SplitType;
 
-            this.m_prcClient.PlayerListSettings.SplitType = this.m_prcClient.PlayerListSettings.SplitType;
+                this.m_prcClient_ListPlayers(this.m_prcClient.Game, new List<CPlayerInfo>(this.m_prcClient.PlayerList), new CPlayerSubset(CPlayerSubset.PlayerSubsetType.All));
 
-            this.m_prcClient_ListPlayers(this.m_prcClient.Game, new List<CPlayerInfo>(this.m_prcClient.PlayerList), new CPlayerSubset(CPlayerSubset.PlayerSubsetType.All));
+                if (sender.Game.HasSquads == false) {
+                    this.lsvTeamOnePlayers.Columns.Remove(this.colSquad1);
+                    this.lsvTeamTwoPlayers.Columns.Remove(this.colSquad2);
+                    this.lsvTeamThreePlayers.Columns.Remove(this.colSquad3);
+                    this.lsvTeamFourPlayers.Columns.Remove(this.colSquad4);
 
-            if (sender.Game.HasSquads == false) {
-                this.lsvTeamOnePlayers.Columns.Remove(this.colSquad1);
-                this.lsvTeamTwoPlayers.Columns.Remove(this.colSquad2);
-                this.lsvTeamThreePlayers.Columns.Remove(this.colSquad3);
-                this.lsvTeamFourPlayers.Columns.Remove(this.colSquad4);
-                
-                //this.colSquad1.Text = this.colSquad2.Text = this.colSquad3.Text = this.colSquad4.Text = this.m_clocLanguage.GetLocalized("uscPlayerListPanel.lsvPlayers.colSquad", null);
+                    //this.colSquad1.Text = this.colSquad2.Text = this.colSquad3.Text = this.colSquad4.Text = this.m_clocLanguage.GetLocalized("uscPlayerListPanel.lsvPlayers.colSquad", null);
 
-            }
+                }
 
-            this.SetSplitterDistances();
+                this.SetSplitterDistances();
+            });
         }
 
         private void PlayerListSettings_SplitTypeChanged(int index) {
@@ -305,13 +308,15 @@ namespace PRoCon.Controls {
         }
 
         private void m_prcClient_ProconPrivileges(PRoConClient sender, CPrivileges spPrivs) {
-            this.m_spPrivileges = spPrivs;
+            this.InvokeIfRequired(() => {
+                this.m_spPrivileges = spPrivs;
 
-            this.kbpPunkbusterPunishPanel.Enabled = (!this.m_spPrivileges.CannotPunishPlayers && this.m_spPrivileges.CanIssueLimitedPunkbusterCommands);
-            this.kbpPunkbusterPunishPanel.SetPrivileges(this.m_spPrivileges);
+                this.kbpPunkbusterPunishPanel.Enabled = (!this.m_spPrivileges.CannotPunishPlayers && this.m_spPrivileges.CanIssueLimitedPunkbusterCommands);
+                this.kbpPunkbusterPunishPanel.SetPrivileges(this.m_spPrivileges);
 
-            this.kbpBfbcPunishPanel.Enabled = !this.m_spPrivileges.CannotPunishPlayers;
-            this.kbpBfbcPunishPanel.SetPrivileges(this.m_spPrivileges);
+                this.kbpBfbcPunishPanel.Enabled = !this.m_spPrivileges.CannotPunishPlayers;
+                this.kbpBfbcPunishPanel.SetPrivileges(this.m_spPrivileges);
+            });
         }
 
         public void SetLocalization(CLocalization clocLanguage) {
@@ -895,24 +900,28 @@ namespace PRoCon.Controls {
         }
 
         private void m_prcClient_PlayerLeft(FrostbiteClient sender, string playerName, CPlayerInfo cpiPlayer) {
-            if (this.m_dicPlayers.ContainsKey(playerName) == true) {
-                this.m_dicPlayers[playerName].Remove();
-                this.m_dicPlayers.Remove(playerName);
-            }
-            if (this.m_dicPings.ContainsKey(playerName) == true) {
-                this.m_dicPings.Remove(playerName);
-            }
-            this.UpdateTeamNames();
+            this.InvokeIfRequired(() => {
+                if (this.m_dicPlayers.ContainsKey(playerName) == true) {
+                    this.m_dicPlayers[playerName].Remove();
+                    this.m_dicPlayers.Remove(playerName);
+                }
+                if (this.m_dicPings.ContainsKey(playerName) == true) {
+                    this.m_dicPings.Remove(playerName);
+                }
+                this.UpdateTeamNames();
 
-            this.RefreshSelectedPlayer();
+                this.RefreshSelectedPlayer();
+            });
         }
 
         private void m_prcClient_PlayerJoin(FrostbiteClient sender, string playerName) {
-            if (this.m_dicPlayers.ContainsKey(playerName) == false) {
-                this.m_dicPlayers.Add(playerName, this.CreatePlayer(new CPlayerInfo(playerName, String.Empty, 0, 0)));
+            this.InvokeIfRequired(() => {
+                if (this.m_dicPlayers.ContainsKey(playerName) == false) {
+                    this.m_dicPlayers.Add(playerName, this.CreatePlayer(new CPlayerInfo(playerName, String.Empty, 0, 0)));
 
-                this.ArrangePlayers();
-            }
+                    this.ArrangePlayers();
+                }
+            });
         }
 
         /*
@@ -928,68 +937,71 @@ namespace PRoCon.Controls {
         */
 
         private void m_prcClient_PlayerSpawned(PRoConClient sender, string soldierName, Inventory spawnedInventory) {
+            this.InvokeIfRequired(() => {
+                this.m_blPropogatingIndexChange = true;
 
-            this.m_blPropogatingIndexChange = true;
+                if (this.m_dicPlayers.ContainsKey(soldierName) == true) {
+                    AdditionalPlayerInfo sapiAdditional;
 
-            if (this.m_dicPlayers.ContainsKey(soldierName) == true) {
-                AdditionalPlayerInfo sapiAdditional;
+                    if (this.m_dicPlayers[soldierName].Tag != null) {
+                        sapiAdditional = (AdditionalPlayerInfo) this.m_dicPlayers[soldierName].Tag;
 
-                if (this.m_dicPlayers[soldierName].Tag != null) {
-                    sapiAdditional = (AdditionalPlayerInfo)this.m_dicPlayers[soldierName].Tag;
+                        sapiAdditional.m_spawnedInventory = spawnedInventory;
 
-                    sapiAdditional.m_spawnedInventory = spawnedInventory;
-
-                    if (this.m_dicPlayers.ContainsKey(soldierName) == true) {
-                        this.m_dicPlayers[soldierName].SubItems["kit"].Text = this.m_clocLanguage.GetLocalized(String.Format("global.Kits.{0}", spawnedInventory.Kit.ToString()));
-                    }
-
-                    if (sapiAdditional.m_pbInfo != null) {
-                        if (this.m_frmMain.iglFlags.Images.ContainsKey(sapiAdditional.m_pbInfo.PlayerCountryCode + ".png") == true) {
-                            this.m_dicPlayers[sapiAdditional.m_pbInfo.SoldierName].ImageIndex = this.m_frmMain.iglFlags.Images.IndexOfKey(sapiAdditional.m_pbInfo.PlayerCountryCode + ".png");
+                        if (this.m_dicPlayers.ContainsKey(soldierName) == true) {
+                            this.m_dicPlayers[soldierName].SubItems["kit"].Text = this.m_clocLanguage.GetLocalized(String.Format("global.Kits.{0}", spawnedInventory.Kit.ToString()));
                         }
+
+                        if (sapiAdditional.m_pbInfo != null) {
+                            if (this.m_frmMain.iglFlags.Images.ContainsKey(sapiAdditional.m_pbInfo.PlayerCountryCode + ".png") == true) {
+                                this.m_dicPlayers[sapiAdditional.m_pbInfo.SoldierName].ImageIndex = this.m_frmMain.iglFlags.Images.IndexOfKey(sapiAdditional.m_pbInfo.PlayerCountryCode + ".png");
+                            }
+                        }
+
+                        this.m_dicPlayers[soldierName].Tag = sapiAdditional;
                     }
 
-                    this.m_dicPlayers[soldierName].Tag = sapiAdditional;
+                    this.RefreshSelectedPlayer();
                 }
 
-                this.RefreshSelectedPlayer();
-            }
+                //this.ArrangePlayers();
 
-            //this.ArrangePlayers();
-
-            this.m_blPropogatingIndexChange = false;
+                this.m_blPropogatingIndexChange = false;
+            });
         }
 
         private void m_prcClient_PunkbusterPlayerInfo(PRoConClient sender, CPunkbusterInfo pbInfo) {
-            this.m_blPropogatingIndexChange = true;
+            this.InvokeIfRequired(() => {
+                this.m_blPropogatingIndexChange = true;
 
-            if (this.m_dicPlayers.ContainsKey(pbInfo.SoldierName) == true) {
+                if (this.m_dicPlayers.ContainsKey(pbInfo.SoldierName) == true) {
 
-                AdditionalPlayerInfo sapiAdditional;
+                    AdditionalPlayerInfo sapiAdditional;
 
-                if (this.m_dicPlayers[pbInfo.SoldierName].Tag == null) {
-                    sapiAdditional = new AdditionalPlayerInfo();
-                    sapiAdditional.m_strResolvedHostName = String.Empty;
+                    if (this.m_dicPlayers[pbInfo.SoldierName].Tag == null) {
+                        sapiAdditional = new AdditionalPlayerInfo();
+                        sapiAdditional.m_strResolvedHostName = String.Empty;
+                    }
+                    else {
+                        sapiAdditional = (AdditionalPlayerInfo) this.m_dicPlayers[pbInfo.SoldierName].Tag;
+                    }
+
+                    sapiAdditional.m_pbInfo = pbInfo;
+
+                    this.m_dicPlayers[pbInfo.SoldierName].Tag = sapiAdditional;
+
+                    this.m_dicPlayers[pbInfo.SoldierName].Text = pbInfo.SlotID;
+
+                    //string strCountryCode = this.m_frmMain.GetCountryCode(pbInfo.Ip);
+                    if (this.m_frmMain.iglFlags.Images.ContainsKey(pbInfo.PlayerCountryCode + ".png") == true && this.m_dicPlayers[sapiAdditional.m_pbInfo.SoldierName].ImageIndex < 0) {
+                        this.m_dicPlayers[pbInfo.SoldierName].ImageIndex = this.m_frmMain.iglFlags.Images.IndexOfKey(pbInfo.PlayerCountryCode + ".png");
+                    }
+
+                    this.RefreshSelectedPlayer();
                 }
-                else {
-                    sapiAdditional = (AdditionalPlayerInfo)this.m_dicPlayers[pbInfo.SoldierName].Tag;
-                }
 
-                sapiAdditional.m_pbInfo = pbInfo;
-
-                this.m_dicPlayers[pbInfo.SoldierName].Tag = sapiAdditional;
-
-                this.m_dicPlayers[pbInfo.SoldierName].Text = pbInfo.SlotID;
-                
-                //string strCountryCode = this.m_frmMain.GetCountryCode(pbInfo.Ip);
-                if (this.m_frmMain.iglFlags.Images.ContainsKey(pbInfo.PlayerCountryCode + ".png") == true && this.m_dicPlayers[sapiAdditional.m_pbInfo.SoldierName].ImageIndex < 0) {
-                    this.m_dicPlayers[pbInfo.SoldierName].ImageIndex = this.m_frmMain.iglFlags.Images.IndexOfKey(pbInfo.PlayerCountryCode + ".png");
-                }
-
-                this.RefreshSelectedPlayer();
-            }
-
-            this.m_blPropogatingIndexChange = false;
+                this.m_blPropogatingIndexChange = false;
+            });
         }
 
         /*
@@ -1000,131 +1012,158 @@ namespace PRoCon.Controls {
         */
 
         private void m_prcClient_ListPlayers(FrostbiteClient sender, List<CPlayerInfo> lstPlayers, CPlayerSubset cpsSubset) {
-            if (cpsSubset.Subset == CPlayerSubset.PlayerSubsetType.All) {
-                foreach (CPlayerInfo cpiPlayer in lstPlayers) {
-                    if (this.m_dicPlayers.ContainsKey(cpiPlayer.SoldierName) == true) {
+            this.InvokeIfRequired(() => {
+                if (cpsSubset.Subset == CPlayerSubset.PlayerSubsetType.All) {
+                    foreach (CPlayerInfo cpiPlayer in lstPlayers) {
+                        if (this.m_dicPlayers.ContainsKey(cpiPlayer.SoldierName) == true) {
 
-                        ListViewItem playerListItem = this.m_dicPlayers[cpiPlayer.SoldierName];
+                            ListViewItem playerListItem = this.m_dicPlayers[cpiPlayer.SoldierName];
 
-                        if (this.m_prcClient != null && this.m_prcClient.Game != null && this.m_prcClient.Game.HasSquads == true) {
-                            if (cpiPlayer.SquadID != uscPlayerListPanel.INT_NEUTRAL_SQUAD) {
-                                if (String.Compare(playerListItem.SubItems["squad"].Text, cpiPlayer.ClanTag) == 0) { playerListItem.SubItems["squad"].Text = this.m_clocLanguage.GetLocalized("global.Squad" + cpiPlayer.SquadID.ToString(), null); }
+                            if (this.m_prcClient != null && this.m_prcClient.Game != null && this.m_prcClient.Game.HasSquads == true) {
+                                if (cpiPlayer.SquadID != uscPlayerListPanel.INT_NEUTRAL_SQUAD) {
+                                    if (String.Compare(playerListItem.SubItems["squad"].Text, cpiPlayer.ClanTag) == 0) {
+                                        playerListItem.SubItems["squad"].Text = this.m_clocLanguage.GetLocalized("global.Squad" + cpiPlayer.SquadID.ToString(), null);
+                                    }
+                                }
+                                else {
+                                    if (String.IsNullOrEmpty(playerListItem.SubItems["squad"].Text) != false) {
+                                        playerListItem.SubItems["squad"].Text = String.Empty;
+                                    }
+                                }
+                            }
+
+                            if (String.Compare(playerListItem.SubItems["tags"].Text, cpiPlayer.ClanTag) != 0) {
+                                playerListItem.SubItems["tags"].Text = cpiPlayer.ClanTag;
+                            }
+
+                            if (String.Compare(playerListItem.SubItems["score"].Text, cpiPlayer.Score.ToString()) != 0) {
+                                playerListItem.SubItems["score"].Text = cpiPlayer.Score.ToString();
+                            }
+                            playerListItem.SubItems["kills"].Tag = (Double) cpiPlayer.Kills;
+                            if (String.Compare(playerListItem.SubItems["kills"].Text, cpiPlayer.Kills.ToString()) != 0) {
+                                playerListItem.SubItems["kills"].Text = cpiPlayer.Kills.ToString();
+                            }
+
+                            playerListItem.SubItems["deaths"].Tag = (Double) cpiPlayer.Deaths;
+                            if (String.Compare(playerListItem.SubItems["deaths"].Text, cpiPlayer.Kills.ToString()) != 0) {
+                                playerListItem.SubItems["deaths"].Text = cpiPlayer.Deaths.ToString();
+                            }
+
+                            string kdr = cpiPlayer.Deaths > 0 ? String.Format("{0:0.00}", (Double) cpiPlayer.Kills / (Double) cpiPlayer.Deaths) : String.Format("{0:0.00}", (Double) cpiPlayer.Kills);
+
+                            if (String.Compare(playerListItem.SubItems["kdr"].Text, kdr) == 0) {
+                                playerListItem.SubItems["kdr"].Text = kdr;
+                            }
+
+                            //if (String.Compare(playerListItem.SubItems["ping"].Text, cpiPlayer.Ping.ToString()) != 0) { playerListItem.SubItems["ping"].Text = cpiPlayer.Ping.ToString(); }
+                            if ((this.m_prcClient.Game.GameType.Equals("BF3") == true) && (this.m_dicPings.ContainsKey(cpiPlayer.SoldierName) == true)) {
+                                if (String.Compare(playerListItem.SubItems["ping"].Text, this.m_dicPings[cpiPlayer.SoldierName].ToString()) != 0) {
+                                    playerListItem.SubItems["ping"].Text = this.m_dicPings[cpiPlayer.SoldierName].ToString();
+                                    cpiPlayer.Ping = this.m_dicPings[cpiPlayer.SoldierName];
+                                }
                             }
                             else {
-                                if (String.IsNullOrEmpty(playerListItem.SubItems["squad"].Text) != false) { playerListItem.SubItems["squad"].Text = String.Empty; }
+                                if (String.Compare(playerListItem.SubItems["ping"].Text, cpiPlayer.Ping.ToString()) != 0) {
+                                    playerListItem.SubItems["ping"].Text = cpiPlayer.Ping.ToString();
+                                }
                             }
-                        }
 
-                        if (String.Compare(playerListItem.SubItems["tags"].Text, cpiPlayer.ClanTag) != 0) { playerListItem.SubItems["tags"].Text = cpiPlayer.ClanTag; }
-
-                        if (String.Compare(playerListItem.SubItems["score"].Text, cpiPlayer.Score.ToString()) != 0) { playerListItem.SubItems["score"].Text = cpiPlayer.Score.ToString(); }
-                        playerListItem.SubItems["kills"].Tag = (Double)cpiPlayer.Kills;
-                        if (String.Compare(playerListItem.SubItems["kills"].Text, cpiPlayer.Kills.ToString()) != 0) { playerListItem.SubItems["kills"].Text = cpiPlayer.Kills.ToString(); }
-
-                        playerListItem.SubItems["deaths"].Tag = (Double)cpiPlayer.Deaths;
-                        if (String.Compare(playerListItem.SubItems["deaths"].Text, cpiPlayer.Kills.ToString()) != 0) { playerListItem.SubItems["deaths"].Text = cpiPlayer.Deaths.ToString(); }
-
-                        string kdr = cpiPlayer.Deaths > 0 ? String.Format("{0:0.00}", (Double)cpiPlayer.Kills / (Double)cpiPlayer.Deaths) : String.Format("{0:0.00}", (Double)cpiPlayer.Kills);
-
-                        if (String.Compare(playerListItem.SubItems["kdr"].Text, kdr) == 0) { playerListItem.SubItems["kdr"].Text = kdr; }
-
-                        //if (String.Compare(playerListItem.SubItems["ping"].Text, cpiPlayer.Ping.ToString()) != 0) { playerListItem.SubItems["ping"].Text = cpiPlayer.Ping.ToString(); }
-                        if ((this.m_prcClient.Game.GameType.Equals("BF3") == true) && (this.m_dicPings.ContainsKey(cpiPlayer.SoldierName) == true)) {
-                            if (String.Compare(playerListItem.SubItems["ping"].Text, this.m_dicPings[cpiPlayer.SoldierName].ToString()) != 0) { 
-                                playerListItem.SubItems["ping"].Text = this.m_dicPings[cpiPlayer.SoldierName].ToString();
-                                cpiPlayer.Ping = this.m_dicPings[cpiPlayer.SoldierName];
+                            if (String.Compare(playerListItem.SubItems["rank"].Text, cpiPlayer.Rank.ToString()) != 0) {
+                                playerListItem.SubItems["rank"].Text = cpiPlayer.Rank.ToString();
                             }
-                        } else {
-                            if (String.Compare(playerListItem.SubItems["ping"].Text, cpiPlayer.Ping.ToString()) != 0) { playerListItem.SubItems["ping"].Text = cpiPlayer.Ping.ToString(); }
-                        }
-                        
-                        if (String.Compare(playerListItem.SubItems["rank"].Text, cpiPlayer.Rank.ToString()) != 0) { playerListItem.SubItems["rank"].Text = cpiPlayer.Rank.ToString(); }
-                        if (String.Compare(playerListItem.SubItems["type"].Text, cpiPlayer.Type.ToString()) != 0) { 
-                            if (cpiPlayer.Type == 0) {
-                                //playerListItem.SubItems["type"].Text = this.m_clocLanguage.GetDefaultLocalized("Player", "uscPlayerListPanel.lsvPlayers.Type.Player", null);
-                                playerListItem.SubItems["type"].Text = String.Empty;
+                            if (String.Compare(playerListItem.SubItems["type"].Text, cpiPlayer.Type.ToString()) != 0) {
+                                if (cpiPlayer.Type == 0) {
+                                    //playerListItem.SubItems["type"].Text = this.m_clocLanguage.GetDefaultLocalized("Player", "uscPlayerListPanel.lsvPlayers.Type.Player", null);
+                                    playerListItem.SubItems["type"].Text = String.Empty;
+                                }
+                                else if (cpiPlayer.Type == 1) {
+                                    playerListItem.SubItems["type"].Text = this.m_clocLanguage.GetDefaultLocalized("Spectator", "uscPlayerListPanel.lsvPlayers.Type.Spectator", null);
+                                }
+                                else if (cpiPlayer.Type == 2) {
+                                    playerListItem.SubItems["type"].Text = this.m_clocLanguage.GetDefaultLocalized("Commander (PC)", "uscPlayerListPanel.lsvPlayers.Type.CommanderPC", null);
+                                }
+                                else if (cpiPlayer.Type == 3) {
+                                    playerListItem.SubItems["type"].Text = this.m_clocLanguage.GetDefaultLocalized("Commander (Tablet)", "uscPlayerListPanel.lsvPlayers.Type.CommanderTablet", null);
+                                }
                             }
-                            else if (cpiPlayer.Type == 1) {
-                                playerListItem.SubItems["type"].Text = this.m_clocLanguage.GetDefaultLocalized("Spectator", "uscPlayerListPanel.lsvPlayers.Type.Spectator", null);
-                            }
-                            else if (cpiPlayer.Type == 2) {
-                                playerListItem.SubItems["type"].Text = this.m_clocLanguage.GetDefaultLocalized("Commander (PC)", "uscPlayerListPanel.lsvPlayers.Type.CommanderPC", null);
-                            }
-                            else if (cpiPlayer.Type == 3) {
-                                playerListItem.SubItems["type"].Text = this.m_clocLanguage.GetDefaultLocalized("Commander (Tablet)", "uscPlayerListPanel.lsvPlayers.Type.CommanderTablet", null);
-                            }
-                        }
 
-                        AdditionalPlayerInfo sapiAdditional;
+                            AdditionalPlayerInfo sapiAdditional;
 
-                        if (playerListItem.Tag == null) {
-                            sapiAdditional = new AdditionalPlayerInfo();
-                            sapiAdditional.m_strResolvedHostName = String.Empty;
+                            if (playerListItem.Tag == null) {
+                                sapiAdditional = new AdditionalPlayerInfo();
+                                sapiAdditional.m_strResolvedHostName = String.Empty;
+                            }
+                            else {
+                                sapiAdditional = (AdditionalPlayerInfo) playerListItem.Tag;
+                            }
+
+                            sapiAdditional.m_cpiPlayer = cpiPlayer;
+                            playerListItem.Tag = sapiAdditional;
                         }
                         else {
-                            sapiAdditional = (AdditionalPlayerInfo)playerListItem.Tag;
-                        }
-
-                        sapiAdditional.m_cpiPlayer = cpiPlayer;
-                        playerListItem.Tag = sapiAdditional;
-                    }
-                    else {
-                        this.m_dicPlayers.Add(cpiPlayer.SoldierName, this.CreatePlayer(cpiPlayer));
-                    }
-                }
-
-                List<string> lstKeys = new List<string>(this.m_dicPlayers.Keys);
-
-                for (int i = 0; i < lstKeys.Count; i++) {
-                    bool blFoundPlayer = false;
-
-                    foreach (CPlayerInfo cpiPlayer in lstPlayers) {
-                        if (String.Compare(cpiPlayer.SoldierName, this.m_dicPlayers[lstKeys[i]].Name) == 0) {
-                            blFoundPlayer = true;
-                            break;
+                            this.m_dicPlayers.Add(cpiPlayer.SoldierName, this.CreatePlayer(cpiPlayer));
                         }
                     }
 
-                    if (blFoundPlayer == false) {
-                        this.m_dicPlayers[lstKeys[i]].Remove();
-                        this.m_dicPlayers.Remove(lstKeys[i]);
+                    List<string> lstKeys = new List<string>(this.m_dicPlayers.Keys);
+
+                    for (int i = 0; i < lstKeys.Count; i++) {
+                        bool blFoundPlayer = false;
+
+                        foreach (CPlayerInfo cpiPlayer in lstPlayers) {
+                            if (String.Compare(cpiPlayer.SoldierName, this.m_dicPlayers[lstKeys[i]].Name) == 0) {
+                                blFoundPlayer = true;
+                                break;
+                            }
+                        }
+
+                        if (blFoundPlayer == false) {
+                            this.m_dicPlayers[lstKeys[i]].Remove();
+                            this.m_dicPlayers.Remove(lstKeys[i]);
+                        }
                     }
+
+                    this.m_dicPlayers.Add("procon.playerlist.totals1", this.CreateTotalsPlayer(new CPlayerInfo("Totals", "procon.playerlist.totals1", 1, 0), 1));
+                    this.m_dicPlayers.Add("procon.playerlist.totals2", this.CreateTotalsPlayer(new CPlayerInfo("Totals", "procon.playerlist.totals2", 2, 0), 2));
+                    this.m_dicPlayers.Add("procon.playerlist.totals3", this.CreateTotalsPlayer(new CPlayerInfo("Totals", "procon.playerlist.totals3", 3, 0), 3));
+                    this.m_dicPlayers.Add("procon.playerlist.totals4", this.CreateTotalsPlayer(new CPlayerInfo("Totals", "procon.playerlist.totals4", 4, 0), 4));
+
+                    this.m_dicPlayers.Add("procon.playerlist.averages1", this.CreateTotalsPlayer(new CPlayerInfo("Averages", "procon.playerlist.averages1", 1, 0), 1));
+                    this.m_dicPlayers.Add("procon.playerlist.averages2", this.CreateTotalsPlayer(new CPlayerInfo("Averages", "procon.playerlist.averages2", 2, 0), 2));
+                    this.m_dicPlayers.Add("procon.playerlist.averages3", this.CreateTotalsPlayer(new CPlayerInfo("Averages", "procon.playerlist.averages3", 3, 0), 3));
+                    this.m_dicPlayers.Add("procon.playerlist.averages4", this.CreateTotalsPlayer(new CPlayerInfo("Averages", "procon.playerlist.averages4", 4, 0), 4));
+
+                    this.ArrangePlayers();
                 }
-
-                this.m_dicPlayers.Add("procon.playerlist.totals1", this.CreateTotalsPlayer(new CPlayerInfo("Totals", "procon.playerlist.totals1", 1, 0), 1));
-                this.m_dicPlayers.Add("procon.playerlist.totals2", this.CreateTotalsPlayer(new CPlayerInfo("Totals", "procon.playerlist.totals2", 2, 0), 2));
-                this.m_dicPlayers.Add("procon.playerlist.totals3", this.CreateTotalsPlayer(new CPlayerInfo("Totals", "procon.playerlist.totals3", 3, 0), 3));
-                this.m_dicPlayers.Add("procon.playerlist.totals4", this.CreateTotalsPlayer(new CPlayerInfo("Totals", "procon.playerlist.totals4", 4, 0), 4));
-
-                this.m_dicPlayers.Add("procon.playerlist.averages1", this.CreateTotalsPlayer(new CPlayerInfo("Averages", "procon.playerlist.averages1", 1, 0), 1));
-                this.m_dicPlayers.Add("procon.playerlist.averages2", this.CreateTotalsPlayer(new CPlayerInfo("Averages", "procon.playerlist.averages2", 2, 0), 2));
-                this.m_dicPlayers.Add("procon.playerlist.averages3", this.CreateTotalsPlayer(new CPlayerInfo("Averages", "procon.playerlist.averages3", 3, 0), 3));
-                this.m_dicPlayers.Add("procon.playerlist.averages4", this.CreateTotalsPlayer(new CPlayerInfo("Averages", "procon.playerlist.averages4", 4, 0), 4));
-
-                this.ArrangePlayers();
-            }
+            });
         }
 
         private void Game_PlayerPingedByAdmin(FrostbiteClient sender, string soldierName, int ping) {
-            if (this.m_dicPlayers.ContainsKey(soldierName) == true) {
+            this.InvokeIfRequired(() => {
+                if (this.m_dicPlayers.ContainsKey(soldierName) == true) {
 
-                if (this.m_dicPings.ContainsKey(soldierName) == true) {
-                    this.m_dicPings[soldierName] = ping;
-                } else {
-                    this.m_dicPings.Add(soldierName, ping);
+                    if (this.m_dicPings.ContainsKey(soldierName) == true) {
+                        this.m_dicPings[soldierName] = ping;
+                    }
+                    else {
+                        this.m_dicPings.Add(soldierName, ping);
+                    }
                 }
-            }
+            });
         }
 
         private void Game_PlayerPingedByAdmin(PRoConClient sender, string soldierName, int ping) {
-            if (this.m_dicPlayers.ContainsKey(soldierName) == true) {
+            this.InvokeIfRequired(() => {
+                if (this.m_dicPlayers.ContainsKey(soldierName) == true) {
 
-                if (this.m_dicPings.ContainsKey(soldierName) == true) {
-                    this.m_dicPings[soldierName] = ping;
-                } else {
-                    this.m_dicPings.Add(soldierName, ping);
+                    if (this.m_dicPings.ContainsKey(soldierName) == true) {
+                        this.m_dicPings[soldierName] = ping;
+                    }
+                    else {
+                        this.m_dicPings.Add(soldierName, ping);
+                    }
                 }
-            }
+            });
         }
 
         /*
@@ -1135,23 +1174,25 @@ namespace PRoCon.Controls {
         */
 
         private void m_prcClient_LevelStarted(FrostbiteClient sender) {
-            foreach (KeyValuePair<string, ListViewItem> kvpPlayer in this.m_dicPlayers) {
-                kvpPlayer.Value.SubItems["score"].Text = String.Empty;
-                kvpPlayer.Value.SubItems["kills"].Tag = new Double();
-                kvpPlayer.Value.SubItems["kills"].Text = String.Empty;
-                kvpPlayer.Value.SubItems["deaths"].Tag = new Double();
-                kvpPlayer.Value.SubItems["deaths"].Text = String.Empty;
-                kvpPlayer.Value.SubItems["kdr"].Text = String.Empty;
-                kvpPlayer.Value.SubItems["kit"].Text = String.Empty;
+            this.InvokeIfRequired(() => {
+                foreach (KeyValuePair<string, ListViewItem> kvpPlayer in this.m_dicPlayers) {
+                    kvpPlayer.Value.SubItems["score"].Text = String.Empty;
+                    kvpPlayer.Value.SubItems["kills"].Tag = new Double();
+                    kvpPlayer.Value.SubItems["kills"].Text = String.Empty;
+                    kvpPlayer.Value.SubItems["deaths"].Tag = new Double();
+                    kvpPlayer.Value.SubItems["deaths"].Text = String.Empty;
+                    kvpPlayer.Value.SubItems["kdr"].Text = String.Empty;
+                    kvpPlayer.Value.SubItems["kit"].Text = String.Empty;
 
-                if (kvpPlayer.Value.ImageIndex >= 0) {
-                    kvpPlayer.Value.ImageIndex = this.m_frmMain.iglFlags.Images.IndexOfKey("flag_death.png");
-                }
+                    if (kvpPlayer.Value.ImageIndex >= 0) {
+                        kvpPlayer.Value.ImageIndex = this.m_frmMain.iglFlags.Images.IndexOfKey("flag_death.png");
+                    }
 
-                if (kvpPlayer.Value.Tag != null) {
-                    ((AdditionalPlayerInfo)kvpPlayer.Value.Tag).m_spawnedInventory = null;
+                    if (kvpPlayer.Value.Tag != null) {
+                        ((AdditionalPlayerInfo) kvpPlayer.Value.Tag).m_spawnedInventory = null;
+                    }
                 }
-            }
+            });
         }
 
         private void chkPlayerListShowTeams_CheckedChanged(object sender, EventArgs e) {
@@ -1442,31 +1483,34 @@ namespace PRoCon.Controls {
         }
 
         private void m_prcClient_PlayerChangedTeam(FrostbiteClient sender, string strSoldierName, int iTeamID, int iSquadID) {
-            this.m_blPropogatingIndexChange = true;
+            this.InvokeIfRequired(() => {
+                this.m_blPropogatingIndexChange = true;
 
-            lock (this.m_objPlayerDictionaryLocker) {
+                lock (this.m_objPlayerDictionaryLocker) {
 
-                if (this.m_dicPlayers.ContainsKey(strSoldierName) == true) {
-                    this.SetPlayerTeamID(this.m_dicPlayers[strSoldierName], iTeamID);
+                    if (this.m_dicPlayers.ContainsKey(strSoldierName) == true) {
+                        this.SetPlayerTeamID(this.m_dicPlayers[strSoldierName], iTeamID);
 
-                    this.ArrangePlayers();
-                    // Save the SquadChange event for onSquadChange
-                    //this.SetPlayerSquadID(this.m_dicPlayers[strSoldierName], iSquadID);
+                        this.ArrangePlayers();
+                        // Save the SquadChange event for onSquadChange
+                        //this.SetPlayerSquadID(this.m_dicPlayers[strSoldierName], iSquadID);
+                    }
+
                 }
 
-            }
-
-            this.m_blPropogatingIndexChange = false;
+                this.m_blPropogatingIndexChange = false;
+            });
         }
 
         private void m_prcClient_PlayerChangedSquad(FrostbiteClient sender, string strSoldierName, int iTeamID, int iSquadID) {
-
-            lock (this.m_objPlayerDictionaryLocker) {
-                if (this.m_dicPlayers.ContainsKey(strSoldierName) == true) {
-                    this.SetPlayerTeamID(this.m_dicPlayers[strSoldierName], iTeamID);
-                    this.SetPlayerSquadID(this.m_dicPlayers[strSoldierName], iSquadID);
+            this.InvokeIfRequired(() => {
+                lock (this.m_objPlayerDictionaryLocker) {
+                    if (this.m_dicPlayers.ContainsKey(strSoldierName) == true) {
+                        this.SetPlayerTeamID(this.m_dicPlayers[strSoldierName], iTeamID);
+                        this.SetPlayerSquadID(this.m_dicPlayers[strSoldierName], iSquadID);
+                    }
                 }
-            }
+            });
         }
 
         //public void OnPlayerTeamChange(string strSoldierName, int iTeamID, int iSquadID) {
@@ -1567,57 +1611,58 @@ namespace PRoCon.Controls {
         }
 
         private void m_prcClient_PlayerKilled(PRoConClient sender, Kill kKillerVictimDetails) {
+            this.InvokeIfRequired(() => {
+                lock (this.m_objPlayerDictionaryLocker) {
 
-            lock (this.m_objPlayerDictionaryLocker) {
+                    if (this.m_dicPlayers.ContainsKey(kKillerVictimDetails.Killer.SoldierName) == true && String.Compare(kKillerVictimDetails.Killer.SoldierName, kKillerVictimDetails.Victim.SoldierName, true) != 0) {
 
-                if (this.m_dicPlayers.ContainsKey(kKillerVictimDetails.Killer.SoldierName) == true && String.Compare(kKillerVictimDetails.Killer.SoldierName, kKillerVictimDetails.Victim.SoldierName, true) != 0) {
+                        if (this.m_dicPlayers[kKillerVictimDetails.Killer.SoldierName].Tag != null && ((AdditionalPlayerInfo) this.m_dicPlayers[kKillerVictimDetails.Killer.SoldierName].Tag).m_cpiPlayer != null) {
+                            ((AdditionalPlayerInfo) this.m_dicPlayers[kKillerVictimDetails.Killer.SoldierName].Tag).m_cpiPlayer.Kills++;
+                        }
 
-                    if (this.m_dicPlayers[kKillerVictimDetails.Killer.SoldierName].Tag != null && ((AdditionalPlayerInfo)this.m_dicPlayers[kKillerVictimDetails.Killer.SoldierName].Tag).m_cpiPlayer != null) {
-                        ((AdditionalPlayerInfo)this.m_dicPlayers[kKillerVictimDetails.Killer.SoldierName].Tag).m_cpiPlayer.Kills++;
+                        this.m_dicPlayers[kKillerVictimDetails.Killer.SoldierName].SubItems["kills"].Tag = ((Double) this.m_dicPlayers[kKillerVictimDetails.Killer.SoldierName].SubItems["kills"].Tag) + 1;
+                        this.m_dicPlayers[kKillerVictimDetails.Killer.SoldierName].SubItems["kills"].Text = ((Double) this.m_dicPlayers[kKillerVictimDetails.Killer.SoldierName].SubItems["kills"].Tag).ToString();
+
+                        this.m_dicPlayers[kKillerVictimDetails.Killer.SoldierName].SubItems["kdr"].Tag = kKillerVictimDetails;
+
+                        if (this.m_dicPlayers[kKillerVictimDetails.Killer.SoldierName].SubItems["deaths"].Tag != null && (Double) this.m_dicPlayers[kKillerVictimDetails.Killer.SoldierName].SubItems["deaths"].Tag > 0) {
+                            this.m_dicPlayers[kKillerVictimDetails.Killer.SoldierName].SubItems["kdr"].Text = String.Format("{0:0.00}", ((Double) this.m_dicPlayers[kKillerVictimDetails.Killer.SoldierName].SubItems["kills"].Tag / (Double) this.m_dicPlayers[kKillerVictimDetails.Killer.SoldierName].SubItems["deaths"].Tag));
+                        }
+                        else {
+                            this.m_dicPlayers[kKillerVictimDetails.Killer.SoldierName].SubItems["kdr"].Text = String.Format("{0:0.00}", (Double) this.m_dicPlayers[kKillerVictimDetails.Killer.SoldierName].SubItems["kills"].Tag);
+                        }
+
+                        this.AddKillToTeamTotal(((AdditionalPlayerInfo) this.m_dicPlayers[kKillerVictimDetails.Killer.SoldierName].Tag).m_cpiPlayer.TeamID);
                     }
 
-                    this.m_dicPlayers[kKillerVictimDetails.Killer.SoldierName].SubItems["kills"].Tag = ((Double)this.m_dicPlayers[kKillerVictimDetails.Killer.SoldierName].SubItems["kills"].Tag) + 1;
-                    this.m_dicPlayers[kKillerVictimDetails.Killer.SoldierName].SubItems["kills"].Text = ((Double)this.m_dicPlayers[kKillerVictimDetails.Killer.SoldierName].SubItems["kills"].Tag).ToString();
+                    if (this.m_dicPlayers.ContainsKey(kKillerVictimDetails.Victim.SoldierName) == true || String.Compare(kKillerVictimDetails.Killer.SoldierName, kKillerVictimDetails.Victim.SoldierName, true) == 0) {
+                        if (this.m_dicPlayers[kKillerVictimDetails.Victim.SoldierName].Tag != null && ((AdditionalPlayerInfo) this.m_dicPlayers[kKillerVictimDetails.Victim.SoldierName].Tag).m_cpiPlayer != null) {
+                            ((AdditionalPlayerInfo) this.m_dicPlayers[kKillerVictimDetails.Victim.SoldierName].Tag).m_cpiPlayer.Deaths++;
+                        }
 
-                    this.m_dicPlayers[kKillerVictimDetails.Killer.SoldierName].SubItems["kdr"].Tag = kKillerVictimDetails;
+                        this.m_dicPlayers[kKillerVictimDetails.Victim.SoldierName].SubItems["deaths"].Tag = (Double) this.m_dicPlayers[kKillerVictimDetails.Victim.SoldierName].SubItems["deaths"].Tag + 1;
+                        this.m_dicPlayers[kKillerVictimDetails.Victim.SoldierName].SubItems["deaths"].Text = ((Double) this.m_dicPlayers[kKillerVictimDetails.Victim.SoldierName].SubItems["deaths"].Tag).ToString();
 
-                    if (this.m_dicPlayers[kKillerVictimDetails.Killer.SoldierName].SubItems["deaths"].Tag != null && (Double)this.m_dicPlayers[kKillerVictimDetails.Killer.SoldierName].SubItems["deaths"].Tag > 0) {
-                        this.m_dicPlayers[kKillerVictimDetails.Killer.SoldierName].SubItems["kdr"].Text = String.Format("{0:0.00}", ((Double)this.m_dicPlayers[kKillerVictimDetails.Killer.SoldierName].SubItems["kills"].Tag / (Double)this.m_dicPlayers[kKillerVictimDetails.Killer.SoldierName].SubItems["deaths"].Tag));
+                        this.m_dicPlayers[kKillerVictimDetails.Victim.SoldierName].SubItems["kdr"].Tag = kKillerVictimDetails;
+
+                        if (this.m_dicPlayers[kKillerVictimDetails.Victim.SoldierName].SubItems["deaths"].Tag != null && (Double) this.m_dicPlayers[kKillerVictimDetails.Victim.SoldierName].SubItems["deaths"].Tag > 0) {
+                            this.m_dicPlayers[kKillerVictimDetails.Victim.SoldierName].SubItems["kdr"].Text = String.Format("{0:0.00}", ((Double) this.m_dicPlayers[kKillerVictimDetails.Victim.SoldierName].SubItems["kills"].Tag / (Double) this.m_dicPlayers[kKillerVictimDetails.Victim.SoldierName].SubItems["deaths"].Tag));
+                        }
+                        else {
+                            this.m_dicPlayers[kKillerVictimDetails.Victim.SoldierName].SubItems["kdr"].Text = String.Format("{0:0.00}", (Double) this.m_dicPlayers[kKillerVictimDetails.Victim.SoldierName].SubItems["kills"].Tag);
+                        }
+
+                        this.m_dicPlayers[kKillerVictimDetails.Victim.SoldierName].ImageIndex = this.m_frmMain.iglFlags.Images.IndexOfKey("flag_death.png");
+
+                        this.AddDeathToTeamTotal(((AdditionalPlayerInfo) this.m_dicPlayers[kKillerVictimDetails.Victim.SoldierName].Tag).m_cpiPlayer.TeamID);
                     }
-                    else {
-                        this.m_dicPlayers[kKillerVictimDetails.Killer.SoldierName].SubItems["kdr"].Text = String.Format("{0:0.00}", (Double)this.m_dicPlayers[kKillerVictimDetails.Killer.SoldierName].SubItems["kills"].Tag);
-                    }
 
-                    this.AddKillToTeamTotal(((AdditionalPlayerInfo)this.m_dicPlayers[kKillerVictimDetails.Killer.SoldierName].Tag).m_cpiPlayer.TeamID);
+                    this.tmrKillDeathHighlight.Enabled = true;
                 }
 
-                if (this.m_dicPlayers.ContainsKey(kKillerVictimDetails.Victim.SoldierName) == true || String.Compare(kKillerVictimDetails.Killer.SoldierName, kKillerVictimDetails.Victim.SoldierName, true) == 0) {
-                    if (this.m_dicPlayers[kKillerVictimDetails.Victim.SoldierName].Tag != null && ((AdditionalPlayerInfo)this.m_dicPlayers[kKillerVictimDetails.Victim.SoldierName].Tag).m_cpiPlayer != null) {
-                        ((AdditionalPlayerInfo)this.m_dicPlayers[kKillerVictimDetails.Victim.SoldierName].Tag).m_cpiPlayer.Deaths++;
-                    }
-
-                    this.m_dicPlayers[kKillerVictimDetails.Victim.SoldierName].SubItems["deaths"].Tag = (Double)this.m_dicPlayers[kKillerVictimDetails.Victim.SoldierName].SubItems["deaths"].Tag + 1;
-                    this.m_dicPlayers[kKillerVictimDetails.Victim.SoldierName].SubItems["deaths"].Text = ((Double)this.m_dicPlayers[kKillerVictimDetails.Victim.SoldierName].SubItems["deaths"].Tag).ToString();
-
-                    this.m_dicPlayers[kKillerVictimDetails.Victim.SoldierName].SubItems["kdr"].Tag = kKillerVictimDetails;
-
-                    if (this.m_dicPlayers[kKillerVictimDetails.Victim.SoldierName].SubItems["deaths"].Tag != null && (Double)this.m_dicPlayers[kKillerVictimDetails.Victim.SoldierName].SubItems["deaths"].Tag > 0) {
-                        this.m_dicPlayers[kKillerVictimDetails.Victim.SoldierName].SubItems["kdr"].Text = String.Format("{0:0.00}", ((Double)this.m_dicPlayers[kKillerVictimDetails.Victim.SoldierName].SubItems["kills"].Tag / (Double)this.m_dicPlayers[kKillerVictimDetails.Victim.SoldierName].SubItems["deaths"].Tag));
-                    }
-                    else {
-                        this.m_dicPlayers[kKillerVictimDetails.Victim.SoldierName].SubItems["kdr"].Text = String.Format("{0:0.00}", (Double)this.m_dicPlayers[kKillerVictimDetails.Victim.SoldierName].SubItems["kills"].Tag);
-                    }
-
-                    this.m_dicPlayers[kKillerVictimDetails.Victim.SoldierName].ImageIndex = this.m_frmMain.iglFlags.Images.IndexOfKey("flag_death.png");
-
-                    this.AddDeathToTeamTotal(((AdditionalPlayerInfo)this.m_dicPlayers[kKillerVictimDetails.Victim.SoldierName].Tag).m_cpiPlayer.TeamID);
-                }
-
-                this.tmrKillDeathHighlight.Enabled = true;
-            }
-
-            this.FinalizeTotalsAverages();
-            // this.ArrangePlayers();
+                this.FinalizeTotalsAverages();
+                // this.ArrangePlayers();
+            });
         }
 
         private void lsvPlayers_DragDrop(object sender, DragEventArgs e) {
@@ -2292,28 +2337,23 @@ namespace PRoCon.Controls {
             this.cboEndRound.SelectedIndex = 0;
         }
 
-        private void m_prcClient_Serverinfo_EndRound_Update(FrostbiteClient sender, CServerInfo csiServerInfo) { 
-            //
-            int iTeams = this.m_prcClient.GetLocalizedTeamNameCount(this.m_prcClient.CurrentServerInfo.Map, this.m_prcClient.CurrentServerInfo.GameMode);
+        private void m_prcClient_Serverinfo_EndRound_Update(FrostbiteClient sender, CServerInfo csiServerInfo) {
+            this.InvokeIfRequired(() => {
+                //
+                int iTeams = this.m_prcClient.GetLocalizedTeamNameCount(this.m_prcClient.CurrentServerInfo.Map, this.m_prcClient.CurrentServerInfo.GameMode);
 
 
-            this.cboEndRound.Items.Clear();
-            this.cboEndRound.Items.AddRange(new object[] {
-                this.m_clocLanguage.GetDefaultLocalized("Select winning team to end round:", "uscPlayerListPanel.ctxPlayerOptions.EndRound.Label")
+                this.cboEndRound.Items.Clear();
+                this.cboEndRound.Items.AddRange(new object[] {this.m_clocLanguage.GetDefaultLocalized("Select winning team to end round:", "uscPlayerListPanel.ctxPlayerOptions.EndRound.Label")});
+                this.cboEndRound.SelectedIndex = 0;
+
+                for (int i = 1; i < iTeams; i++) {
+                    this.cboEndRound.Items.AddRange(new object[] {String.Format("{0} - {1}", this.m_clocLanguage.GetDefaultLocalized("Team " + i.ToString(), "uscPlayerListPanel.ctxPlayerOptions.EndRound.Team" + i.ToString()), this.m_prcClient.GetLocalizedTeamName(i, this.m_prcClient.CurrentServerInfo.Map, this.m_prcClient.CurrentServerInfo.GameMode))});
+                }
+
+                Graphics cboEndRoundGrafphics = cboEndRound.CreateGraphics();
+                this.cboEndRound.Width = 18 + (int) cboEndRoundGrafphics.MeasureString(this.cboEndRound.Text, this.cboEndRound.Font).Width;
             });
-            this.cboEndRound.SelectedIndex = 0;
-
-            for (int i = 1; i < iTeams; i++) {
-                this.cboEndRound.Items.AddRange(new object[] {
-                    String.Format("{0} - {1}", 
-                        this.m_clocLanguage.GetDefaultLocalized("Team " + i.ToString(), "uscPlayerListPanel.ctxPlayerOptions.EndRound.Team"+i.ToString()),
-                        this.m_prcClient.GetLocalizedTeamName(i, this.m_prcClient.CurrentServerInfo.Map, this.m_prcClient.CurrentServerInfo.GameMode)
-                    )
-                });
-            }
-
-            Graphics cboEndRoundGrafphics = cboEndRound.CreateGraphics();
-            this.cboEndRound.Width = 18 + (int)cboEndRoundGrafphics.MeasureString(this.cboEndRound.Text, this.cboEndRound.Font).Width;
         }
 
         #endregion

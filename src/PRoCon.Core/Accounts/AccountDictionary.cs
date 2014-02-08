@@ -38,13 +38,13 @@ namespace PRoCon.Core.Accounts {
             base.InsertItem(index, item);
 
             if (AccountAdded != null) {
-                FrostbiteConnection.RaiseEvent(AccountAdded.GetInvocationList(), item);
+                this.AccountAdded(item);
             }
         }
 
         protected override void RemoveItem(int index) {
             if (AccountRemoved != null) {
-                FrostbiteConnection.RaiseEvent(AccountRemoved.GetInvocationList(), this[index]);
+                this.AccountRemoved(this[index]);
             }
 
             base.RemoveItem(index);
@@ -52,7 +52,7 @@ namespace PRoCon.Core.Accounts {
 
         protected override void SetItem(int index, Account item) {
             if (AccountChanged != null) {
-                FrostbiteConnection.RaiseEvent(AccountChanged.GetInvocationList(), item);
+                this.AccountChanged(item);
             }
 
             base.SetItem(index, item);

@@ -11,6 +11,7 @@ namespace PRoCon.Core.Remote.Layer {
     public class LayerInstance : ILayerInstance {
 
         private TcpListener _layerListener;
+        protected readonly Object LayerListenerLock = new Object();
 
         private PRoConApplication _application;
         private PRoConClient _client;
@@ -251,40 +252,41 @@ namespace PRoCon.Core.Remote.Layer {
         }
 
         private void ListenIncommingLayerConnections(IAsyncResult ar) {
+            lock (this.LayerListenerLock) {
+                if (this._layerListener != null) {
 
-            if (this._layerListener != null) {
+                    try {
+                        TcpClient tcpClient = this._layerListener.EndAcceptTcpClient(ar);
 
-                try {
-                    TcpClient tcpClient = this._layerListener.EndAcceptTcpClient(ar);
+                        ILayerClient client = new LayerClient(this, new LayerConnection(tcpClient), this._application, this._client);
 
-                    ILayerClient client = new LayerClient(this, new LayerConnection(tcpClient), this._application, this._client);
-
-                    // Issue #24. Somewhere the end port connection+port isn't being removed.
-                    if (this.Clients.ContainsKey(client.IPPort) == true) {
-                        this.Clients[client.IPPort].Shutdown();
-
-                        // If, for some reason, the client wasn't removed during shutdown..
+                        // Issue #24. Somewhere the end port connection+port isn't being removed.
                         if (this.Clients.ContainsKey(client.IPPort) == true) {
-                            this.Clients.Remove(client.IPPort);
+                            this.Clients[client.IPPort].Shutdown();
+
+                            // If, for some reason, the client wasn't removed during shutdown..
+                            if (this.Clients.ContainsKey(client.IPPort) == true) {
+                                this.Clients.Remove(client.IPPort);
+                            }
                         }
+
+                        this.Clients.Add(client.IPPort, client);
+
+
+                        this.OnClientConnected(client);
+
+                        this._layerListener.BeginAcceptTcpClient(this.ListenIncommingLayerConnections, this);
                     }
+                    catch (SocketException exception) {
+                        this.OnSocketError(exception);
 
-                    this.Clients.Add(client.IPPort, client);
+                        this.Shutdown();
 
-
-                    this.OnClientConnected(client);
-
-                    this._layerListener.BeginAcceptTcpClient(this.ListenIncommingLayerConnections, this);
-                }
-                catch (SocketException exception) {
-                    this.OnSocketError(exception);
-
-                    this.Shutdown();
-
-                    //cbfAccountsPanel.OnLayerServerSocketError(skeError);
-                }
-                catch (Exception e) {
-                    FrostbiteConnection.LogError("ListenIncommingLayerConnections", "catch (Exception e)", e);
+                        //cbfAccountsPanel.OnLayerServerSocketError(skeError);
+                    }
+                    catch (Exception e) {
+                        FrostbiteConnection.LogError("ListenIncommingLayerConnections", "catch (Exception e)", e);
+                    }
                 }
             }
         }
@@ -325,9 +327,11 @@ namespace PRoCon.Core.Remote.Layer {
             try {
                 IPAddress ipBinding = this.ResolveHostName(this.BindingAddress);
 
-                this._layerListener = new TcpListener(ipBinding, this.ListeningPort);
+                lock (this.LayerListenerLock) {
+                    this._layerListener = new TcpListener(ipBinding, this.ListeningPort);
 
-                this._layerListener.Start();
+                    this._layerListener.Start();
+                }
 
                 this.OnLayerStarted();
 
@@ -341,22 +345,23 @@ namespace PRoCon.Core.Remote.Layer {
         }
 
         public void Shutdown() {
+            lock (this.LayerListenerLock) {
+                if (this._layerListener != null) {
 
-            if (this._layerListener != null) {
+                    try {
+                        foreach (ILayerClient client in new List<ILayerClient>(this.Clients.Values)) {
+                            client.Shutdown();
+                        }
 
-                try {
-                    foreach (ILayerClient client in new List<ILayerClient>(this.Clients.Values)) {
-                        client.Shutdown();
+                        this._layerListener.Stop();
+                        this._layerListener = null;
+                    }
+                    catch (Exception) {
                     }
 
-                    this._layerListener.Stop();
-                    this._layerListener = null;
+                    this.OnLayerShutdown();
                 }
-                catch (Exception) { }
-
-                this.OnLayerShutdown();
             }
-            //this.OnLayerServerOffline();
         }
         
     }

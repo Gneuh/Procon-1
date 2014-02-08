@@ -98,7 +98,7 @@ namespace PRoCon.Core {
                     this.m_clocCurrentLanguage = value;
 
                     if (this.CurrentLanguageChanged != null) {
-                        FrostbiteConnection.RaiseEvent(this.CurrentLanguageChanged.GetInvocationList(), value);
+                        this.CurrentLanguageChanged(value);
                     }
 
                     this.SaveMainConfig();
@@ -1389,14 +1389,14 @@ namespace PRoCon.Core {
                 {
                     if (this.ShowNotification != null)
                     {
-                        FrostbiteConnection.RaiseEvent(this.ShowNotification.GetInvocationList(), 2000, lstWords[1], lstWords[2], blError);
+                        this.ShowNotification(2000, lstWords[1], lstWords[2], blError);
                     }
                 }
                 else
                 {
                     if (this.ShowNotification != null)
                     {
-                        FrostbiteConnection.RaiseEvent(this.ShowNotification.GetInvocationList(), 2000, lstWords[1], lstWords[2], false);
+                        this.ShowNotification(2000, lstWords[1], lstWords[2], false);
                     }
                 }
             }
@@ -2212,14 +2212,14 @@ namespace PRoCon.Core {
                 {
                     if (this.ShowNotification != null)
                     {
-                        FrostbiteConnection.RaiseEvent(this.ShowNotification.GetInvocationList(), 2000, lstWords[1], lstWords[2], blError);
+                        this.ShowNotification(2000, lstWords[1], lstWords[2], blError);
                     }
                 }
                 else
                 {
                     if (this.ShowNotification != null)
                     {
-                        FrostbiteConnection.RaiseEvent(this.ShowNotification.GetInvocationList(), 2000, lstWords[1], lstWords[2], false);
+                        this.ShowNotification(2000, lstWords[1], lstWords[2], false);
                     }
                 }
             }
@@ -2388,13 +2388,13 @@ namespace PRoCon.Core {
 
         private void HttpWebServer_HttpServerOffline(HttpWebServer sender) {
             if (this.HttpServerOffline != null) {
-                FrostbiteConnection.RaiseEvent(this.HttpServerOffline.GetInvocationList(), sender);
+                this.HttpServerOffline(sender);
             }
         }
 
         private void HttpWebServer_HttpServerOnline(HttpWebServer sender) {
             if (this.HttpServerOnline != null) {
-                FrostbiteConnection.RaiseEvent(this.HttpServerOnline.GetInvocationList(), sender);
+                this.HttpServerOnline(sender);
             }
         }
 
@@ -2406,7 +2406,7 @@ namespace PRoCon.Core {
             
             // Begin RSS Update
             if (this.BeginRssUpdate != null) {
-                FrostbiteConnection.RaiseEvent(this.BeginRssUpdate.GetInvocationList(), this);
+                this.BeginRssUpdate(this);
             }
 
             CDownloadFile downloadRssFeed = new CDownloadFile("https://forum.myrcon.com/external.php?do=rss&type=newcontent&sectionid=1&days=120&count=10");
@@ -2435,7 +2435,7 @@ namespace PRoCon.Core {
                 }
                 */
                 if (this.RssUpdateSuccess != null) {
-                    FrostbiteConnection.RaiseEvent(this.RssUpdateSuccess.GetInvocationList(), this, rssDocument);
+                    this.RssUpdateSuccess(this, rssDocument);
                 }
             }
             catch (Exception) { }
@@ -2446,7 +2446,7 @@ namespace PRoCon.Core {
 
             // RSS Error
             if (this.RssUpdateError != null) {
-                FrostbiteConnection.RaiseEvent(this.RssUpdateError.GetInvocationList(), this);
+                this.RssUpdateError(this);
             }
 
         }
@@ -2461,7 +2461,7 @@ namespace PRoCon.Core {
                 rssDocument.LoadXml(xmlDocumentText);
 
                 if (this.RssUpdateSuccess != null) {
-                    FrostbiteConnection.RaiseEvent(this.PromoUpdateSuccess.GetInvocationList(), this, rssDocument);
+                    this.PromoUpdateSuccess(this, rssDocument);
                 }
             }
             catch (Exception) { }
@@ -2472,7 +2472,7 @@ namespace PRoCon.Core {
 
             // RSS Error
             if (this.RssUpdateError != null) {
-                FrostbiteConnection.RaiseEvent(this.PromoUpdateError.GetInvocationList(), this);
+                this.PromoUpdateError(this);
             }
 
         }

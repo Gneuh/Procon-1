@@ -54,7 +54,7 @@ namespace PRoCon.Core.Options {
                 this.m_praApplication.SaveMainConfig();
 
                 if (this.ConsoleLoggingChanged != null) {
-                    FrostbiteConnection.RaiseEvent(this.ConsoleLoggingChanged.GetInvocationList(), value);
+                    this.ConsoleLoggingChanged(value);
                 }
             }
         }
@@ -69,7 +69,7 @@ namespace PRoCon.Core.Options {
                 this.m_praApplication.SaveMainConfig();
 
                 if (this.EventsLoggingChanged != null) {
-                    FrostbiteConnection.RaiseEvent(this.EventsLoggingChanged.GetInvocationList(), value);
+                    this.EventsLoggingChanged(value);
                 }
             }
         }
@@ -84,7 +84,7 @@ namespace PRoCon.Core.Options {
                 this.m_praApplication.SaveMainConfig();
 
                 if (this.PluginsLoggingChanged != null) {
-                    FrostbiteConnection.RaiseEvent(this.PluginsLoggingChanged.GetInvocationList(), value);
+                    this.PluginsLoggingChanged(value);
                 }
             }
         }
@@ -99,7 +99,7 @@ namespace PRoCon.Core.Options {
                 this.m_praApplication.SaveMainConfig();
 
                 if (this.ChatLoggingChanged != null) {
-                    FrostbiteConnection.RaiseEvent(this.ChatLoggingChanged.GetInvocationList(), value);
+                    this.ChatLoggingChanged(value);
                 }
             }
         }
@@ -120,7 +120,7 @@ namespace PRoCon.Core.Options {
                 this.m_praApplication.SaveMainConfig();
 
                 if (this.AutoCheckDownloadUpdatesChanged != null) {
-                    FrostbiteConnection.RaiseEvent(this.AutoCheckDownloadUpdatesChanged.GetInvocationList(), value);
+                    this.AutoCheckDownloadUpdatesChanged(value);
                 }
             }
         }
@@ -135,7 +135,7 @@ namespace PRoCon.Core.Options {
                 this.m_praApplication.SaveMainConfig();
 
                 if (this.AutoApplyUpdatesChanged != null) {
-                    FrostbiteConnection.RaiseEvent(this.AutoApplyUpdatesChanged.GetInvocationList(), value);
+                    this.AutoApplyUpdatesChanged(value);
                 }
             }
         }
@@ -157,7 +157,7 @@ namespace PRoCon.Core.Options {
                 this.m_praApplication.SaveMainConfig();
 
                 if (this.AutoCheckDownloadUpdatesChanged != null) {
-                    FrostbiteConnection.RaiseEvent(this.AutoCheckGameConfigsForUpdatesChanged.GetInvocationList(), value);
+                    this.AutoCheckGameConfigsForUpdatesChanged(value);
                 }
             }
         }
@@ -172,7 +172,7 @@ namespace PRoCon.Core.Options {
                 this.m_praApplication.SaveMainConfig();
 
                 if (this.ShowTrayIconChanged != null) {
-                    FrostbiteConnection.RaiseEvent(this.ShowTrayIconChanged.GetInvocationList(), value);
+                    this.ShowTrayIconChanged(value);
                 }
             }
         }
@@ -187,7 +187,7 @@ namespace PRoCon.Core.Options {
                 this.m_praApplication.SaveMainConfig();
 
                 if (this.CloseToTrayChanged != null) {
-                    FrostbiteConnection.RaiseEvent(this.CloseToTrayChanged.GetInvocationList(), value);
+                    this.CloseToTrayChanged(value);
                 }
             }
         }
@@ -202,7 +202,7 @@ namespace PRoCon.Core.Options {
                 this.m_praApplication.SaveMainConfig();
 
                 if (this.MinimizeToTrayChanged != null) {
-                    FrostbiteConnection.RaiseEvent(this.MinimizeToTrayChanged.GetInvocationList(), value);
+                    this.MinimizeToTrayChanged(value);
                 }
             }
         }
@@ -217,7 +217,7 @@ namespace PRoCon.Core.Options {
                 this.m_praApplication.SaveMainConfig();
 
                 if (this.RunPluginsInTrustedSandboxChanged != null) {
-                    FrostbiteConnection.RaiseEvent(this.RunPluginsInTrustedSandboxChanged.GetInvocationList(), value);
+                    this.RunPluginsInTrustedSandboxChanged(value);
                 }
             }
         }
@@ -232,7 +232,7 @@ namespace PRoCon.Core.Options {
                 this.m_praApplication.SaveMainConfig();
 
                 if (this.AdminMoveMessageChanged != null) {
-                    FrostbiteConnection.RaiseEvent(this.AdminMoveMessageChanged.GetInvocationList(), value);
+                    this.AdminMoveMessageChanged(value);
                 }
             }
         }
@@ -248,7 +248,7 @@ namespace PRoCon.Core.Options {
                 this.m_praApplication.SaveMainConfig();
 
                 if (this.ChatDisplayAdminNameChanged != null) {
-                    FrostbiteConnection.RaiseEvent(this.ChatDisplayAdminNameChanged.GetInvocationList(), value);
+                    this.ChatDisplayAdminNameChanged(value);
                 }
             }
         }
@@ -265,7 +265,7 @@ namespace PRoCon.Core.Options {
                 this.m_praApplication.SaveMainConfig();
 
                 if (this.EnableAdminReasonChanged != null) {
-                    FrostbiteConnection.RaiseEvent(this.EnableAdminReasonChanged.GetInvocationList(), value);
+                    this.EnableAdminReasonChanged(value);
                 }
             }
         }
@@ -280,7 +280,7 @@ namespace PRoCon.Core.Options {
                 this.m_praApplication.SaveMainConfig();
 
                 if (this.LayerHideLocalPluginsChanged != null) {
-                    FrostbiteConnection.RaiseEvent(this.LayerHideLocalPluginsChanged.GetInvocationList(), value);
+                    this.LayerHideLocalPluginsChanged(value);
                 }
             }
         }
@@ -295,7 +295,7 @@ namespace PRoCon.Core.Options {
                 this.m_praApplication.SaveMainConfig();
 
                 if (this.LayerHideLocalAccountsChanged != null) {
-                    FrostbiteConnection.RaiseEvent(this.LayerHideLocalAccountsChanged.GetInvocationList(), value);
+                    this.LayerHideLocalAccountsChanged(value);
                 }
             }
         }
@@ -315,7 +315,7 @@ namespace PRoCon.Core.Options {
 
                 if (this.ShowRoundTimerConstantlyChanged != null)
                 {
-                    FrostbiteConnection.RaiseEvent(this.ShowRoundTimerConstantlyChanged.GetInvocationList(), value);
+                    this.ShowRoundTimerConstantlyChanged(value);
                 }
             }
         }
@@ -335,7 +335,7 @@ namespace PRoCon.Core.Options {
 
                 if (this.ShowCfmMsgRoundRestartNextChanged != null)
                 {
-                    FrostbiteConnection.RaiseEvent(this.ShowCfmMsgRoundRestartNextChanged.GetInvocationList(), value);
+                    this.ShowCfmMsgRoundRestartNextChanged(value);
                 }
             }
         }
@@ -355,7 +355,7 @@ namespace PRoCon.Core.Options {
 
                 if (this.ShowDICESpecialOptionsChanged != null)
                 {
-                    FrostbiteConnection.RaiseEvent(this.ShowDICESpecialOptionsChanged.GetInvocationList(), value);
+                    this.ShowDICESpecialOptionsChanged(value);
                 }
             }
         }
@@ -370,7 +370,7 @@ namespace PRoCon.Core.Options {
                 this.m_praApplication.SaveMainConfig();
 
                 if (this.AllowAllODBCConnectionsChanged != null) {
-                    FrostbiteConnection.RaiseEvent(this.AllowAllODBCConnectionsChanged.GetInvocationList(), value);
+                    this.AllowAllODBCConnectionsChanged(value);
                 }
             }
         }
@@ -389,7 +389,7 @@ namespace PRoCon.Core.Options {
 
                 if (this.AllowAllSmtpConnectionsChanged != null)
                 {
-                    FrostbiteConnection.RaiseEvent(this.AllowAllSmtpConnectionsChanged.GetInvocationList(), value);
+                    this.AllowAllSmtpConnectionsChanged(value);
                 }
             }
         }
@@ -404,7 +404,7 @@ namespace PRoCon.Core.Options {
                 this.m_praApplication.SaveMainConfig();
 
                 if (this.AllowAnonymousUsageDataChanged != null) {
-                    FrostbiteConnection.RaiseEvent(this.AllowAnonymousUsageDataChanged.GetInvocationList(), value);
+                    this.AllowAnonymousUsageDataChanged(value);
                 }
             }
         }
@@ -470,7 +470,7 @@ namespace PRoCon.Core.Options {
                 this.m_praApplication.SaveMainConfig();
 
                 if (this.UsePluginOldStyleLoadChanged != null) {
-                    FrostbiteConnection.RaiseEvent(this.UsePluginOldStyleLoadChanged.GetInvocationList(), value);
+                    this.UsePluginOldStyleLoadChanged(value);
                 }
             }
         }

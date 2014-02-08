@@ -49,45 +49,49 @@ namespace PRoCon.Controls.ServerSettings.BF3 {
         }
 
         private void Client_GameTypeDiscovered(PRoConClient sender) {
-            this.Client.Game.TeamBalance += new FrostbiteClient.IsEnabledHandler(Client_TeamBalance);
-            this.Client.Game.KillCam += new FrostbiteClient.IsEnabledHandler(Client_KillCam);
-            this.Client.Game.MiniMap += new FrostbiteClient.IsEnabledHandler(Client_MiniMap);
-            this.Client.Game.CrossHair += new FrostbiteClient.IsEnabledHandler(Client_CrossHair);
-            this.Client.Game.ThreeDSpotting += new FrostbiteClient.IsEnabledHandler(Client_ThreeDSpotting);
-            this.Client.Game.ThirdPersonVehicleCameras += new FrostbiteClient.IsEnabledHandler(Client_ThirdPersonVehicleCameras);
-            this.Client.Game.MiniMapSpotting += new FrostbiteClient.IsEnabledHandler(Client_MiniMapSpotting);
+            this.InvokeIfRequired(() => {
+                this.Client.Game.TeamBalance += new FrostbiteClient.IsEnabledHandler(Client_TeamBalance);
+                this.Client.Game.KillCam += new FrostbiteClient.IsEnabledHandler(Client_KillCam);
+                this.Client.Game.MiniMap += new FrostbiteClient.IsEnabledHandler(Client_MiniMap);
+                this.Client.Game.CrossHair += new FrostbiteClient.IsEnabledHandler(Client_CrossHair);
+                this.Client.Game.ThreeDSpotting += new FrostbiteClient.IsEnabledHandler(Client_ThreeDSpotting);
+                this.Client.Game.ThirdPersonVehicleCameras += new FrostbiteClient.IsEnabledHandler(Client_ThirdPersonVehicleCameras);
+                this.Client.Game.MiniMapSpotting += new FrostbiteClient.IsEnabledHandler(Client_MiniMapSpotting);
 
-            this.Client.Game.VehicleSpawnAllowed += new FrostbiteClient.IsEnabledHandler(Game_VehicleSpawnAllowed);
-            this.Client.Game.VehicleSpawnDelay += new FrostbiteClient.LimitHandler(Game_VehicleSpawnDelay);
-            this.Client.Game.BulletDamage += new FrostbiteClient.LimitHandler(Game_BulletDamage);
-            this.Client.Game.NameTag += new FrostbiteClient.IsEnabledHandler(Game_NameTag);
-            this.Client.Game.RegenerateHealth += new FrostbiteClient.IsEnabledHandler(Game_RegenerateHealth);
-            this.Client.Game.OnlySquadLeaderSpawn += new FrostbiteClient.IsEnabledHandler(Game_OnlySquadLeaderSpawn);
-            this.Client.Game.UnlockMode += new FrostbiteClient.UnlockModeHandler(Game_UnlockMode);
-            this.Client.Game.GunMasterWeaponsPreset += new FrostbiteClient.GunMasterWeaponsPresetHandler(Game_GunMasterWeaponsPreset);
-            this.Client.Game.SoldierHealth += new FrostbiteClient.LimitHandler(Game_SoldierHealth);
-            this.Client.Game.Hud += new FrostbiteClient.IsEnabledHandler(Game_Hud);
-            this.Client.Game.PlayerManDownTime += new FrostbiteClient.LimitHandler(Game_PlayerManDownTime);
-            this.Client.Game.RoundRestartPlayerCount += new FrostbiteClient.LimitHandler(Game_RoundRestartPlayerCount);
-            this.Client.Game.RoundStartPlayerCount += new FrostbiteClient.LimitHandler(Game_RoundStartPlayerCount);
-            this.Client.Game.PlayerRespawnTime += new FrostbiteClient.LimitHandler(Game_PlayerRespawnTime);
-            this.Client.Game.GameModeCounter += new FrostbiteClient.LimitHandler(Game_GameModeCounter);
-            this.Client.Game.CtfRoundTimeModifier +=new FrostbiteClient.LimitHandler(Game_CtfRoundTimeModifier);
-            this.Client.Game.IdleTimeout += new FrostbiteClient.LimitHandler(Client_IdleTimeout);
-            this.Client.Game.IdleBanRounds += new FrostbiteClient.LimitHandler(Game_IdleBanRounds);
-            this.Client.Game.ServerMessage += new FrostbiteClient.ServerMessageHandler(Game_ServerMessage);
+                this.Client.Game.VehicleSpawnAllowed += new FrostbiteClient.IsEnabledHandler(Game_VehicleSpawnAllowed);
+                this.Client.Game.VehicleSpawnDelay += new FrostbiteClient.LimitHandler(Game_VehicleSpawnDelay);
+                this.Client.Game.BulletDamage += new FrostbiteClient.LimitHandler(Game_BulletDamage);
+                this.Client.Game.NameTag += new FrostbiteClient.IsEnabledHandler(Game_NameTag);
+                this.Client.Game.RegenerateHealth += new FrostbiteClient.IsEnabledHandler(Game_RegenerateHealth);
+                this.Client.Game.OnlySquadLeaderSpawn += new FrostbiteClient.IsEnabledHandler(Game_OnlySquadLeaderSpawn);
+                this.Client.Game.UnlockMode += new FrostbiteClient.UnlockModeHandler(Game_UnlockMode);
+                this.Client.Game.GunMasterWeaponsPreset += new FrostbiteClient.GunMasterWeaponsPresetHandler(Game_GunMasterWeaponsPreset);
+                this.Client.Game.SoldierHealth += new FrostbiteClient.LimitHandler(Game_SoldierHealth);
+                this.Client.Game.Hud += new FrostbiteClient.IsEnabledHandler(Game_Hud);
+                this.Client.Game.PlayerManDownTime += new FrostbiteClient.LimitHandler(Game_PlayerManDownTime);
+                this.Client.Game.RoundRestartPlayerCount += new FrostbiteClient.LimitHandler(Game_RoundRestartPlayerCount);
+                this.Client.Game.RoundStartPlayerCount += new FrostbiteClient.LimitHandler(Game_RoundStartPlayerCount);
+                this.Client.Game.PlayerRespawnTime += new FrostbiteClient.LimitHandler(Game_PlayerRespawnTime);
+                this.Client.Game.GameModeCounter += new FrostbiteClient.LimitHandler(Game_GameModeCounter);
+                this.Client.Game.CtfRoundTimeModifier += new FrostbiteClient.LimitHandler(Game_CtfRoundTimeModifier);
+                this.Client.Game.IdleTimeout += new FrostbiteClient.LimitHandler(Client_IdleTimeout);
+                this.Client.Game.IdleBanRounds += new FrostbiteClient.LimitHandler(Game_IdleBanRounds);
+                this.Client.Game.ServerMessage += new FrostbiteClient.ServerMessageHandler(Game_ServerMessage);
 
-            this.Client.Game.ReservedSlotsListAggressiveJoin += new FrostbiteClient.IsEnabledHandler(Game_ReservedSlotsListAggressiveJoin);
-            this.Client.Game.RoundLockdownCountdown += new FrostbiteClient.LimitHandler(Game_RoundLockdownCountdown);
-            this.Client.Game.RoundWarmupTimeout += new FrostbiteClient.LimitHandler(Game_RoundWarmupTimeout);
+                this.Client.Game.ReservedSlotsListAggressiveJoin += new FrostbiteClient.IsEnabledHandler(Game_ReservedSlotsListAggressiveJoin);
+                this.Client.Game.RoundLockdownCountdown += new FrostbiteClient.LimitHandler(Game_RoundLockdownCountdown);
+                this.Client.Game.RoundWarmupTimeout += new FrostbiteClient.LimitHandler(Game_RoundWarmupTimeout);
 
-            this.Client.Game.PremiumStatus += new FrostbiteClient.IsEnabledHandler(Game_PremiumStatus);
+                this.Client.Game.PremiumStatus += new FrostbiteClient.IsEnabledHandler(Game_PremiumStatus);
+            });
         }
 
         protected override void Game_Login(FrostbiteClient sender) {
-            base.Game_Login(sender);
+            this.InvokeIfRequired(() => {
+                base.Game_Login(sender);
 
-            this.AppendPunkbusterActivation();
+                this.AppendPunkbusterActivation();
+            });
         }
 
         private void AppendPunkbusterActivation() {
@@ -126,8 +130,7 @@ namespace PRoCon.Controls.ServerSettings.BF3 {
             this.AppendSetting("vars.gunMasterWeaponsPreset", preset.ToString());
         }
 
-        void Game_OnlySquadLeaderSpawn(FrostbiteClient sender, bool isEnabled)
-        {
+        void Game_OnlySquadLeaderSpawn(FrostbiteClient sender, bool isEnabled) {
             this.AppendSetting("vars.onlySquadLeaderSpawn", isEnabled.ToString());
         }
 
@@ -183,13 +186,11 @@ namespace PRoCon.Controls.ServerSettings.BF3 {
             this.AppendSetting("vars.miniMapSpotting", isEnabled.ToString());
         }
 
-        void Game_GameModeCounter(FrostbiteClient sender, int limit)
-        {
+        void Game_GameModeCounter(FrostbiteClient sender, int limit) {
             this.AppendSetting("vars.gameModeCounter", limit.ToString());
         }
 
-        void Game_CtfRoundTimeModifier(FrostbiteClient sender, int limit)
-        {
+        void Game_CtfRoundTimeModifier(FrostbiteClient sender, int limit) {
             this.AppendSetting("vars.ctfRoundTimeModifier", limit.ToString());
         }
 
@@ -200,34 +201,28 @@ namespace PRoCon.Controls.ServerSettings.BF3 {
         protected override void Client_IdleTimeout(FrostbiteClient sender, int limit) {
             this.AppendSetting("vars.idleTimeout", limit.ToString());
         }
-        
-        void Game_IdleBanRounds(FrostbiteClient sender, int limit)
-        {
+
+        void Game_IdleBanRounds(FrostbiteClient sender, int limit) {
             this.AppendSetting("vars.idleBanRounds", limit.ToString());
         }
 
-        void Game_ServerMessage(FrostbiteClient sender, string message)
-        {
+        void Game_ServerMessage(FrostbiteClient sender, string message) {
             this.AppendSetting("vars.serverMessage", message);
         }
 
-        void Game_ReservedSlotsListAggressiveJoin(FrostbiteClient sender, bool isEnabled)
-        {
+        void Game_ReservedSlotsListAggressiveJoin(FrostbiteClient sender, bool isEnabled) {
             this.AppendSetting("reservedSlotsList.aggressiveJoin", isEnabled.ToString());
         }
 
-        void Game_RoundLockdownCountdown(FrostbiteClient sender, int limit)
-        {
+        void Game_RoundLockdownCountdown(FrostbiteClient sender, int limit) {
             this.AppendSetting("vars.roundLockdownCountdown", limit.ToString());
         }
 
-        void Game_RoundWarmupTimeout(FrostbiteClient sender, int limit)
-        {
+        void Game_RoundWarmupTimeout(FrostbiteClient sender, int limit) {
             this.AppendSetting("vars.roundWarmupTimeout", limit.ToString());
         }
 
-        void Game_PremiumStatus(FrostbiteClient sender, bool isEnabled)
-        {
+        void Game_PremiumStatus(FrostbiteClient sender, bool isEnabled) {
             this.AppendSetting("vars.premiumStatus", isEnabled.ToString());
         }
     }

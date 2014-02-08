@@ -40,10 +40,10 @@ namespace PRoCon.Controls.ServerSettings {
         }
 
         private void m_prcClient_GameTypeDiscovered(PRoConClient sender) {
-
-            this.Client.Game.Hardcore += new FrostbiteClient.IsEnabledHandler(m_prcClient_Hardcore);
-            this.Client.Game.FriendlyFire += new FrostbiteClient.IsEnabledHandler(m_prcClient_FriendlyFire);
-
+            this.InvokeIfRequired(() => {
+                this.Client.Game.Hardcore += new FrostbiteClient.IsEnabledHandler(m_prcClient_Hardcore);
+                this.Client.Game.FriendlyFire += new FrostbiteClient.IsEnabledHandler(m_prcClient_FriendlyFire);
+            });
         }
 
         #region Hardcore

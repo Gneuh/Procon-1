@@ -29,7 +29,7 @@ namespace PRoCon.Core.Players {
                 }
 
                 if (this.SplitTypeChanged != null) {
-                    FrostbiteConnection.RaiseEvent(this.SplitTypeChanged.GetInvocationList(), this.m_iSplitType);
+                    this.SplitTypeChanged(this.m_iSplitType);
                 }
             }
         }
@@ -48,7 +48,7 @@ namespace PRoCon.Core.Players {
                 }
 
                 if (this.TwoSplitterPercentageChanged != null) {
-                    FrostbiteConnection.RaiseEvent(this.TwoSplitterPercentageChanged.GetInvocationList(), this.m_flTwoSplitterPercentage);
+                    this.TwoSplitterPercentageChanged(this.m_flTwoSplitterPercentage);
                 }
             }
         }
@@ -67,7 +67,7 @@ namespace PRoCon.Core.Players {
                 }
 
                 if (this.FourSplitterPercentageChanged != null) {
-                    FrostbiteConnection.RaiseEvent(this.FourSplitterPercentageChanged.GetInvocationList(), this.m_flFourSplitterPercentage);
+                    this.FourSplitterPercentageChanged(this.m_flFourSplitterPercentage);
                 }
             }
         }

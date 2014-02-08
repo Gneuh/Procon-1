@@ -313,7 +313,7 @@ namespace PRoCon.Core.Remote {
                 IsAutomaticallyConnectEnabled = value;
 
                 if (AutomaticallyConnectChanged != null) {
-                    FrostbiteConnection.RaiseEvent(AutomaticallyConnectChanged.GetInvocationList(), this, value);
+                    this.AutomaticallyConnectChanged(this, value);
                 }
             }
         }
@@ -532,7 +532,7 @@ namespace PRoCon.Core.Remote {
             //sender.PacketReceived -= new FrostbiteConnection.PacketDispatchHandler(Connection_PacketRecieved);
 
             if (ConnectionClosed != null) {
-                FrostbiteConnection.RaiseEvent(ConnectionClosed.GetInvocationList(), this);
+                this.ConnectionClosed(this);
             }
         }
 
@@ -542,7 +542,7 @@ namespace PRoCon.Core.Remote {
             //sender.PacketReceived -= new FrostbiteConnection.PacketDispatchHandler(Connection_PacketRecieved);
 
             if (ConnectionFailure != null) {
-                FrostbiteConnection.RaiseEvent(ConnectionFailure.GetInvocationList(), this, exception);
+                this.ConnectionFailure(this, exception);
             }
         }
 
@@ -552,7 +552,7 @@ namespace PRoCon.Core.Remote {
             //sender.PacketReceived -= new FrostbiteConnection.PacketDispatchHandler(Connection_PacketRecieved);
 
             if (SocketException != null) {
-                FrostbiteConnection.RaiseEvent(SocketException.GetInvocationList(), this, se);
+                this.SocketException(this, se);
             }
         }
 
@@ -717,7 +717,7 @@ namespace PRoCon.Core.Remote {
 
         private void Connection_ConnectSuccess(FrostbiteConnection sender) {
             if (ConnectSuccess != null) {
-                FrostbiteConnection.RaiseEvent(ConnectSuccess.GetInvocationList(), this);
+                this.ConnectSuccess(this);
             }
 
             sender.PacketReceived -= new FrostbiteConnection.PacketDispatchHandler(Connection_PacketRecieved);
@@ -734,7 +734,7 @@ namespace PRoCon.Core.Remote {
 
         private void Connection_ConnectAttempt(FrostbiteConnection sender) {
             if (ConnectAttempt != null) {
-                FrostbiteConnection.RaiseEvent(ConnectAttempt.GetInvocationList(), this);
+                this.ConnectAttempt(this);
             }
         }
 
@@ -742,13 +742,13 @@ namespace PRoCon.Core.Remote {
             if (LoginFailure != null) {
                 State = ConnectionState.Error;
 
-                FrostbiteConnection.RaiseEvent(LoginFailure.GetInvocationList(), this, strError);
+                this.LoginFailure(this, strError);
             }
         }
 
         private void Game_Logout(FrostbiteClient sender) {
             if (Logout != null) {
-                FrostbiteConnection.RaiseEvent(Logout.GetInvocationList(), this);
+                this.Logout(this);
             }
         }
 
@@ -803,7 +803,7 @@ namespace PRoCon.Core.Remote {
             ExecuteConnectionConfig("connection_onlogin.cfg", 0, null, false);
 
             if (Login != null) {
-                FrostbiteConnection.RaiseEvent(Login.GetInvocationList(), this);
+                this.Login(this);
             }
 
             // Tasks
@@ -823,7 +823,7 @@ namespace PRoCon.Core.Remote {
                 _connection.Shutdown();
             }
             else if (ConnectionClosed != null) {
-                FrostbiteConnection.RaiseEvent(ConnectionClosed.GetInvocationList(), this);
+                this.ConnectionClosed(this);
             }
         }
 
@@ -934,7 +934,7 @@ namespace PRoCon.Core.Remote {
                 //this.m_uscParent.OnRemoteAccountLoggedIn(cpBeforePacketDispatch.Words[1], true);
 
                 if (RemoteAccountLoggedIn != null) {
-                    FrostbiteConnection.RaiseEvent(RemoteAccountLoggedIn.GetInvocationList(), this, cpBeforePacketDispatch.Words[1], true);
+                    this.RemoteAccountLoggedIn(this, cpBeforePacketDispatch.Words[1], true);
                 }
 
                 blCancelPacket = true;
@@ -943,7 +943,7 @@ namespace PRoCon.Core.Remote {
                 //this.SendPacket(new Packet(true, true, cpBeforePacketDispatch.SequenceNumber, new List<string>() { "OK" }));
 
                 if (RemoteAccountLoggedIn != null) {
-                    FrostbiteConnection.RaiseEvent(RemoteAccountLoggedIn.GetInvocationList(), this, cpBeforePacketDispatch.Words[1], false);
+                    this.RemoteAccountLoggedIn(this, cpBeforePacketDispatch.Words[1], false);
                 }
 
                 blCancelPacket = true;
@@ -962,7 +962,7 @@ namespace PRoCon.Core.Remote {
                 //this.SendPacket(new Packet(true, true, cpBeforePacketDispatch.SequenceNumber, new List<string>() { "OK" }));
 
                 if (RemoteAccountCreated != null) {
-                    FrostbiteConnection.RaiseEvent(RemoteAccountCreated.GetInvocationList(), this, cpBeforePacketDispatch.Words[1]);
+                    this.RemoteAccountCreated(this, cpBeforePacketDispatch.Words[1]);
                 }
 
                 blCancelPacket = true;
@@ -971,7 +971,7 @@ namespace PRoCon.Core.Remote {
                 //this.SendPacket(new Packet(true, true, cpBeforePacketDispatch.SequenceNumber, new List<string>() { "OK" }));
 
                 if (RemoteAccountDeleted != null) {
-                    FrostbiteConnection.RaiseEvent(RemoteAccountDeleted.GetInvocationList(), this, cpBeforePacketDispatch.Words[1]);
+                    this.RemoteAccountDeleted(this, cpBeforePacketDispatch.Words[1]);
                 }
 
                 blCancelPacket = true;
@@ -987,11 +987,11 @@ namespace PRoCon.Core.Remote {
                     if (ProconPrivileges != null && String.Compare(cpBeforePacketDispatch.Words[1], Username) == 0) {
                         Privileges = spPrivs;
 
-                        FrostbiteConnection.RaiseEvent(ProconPrivileges.GetInvocationList(), this, spPrivs);
+                        this.ProconPrivileges(this, spPrivs);
                     }
 
                     if (RemoteAccountAltered != null) {
-                        FrostbiteConnection.RaiseEvent(RemoteAccountAltered.GetInvocationList(), this, cpBeforePacketDispatch.Words[1], spPrivs);
+                        this.RemoteAccountAltered(this, cpBeforePacketDispatch.Words[1], spPrivs);
                     }
                 }
 
@@ -1000,28 +1000,28 @@ namespace PRoCon.Core.Remote {
 
             else if (cpBeforePacketDispatch.Words.Count >= 2 && String.Compare(cpBeforePacketDispatch.Words[0], "procon.packages.onDownloading", true) == 0) {
                 if (PackageDownloading != null) {
-                    FrostbiteConnection.RaiseEvent(PackageDownloading.GetInvocationList(), this, cpBeforePacketDispatch.Words[1]);
+                    this.PackageDownloading(this, cpBeforePacketDispatch.Words[1]);
                 }
 
                 blCancelPacket = true;
             }
             else if (cpBeforePacketDispatch.Words.Count >= 2 && String.Compare(cpBeforePacketDispatch.Words[0], "procon.packages.onDownloaded", true) == 0) {
                 if (PackageDownloaded != null) {
-                    FrostbiteConnection.RaiseEvent(PackageDownloaded.GetInvocationList(), this, cpBeforePacketDispatch.Words[1]);
+                    this.PackageDownloaded(this, cpBeforePacketDispatch.Words[1]);
                 }
 
                 blCancelPacket = true;
             }
             else if (cpBeforePacketDispatch.Words.Count >= 2 && String.Compare(cpBeforePacketDispatch.Words[0], "procon.packages.onInstalling", true) == 0) {
                 if (PackageInstalling != null) {
-                    FrostbiteConnection.RaiseEvent(PackageInstalling.GetInvocationList(), this, cpBeforePacketDispatch.Words[1]);
+                    this.PackageInstalling(this, cpBeforePacketDispatch.Words[1]);
                 }
 
                 blCancelPacket = true;
             }
             else if (cpBeforePacketDispatch.Words.Count >= 3 && String.Compare(cpBeforePacketDispatch.Words[0], "procon.packages.onDownloadError", true) == 0) {
                 if (PackageDownloadError != null) {
-                    FrostbiteConnection.RaiseEvent(PackageDownloadError.GetInvocationList(), this, cpBeforePacketDispatch.Words[1], cpBeforePacketDispatch.Words[2]);
+                    this.PackageDownloadError(this, cpBeforePacketDispatch.Words[1], cpBeforePacketDispatch.Words[2]);
                 }
 
                 blCancelPacket = true;
@@ -1031,7 +1031,7 @@ namespace PRoCon.Core.Remote {
 
                 if (bool.TryParse(cpBeforePacketDispatch.Words[2], out restartRequired) == true) {
                     if (PackageInstalled != null) {
-                        FrostbiteConnection.RaiseEvent(PackageInstalled.GetInvocationList(), this, cpBeforePacketDispatch.Words[1], restartRequired);
+                        this.PackageInstalled(this, cpBeforePacketDispatch.Words[1], restartRequired);
                     }
                 }
 
@@ -1044,7 +1044,7 @@ namespace PRoCon.Core.Remote {
 
                 if (long.TryParse(cpBeforePacketDispatch.Words[1], out logTime) == true) {
                     if (ReadRemoteChatConsole != null) {
-                        FrostbiteConnection.RaiseEvent(ReadRemoteChatConsole.GetInvocationList(), this, DateTime.FromBinary(logTime), cpBeforePacketDispatch.Words[2]);
+                        this.ReadRemoteChatConsole(this, DateTime.FromBinary(logTime), cpBeforePacketDispatch.Words[2]);
                     }
                 }
             }
@@ -1053,7 +1053,7 @@ namespace PRoCon.Core.Remote {
 
                 if (long.TryParse(cpBeforePacketDispatch.Words[1], out logTime) == true) {
                     if (ReadRemotePluginConsole != null) {
-                        FrostbiteConnection.RaiseEvent(ReadRemotePluginConsole.GetInvocationList(), this, DateTime.FromBinary(logTime), cpBeforePacketDispatch.Words[2]);
+                        this.ReadRemotePluginConsole(this, DateTime.FromBinary(logTime), cpBeforePacketDispatch.Words[2]);
                     }
                 }
             }
@@ -1072,7 +1072,7 @@ namespace PRoCon.Core.Remote {
                 }
 
                 if (RemotePluginVariables != null) {
-                    FrostbiteConnection.RaiseEvent(RemotePluginVariables.GetInvocationList(), this, strClassName, lstVariables);
+                    this.RemotePluginVariables(this, strClassName, lstVariables);
                 }
 
                 blCancelPacket = true;
@@ -1101,7 +1101,7 @@ namespace PRoCon.Core.Remote {
                     }
 
                     if (RemotePluginLoaded != null) {
-                        FrostbiteConnection.RaiseEvent(RemotePluginLoaded.GetInvocationList(), this, spdLoaded);
+                        this.RemotePluginLoaded(this, spdLoaded);
                     }
                 }
 
@@ -1113,7 +1113,7 @@ namespace PRoCon.Core.Remote {
                 bool blEnabled = false;
 
                 if (bool.TryParse(cpBeforePacketDispatch.Words[2], out blEnabled) == true && RemotePluginEnabled != null) {
-                    FrostbiteConnection.RaiseEvent(RemotePluginEnabled.GetInvocationList(), this, cpBeforePacketDispatch.Words[1], blEnabled);
+                    this.RemotePluginEnabled(this, cpBeforePacketDispatch.Words[1], blEnabled);
                 }
 
                 blCancelPacket = true;
@@ -1122,11 +1122,11 @@ namespace PRoCon.Core.Remote {
                 //this.SendPacket(new Packet(true, true, cpBeforePacketDispatch.SequenceNumber, new List<string>() { "OK" }));
 
                 if (ProconAdminSaying != null) {
-                    FrostbiteConnection.RaiseEvent(ProconAdminSaying.GetInvocationList(), this, cpBeforePacketDispatch.Words[1], cpBeforePacketDispatch.Words[2], new CPlayerSubset(cpBeforePacketDispatch.Words.GetRange(3, cpBeforePacketDispatch.Words.Count - 3)));
+                    this.ProconAdminSaying(this, cpBeforePacketDispatch.Words[1], cpBeforePacketDispatch.Words[2], new CPlayerSubset(cpBeforePacketDispatch.Words.GetRange(3, cpBeforePacketDispatch.Words.Count - 3)));
                 }
 
                 if (PassLayerEvent != null) {
-                    FrostbiteConnection.RaiseEvent(PassLayerEvent.GetInvocationList(), this, cpBeforePacketDispatch);
+                    this.PassLayerEvent(this, cpBeforePacketDispatch);
                 }
 
                 blCancelPacket = true;
@@ -1138,10 +1138,10 @@ namespace PRoCon.Core.Remote {
                 int iDisplayDuration = 0;
 
                 if (ProconAdminYelling != null) {
-                    FrostbiteConnection.RaiseEvent(ProconAdminYelling.GetInvocationList(), this, cpBeforePacketDispatch.Words[1], cpBeforePacketDispatch.Words[2], iDisplayDuration, new CPlayerSubset(cpBeforePacketDispatch.Words.GetRange(4, cpBeforePacketDispatch.Words.Count - 4)));
+                    this.ProconAdminYelling(this, cpBeforePacketDispatch.Words[1], cpBeforePacketDispatch.Words[2], iDisplayDuration, new CPlayerSubset(cpBeforePacketDispatch.Words.GetRange(4, cpBeforePacketDispatch.Words.Count - 4)));
                 }
                 if (PassLayerEvent != null) {
-                    FrostbiteConnection.RaiseEvent(PassLayerEvent.GetInvocationList(), this, cpBeforePacketDispatch);
+                    this.PassLayerEvent(this, cpBeforePacketDispatch);
                 }
 
                 blCancelPacket = true;
@@ -1154,11 +1154,11 @@ namespace PRoCon.Core.Remote {
 
                 if (int.TryParse(cpBeforePacketDispatch.Words[3], out iDisplayDuration) == true) {
                     if (ProconAdminYelling != null) {
-                        FrostbiteConnection.RaiseEvent(ProconAdminYelling.GetInvocationList(), this, cpBeforePacketDispatch.Words[1], cpBeforePacketDispatch.Words[2], iDisplayDuration, new CPlayerSubset(cpBeforePacketDispatch.Words.GetRange(4, cpBeforePacketDispatch.Words.Count - 4)));
+                        this.ProconAdminYelling(this, cpBeforePacketDispatch.Words[1], cpBeforePacketDispatch.Words[2], iDisplayDuration, new CPlayerSubset(cpBeforePacketDispatch.Words.GetRange(4, cpBeforePacketDispatch.Words.Count - 4)));
                     }
 
                     if (PassLayerEvent != null) {
-                        FrostbiteConnection.RaiseEvent(PassLayerEvent.GetInvocationList(), this, cpBeforePacketDispatch);
+                        this.PassLayerEvent(this, cpBeforePacketDispatch);
                     }
                 }
 
@@ -1175,10 +1175,10 @@ namespace PRoCon.Core.Remote {
                     }
 
                     if (ProconAdminPinging != null) {
-                        FrostbiteConnection.RaiseEvent(ProconAdminPinging.GetInvocationList(), this, strSoldierName, iPing);
+                        this.ProconAdminPinging(this, strSoldierName, iPing);
                     }
                     if (PassLayerEvent != null) {
-                        FrostbiteConnection.RaiseEvent(PassLayerEvent.GetInvocationList(), this, cpBeforePacketDispatch);
+                        this.PassLayerEvent(this, cpBeforePacketDispatch);
                     }
                 }
                 blCancelPacket = true;
@@ -1209,7 +1209,7 @@ namespace PRoCon.Core.Remote {
                     cpAssumedResponsePacket = null;
 
                     if (PassLayerEvent != null) {
-                        FrostbiteConnection.RaiseEvent(PassLayerEvent.GetInvocationList(), this, cpBeforePacketDispatch);
+                        this.PassLayerEvent(this, cpBeforePacketDispatch);
                     }
                 }
 
@@ -1218,7 +1218,7 @@ namespace PRoCon.Core.Remote {
 
             else if (cpBeforePacketDispatch.Words.Count >= 2 && String.Compare(cpBeforePacketDispatch.Words[0], "procon.battlemap.onZoneRemoved", true) == 0) {
                 if (MapZoneDeleted != null) {
-                    FrostbiteConnection.RaiseEvent(MapZoneDeleted.GetInvocationList(), this, new MapZoneDrawing(cpBeforePacketDispatch.Words[1], String.Empty, String.Empty, null, true));
+                    this.MapZoneDeleted(this, new MapZoneDrawing(cpBeforePacketDispatch.Words[1], String.Empty, String.Empty, null, true));
                 }
             }
 
@@ -1235,7 +1235,7 @@ namespace PRoCon.Core.Remote {
                     }
 
                     if (MapZoneCreated != null) {
-                        FrostbiteConnection.RaiseEvent(MapZoneCreated.GetInvocationList(), this, new MapZoneDrawing(cpBeforePacketDispatch.Words[1], cpBeforePacketDispatch.Words[2], String.Empty, points, true));
+                        this.MapZoneCreated(this, new MapZoneDrawing(cpBeforePacketDispatch.Words[1], cpBeforePacketDispatch.Words[2], String.Empty, points, true));
                     }
                 }
 
@@ -1255,7 +1255,7 @@ namespace PRoCon.Core.Remote {
                     }
 
                     if (MapZoneModified != null) {
-                        FrostbiteConnection.RaiseEvent(MapZoneModified.GetInvocationList(), this, new MapZoneDrawing(cpBeforePacketDispatch.Words[1], String.Empty, cpBeforePacketDispatch.Words[2], points, true));
+                        this.MapZoneModified(this, new MapZoneDrawing(cpBeforePacketDispatch.Words[1], String.Empty, cpBeforePacketDispatch.Words[2], points, true));
                     }
                 }
 
@@ -1269,7 +1269,7 @@ namespace PRoCon.Core.Remote {
                 SV_Variables.SetVariable(cpBeforePacketDispatch.Words[1], cpBeforePacketDispatch.Words[2]);
 
                 if (ReceiveProconVariable != null) {
-                    FrostbiteConnection.RaiseEvent(ReceiveProconVariable.GetInvocationList(), this, cpBeforePacketDispatch.Words[1], cpBeforePacketDispatch.Words[2]);
+                    this.ReceiveProconVariable(this, cpBeforePacketDispatch.Words[1], cpBeforePacketDispatch.Words[2]);
                 }
 
                 blCancelPacket = true;
@@ -1278,7 +1278,7 @@ namespace PRoCon.Core.Remote {
             else {
                 //  if (blCommandConnection == false) Pass everything else onto any connected clients..
                 if (PassLayerEvent != null) {
-                    FrostbiteConnection.RaiseEvent(PassLayerEvent.GetInvocationList(), this, cpBeforePacketDispatch);
+                    this.PassLayerEvent(this, cpBeforePacketDispatch);
                 }
             }
 
@@ -1292,7 +1292,7 @@ namespace PRoCon.Core.Remote {
                 if (cpRequestPacket != null) {
                     if (cpBeforePacketDispatch.Words.Count >= 1 && String.Compare(cpBeforePacketDispatch.Words[0], "InvalidUsername", true) == 0) {
                         if (LoginFailure != null) {
-                            FrostbiteConnection.RaiseEvent(LoginFailure.GetInvocationList(), this, cpBeforePacketDispatch.Words[0]);
+                            this.LoginFailure(this, cpBeforePacketDispatch.Words[0]);
                         }
 
                         Shutdown();
@@ -1305,7 +1305,7 @@ namespace PRoCon.Core.Remote {
                             ConnectedLayerVersion = new Version(cpBeforePacketDispatch.Words[1]);
 
                             if (ProconVersion != null) {
-                                FrostbiteConnection.RaiseEvent(ProconVersion.GetInvocationList(), this, ConnectedLayerVersion);
+                                this.ProconVersion(this, ConnectedLayerVersion);
                             }
                         }
                         catch (Exception) {
@@ -1322,7 +1322,7 @@ namespace PRoCon.Core.Remote {
                             Privileges = spPrivs;
 
                             if (ProconPrivileges != null) {
-                                FrostbiteConnection.RaiseEvent(ProconPrivileges.GetInvocationList(), this, spPrivs);
+                                this.ProconPrivileges(this, spPrivs);
                             }
                         }
 
@@ -1353,8 +1353,8 @@ namespace PRoCon.Core.Remote {
                                 spPrivs.PrivilegesFlags = ui32Privileges;
 
                                 if (RemoteAccountCreated != null && RemoteAccountAltered != null) {
-                                    FrostbiteConnection.RaiseEvent(RemoteAccountCreated.GetInvocationList(), this, cpBeforePacketDispatch.Words[i]);
-                                    FrostbiteConnection.RaiseEvent(RemoteAccountAltered.GetInvocationList(), this, cpBeforePacketDispatch.Words[i], spPrivs);
+                                    this.RemoteAccountCreated(this, cpBeforePacketDispatch.Words[i]);
+                                    this.RemoteAccountAltered(this, cpBeforePacketDispatch.Words[i], spPrivs);
                                 }
                             }
                         }
@@ -1392,7 +1392,7 @@ namespace PRoCon.Core.Remote {
                         }
 
                         if (ListMapZones != null) {
-                            FrostbiteConnection.RaiseEvent(ListMapZones.GetInvocationList(), this, zones);
+                            this.ListMapZones(this, zones);
                         }
 
                         blCancelPacket = true;
@@ -1401,7 +1401,7 @@ namespace PRoCon.Core.Remote {
 
                     else if (cpRequestPacket.Words.Count >= 1 && String.Compare(cpRequestPacket.Words[0], "procon.account.setPassword", true) == 0 && cpBeforePacketDispatch.Words.Count >= 1 && String.Compare(cpBeforePacketDispatch.Words[0], "OK", true) == 0) {
                         if (RemoteAccountChangePassword != null) {
-                            FrostbiteConnection.RaiseEvent(RemoteAccountChangePassword.GetInvocationList(), this);
+                            this.RemoteAccountChangePassword(this);
                         }
 
                         blCancelPacket = true;
@@ -1411,7 +1411,7 @@ namespace PRoCon.Core.Remote {
 
                         if (RemoteAccountLoggedIn != null) {
                             for (int i = 1; i < cpBeforePacketDispatch.Words.Count; i++) {
-                                FrostbiteConnection.RaiseEvent(RemoteAccountLoggedIn.GetInvocationList(), this, cpBeforePacketDispatch.Words[i], true);
+                                this.RemoteAccountLoggedIn(this, cpBeforePacketDispatch.Words[i], true);
 
                                 if (containsUids == true && i + 1 < cpBeforePacketDispatch.Words.Count) {
                                     if (m_dicUsernamesToUids.ContainsKey(cpBeforePacketDispatch.Words[i]) == true) {
@@ -1434,7 +1434,7 @@ namespace PRoCon.Core.Remote {
                             var lstEnabledPlugins = new List<string>(cpBeforePacketDispatch.Words);
                             lstEnabledPlugins.RemoveAt(0);
 
-                            FrostbiteConnection.RaiseEvent(RemoteEnabledPlugins.GetInvocationList(), this, lstEnabledPlugins);
+                            this.RemoteEnabledPlugins(this, lstEnabledPlugins);
                         }
 
                         blCancelPacket = true;
@@ -1443,7 +1443,7 @@ namespace PRoCon.Core.Remote {
                         SV_Variables.SetVariable(cpBeforePacketDispatch.Words[1], cpBeforePacketDispatch.Words[2]);
 
                         if (ReceiveProconVariable != null) {
-                            FrostbiteConnection.RaiseEvent(ReceiveProconVariable.GetInvocationList(), this, cpBeforePacketDispatch.Words[1], cpBeforePacketDispatch.Words[2]);
+                            this.ReceiveProconVariable(this, cpBeforePacketDispatch.Words[1], cpBeforePacketDispatch.Words[2]);
                         }
                         // Dispatch to plugins.
                     }
@@ -1477,7 +1477,7 @@ namespace PRoCon.Core.Remote {
                                     }
                                 }
 
-                                FrostbiteConnection.RaiseEvent(RemoteLoadedPlugins.GetInvocationList(), this, dicLoadedPlugins);
+                                this.RemoteLoadedPlugins(this, dicLoadedPlugins);
                             }
                         }
 
@@ -1485,7 +1485,7 @@ namespace PRoCon.Core.Remote {
                     }
                     else if (cpRequestPacket.Words.Count >= 2 && String.Compare(cpRequestPacket.Words[0], "login.hashed", true) == 0 && cpBeforePacketDispatch.Words.Count >= 1 && String.Compare(cpBeforePacketDispatch.Words[0], "InsufficientPrivileges", true) == 0) {
                         if (LoginFailure != null) {
-                            FrostbiteConnection.RaiseEvent(LoginFailure.GetInvocationList(), this, cpBeforePacketDispatch.Words[0]);
+                            this.LoginFailure(this, cpBeforePacketDispatch.Words[0]);
                         }
 
                         Shutdown();
@@ -1498,7 +1498,7 @@ namespace PRoCon.Core.Remote {
 
                         // This is the first command we would recieve so now we know we're connected through a PRoCon layer.
                         if (LoginAttempt != null) {
-                            FrostbiteConnection.RaiseEvent(LoginAttempt.GetInvocationList(), this);
+                            this.LoginAttempt(this);
                         }
 
                         Game.SendLoginHashedPacket(Password);
@@ -1517,7 +1517,7 @@ namespace PRoCon.Core.Remote {
                     else if (cpRequestPacket.Words.Count >= 2 && String.Compare(cpRequestPacket.Words[0], "procon.login.username", true) == 0 && cpBeforePacketDispatch.Words.Count >= 1 && String.Compare(cpBeforePacketDispatch.Words[0], "InsufficientPrivileges", true) == 0) {
                         // The servers just told us off, try and login normally.
                         if (LoginFailure != null) {
-                            FrostbiteConnection.RaiseEvent(LoginFailure.GetInvocationList(), this, cpBeforePacketDispatch.Words[0]);
+                            this.LoginFailure(this, cpBeforePacketDispatch.Words[0]);
                         }
 
                         Shutdown();
@@ -1533,12 +1533,12 @@ namespace PRoCon.Core.Remote {
                                 List<string> lstWords = m_dicForwardedPackets[cpBeforePacketDispatch.SequenceNumber].m_lstWords;
 
                                 if (ProconAdminSaying != null) {
-                                    FrostbiteConnection.RaiseEvent(ProconAdminSaying.GetInvocationList(), this, lstWords[1], lstWords[2], new CPlayerSubset(lstWords.GetRange(3, lstWords.Count - 3)));
+                                    this.ProconAdminSaying(this, lstWords[1], lstWords[2], new CPlayerSubset(lstWords.GetRange(3, lstWords.Count - 3)));
                                 }
                             }
 
                             if (PassLayerEvent != null) {
-                                FrostbiteConnection.RaiseEvent(PassLayerEvent.GetInvocationList(), this, new Packet(true, false, cpRequestPacket.SequenceNumber, m_dicForwardedPackets[cpBeforePacketDispatch.SequenceNumber].m_lstWords));
+                                this.PassLayerEvent(this, new Packet(true, false, cpRequestPacket.SequenceNumber, m_dicForwardedPackets[cpBeforePacketDispatch.SequenceNumber].m_lstWords));
                             }
 
                             // Send to all logged in layer clients
@@ -1559,14 +1559,14 @@ namespace PRoCon.Core.Remote {
 
                                 if (int.TryParse(lstWords[3], out iDisplayDuration) == true) {
                                     if (ProconAdminYelling != null) {
-                                        FrostbiteConnection.RaiseEvent(ProconAdminYelling.GetInvocationList(), this, lstWords[1], lstWords[2], iDisplayDuration, new CPlayerSubset(lstWords.GetRange(4, lstWords.Count - 4)));
+                                        this.ProconAdminYelling(this, lstWords[1], lstWords[2], iDisplayDuration, new CPlayerSubset(lstWords.GetRange(4, lstWords.Count - 4)));
                                     }
                                 }
                             }
 
                             // Send to all logged in layer clients
                             if (PassLayerEvent != null) {
-                                FrostbiteConnection.RaiseEvent(PassLayerEvent.GetInvocationList(), this, new Packet(true, false, cpRequestPacket.SequenceNumber, m_dicForwardedPackets[cpBeforePacketDispatch.SequenceNumber].m_lstWords));
+                                this.PassLayerEvent(this, new Packet(true, false, cpRequestPacket.SequenceNumber, m_dicForwardedPackets[cpBeforePacketDispatch.SequenceNumber].m_lstWords));
                             }
 
                             m_dicForwardedPackets.Remove(cpBeforePacketDispatch.SequenceNumber);
@@ -1587,14 +1587,14 @@ namespace PRoCon.Core.Remote {
                                 if (int.TryParse(lstWords[3], out iDisplayDuration) == true) {
                                     iDisplayDuration = 0;
                                     if (ProconAdminYelling != null) {
-                                        FrostbiteConnection.RaiseEvent(ProconAdminYelling.GetInvocationList(), this, lstWords[1], lstWords[2], iDisplayDuration, new CPlayerSubset(lstWords.GetRange(4, lstWords.Count - 4)));
+                                        this.ProconAdminYelling(this, lstWords[1], lstWords[2], iDisplayDuration, new CPlayerSubset(lstWords.GetRange(4, lstWords.Count - 4)));
                                     }
                                 }
                             }
 
                             // Send to all logged in layer clients
                             if (PassLayerEvent != null) {
-                                FrostbiteConnection.RaiseEvent(PassLayerEvent.GetInvocationList(), this, new Packet(true, false, cpRequestPacket.SequenceNumber, m_dicForwardedPackets[cpBeforePacketDispatch.SequenceNumber].m_lstWords));
+                                this.PassLayerEvent(this, new Packet(true, false, cpRequestPacket.SequenceNumber, m_dicForwardedPackets[cpBeforePacketDispatch.SequenceNumber].m_lstWords));
                             }
 
                             m_dicForwardedPackets.Remove(cpBeforePacketDispatch.SequenceNumber);
@@ -1616,7 +1616,7 @@ namespace PRoCon.Core.Remote {
                         // Don't pass on anything regarding login
                         if ((lstProconUpdatedWords.Count >= 4 && (String.Compare(lstProconUpdatedWords[2], "login.plainText", true) == 0 || String.Compare(lstProconUpdatedWords[2], "login.hashed", true) == 0)) == false) {
                             if (PassLayerEvent != null) {
-                                FrostbiteConnection.RaiseEvent(PassLayerEvent.GetInvocationList(), this, new Packet(true, false, cpRequestPacket.SequenceNumber, lstProconUpdatedWords));
+                                this.PassLayerEvent(this, new Packet(true, false, cpRequestPacket.SequenceNumber, lstProconUpdatedWords));
                             }
                         }
                     }
@@ -1651,7 +1651,7 @@ namespace PRoCon.Core.Remote {
                             // Don't pass on anything regarding login
                             if ((lstProconUpdatedWords.Count >= 4 && (String.Compare(lstProconUpdatedWords[2], "login.plainText", true) == 0 || String.Compare(lstProconUpdatedWords[2], "login.hashed", true) == 0)) == false) {
                                 if (PassLayerEvent != null) {
-                                    FrostbiteConnection.RaiseEvent(PassLayerEvent.GetInvocationList(), this, new Packet(true, false, cpRequestPacket.SequenceNumber, lstProconUpdatedWords));
+                                    this.PassLayerEvent(this, new Packet(true, false, cpRequestPacket.SequenceNumber, lstProconUpdatedWords));
                                 }
                             }
                         }
@@ -2513,7 +2513,7 @@ namespace PRoCon.Core.Remote {
                     cpVictim = new CPlayerInfo(strVictim, String.Empty, 0, 0);
                 }
 
-                FrostbiteConnection.RaiseEvent(PlayerKilled.GetInvocationList(), this, new Kill(cpKiller, cpVictim, strDamageType, blHeadshot, pntKiller, pntVictim));
+                this.PlayerKilled(this, new Kill(cpKiller, cpVictim, strDamageType, blHeadshot, pntKiller, pntVictim));
             }
         }
 
@@ -2534,10 +2534,10 @@ namespace PRoCon.Core.Remote {
                         }
                     }
 
-                    FrostbiteConnection.RaiseEvent(PlayerSpawned.GetInvocationList(), this, soldierName, inv);
+                    this.PlayerSpawned(this, soldierName, inv);
                 }
                 else {
-                    FrostbiteConnection.RaiseEvent(PlayerSpawned.GetInvocationList(), this, soldierName, new Inventory(Kits.None));
+                    this.PlayerSpawned(this, soldierName, new Inventory(Kits.None));
                 }
             }
         }
@@ -2617,7 +2617,7 @@ namespace PRoCon.Core.Remote {
                 InitialSetup();
 
                 if (GameTypeDiscovered != null) {
-                    FrostbiteConnection.RaiseEvent(GameTypeDiscovered.GetInvocationList(), this);
+                    this.GameTypeDiscovered(this);
                 }
             }
             else if (CurrentServerInfo != null && oldGameMod != csiServerInfo.GameMod) {
@@ -2652,18 +2652,18 @@ namespace PRoCon.Core.Remote {
                 var newPbInfo = new CPunkbusterInfo(mMatch.Groups["slotid"].Value, mMatch.Groups["name"].Value, mMatch.Groups["guid"].Value, mMatch.Groups["ip"].Value, Parent.GetCountryName(mMatch.Groups["ip"].Value), Parent.GetCountryCode(mMatch.Groups["ip"].Value));
 
                 if (PunkbusterPlayerInfo != null) {
-                    FrostbiteConnection.RaiseEvent(PunkbusterPlayerInfo.GetInvocationList(), this, newPbInfo);
+                    this.PunkbusterPlayerInfo(this, newPbInfo);
                 }
             }
 
             mMatch = Parent.RegexMatchPunkbusterBeginPlist.Match(strPunkbusterMessage);
             if (mMatch.Success == true && PunkbusterBeginPlayerInfo != null) {
-                FrostbiteConnection.RaiseEvent(PunkbusterBeginPlayerInfo.GetInvocationList(), this);
+                this.PunkbusterBeginPlayerInfo(this);
             }
 
             mMatch = Parent.RegexMatchPunkbusterEndPlist.Match(strPunkbusterMessage);
             if (mMatch.Success == true && PunkbusterEndPlayerInfo != null) {
-                FrostbiteConnection.RaiseEvent(PunkbusterEndPlayerInfo.GetInvocationList(), this);
+                this.PunkbusterEndPlayerInfo(this);
             }
 
             // PunkBuster Server: Player Guid Computed ([A-Za-z0-9]+)\(.*?\) \(slot #([0-9]+)\) ([0-9\.:]+) (.*)
@@ -2675,7 +2675,7 @@ namespace PRoCon.Core.Remote {
                 var newPbInfo = new CPunkbusterInfo(mMatch.Groups["slotid"].Value, mMatch.Groups["name"].Value, mMatch.Groups["guid"].Value, mMatch.Groups["ip"].Value, Parent.GetCountryName(mMatch.Groups["ip"].Value), Parent.GetCountryCode(mMatch.Groups["ip"].Value));
 
                 if (PunkbusterPlayerInfo != null) {
-                    FrostbiteConnection.RaiseEvent(PunkbusterPlayerInfo.GetInvocationList(), this, newPbInfo);
+                    this.PunkbusterPlayerInfo(this, newPbInfo);
                 }
             }
 
@@ -2693,7 +2693,7 @@ namespace PRoCon.Core.Remote {
                 var newPbBanInfo = new CBanInfo(mMatch.Groups["name"].Value, mMatch.Groups["guid"].Value, mMatch.Groups["ip"].Value, new TimeoutSubset(mMatch.Groups["banlength"].Value, mMatch.Groups["remaining"].Value), mMatch.Groups["reason"].Value);
 
                 if (PunkbusterPlayerBanned != null) {
-                    FrostbiteConnection.RaiseEvent(PunkbusterPlayerBanned.GetInvocationList(), this, newPbBanInfo);
+                    this.PunkbusterPlayerBanned(this, newPbBanInfo);
                 }
             }
 
@@ -2726,7 +2726,7 @@ namespace PRoCon.Core.Remote {
                 var newPbBanInfo = new CBanInfo(mMatch.Groups["name"].Value, mMatch.Groups["guid"].Value, mMatch.Groups["ip"].Value, kb_timeoutSubset, mMatch.Groups["reason"].Value);
 
                 if (PunkbusterPlayerBanned != null) {
-                    FrostbiteConnection.RaiseEvent(PunkbusterPlayerBanned.GetInvocationList(), this, newPbBanInfo);
+                    this.PunkbusterPlayerBanned(this, newPbBanInfo);
                 }
             }
 
@@ -2737,7 +2737,7 @@ namespace PRoCon.Core.Remote {
                 var cbiUnbannedPlayer = new CBanInfo(String.Empty, mMatch.Groups["guid"].Value, String.Empty, new TimeoutSubset(TimeoutSubset.TimeoutSubsetType.None), String.Empty);
 
                 if (PunkbusterPlayerUnbanned != null) {
-                    FrostbiteConnection.RaiseEvent(PunkbusterPlayerUnbanned.GetInvocationList(), this, cbiUnbannedPlayer);
+                    this.PunkbusterPlayerUnbanned(this, cbiUnbannedPlayer);
                 }
             }
 
@@ -2788,7 +2788,7 @@ namespace PRoCon.Core.Remote {
             else {
                 // We have recieved the whole banlist in 100 ban increments.. throw event.
                 if (FullBanListList != null) {
-                    FrostbiteConnection.RaiseEvent(FullBanListList.GetInvocationList(), this, FullVanillaBanList);
+                    this.FullBanListList(this, FullVanillaBanList);
                 }
             }
         }
@@ -2797,7 +2797,7 @@ namespace PRoCon.Core.Remote {
             // Banlist backwards compatability with R11 (Will attempt to get "banList.list 100" which will throw this error)
             if (originalRequest.Words.Count > 0 && String.Compare(originalRequest.Words[0], "banList.list", true) == 0 && String.Compare(errorMessage, "InvalidArguments", true) == 0) {
                 if (FullBanListList != null) {
-                    FrostbiteConnection.RaiseEvent(FullBanListList.GetInvocationList(), this, FullVanillaBanList);
+                    this.FullBanListList(this, FullVanillaBanList);
                 }
             }
         }
@@ -2835,7 +2835,7 @@ namespace PRoCon.Core.Remote {
             else {
                 // We have recieved the whole banlist in 100 ban increments.. throw event.
                 if (FullTextChatModerationListList != null) {
-                    FrostbiteConnection.RaiseEvent(FullTextChatModerationListList.GetInvocationList(), this, FullTextChatModerationList);
+                    this.FullTextChatModerationListList(this, FullTextChatModerationList);
                 }
             }
         }
@@ -3131,20 +3131,20 @@ namespace PRoCon.Core.Remote {
 
                 PluginsManager = new PluginManager(this);
                 if (RecompilingPlugins != null) {
-                    FrostbiteConnection.RaiseEvent(RecompilingPlugins.GetInvocationList(), this);
+                    this.RecompilingPlugins(this);
                 }
             }
             else {
                 PluginsManager = new PluginManager(this);
                 if (CompilingPlugins != null) {
-                    FrostbiteConnection.RaiseEvent(CompilingPlugins.GetInvocationList(), this);
+                    this.CompilingPlugins(this);
                 }
             }
 
             PluginsManager.CompilePlugins(prmPluginSandbox, ignoredPluginClassNames);
 
             if (PluginsCompiled != null) {
-                FrostbiteConnection.RaiseEvent(PluginsCompiled.GetInvocationList(), this);
+                this.PluginsCompiled(this);
             }
 
             // Reload all the variables if it's a recompile

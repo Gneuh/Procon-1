@@ -84,7 +84,7 @@ namespace PRoCon.Core.Consoles {
             get { return _logJoinLeaving; }
             set {
                 if (LogJoinLeavingChanged != null) {
-                    FrostbiteConnection.RaiseEvent(LogJoinLeavingChanged.GetInvocationList(), value);
+                    this.LogJoinLeavingChanged(value);
                 }
 
                 _logJoinLeaving = value;
@@ -95,7 +95,7 @@ namespace PRoCon.Core.Consoles {
             get { return _logKills; }
             set {
                 if (LogKillsChanged != null) {
-                    FrostbiteConnection.RaiseEvent(LogKillsChanged.GetInvocationList(), value);
+                    this.LogKillsChanged(value);
                 }
 
                 _logKills = value;
@@ -106,7 +106,7 @@ namespace PRoCon.Core.Consoles {
             get { return _scrolling; }
             set {
                 if (ScrollingChanged != null) {
-                    FrostbiteConnection.RaiseEvent(ScrollingChanged.GetInvocationList(), value);
+                    this.ScrollingChanged(value);
                 }
 
                 _scrolling = value;
@@ -117,7 +117,7 @@ namespace PRoCon.Core.Consoles {
             get { return _logComRoseMessages; }
             set {
                 if (LogComRoseMessagesChanged != null) {
-                    FrostbiteConnection.RaiseEvent(LogComRoseMessagesChanged.GetInvocationList(), value);
+                    this.LogComRoseMessagesChanged(value);
                 }
 
                 _logComRoseMessages = value;
@@ -130,7 +130,7 @@ namespace PRoCon.Core.Consoles {
                 _displayTypeIndex = value;
 
                 if (DisplayTypeChanged != null) {
-                    FrostbiteConnection.RaiseEvent(DisplayTypeChanged.GetInvocationList(), _displayTypeIndex);
+                    this.DisplayTypeChanged(_displayTypeIndex);
                 }
             }
         }
@@ -141,7 +141,7 @@ namespace PRoCon.Core.Consoles {
                 _displayTimeIndex = value;
 
                 if (DisplayTimeChanged != null) {
-                    FrostbiteConnection.RaiseEvent(DisplayTimeChanged.GetInvocationList(), _displayTimeIndex);
+                    this.DisplayTimeChanged(_displayTimeIndex);
                 }
             }
         }
@@ -492,7 +492,7 @@ namespace PRoCon.Core.Consoles {
             Write(DateTime.UtcNow.ToUniversalTime().AddHours(Client.Game.UtcOffset).ToLocalTime(), strText);
 
             if (WriteConsoleViaCommand != null) {
-                FrostbiteConnection.RaiseEvent(WriteConsoleViaCommand.GetInvocationList(), DateTime.UtcNow.ToUniversalTime().AddHours(Client.Game.UtcOffset).ToLocalTime(), strText);
+                this.WriteConsoleViaCommand(DateTime.UtcNow.ToUniversalTime().AddHours(Client.Game.UtcOffset).ToLocalTime(), strText);
             }
         }
 
@@ -500,7 +500,7 @@ namespace PRoCon.Core.Consoles {
             WriteLogLine(String.Format("[{0}] {1}", dtLoggedTime.ToString("HH:mm:ss"), strText.Replace("{", "{{").Replace("}", "}}")));
 
             if (WriteConsole != null) {
-                FrostbiteConnection.RaiseEvent(WriteConsole.GetInvocationList(), dtLoggedTime, strText);
+                this.WriteConsole(dtLoggedTime, strText);
             }
         }
     }

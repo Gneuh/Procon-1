@@ -280,7 +280,7 @@ namespace PRoCon.Core.Plugin {
 
         private void WritePluginConsole(string strFormat, params object[] arguments) {
             if (PluginOutput != null) {
-                FrostbiteConnection.RaiseEvent(PluginOutput.GetInvocationList(), String.Format(strFormat, arguments));
+                this.PluginOutput(String.Format(strFormat, arguments));
             }
         }
 
@@ -292,7 +292,7 @@ namespace PRoCon.Core.Plugin {
                     Plugins[className].Type.Invoke("OnPluginEnable");
 
                     if (PluginEnabled != null) {
-                        FrostbiteConnection.RaiseEvent(PluginEnabled.GetInvocationList(), className);
+                        this.PluginEnabled(className);
                     }
                 }
                 catch (Exception e) {
@@ -309,7 +309,7 @@ namespace PRoCon.Core.Plugin {
                     Plugins[className].Type.Invoke("OnPluginDisable");
 
                     if (PluginDisabled != null) {
-                        FrostbiteConnection.RaiseEvent(PluginDisabled.GetInvocationList(), className);
+                        this.PluginDisabled(className);
                     }
                 }
                 catch (Exception e) {
@@ -341,7 +341,7 @@ namespace PRoCon.Core.Plugin {
                 InvokeOnLoaded(strClassName, "SetPluginVariable", new object[] {strVariable, strValue});
 
                 if (PluginVariableAltered != null) {
-                    FrostbiteConnection.RaiseEvent(PluginVariableAltered.GetInvocationList(), GetPluginDetails(strClassName));
+                    this.PluginVariableAltered(GetPluginDetails(strClassName));
                 }
             }
             else if (Plugins.IsLoaded(strClassName) == false) {
@@ -382,7 +382,7 @@ namespace PRoCon.Core.Plugin {
                 InvokeOnLoaded(strClassName, "SetPluginVariable", new object[] {strVariable, strValue});
 
                 if (PluginVariableAltered != null) {
-                    FrostbiteConnection.RaiseEvent(PluginVariableAltered.GetInvocationList(), GetPluginDetailsCon(strClassName));
+                    this.PluginVariableAltered(GetPluginDetailsCon(strClassName));
                 }
             }
             else if (Plugins.IsLoaded(strClassName) == false) {
@@ -703,7 +703,7 @@ namespace PRoCon.Core.Plugin {
                 InvokeOnLoaded(pluginClassName, "OnPluginLoaded", ProconClient.HostName, ProconClient.Port.ToString(CultureInfo.InvariantCulture), Assembly.GetExecutingAssembly().GetName().Version.ToString());
 
                 if (PluginLoaded != null) {
-                    FrostbiteConnection.RaiseEvent(PluginLoaded.GetInvocationList(), pluginClassName);
+                    this.PluginLoaded(pluginClassName);
                 }
             }
             //else {

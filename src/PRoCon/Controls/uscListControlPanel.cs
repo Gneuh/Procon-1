@@ -143,44 +143,44 @@ namespace PRoCon.Controls {
         }
 
         public void m_prcClient_ProconPrivileges(PRoConClient sender, CPrivileges spPrivs) {
+            this.InvokeIfRequired(() => {
+                this.m_spPrivileges = spPrivs;
 
-            this.m_spPrivileges = spPrivs;
+                this.m_dicAsyncSettingControls["local.reservedlist.append"].m_blReEnableControls = this.m_spPrivileges.CanEditReservedSlotsList;
+                this.m_dicAsyncSettingControls["local.reservedlist.remove"].m_blReEnableControls = this.m_spPrivileges.CanEditReservedSlotsList;
+                if (this.lsvReservedList.SelectedItems.Count > 0) {
+                    this.btnReservedRemoveSoldier.Enabled = this.m_spPrivileges.CanEditReservedSlotsList;
+                } // ELSE It'll already be disabled 
+                this.lnkReservedAddSoldierName.Enabled = this.m_spPrivileges.CanEditReservedSlotsList;
 
-            this.m_dicAsyncSettingControls["local.reservedlist.append"].m_blReEnableControls = this.m_spPrivileges.CanEditReservedSlotsList;
-            this.m_dicAsyncSettingControls["local.reservedlist.remove"].m_blReEnableControls = this.m_spPrivileges.CanEditReservedSlotsList;
-            if (this.lsvReservedList.SelectedItems.Count > 0) {
-                this.btnReservedRemoveSoldier.Enabled = this.m_spPrivileges.CanEditReservedSlotsList;
-            } // ELSE It'll already be disabled 
-            this.lnkReservedAddSoldierName.Enabled = this.m_spPrivileges.CanEditReservedSlotsList;
+                this.m_dicAsyncSettingControls["local.spectatorlist.append"].m_blReEnableControls = this.m_spPrivileges.CanEditReservedSlotsList;
+                this.m_dicAsyncSettingControls["local.spectatorlist.remove"].m_blReEnableControls = this.m_spPrivileges.CanEditReservedSlotsList;
+                if (this.lsvSpectatorList.SelectedItems.Count > 0) {
+                    this.btnSpectatorRemoveSoldier.Enabled = this.m_spPrivileges.CanEditReservedSlotsList;
+                } // ELSE It'll already be disabled 
+                this.lnkSpectatorAddSoldierName.Enabled = this.m_spPrivileges.CanEditReservedSlotsList;
 
-            this.m_dicAsyncSettingControls["local.spectatorlist.append"].m_blReEnableControls = this.m_spPrivileges.CanEditReservedSlotsList;
-            this.m_dicAsyncSettingControls["local.spectatorlist.remove"].m_blReEnableControls = this.m_spPrivileges.CanEditReservedSlotsList;
-            if (this.lsvSpectatorList.SelectedItems.Count > 0)
-            {
-                this.btnSpectatorRemoveSoldier.Enabled = this.m_spPrivileges.CanEditReservedSlotsList;
-            } // ELSE It'll already be disabled 
-            this.lnkSpectatorAddSoldierName.Enabled = this.m_spPrivileges.CanEditReservedSlotsList;
+                this.m_dicAsyncSettingControls["local.banlist.clearlist"].m_blReEnableControls = this.m_spPrivileges.CanEditBanList;
+                this.m_dicAsyncSettingControls["local.banlist.unban"].m_blReEnableControls = this.m_spPrivileges.CanEditBanList;
+                this.btnBanlistClearBanlist.Enabled = this.m_spPrivileges.CanEditBanList;
 
-            this.m_dicAsyncSettingControls["local.banlist.clearlist"].m_blReEnableControls = this.m_spPrivileges.CanEditBanList;
-            this.m_dicAsyncSettingControls["local.banlist.unban"].m_blReEnableControls = this.m_spPrivileges.CanEditBanList;
-            this.btnBanlistClearBanlist.Enabled = this.m_spPrivileges.CanEditBanList;
+                if (this.lsvBanlist.SelectedItems.Count > 0) {
+                    this.btnBanlistUnban.Enabled = this.m_spPrivileges.CanEditBanList;
+                } // ELSE It'll already be disabled 
 
-            if (this.lsvBanlist.SelectedItems.Count > 0) {
-                this.btnBanlistUnban.Enabled = this.m_spPrivileges.CanEditBanList;
-            } // ELSE It'll already be disabled 
+                // Manual banning..
+                this.rdoBanlistPbGUID.Enabled = this.rdoBanlistPermanent.Enabled = this.m_spPrivileges.CanPermanentlyBanPlayers;
 
-            // Manual banning..
-            this.rdoBanlistPbGUID.Enabled = this.rdoBanlistPermanent.Enabled = this.m_spPrivileges.CanPermanentlyBanPlayers;
+                if (this.rdoBanlistPbGUID.Checked == true && this.rdoBanlistPbGUID.Enabled == false) {
+                    this.rdoBanlistName.Checked = true;
+                }
 
-            if (this.rdoBanlistPbGUID.Checked == true && this.rdoBanlistPbGUID.Enabled == false) {
-                this.rdoBanlistName.Checked = true;
-            }
+                if (this.rdoBanlistPermanent.Checked == true && this.rdoBanlistPermanent.Enabled == false) {
+                    this.rdoBanlistTemporary.Checked = true;
+                }
 
-            if (this.rdoBanlistPermanent.Checked == true && this.rdoBanlistPermanent.Enabled == false) {
-                this.rdoBanlistTemporary.Checked = true;
-            }
-
-            this.spltBanlistManualBans.Panel2.Enabled = this.m_spPrivileges.CanTemporaryBanPlayers;
+                this.spltBanlistManualBans.Panel2.Enabled = this.m_spPrivileges.CanTemporaryBanPlayers;
+            });
         }
 
         public void Initialize(frmMain frmMainWindow, uscServerConnection uscConnectionPanel) {
@@ -261,58 +261,58 @@ namespace PRoCon.Controls {
         }
 
         private void m_prcClient_GameTypeDiscovered(PRoConClient sender) {
+            this.InvokeIfRequired(() => {
+                this.m_prcClient.Game.ReservedSlotsSave += new FrostbiteClient.EmptyParamterHandler(this.OnReservedSlotsSave);
+                this.m_prcClient.Game.ReservedSlotsList += new FrostbiteClient.ReservedSlotsListHandler(this.OnReservedSlotsList);
+                this.m_prcClient.Game.ReservedSlotsPlayerAdded += new FrostbiteClient.ReservedSlotsPlayerHandler(this.OnReservedSlotsPlayerAdded);
+                this.m_prcClient.Game.ReservedSlotsPlayerRemoved += new FrostbiteClient.ReservedSlotsPlayerHandler(this.OnReservedSlotsPlayerRemoved);
 
-            this.m_prcClient.Game.ReservedSlotsSave += new FrostbiteClient.EmptyParamterHandler(this.OnReservedSlotsSave);
-            this.m_prcClient.Game.ReservedSlotsList += new FrostbiteClient.ReservedSlotsListHandler(this.OnReservedSlotsList);
-            this.m_prcClient.Game.ReservedSlotsPlayerAdded += new FrostbiteClient.ReservedSlotsPlayerHandler(this.OnReservedSlotsPlayerAdded);
-            this.m_prcClient.Game.ReservedSlotsPlayerRemoved += new FrostbiteClient.ReservedSlotsPlayerHandler(this.OnReservedSlotsPlayerRemoved);
+                this.m_prcClient.Game.SpectatorListSave += new FrostbiteClient.EmptyParamterHandler(this.OnSpectatorSlotsSave);
+                this.m_prcClient.Game.SpectatorListList += new FrostbiteClient.SpectatorListListHandler(this.OnSpectatorSlotsList);
+                this.m_prcClient.Game.SpectatorListPlayerAdded += new FrostbiteClient.SpectatorListPlayerHandler(this.OnSpectatorSlotsPlayerAdded);
+                this.m_prcClient.Game.SpectatorListPlayerRemoved += new FrostbiteClient.SpectatorListPlayerHandler(this.OnSpectatorSlotsPlayerRemoved);
 
-            this.m_prcClient.Game.SpectatorListSave += new FrostbiteClient.EmptyParamterHandler(this.OnSpectatorSlotsSave);
-            this.m_prcClient.Game.SpectatorListList += new FrostbiteClient.SpectatorListListHandler(this.OnSpectatorSlotsList);
-            this.m_prcClient.Game.SpectatorListPlayerAdded += new FrostbiteClient.SpectatorListPlayerHandler(this.OnSpectatorSlotsPlayerAdded);
-            this.m_prcClient.Game.SpectatorListPlayerRemoved += new FrostbiteClient.SpectatorListPlayerHandler(this.OnSpectatorSlotsPlayerRemoved);
-
-            this.m_prcClient.Game.BanListClear += new FrostbiteClient.EmptyParamterHandler(this.OnClearBanList);
-            this.m_prcClient.FullBanListList += new PRoConClient.FullBanListListHandler(this.OnBanList);
-            this.m_prcClient.PunkbusterPlayerUnbanned += new PRoConClient.PunkbusterBanHandler(m_prcClient_PunkbusterPlayerUnbanned);
-            this.m_prcClient.Game.BanListRemove += new FrostbiteClient.BanListRemoveHandler(this.OnUnban);
-            this.m_prcClient.PunkbusterPlayerBanned += new PRoConClient.PunkbusterBanHandler(this.OnPbGuidBan);
+                this.m_prcClient.Game.BanListClear += new FrostbiteClient.EmptyParamterHandler(this.OnClearBanList);
+                this.m_prcClient.FullBanListList += new PRoConClient.FullBanListListHandler(this.OnBanList);
+                this.m_prcClient.PunkbusterPlayerUnbanned += new PRoConClient.PunkbusterBanHandler(m_prcClient_PunkbusterPlayerUnbanned);
+                this.m_prcClient.Game.BanListRemove += new FrostbiteClient.BanListRemoveHandler(this.OnUnban);
+                this.m_prcClient.PunkbusterPlayerBanned += new PRoConClient.PunkbusterBanHandler(this.OnPbGuidBan);
 
 
-            this.m_prcClient.ProconPrivileges += new PRoConClient.ProconPrivilegesHandler(m_prcClient_ProconPrivileges);
+                this.m_prcClient.ProconPrivileges += new PRoConClient.ProconPrivilegesHandler(m_prcClient_ProconPrivileges);
 
-            //this.m_prcClient.Reasons.ItemRemoved += new NotificationList<string>.ItemModifiedHandler(Reasons_ItemRemoved);
-            this.m_prcClient.Reasons.ItemAdded += new NotificationList<string>.ItemModifiedHandler(Reasons_ItemAdded);
+                //this.m_prcClient.Reasons.ItemRemoved += new NotificationList<string>.ItemModifiedHandler(Reasons_ItemRemoved);
+                this.m_prcClient.Reasons.ItemAdded += new NotificationList<string>.ItemModifiedHandler(Reasons_ItemAdded);
 
-            this.m_prcClient.ListSettings.ManualBansVisibleChange += new PRoCon.Core.Lists.ListsSettings.ManualBansVisibleChangeHandler(ListSettings_ManualBansVisibleChange);
+                this.m_prcClient.ListSettings.ManualBansVisibleChange += new PRoCon.Core.Lists.ListsSettings.ManualBansVisibleChangeHandler(ListSettings_ManualBansVisibleChange);
 
-            this.m_prcClient.ListSettings.ManualBansVisible = this.m_prcClient.ListSettings.ManualBansVisible;
+                this.m_prcClient.ListSettings.ManualBansVisible = this.m_prcClient.ListSettings.ManualBansVisible;
 
-            this.cboBanlistReason.Items.Clear();
-            foreach (string strReason in this.m_prcClient.Reasons) {
-                this.Reasons_ItemAdded(0, strReason);
-            }
+                this.cboBanlistReason.Items.Clear();
+                foreach (string strReason in this.m_prcClient.Reasons) {
+                    this.Reasons_ItemAdded(0, strReason);
+                }
 
-            if (this.m_prcClient.FullVanillaBanList != null) {
-                this.OnBanList(this.m_prcClient, this.m_prcClient.FullVanillaBanList);
-            }
+                if (this.m_prcClient.FullVanillaBanList != null) {
+                    this.OnBanList(this.m_prcClient, this.m_prcClient.FullVanillaBanList);
+                }
 
-            if (this.m_prcClient.ReservedSlotList != null) {
-                this.OnReservedSlotsList(this.m_prcClient.Game, new List<string>(this.m_prcClient.ReservedSlotList));
-            }
+                if (this.m_prcClient.ReservedSlotList != null) {
+                    this.OnReservedSlotsList(this.m_prcClient.Game, new List<string>(this.m_prcClient.ReservedSlotList));
+                }
 
-            if (this.m_prcClient.SpectatorList != null) {
-                this.OnSpectatorSlotsList(this.m_prcClient.Game, new List<string>(this.m_prcClient.SpectatorList));
-            }
+                if (this.m_prcClient.SpectatorList != null) {
+                    this.OnSpectatorSlotsList(this.m_prcClient.Game, new List<string>(this.m_prcClient.SpectatorList));
+                }
 
-            if (sender.Game is BF4Client || sender.Game is BF3Client || sender.Game is MOHWClient)
-            {
-                this.tbcLists.TabPages.Remove(this.tabTextChatModeration);
-            }
+                if (sender.Game is BF4Client || sender.Game is BF3Client || sender.Game is MOHWClient) {
+                    this.tbcLists.TabPages.Remove(this.tabTextChatModeration);
+                }
 
-            if (!(sender.Game is BF4Client)) {
-                this.tbcLists.TabPages.Remove(this.tabSpectatorSlots);
-            }
+                if (!(sender.Game is BF4Client)) {
+                    this.tbcLists.TabPages.Remove(this.tabSpectatorSlots);
+                }
+            });
         }
 
         public void SetLocalization(CLocalization clocLanguage) {
@@ -548,9 +548,32 @@ namespace PRoCon.Controls {
         #region Reserved Slots
 
         public void OnReservedSlotsList(FrostbiteClient sender, List<string> lstSoldierNames) {
-            this.lsvReservedList.BeginUpdate();
-            this.lsvReservedList.Items.Clear();
-            foreach (string strSoldierName in lstSoldierNames) {
+            this.InvokeIfRequired(() => {
+                this.lsvReservedList.BeginUpdate();
+                this.lsvReservedList.Items.Clear();
+                foreach (string strSoldierName in lstSoldierNames) {
+                    if (this.lsvReservedList.Items.ContainsKey(strSoldierName) == false) {
+
+                        ListViewItem lsvNewSoldier = new ListViewItem(strSoldierName);
+                        lsvNewSoldier.Name = strSoldierName;
+
+                        this.lsvReservedList.Items.Add(lsvNewSoldier);
+                    }
+                }
+                this.lsvReservedList.EndUpdate();
+            });
+        }
+
+        public void OnReservedSlotsPlayerRemoved(FrostbiteClient sender, string strSoldierName) {
+            this.InvokeIfRequired(() => {
+                if (this.lsvReservedList.Items.ContainsKey(strSoldierName) == true) {
+                    this.lsvReservedList.Items.RemoveByKey(strSoldierName);
+                }
+            });
+        }
+
+        public void OnReservedSlotsPlayerAdded(FrostbiteClient sender, string strSoldierName) {
+            this.InvokeIfRequired(() => {
                 if (this.lsvReservedList.Items.ContainsKey(strSoldierName) == false) {
 
                     ListViewItem lsvNewSoldier = new ListViewItem(strSoldierName);
@@ -558,36 +581,20 @@ namespace PRoCon.Controls {
 
                     this.lsvReservedList.Items.Add(lsvNewSoldier);
                 }
-            }
-            this.lsvReservedList.EndUpdate();
-        }
-
-        public void OnReservedSlotsPlayerRemoved(FrostbiteClient sender, string strSoldierName) {
-            if (this.lsvReservedList.Items.ContainsKey(strSoldierName) == true) {
-                this.lsvReservedList.Items.RemoveByKey(strSoldierName);
-            }
-        }
-
-        public void OnReservedSlotsPlayerAdded(FrostbiteClient sender, string strSoldierName) {
-            if (this.lsvReservedList.Items.ContainsKey(strSoldierName) == false) {
-
-                ListViewItem lsvNewSoldier = new ListViewItem(strSoldierName);
-                lsvNewSoldier.Name = strSoldierName;
-
-                this.lsvReservedList.Items.Add(lsvNewSoldier);
-            }
+            });
         }
 
         public void OnReservedSlotsSave(FrostbiteClient sender) {
-            if (this.m_blSettingAppendingReservedPlayer == true) {
-                this.OnSettingResponse("local.reservedlist.append", true);
-                this.m_blSettingAppendingReservedPlayer = false;
-            }
-            else if (this.m_blSettingRemovingReservedPlayer == true) {
-                this.OnSettingResponse("local.reservedlist.remove", true);
-                this.m_blSettingRemovingReservedPlayer = false;
-            }
-            
+            this.InvokeIfRequired(() => {
+                if (this.m_blSettingAppendingReservedPlayer == true) {
+                    this.OnSettingResponse("local.reservedlist.append", true);
+                    this.m_blSettingAppendingReservedPlayer = false;
+                }
+                else if (this.m_blSettingRemovingReservedPlayer == true) {
+                    this.OnSettingResponse("local.reservedlist.remove", true);
+                    this.m_blSettingRemovingReservedPlayer = false;
+                }
+            });
         }
 
         private void lnkReservedAddSoldierName_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
@@ -678,57 +685,54 @@ namespace PRoCon.Controls {
 
         #region Spectator Slots
 
-        public void OnSpectatorSlotsList(FrostbiteClient sender, List<string> lstSoldierNames)
-        {
-            this.lsvSpectatorList.BeginUpdate();
-            this.lsvSpectatorList.Items.Clear();
-            foreach (string strSoldierName in lstSoldierNames)
-            {
-                if (this.lsvSpectatorList.Items.ContainsKey(strSoldierName) == false)
-                {
+        public void OnSpectatorSlotsList(FrostbiteClient sender, List<string> lstSoldierNames) {
+            this.InvokeIfRequired(() => {
+                this.lsvSpectatorList.BeginUpdate();
+                this.lsvSpectatorList.Items.Clear();
+                foreach (string strSoldierName in lstSoldierNames) {
+                    if (this.lsvSpectatorList.Items.ContainsKey(strSoldierName) == false) {
+
+                        ListViewItem lsvNewSoldier = new ListViewItem(strSoldierName);
+                        lsvNewSoldier.Name = strSoldierName;
+
+                        this.lsvSpectatorList.Items.Add(lsvNewSoldier);
+                    }
+                }
+                this.lsvSpectatorList.EndUpdate();
+            });
+        }
+
+        public void OnSpectatorSlotsPlayerRemoved(FrostbiteClient sender, string strSoldierName) {
+            this.InvokeIfRequired(() => {
+                if (this.lsvSpectatorList.Items.ContainsKey(strSoldierName) == true) {
+                    this.lsvSpectatorList.Items.RemoveByKey(strSoldierName);
+                }
+            });
+        }
+
+        public void OnSpectatorSlotsPlayerAdded(FrostbiteClient sender, string strSoldierName) {
+            this.InvokeIfRequired(() => {
+                if (this.lsvSpectatorList.Items.ContainsKey(strSoldierName) == false) {
 
                     ListViewItem lsvNewSoldier = new ListViewItem(strSoldierName);
                     lsvNewSoldier.Name = strSoldierName;
 
                     this.lsvSpectatorList.Items.Add(lsvNewSoldier);
                 }
-            }
-            this.lsvSpectatorList.EndUpdate();
+            });
         }
 
-        public void OnSpectatorSlotsPlayerRemoved(FrostbiteClient sender, string strSoldierName)
-        {
-            if (this.lsvSpectatorList.Items.ContainsKey(strSoldierName) == true)
-            {
-                this.lsvSpectatorList.Items.RemoveByKey(strSoldierName);
-            }
-        }
-
-        public void OnSpectatorSlotsPlayerAdded(FrostbiteClient sender, string strSoldierName)
-        {
-            if (this.lsvSpectatorList.Items.ContainsKey(strSoldierName) == false)
-            {
-
-                ListViewItem lsvNewSoldier = new ListViewItem(strSoldierName);
-                lsvNewSoldier.Name = strSoldierName;
-
-                this.lsvSpectatorList.Items.Add(lsvNewSoldier);
-            }
-        }
-
-        public void OnSpectatorSlotsSave(FrostbiteClient sender)
-        {
-            if (this.m_blSettingAppendingSpectatorPlayer == true)
-            {
-                this.OnSettingResponse("local.spectatorlist.append", true);
-                this.m_blSettingAppendingSpectatorPlayer = false;
-            }
-            else if (this.m_blSettingRemovingSpectatorPlayer == true)
-            {
-                this.OnSettingResponse("local.spectatorlist.remove", true);
-                this.m_blSettingRemovingSpectatorPlayer = false;
-            }
-
+        public void OnSpectatorSlotsSave(FrostbiteClient sender) {
+            this.InvokeIfRequired(() => {
+                if (this.m_blSettingAppendingSpectatorPlayer == true) {
+                    this.OnSettingResponse("local.spectatorlist.append", true);
+                    this.m_blSettingAppendingSpectatorPlayer = false;
+                }
+                else if (this.m_blSettingRemovingSpectatorPlayer == true) {
+                    this.OnSettingResponse("local.spectatorlist.remove", true);
+                    this.m_blSettingRemovingSpectatorPlayer = false;
+                }
+            });
         }
 
         private void lnkSpectatorAddSoldierName_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -1062,11 +1066,55 @@ namespace PRoCon.Controls {
         }
 
         public void OnBanList(PRoConClient sender, List<CBanInfo> lstBans) {
+            this.InvokeIfRequired(() => {
 
-            this.lsvBanlist.BeginUpdate();
+                this.lsvBanlist.BeginUpdate();
 
-            foreach (CBanInfo cbiBan in lstBans) {
-                
+                foreach (CBanInfo cbiBan in lstBans) {
+
+                    string strKey = String.Empty;
+
+                    if (String.Compare(cbiBan.IdType, "name") == 0 || String.Compare(cbiBan.IdType, "persona") == 0) {
+                        strKey = String.Format("{0}\r\n\r\n", cbiBan.SoldierName);
+                    }
+                    else if (String.Compare(cbiBan.IdType, "ip") == 0) {
+                        strKey = String.Format("\r\n{0}\r\n", cbiBan.IpAddress);
+                    }
+                    else if (String.Compare(cbiBan.IdType, "guid") == 0) {
+                        strKey = String.Format("\r\n\r\n{0}", cbiBan.Guid);
+                    }
+
+                    if (this.lsvBanlist.Items.ContainsKey(strKey) == false) {
+                        this.lsvBanlist.Items.Add(this.CreateBanEntry(cbiBan));
+                    }
+                    else {
+                        ListViewItem lviBanEntry = this.lsvBanlist.Items[strKey];
+                        lviBanEntry.Text = cbiBan.SoldierName;
+                        lviBanEntry.SubItems["type"].Tag = cbiBan.IdType;
+                        lviBanEntry.SubItems["type"].Text = this.GetFriendlyTypeName(cbiBan.IdType);
+                        lviBanEntry.SubItems["timeremaining"].Tag = cbiBan.BanLength;
+                        lviBanEntry.SubItems["reason"].Text = cbiBan.Reason;
+                    }
+                }
+
+                this.RemoveDeletedBans(lstBans);
+
+                for (int i = 0; i < this.lsvBanlist.Columns.Count; i++) {
+                    this.lsvBanlist.Columns[i].Width = -2;
+                }
+
+                this.tmrRefreshBanlist_Tick(null, null);
+
+                this.lsvBanlist.EndUpdate();
+            });
+        }
+
+        private void m_prcClient_PunkbusterPlayerUnbanned(PRoConClient sender, CBanInfo cbiUnbannedPlayer) {
+            this.InvokeIfRequired(() => this.OnUnban(sender.Game, cbiUnbannedPlayer));
+        }
+
+        public void OnUnban(FrostbiteClient sender, CBanInfo cbiBan) {
+            this.InvokeIfRequired(() => {
                 string strKey = String.Empty;
 
                 if (String.Compare(cbiBan.IdType, "name") == 0 || String.Compare(cbiBan.IdType, "persona") == 0) {
@@ -1075,57 +1123,15 @@ namespace PRoCon.Controls {
                 else if (String.Compare(cbiBan.IdType, "ip") == 0) {
                     strKey = String.Format("\r\n{0}\r\n", cbiBan.IpAddress);
                 }
-                else if (String.Compare(cbiBan.IdType, "guid") == 0) {
+                else if (String.Compare(cbiBan.IdType, "guid") == 0 || String.Compare(cbiBan.IdType, "pbguid") == 0) {
                     strKey = String.Format("\r\n\r\n{0}", cbiBan.Guid);
                 }
 
-                if (this.lsvBanlist.Items.ContainsKey(strKey) == false) {
-                    this.lsvBanlist.Items.Add(this.CreateBanEntry(cbiBan));
+                if (this.lsvBanlist.Items.ContainsKey(strKey) == true) {
+                    this.lsvBanlist.Items[strKey].Remove();
+                    this.OnSettingResponse("local.banlist.unban", true);
                 }
-                else {
-                    ListViewItem lviBanEntry = this.lsvBanlist.Items[strKey];
-                    lviBanEntry.Text = cbiBan.SoldierName;
-                    lviBanEntry.SubItems["type"].Tag = cbiBan.IdType;
-                    lviBanEntry.SubItems["type"].Text = this.GetFriendlyTypeName(cbiBan.IdType);
-                    lviBanEntry.SubItems["timeremaining"].Tag = cbiBan.BanLength;
-                    lviBanEntry.SubItems["reason"].Text = cbiBan.Reason;
-                }
-            }
-
-            this.RemoveDeletedBans(lstBans);
-
-            for (int i = 0; i < this.lsvBanlist.Columns.Count; i++) {
-                this.lsvBanlist.Columns[i].Width = -2;
-            }
-
-            this.tmrRefreshBanlist_Tick(null, null);
-
-            this.lsvBanlist.EndUpdate();
-
-        }
-
-        private void m_prcClient_PunkbusterPlayerUnbanned(PRoConClient sender, CBanInfo cbiUnbannedPlayer) {
-            this.OnUnban(sender.Game, cbiUnbannedPlayer);    
-        }
-
-        public void OnUnban(FrostbiteClient sender, CBanInfo cbiBan) {
-
-            string strKey = String.Empty;
-
-            if (String.Compare(cbiBan.IdType, "name") == 0 || String.Compare(cbiBan.IdType, "persona") == 0) {
-                strKey = String.Format("{0}\r\n\r\n", cbiBan.SoldierName);
-            }
-            else if (String.Compare(cbiBan.IdType, "ip") == 0) {
-                strKey = String.Format("\r\n{0}\r\n", cbiBan.IpAddress);
-            }
-            else if (String.Compare(cbiBan.IdType, "guid") == 0 || String.Compare(cbiBan.IdType, "pbguid") == 0) {
-                strKey = String.Format("\r\n\r\n{0}", cbiBan.Guid);
-            }
-
-            if (this.lsvBanlist.Items.ContainsKey(strKey) == true) {
-                this.lsvBanlist.Items[strKey].Remove();
-                this.OnSettingResponse("local.banlist.unban", true);
-            }
+            });
         }
 
         private void tmrRefreshBanlist_Tick(object sender, EventArgs e) {
@@ -1165,30 +1171,32 @@ namespace PRoCon.Controls {
         }
 
         public void OnPbGuidBan(PRoConClient sender, CBanInfo cbiGuidBan) {
-            this.lsvBanlist.BeginUpdate();
+            this.InvokeIfRequired(() => {
+                this.lsvBanlist.BeginUpdate();
 
-            if (this.lsvBanlist.Items.ContainsKey(String.Format("\r\n\r\n{0}", cbiGuidBan.Guid)) == false) {
-                this.lsvBanlist.Items.Add(this.CreateBanEntry(cbiGuidBan));
-            }
-            else {
-                ListViewItem lviBanEntry = this.lsvBanlist.Items[String.Format("\r\n\r\n{0}", cbiGuidBan.Guid)];
-                lviBanEntry.Text = cbiGuidBan.SoldierName;
-                lviBanEntry.SubItems["guid"].Text = cbiGuidBan.Guid;
-                lviBanEntry.SubItems["ip"].Text = cbiGuidBan.IpAddress;
+                if (this.lsvBanlist.Items.ContainsKey(String.Format("\r\n\r\n{0}", cbiGuidBan.Guid)) == false) {
+                    this.lsvBanlist.Items.Add(this.CreateBanEntry(cbiGuidBan));
+                }
+                else {
+                    ListViewItem lviBanEntry = this.lsvBanlist.Items[String.Format("\r\n\r\n{0}", cbiGuidBan.Guid)];
+                    lviBanEntry.Text = cbiGuidBan.SoldierName;
+                    lviBanEntry.SubItems["guid"].Text = cbiGuidBan.Guid;
+                    lviBanEntry.SubItems["ip"].Text = cbiGuidBan.IpAddress;
 
-                lviBanEntry.SubItems["type"].Tag = cbiGuidBan.IdType;
-                lviBanEntry.SubItems["type"].Text = this.GetFriendlyTypeName(cbiGuidBan.IdType);
+                    lviBanEntry.SubItems["type"].Tag = cbiGuidBan.IdType;
+                    lviBanEntry.SubItems["type"].Text = this.GetFriendlyTypeName(cbiGuidBan.IdType);
 
-                lviBanEntry.SubItems["timeremaining"].Tag = cbiGuidBan.BanLength;
+                    lviBanEntry.SubItems["timeremaining"].Tag = cbiGuidBan.BanLength;
 
-                lviBanEntry.SubItems["reason"].Tag = cbiGuidBan.Reason.TrimEnd('"');
-            }
+                    lviBanEntry.SubItems["reason"].Tag = cbiGuidBan.Reason.TrimEnd('"');
+                }
 
-            for (int i = 0; i < this.lsvBanlist.Columns.Count; i++) {
-                this.lsvBanlist.Columns[i].Width = -2;
-            }
+                for (int i = 0; i < this.lsvBanlist.Columns.Count; i++) {
+                    this.lsvBanlist.Columns[i].Width = -2;
+                }
 
-            this.lsvBanlist.EndUpdate();
+                this.lsvBanlist.EndUpdate();
+            });
         }
         
         private void unbanToolStripMenuItem_Click(object sender, EventArgs e) {

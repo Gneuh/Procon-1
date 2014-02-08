@@ -45,7 +45,7 @@ namespace PRoCon.Core.Consoles {
                 WriteLogLine(String.Format("[{0}] {1}", dtLoggedTime.ToString("HH:mm:ss"), strText));
 
                 if (WriteConsole != null) {
-                    FrostbiteConnection.RaiseEvent(WriteConsole.GetInvocationList(), dtLoggedTime, strText);
+                    this.WriteConsole(dtLoggedTime, strText);
                 }
 
                 LogEntries.Enqueue(new LogEntry(dtLoggedTime, strText));

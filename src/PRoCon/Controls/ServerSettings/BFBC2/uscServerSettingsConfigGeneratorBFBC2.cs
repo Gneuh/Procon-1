@@ -49,14 +49,16 @@ namespace PRoCon.Controls.ServerSettings.BFBC2 {
         }
 
         private void Client_GameTypeDiscovered(PRoConClient sender) {
-            this.Client.Game.RankLimit += new FrostbiteClient.LimitHandler(Client_RankLimit);
-            this.Client.Game.TeamBalance += new FrostbiteClient.IsEnabledHandler(Client_TeamBalance);
-            this.Client.Game.KillCam += new FrostbiteClient.IsEnabledHandler(Client_KillCam);
-            this.Client.Game.MiniMap += new FrostbiteClient.IsEnabledHandler(Client_MiniMap);
-            this.Client.Game.CrossHair += new FrostbiteClient.IsEnabledHandler(Client_CrossHair);
-            this.Client.Game.ThreeDSpotting += new FrostbiteClient.IsEnabledHandler(Client_ThreeDSpotting);
-            this.Client.Game.ThirdPersonVehicleCameras += new FrostbiteClient.IsEnabledHandler(Client_ThirdPersonVehicleCameras);
-            this.Client.Game.MiniMapSpotting += new FrostbiteClient.IsEnabledHandler(Client_MiniMapSpotting);
+            this.InvokeIfRequired(() => {
+                this.Client.Game.RankLimit += new FrostbiteClient.LimitHandler(Client_RankLimit);
+                this.Client.Game.TeamBalance += new FrostbiteClient.IsEnabledHandler(Client_TeamBalance);
+                this.Client.Game.KillCam += new FrostbiteClient.IsEnabledHandler(Client_KillCam);
+                this.Client.Game.MiniMap += new FrostbiteClient.IsEnabledHandler(Client_MiniMap);
+                this.Client.Game.CrossHair += new FrostbiteClient.IsEnabledHandler(Client_CrossHair);
+                this.Client.Game.ThreeDSpotting += new FrostbiteClient.IsEnabledHandler(Client_ThreeDSpotting);
+                this.Client.Game.ThirdPersonVehicleCameras += new FrostbiteClient.IsEnabledHandler(Client_ThirdPersonVehicleCameras);
+                this.Client.Game.MiniMapSpotting += new FrostbiteClient.IsEnabledHandler(Client_MiniMapSpotting);
+            });
         }
 
         void Client_RankLimit(FrostbiteClient sender, int limit) {

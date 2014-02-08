@@ -88,7 +88,7 @@ namespace PRoCon.Core.Remote {
         protected override void DispatchPlayerOnSpawnRequest(FrostbiteConnection sender, Packet cpRequestPacket) {
             if (cpRequestPacket.Words.Count >= 9) {
                 if (this.PlayerSpawned != null) {
-                    FrostbiteConnection.RaiseEvent(this.PlayerSpawned.GetInvocationList(), this, cpRequestPacket.Words[1], cpRequestPacket.Words[2], cpRequestPacket.Words.GetRange(3, 3), cpRequestPacket.Words.GetRange(6, 3)); // new Inventory(cpRequestPacket.Words[3], cpRequestPacket.Words[4], cpRequestPacket.Words[5], cpRequestPacket.Words[6], cpRequestPacket.Words[7], cpRequestPacket.Words[8]));
+                    this.PlayerSpawned(this, cpRequestPacket.Words[1], cpRequestPacket.Words[2], cpRequestPacket.Words.GetRange(3, 3), cpRequestPacket.Words.GetRange(6, 3)); // new Inventory(cpRequestPacket.Words[3], cpRequestPacket.Words[4], cpRequestPacket.Words[5], cpRequestPacket.Words[6], cpRequestPacket.Words[7], cpRequestPacket.Words[8]));
                 }
             }
         }
@@ -96,7 +96,7 @@ namespace PRoCon.Core.Remote {
         protected virtual void DispatchAdminSetPlaylistResponse(FrostbiteConnection sender, Packet cpRecievedPacket, Packet cpRequestPacket) {
             if (cpRequestPacket.Words.Count >= 2) {
                 if (this.PlaylistSet != null) {
-                    FrostbiteConnection.RaiseEvent(this.PlaylistSet.GetInvocationList(), this, cpRequestPacket.Words[1]);
+                    this.PlaylistSet(this, cpRequestPacket.Words[1]);
                 }
             }
         }
@@ -104,7 +104,7 @@ namespace PRoCon.Core.Remote {
         protected virtual void DispatchAdminGetPlaylistResponse(FrostbiteConnection sender, Packet cpRecievedPacket, Packet cpRequestPacket) {
             if (cpRequestPacket.Words.Count >= 1 && cpRecievedPacket.Words.Count >= 2) {
                 if (this.PlaylistSet != null) {
-                    FrostbiteConnection.RaiseEvent(this.PlaylistSet.GetInvocationList(), this, cpRecievedPacket.Words[1]);
+                    this.PlaylistSet(this, cpRecievedPacket.Words[1]);
                 }
             }
         }
@@ -113,10 +113,10 @@ namespace PRoCon.Core.Remote {
             if (cpRequestPacket.Words.Count >= 1) {
                 if (this.RankLimit != null) {
                     if (cpRecievedPacket.Words.Count == 2) {
-                        FrostbiteConnection.RaiseEvent(this.RankLimit.GetInvocationList(), this, Convert.ToInt32(cpRecievedPacket.Words[1]));
+                        this.RankLimit(this, Convert.ToInt32(cpRecievedPacket.Words[1]));
                     }
                     else if (cpRequestPacket.Words.Count >= 2) {
-                        FrostbiteConnection.RaiseEvent(this.RankLimit.GetInvocationList(), this, Convert.ToInt32(cpRequestPacket.Words[1]));
+                        this.RankLimit(this, Convert.ToInt32(cpRequestPacket.Words[1]));
                     }
                 }
             }
@@ -126,10 +126,10 @@ namespace PRoCon.Core.Remote {
             if (cpRequestPacket.Words.Count >= 1) {
                 if (this.TeamBalance != null) {
                     if (cpRecievedPacket.Words.Count == 2) {
-                        FrostbiteConnection.RaiseEvent(this.TeamBalance.GetInvocationList(), this, Convert.ToBoolean(cpRecievedPacket.Words[1]));
+                        this.TeamBalance(this, Convert.ToBoolean(cpRecievedPacket.Words[1]));
                     }
                     else if (cpRequestPacket.Words.Count >= 2) {
-                        FrostbiteConnection.RaiseEvent(this.TeamBalance.GetInvocationList(), this, Convert.ToBoolean(cpRequestPacket.Words[1]));
+                        this.TeamBalance(this, Convert.ToBoolean(cpRequestPacket.Words[1]));
                     }
                 }
             }
@@ -140,10 +140,10 @@ namespace PRoCon.Core.Remote {
             if (cpRequestPacket.Words.Count >= 1) {
                 if (this.KillCam != null) {
                     if (cpRecievedPacket.Words.Count == 2) {
-                        FrostbiteConnection.RaiseEvent(this.KillCam.GetInvocationList(), this, Convert.ToBoolean(cpRecievedPacket.Words[1]));
+                        this.KillCam(this, Convert.ToBoolean(cpRecievedPacket.Words[1]));
                     }
                     else if (cpRequestPacket.Words.Count >= 2) {
-                        FrostbiteConnection.RaiseEvent(this.KillCam.GetInvocationList(), this, Convert.ToBoolean(cpRequestPacket.Words[1]));
+                        this.KillCam(this, Convert.ToBoolean(cpRequestPacket.Words[1]));
                     }
                 }
             }
@@ -153,10 +153,10 @@ namespace PRoCon.Core.Remote {
             if (cpRequestPacket.Words.Count >= 1) {
                 if (this.MiniMap != null) {
                     if (cpRecievedPacket.Words.Count == 2) {
-                        FrostbiteConnection.RaiseEvent(this.MiniMap.GetInvocationList(), this, Convert.ToBoolean(cpRecievedPacket.Words[1]));
+                        this.MiniMap(this, Convert.ToBoolean(cpRecievedPacket.Words[1]));
                     }
                     else if (cpRequestPacket.Words.Count >= 2) {
-                        FrostbiteConnection.RaiseEvent(this.MiniMap.GetInvocationList(), this, Convert.ToBoolean(cpRequestPacket.Words[1]));
+                        this.MiniMap(this, Convert.ToBoolean(cpRequestPacket.Words[1]));
                     }
                 }
             }
@@ -166,10 +166,10 @@ namespace PRoCon.Core.Remote {
             if (cpRequestPacket.Words.Count >= 1) {
                 if (this.CrossHair != null) {
                     if (cpRecievedPacket.Words.Count == 2) {
-                        FrostbiteConnection.RaiseEvent(this.CrossHair.GetInvocationList(), this, Convert.ToBoolean(cpRecievedPacket.Words[1]));
+                        this.CrossHair(this, Convert.ToBoolean(cpRecievedPacket.Words[1]));
                     }
                     else if (cpRequestPacket.Words.Count >= 2) {
-                        FrostbiteConnection.RaiseEvent(this.CrossHair.GetInvocationList(), this, Convert.ToBoolean(cpRequestPacket.Words[1]));
+                        this.CrossHair(this, Convert.ToBoolean(cpRequestPacket.Words[1]));
                     }
                 }
             }
@@ -179,10 +179,10 @@ namespace PRoCon.Core.Remote {
             if (cpRequestPacket.Words.Count >= 1) {
                 if (this.ThreeDSpotting != null) {
                     if (cpRecievedPacket.Words.Count == 2) {
-                        FrostbiteConnection.RaiseEvent(this.ThreeDSpotting.GetInvocationList(), this, Convert.ToBoolean(cpRecievedPacket.Words[1]));
+                        this.ThreeDSpotting(this, Convert.ToBoolean(cpRecievedPacket.Words[1]));
                     }
                     else if (cpRequestPacket.Words.Count >= 2) {
-                        FrostbiteConnection.RaiseEvent(this.ThreeDSpotting.GetInvocationList(), this, Convert.ToBoolean(cpRequestPacket.Words[1]));
+                        this.ThreeDSpotting(this, Convert.ToBoolean(cpRequestPacket.Words[1]));
                     }
                 }
             }
@@ -192,10 +192,10 @@ namespace PRoCon.Core.Remote {
             if (cpRequestPacket.Words.Count >= 1) {
                 if (this.MiniMapSpotting != null) {
                     if (cpRecievedPacket.Words.Count == 2) {
-                        FrostbiteConnection.RaiseEvent(this.MiniMapSpotting.GetInvocationList(), this, Convert.ToBoolean(cpRecievedPacket.Words[1]));
+                        this.MiniMapSpotting(this, Convert.ToBoolean(cpRecievedPacket.Words[1]));
                     }
                     else if (cpRequestPacket.Words.Count >= 2) {
-                        FrostbiteConnection.RaiseEvent(this.MiniMapSpotting.GetInvocationList(), this, Convert.ToBoolean(cpRequestPacket.Words[1]));
+                        this.MiniMapSpotting(this, Convert.ToBoolean(cpRequestPacket.Words[1]));
                     }
                 }
             }
@@ -205,10 +205,10 @@ namespace PRoCon.Core.Remote {
             if (cpRequestPacket.Words.Count >= 1) {
                 if (this.ThirdPersonVehicleCameras != null) {
                     if (cpRecievedPacket.Words.Count == 2) {
-                        FrostbiteConnection.RaiseEvent(this.ThirdPersonVehicleCameras.GetInvocationList(), this, Convert.ToBoolean(cpRecievedPacket.Words[1]));
+                        this.ThirdPersonVehicleCameras(this, Convert.ToBoolean(cpRecievedPacket.Words[1]));
                     }
                     else if (cpRequestPacket.Words.Count >= 2) {
-                        FrostbiteConnection.RaiseEvent(this.ThirdPersonVehicleCameras.GetInvocationList(), this, Convert.ToBoolean(cpRequestPacket.Words[1]));
+                        this.ThirdPersonVehicleCameras(this, Convert.ToBoolean(cpRequestPacket.Words[1]));
                     }
                 }
             }

@@ -268,7 +268,7 @@ namespace PRoCon.Controls.Battlemap.MapImagePacks {
             // END REMOVE AFTER LEGACY UPDATE
 
             if (this.MapLoaded != null) {
-                FrostbiteConnection.RaiseEvent(this.MapLoaded.GetInvocationList());
+                this.MapLoaded();
             }
         }
 

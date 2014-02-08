@@ -49,38 +49,39 @@ namespace PRoCon.Controls.ServerSettings.MOHW {
         }
 
         private void Client_GameTypeDiscovered(PRoConClient sender) {
-            this.Client.Game.ThirdPersonVehicleCameras += new FrostbiteClient.IsEnabledHandler(Client_ThirdPersonVehicleCameras);
-            // deprecated R-5 this.Client.Game.AllUnlocksUnlocked += new FrostbiteClient.IsEnabledHandler(Game_AllUnlocksUnlocked);
-            this.Client.Game.TeamBalance += new FrostbiteClient.IsEnabledHandler(Client_TeamBalance);
-            this.Client.Game.BuddyOutline += new FrostbiteClient.IsEnabledHandler(Game_BuddyOutline);
-            this.Client.Game.BulletDamage += new FrostbiteClient.LimitHandler(Game_BulletDamage);
-            
-            this.Client.Game.HudCrosshair += new FrostbiteClient.IsEnabledHandler(Game_HudCrosshair);
-            this.Client.Game.HudEnemyTag += new FrostbiteClient.IsEnabledHandler(Game_HudEnemyTag);
-            this.Client.Game.HudExplosiveIcons += new FrostbiteClient.IsEnabledHandler(Game_HudExplosiveIcons);
-            this.Client.Game.HudGameMode += new FrostbiteClient.IsEnabledHandler(Game_HudGameMode);
-            this.Client.Game.HudHealthAmmo += new FrostbiteClient.IsEnabledHandler(Game_HudHealthAmmo);
-            this.Client.Game.HudMinimap += new FrostbiteClient.IsEnabledHandler(Game_HudMinimap);
+            this.InvokeIfRequired(() => {
+                this.Client.Game.ThirdPersonVehicleCameras += new FrostbiteClient.IsEnabledHandler(Client_ThirdPersonVehicleCameras);
+                // deprecated R-5 this.Client.Game.AllUnlocksUnlocked += new FrostbiteClient.IsEnabledHandler(Game_AllUnlocksUnlocked);
+                this.Client.Game.TeamBalance += new FrostbiteClient.IsEnabledHandler(Client_TeamBalance);
+                this.Client.Game.BuddyOutline += new FrostbiteClient.IsEnabledHandler(Game_BuddyOutline);
+                this.Client.Game.BulletDamage += new FrostbiteClient.LimitHandler(Game_BulletDamage);
 
-            this.Client.Game.HudObiturary += new FrostbiteClient.IsEnabledHandler(Game_HudObiturary);
-            this.Client.Game.HudPointsTracker += new FrostbiteClient.IsEnabledHandler(Game_HudPointsTracker);
-            this.Client.Game.HudUnlocks += new FrostbiteClient.IsEnabledHandler(Game_HudUnlocks);
+                this.Client.Game.HudCrosshair += new FrostbiteClient.IsEnabledHandler(Game_HudCrosshair);
+                this.Client.Game.HudEnemyTag += new FrostbiteClient.IsEnabledHandler(Game_HudEnemyTag);
+                this.Client.Game.HudExplosiveIcons += new FrostbiteClient.IsEnabledHandler(Game_HudExplosiveIcons);
+                this.Client.Game.HudGameMode += new FrostbiteClient.IsEnabledHandler(Game_HudGameMode);
+                this.Client.Game.HudHealthAmmo += new FrostbiteClient.IsEnabledHandler(Game_HudHealthAmmo);
+                this.Client.Game.HudMinimap += new FrostbiteClient.IsEnabledHandler(Game_HudMinimap);
 
-            this.Client.Game.IdleBanRounds += new FrostbiteClient.LimitHandler(Game_IdleBanRounds);
-            this.Client.Game.IdleTimeout += new FrostbiteClient.LimitHandler(Client_IdleTimeout);
-            this.Client.Game.KillCam += new FrostbiteClient.IsEnabledHandler(Client_KillCam);
+                this.Client.Game.HudObiturary += new FrostbiteClient.IsEnabledHandler(Game_HudObiturary);
+                this.Client.Game.HudPointsTracker += new FrostbiteClient.IsEnabledHandler(Game_HudPointsTracker);
+                this.Client.Game.HudUnlocks += new FrostbiteClient.IsEnabledHandler(Game_HudUnlocks);
 
-            this.Client.Game.PlayerManDownTime += new FrostbiteClient.LimitHandler(Game_PlayerManDownTime);
-            this.Client.Game.PlayerRespawnTime += new FrostbiteClient.LimitHandler(Game_PlayerRespawnTime);
-            this.Client.Game.Playlist += new FrostbiteClient.PlaylistSetHandler(Game_Playlist);
-            this.Client.Game.RegenerateHealth += new FrostbiteClient.IsEnabledHandler(Game_RegenerateHealth);
-            this.Client.Game.RoundRestartPlayerCount += new FrostbiteClient.LimitHandler(Game_RoundRestartPlayerCount);
-            this.Client.Game.RoundStartPlayerCount += new FrostbiteClient.LimitHandler(Game_RoundStartPlayerCount);
+                this.Client.Game.IdleBanRounds += new FrostbiteClient.LimitHandler(Game_IdleBanRounds);
+                this.Client.Game.IdleTimeout += new FrostbiteClient.LimitHandler(Client_IdleTimeout);
+                this.Client.Game.KillCam += new FrostbiteClient.IsEnabledHandler(Client_KillCam);
 
-            this.Client.Game.SoldierHealth += new FrostbiteClient.LimitHandler(Game_SoldierHealth);
-            this.Client.Game.GameModeCounter += new FrostbiteClient.LimitHandler(Game_GameModeCounter);
-            this.Client.Game.ServerMessage += new FrostbiteClient.ServerMessageHandler(Game_ServerMessage);
+                this.Client.Game.PlayerManDownTime += new FrostbiteClient.LimitHandler(Game_PlayerManDownTime);
+                this.Client.Game.PlayerRespawnTime += new FrostbiteClient.LimitHandler(Game_PlayerRespawnTime);
+                this.Client.Game.Playlist += new FrostbiteClient.PlaylistSetHandler(Game_Playlist);
+                this.Client.Game.RegenerateHealth += new FrostbiteClient.IsEnabledHandler(Game_RegenerateHealth);
+                this.Client.Game.RoundRestartPlayerCount += new FrostbiteClient.LimitHandler(Game_RoundRestartPlayerCount);
+                this.Client.Game.RoundStartPlayerCount += new FrostbiteClient.LimitHandler(Game_RoundStartPlayerCount);
 
+                this.Client.Game.SoldierHealth += new FrostbiteClient.LimitHandler(Game_SoldierHealth);
+                this.Client.Game.GameModeCounter += new FrostbiteClient.LimitHandler(Game_GameModeCounter);
+                this.Client.Game.ServerMessage += new FrostbiteClient.ServerMessageHandler(Game_ServerMessage);
+            });
         }
 
         protected override void Game_Login(FrostbiteClient sender) {
