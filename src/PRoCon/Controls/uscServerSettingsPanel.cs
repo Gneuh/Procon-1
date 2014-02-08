@@ -19,30 +19,18 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Text;
 using System.Windows.Forms;
-using System.Net;
-using System.Net.Sockets;
-using System.Threading;
-using System.IO;
+using PRoCon.Controls.ServerSettings.BF4;
+using PRoCon.Core;
+using PRoCon.Core.Remote;
+using PRoCon.Controls.ServerSettings;
+using PRoCon.Controls.ServerSettings.BFBC2;
+using PRoCon.Controls.ServerSettings.MOH;
+using PRoCon.Controls.ServerSettings.BF3;
+using PRoCon.Controls.ServerSettings.MOHW;
+using PRoCon.Forms;
 
-namespace PRoCon {
-    using Core;
-    using Core.Plugin;
-    using Core.Remote;
-    using Core.Settings;
-    using Controls.ServerSettings;
-    using Controls.ServerSettings.BFBC2;
-    using Controls.ServerSettings.MOH;
-    using Controls.ServerSettings.BF3;
-    using Controls.ServerSettings.BF4;
-    using Controls.ServerSettings.MOHW;
-    using PRoCon.Forms;
-
+namespace PRoCon.Controls {
     public partial class uscServerSettingsPanel : UserControl {
 
         private frmMain m_frmMain;

@@ -20,16 +20,14 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Windows.Forms;
+using PRoCon.Controls.ControlsEx;
+using PRoCon.Core;
+using PRoCon.Core.Events;
+using PRoCon.Core.Remote;
+using PRoCon.Forms;
 
-namespace PRoCon {
-    using Core;
-    using Core.Events;
-    using Core.Remote;
-    using PRoCon.Forms;
-    using PRoCon.Controls.ControlsEx;
-
+namespace PRoCon.Controls {
     public partial class uscEventsPanel : UserControl {
 
         private frmMain m_frmMain;

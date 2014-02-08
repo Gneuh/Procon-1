@@ -3,14 +3,13 @@ using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms;
 using System.Net.Sockets;
+using PRoCon.Core;
+using PRoCon.Core.Accounts;
+using PRoCon.Core.Remote.Layer;
+using PRoCon.Core.Remote;
+using PRoCon.Forms;
 
-namespace PRoCon {
-    using Core;
-    using Core.Accounts;
-    using Core.Remote.Layer;
-    using Core.Remote;
-    using PRoCon.Forms;
-
+namespace PRoCon.Controls {
     public partial class uscAccountsPanel : UserControl {
 
         private frmMain _main;

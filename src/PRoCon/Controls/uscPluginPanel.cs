@@ -22,23 +22,18 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Text;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
-using System.ComponentModel.Design;
-
 using System.Threading;
 using System.Reflection;
 using System.Reflection.Emit;
+using PRoCon.Controls.ControlsEx;
+using PRoCon.Core;
+using PRoCon.Core.Plugin;
+using PRoCon.Core.Remote;
+using PRoCon.Forms;
 
-namespace PRoCon {
-    using Core;
-    using Core.Plugin;
-    using Core.Remote;
-    using PRoCon.Forms;
-    using PRoCon.Controls.ControlsEx;
-
+namespace PRoCon.Controls {
     public partial class uscPluginPanel : UserControl {
 
         private uscServerConnection m_uscParent;
@@ -136,7 +131,7 @@ table.nostyle td,table.nostyle th,table.nostyle tr.even td,table.nostyle tr:hove
         #endregion
 
         private bool m_blLocalPlugins;
-        [CategoryAttribute("PRoCon Settings"), DescriptionAttribute("The control is used for local plugins or remote")]
+        [Category("PRoCon Settings"), Description("The control is used for local plugins or remote")]
         public bool LocalPlugins {
             set {
                 //this.spltPlugins.Panel2Collapsed = value;

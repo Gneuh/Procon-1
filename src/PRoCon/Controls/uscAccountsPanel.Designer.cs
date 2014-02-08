@@ -1,4 +1,4 @@
-﻿namespace PRoCon {
+﻿namespace PRoCon.Controls {
     partial class uscAccountsPanel {
         /// <summary> 
         /// Required designer variable.
@@ -24,7 +24,7 @@
         /// </summary>
         private void InitializeComponent() {
             this.pnlAccountPrivileges = new System.Windows.Forms.Panel();
-            this.uscPrivileges = new PRoCon.uscPrivilegesSelection();
+            this.uscPrivileges = new uscPrivilegesSelection();
             this.pnlStartPRoConLayer = new System.Windows.Forms.Panel();
             this.btnInsertName = new System.Windows.Forms.Button();
             this.lblBindingExplanation = new System.Windows.Forms.Label();

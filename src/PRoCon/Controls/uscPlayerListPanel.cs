@@ -20,27 +20,21 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
 using System.Globalization;
-using System.Text;
 using System.Windows.Forms;
-using System.Collections;
-//using System.Text.RegularExpressions;
 using System.Net;
+using PRoCon.Controls.ControlsEx;
+using PRoCon.Core;
+using PRoCon.Core.Options;
+using PRoCon.Core.Players;
+using PRoCon.Core.Players.Items;
+using PRoCon.Core.Remote;
+using PRoCon.Core.TextChatModeration;
+using PRoCon.Forms;
+//using System.Text.RegularExpressions;
 
-namespace PRoCon {
-    using Core;
-    using Core.Options;
-    using Core.Players;
-    using Core.Plugin;
-    using Core.Players.Items;
-    using Core.Remote;
-    using Core.TextChatModeration;
-    using PRoCon.Forms;
-    using PRoCon.Controls.ControlsEx;
-
+namespace PRoCon.Controls {
     public partial class uscPlayerListPanel : UserControl {
 
         private frmMain m_frmMain;

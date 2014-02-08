@@ -25,7 +25,7 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 
-namespace PRoCon {
+namespace PRoCon.Controls {
     using Core;
     using Core.Plugin;
 

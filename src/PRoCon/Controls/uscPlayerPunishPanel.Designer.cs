@@ -1,4 +1,4 @@
-﻿namespace PRoCon {
+﻿namespace PRoCon.Controls {
     partial class uscPlayerPunishPanel {
         /// <summary> 
         /// Required designer variable.

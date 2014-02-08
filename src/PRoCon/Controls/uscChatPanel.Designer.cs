@@ -1,4 +1,6 @@
-﻿namespace PRoCon {
+﻿using PRoCon.Controls.ControlsEx;
+
+namespace PRoCon.Controls {
     partial class uscChatPanel {
         /// <summary> 
         /// Required designer variable.
@@ -24,7 +26,7 @@
         /// </summary>
         private void InitializeComponent() {
             this.pnlChatEnclosure = new System.Windows.Forms.Panel();
-            this.rtbChatBox = new PRoCon.CodRichTextBox();
+            this.rtbChatBox = new CodRichTextBox();
             this.chkDisplayScrollingEvents = new System.Windows.Forms.CheckBox();
             this.btnclearchat = new System.Windows.Forms.Button();
             this.txtChat = new System.Windows.Forms.TextBox();

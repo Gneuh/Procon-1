@@ -20,13 +20,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Windows.Forms;
 using System.Drawing;
-using System.Runtime.InteropServices;
 
-
-namespace PRoCon {
+namespace PRoCon.Controls.ControlsEx {
     class CodRichTextBox : RichTextBox {
 
         private Dictionary<string, Color> m_dicChatTextColours;

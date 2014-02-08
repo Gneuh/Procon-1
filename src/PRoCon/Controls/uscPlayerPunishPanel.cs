@@ -20,17 +20,12 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Text;
 using System.Windows.Forms;
+using PRoCon.Core;
+using PRoCon.Core.Remote;
 
-namespace PRoCon {
-    using Core;
-    using Core.Plugin;
-    using Core.Remote;
-
+namespace PRoCon.Controls {
     public partial class uscPlayerPunishPanel : UserControl {
 
         /*

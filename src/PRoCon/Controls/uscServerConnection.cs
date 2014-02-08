@@ -19,30 +19,19 @@
  */
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Drawing;
 using System.Windows.Forms;
-using System.Net;
-using System.Net.Sockets;
-using System.Threading;
-using System.IO;
-using MaxMind;
-using System.Media;
+using PRoCon.Controls.ControlsEx;
+using PRoCon.Core;
+using PRoCon.Core.Players;
+using PRoCon.Core.Plugin;
+using PRoCon.Core.Logging;
+using PRoCon.Core.Remote;
+using PRoCon.Forms;
 
-namespace PRoCon {
-    using Core;
-    using Core.Players;
-    using Core.Accounts;
-    using Core.Plugin;
-    using Core.Logging;
-    using Core.Remote;
-    using PRoCon.Forms;
-    using PRoCon.Controls.ControlsEx;
-
+namespace PRoCon.Controls {
     public partial class uscServerConnection : uscPage {
 
         private frmMain m_frmParent = null;

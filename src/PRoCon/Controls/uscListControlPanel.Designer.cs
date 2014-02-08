@@ -1,4 +1,4 @@
-﻿namespace PRoCon {
+﻿namespace PRoCon.Controls {
     partial class uscListControlPanel {
         /// <summary> 
         /// Required designer variable.

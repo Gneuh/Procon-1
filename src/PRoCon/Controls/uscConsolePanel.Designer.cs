@@ -1,4 +1,6 @@
-﻿namespace PRoCon {
+﻿using PRoCon.Controls.ControlsEx;
+
+namespace PRoCon.Controls {
     partial class uscConsolePanel {
         /// <summary> 
         /// Required designer variable.
@@ -34,14 +36,14 @@
             this.btnConsoleSend = new System.Windows.Forms.Button();
             this.txtConsoleCommand = new System.Windows.Forms.TextBox();
             this.pnlConsoleEnclosure = new System.Windows.Forms.Panel();
-            this.rtbConsoleBox = new PRoCon.CodRichTextBox();
+            this.rtbConsoleBox = new CodRichTextBox();
             this.tabPunkbuster = new System.Windows.Forms.TabPage();
             this.chkPBEnableScrolling = new System.Windows.Forms.CheckBox();
             this.chkEnablePunkbusterOutput = new System.Windows.Forms.CheckBox();
             this.btnPunkbusterSend = new System.Windows.Forms.Button();
             this.txtPunkbusterCommand = new System.Windows.Forms.TextBox();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.rtbPunkbusterBox = new PRoCon.CodRichTextBox();
+            this.rtbPunkbusterBox = new CodRichTextBox();
             this.tbcConsoles.SuspendLayout();
             this.tabConsole.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();

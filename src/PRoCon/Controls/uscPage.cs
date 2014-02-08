@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Text;
 using System.Windows.Forms;
 using System.Security.Permissions;
+using PRoCon.Core;
+using PRoCon.Core.Remote;
 
-namespace PRoCon {
-    using PRoCon.Core;
-    using PRoCon.Core.Remote;
+namespace PRoCon.Controls {
     [PermissionSet(SecurityAction.Demand, Name = "FullTrust")]
     [System.Runtime.InteropServices.ComVisibleAttribute(true)]
     public partial class uscPage : UserControl {

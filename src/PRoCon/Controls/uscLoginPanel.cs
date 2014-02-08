@@ -19,18 +19,12 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Text;
 using System.Windows.Forms;
+using PRoCon.Core;
+using PRoCon.Core.Remote;
+using PRoCon.Forms;
 
-namespace PRoCon {
-    using Core;
-    using Core.Remote;
-    using PRoCon.Forms;
-
+namespace PRoCon.Controls {
     public partial class uscLoginPanel : UserControl {
 
         private uscServerConnection m_uscConnectionPanel;

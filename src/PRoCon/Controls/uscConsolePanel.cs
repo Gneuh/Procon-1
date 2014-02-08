@@ -20,19 +20,13 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Text;
 using System.Windows.Forms;
-using System.IO;
 using System.Text.RegularExpressions;
+using PRoCon.Core;
+using PRoCon.Core.Remote;
+using PRoCon.Forms;
 
-namespace PRoCon {
-    using Core;
-    using Core.Remote;
-    using PRoCon.Forms;
-
+namespace PRoCon.Controls {
     public partial class uscConsolePanel : UserControl {
 
         private frmMain m_frmMainWindow;
