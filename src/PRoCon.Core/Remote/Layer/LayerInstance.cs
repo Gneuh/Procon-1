@@ -246,43 +246,40 @@ namespace PRoCon.Core.Remote.Layer {
             return loggedInAccounts;
         }
 
-        private AsyncCallback m_asyncAcceptCallback = new AsyncCallback(LayerInstance.ListenIncommingLayerConnections);
-        private static void ListenIncommingLayerConnections(IAsyncResult ar) {
+        private void ListenIncommingLayerConnections(IAsyncResult ar) {
 
-            LayerInstance plLayer = (LayerInstance)ar.AsyncState;
-
-            if (plLayer._layerListener != null) {
+            if (this._layerListener != null) {
 
                 try {
-                    TcpClient tcpNewConnection = plLayer._layerListener.EndAcceptTcpClient(ar);
+                    TcpClient tcpNewConnection = this._layerListener.EndAcceptTcpClient(ar);
 
-                    ILayerClient cplcNewConnection = new LayerClient(new LayerConnection(tcpNewConnection), plLayer._application, plLayer._client);
+                    ILayerClient cplcNewConnection = new LayerClient(new LayerConnection(tcpNewConnection), this._application, this._client);
 
                     // Issue #24. Somewhere the end port connection+port isn't being removed.
-                    if (plLayer.LayerClients.ContainsKey(cplcNewConnection.IPPort) == true) {
-                        plLayer.LayerClients[cplcNewConnection.IPPort].Shutdown();
+                    if (this.LayerClients.ContainsKey(cplcNewConnection.IPPort) == true) {
+                        this.LayerClients[cplcNewConnection.IPPort].Shutdown();
 
                         // If, for some reason, the client wasn't removed during shutdown..
-                        if (plLayer.LayerClients.ContainsKey(cplcNewConnection.IPPort) == true) {
-                            plLayer.LayerClients.Remove(cplcNewConnection.IPPort);
+                        if (this.LayerClients.ContainsKey(cplcNewConnection.IPPort) == true) {
+                            this.LayerClients.Remove(cplcNewConnection.IPPort);
                         }
                     }
 
-                    plLayer.LayerClients.Add(cplcNewConnection.IPPort, cplcNewConnection);
+                    this.LayerClients.Add(cplcNewConnection.IPPort, cplcNewConnection);
 
-                    if (plLayer.ClientConnected != null) {
-                        FrostbiteConnection.RaiseEvent(plLayer.ClientConnected.GetInvocationList(), cplcNewConnection);
+                    if (this.ClientConnected != null) {
+                        FrostbiteConnection.RaiseEvent(this.ClientConnected.GetInvocationList(), cplcNewConnection);
                     }
 
-                    plLayer._layerListener.BeginAcceptTcpClient(plLayer.m_asyncAcceptCallback, plLayer);
+                    this._layerListener.BeginAcceptTcpClient(this.ListenIncommingLayerConnections, this);
                 }
                 catch (SocketException exception) {
 
-                    if (plLayer.LayerSocketError != null) {
-                        FrostbiteConnection.RaiseEvent(plLayer.LayerSocketError.GetInvocationList(), exception);
+                    if (this.LayerSocketError != null) {
+                        FrostbiteConnection.RaiseEvent(this.LayerSocketError.GetInvocationList(), exception);
                     }
 
-                    plLayer.ShutdownLayerListener();
+                    this.ShutdownLayerListener();
 
                     //cbfAccountsPanel.OnLayerServerSocketError(skeError);
                 }
@@ -336,7 +333,7 @@ namespace PRoCon.Core.Remote.Layer {
                     FrostbiteConnection.RaiseEvent(this.LayerOnline.GetInvocationList());
                 }
 
-                this._layerListener.BeginAcceptTcpClient(this.m_asyncAcceptCallback, this);
+                this._layerListener.BeginAcceptTcpClient(this.ListenIncommingLayerConnections, this);
             }
             catch (SocketException skeError) {
                 if (this.LayerSocketError != null) {
