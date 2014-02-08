@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Reflection;
@@ -37,7 +38,7 @@ namespace PRoCon.Core.Remote.Layer {
         protected PRoConClient Client { get; set; }
 
         protected delegate void RequestPacketHandler(ILayerPacketDispatcher sender, Packet packet);
-        protected Dictionary<String, RequestPacketHandler> m_requestDelegates;
+        protected Dictionary<String, RequestPacketHandler> RequestDelegates { get; set; }
 
         /// <summary>
         /// The game dependant packet dispatcher to use
@@ -79,7 +80,19 @@ namespace PRoCon.Core.Remote.Layer {
         /// </summary>
         protected String Salt { get; set; }
 
-        public LayerClient(ILayerConnection newConnection, PRoConApplication application, PRoConClient client) {
+        /// <summary>
+        /// Records the sequence number of a server info request so we may edit the respond before dispatching.
+        /// </summary>
+        protected UInt32 ServerInfoSequenceNumber { get; set; }
+
+        public LayerClient(ILayerConnection connection, PRoConApplication application, PRoConClient client) {
+            if (connection == null) throw new ArgumentNullException("connection");
+            if (application == null) throw new ArgumentNullException("application");
+            if (client == null) throw new ArgumentNullException("client");
+
+            this.Application = application;
+            this.Client = client;
+
             Privileges = new CPrivileges();
             Username = String.Empty;
 
@@ -95,23 +108,23 @@ namespace PRoCon.Core.Remote.Layer {
             if (client.Game != null) {
 
                 if (client.Game is BFBC2Client) {
-                    this.PacketDispatcher = new Bfbc2PacketDispatcher(newConnection);
+                    this.PacketDispatcher = new Bfbc2PacketDispatcher(connection);
                 }
                 else if (client.Game is MoHClient) {
-                    this.PacketDispatcher = new MohPacketDispatcher(newConnection);
+                    this.PacketDispatcher = new MohPacketDispatcher(connection);
                 }
                 else if (client.Game is BF3Client) {
-                    this.PacketDispatcher = new Bf3PacketDispatcher(newConnection);
+                    this.PacketDispatcher = new Bf3PacketDispatcher(connection);
                 }
                 else if (client.Game is BF4Client) {
-                    this.PacketDispatcher = new Bf4PacketDispatcher(newConnection);
+                    this.PacketDispatcher = new Bf4PacketDispatcher(connection);
                 }
                 else if (client.Game is MOHWClient)
                 {
-                    this.PacketDispatcher = new MohwPacketDispatcher(newConnection);
+                    this.PacketDispatcher = new MohwPacketDispatcher(connection);
                 }
 
-                this.m_requestDelegates = new Dictionary<String, RequestPacketHandler>() {
+                this.RequestDelegates = new Dictionary<String, RequestPacketHandler>() {
                     { "procon.application.shutdown", this.DispatchProconApplicationShutdownRequest  },
 
                     { "procon.login.username", this.DispatchProconLoginUsernameRequest  },
@@ -146,9 +159,7 @@ namespace PRoCon.Core.Remote.Layer {
                     { "procon.admin.yell", this.DispatchProconAdminYellRequest },
                 };
 
-                if ((this.Application = application) != null && (this.Client = client) != null) {
-                    this.RegisterEvents();
-                }
+                this.RegisterEvents();
             }
         }
 
@@ -328,12 +339,11 @@ namespace PRoCon.Core.Remote.Layer {
         #region Packet Forwarding
 
         // What we got back from the BFBC2 server..
-        UInt32 m_ui32ServerInfoSequenceNumber = 0;
         public void OnServerForwardedResponse(Packet cpPacket) {
 
             if (this.PacketDispatcher != null) {
 
-                if (this.m_ui32ServerInfoSequenceNumber == cpPacket.SequenceNumber && cpPacket.Words.Count >= 2) {
+                if (this.ServerInfoSequenceNumber == cpPacket.SequenceNumber && cpPacket.Words.Count >= 2) {
                     cpPacket.Words[1] = this.Client.Layer.LayerNameFormat.Replace("%servername%", cpPacket.Words[1]);
                 }
 
@@ -398,12 +408,7 @@ namespace PRoCon.Core.Remote.Layer {
 
                 this.Privileges.SetLowestPrivileges(this.Client.Privileges);
 
-                if (this.Privileges.CanLogin == true) {
-                    sender.SendResponse(packet, LayerClient.ResponseOk);
-                }
-                else {
-                    sender.SendResponse(packet, LayerClient.ResponseInsufficientPrivileges);
-                }
+                sender.SendResponse(packet, this.Privileges.CanLogin == true ? LayerClient.ResponseOk : LayerClient.ResponseInsufficientPrivileges);
             }
             else {
                 sender.SendResponse(packet, LayerClient.ResponseInvalidUsername);
@@ -458,7 +463,7 @@ namespace PRoCon.Core.Remote.Layer {
             if (this.IsLoggedIn == true) {
 
                 if (packet.Words.Count == 2) {
-                    sender.SendResponse(packet, LayerClient.ResponseOk, packet.Words[1], this.Client.Variables.GetVariable<String>(packet.Words[1], ""));
+                    sender.SendResponse(packet, LayerClient.ResponseOk, packet.Words[1], this.Client.Variables.GetVariable(packet.Words[1], ""));
                 }
                 else if (packet.Words.Count > 2) {
 
@@ -466,7 +471,7 @@ namespace PRoCon.Core.Remote.Layer {
 
                         this.Client.Variables.SetVariable(packet.Words[1], packet.Words[2]);
 
-                        sender.SendResponse(packet, LayerClient.ResponseOk, packet.Words[1], this.Client.Variables.GetVariable<String>(packet.Words[1], ""));
+                        sender.SendResponse(packet, LayerClient.ResponseOk, packet.Words[1], this.Client.Variables.GetVariable(packet.Words[1], ""));
                     }
                     else {
                         sender.SendResponse(packet, LayerClient.ResponseInsufficientPrivileges);
@@ -484,7 +489,7 @@ namespace PRoCon.Core.Remote.Layer {
         private void DispatchProconPrivilegesRequest(ILayerPacketDispatcher sender, Packet packet) {
 
             if (this.IsLoggedIn == true) {
-                sender.SendResponse(packet, LayerClient.ResponseOk, this.Privileges.PrivilegesFlags.ToString());
+                sender.SendResponse(packet, LayerClient.ResponseOk, this.Privileges.PrivilegesFlags.ToString(CultureInfo.InvariantCulture));
             }
             else {
                 sender.SendResponse(packet, LayerClient.ResponseLoginRequired);
@@ -533,13 +538,14 @@ namespace PRoCon.Core.Remote.Layer {
             if (this.IsLoggedIn == true) {
                 if (this.Privileges.CanIssueLimitedProconCommands == true) {
 
-                    List<String> lstAccounts = new List<String>();
-                    lstAccounts.Add(LayerClient.ResponseOk);
+                    List<String> lstAccounts = new List<String> {
+                        LayerClient.ResponseOk
+                    };
 
                     foreach (String strAccountName in this.Application.AccountsList.ListAccountNames()) {
                         if (this.Client.Layer.AccountPrivileges.Contains(strAccountName) == true) {
                             lstAccounts.Add(strAccountName);
-                            lstAccounts.Add(this.Client.Layer.AccountPrivileges[strAccountName].Privileges.PrivilegesFlags.ToString());
+                            lstAccounts.Add(this.Client.Layer.AccountPrivileges[strAccountName].Privileges.PrivilegesFlags.ToString(CultureInfo.InvariantCulture));
                         }
                     }
 
@@ -557,7 +563,7 @@ namespace PRoCon.Core.Remote.Layer {
         private void DispatchProconAccountListLoggedInRequest(ILayerPacketDispatcher sender, Packet packet) {
             if (this.Privileges.CanIssueLimitedProconCommands == true) {
 
-                List<String> lstLoggedInAccounts = this.Client.Layer.GetLoggedInAccounts((packet.Words.Count >= 2 && String.Compare(packet.Words[1], "uids") == 0));
+                List<String> lstLoggedInAccounts = this.Client.Layer.GetLoggedInAccounts((packet.Words.Count >= 2 && String.CompareOrdinal(packet.Words[1], "uids") == 0));
 
                 //List<String> lstLoggedInAccounts = this.m_prcClient.Layer.GetLoggedInAccounts();
                 lstLoggedInAccounts.Insert(0, LayerClient.ResponseOk);
@@ -775,17 +781,17 @@ namespace PRoCon.Core.Remote.Layer {
 
             if (this.IsLoggedIn == true) {
 
-                List<String> listPacket = new List<String>() { LayerClient.ResponseOk };
-
-                listPacket.Add(this.Client.MapGeometry.MapZones.Count.ToString());
+                List<String> listPacket = new List<String> {
+                    LayerClient.ResponseOk,
+                    this.Client.MapGeometry.MapZones.Count.ToString(CultureInfo.InvariantCulture)
+                };
 
                 foreach (MapZoneDrawing zone in this.Client.MapGeometry.MapZones) {
-
                     listPacket.Add(zone.UID);
                     listPacket.Add(zone.LevelFileName);
                     listPacket.Add(zone.Tags.ToString());
 
-                    listPacket.Add(zone.ZonePolygon.Length.ToString());
+                    listPacket.Add(zone.ZonePolygon.Length.ToString(CultureInfo.InvariantCulture));
                     listPacket.AddRange(Point3D.ToStringList(zone.ZonePolygon));
                 }
 
@@ -990,8 +996,8 @@ namespace PRoCon.Core.Remote.Layer {
         private void PacketDispatcher_RequestPacketUnknownRecieved(ILayerPacketDispatcher sender, Packet packet) {
 
             if (packet.Words.Count >= 1) {
-                if (this.m_requestDelegates.ContainsKey(packet.Words[0]) == true) {
-                    this.m_requestDelegates[packet.Words[0]](sender, packet);
+                if (this.RequestDelegates.ContainsKey(packet.Words[0]) == true) {
+                    this.RequestDelegates[packet.Words[0]](sender, packet);
                 }
                 else {
                     sender.SendResponse(packet, LayerClient.ResponseUnknownCommand);
@@ -1127,8 +1133,8 @@ namespace PRoCon.Core.Remote.Layer {
 
         private void PacketDispatcher_RequestPacketUnsecureSafeListedRecieved(ILayerPacketDispatcher sender, Packet packet) {
             
-            if (packet.Words.Count >= 1 && String.Compare(packet.Words[0], "serverInfo", true) == 0) {
-                this.m_ui32ServerInfoSequenceNumber = packet.SequenceNumber;
+            if (packet.Words.Count >= 1 && String.Compare(packet.Words[0], "serverInfo", StringComparison.OrdinalIgnoreCase) == 0) {
+                this.ServerInfoSequenceNumber = packet.SequenceNumber;
             }
             
             this.Client.SendProconLayerPacket(this, packet);
@@ -1156,15 +1162,15 @@ namespace PRoCon.Core.Remote.Layer {
                         }
                         else {
 
-                            if (this.Privileges.CanPermanentlyBanPlayers == false && (String.Compare(mtcMatch.Groups["pb_sv_command"].Value, "pb_sv_ban", true) == 0 || String.Compare(mtcMatch.Groups["pb_sv_command"].Value, "pb_sv_banguid", true) == 0 || String.Compare(mtcMatch.Groups["pb_sv_command"].Value, "pb_sv_reban", true) == 0)) {
+                            if (this.Privileges.CanPermanentlyBanPlayers == false && (System.String.Compare(mtcMatch.Groups["pb_sv_command"].Value, "pb_sv_ban", System.StringComparison.OrdinalIgnoreCase) == 0 || System.String.Compare(mtcMatch.Groups["pb_sv_command"].Value, "pb_sv_banguid", System.StringComparison.OrdinalIgnoreCase) == 0 || System.String.Compare(mtcMatch.Groups["pb_sv_command"].Value, "pb_sv_reban", System.StringComparison.OrdinalIgnoreCase) == 0)) {
                                 sender.SendResponse(packet, LayerClient.ResponseInsufficientPrivileges);
                                 blCommandProcessed = true;
                             }
-                            else if (this.Privileges.CanEditBanList == false && (String.Compare(mtcMatch.Groups["pb_sv_command"].Value, "pb_sv_unban", true) == 0 || String.Compare(mtcMatch.Groups["pb_sv_command"].Value, "pb_sv_unbanguid", true) == 0)) {
+                            else if (this.Privileges.CanEditBanList == false && (System.String.Compare(mtcMatch.Groups["pb_sv_command"].Value, "pb_sv_unban", System.StringComparison.OrdinalIgnoreCase) == 0 || System.String.Compare(mtcMatch.Groups["pb_sv_command"].Value, "pb_sv_unbanguid", System.StringComparison.OrdinalIgnoreCase) == 0)) {
                                 sender.SendResponse(packet, LayerClient.ResponseInsufficientPrivileges);
                                 blCommandProcessed = true;
                             }
-                            else if (String.Compare(mtcMatch.Groups["pb_sv_command"].Value, "pb_sv_kick", true) == 0) {
+                            else if (System.String.Compare(mtcMatch.Groups["pb_sv_command"].Value, "pb_sv_kick", System.StringComparison.OrdinalIgnoreCase) == 0) {
 
                                 int iBanLength = 0;
 
@@ -1177,7 +1183,7 @@ namespace PRoCon.Core.Remote.Layer {
                                         blCommandProcessed = true;
                                     }
                                     // If they can temporary ban but not permanently ban BUT the banlength is over an hour (default)
-                                    else if (this.Privileges.CanTemporaryBanPlayers == true && this.Privileges.CanPermanentlyBanPlayers == false && iBanLength > (this.Client.Variables.GetVariable<int>("TEMP_BAN_CEILING", 3600) / 60)) {
+                                    else if (this.Privileges.CanTemporaryBanPlayers == true && this.Privileges.CanPermanentlyBanPlayers == false && iBanLength > (this.Client.Variables.GetVariable("TEMP_BAN_CEILING", 3600) / 60)) {
                                         sender.SendResponse(packet, LayerClient.ResponseInsufficientPrivileges);
                                         blCommandProcessed = true;
                                     }
@@ -1296,7 +1302,7 @@ namespace PRoCon.Core.Remote.Layer {
                 }
                 else if (newBan.BanLength.Subset == TimeoutSubset.TimeoutSubsetType.Seconds && this.Privileges.CanTemporaryBanPlayers == true) {
                     
-                    if (newBan.BanLength.Seconds <= this.Client.Variables.GetVariable<int>("TEMP_BAN_CEILING", 3600)) {
+                    if (newBan.BanLength.Seconds <= this.Client.Variables.GetVariable("TEMP_BAN_CEILING", 3600)) {
                         this.Client.SendProconLayerPacket(this, packet);
                     }
                     else {
@@ -1413,7 +1419,7 @@ namespace PRoCon.Core.Remote.Layer {
             }
 
             if (String.IsNullOrEmpty(strUsername) == true) {
-                strReturnPassword = this.Client.Variables.GetVariable<String>("GUEST_PASSWORD", "");
+                strReturnPassword = this.Client.Variables.GetVariable("GUEST_PASSWORD", "");
             }
 
             return strReturnPassword;
@@ -1421,8 +1427,9 @@ namespace PRoCon.Core.Remote.Layer {
 
         private CPrivileges GetAccountPrivileges(String strUsername) {
 
-            CPrivileges sprReturn = new CPrivileges();
-            sprReturn.PrivilegesFlags = 0;
+            CPrivileges sprReturn = new CPrivileges {
+                PrivilegesFlags = 0
+            };
 
             if (this.Client.Layer.AccountPrivileges.Contains(strUsername) == true) {
                 sprReturn = this.Client.Layer.AccountPrivileges[strUsername].Privileges;
@@ -1439,16 +1446,14 @@ namespace PRoCon.Core.Remote.Layer {
         // TO DO: Implement event once available
         public void OnAccountLogin(String strUsername, CPrivileges sprvPrivileges) {
             if (this.IsLoggedIn == true && this.EventsEnabled == true && this.PacketDispatcher != null) {
-                this.PacketDispatcher.SendRequest("procon.account.onLogin", strUsername, sprvPrivileges.PrivilegesFlags.ToString());
-                //this.send(new Packet(true, false, this.AcquireSequenceNumber, new List<String>() { "procon.account.onLogin", strUsername, sprvPrivileges.PrivilegesFlags.ToString() }));
+                this.PacketDispatcher.SendRequest("procon.account.onLogin", strUsername, sprvPrivileges.PrivilegesFlags.ToString(CultureInfo.InvariantCulture));
             }
         }
 
         // TO DO: Implement event once available
         public void OnAccountLogout(String strUsername) {
-            if (this.IsLoggedIn == true && String.Compare(strUsername, this.Username) != 0 && this.EventsEnabled == true && this.PacketDispatcher != null) {
+            if (this.IsLoggedIn == true && System.String.CompareOrdinal(strUsername, this.Username) != 0 && this.EventsEnabled == true && this.PacketDispatcher != null) {
                 this.PacketDispatcher.SendRequest("procon.account.onLogout", strUsername);
-                //this.send(new Packet(true, false, this.AcquireSequenceNumber, new List<String>() { "procon.account.onLogout", strUsername }));
             }
         }
 
@@ -1459,11 +1464,10 @@ namespace PRoCon.Core.Remote.Layer {
             cpPrivs.SetLowestPrivileges(this.Client.Privileges);
 
             if (this.IsLoggedIn == true && this.EventsEnabled == true && this.PacketDispatcher != null) {
-                this.PacketDispatcher.SendRequest("procon.account.onAltered", item.Owner.Name, cpPrivs.PrivilegesFlags.ToString());
-                //this.send(new Packet(true, false, this.AcquireSequenceNumber, new List<String>() { "procon.account.onAltered", item.Owner.Name, cpPrivs.PrivilegesFlags.ToString() }));
+                this.PacketDispatcher.SendRequest("procon.account.onAltered", item.Owner.Name, cpPrivs.PrivilegesFlags.ToString(CultureInfo.InvariantCulture));
             }
 
-            if (String.Compare(this.Username, item.Owner.Name) == 0) {
+            if (System.String.CompareOrdinal(this.Username, item.Owner.Name) == 0) {
                 this.Privileges = cpPrivs;
             }
         }
@@ -1498,34 +1502,29 @@ namespace PRoCon.Core.Remote.Layer {
         #region Plugins
 
         private List<String> GetListLoadedPlugins() {
-            List<String> lstReturn = new List<String>();
+            List<String> plugins = new List<String>();
 
             foreach (String strPluginClassName in this.Client.PluginsManager.Plugins.LoadedClassNames) {
                 // Get some updated plugin details..
                 PluginDetails spDetails = this.Client.PluginsManager.GetPluginDetails(strPluginClassName);
 
-                lstReturn.Add(spDetails.ClassName);
+                plugins.Add(spDetails.ClassName);
 
-                lstReturn.Add(spDetails.Name);
-                lstReturn.Add(spDetails.Author);
-                lstReturn.Add(spDetails.Website);
-                lstReturn.Add(spDetails.Version);
-                if (this.GzipCompression == true) {
-                    lstReturn.Add(Packet.Compress(spDetails.Description));
-                }
-                else {
-                    lstReturn.Add(spDetails.Description);
-                }
-                lstReturn.Add(spDetails.DisplayPluginVariables.Count.ToString());
+                plugins.Add(spDetails.Name);
+                plugins.Add(spDetails.Author);
+                plugins.Add(spDetails.Website);
+                plugins.Add(spDetails.Version);
+                plugins.Add(this.GzipCompression == true ? Packet.Compress(spDetails.Description) : spDetails.Description);
+                plugins.Add(spDetails.DisplayPluginVariables.Count.ToString(CultureInfo.InvariantCulture));
 
                 foreach (CPluginVariable cpvVariable in spDetails.DisplayPluginVariables) {
-                    lstReturn.Add(cpvVariable.Name);
-                    lstReturn.Add(cpvVariable.Type);
-                    lstReturn.Add(cpvVariable.Value);
+                    plugins.Add(cpvVariable.Name);
+                    plugins.Add(cpvVariable.Type);
+                    plugins.Add(cpvVariable.Value);
                 }
             }
 
-            return lstReturn;
+            return plugins;
         }
 
         private void m_prcClient_CompilingPlugins(PRoConClient sender) {
@@ -1540,49 +1539,48 @@ namespace PRoCon.Core.Remote.Layer {
 
             if (this.IsLoggedIn == true && this.EventsEnabled == true && this.PacketDispatcher != null) {
 
-                List<String> lstOnPluginLoaded = new List<String>() { "procon.plugin.onLoaded", spdDetails.ClassName, spdDetails.Name, spdDetails.Author, spdDetails.Website, spdDetails.Version, spdDetails.Description, spdDetails.DisplayPluginVariables.Count.ToString() };
+                List<String> lstOnPluginLoaded = new List<String>() { "procon.plugin.onLoaded", spdDetails.ClassName, spdDetails.Name, spdDetails.Author, spdDetails.Website, spdDetails.Version, spdDetails.Description, spdDetails.DisplayPluginVariables.Count.ToString(CultureInfo.InvariantCulture) };
 
                 foreach (CPluginVariable cpvVariable in spdDetails.DisplayPluginVariables) {
                     lstOnPluginLoaded.AddRange(new List<String> { cpvVariable.Name, cpvVariable.Type, cpvVariable.Value });
                 }
 
                 this.PacketDispatcher.SendRequest(lstOnPluginLoaded);
-                //this.send(new Packet(true, false, this.AcquireSequenceNumber, lstOnPluginLoaded));
             }
         }
 
         private void Plugins_PluginVariableAltered(PluginDetails spdNewDetails) {
             if (this.IsLoggedIn == true && this.EventsEnabled == true && this.PacketDispatcher != null) {
 
-                List<String> lstWords = new List<String>() { "procon.plugin.onVariablesAltered", spdNewDetails.ClassName, (spdNewDetails.DisplayPluginVariables.Count).ToString() };
+                List<String> lstWords = new List<String>() { "procon.plugin.onVariablesAltered", spdNewDetails.ClassName, (spdNewDetails.DisplayPluginVariables.Count).ToString(CultureInfo.InvariantCulture) };
 
                 foreach (CPluginVariable cpvVariable in spdNewDetails.DisplayPluginVariables) {
-                    lstWords.AddRange(new String[] { cpvVariable.Name, cpvVariable.Type, cpvVariable.Value });
+                    lstWords.AddRange(new[] {
+                        cpvVariable.Name, 
+                        cpvVariable.Type, 
+                        cpvVariable.Value
+                    });
                 }
 
                 this.PacketDispatcher.SendRequest(lstWords);
-                //this.send(new Packet(true, false, this.AcquireSequenceNumber, lstWords));
             }
         }
 
         private void Plugins_PluginEnabled(String strClassName) {
             if (this.IsLoggedIn == true && this.EventsEnabled == true && this.PacketDispatcher != null) {
                 this.PacketDispatcher.SendRequest("procon.plugin.onEnabled", strClassName, Packet.Bltos(true));
-                //this.send(new Packet(true, false, this.AcquireSequenceNumber, new List<String>() { "procon.plugin.onEnabled", strClassName, bool.TrueString }));
             }
         }
 
         private void Plugins_PluginDisabled(String strClassName) {
             if (this.IsLoggedIn == true && this.EventsEnabled == true && this.PacketDispatcher != null) {
                 this.PacketDispatcher.SendRequest("procon.plugin.onEnabled", strClassName, Packet.Bltos(false));
-                //this.send(new Packet(true, false, this.AcquireSequenceNumber, new List<String>() { "procon.plugin.onEnabled", strClassName, bool.FalseString }));
             }
         }
 
         public void PluginConsole_WriteConsole(DateTime dtLoggedTime, String strLoggedText) {
             if (this.IsLoggedIn == true && this.EventsEnabled == true && this.PacketDispatcher != null) {
-                this.PacketDispatcher.SendRequest("procon.plugin.onConsole", dtLoggedTime.ToBinary().ToString(), strLoggedText);
-                //this.send(new Packet(true, false, this.AcquireSequenceNumber, new List<String>() { "procon.plugin.onConsole", dtLoggedTime.ToBinary().ToString(), strLoggedText }));
+                this.PacketDispatcher.SendRequest("procon.plugin.onConsole", dtLoggedTime.ToBinary().ToString(CultureInfo.InvariantCulture), strLoggedText);
             }
         }
 
@@ -1592,8 +1590,7 @@ namespace PRoCon.Core.Remote.Layer {
 
         public void ChatConsole_WriteConsoleViaCommand(DateTime dtLoggedTime, String strLoggedText) {
             if (this.IsLoggedIn == true && this.EventsEnabled == true && this.PacketDispatcher != null) {
-                this.PacketDispatcher.SendRequest("procon.chat.onConsole", dtLoggedTime.ToBinary().ToString(), strLoggedText);
-                //this.send(new Packet(true, false, this.AcquireSequenceNumber, new List<String>() { "procon.chat.onConsole", dtLoggedTime.ToBinary().ToString(), strLoggedText }));
+                this.PacketDispatcher.SendRequest("procon.chat.onConsole", dtLoggedTime.ToBinary().ToString(CultureInfo.InvariantCulture), strLoggedText);
             }
         }
 
@@ -1604,13 +1601,12 @@ namespace PRoCon.Core.Remote.Layer {
         private void MapZones_MapZoneRemoved(PRoCon.Core.Battlemap.MapZoneDrawing item) {
             if (this.IsLoggedIn == true && this.EventsEnabled == true && this.PacketDispatcher != null) {
                 this.PacketDispatcher.SendRequest("procon.battlemap.onZoneRemoved", item.UID);
-                //this.send(new Packet(true, false, this.AcquireSequenceNumber, new List<String>() { "procon.battlemap.onZoneRemoved", item.UID }));
             }
         }
 
         private void MapZones_MapZoneChanged(PRoCon.Core.Battlemap.MapZoneDrawing item) {
             if (this.IsLoggedIn == true && this.EventsEnabled == true && this.PacketDispatcher != null) {
-                List<String> packet = new List<String>() { "procon.battlemap.onZoneModified", item.UID, item.Tags.ToString(), item.ZonePolygon.Length.ToString() };
+                List<String> packet = new List<String>() { "procon.battlemap.onZoneModified", item.UID, item.Tags.ToString(), item.ZonePolygon.Length.ToString(CultureInfo.InvariantCulture) };
 
                 packet.AddRange(Point3D.ToStringList(item.ZonePolygon));
 
@@ -1621,7 +1617,7 @@ namespace PRoCon.Core.Remote.Layer {
 
         private void MapZones_MapZoneAdded(PRoCon.Core.Battlemap.MapZoneDrawing item) {
             if (this.IsLoggedIn == true && this.EventsEnabled == true && this.PacketDispatcher != null) {
-                List<String> packet = new List<String>() { "procon.battlemap.onZoneCreated", item.UID, item.LevelFileName, item.ZonePolygon.Length.ToString() };
+                List<String> packet = new List<String>() { "procon.battlemap.onZoneCreated", item.UID, item.LevelFileName, item.ZonePolygon.Length.ToString(CultureInfo.InvariantCulture) };
 
                 packet.AddRange(Point3D.ToStringList(item.ZonePolygon));
 
@@ -1637,14 +1633,12 @@ namespace PRoCon.Core.Remote.Layer {
         private void Variables_VariableUpdated(PRoCon.Core.Variables.Variable item) {
             if (this.IsLoggedIn == true && this.EventsEnabled == true && this.PacketDispatcher != null) {
                 this.PacketDispatcher.SendRequest("procon.vars.onAltered", item.Name, item.Value);
-                //this.send(new Packet(true, false, this.AcquireSequenceNumber, new List<String>() { "procon.vars.onAltered", item.Name, item.Value }));
             }
         }
 
         private void Variables_VariableAdded(PRoCon.Core.Variables.Variable item) {
             if (this.IsLoggedIn == true && this.EventsEnabled == true && this.PacketDispatcher != null) {
                 this.PacketDispatcher.SendRequest("procon.vars.onAltered", item.Name, item.Value);
-                //this.send(new Packet(true, false, this.AcquireSequenceNumber, new List<String>() { "procon.vars.onAltered", item.Name, item.Value }));
             }
         }
 
