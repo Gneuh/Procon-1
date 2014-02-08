@@ -2690,7 +2690,7 @@ namespace PRoCon.Core {
 
                 XmlNode layer = document.CreateElement("layer");
                 layer.AppendChild(this.CreateNode(document, "port", client.Layer.ListeningPort.ToString()));
-                layer.AppendChild(this.CreateNode(document, "is_enabled", client.Layer.IsLayerOnline.ToString()));
+                layer.AppendChild(this.CreateNode(document, "is_enabled", client.Layer.IsOnline.ToString()));
                 connection.AppendChild(layer);
 
                 XmlNode plugins = document.CreateElement("plugins");

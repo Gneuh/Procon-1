@@ -1082,7 +1082,7 @@ namespace PRoCon.Core.Plugin {
 
             #region Layer Accounts
 
-            foreach (ILayerClient client in new List<ILayerClient>(ProconClient.Layer.LayerClients.Values)) {
+            foreach (ILayerClient client in new List<ILayerClient>(ProconClient.Layer.Clients.Values)) {
                 client.Login -= Layer_LayerClientLogin;
                 client.Logout -= Layer_LayerClientLogout;
             }
@@ -1326,11 +1326,11 @@ namespace PRoCon.Core.Plugin {
 
             #region Layer Accounts
 
-            foreach (ILayerClient client in new List<ILayerClient>(ProconClient.Layer.LayerClients.Values)) {
+            foreach (ILayerClient client in new List<ILayerClient>(ProconClient.Layer.Clients.Values)) {
                 client.Login += Layer_LayerClientLogin;
                 client.Logout += Layer_LayerClientLogout;
             }
-            ProconClient.Layer.ClientConnected += new LayerInstance.LayerAccountHandler(Layer_ClientConnected);
+            ProconClient.Layer.ClientConnected += Layer_ClientConnected;
 
             #endregion
 

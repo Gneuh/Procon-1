@@ -33,6 +33,11 @@ namespace PRoCon.Core.Remote.Layer {
         public event Action<ILayerClient> Quit;
         public event Action<ILayerClient> UidRegistered;
 
+        /// <summary>
+        /// The owner of this client
+        /// </summary>
+        protected ILayerInstance Layer { get; set; }
+
         protected PRoConApplication Application { get; set; }
         protected PRoConClient Client { get; set; }
 
@@ -86,11 +91,13 @@ namespace PRoCon.Core.Remote.Layer {
         /// </summary>
         protected UInt32 ServerInfoSequenceNumber { get; set; }
 
-        public LayerClient(ILayerConnection connection, PRoConApplication application, PRoConClient client) {
+        public LayerClient(ILayerInstance layer, ILayerConnection connection, PRoConApplication application, PRoConClient client) {
+            if (layer == null) throw new ArgumentNullException("layer");
             if (connection == null) throw new ArgumentNullException("connection");
             if (application == null) throw new ArgumentNullException("application");
             if (client == null) throw new ArgumentNullException("client");
 
+            this.Layer = layer;
             this.Application = application;
             this.Client = client;
 
@@ -202,7 +209,7 @@ namespace PRoCon.Core.Remote.Layer {
             this.Application.AccountsList.AccountRemoved += new AccountDictionary.AccountAlteredHandler(AccountsList_AccountRemoved);
 
             foreach (Account acAccount in this.Application.AccountsList) {
-                this.Client.Layer.AccountPrivileges[acAccount.Name].AccountPrivilegesChanged += new AccountPrivilege.AccountPrivilegesChangedHandler(CPRoConLayerClient_AccountPrivilegesChanged);
+                this.Layer.AccountPrivileges[acAccount.Name].AccountPrivilegesChanged += new AccountPrivilege.AccountPrivilegesChangedHandler(CPRoConLayerClient_AccountPrivilegesChanged);
             }
 
             this.Client.RecompilingPlugins += new PRoConClient.EmptyParamterHandler(m_prcClient_CompilingPlugins);
@@ -233,7 +240,7 @@ namespace PRoCon.Core.Remote.Layer {
             this.Application.AccountsList.AccountRemoved -= new AccountDictionary.AccountAlteredHandler(AccountsList_AccountRemoved);
 
             foreach (Account acAccount in this.Application.AccountsList) {
-                this.Client.Layer.AccountPrivileges[acAccount.Name].AccountPrivilegesChanged -= new AccountPrivilege.AccountPrivilegesChangedHandler(CPRoConLayerClient_AccountPrivilegesChanged);
+                this.Layer.AccountPrivileges[acAccount.Name].AccountPrivilegesChanged -= new AccountPrivilege.AccountPrivilegesChangedHandler(CPRoConLayerClient_AccountPrivilegesChanged);
             }
 
             this.Client.RecompilingPlugins -= new PRoConClient.EmptyParamterHandler(m_prcClient_CompilingPlugins);
@@ -337,7 +344,7 @@ namespace PRoCon.Core.Remote.Layer {
         public void Forward(Packet packet) {
             if (this.PacketDispatcher != null) {
                 if (this.ServerInfoSequenceNumber == packet.SequenceNumber && packet.Words.Count >= 2) {
-                    packet.Words[1] = this.Client.Layer.LayerNameFormat.Replace("%servername%", packet.Words[1]);
+                    packet.Words[1] = this.Client.Layer.NameFormat.Replace("%servername%", packet.Words[1]);
                 }
 
                 this.PacketDispatcher.SendResponse(packet, packet.Words);
@@ -417,7 +424,7 @@ namespace PRoCon.Core.Remote.Layer {
                     }
                     else if (packet.Words.Count >= 3) {
 
-                        if (this.Client.Layer.LayerClients.Any(client => client.Value.ProconEventsUid == packet.Words[2]) == false) {
+                        if (this.Client.Layer.Clients.Any(client => client.Value.ProconEventsUid == packet.Words[2]) == false) {
                             sender.SendResponse(packet, LayerClient.ResponseOk);
 
                             this.ProconEventsUid = packet.Words[2];
@@ -530,9 +537,9 @@ namespace PRoCon.Core.Remote.Layer {
                     };
 
                     foreach (String strAccountName in this.Application.AccountsList.ListAccountNames()) {
-                        if (this.Client.Layer.AccountPrivileges.Contains(strAccountName) == true) {
+                        if (this.Layer.AccountPrivileges.Contains(strAccountName) == true) {
                             lstAccounts.Add(strAccountName);
-                            lstAccounts.Add(this.Client.Layer.AccountPrivileges[strAccountName].Privileges.PrivilegesFlags.ToString(CultureInfo.InvariantCulture));
+                            lstAccounts.Add(this.Layer.AccountPrivileges[strAccountName].Privileges.PrivilegesFlags.ToString(CultureInfo.InvariantCulture));
                         }
                     }
 
@@ -549,8 +556,8 @@ namespace PRoCon.Core.Remote.Layer {
 
         private void DispatchProconAccountListLoggedInRequest(ILayerPacketDispatcher sender, Packet packet) {
             if (this.Privileges.CanIssueLimitedProconCommands == true) {
-
-                List<String> lstLoggedInAccounts = this.Client.Layer.GetLoggedInAccountUsernamesWithUids((packet.Words.Count >= 2 && String.CompareOrdinal(packet.Words[1], "uids") == 0));
+                
+                List<String> lstLoggedInAccounts = this.Layer.GetLoggedInAccountUsernamesWithUids((packet.Words.Count >= 2 && String.CompareOrdinal(packet.Words[1], "uids") == 0));
 
                 //List<String> lstLoggedInAccounts = this.m_prcClient.Layer.GetLoggedInAccounts();
                 lstLoggedInAccounts.Insert(0, LayerClient.ResponseOk);
@@ -808,7 +815,7 @@ namespace PRoCon.Core.Remote.Layer {
                             sender.SendResponse(packet, LayerClient.ResponseOk);
 
                             sprvPrivs.PrivilegesFlags = ui32Privileges;
-                            this.Client.Layer.AccountPrivileges[packet.Words[1]].SetPrivileges(sprvPrivs);
+                            this.Layer.AccountPrivileges[packet.Words[1]].SetPrivileges(sprvPrivs);
                         }
                         else {
                             sender.SendResponse(packet, "AccountDoesNotExists");
@@ -1423,8 +1430,8 @@ namespace PRoCon.Core.Remote.Layer {
                 PrivilegesFlags = 0
             };
 
-            if (this.Client.Layer.AccountPrivileges.Contains(username) == true) {
-                privileges = this.Client.Layer.AccountPrivileges[username].Privileges;
+            if (this.Layer.AccountPrivileges.Contains(username) == true) {
+                privileges = this.Layer.AccountPrivileges[username].Privileges;
             }
 
             if (String.IsNullOrEmpty(username) == true && this.Client.Variables.IsVariableNullOrEmpty("GUEST_PRIVILEGES") == false) {

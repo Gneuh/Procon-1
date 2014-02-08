@@ -84,11 +84,11 @@ namespace PRoCon {
                     }
                 }
 
-                this.txtLayerName.Text = this.m_prcClient.Layer.LayerNameFormat;
+                this.txtLayerName.Text = this.m_prcClient.Layer.NameFormat;
                 this.txtLayerBindingAddress.Text = this.m_prcClient.Layer.BindingAddress;
                 this.txtLayerStartPort.Text = this.m_prcClient.Layer.ListeningPort.ToString();
 
-                if (this.m_prcClient.Layer.IsLayerOnline == true) {
+                if (this.m_prcClient.Layer.IsOnline == true) {
                     this.Layer_LayerOnline();
                 }
             }
@@ -135,11 +135,11 @@ namespace PRoCon {
                 }
             }
 
-            this.m_prcClient.Layer.LayerOnline += new LayerInstance.LayerEmptyParameterHandler(Layer_LayerOnline);
-            this.m_prcClient.Layer.LayerOffline += new LayerInstance.LayerEmptyParameterHandler(Layer_LayerOffline);
-            this.m_prcClient.Layer.LayerSocketError += new LayerInstance.LayerSocketErrorHandler(Layer_LayerSocketError);
+            this.m_prcClient.Layer.LayerOnline += Layer_LayerOnline;
+            this.m_prcClient.Layer.LayerOffline += Layer_LayerOffline;
+            this.m_prcClient.Layer.LayerSocketError += Layer_LayerSocketError;
 
-            this.m_prcClient.Layer.ClientConnected += new LayerInstance.LayerAccountHandler(Layer_ClientConnected);
+            this.m_prcClient.Layer.ClientConnected += Layer_ClientConnected;
         }
 
         void Layer_ClientConnected(ILayerClient client) {
@@ -346,14 +346,14 @@ namespace PRoCon {
         //public event DispatchEventDelegate LayerServerManuallyStopped;
         private void lnkStartStopLayer_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
 
-            if (this.m_prcClient.Layer.IsLayerOnline == false) {
+            if (this.m_prcClient.Layer.IsOnline == false) {
                 this.ShowLayerPanel(this.pnlStartPRoConLayer);
             }
             else {
-                this.m_prcClient.Layer.LayerEnabled = false;
+                this.m_prcClient.Layer.IsEnabled = false;
                 //this.m_blLayerEnabled = false;
 
-                this.m_prcClient.Layer.ShutdownLayerListener();
+                this.m_prcClient.Layer.Shutdown();
 
                 //if (this.LayerServerManuallyStopped != null) {
                 //    this.LayerServerManuallyStopped();
@@ -365,12 +365,12 @@ namespace PRoCon {
         private void btnLayerStart_Click(object sender, EventArgs e) {
             this.ShowLayerPanel(this.pnlMainLayerServer);
 
-            this.m_prcClient.Layer.LayerEnabled = true;
+            this.m_prcClient.Layer.IsEnabled = true;
             this.m_prcClient.Layer.BindingAddress = this.txtLayerBindingAddress.Text;
             this.m_prcClient.Layer.ListeningPort = Convert.ToUInt16(this.txtLayerStartPort.Text);
-            this.m_prcClient.Layer.LayerNameFormat = this.txtLayerName.Text;
+            this.m_prcClient.Layer.NameFormat = this.txtLayerName.Text;
             //this.m_ui16LayerListenerPort = Convert.ToUInt16(this.txtLayerStartPort.Text);
-            this.m_prcClient.Layer.StartLayerListener();
+            this.m_prcClient.Layer.Start();
 
             //if (this.LayerServerManuallyStarted != null) {
             //    this.LayerServerManuallyStarted();

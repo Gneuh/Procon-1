@@ -294,7 +294,7 @@ namespace PRoCon.Core.Remote {
 
         public Version ConnectedLayerVersion { get; private set; }
 
-        public LayerInstance Layer { get; private set; }
+        public ILayerInstance Layer { get; private set; }
 
         public NotificationList<string> Reasons { get; private set; }
 
@@ -566,8 +566,8 @@ namespace PRoCon.Core.Remote {
                 Layer.Initialize(Parent, this);
 
                 // I may move these events to within Layer, depends on the end of the restructure.
-                Layer.LayerOnline += new LayerInstance.LayerEmptyParameterHandler(Layer_LayerOnline);
-                Layer.LayerOffline += new LayerInstance.LayerEmptyParameterHandler(Layer_LayerOffline);
+                Layer.LayerOnline += Layer_LayerOnline;
+                Layer.LayerOffline += Layer_LayerOffline;
                 Layer.AccountPrivileges.AccountPrivilegeAdded += new AccountPrivilegeDictionary.AccountPrivilegeAlteredHandler(AccountPrivileges_AccountPrivilegeAdded);
                 Layer.AccountPrivileges.AccountPrivilegeRemoved += new AccountPrivilegeDictionary.AccountPrivilegeAlteredHandler(AccountPrivileges_AccountPrivilegeRemoved);
 
@@ -1706,7 +1706,7 @@ namespace PRoCon.Core.Remote {
             }
             */
             if (Layer != null) {
-                Layer.ShutdownLayerListener();
+                Layer.Shutdown();
             }
 
             Shutdown();
@@ -2081,20 +2081,20 @@ namespace PRoCon.Core.Remote {
 
         public void ProconProtectedLayerEnable(bool blEnabled, UInt16 ui16Port, string strBindingAddress, string strLayerName) {
             if (Layer != null) {
-                Layer.LayerEnabled = blEnabled;
+                Layer.IsEnabled = blEnabled;
                 //if (this.Layer.LayerEnabled == true) {
                 Layer.ListeningPort = ui16Port;
                 Layer.BindingAddress = strBindingAddress;
-                Layer.LayerNameFormat = strLayerName;
+                Layer.NameFormat = strLayerName;
                 //}
 
                 // Start it up if we've logged into the bfbc2 server..
                 if (Game != null && Game.IsLoggedIn == true) {
-                    if (Layer.LayerEnabled == true && Layer.IsLayerOnline == false) {
-                        Layer.StartLayerListener();
+                    if (Layer.IsEnabled == true && Layer.IsOnline == false) {
+                        Layer.Start();
                     }
-                    else if (Layer.LayerEnabled == false && Layer.IsLayerOnline == true) {
-                        Layer.ShutdownLayerListener();
+                    else if (Layer.IsEnabled == false && Layer.IsOnline == true) {
+                        Layer.Shutdown();
                     }
                 }
             }
@@ -2929,7 +2929,7 @@ namespace PRoCon.Core.Remote {
                                 stwConfig.WriteLine("procon.protected.layer.setPrivileges \"{0}\" {1}", apPrivs.Owner.Name, apPrivs.Privileges.PrivilegesFlags);
                             }
 
-                            stwConfig.WriteLine("procon.protected.layer.enable {0} {1} \"{2}\" \"{3}\"", Layer.LayerEnabled, Layer.ListeningPort, Layer.BindingAddress, Layer.LayerNameFormat);
+                            stwConfig.WriteLine("procon.protected.layer.enable {0} {1} \"{2}\" \"{3}\"", Layer.IsEnabled, Layer.ListeningPort, Layer.BindingAddress, Layer.NameFormat);
 
                             stwConfig.WriteLine("procon.protected.playerlist.settings " + String.Join(" ", PlayerListSettings.Settings.ToArray()));
                             stwConfig.WriteLine("procon.protected.chat.settings " + String.Join(" ", ChatConsole.Settings.ToArray()));
