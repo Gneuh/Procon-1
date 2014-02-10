@@ -92,7 +92,8 @@ namespace PRoCon.Controls.Data {
         public void Set<T>(IEnumerable<T> items) {
             if (typeof(T) != typeof(CBanInfo)) throw new InvalidCastException();
 
-            if (this.ItemsAge > DateTime.Now.AddMinutes(-1)) {
+            // If we have nothing yet or the items we do have are expired.
+            if (this.Items == null || this.Items.Count == 0 || this.ItemsAge > DateTime.Now.AddMinutes(-1)) {
                 this.Items = items.Cast<CBanInfo>().ToList();
                 this.ItemsAge = DateTime.Now;
 
