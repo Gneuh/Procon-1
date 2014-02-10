@@ -240,11 +240,13 @@ namespace PRoCon.Controls {
         }
 
         private void LoggedEvents_LoggedEvent(CapturedEvent ceEvent) {
-            this.lsvEvents.BeginUpdate();
+            this.InvokeIfRequired(() => {
+                this.lsvEvents.BeginUpdate();
 
-            this.CleanUpLoggedEvents(this.AddLoggedEvent(ceEvent));
+                this.CleanUpLoggedEvents(this.AddLoggedEvent(ceEvent));
 
-            this.lsvEvents.EndUpdate();
+                this.lsvEvents.EndUpdate();
+            });
         }
 
         private void CapturedEvents_ItemAdded(int iIndex, CapturableEvents item) {
