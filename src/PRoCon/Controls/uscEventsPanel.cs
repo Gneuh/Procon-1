@@ -250,50 +250,57 @@ namespace PRoCon.Controls {
         }
 
         private void CapturedEvents_ItemAdded(int iIndex, CapturableEvents item) {
-            ListViewItem lviNewCapture = new ListViewItem(item.ToString());
-            lviNewCapture.Name = item.ToString();
-            this.lsvCapturedEvents.Items.Add(lviNewCapture);
+            this.InvokeIfRequired(() => {
+                ListViewItem lviNewCapture = new ListViewItem(item.ToString());
+                lviNewCapture.Name = item.ToString();
+                this.lsvCapturedEvents.Items.Add(lviNewCapture);
+            });
         }
 
         private void CapturedEvents_ItemRemoved(int iIndex, CapturableEvents item) {
-            if (this.lsvCapturedEvents.Items.ContainsKey(item.ToString()) == true) {
-                this.lsvCapturedEvents.Items.Remove(this.lsvCapturedEvents.Items[item.ToString()]);
-            }
+            this.InvokeIfRequired(() => {
+                if (this.lsvCapturedEvents.Items.ContainsKey(item.ToString()) == true) {
+                    this.lsvCapturedEvents.Items.Remove(this.lsvCapturedEvents.Items[item.ToString()]);
+                }
+            });
         }
 
         private void LoggedEvents_OptionsHiddenChange(bool isVisible) {
+            this.InvokeIfRequired(() => {
+                if (this.m_frmMain != null) {
 
-            if (this.m_frmMain != null) {
-
-                if (isVisible == true) {
-                    this.lnkShowHide.Text = this.lnkShowHide.Text = this.m_clocLanguage.GetLocalized("uscEvents.lnkShowHide.Hide", null);
-                    this.picOpenCloseCaptures.Image = this.m_frmMain.iglIcons.Images["arrow_right.png"];
-                    spltEvents.Panel2Collapsed = false;
+                    if (isVisible == true) {
+                        this.lnkShowHide.Text = this.lnkShowHide.Text = this.m_clocLanguage.GetLocalized("uscEvents.lnkShowHide.Hide", null);
+                        this.picOpenCloseCaptures.Image = this.m_frmMain.iglIcons.Images["arrow_right.png"];
+                        spltEvents.Panel2Collapsed = false;
+                    }
+                    else {
+                        this.lnkShowHide.Text = this.lnkShowHide.Text = this.m_clocLanguage.GetLocalized("uscEvents.lnkShowHide.Show", null);
+                        this.picOpenCloseCaptures.Image = this.m_frmMain.iglIcons.Images["arrow_left.png"];
+                        spltEvents.Panel2Collapsed = true;
+                    }
                 }
-                else {
-                    this.lnkShowHide.Text = this.lnkShowHide.Text = this.m_clocLanguage.GetLocalized("uscEvents.lnkShowHide.Show", null);
-                    this.picOpenCloseCaptures.Image = this.m_frmMain.iglIcons.Images["arrow_left.png"];
-                    spltEvents.Panel2Collapsed = true;
-                }
-            }
+            });
         }
 
         private void LoggedEvents_MaximumDisplayedEventsChange(int maximumDisplayedEvents) {
-            if (maximumDisplayedEvents >= this.numMaximumEvents.Minimum && maximumDisplayedEvents <= this.numMaximumEvents.Maximum) {
-                this.numMaximumEvents.Value = (decimal)maximumDisplayedEvents;
+            this.InvokeIfRequired(() => {
+                if (maximumDisplayedEvents >= this.numMaximumEvents.Minimum && maximumDisplayedEvents <= this.numMaximumEvents.Maximum) {
+                    this.numMaximumEvents.Value = (decimal) maximumDisplayedEvents;
 
-                this.lsvEvents.BeginUpdate();
+                    this.lsvEvents.BeginUpdate();
 
-                while (this.m_queListItems.Count > this.numMaximumEvents.Value) {
-                    this.lsvEvents.Items.Remove(this.m_queListItems.Dequeue());
+                    while (this.m_queListItems.Count > this.numMaximumEvents.Value) {
+                        this.lsvEvents.Items.Remove(this.m_queListItems.Dequeue());
+                    }
+
+                    this.lsvEvents.EndUpdate();
                 }
-
-                this.lsvEvents.EndUpdate();
-            }
+            });
         }
 
         private void LoggedEvents_ScrollingEnabledChange(bool isEnabled) {
-            this.chkEventsEnableScrolling.Checked = isEnabled;
+            this.InvokeIfRequired(() => { this.chkEventsEnableScrolling.Checked = isEnabled; });
         }
 
         private void picOpenCloseCaptures_Click(object sender, EventArgs e) {
