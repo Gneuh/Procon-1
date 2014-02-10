@@ -317,28 +317,25 @@ namespace PRoCon.Core.Plugin {
         }
 
         public PluginDetails GetPluginDetails(string strClassName) {
-            var spdReturnDetails = new PluginDetails();
-
-            spdReturnDetails.ClassName = strClassName;
-            spdReturnDetails.Name = InvokeOnLoaded_String(strClassName, "GetPluginName");
-            spdReturnDetails.Author = InvokeOnLoaded_String(strClassName, "GetPluginAuthor");
-            spdReturnDetails.Version = InvokeOnLoaded_String(strClassName, "GetPluginVersion");
-            spdReturnDetails.Website = InvokeOnLoaded_String(strClassName, "GetPluginWebsite");
-            spdReturnDetails.Description = InvokeOnLoaded_String(strClassName, "GetPluginDescription");
-
-            spdReturnDetails.DisplayPluginVariables = InvokeOnLoaded_CPluginVariables(strClassName, "GetDisplayPluginVariables");
-            spdReturnDetails.PluginVariables = InvokeOnLoaded_CPluginVariables(strClassName, "GetPluginVariables");
-
-            return spdReturnDetails;
+            return new PluginDetails {
+                ClassName = strClassName,
+                Name = InvokeOnLoaded_String(strClassName, "GetPluginName"),
+                Author = InvokeOnLoaded_String(strClassName, "GetPluginAuthor"),
+                Version = InvokeOnLoaded_String(strClassName, "GetPluginVersion"),
+                Website = InvokeOnLoaded_String(strClassName, "GetPluginWebsite"),
+                Description = InvokeOnLoaded_String(strClassName, "GetPluginDescription"),
+                DisplayPluginVariables = InvokeOnLoaded_CPluginVariables(strClassName, "GetDisplayPluginVariables"),
+                PluginVariables = InvokeOnLoaded_CPluginVariables(strClassName, "GetPluginVariables")
+            };
         }
 
-        public void SetPluginVariable(string strClassName, string strVariable, string strValue) {
+        public void SetPluginVariable(string strClassName, string strVariable, string strValue, bool notification = true) {
             // FailCompiledPlugins
 
             if (Plugins.Contains(strClassName) == true && Plugins[strClassName].IsLoaded == true) {
                 InvokeOnLoaded(strClassName, "SetPluginVariable", new object[] {strVariable, strValue});
 
-                if (PluginVariableAltered != null) {
+                if (PluginVariableAltered != null && notification == true) {
                     this.PluginVariableAltered(GetPluginDetails(strClassName));
                 }
             }
@@ -357,29 +354,24 @@ namespace PRoCon.Core.Plugin {
         }
 
         public PluginDetails GetPluginDetailsCon(string strClassName) {
-            var spdReturnDetails = new PluginDetails();
-
-            spdReturnDetails.ClassName = strClassName;
-            spdReturnDetails.Name = InvokeOnLoaded_String(strClassName, "GetPluginName");
-            spdReturnDetails.Author = InvokeOnLoaded_String(strClassName, "GetPluginAuthor");
-            spdReturnDetails.Version = InvokeOnLoaded_String(strClassName, "GetPluginVersion");
-            spdReturnDetails.Website = InvokeOnLoaded_String(strClassName, "GetPluginWebsite");
-            spdReturnDetails.Description = InvokeOnLoaded_String(strClassName, "GetPluginDescription");
-
-            // a bit rough but for the moment...  
-            //spdReturnDetails.DisplayPluginVariables = this.InvokeOnLoaded_CPluginVariables(strClassName, "GetDisplayPluginVariables");
-            spdReturnDetails.PluginVariables = InvokeOnLoaded_CPluginVariables(strClassName, "GetPluginVariables");
-
-            return spdReturnDetails;
+            return new PluginDetails {
+                ClassName = strClassName,
+                Name = InvokeOnLoaded_String(strClassName, "GetPluginName"),
+                Author = InvokeOnLoaded_String(strClassName, "GetPluginAuthor"),
+                Version = InvokeOnLoaded_String(strClassName, "GetPluginVersion"),
+                Website = InvokeOnLoaded_String(strClassName, "GetPluginWebsite"),
+                Description = InvokeOnLoaded_String(strClassName, "GetPluginDescription"),
+                PluginVariables = InvokeOnLoaded_CPluginVariables(strClassName, "GetPluginVariables")
+            };
         }
 
-        public void SetPluginVariableCon(string strClassName, string strVariable, string strValue) {
+        public void SetPluginVariableCon(string strClassName, string strVariable, string strValue, bool notification = true) {
             // FailCompiledPlugins
 
             if (Plugins.Contains(strClassName) == true && Plugins[strClassName].IsLoaded == true) {
                 InvokeOnLoaded(strClassName, "SetPluginVariable", new object[] {strVariable, strValue});
 
-                if (PluginVariableAltered != null) {
+                if (PluginVariableAltered != null && notification == true) {
                     this.PluginVariableAltered(GetPluginDetailsCon(strClassName));
                 }
             }

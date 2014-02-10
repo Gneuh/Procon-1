@@ -2073,7 +2073,7 @@ namespace PRoCon.Core.Remote {
 
         public void ProconProtectedPluginSetVariableCon(string strClassName, string strVariable, string strValue) {
             if (PluginsManager != null) {
-                PluginsManager.SetPluginVariableCon(strClassName, strVariable, strValue);
+                PluginsManager.SetPluginVariableCon(strClassName, strVariable, strValue, false);
             }
         }
 
