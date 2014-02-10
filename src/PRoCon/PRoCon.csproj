@@ -112,6 +112,7 @@
     <Compile Include="Controls\Battlemap\MapZoneDisplay\MapZoneControl.cs" />
     <Compile Include="Controls\Battlemap\MapZoneDisplay\MapZonePointControl.cs" />
     <Compile Include="Controls\Battlemap\TeamNamesDisplay\TeamNamesDisplayLegend.cs" />
+    <Compile Include="Controls\Containers\AdditionalPlayerInfo.cs" />
     <Compile Include="Controls\ControlsEx\CodRichTextBox.cs">
       <SubType>Component</SubType>
     </Compile>
