@@ -344,7 +344,7 @@ namespace PRoCon.Core.Remote.Layer {
         public void Forward(Packet packet) {
             if (this.PacketDispatcher != null) {
                 if (this.ServerInfoSequenceNumber == packet.SequenceNumber && packet.Words.Count >= 2) {
-                    packet.Words[1] = this.Client.Layer.NameFormat.Replace("%servername%", packet.Words[1]);
+                    packet.Words[1] = this.Layer.NameFormat.Replace("%servername%", packet.Words[1]);
                 }
 
                 this.PacketDispatcher.SendResponse(packet, packet.Words);
@@ -424,7 +424,7 @@ namespace PRoCon.Core.Remote.Layer {
                     }
                     else if (packet.Words.Count >= 3) {
 
-                        if (this.Client.Layer.Clients.Any(client => client.Value.ProconEventsUid == packet.Words[2]) == false) {
+                        if (this.Layer.Clients.Any(client => client.Value.ProconEventsUid == packet.Words[2]) == false) {
                             sender.SendResponse(packet, LayerClient.ResponseOk);
 
                             this.ProconEventsUid = packet.Words[2];
@@ -1486,7 +1486,7 @@ namespace PRoCon.Core.Remote.Layer {
 
         private void AccountsList_AccountAdded(Account item) {
 
-            this.Client.Layer.AccountPrivileges[item.Name].AccountPrivilegesChanged += new AccountPrivilege.AccountPrivilegesChangedHandler(CPRoConLayerClient_AccountPrivilegesChanged);
+            this.Layer.AccountPrivileges[item.Name].AccountPrivilegesChanged += new AccountPrivilege.AccountPrivilegesChangedHandler(CPRoConLayerClient_AccountPrivilegesChanged);
 
             if (this.IsLoggedIn == true && this.EventsEnabled == true && this.PacketDispatcher != null) {
                 this.PacketDispatcher.SendRequest("procon.account.onCreated", item.Name);
