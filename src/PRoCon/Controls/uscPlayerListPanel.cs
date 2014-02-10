@@ -1,24 +1,4 @@
-﻿/*  Copyright 2010 Geoffrey 'Phogue' Green
-
-    http://www.phogue.net
- 
-    This file is part of PRoCon Frostbite.
-
-    PRoCon Frostbite is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    PRoCon Frostbite is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with PRoCon Frostbite.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
@@ -32,7 +12,6 @@ using PRoCon.Core.Players.Items;
 using PRoCon.Core.Remote;
 using PRoCon.Core.TextChatModeration;
 using PRoCon.Forms;
-//using System.Text.RegularExpressions;
 
 namespace PRoCon.Controls {
     public partial class uscPlayerListPanel : UserControl {
@@ -370,40 +349,9 @@ namespace PRoCon.Controls {
             this.kbpPunkbusterPunishPanel.SetLocalization(this.m_clocLanguage);
         }
 
-        //private CServerInfo m_csiLastServerInfo = null;
-
-        /*
-        private string GetTeamName(int iTeamID) {
-
-            string strReturnTeamName = String.Empty;
-
-            if (this.m_csiLastServerInfo != null) {
-                
-                strReturnTeamName = this.m_prcClient.GetLocalizedTeamName(iTeamID, this.m_prcClient.CurrentServerInfo.Map);
-
-            }
-
-            return strReturnTeamName;
-        }
-        */
-        /*
-        private int GetTotalTeamsForMap() {
-
-            int iTotalTeams = this.m_prcClient.GetLocalizedTeamNameCount(this.m_prcClient.CurrentServerInfo.Map);
-            
-            return iTotalTeams;
-        }
-        */
-          
-        //public void OnServerInfo(CServerInfo csiInfo) {
-        //    this.m_csiLastServerInfo = csiInfo;
-        //}
-        
         private readonly object m_objPlayerDictionaryLocker = new object();
         private Dictionary<string, ListViewItem> Players = new Dictionary<string, ListViewItem>();
         private Dictionary<string, int> m_dicPings = new Dictionary<string, int>();
-        //private bool m_blSplitList = false;
-        //private int m_iSplitPlayerLists = 1;
 
         private ListViewItem CreateTotalsPlayer(CPlayerInfo cpiDummyPlayer, int iTeamID) {
             ListViewItem lviReturn = this.CreatePlayer(new CPlayerInfo(cpiDummyPlayer.SoldierName, String.Empty, iTeamID, 0));
@@ -717,39 +665,6 @@ namespace PRoCon.Controls {
 
             }
         }
-
-        /*
-        private void AddTotalsPlayerDetails(int iTeamID, CPlayerInfo cpiPlayer) {
-            if (this.m_dicPlayers.ContainsKey(String.Format("procon.playerlist.totals{0}", iTeamID)) == true) {
-
-                ((AdditionalPlayerInfo)this.m_dicPlayers[String.Format("procon.playerlist.totals{0}", iTeamID)].Tag).m_cpiPlayer.Kills += cpiPlayer.Kills;
-                ((AdditionalPlayerInfo)this.m_dicPlayers[String.Format("procon.playerlist.totals{0}", iTeamID)].Tag).m_cpiPlayer.Deaths += cpiPlayer.Deaths;
-                ((AdditionalPlayerInfo)this.m_dicPlayers[String.Format("procon.playerlist.totals{0}", iTeamID)].Tag).m_cpiPlayer.Score += cpiPlayer.Score; ;
-                ((AdditionalPlayerInfo)this.m_dicPlayers[String.Format("procon.playerlist.totals{0}", iTeamID)].Tag).m_cpiPlayer.Ping += cpiPlayer.Ping;
-                ((AdditionalPlayerInfo)this.m_dicPlayers[String.Format("procon.playerlist.totals{0}", iTeamID)].Tag).m_cpiPlayer.Kdr += (cpiPlayer.Deaths > 0 ? (float)cpiPlayer.Kills / (float)cpiPlayer.Deaths : cpiPlayer.Kills);
-                ((AdditionalPlayerInfo)this.m_dicPlayers[String.Format("procon.playerlist.totals{0}", iTeamID)].Tag).m_cpiPlayer.SquadID++;
-
-                this.m_dicPlayers[String.Format("procon.playerlist.totals{0}", iTeamID)].SubItems["kills"].Text = ((AdditionalPlayerInfo)this.m_dicPlayers[String.Format("procon.playerlist.totals{0}", iTeamID)].Tag).m_cpiPlayer.Kills.ToString();
-                this.m_dicPlayers[String.Format("procon.playerlist.totals{0}", iTeamID)].SubItems["deaths"].Text = ((AdditionalPlayerInfo)this.m_dicPlayers[String.Format("procon.playerlist.totals{0}", iTeamID)].Tag).m_cpiPlayer.Deaths.ToString();
-                this.m_dicPlayers[String.Format("procon.playerlist.totals{0}", iTeamID)].SubItems["score"].Text = ((AdditionalPlayerInfo)this.m_dicPlayers[String.Format("procon.playerlist.totals{0}", iTeamID)].Tag).m_cpiPlayer.Score.ToString();
-                //this.m_dicPlayers[String.Format("procon.playerlist.totals{0}", iTeamID)].SubItems["ping"].Text = ((SAdditionalPlayerInfo)this.m_dicPlayers[String.Format("procon.playerlist.totals{0}", iTeamID)].Tag).m_cpiPlayer.Ping.ToString();
-                this.m_dicPlayers[String.Format("procon.playerlist.totals{0}", iTeamID)].SubItems["kdr"].Text = String.Format("{0:0.00}", ((AdditionalPlayerInfo)this.m_dicPlayers[String.Format("procon.playerlist.totals{0}", iTeamID)].Tag).m_cpiPlayer.Kdr);
-
-                this.m_dicPlayers[String.Format("procon.playerlist.averages{0}", iTeamID)].SubItems["kills"].Text = String.Format("{0:0.00}", (float)((AdditionalPlayerInfo)this.m_dicPlayers[String.Format("procon.playerlist.totals{0}", iTeamID)].Tag).m_cpiPlayer.Kills / (float)((AdditionalPlayerInfo)this.m_dicPlayers[String.Format("procon.playerlist.totals{0}", iTeamID)].Tag).m_cpiPlayer.SquadID);
-                this.m_dicPlayers[String.Format("procon.playerlist.averages{0}", iTeamID)].SubItems["deaths"].Text = String.Format("{0:0.00}", (float)((AdditionalPlayerInfo)this.m_dicPlayers[String.Format("procon.playerlist.totals{0}", iTeamID)].Tag).m_cpiPlayer.Deaths / (float)((AdditionalPlayerInfo)this.m_dicPlayers[String.Format("procon.playerlist.totals{0}", iTeamID)].Tag).m_cpiPlayer.SquadID);
-                this.m_dicPlayers[String.Format("procon.playerlist.averages{0}", iTeamID)].SubItems["score"].Text = String.Format("{0:0.00}", (float)((AdditionalPlayerInfo)this.m_dicPlayers[String.Format("procon.playerlist.totals{0}", iTeamID)].Tag).m_cpiPlayer.Score / (float)((AdditionalPlayerInfo)this.m_dicPlayers[String.Format("procon.playerlist.totals{0}", iTeamID)].Tag).m_cpiPlayer.SquadID);
-                this.m_dicPlayers[String.Format("procon.playerlist.averages{0}", iTeamID)].SubItems["ping"].Text = String.Format("{0:0}", (float)((AdditionalPlayerInfo)this.m_dicPlayers[String.Format("procon.playerlist.totals{0}", iTeamID)].Tag).m_cpiPlayer.Ping / (float)((AdditionalPlayerInfo)this.m_dicPlayers[String.Format("procon.playerlist.totals{0}", iTeamID)].Tag).m_cpiPlayer.SquadID);
-                this.m_dicPlayers[String.Format("procon.playerlist.averages{0}", iTeamID)].SubItems["kdr"].Text = String.Format("{0:0.00}", ((AdditionalPlayerInfo)this.m_dicPlayers[String.Format("procon.playerlist.totals{0}", iTeamID)].Tag).m_cpiPlayer.Kdr / (float)((AdditionalPlayerInfo)this.m_dicPlayers[String.Format("procon.playerlist.totals{0}", iTeamID)].Tag).m_cpiPlayer.SquadID);
-
-
-
-                //this.m_dicPlayers[String.Format("procon.playerlist.totals{0}", iTeamID)].SubItems["kills"].Tag = (int)(this.m_dicPlayers[String.Format("procon.playerlist.totals{0}", iTeamID)].SubItems["kills"].Tag) + cpiPlayer.Kills;
-                //this.m_dicPlayers[String.Format("procon.playerlist.totals{0}", iTeamID)].SubItems["deaths"].Tag = (int)(this.m_dicPlayers[String.Format("procon.playerlist.totals{0}", iTeamID)].SubItems["deaths"].Tag) + cpiPlayer.Deaths;
-                //this.m_dicPlayers[String.Format("procon.playerlist.totals{0}", iTeamID)].SubItems["score"].Tag = (int)(this.m_dicPlayers[String.Format("procon.playerlist.totals{0}", iTeamID)].SubItems["score"].Tag) + cpiPlayer.Score;
-                //this.m_dicPlayers[String.Format("procon.playerlist.totals{0}", iTeamID)].SubItems["ping"].Tag = (int)(this.m_dicPlayers[String.Format("procon.playerlist.totals{0}", iTeamID)].SubItems["ping"].Tag) + cpiPlayer.Ping;
-            }
-        }
-        */
 
         // Simply puts the players into the correct list.
         private void ArrangePlayers() {
