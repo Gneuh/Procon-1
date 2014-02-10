@@ -1,23 +1,3 @@
-/*  Copyright 2010 Geoffrey 'Phogue' Green
-
-    http://www.phogue.net
- 
-    This file is part of PRoCon Frostbite.
-
-    PRoCon Frostbite is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    PRoCon Frostbite is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with PRoCon Frostbite.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 using System;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
@@ -30,7 +10,6 @@ using System.Security.Permissions;
 using System.Security.Policy;
 using System.Text.RegularExpressions;
 using System.Threading;
-using System.Xml.Linq;
 using Microsoft.CSharp;
 using PRoCon.Core.Accounts;
 using PRoCon.Core.Battlemap;
@@ -725,7 +704,7 @@ namespace PRoCon.Core.Plugin {
                     WritePluginConsole("Loading plugin cache..");
 
                     try {
-                        this.PluginCache = XDocument.Load(Path.Combine(this.PluginBaseDirectory, "PluginCache.xml")).Root.FromXElement<PluginCache>();
+                        this.PluginCache = PluginCache.Load(Path.Combine(this.PluginBaseDirectory, "PluginCache.xml"));
                     }
                     catch (Exception e) {
                         WritePluginConsole("Error loading plugin cache: {0}", e.Message);
@@ -822,9 +801,7 @@ namespace PRoCon.Core.Plugin {
                     }
                 }
 
-                XDocument pluginCacheDocument = new XDocument(this.PluginCache.ToXElement());
-
-                pluginCacheDocument.Save(Path.Combine(this.PluginBaseDirectory, "PluginCache.xml"));
+                this.PluginCache.Save(Path.Combine(this.PluginBaseDirectory, "PluginCache.xml"));
 
                 pluginsCodeDomProvider.Dispose();
             }

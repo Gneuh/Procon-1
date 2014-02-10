@@ -232,7 +232,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Battlemap\MapZone.cs" />
     <Compile Include="Utils\MD5.cs" />
-    <Compile Include="Utils\XElementExtensions.cs" />
     <Compile Include="Variables\Variable.cs" />
     <Compile Include="Variables\VariableDictionary.cs" />
   </ItemGroup>
