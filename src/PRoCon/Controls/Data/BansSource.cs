@@ -15,6 +15,12 @@ namespace PRoCon.Controls.Data {
         public List<CBanInfo> Items { get; set; }
 
         /// <summary>
+        /// When the items were last set. We use this to ignore full refreshes if one was done
+        /// in the last minute. Prevents redrawing information we already know about.
+        /// </summary>
+        protected DateTime ItemsAge { get; set; }
+
+        /// <summary>
         /// The items that have been filtered
         /// </summary>
         public List<CBanInfo> Filtered { get; set; }
@@ -86,9 +92,13 @@ namespace PRoCon.Controls.Data {
         public void Set<T>(IEnumerable<T> items) {
             if (typeof(T) != typeof(CBanInfo)) throw new InvalidCastException();
 
-            this.Items = items.Cast<CBanInfo>().ToList();
-            this.RefreshFilter();
-            this.OnChange();
+            if (this.ItemsAge > DateTime.Now.AddMinutes(-1)) {
+                this.Items = items.Cast<CBanInfo>().ToList();
+                this.ItemsAge = DateTime.Now;
+
+                this.RefreshFilter();
+                this.OnChange();
+            }
         }
 
         IEnumerable<T> ISource.Fetch<T>() {

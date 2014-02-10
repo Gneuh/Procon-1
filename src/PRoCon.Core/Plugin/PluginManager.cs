@@ -73,13 +73,18 @@ namespace PRoCon.Core.Plugin {
         ///     If they have it will destroy the AppDomain, rebuilding it but not loading
         ///     the faulty plugin.
         /// </summary>
-        protected Thread InvocationTimeoutThread { get; set; }
+        protected Timer InvocationTimeoutTimer { get; set; }
 
         /// <summary>
-        ///     Checked inside of the invocation timeout loop. If false
-        ///     the thread will gracefully exit.
+        /// Bool specifying if a check is currently occuring for plugin invocation timeouts. We
+        /// ignore the check instead of blocking.
         /// </summary>
-        protected Boolean InvocationTimeoutThreadRunning { get; set; }
+        protected bool InvocationTimeoutCheckRunning { get; set; }
+
+        /// <summary>
+        /// The maximum time span a single invocation can run
+        /// </summary>
+        protected TimeSpan InvocationMaxRuntime { get; set; }
 
         /// <summary>
         ///     A list of plugin class names that have previously been deemed as
@@ -157,57 +162,50 @@ namespace PRoCon.Core.Plugin {
             Invocations = new List<PluginInvocation>();
             IgnoredPluginClassNames = new List<String>();
 
-            InvocationTimeoutThreadRunning = true;
-            InvocationTimeoutThread = new Thread(new ThreadStart(InvocationTimeoutLoop));
-            InvocationTimeoutThread.Start();
+            this.InvocationMaxRuntime = ProconClient.PluginMaxRuntimeSpan;
 
-            AssignEventHandler();
-        }
-
-        private void InvocationTimeoutLoop() {
-            // should be configurable via options
-            TimeSpan pluginMaxRuntime = PluginInvocation.MaximumRuntime;
-            //PluginMaxRuntime = new TimeSpan(0, 0, 59);
-            pluginMaxRuntime = ProconClient.PluginMaxRuntimeSpan;
-
-            if (pluginMaxRuntime.TotalMilliseconds < 10) {
-                pluginMaxRuntime = PluginInvocation.MaximumRuntime;
+            if (this.InvocationMaxRuntime.TotalMilliseconds < 10) {
+                this.InvocationMaxRuntime = PluginInvocation.MaximumRuntime;
             }
 
             // Default maximum runtime = 5 seconds, divided by 20
             // check every 250 milliseconds.
-            var sleepMilliseconds = (int) (pluginMaxRuntime.TotalMilliseconds / 20.0);
+            this.InvocationTimeoutTimer = new Timer(state => this.InvocationTimeoutCheck(), null, (int)(this.InvocationMaxRuntime.TotalMilliseconds / 20.0), (int)(this.InvocationMaxRuntime.TotalMilliseconds / 20.0));
 
-            while (InvocationTimeoutThreadRunning) {
-                lock (this) {
-                    PluginInvocation invocation = Invocations.FirstOrDefault(); // .OrderBy(x => x.Runtime())
+            AssignEventHandler();
+        }
 
-                    if (invocation != null) {
-                        if (invocation.Runtime() >= pluginMaxRuntime) {
-                            WritePluginConsole("^1^bPlugin manager entering panic..");
+        private void InvocationTimeoutCheck() {
+            if (this.InvocationTimeoutCheckRunning == false) {
+                this.InvocationTimeoutCheckRunning = true;
 
-                            // Prevent the plugin from being loaded again during this instance
-                            // of the plugin manager.
-                            IgnoredPluginClassNames.Add(invocation.Plugin.ClassName);
+                PluginInvocation invocation = Invocations.FirstOrDefault(); // .OrderBy(x => x.Runtime())
 
-                            String faultText = invocation.FormatInvocationFault("Call exceeded maximum execution time of {0}", pluginMaxRuntime);
+                if (invocation != null) {
+                    if (invocation.Runtime() >= this.InvocationMaxRuntime) {
+                        WritePluginConsole("^1^bPlugin manager entering panic..");
 
-                            // Log the error so we might alert a plugin developer that
-                            // a call to their plugin has caused the plugin manager to go
-                            // into a panic.
-                            File.AppendAllText("PLUGIN_DEBUG.txt", faultText);
+                        // Prevent the plugin from being loaded again during this instance
+                        // of the plugin manager.
+                        IgnoredPluginClassNames.Add(invocation.Plugin.ClassName);
 
-                            WritePluginConsole("^1^bPlugin invocation timeout: ");
-                            WritePluginConsole("^1" + faultText);
+                        String faultText = invocation.FormatInvocationFault("Call exceeded maximum execution time of {0}", this.InvocationMaxRuntime);
 
-                            if (PluginPanic != null) {
-                                PluginPanic();
-                            }
+                        // Log the error so we might alert a plugin developer that
+                        // a call to their plugin has caused the plugin manager to go
+                        // into a panic.
+                        File.AppendAllText("PLUGIN_DEBUG.txt", faultText);
+
+                        WritePluginConsole("^1^bPlugin invocation timeout: ");
+                        WritePluginConsole("^1" + faultText);
+
+                        if (PluginPanic != null) {
+                            PluginPanic();
                         }
                     }
-                }
 
-                Thread.Sleep(sleepMilliseconds);
+                    this.InvocationTimeoutCheckRunning = false;
+                }
             }
         }
 
@@ -850,13 +848,13 @@ namespace PRoCon.Core.Plugin {
             //this.LoadedClassNames = null;
             ProconClient = null;
 
-            InvocationTimeoutThreadRunning = false;
+            this.InvocationTimeoutTimer.Dispose();
         }
 
         public void Unload() {
             UnassignEventHandler();
 
-            InvocationTimeoutThreadRunning = false;
+            this.InvocationTimeoutTimer.Dispose();
 
             try {
                 if (AppDomainSandbox != null) {
