@@ -32,7 +32,7 @@ namespace PRoCon.Core.Remote {
 
         public bool IsResponse { get; private set; }
 
-        public UInt32 SequenceNumber { get; private set; }
+        public UInt32 SequenceNumber { get; set; }
 
         public List<string> Words { get; private set; }
 

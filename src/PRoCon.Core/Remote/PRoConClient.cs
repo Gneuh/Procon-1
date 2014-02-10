@@ -867,6 +867,7 @@ namespace PRoCon.Core.Remote {
                         _connection.ConnectionFailure += new FrostbiteConnection.FailureHandler(Connection_ConnectionFailure);
                         _connection.ConnectionClosed += new FrostbiteConnection.EmptyParamterHandler(Connection_ConnectionClosed);
                         _connection.BeforePacketDispatch += new FrostbiteConnection.PrePacketDispatchedHandler(Connection_BeforePacketDispatch);
+                        _connection.PacketCacheIntercept += new FrostbiteConnection.PacketCacheDispatchHandler(_connection_PacketCacheIntercept);
                     }
 
                     _connection.AttemptConnection();
@@ -897,6 +898,12 @@ namespace PRoCon.Core.Remote {
 
         private void Plugins_PluginVariableAltered(PluginDetails spdNewDetails) {
             SaveConnectionConfig();
+        }
+
+        private void _connection_PacketCacheIntercept(FrostbiteConnection sender, Packet request, Packet response) {
+            InstigatingAccountName = String.Empty;
+
+            HandleResponsePacket(response, false, false, request);
         }
 
         private void Connection_BeforePacketDispatch(FrostbiteConnection sender, Packet packetBeforeDispatch, out bool isProcessed) {
@@ -1285,9 +1292,9 @@ namespace PRoCon.Core.Remote {
             return blCancelPacket;
         }
 
-        private bool HandleResponsePacket(Packet cpBeforePacketDispatch, bool blCancelUpdateEvent, bool blCancelPacket) {
+        private bool HandleResponsePacket(Packet cpBeforePacketDispatch, bool blCancelUpdateEvent, bool blCancelPacket, Packet request = null) {
             if (Game != null) {
-                Packet cpRequestPacket = Game.Connection.GetRequestPacket(cpBeforePacketDispatch);
+                Packet cpRequestPacket = request ?? Game.Connection.GetRequestPacket(cpBeforePacketDispatch);
 
                 if (cpRequestPacket != null) {
                     if (cpBeforePacketDispatch.Words.Count >= 1 && String.Compare(cpBeforePacketDispatch.Words[0], "InvalidUsername", true) == 0) {

@@ -103,6 +103,12 @@
     <Compile Include="Plugin\PluginCacheEntry.cs" />
     <Compile Include="Plugin\PluginInvocation.cs" />
     <Compile Include="Remote\BF4Client.cs" />
+    <Compile Include="Remote\Cache\CacheManager.cs" />
+    <Compile Include="Remote\Cache\ICacheManager.cs" />
+    <Compile Include="Remote\Cache\IPacketCache.cs" />
+    <Compile Include="Remote\Cache\IPacketCacheConfiguration.cs" />
+    <Compile Include="Remote\Cache\PacketCache.cs" />
+    <Compile Include="Remote\Cache\PacketCacheConfiguration.cs" />
     <Compile Include="Remote\Layer\ILayerClient.cs" />
     <Compile Include="Remote\Layer\ILayerInstance.cs" />
     <Compile Include="Remote\Layer\ILayerPacketDispatcher.cs" />

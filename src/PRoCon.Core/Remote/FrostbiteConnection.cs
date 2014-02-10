@@ -1,33 +1,14 @@
-﻿/*  Copyright 2010 Geoffrey 'Phogue' Green
-
-    http://www.phogue.net
- 
-    This file is part of PRoCon Frostbite.
-
-    PRoCon Frostbite is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    PRoCon Frostbite is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with PRoCon Frostbite.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.IO;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 using System.Threading;
-using System.Windows.Forms;
 using System.Reflection;
+using PRoCon.Core.Remote.Cache;
 
 namespace PRoCon.Core.Remote {
     public class FrostbiteConnection {
@@ -83,6 +64,11 @@ namespace PRoCon.Core.Remote {
         public Packet LastPacketSent { get; protected set; }
 
         /// <summary>
+        /// Holds packet cache to avoid doubling up on calls to the server.
+        /// </summary>
+        public ICacheManager Cache { get; set; }
+
+        /// <summary>
         /// Why is this here?
         /// </summary>
         protected UInt32 SequenceNumber;
@@ -132,6 +118,12 @@ namespace PRoCon.Core.Remote {
         public delegate void PacketDispatchHandler(FrostbiteConnection sender, bool isHandled, Packet packet);
         public event PacketDispatchHandler PacketSent;
         public event PacketDispatchHandler PacketReceived;
+        
+        public delegate void PacketCacheDispatchHandler(FrostbiteConnection sender, Packet request, Packet response);
+        /// <summary>
+        /// A packet response has been pulled from cache, instead of being sent to the server.
+        /// </summary>
+        public event PacketCacheDispatchHandler PacketCacheIntercept;
 
         public delegate void SocketExceptionHandler(FrostbiteConnection sender, SocketException se);
         public event SocketExceptionHandler SocketException;
@@ -157,6 +149,31 @@ namespace PRoCon.Core.Remote {
 
             this.Hostname = hostname;
             this.Port = port;
+
+            this.Cache = new CacheManager() {
+                Configurations = new List<IPacketCacheConfiguration>() {
+                    // Cache all ping values for 30 seconds.
+                    new PacketCacheConfiguration() {
+                        Matching = new Regex(@"^player\.ping .*$", RegexOptions.Compiled),
+                        Ttl = new TimeSpan(0, 0, 0, 30)
+                    },
+                    // Cache all banlist responses for two minutes
+                    new PacketCacheConfiguration() {
+                        Matching = new Regex(@"^banList\.list [0-9]*$", RegexOptions.Compiled),
+                        Ttl = new TimeSpan(0, 0, 2, 0)
+                    },
+                    // Cache all reserved slit responses for one minute
+                    new PacketCacheConfiguration() {
+                        Matching = new Regex(@"^reservedSlotsList\.list [0-9]*$", RegexOptions.Compiled),
+                        Ttl = new TimeSpan(0, 0, 2, 0)
+                    },
+                    // Only initiate the punkbuster plist update everyminute (max)
+                    new PacketCacheConfiguration() {
+                        Matching = new Regex(@"^punkBuster\.pb_sv_command pb_sv_plist$", RegexOptions.Compiled),
+                        Ttl = new TimeSpan(0, 0, 1, 0)
+                    }
+                }
+            };
         }
 
         private void ClearConnection() {
@@ -317,21 +334,32 @@ namespace PRoCon.Core.Remote {
 
         // Queue for sending.
         public void SendQueued(Packet cpPacket) {
-            // QueueUnqueuePacket
-            Packet cpNullPacket = null;
+            IPacketCache cache = this.Cache.Request(cpPacket);
 
-            if (cpPacket.OriginatedFromServer == true && cpPacket.IsResponse == true) {
-                this.SendAsync(cpPacket);
-            }
-            else {
-                // Null return because we're not popping a packet, just checking to see if this one needs to be queued.
-                if (this.QueueUnqueuePacket(true, cpPacket, out cpNullPacket) == false) {
-                    // No need to queue, queue is empty.  Send away..
+            if (cache == null) {
+                // QueueUnqueuePacket
+                Packet cpNullPacket = null;
+
+                if (cpPacket.OriginatedFromServer == true && cpPacket.IsResponse == true) {
                     this.SendAsync(cpPacket);
                 }
+                else {
+                    // Null return because we're not popping a packet, just checking to see if this one needs to be queued.
+                    if (this.QueueUnqueuePacket(true, cpPacket, out cpNullPacket) == false) {
+                        // No need to queue, queue is empty.  Send away..
+                        this.SendAsync(cpPacket);
+                    }
 
-                // Shutdown if we're just waiting for a response to an old packet.
-                this.RestartConnectionOnQueueFailure();
+                    // Shutdown if we're just waiting for a response to an old packet.
+                    this.RestartConnectionOnQueueFailure();
+                }
+            }
+            else if (this.PacketCacheIntercept != null) {
+                Packet cloned = (Packet)cache.Response.Clone();
+                cloned.SequenceNumber = cpPacket.SequenceNumber;
+
+                // Fake a response to this packet
+                this.PacketCacheIntercept(this, cpPacket, cloned);
             }
         }
 
@@ -387,6 +415,8 @@ namespace PRoCon.Core.Remote {
 
                                 if (this.PacketReceived != null) {
                                     this.LastPacketReceived = packet;
+
+                                    this.Cache.Response(packet);
 
                                     this.PacketReceived(this, isProcessed, packet);
                                 }

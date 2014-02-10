@@ -33,6 +33,7 @@ namespace PRoCon.Core.Remote {
         public FrostbiteClient(FrostbiteConnection connection) {
             Connection = connection;
             Connection.PacketReceived += new FrostbiteConnection.PacketDispatchHandler(Connection_PacketRecieved);
+            Connection.PacketCacheIntercept += new FrostbiteConnection.PacketCacheDispatchHandler(Connection_PacketCacheIntercept);
             // Register.
 
             Login += new EmptyParamterHandler(FrostbiteClient_Login);
@@ -2103,6 +2104,12 @@ namespace PRoCon.Core.Remote {
             int versionInteger = 0;
             if (int.TryParse(serverVersion, out versionInteger) == true) {
                 VersionInteger = versionInteger;
+            }
+        }
+
+        private void Connection_PacketCacheIntercept(FrostbiteConnection sender, Packet request, Packet response) {
+            if (request.OriginatedFromServer == false && response.IsResponse == true) {
+                DispatchResponsePacket(sender, response, request);
             }
         }
 
