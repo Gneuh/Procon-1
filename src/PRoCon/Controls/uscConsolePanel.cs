@@ -64,6 +64,9 @@ namespace PRoCon.Controls {
             this.m_llPunkbusterCommandsHistory = new LinkedList<string>();
 
             this.m_regRemoveCaretCodes = new Regex(@"\^[0-9]|\^b|\^i|\^n", RegexOptions.Compiled);
+
+            this.rtbConsoleBox.Flushed += new Action<object, EventArgs>(rtbConsoleBox_Flushed);
+            this.rtbPunkbusterBox.Flushed += new Action<object, EventArgs>(rtbPunkbusterBox_Flushed);
         }
 
         private void uscConsolePanel_Load(object sender, EventArgs e) {
@@ -170,19 +173,21 @@ namespace PRoCon.Controls {
 
                 if (this.chkEnableOutput.Checked == true) {
 
-                    string strFormattedConsoleOutput = String.Format("[{0}] {1}{2}", dtLoggedTime.ToString("HH:mm:ss"), strLoggedText, Environment.NewLine);
+                    string strFormattedConsoleOutput = String.Format("[{0}] {1}{2}", dtLoggedTime.ToString("HH:mm:ss"), strLoggedText, "\n");
 
                     this.rtbConsoleBox.AppendText(strFormattedConsoleOutput);
-
-                    if (this.rtbConsoleBox.Focused == false) {
-                        if (this.m_prcClient.Console.ConScrolling == true) {
-                            this.rtbConsoleBox.ScrollToCaret();
-                        }
-                    }
-
-                    this.rtbConsoleBox.TrimLines(this.m_prcClient.Variables.GetVariable<int>("MAX_CONSOLE_LINES", 75));
                 }
             });
+        }
+
+        private void rtbConsoleBox_Flushed(object sender, EventArgs args) {
+            if (this.rtbConsoleBox.Focused == false) {
+                if (this.m_prcClient.Console.ConScrolling == true) {
+                    this.rtbConsoleBox.ScrollToCaret();
+                }
+            }
+
+            this.rtbConsoleBox.TrimLines(this.m_prcClient.Variables.GetVariable<int>("MAX_CONSOLE_LINES", 75));
         }
 
         private void PunkbusterConsole_WriteConsole(DateTime dtLoggedTime, string strLoggedText) {
@@ -190,19 +195,21 @@ namespace PRoCon.Controls {
             this.InvokeIfRequired(() => {
                 if (this.chkEnablePunkbusterOutput.Checked == true) {
 
-                    string strFormattedConsoleOutput = String.Format("{0}{1}", strLoggedText, Environment.NewLine);
+                    string strFormattedConsoleOutput = String.Format("{0}{1}", strLoggedText, "\n");
 
                     this.rtbPunkbusterBox.AppendText(strFormattedConsoleOutput);
-
-                    if (this.rtbPunkbusterBox.Focused == false) {
-                        if (this.m_prcClient.Console.PBScrolling == true) {
-                            this.rtbPunkbusterBox.ScrollToCaret();
-                        }
-                    }
-
-                    this.rtbPunkbusterBox.TrimLines(this.m_prcClient.Variables.GetVariable<int>("MAX_PUNKBUSTERCONSOLE_LINES", 200));
                 }
             });
+        }
+
+        private void rtbPunkbusterBox_Flushed(object sender, EventArgs args) {
+            if (this.rtbPunkbusterBox.Focused == false) {
+                if (this.m_prcClient.Console.PBScrolling == true) {
+                    this.rtbPunkbusterBox.ScrollToCaret();
+                }
+            }
+
+            this.rtbPunkbusterBox.TrimLines(this.m_prcClient.Variables.GetVariable<int>("MAX_PUNKBUSTERCONSOLE_LINES", 200));
         }
 
         private void btnPunkbusterSend_Click(object sender, EventArgs e) {

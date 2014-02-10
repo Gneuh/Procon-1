@@ -9,6 +9,34 @@ namespace PRoCon.Controls.ControlsEx {
 
         protected readonly Dictionary<string, Color> ChatTextColours;
 
+        /// <summary>
+        /// Buffer of information to append to the text box
+        /// </summary>
+        protected String AppendTextBuffer { get; set; }
+
+        /// <summary>
+        /// Lock used whenever we modify the append text buffer
+        /// </summary>
+        protected readonly Object AppendTextBufferLock = new Object();
+
+        /// <summary>
+        /// Timer to tick every 100 ms and flush the cache
+        /// </summary>
+        protected System.Threading.Timer AppendTextTimer { get; set; }
+
+        /// <summary>
+        /// A copy of the content in the text box for manipulation. It's more efficient for us
+        /// to maintain a copy than it is to ever ask the control for copy.
+        /// </summary>
+        public String Content { get; private set; }
+
+        /// <summary>
+        /// Fired whenever content has been flushed to the control
+        /// </summary>
+        public event Action<Object, EventArgs> Flushed;
+
+        public int LineLength { get; private set; }
+
         public CodRichTextBox() : base() {
             // Deviated a bit from cod4 because some of these colours suck.
             //^0 = Black
@@ -34,6 +62,17 @@ namespace PRoCon.Controls.ControlsEx {
                 {"^8", Color.Red},
                 {"^9", Color.Gray}
             };
+
+            this.AppendTextBuffer = "";
+            this.AppendTextTimer = new System.Threading.Timer(state => this.FlushBuffer(), null, 250, 250);
+        }
+
+        protected virtual void OnFlushed() {
+            var handler = Flushed;
+
+            if (handler != null) {
+                handler(this, EventArgs.Empty);
+            }
         }
 
         public void SetColour(string variable, string value) {
@@ -48,10 +87,6 @@ namespace PRoCon.Controls.ControlsEx {
             }
 
         }
-
-        public string Content { get; private set; }
-
-        public int LineLength {get; private set; }
 
         public int PopFirstLine() {
             int firstLineLength = 0;
@@ -70,11 +105,7 @@ namespace PRoCon.Controls.ControlsEx {
         }
 
         private void InternalAppend(string content) {
-            foreach (char c in content) {
-                if (c == '\n') {
-                    this.LineLength++;
-                }
-            }
+            this.LineLength += content.Count(c => c == '\n');
 
             this.Content += content;
         }
@@ -129,108 +160,126 @@ namespace PRoCon.Controls.ControlsEx {
             public Font Font;
         }
 
-        public new void AppendText(string text) {
+        protected void FlushBuffer() {
+            String text = null;
+            lock (this.AppendTextBufferLock) {
+                text = this.AppendTextBuffer;
 
-            List<STextChange> changes = new List<STextChange>();
-
-            int carets = 0;
-            int appendedStartPosition = -1;
-            int appendedTextLength = -1;
-
-            if ((carets = GetCaretCount(text)) > 0) {
-
-                appendedStartPosition = this.Text.Length;
-                appendedTextLength = text.Length;
-
-                int i = -1;
-                int foundCarets = 0;
-                bool findingColourCodes = false;
-
-                string colourCode = String.Empty;
-
-                do {
-                    i = -1;
-                    findingColourCodes = false;
-
-                    //if ((i = this.Find("^", this.Text.Length - iConsoleOutputLength - 1, this.Text.Length, RichTextBoxFinds.MatchCase)) > 0) {
-                    if ((i = FindCaretCode(text, appendedTextLength)) >= 0) {
-
-                        if (i < appendedTextLength - 1 && char.IsDigit(text[i + 1]) == true) {
-
-                            STextChange change = new STextChange {
-                                Position = i
-                            };
-
-                            colourCode = text.Substring(i, 2);
-
-                            // Remove the ^[0-9]
-                            text = text.Substring(0, i) + text.Substring(i + 2);
-                            appendedTextLength -= 2;
-
-                            if (this.ChatTextColours.ContainsKey(colourCode) == true) {
-                                change.Colour = this.ChatTextColours[colourCode];
-                            }
-
-                            changes.Add(change);
-
-                            findingColourCodes = true;
-                        }
-                        else {
-                            char fontCode = 'n';
-                            if (i < appendedTextLength - 1 && ((fontCode = text[i + 1]) == 'b' || text[i + 1] == 'n' || text[i + 1] == 'i')) {
-
-                                STextChange stcChange = new STextChange {
-                                    Position = i
-                                };
-
-                                switch (fontCode) {
-                                    case 'n':
-                                        stcChange.Font = this.Font;// new Font("Calibri", 10);
-                                        break;
-                                    case 'b':
-                                        stcChange.Font = new Font(this.Font, FontStyle.Bold);  //new Font("Calibri", 10, FontStyle.Bold);
-                                        break;
-                                    case 'i':
-                                        stcChange.Font = new Font(this.Font, FontStyle.Italic);  //new Font("Calibri", 10, FontStyle.Italic);
-                                        break;
-                                }
-
-                                // Remove the ^[b|n|i]
-                                text = text.Substring(0, i) + text.Substring(i + 2);
-                                appendedTextLength -= 2;
-
-                                changes.Add(stcChange);
-
-                                findingColourCodes = true;
-                            }
-                        }
-
-                        // Just stops that last pass of the string when we know how many times
-                        // it should pass anyway.
-                        foundCarets++;
-                    }
-                } while (findingColourCodes == true && foundCarets < carets);
-
-                while ((i = text.IndexOf("^^", System.StringComparison.Ordinal)) > 0) {
-                    text = text.Substring(0, i) + "^" + text.Substring(i + 2);
-                    appendedTextLength--;
-                }
+                this.AppendTextBuffer = "";
             }
 
-            this.InternalAppend(text);
-            base.AppendText(text);
+            if (String.IsNullOrEmpty(text) == false) {
+                this.InvokeIfRequired(() => {
 
-            if (appendedStartPosition >= 0) { 
-                foreach (STextChange change in changes) {
-                    this.Select(appendedStartPosition + change.Position, appendedTextLength - change.Position);
+                    List<STextChange> changes = new List<STextChange>();
 
-                    if (change.Font != null) {
-                        this.SelectionFont = change.Font;
+                    int carets = 0;
+                    int appendedStartPosition = -1;
+                    int appendedTextLength = -1;
+
+                    if ((carets = GetCaretCount(text)) > 0) {
+
+                        appendedStartPosition = this.Text.Length;
+                        appendedTextLength = text.Length;
+
+                        int i = -1;
+                        int foundCarets = 0;
+                        bool findingColourCodes = false;
+
+                        string colourCode = String.Empty;
+
+                        do {
+                            i = -1;
+                            findingColourCodes = false;
+
+                            //if ((i = this.Find("^", this.Text.Length - iConsoleOutputLength - 1, this.Text.Length, RichTextBoxFinds.MatchCase)) > 0) {
+                            if ((i = FindCaretCode(text, appendedTextLength)) >= 0) {
+
+                                if (i < appendedTextLength - 1 && char.IsDigit(text[i + 1]) == true) {
+
+                                    STextChange change = new STextChange {
+                                        Position = i
+                                    };
+
+                                    colourCode = text.Substring(i, 2);
+
+                                    // Remove the ^[0-9]
+                                    text = text.Substring(0, i) + text.Substring(i + 2);
+                                    appendedTextLength -= 2;
+
+                                    if (this.ChatTextColours.ContainsKey(colourCode) == true) {
+                                        change.Colour = this.ChatTextColours[colourCode];
+                                    }
+
+                                    changes.Add(change);
+
+                                    findingColourCodes = true;
+                                }
+                                else {
+                                    char fontCode = 'n';
+                                    if (i < appendedTextLength - 1 && ((fontCode = text[i + 1]) == 'b' || text[i + 1] == 'n' || text[i + 1] == 'i')) {
+
+                                        STextChange stcChange = new STextChange {
+                                            Position = i
+                                        };
+
+                                        switch (fontCode) {
+                                            case 'n':
+                                                stcChange.Font = this.Font;// new Font("Calibri", 10);
+                                                break;
+                                            case 'b':
+                                                stcChange.Font = new Font(this.Font, FontStyle.Bold);  //new Font("Calibri", 10, FontStyle.Bold);
+                                                break;
+                                            case 'i':
+                                                stcChange.Font = new Font(this.Font, FontStyle.Italic);  //new Font("Calibri", 10, FontStyle.Italic);
+                                                break;
+                                        }
+
+                                        // Remove the ^[b|n|i]
+                                        text = text.Substring(0, i) + text.Substring(i + 2);
+                                        appendedTextLength -= 2;
+
+                                        changes.Add(stcChange);
+
+                                        findingColourCodes = true;
+                                    }
+                                }
+
+                                // Just stops that last pass of the string when we know how many times
+                                // it should pass anyway.
+                                foundCarets++;
+                            }
+                        } while (findingColourCodes == true && foundCarets < carets);
+
+                        while ((i = text.IndexOf("^^", System.StringComparison.Ordinal)) > 0) {
+                            text = text.Substring(0, i) + "^" + text.Substring(i + 2);
+                            appendedTextLength--;
+                        }
                     }
-                    else {
-                        this.SelectionColor = change.Colour;
+
+                    this.InternalAppend(text);
+                    base.AppendText(text);
+
+                    if (appendedStartPosition >= 0) {
+                        foreach (STextChange change in changes) {
+                            this.Select(appendedStartPosition + change.Position, appendedTextLength - change.Position);
+
+                            if (change.Font != null) {
+                                this.SelectionFont = change.Font;
+                            }
+
+                            this.SelectionColor = change.Colour;
+                        }
                     }
-                }
+
+                    this.OnFlushed();
+                });
+            }
+        }
+
+        public new void AppendText(string text) {
+            lock (this.AppendTextBufferLock) {
+                this.AppendTextBuffer += "^0" + text;
             }
         }
     }
