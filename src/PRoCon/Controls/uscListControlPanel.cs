@@ -24,6 +24,7 @@ using System.Drawing;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using PRoCon.Controls.ControlsEx;
+using PRoCon.Controls.Data;
 using PRoCon.Core;
 using PRoCon.Core.Remote;
 using PRoCon.Forms;
@@ -67,6 +68,11 @@ namespace PRoCon.Controls {
         private Regex m_regIP = null;
         private Regex m_regPbGUID = null;
         private Regex m_regBc2GUID = null;
+
+        /// <summary>
+        /// A filterable/pagable source of bans
+        /// </summary>
+        protected ISource BansSource { get; set; }
 
         /*
         public List<string> SetListsSettings {
@@ -140,6 +146,11 @@ namespace PRoCon.Controls {
 
             this.m_spPrivileges = new CPrivileges(CPrivileges.FullPrivilegesFlags);
 
+            this.BansSource = new BansSource {
+                Take = this.pagination1.ItemsPerPage = 30
+            };
+            this.pagination1.Source = this.BansSource;
+            this.BansSource.Changed += BansSourceOnChanged;
         }
 
         public void m_prcClient_ProconPrivileges(PRoConClient sender, CPrivileges spPrivs) {
@@ -198,6 +209,8 @@ namespace PRoCon.Controls {
 
             this.btnBanlistRefresh.ImageList = this.m_frmMain.iglIcons;
             this.btnBanlistRefresh.ImageKey = "arrow_refresh.png";
+
+            this.picBansFilterMagnifier.Image = this.m_frmMain.iglIcons.Images["magnifier.png"];
 
             this.btnReservedRemoveSoldier.ImageList = this.m_frmMain.iglIcons;
             this.btnReservedRemoveSoldier.ImageKey = "cross.png";
@@ -1028,11 +1041,11 @@ namespace PRoCon.Controls {
             return lviNewBanEntry;
         }
 
-        public void RemoveDeletedBans(List<CBanInfo> lstBans) {
+        public void RemoveDeletedBans(IEnumerable<CBanInfo> bans) {
 
             for (int i = 0; i < this.lsvBanlist.Items.Count; i++) {
                 bool blFoundBan = false;
-                foreach (CBanInfo cbiBan in lstBans) {
+                foreach (CBanInfo cbiBan in bans) {
 
                     switch ((string)this.lsvBanlist.Items[i].SubItems["type"].Tag) {
                         case "name":
@@ -1065,12 +1078,14 @@ namespace PRoCon.Controls {
             }
         }
 
-        public void OnBanList(PRoConClient sender, List<CBanInfo> lstBans) {
+
+        private void BansSourceOnChanged() {
             this.InvokeIfRequired(() => {
+                IEnumerable<CBanInfo> bans = this.BansSource.Fetch<CBanInfo>();
 
                 this.lsvBanlist.BeginUpdate();
 
-                foreach (CBanInfo cbiBan in lstBans) {
+                foreach (CBanInfo cbiBan in bans) {
 
                     string strKey = String.Empty;
 
@@ -1097,7 +1112,7 @@ namespace PRoCon.Controls {
                     }
                 }
 
-                this.RemoveDeletedBans(lstBans);
+                this.RemoveDeletedBans(bans);
 
                 for (int i = 0; i < this.lsvBanlist.Columns.Count; i++) {
                     this.lsvBanlist.Columns[i].Width = -2;
@@ -1107,6 +1122,14 @@ namespace PRoCon.Controls {
 
                 this.lsvBanlist.EndUpdate();
             });
+        }
+
+        private void BansFilter_TextChanged(object sender, EventArgs e) {
+            this.BansSource.Filter = this.BansFilter.Text;
+        }
+
+        public void OnBanList(PRoConClient sender, List<CBanInfo> lstBans) {
+            this.InvokeIfRequired(() => this.BansSource.Set(lstBans));
         }
 
         private void m_prcClient_PunkbusterPlayerUnbanned(PRoConClient sender, CBanInfo cbiUnbannedPlayer) {

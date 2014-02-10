@@ -30,6 +30,8 @@
             this.tbcLists = new System.Windows.Forms.TabControl();
             this.tabBanlist = new System.Windows.Forms.TabPage();
             this.spltBanlistManualBans = new System.Windows.Forms.SplitContainer();
+            this.picBansFilterMagnifier = new System.Windows.Forms.PictureBox();
+            this.BansFilter = new System.Windows.Forms.TextBox();
             this.btnBanlistRefresh = new System.Windows.Forms.Button();
             this.picCloseOpenManualBans = new System.Windows.Forms.PictureBox();
             this.lnkCloseOpenManualBans = new System.Windows.Forms.LinkLabel();
@@ -37,13 +39,6 @@
             this.picUnbanPlayer = new System.Windows.Forms.PictureBox();
             this.btnBanlistClearBanlist = new System.Windows.Forms.Button();
             this.btnBanlistUnban = new System.Windows.Forms.Button();
-            this.lsvBanlist = new PRoCon.Controls.ControlsEx.ListViewNF();
-            this.colName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.colIP = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.colGUID = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.colType = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.colTimeRemaining = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.colReason = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.rdoBanlistBc2GUID = new System.Windows.Forms.RadioButton();
             this.lblBanlistConfirmation = new System.Windows.Forms.Label();
             this.panel7 = new System.Windows.Forms.Panel();
@@ -66,7 +61,6 @@
             this.rdoBanlistName = new System.Windows.Forms.RadioButton();
             this.txtBanlistManualBanName = new System.Windows.Forms.TextBox();
             this.tabMaplist = new System.Windows.Forms.TabPage();
-            this.uscMaplist1 = new PRoCon.Controls.Maplist.uscMaplist();
             this.tabReservedSlots = new System.Windows.Forms.TabPage();
             this.lblMohNotice = new System.Windows.Forms.Label();
             this.pnlReservedPanel = new System.Windows.Forms.Panel();
@@ -82,10 +76,7 @@
             this.panel9 = new System.Windows.Forms.Panel();
             this.picReservedList = new System.Windows.Forms.PictureBox();
             this.panel10 = new System.Windows.Forms.Panel();
-            this.lsvReservedList = new PRoCon.Controls.ControlsEx.ListViewNF();
-            this.colSoldierNames = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tabTextChatModeration = new System.Windows.Forms.TabPage();
-            this.uscTextChatModerationListcs1 = new PRoCon.Controls.TextChatModeration.uscTextChatModerationListcs();
             this.tabSpectatorSlots = new System.Windows.Forms.TabPage();
             this.label1 = new System.Windows.Forms.Label();
             this.pnlSpectatorPanel = new System.Windows.Forms.Panel();
@@ -101,19 +92,32 @@
             this.panel4 = new System.Windows.Forms.Panel();
             this.picSpectatorList = new System.Windows.Forms.PictureBox();
             this.panel5 = new System.Windows.Forms.Panel();
-            this.lsvSpectatorList = new PRoCon.Controls.ControlsEx.ListViewNF();
-            this.colSpectatorSoldierNames = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tmrTimeoutCheck = new System.Windows.Forms.Timer(this.components);
             this.tmrRefreshBanlist = new System.Windows.Forms.Timer(this.components);
             this.ctxBanlistMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.unbanToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.pagination1 = new PRoCon.Controls.ControlsEx.Pagination();
+            this.lsvBanlist = new PRoCon.Controls.ControlsEx.ListViewNF();
+            this.colName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colIP = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colGUID = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colType = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colTimeRemaining = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colReason = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.uscMaplist1 = new PRoCon.Controls.Maplist.uscMaplist();
+            this.lsvReservedList = new PRoCon.Controls.ControlsEx.ListViewNF();
+            this.colSoldierNames = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.uscTextChatModerationListcs1 = new PRoCon.Controls.TextChatModeration.uscTextChatModerationListcs();
+            this.lsvSpectatorList = new PRoCon.Controls.ControlsEx.ListViewNF();
+            this.colSpectatorSoldierNames = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tbcLists.SuspendLayout();
             this.tabBanlist.SuspendLayout();
             this.spltBanlistManualBans.Panel1.SuspendLayout();
             this.spltBanlistManualBans.Panel2.SuspendLayout();
             this.spltBanlistManualBans.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picBansFilterMagnifier)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picCloseOpenManualBans)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picClearLists)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picUnbanPlayer)).BeginInit();
@@ -176,6 +180,9 @@
             // 
             // spltBanlistManualBans.Panel1
             // 
+            this.spltBanlistManualBans.Panel1.Controls.Add(this.picBansFilterMagnifier);
+            this.spltBanlistManualBans.Panel1.Controls.Add(this.BansFilter);
+            this.spltBanlistManualBans.Panel1.Controls.Add(this.pagination1);
             this.spltBanlistManualBans.Panel1.Controls.Add(this.btnBanlistRefresh);
             this.spltBanlistManualBans.Panel1.Controls.Add(this.picCloseOpenManualBans);
             this.spltBanlistManualBans.Panel1.Controls.Add(this.lnkCloseOpenManualBans);
@@ -206,6 +213,25 @@
             this.spltBanlistManualBans.Size = new System.Drawing.Size(1022, 812);
             this.spltBanlistManualBans.SplitterDistance = 690;
             this.spltBanlistManualBans.TabIndex = 94;
+            // 
+            // picBansFilterMagnifier
+            // 
+            this.picBansFilterMagnifier.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.picBansFilterMagnifier.Location = new System.Drawing.Point(292, 634);
+            this.picBansFilterMagnifier.Name = "picBansFilterMagnifier";
+            this.picBansFilterMagnifier.Size = new System.Drawing.Size(16, 16);
+            this.picBansFilterMagnifier.TabIndex = 110;
+            this.picBansFilterMagnifier.TabStop = false;
+            // 
+            // BansFilter
+            // 
+            this.BansFilter.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.BansFilter.Location = new System.Drawing.Point(314, 630);
+            this.BansFilter.Name = "BansFilter";
+            this.BansFilter.Size = new System.Drawing.Size(280, 23);
+            this.BansFilter.TabIndex = 109;
+            this.BansFilter.TextChanged += new System.EventHandler(this.BansFilter_TextChanged);
             // 
             // btnBanlistRefresh
             // 
@@ -287,70 +313,6 @@
             this.btnBanlistUnban.Text = "Unban Player";
             this.btnBanlistUnban.UseVisualStyleBackColor = true;
             this.btnBanlistUnban.Click += new System.EventHandler(this.btnBanlistUnban_Click);
-            // 
-            // lsvBanlist
-            // 
-            this.lsvBanlist.AllowColumnReorder = true;
-            this.lsvBanlist.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.lsvBanlist.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.colName,
-            this.colIP,
-            this.colGUID,
-            this.colType,
-            this.colTimeRemaining,
-            this.colReason});
-            this.lsvBanlist.FullRowSelect = true;
-            this.lsvBanlist.GridLines = true;
-            listViewGroup1.Header = "Name";
-            listViewGroup1.Name = "lvgName";
-            listViewGroup2.Header = "IpAddress";
-            listViewGroup2.Name = "lvgIP";
-            listViewGroup3.Header = "Guid";
-            listViewGroup3.Name = "lvgGUID";
-            this.lsvBanlist.Groups.AddRange(new System.Windows.Forms.ListViewGroup[] {
-            listViewGroup1,
-            listViewGroup2,
-            listViewGroup3});
-            this.lsvBanlist.HideSelection = false;
-            this.lsvBanlist.Location = new System.Drawing.Point(0, 0);
-            this.lsvBanlist.MultiSelect = false;
-            this.lsvBanlist.Name = "lsvBanlist";
-            this.lsvBanlist.ShowGroups = false;
-            this.lsvBanlist.ShowItemToolTips = true;
-            this.lsvBanlist.Size = new System.Drawing.Size(1022, 624);
-            this.lsvBanlist.TabIndex = 99;
-            this.lsvBanlist.UseCompatibleStateImageBehavior = false;
-            this.lsvBanlist.View = System.Windows.Forms.View.Details;
-            this.lsvBanlist.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lsvBanlist_ColumnClick);
-            this.lsvBanlist.SelectedIndexChanged += new System.EventHandler(this.lsvBanlist_SelectedIndexChanged);
-            this.lsvBanlist.MouseUp += new System.Windows.Forms.MouseEventHandler(this.lsvBanlist_MouseUp);
-            // 
-            // colName
-            // 
-            this.colName.Text = "Name";
-            // 
-            // colIP
-            // 
-            this.colIP.Text = "IpAddress";
-            // 
-            // colGUID
-            // 
-            this.colGUID.Text = "Guid";
-            // 
-            // colType
-            // 
-            this.colType.Text = "Type";
-            // 
-            // colTimeRemaining
-            // 
-            this.colTimeRemaining.Text = "Remaining";
-            this.colTimeRemaining.Width = 106;
-            // 
-            // colReason
-            // 
-            this.colReason.Text = "Reason";
             // 
             // rdoBanlistBc2GUID
             // 
@@ -594,18 +556,6 @@
             this.tabMaplist.Text = "Maplist";
             this.tabMaplist.UseVisualStyleBackColor = true;
             // 
-            // uscMaplist1
-            // 
-            this.uscMaplist1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.uscMaplist1.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.uscMaplist1.Location = new System.Drawing.Point(8, 8);
-            this.uscMaplist1.Name = "uscMaplist1";
-            this.uscMaplist1.SettingFail = null;
-            this.uscMaplist1.SettingLoading = null;
-            this.uscMaplist1.SettingSuccess = null;
-            this.uscMaplist1.Size = new System.Drawing.Size(1022, 812);
-            this.uscMaplist1.TabIndex = 1;
-            // 
             // tabReservedSlots
             // 
             this.tabReservedSlots.Controls.Add(this.lblMohNotice);
@@ -771,28 +721,6 @@
             this.panel10.Size = new System.Drawing.Size(424, 1);
             this.panel10.TabIndex = 16;
             // 
-            // lsvReservedList
-            // 
-            this.lsvReservedList.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
-            this.lsvReservedList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.colSoldierNames});
-            this.lsvReservedList.FullRowSelect = true;
-            this.lsvReservedList.HideSelection = false;
-            this.lsvReservedList.Location = new System.Drawing.Point(69, 41);
-            this.lsvReservedList.MultiSelect = false;
-            this.lsvReservedList.Name = "lsvReservedList";
-            this.lsvReservedList.Size = new System.Drawing.Size(349, 232);
-            this.lsvReservedList.TabIndex = 0;
-            this.lsvReservedList.UseCompatibleStateImageBehavior = false;
-            this.lsvReservedList.View = System.Windows.Forms.View.Details;
-            this.lsvReservedList.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lsvReservedList_ColumnClick);
-            this.lsvReservedList.SelectedIndexChanged += new System.EventHandler(this.lsvReservedList_SelectedIndexChanged);
-            // 
-            // colSoldierNames
-            // 
-            this.colSoldierNames.Text = "Soldier Names";
-            this.colSoldierNames.Width = 317;
-            // 
             // tabTextChatModeration
             // 
             this.tabTextChatModeration.Controls.Add(this.uscTextChatModerationListcs1);
@@ -803,18 +731,6 @@
             this.tabTextChatModeration.TabIndex = 3;
             this.tabTextChatModeration.Text = "Text chat moderation";
             this.tabTextChatModeration.UseVisualStyleBackColor = true;
-            // 
-            // uscTextChatModerationListcs1
-            // 
-            this.uscTextChatModerationListcs1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.uscTextChatModerationListcs1.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.uscTextChatModerationListcs1.Location = new System.Drawing.Point(3, 3);
-            this.uscTextChatModerationListcs1.Name = "uscTextChatModerationListcs1";
-            this.uscTextChatModerationListcs1.SettingFail = null;
-            this.uscTextChatModerationListcs1.SettingLoading = null;
-            this.uscTextChatModerationListcs1.SettingSuccess = null;
-            this.uscTextChatModerationListcs1.Size = new System.Drawing.Size(1032, 822);
-            this.uscTextChatModerationListcs1.TabIndex = 0;
             // 
             // tabSpectatorSlots
             // 
@@ -980,28 +896,6 @@
             this.panel5.Size = new System.Drawing.Size(424, 1);
             this.panel5.TabIndex = 16;
             // 
-            // lsvSpectatorList
-            // 
-            this.lsvSpectatorList.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
-            this.lsvSpectatorList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.colSpectatorSoldierNames});
-            this.lsvSpectatorList.FullRowSelect = true;
-            this.lsvSpectatorList.HideSelection = false;
-            this.lsvSpectatorList.Location = new System.Drawing.Point(69, 41);
-            this.lsvSpectatorList.MultiSelect = false;
-            this.lsvSpectatorList.Name = "lsvSpectatorList";
-            this.lsvSpectatorList.Size = new System.Drawing.Size(349, 232);
-            this.lsvSpectatorList.TabIndex = 0;
-            this.lsvSpectatorList.UseCompatibleStateImageBehavior = false;
-            this.lsvSpectatorList.View = System.Windows.Forms.View.Details;
-            this.lsvSpectatorList.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lsvSpectatorList_ColumnClick);
-            this.lsvSpectatorList.SelectedIndexChanged += new System.EventHandler(this.lsvSpectatorList_SelectedIndexChanged);
-            // 
-            // colSpectatorSoldierNames
-            // 
-            this.colSpectatorSoldierNames.Text = "Soldier Names";
-            this.colSpectatorSoldierNames.Width = 317;
-            // 
             // tmrTimeoutCheck
             // 
             this.tmrTimeoutCheck.Tick += new System.EventHandler(this.tmrSettingsAnimator_Tick);
@@ -1040,6 +934,150 @@
             this.unbanToolStripMenuItem.Text = "Unban";
             this.unbanToolStripMenuItem.Click += new System.EventHandler(this.unbanToolStripMenuItem_Click);
             // 
+            // pagination1
+            // 
+            this.pagination1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.pagination1.CurrentPage = 1;
+            this.pagination1.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.pagination1.ItemsPerPage = 0;
+            this.pagination1.Location = new System.Drawing.Point(44, 630);
+            this.pagination1.Name = "pagination1";
+            this.pagination1.Size = new System.Drawing.Size(242, 23);
+            this.pagination1.Source = null;
+            this.pagination1.TabIndex = 108;
+            // 
+            // lsvBanlist
+            // 
+            this.lsvBanlist.AllowColumnReorder = true;
+            this.lsvBanlist.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lsvBanlist.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.colName,
+            this.colIP,
+            this.colGUID,
+            this.colType,
+            this.colTimeRemaining,
+            this.colReason});
+            this.lsvBanlist.FullRowSelect = true;
+            this.lsvBanlist.GridLines = true;
+            listViewGroup1.Header = "Name";
+            listViewGroup1.Name = "lvgName";
+            listViewGroup2.Header = "IpAddress";
+            listViewGroup2.Name = "lvgIP";
+            listViewGroup3.Header = "Guid";
+            listViewGroup3.Name = "lvgGUID";
+            this.lsvBanlist.Groups.AddRange(new System.Windows.Forms.ListViewGroup[] {
+            listViewGroup1,
+            listViewGroup2,
+            listViewGroup3});
+            this.lsvBanlist.HideSelection = false;
+            this.lsvBanlist.Location = new System.Drawing.Point(0, 0);
+            this.lsvBanlist.MultiSelect = false;
+            this.lsvBanlist.Name = "lsvBanlist";
+            this.lsvBanlist.ShowGroups = false;
+            this.lsvBanlist.ShowItemToolTips = true;
+            this.lsvBanlist.Size = new System.Drawing.Size(1022, 624);
+            this.lsvBanlist.TabIndex = 99;
+            this.lsvBanlist.UseCompatibleStateImageBehavior = false;
+            this.lsvBanlist.View = System.Windows.Forms.View.Details;
+            this.lsvBanlist.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lsvBanlist_ColumnClick);
+            this.lsvBanlist.SelectedIndexChanged += new System.EventHandler(this.lsvBanlist_SelectedIndexChanged);
+            this.lsvBanlist.MouseUp += new System.Windows.Forms.MouseEventHandler(this.lsvBanlist_MouseUp);
+            // 
+            // colName
+            // 
+            this.colName.Text = "Name";
+            // 
+            // colIP
+            // 
+            this.colIP.Text = "IpAddress";
+            // 
+            // colGUID
+            // 
+            this.colGUID.Text = "Guid";
+            // 
+            // colType
+            // 
+            this.colType.Text = "Type";
+            // 
+            // colTimeRemaining
+            // 
+            this.colTimeRemaining.Text = "Remaining";
+            this.colTimeRemaining.Width = 106;
+            // 
+            // colReason
+            // 
+            this.colReason.Text = "Reason";
+            // 
+            // uscMaplist1
+            // 
+            this.uscMaplist1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.uscMaplist1.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.uscMaplist1.Location = new System.Drawing.Point(8, 8);
+            this.uscMaplist1.Name = "uscMaplist1";
+            this.uscMaplist1.SettingFail = null;
+            this.uscMaplist1.SettingLoading = null;
+            this.uscMaplist1.SettingSuccess = null;
+            this.uscMaplist1.Size = new System.Drawing.Size(1022, 814);
+            this.uscMaplist1.TabIndex = 1;
+            // 
+            // lsvReservedList
+            // 
+            this.lsvReservedList.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
+            this.lsvReservedList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.colSoldierNames});
+            this.lsvReservedList.FullRowSelect = true;
+            this.lsvReservedList.HideSelection = false;
+            this.lsvReservedList.Location = new System.Drawing.Point(69, 41);
+            this.lsvReservedList.MultiSelect = false;
+            this.lsvReservedList.Name = "lsvReservedList";
+            this.lsvReservedList.Size = new System.Drawing.Size(349, 232);
+            this.lsvReservedList.TabIndex = 0;
+            this.lsvReservedList.UseCompatibleStateImageBehavior = false;
+            this.lsvReservedList.View = System.Windows.Forms.View.Details;
+            this.lsvReservedList.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lsvReservedList_ColumnClick);
+            this.lsvReservedList.SelectedIndexChanged += new System.EventHandler(this.lsvReservedList_SelectedIndexChanged);
+            // 
+            // colSoldierNames
+            // 
+            this.colSoldierNames.Text = "Soldier Names";
+            this.colSoldierNames.Width = 317;
+            // 
+            // uscTextChatModerationListcs1
+            // 
+            this.uscTextChatModerationListcs1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.uscTextChatModerationListcs1.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.uscTextChatModerationListcs1.Location = new System.Drawing.Point(3, 3);
+            this.uscTextChatModerationListcs1.Name = "uscTextChatModerationListcs1";
+            this.uscTextChatModerationListcs1.SettingFail = null;
+            this.uscTextChatModerationListcs1.SettingLoading = null;
+            this.uscTextChatModerationListcs1.SettingSuccess = null;
+            this.uscTextChatModerationListcs1.Size = new System.Drawing.Size(1032, 824);
+            this.uscTextChatModerationListcs1.TabIndex = 0;
+            // 
+            // lsvSpectatorList
+            // 
+            this.lsvSpectatorList.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
+            this.lsvSpectatorList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.colSpectatorSoldierNames});
+            this.lsvSpectatorList.FullRowSelect = true;
+            this.lsvSpectatorList.HideSelection = false;
+            this.lsvSpectatorList.Location = new System.Drawing.Point(69, 41);
+            this.lsvSpectatorList.MultiSelect = false;
+            this.lsvSpectatorList.Name = "lsvSpectatorList";
+            this.lsvSpectatorList.Size = new System.Drawing.Size(349, 232);
+            this.lsvSpectatorList.TabIndex = 0;
+            this.lsvSpectatorList.UseCompatibleStateImageBehavior = false;
+            this.lsvSpectatorList.View = System.Windows.Forms.View.Details;
+            this.lsvSpectatorList.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lsvSpectatorList_ColumnClick);
+            this.lsvSpectatorList.SelectedIndexChanged += new System.EventHandler(this.lsvSpectatorList_SelectedIndexChanged);
+            // 
+            // colSpectatorSoldierNames
+            // 
+            this.colSpectatorSoldierNames.Text = "Soldier Names";
+            this.colSpectatorSoldierNames.Width = 317;
+            // 
             // uscListControlPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -1056,6 +1094,7 @@
             this.spltBanlistManualBans.Panel2.ResumeLayout(false);
             this.spltBanlistManualBans.Panel2.PerformLayout();
             this.spltBanlistManualBans.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.picBansFilterMagnifier)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picCloseOpenManualBans)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picClearLists)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picUnbanPlayer)).EndInit();
@@ -1175,5 +1214,8 @@
         private System.Windows.Forms.Panel panel5;
         private Controls.ControlsEx.ListViewNF lsvSpectatorList;
         private System.Windows.Forms.ColumnHeader colSpectatorSoldierNames;
+        private ControlsEx.Pagination pagination1;
+        private System.Windows.Forms.TextBox BansFilter;
+        private System.Windows.Forms.PictureBox picBansFilterMagnifier;
     }
 }
