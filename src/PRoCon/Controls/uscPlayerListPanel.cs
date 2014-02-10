@@ -147,11 +147,11 @@ namespace PRoCon.Controls {
         // If we disconnect clear the player list so it's fresh on reconnection.
         private void m_prcClient_ConnectionClosed(PRoConClient sender) {
             this.InvokeIfRequired(() => {
-                foreach (KeyValuePair<string, ListViewItem> kvpPlayer in this.m_dicPlayers) {
+                foreach (KeyValuePair<string, ListViewItem> kvpPlayer in this.Players) {
                     kvpPlayer.Value.Remove();
                 }
 
-                this.m_dicPlayers.Clear();
+                this.Players.Clear();
                 this.m_dicPings.Clear();
             });
         }
@@ -400,7 +400,7 @@ namespace PRoCon.Controls {
         //}
         
         private readonly object m_objPlayerDictionaryLocker = new object();
-        private Dictionary<string, ListViewItem> m_dicPlayers = new Dictionary<string, ListViewItem>();
+        private Dictionary<string, ListViewItem> Players = new Dictionary<string, ListViewItem>();
         private Dictionary<string, int> m_dicPings = new Dictionary<string, int>();
         //private bool m_blSplitList = false;
         //private int m_iSplitPlayerLists = 1;
@@ -516,7 +516,7 @@ namespace PRoCon.Controls {
         private int GetTotalPlayersByTeamID(int iTeamID) {
             int iTotalPlayers = 0;
 
-            foreach (KeyValuePair<string, ListViewItem> kvpPlayer in this.m_dicPlayers) {
+            foreach (KeyValuePair<string, ListViewItem> kvpPlayer in this.Players) {
                 if (this.GetPlayerTeamID(kvpPlayer.Value) == iTeamID) {
                     iTotalPlayers++;
                 }
@@ -592,47 +592,47 @@ namespace PRoCon.Controls {
         }
 
         private void SetTotalsZero(int iTeamID) {
-            if (this.m_dicPlayers.ContainsKey(String.Format("procon.playerlist.totals{0}", iTeamID)) == true) {
+            if (this.Players.ContainsKey(String.Format("procon.playerlist.totals{0}", iTeamID)) == true) {
 
-                ((AdditionalPlayerInfo)this.m_dicPlayers[String.Format("procon.playerlist.totals{0}", iTeamID)].Tag).KitCounter.Clear();
-                ((AdditionalPlayerInfo)this.m_dicPlayers[String.Format("procon.playerlist.totals{0}", iTeamID)].Tag).m_cpiPlayer.Kills = 0;
-                ((AdditionalPlayerInfo)this.m_dicPlayers[String.Format("procon.playerlist.totals{0}", iTeamID)].Tag).m_cpiPlayer.Deaths = 0;
-                ((AdditionalPlayerInfo)this.m_dicPlayers[String.Format("procon.playerlist.totals{0}", iTeamID)].Tag).m_cpiPlayer.Score = 0;
-                ((AdditionalPlayerInfo)this.m_dicPlayers[String.Format("procon.playerlist.totals{0}", iTeamID)].Tag).m_cpiPlayer.Ping = 0;
-                ((AdditionalPlayerInfo)this.m_dicPlayers[String.Format("procon.playerlist.totals{0}", iTeamID)].Tag).m_cpiPlayer.Rank = 0;
-                ((AdditionalPlayerInfo)this.m_dicPlayers[String.Format("procon.playerlist.totals{0}", iTeamID)].Tag).m_cpiPlayer.Type = 0;
-                ((AdditionalPlayerInfo)this.m_dicPlayers[String.Format("procon.playerlist.totals{0}", iTeamID)].Tag).m_cpiPlayer.SquadID = 0;
-                ((AdditionalPlayerInfo)this.m_dicPlayers[String.Format("procon.playerlist.totals{0}", iTeamID)].Tag).m_cpiPlayer.Kdr = 0.0F;
+                ((AdditionalPlayerInfo)this.Players[String.Format("procon.playerlist.totals{0}", iTeamID)].Tag).KitCounter.Clear();
+                ((AdditionalPlayerInfo)this.Players[String.Format("procon.playerlist.totals{0}", iTeamID)].Tag).m_cpiPlayer.Kills = 0;
+                ((AdditionalPlayerInfo)this.Players[String.Format("procon.playerlist.totals{0}", iTeamID)].Tag).m_cpiPlayer.Deaths = 0;
+                ((AdditionalPlayerInfo)this.Players[String.Format("procon.playerlist.totals{0}", iTeamID)].Tag).m_cpiPlayer.Score = 0;
+                ((AdditionalPlayerInfo)this.Players[String.Format("procon.playerlist.totals{0}", iTeamID)].Tag).m_cpiPlayer.Ping = 0;
+                ((AdditionalPlayerInfo)this.Players[String.Format("procon.playerlist.totals{0}", iTeamID)].Tag).m_cpiPlayer.Rank = 0;
+                ((AdditionalPlayerInfo)this.Players[String.Format("procon.playerlist.totals{0}", iTeamID)].Tag).m_cpiPlayer.Type = 0;
+                ((AdditionalPlayerInfo)this.Players[String.Format("procon.playerlist.totals{0}", iTeamID)].Tag).m_cpiPlayer.SquadID = 0;
+                ((AdditionalPlayerInfo)this.Players[String.Format("procon.playerlist.totals{0}", iTeamID)].Tag).m_cpiPlayer.Kdr = 0.0F;
 
-                this.m_dicPlayers[String.Format("procon.playerlist.totals{0}", iTeamID)].SubItems["kit"].Text = String.Empty;
-                this.m_dicPlayers[String.Format("procon.playerlist.totals{0}", iTeamID)].SubItems["kills"].Text = "0";
-                this.m_dicPlayers[String.Format("procon.playerlist.totals{0}", iTeamID)].SubItems["deaths"].Text = "0";
-                this.m_dicPlayers[String.Format("procon.playerlist.totals{0}", iTeamID)].SubItems["score"].Text = "0";
-                this.m_dicPlayers[String.Format("procon.playerlist.totals{0}", iTeamID)].SubItems["ping"].Text = String.Empty;
-                this.m_dicPlayers[String.Format("procon.playerlist.totals{0}", iTeamID)].SubItems["rank"].Text = String.Empty;
-                this.m_dicPlayers[String.Format("procon.playerlist.totals{0}", iTeamID)].SubItems["type"].Text = String.Empty;
-                this.m_dicPlayers[String.Format("procon.playerlist.totals{0}", iTeamID)].SubItems["kdr"].Text = "0.00";
+                this.Players[String.Format("procon.playerlist.totals{0}", iTeamID)].SubItems["kit"].Text = String.Empty;
+                this.Players[String.Format("procon.playerlist.totals{0}", iTeamID)].SubItems["kills"].Text = "0";
+                this.Players[String.Format("procon.playerlist.totals{0}", iTeamID)].SubItems["deaths"].Text = "0";
+                this.Players[String.Format("procon.playerlist.totals{0}", iTeamID)].SubItems["score"].Text = "0";
+                this.Players[String.Format("procon.playerlist.totals{0}", iTeamID)].SubItems["ping"].Text = String.Empty;
+                this.Players[String.Format("procon.playerlist.totals{0}", iTeamID)].SubItems["rank"].Text = String.Empty;
+                this.Players[String.Format("procon.playerlist.totals{0}", iTeamID)].SubItems["type"].Text = String.Empty;
+                this.Players[String.Format("procon.playerlist.totals{0}", iTeamID)].SubItems["kdr"].Text = "0.00";
 
-                this.m_dicPlayers[String.Format("procon.playerlist.averages{0}", iTeamID)].SubItems["kit"].Text = String.Empty;
-                this.m_dicPlayers[String.Format("procon.playerlist.averages{0}", iTeamID)].SubItems["kills"].Text = "0.00";
-                this.m_dicPlayers[String.Format("procon.playerlist.averages{0}", iTeamID)].SubItems["deaths"].Text = "0.00";
-                this.m_dicPlayers[String.Format("procon.playerlist.averages{0}", iTeamID)].SubItems["score"].Text = "0.00";
-                this.m_dicPlayers[String.Format("procon.playerlist.averages{0}", iTeamID)].SubItems["ping"].Text = "0.00";
-                this.m_dicPlayers[String.Format("procon.playerlist.averages{0}", iTeamID)].SubItems["rank"].Text = "-";
-                this.m_dicPlayers[String.Format("procon.playerlist.averages{0}", iTeamID)].SubItems["type"].Text = "-";
-                this.m_dicPlayers[String.Format("procon.playerlist.averages{0}", iTeamID)].SubItems["kdr"].Text = "0.00";
+                this.Players[String.Format("procon.playerlist.averages{0}", iTeamID)].SubItems["kit"].Text = String.Empty;
+                this.Players[String.Format("procon.playerlist.averages{0}", iTeamID)].SubItems["kills"].Text = "0.00";
+                this.Players[String.Format("procon.playerlist.averages{0}", iTeamID)].SubItems["deaths"].Text = "0.00";
+                this.Players[String.Format("procon.playerlist.averages{0}", iTeamID)].SubItems["score"].Text = "0.00";
+                this.Players[String.Format("procon.playerlist.averages{0}", iTeamID)].SubItems["ping"].Text = "0.00";
+                this.Players[String.Format("procon.playerlist.averages{0}", iTeamID)].SubItems["rank"].Text = "-";
+                this.Players[String.Format("procon.playerlist.averages{0}", iTeamID)].SubItems["type"].Text = "-";
+                this.Players[String.Format("procon.playerlist.averages{0}", iTeamID)].SubItems["kdr"].Text = "0.00";
             }
         }
 
         private void AddTotalsPlayerDetails(int iTeamID, AdditionalPlayerInfo player) {
-            if (this.m_dicPlayers.ContainsKey(String.Format("procon.playerlist.totals{0}", iTeamID)) == true) {
+            if (this.Players.ContainsKey(String.Format("procon.playerlist.totals{0}", iTeamID)) == true) {
 
                 string proconPlayerListTotals = String.Format("procon.playerlist.totals{0}", iTeamID),
                        proconPlayerListAverages = String.Format("procon.playerlist.averages{0}", iTeamID);
 
-                AdditionalPlayerInfo proconPlayerListTotalsObject = ((AdditionalPlayerInfo)this.m_dicPlayers[proconPlayerListTotals].Tag);
-                ListViewItem proconPlayerListTotalsListItem = this.m_dicPlayers[proconPlayerListTotals],
-                             proconPlayerListAveragesListItem = this.m_dicPlayers[proconPlayerListAverages];
+                AdditionalPlayerInfo proconPlayerListTotalsObject = ((AdditionalPlayerInfo)this.Players[proconPlayerListTotals].Tag);
+                ListViewItem proconPlayerListTotalsListItem = this.Players[proconPlayerListTotals],
+                             proconPlayerListAveragesListItem = this.Players[proconPlayerListAverages];
 
                 proconPlayerListTotalsObject.m_cpiPlayer.Kills += player.m_cpiPlayer.Kills;
                 proconPlayerListTotalsObject.m_cpiPlayer.Deaths += player.m_cpiPlayer.Deaths;
@@ -652,8 +652,8 @@ namespace PRoCon.Controls {
         private void AddKillToTeamTotal(int iTeamID) {
             string proconPlayerListTotals = String.Format("procon.playerlist.totals{0}", iTeamID);
 
-            AdditionalPlayerInfo proconPlayerListTotalsObject = ((AdditionalPlayerInfo)this.m_dicPlayers[proconPlayerListTotals].Tag);
-            ListViewItem proconPlayerListTotalsListItem = this.m_dicPlayers[proconPlayerListTotals];
+            AdditionalPlayerInfo proconPlayerListTotalsObject = ((AdditionalPlayerInfo)this.Players[proconPlayerListTotals].Tag);
+            ListViewItem proconPlayerListTotalsListItem = this.Players[proconPlayerListTotals];
 
             proconPlayerListTotalsObject.m_cpiPlayer.Kills += 1;
         }
@@ -661,8 +661,8 @@ namespace PRoCon.Controls {
         private void AddDeathToTeamTotal(int iTeamID) {
             string proconPlayerListTotals = String.Format("procon.playerlist.totals{0}", iTeamID);
 
-            AdditionalPlayerInfo proconPlayerListTotalsObject = ((AdditionalPlayerInfo)this.m_dicPlayers[proconPlayerListTotals].Tag);
-            ListViewItem proconPlayerListTotalsListItem = this.m_dicPlayers[proconPlayerListTotals];
+            AdditionalPlayerInfo proconPlayerListTotalsObject = ((AdditionalPlayerInfo)this.Players[proconPlayerListTotals].Tag);
+            ListViewItem proconPlayerListTotalsListItem = this.Players[proconPlayerListTotals];
 
             proconPlayerListTotalsObject.m_cpiPlayer.Deaths += 1;
         }
@@ -675,14 +675,14 @@ namespace PRoCon.Controls {
         }
 
         private void FinalizeTotalsAveragesPlayerDetails(int iTeamID) {
-            if (this.m_dicPlayers.ContainsKey(String.Format("procon.playerlist.totals{0}", iTeamID)) == true) {
+            if (this.Players.ContainsKey(String.Format("procon.playerlist.totals{0}", iTeamID)) == true) {
 
                 string proconPlayerListTotals = String.Format("procon.playerlist.totals{0}", iTeamID),
                        proconPlayerListAverages = String.Format("procon.playerlist.averages{0}", iTeamID);
 
-                AdditionalPlayerInfo proconPlayerListTotalsObject = ((AdditionalPlayerInfo)this.m_dicPlayers[proconPlayerListTotals].Tag);
-                ListViewItem proconPlayerListTotalsListItem = this.m_dicPlayers[proconPlayerListTotals],
-                             proconPlayerListAveragesListItem = this.m_dicPlayers[proconPlayerListAverages];
+                AdditionalPlayerInfo proconPlayerListTotalsObject = ((AdditionalPlayerInfo)this.Players[proconPlayerListTotals].Tag);
+                ListViewItem proconPlayerListTotalsListItem = this.Players[proconPlayerListTotals],
+                             proconPlayerListAveragesListItem = this.Players[proconPlayerListAverages];
 
                 proconPlayerListTotalsListItem.SubItems["kills"].Text = proconPlayerListTotalsObject.m_cpiPlayer.Kills.ToString();
                 proconPlayerListTotalsListItem.SubItems["deaths"].Text = proconPlayerListTotalsObject.m_cpiPlayer.Deaths.ToString();
@@ -765,7 +765,7 @@ namespace PRoCon.Controls {
                 if (this.m_prcClient.PlayerListSettings.SplitType == 1) {
                     this.lsvTeamOnePlayers.BeginUpdate();
 
-                    foreach (KeyValuePair<string, ListViewItem> kvpPlayer in this.m_dicPlayers) {
+                    foreach (KeyValuePair<string, ListViewItem> kvpPlayer in this.Players) {
 
                         int iPlayerTeamID = this.GetPlayerTeamID(kvpPlayer.Value);
                         bool isTotalsPlayer = this.m_lvwColumnSorter.TotalsAveragesChecker.IsMatch(kvpPlayer.Key);
@@ -795,7 +795,7 @@ namespace PRoCon.Controls {
                     this.lsvTeamOnePlayers.BeginUpdate();
                     this.lsvTeamTwoPlayers.BeginUpdate();
 
-                    foreach (KeyValuePair<string, ListViewItem> kvpPlayer in this.m_dicPlayers) {
+                    foreach (KeyValuePair<string, ListViewItem> kvpPlayer in this.Players) {
                         int iTeamID = this.GetPlayerTeamID(kvpPlayer.Value);
                         bool isTotalsPlayer = this.m_lvwColumnSorter.TotalsAveragesChecker.IsMatch(kvpPlayer.Key); ;
 
@@ -835,7 +835,7 @@ namespace PRoCon.Controls {
                     this.lsvTeamThreePlayers.BeginUpdate();
                     this.lsvTeamFourPlayers.BeginUpdate();
 
-                    foreach (KeyValuePair<string, ListViewItem> kvpPlayer in this.m_dicPlayers) {
+                    foreach (KeyValuePair<string, ListViewItem> kvpPlayer in this.Players) {
                         int iTeamID = this.GetPlayerTeamID(kvpPlayer.Value);
                         bool isTotalsPlayer = this.m_lvwColumnSorter.TotalsAveragesChecker.IsMatch(kvpPlayer.Key);
 
@@ -901,9 +901,9 @@ namespace PRoCon.Controls {
 
         private void m_prcClient_PlayerLeft(FrostbiteClient sender, string playerName, CPlayerInfo cpiPlayer) {
             this.InvokeIfRequired(() => {
-                if (this.m_dicPlayers.ContainsKey(playerName) == true) {
-                    this.m_dicPlayers[playerName].Remove();
-                    this.m_dicPlayers.Remove(playerName);
+                if (this.Players.ContainsKey(playerName) == true) {
+                    this.Players[playerName].Remove();
+                    this.Players.Remove(playerName);
                 }
                 if (this.m_dicPings.ContainsKey(playerName) == true) {
                     this.m_dicPings.Remove(playerName);
@@ -916,8 +916,8 @@ namespace PRoCon.Controls {
 
         private void m_prcClient_PlayerJoin(FrostbiteClient sender, string playerName) {
             this.InvokeIfRequired(() => {
-                if (this.m_dicPlayers.ContainsKey(playerName) == false) {
-                    this.m_dicPlayers.Add(playerName, this.CreatePlayer(new CPlayerInfo(playerName, String.Empty, 0, 0)));
+                if (this.Players.ContainsKey(playerName) == false) {
+                    this.Players.Add(playerName, this.CreatePlayer(new CPlayerInfo(playerName, String.Empty, 0, 0)));
 
                     this.ArrangePlayers();
                 }
@@ -940,25 +940,25 @@ namespace PRoCon.Controls {
             this.InvokeIfRequired(() => {
                 this.m_blPropogatingIndexChange = true;
 
-                if (this.m_dicPlayers.ContainsKey(soldierName) == true) {
+                if (this.Players.ContainsKey(soldierName) == true) {
                     AdditionalPlayerInfo sapiAdditional;
 
-                    if (this.m_dicPlayers[soldierName].Tag != null) {
-                        sapiAdditional = (AdditionalPlayerInfo) this.m_dicPlayers[soldierName].Tag;
+                    if (this.Players[soldierName].Tag != null) {
+                        sapiAdditional = (AdditionalPlayerInfo) this.Players[soldierName].Tag;
 
                         sapiAdditional.m_spawnedInventory = spawnedInventory;
 
-                        if (this.m_dicPlayers.ContainsKey(soldierName) == true) {
-                            this.m_dicPlayers[soldierName].SubItems["kit"].Text = this.m_clocLanguage.GetLocalized(String.Format("global.Kits.{0}", spawnedInventory.Kit.ToString()));
+                        if (this.Players.ContainsKey(soldierName) == true) {
+                            this.Players[soldierName].SubItems["kit"].Text = this.m_clocLanguage.GetLocalized(String.Format("global.Kits.{0}", spawnedInventory.Kit.ToString()));
                         }
 
                         if (sapiAdditional.m_pbInfo != null) {
                             if (this.m_frmMain.iglFlags.Images.ContainsKey(sapiAdditional.m_pbInfo.PlayerCountryCode + ".png") == true) {
-                                this.m_dicPlayers[sapiAdditional.m_pbInfo.SoldierName].ImageIndex = this.m_frmMain.iglFlags.Images.IndexOfKey(sapiAdditional.m_pbInfo.PlayerCountryCode + ".png");
+                                this.Players[sapiAdditional.m_pbInfo.SoldierName].ImageIndex = this.m_frmMain.iglFlags.Images.IndexOfKey(sapiAdditional.m_pbInfo.PlayerCountryCode + ".png");
                             }
                         }
 
-                        this.m_dicPlayers[soldierName].Tag = sapiAdditional;
+                        this.Players[soldierName].Tag = sapiAdditional;
                     }
 
                     this.RefreshSelectedPlayer();
@@ -974,27 +974,27 @@ namespace PRoCon.Controls {
             this.InvokeIfRequired(() => {
                 this.m_blPropogatingIndexChange = true;
 
-                if (this.m_dicPlayers.ContainsKey(pbInfo.SoldierName) == true) {
+                if (this.Players.ContainsKey(pbInfo.SoldierName) == true) {
 
                     AdditionalPlayerInfo sapiAdditional;
 
-                    if (this.m_dicPlayers[pbInfo.SoldierName].Tag == null) {
+                    if (this.Players[pbInfo.SoldierName].Tag == null) {
                         sapiAdditional = new AdditionalPlayerInfo();
                         sapiAdditional.m_strResolvedHostName = String.Empty;
                     }
                     else {
-                        sapiAdditional = (AdditionalPlayerInfo) this.m_dicPlayers[pbInfo.SoldierName].Tag;
+                        sapiAdditional = (AdditionalPlayerInfo) this.Players[pbInfo.SoldierName].Tag;
                     }
 
                     sapiAdditional.m_pbInfo = pbInfo;
 
-                    this.m_dicPlayers[pbInfo.SoldierName].Tag = sapiAdditional;
+                    this.Players[pbInfo.SoldierName].Tag = sapiAdditional;
 
-                    this.m_dicPlayers[pbInfo.SoldierName].Text = pbInfo.SlotID;
+                    this.Players[pbInfo.SoldierName].Text = pbInfo.SlotID;
 
                     //string strCountryCode = this.m_frmMain.GetCountryCode(pbInfo.Ip);
-                    if (this.m_frmMain.iglFlags.Images.ContainsKey(pbInfo.PlayerCountryCode + ".png") == true && this.m_dicPlayers[sapiAdditional.m_pbInfo.SoldierName].ImageIndex < 0) {
-                        this.m_dicPlayers[pbInfo.SoldierName].ImageIndex = this.m_frmMain.iglFlags.Images.IndexOfKey(pbInfo.PlayerCountryCode + ".png");
+                    if (this.m_frmMain.iglFlags.Images.ContainsKey(pbInfo.PlayerCountryCode + ".png") == true && this.Players[sapiAdditional.m_pbInfo.SoldierName].ImageIndex < 0) {
+                        this.Players[pbInfo.SoldierName].ImageIndex = this.m_frmMain.iglFlags.Images.IndexOfKey(pbInfo.PlayerCountryCode + ".png");
                     }
 
                     this.RefreshSelectedPlayer();
@@ -1015,9 +1015,9 @@ namespace PRoCon.Controls {
             this.InvokeIfRequired(() => {
                 if (cpsSubset.Subset == CPlayerSubset.PlayerSubsetType.All) {
                     foreach (CPlayerInfo cpiPlayer in lstPlayers) {
-                        if (this.m_dicPlayers.ContainsKey(cpiPlayer.SoldierName) == true) {
+                        if (this.Players.ContainsKey(cpiPlayer.SoldierName) == true) {
 
-                            ListViewItem playerListItem = this.m_dicPlayers[cpiPlayer.SoldierName];
+                            ListViewItem playerListItem = this.Players[cpiPlayer.SoldierName];
 
                             if (this.m_prcClient != null && this.m_prcClient.Game != null && this.m_prcClient.Game.HasSquads == true) {
                                 if (cpiPlayer.SquadID != uscPlayerListPanel.INT_NEUTRAL_SQUAD) {
@@ -1101,37 +1101,37 @@ namespace PRoCon.Controls {
                             playerListItem.Tag = sapiAdditional;
                         }
                         else {
-                            this.m_dicPlayers.Add(cpiPlayer.SoldierName, this.CreatePlayer(cpiPlayer));
+                            this.Players.Add(cpiPlayer.SoldierName, this.CreatePlayer(cpiPlayer));
                         }
                     }
 
-                    List<string> lstKeys = new List<string>(this.m_dicPlayers.Keys);
+                    List<string> lstKeys = new List<string>(this.Players.Keys);
 
                     for (int i = 0; i < lstKeys.Count; i++) {
                         bool blFoundPlayer = false;
 
                         foreach (CPlayerInfo cpiPlayer in lstPlayers) {
-                            if (String.Compare(cpiPlayer.SoldierName, this.m_dicPlayers[lstKeys[i]].Name) == 0) {
+                            if (String.Compare(cpiPlayer.SoldierName, this.Players[lstKeys[i]].Name) == 0) {
                                 blFoundPlayer = true;
                                 break;
                             }
                         }
 
                         if (blFoundPlayer == false) {
-                            this.m_dicPlayers[lstKeys[i]].Remove();
-                            this.m_dicPlayers.Remove(lstKeys[i]);
+                            this.Players[lstKeys[i]].Remove();
+                            this.Players.Remove(lstKeys[i]);
                         }
                     }
 
-                    this.m_dicPlayers.Add("procon.playerlist.totals1", this.CreateTotalsPlayer(new CPlayerInfo("Totals", "procon.playerlist.totals1", 1, 0), 1));
-                    this.m_dicPlayers.Add("procon.playerlist.totals2", this.CreateTotalsPlayer(new CPlayerInfo("Totals", "procon.playerlist.totals2", 2, 0), 2));
-                    this.m_dicPlayers.Add("procon.playerlist.totals3", this.CreateTotalsPlayer(new CPlayerInfo("Totals", "procon.playerlist.totals3", 3, 0), 3));
-                    this.m_dicPlayers.Add("procon.playerlist.totals4", this.CreateTotalsPlayer(new CPlayerInfo("Totals", "procon.playerlist.totals4", 4, 0), 4));
+                    this.Players.Add("procon.playerlist.totals1", this.CreateTotalsPlayer(new CPlayerInfo("Totals", "procon.playerlist.totals1", 1, 0), 1));
+                    this.Players.Add("procon.playerlist.totals2", this.CreateTotalsPlayer(new CPlayerInfo("Totals", "procon.playerlist.totals2", 2, 0), 2));
+                    this.Players.Add("procon.playerlist.totals3", this.CreateTotalsPlayer(new CPlayerInfo("Totals", "procon.playerlist.totals3", 3, 0), 3));
+                    this.Players.Add("procon.playerlist.totals4", this.CreateTotalsPlayer(new CPlayerInfo("Totals", "procon.playerlist.totals4", 4, 0), 4));
 
-                    this.m_dicPlayers.Add("procon.playerlist.averages1", this.CreateTotalsPlayer(new CPlayerInfo("Averages", "procon.playerlist.averages1", 1, 0), 1));
-                    this.m_dicPlayers.Add("procon.playerlist.averages2", this.CreateTotalsPlayer(new CPlayerInfo("Averages", "procon.playerlist.averages2", 2, 0), 2));
-                    this.m_dicPlayers.Add("procon.playerlist.averages3", this.CreateTotalsPlayer(new CPlayerInfo("Averages", "procon.playerlist.averages3", 3, 0), 3));
-                    this.m_dicPlayers.Add("procon.playerlist.averages4", this.CreateTotalsPlayer(new CPlayerInfo("Averages", "procon.playerlist.averages4", 4, 0), 4));
+                    this.Players.Add("procon.playerlist.averages1", this.CreateTotalsPlayer(new CPlayerInfo("Averages", "procon.playerlist.averages1", 1, 0), 1));
+                    this.Players.Add("procon.playerlist.averages2", this.CreateTotalsPlayer(new CPlayerInfo("Averages", "procon.playerlist.averages2", 2, 0), 2));
+                    this.Players.Add("procon.playerlist.averages3", this.CreateTotalsPlayer(new CPlayerInfo("Averages", "procon.playerlist.averages3", 3, 0), 3));
+                    this.Players.Add("procon.playerlist.averages4", this.CreateTotalsPlayer(new CPlayerInfo("Averages", "procon.playerlist.averages4", 4, 0), 4));
 
                     this.ArrangePlayers();
                 }
@@ -1140,7 +1140,7 @@ namespace PRoCon.Controls {
 
         private void Game_PlayerPingedByAdmin(FrostbiteClient sender, string soldierName, int ping) {
             this.InvokeIfRequired(() => {
-                if (this.m_dicPlayers.ContainsKey(soldierName) == true) {
+                if (this.Players.ContainsKey(soldierName) == true) {
 
                     if (this.m_dicPings.ContainsKey(soldierName) == true) {
                         this.m_dicPings[soldierName] = ping;
@@ -1154,7 +1154,7 @@ namespace PRoCon.Controls {
 
         private void Game_PlayerPingedByAdmin(PRoConClient sender, string soldierName, int ping) {
             this.InvokeIfRequired(() => {
-                if (this.m_dicPlayers.ContainsKey(soldierName) == true) {
+                if (this.Players.ContainsKey(soldierName) == true) {
 
                     if (this.m_dicPings.ContainsKey(soldierName) == true) {
                         this.m_dicPings[soldierName] = ping;
@@ -1175,7 +1175,7 @@ namespace PRoCon.Controls {
 
         private void m_prcClient_LevelStarted(FrostbiteClient sender) {
             this.InvokeIfRequired(() => {
-                foreach (KeyValuePair<string, ListViewItem> kvpPlayer in this.m_dicPlayers) {
+                foreach (KeyValuePair<string, ListViewItem> kvpPlayer in this.Players) {
                     kvpPlayer.Value.SubItems["score"].Text = String.Empty;
                     kvpPlayer.Value.SubItems["kills"].Tag = new Double();
                     kvpPlayer.Value.SubItems["kills"].Text = String.Empty;
@@ -1488,8 +1488,8 @@ namespace PRoCon.Controls {
 
                 lock (this.m_objPlayerDictionaryLocker) {
 
-                    if (this.m_dicPlayers.ContainsKey(strSoldierName) == true) {
-                        this.SetPlayerTeamID(this.m_dicPlayers[strSoldierName], iTeamID);
+                    if (this.Players.ContainsKey(strSoldierName) == true) {
+                        this.SetPlayerTeamID(this.Players[strSoldierName], iTeamID);
 
                         this.ArrangePlayers();
                         // Save the SquadChange event for onSquadChange
@@ -1505,9 +1505,9 @@ namespace PRoCon.Controls {
         private void m_prcClient_PlayerChangedSquad(FrostbiteClient sender, string strSoldierName, int iTeamID, int iSquadID) {
             this.InvokeIfRequired(() => {
                 lock (this.m_objPlayerDictionaryLocker) {
-                    if (this.m_dicPlayers.ContainsKey(strSoldierName) == true) {
-                        this.SetPlayerTeamID(this.m_dicPlayers[strSoldierName], iTeamID);
-                        this.SetPlayerSquadID(this.m_dicPlayers[strSoldierName], iSquadID);
+                    if (this.Players.ContainsKey(strSoldierName) == true) {
+                        this.SetPlayerTeamID(this.Players[strSoldierName], iTeamID);
+                        this.SetPlayerSquadID(this.Players[strSoldierName], iSquadID);
                     }
                 }
             });
@@ -1610,51 +1610,66 @@ namespace PRoCon.Controls {
             }
         }
 
-        private void m_prcClient_PlayerKilled(PRoConClient sender, Kill kKillerVictimDetails) {
+        private void m_prcClient_PlayerKilled(PRoConClient sender, Kill kill) {
             this.InvokeIfRequired(() => {
                 lock (this.m_objPlayerDictionaryLocker) {
+                    var killer = this.Players.ContainsKey(kill.Killer.SoldierName) == true ? this.Players[kill.Killer.SoldierName] : null;
+                    var victim = this.Players.ContainsKey(kill.Victim.SoldierName) == true ? this.Players[kill.Victim.SoldierName] : null;
 
-                    if (this.m_dicPlayers.ContainsKey(kKillerVictimDetails.Killer.SoldierName) == true && String.Compare(kKillerVictimDetails.Killer.SoldierName, kKillerVictimDetails.Victim.SoldierName, true) != 0) {
+                    // Don't award a kill for a suicide
+                    if (killer != null && kill.IsSuicide == false) {
+                        var tag = killer.Tag as AdditionalPlayerInfo;
 
-                        if (this.m_dicPlayers[kKillerVictimDetails.Killer.SoldierName].Tag != null && ((AdditionalPlayerInfo) this.m_dicPlayers[kKillerVictimDetails.Killer.SoldierName].Tag).m_cpiPlayer != null) {
-                            ((AdditionalPlayerInfo) this.m_dicPlayers[kKillerVictimDetails.Killer.SoldierName].Tag).m_cpiPlayer.Kills++;
+                        if (tag != null) {
+                            if (killer.Tag != null && tag.m_cpiPlayer != null) {
+                                tag.m_cpiPlayer.Kills++;
+                            }
+
+                            killer.SubItems["kills"].Tag = ((Double)killer.SubItems["kills"].Tag) + 1;
+                            killer.SubItems["kills"].Text = ((Double)killer.SubItems["kills"].Tag).ToString(CultureInfo.InvariantCulture);
+
+                            killer.SubItems["kdr"].Tag = kill;
+
+                            if (killer.SubItems["deaths"].Tag != null && (Double)killer.SubItems["deaths"].Tag > 0) {
+                                killer.SubItems["kdr"].Text = String.Format("{0:0.00}", ((Double)killer.SubItems["kills"].Tag / (Double)killer.SubItems["deaths"].Tag));
+                            }
+                            else {
+                                killer.SubItems["kdr"].Text = String.Format("{0:0.00}", (Double)killer.SubItems["kills"].Tag);
+                            }
+
+                            if (tag.m_cpiPlayer != null) {
+                                this.AddKillToTeamTotal(tag.m_cpiPlayer.TeamID);
+                            }
                         }
 
-                        this.m_dicPlayers[kKillerVictimDetails.Killer.SoldierName].SubItems["kills"].Tag = ((Double) this.m_dicPlayers[kKillerVictimDetails.Killer.SoldierName].SubItems["kills"].Tag) + 1;
-                        this.m_dicPlayers[kKillerVictimDetails.Killer.SoldierName].SubItems["kills"].Text = ((Double) this.m_dicPlayers[kKillerVictimDetails.Killer.SoldierName].SubItems["kills"].Tag).ToString();
-
-                        this.m_dicPlayers[kKillerVictimDetails.Killer.SoldierName].SubItems["kdr"].Tag = kKillerVictimDetails;
-
-                        if (this.m_dicPlayers[kKillerVictimDetails.Killer.SoldierName].SubItems["deaths"].Tag != null && (Double) this.m_dicPlayers[kKillerVictimDetails.Killer.SoldierName].SubItems["deaths"].Tag > 0) {
-                            this.m_dicPlayers[kKillerVictimDetails.Killer.SoldierName].SubItems["kdr"].Text = String.Format("{0:0.00}", ((Double) this.m_dicPlayers[kKillerVictimDetails.Killer.SoldierName].SubItems["kills"].Tag / (Double) this.m_dicPlayers[kKillerVictimDetails.Killer.SoldierName].SubItems["deaths"].Tag));
-                        }
-                        else {
-                            this.m_dicPlayers[kKillerVictimDetails.Killer.SoldierName].SubItems["kdr"].Text = String.Format("{0:0.00}", (Double) this.m_dicPlayers[kKillerVictimDetails.Killer.SoldierName].SubItems["kills"].Tag);
-                        }
-
-                        this.AddKillToTeamTotal(((AdditionalPlayerInfo) this.m_dicPlayers[kKillerVictimDetails.Killer.SoldierName].Tag).m_cpiPlayer.TeamID);
                     }
 
-                    if (this.m_dicPlayers.ContainsKey(kKillerVictimDetails.Victim.SoldierName) == true || String.Compare(kKillerVictimDetails.Killer.SoldierName, kKillerVictimDetails.Victim.SoldierName, true) == 0) {
-                        if (this.m_dicPlayers[kKillerVictimDetails.Victim.SoldierName].Tag != null && ((AdditionalPlayerInfo) this.m_dicPlayers[kKillerVictimDetails.Victim.SoldierName].Tag).m_cpiPlayer != null) {
-                            ((AdditionalPlayerInfo) this.m_dicPlayers[kKillerVictimDetails.Victim.SoldierName].Tag).m_cpiPlayer.Deaths++;
+                    if (victim != null) {
+                        var tag = victim.Tag as AdditionalPlayerInfo;
+
+                        if (tag != null) {
+                            if (victim.Tag != null && tag.m_cpiPlayer != null) {
+                                tag.m_cpiPlayer.Deaths++;
+                            }
+
+                            victim.SubItems["deaths"].Tag = (Double)victim.SubItems["deaths"].Tag + 1;
+                            victim.SubItems["deaths"].Text = ((Double)victim.SubItems["deaths"].Tag).ToString(CultureInfo.InvariantCulture);
+
+                            victim.SubItems["kdr"].Tag = kill;
+
+                            if (victim.SubItems["deaths"].Tag != null && (Double)victim.SubItems["deaths"].Tag > 0) {
+                                victim.SubItems["kdr"].Text = String.Format("{0:0.00}", ((Double)victim.SubItems["kills"].Tag / (Double)victim.SubItems["deaths"].Tag));
+                            }
+                            else {
+                                victim.SubItems["kdr"].Text = String.Format("{0:0.00}", (Double)victim.SubItems["kills"].Tag);
+                            }
+
+                            victim.ImageIndex = this.m_frmMain.iglFlags.Images.IndexOfKey("flag_death.png");
+
+                            if (tag.m_cpiPlayer != null) {
+                                this.AddDeathToTeamTotal(tag.m_cpiPlayer.TeamID);
+                            }
                         }
-
-                        this.m_dicPlayers[kKillerVictimDetails.Victim.SoldierName].SubItems["deaths"].Tag = (Double) this.m_dicPlayers[kKillerVictimDetails.Victim.SoldierName].SubItems["deaths"].Tag + 1;
-                        this.m_dicPlayers[kKillerVictimDetails.Victim.SoldierName].SubItems["deaths"].Text = ((Double) this.m_dicPlayers[kKillerVictimDetails.Victim.SoldierName].SubItems["deaths"].Tag).ToString();
-
-                        this.m_dicPlayers[kKillerVictimDetails.Victim.SoldierName].SubItems["kdr"].Tag = kKillerVictimDetails;
-
-                        if (this.m_dicPlayers[kKillerVictimDetails.Victim.SoldierName].SubItems["deaths"].Tag != null && (Double) this.m_dicPlayers[kKillerVictimDetails.Victim.SoldierName].SubItems["deaths"].Tag > 0) {
-                            this.m_dicPlayers[kKillerVictimDetails.Victim.SoldierName].SubItems["kdr"].Text = String.Format("{0:0.00}", ((Double) this.m_dicPlayers[kKillerVictimDetails.Victim.SoldierName].SubItems["kills"].Tag / (Double) this.m_dicPlayers[kKillerVictimDetails.Victim.SoldierName].SubItems["deaths"].Tag));
-                        }
-                        else {
-                            this.m_dicPlayers[kKillerVictimDetails.Victim.SoldierName].SubItems["kdr"].Text = String.Format("{0:0.00}", (Double) this.m_dicPlayers[kKillerVictimDetails.Victim.SoldierName].SubItems["kills"].Tag);
-                        }
-
-                        this.m_dicPlayers[kKillerVictimDetails.Victim.SoldierName].ImageIndex = this.m_frmMain.iglFlags.Images.IndexOfKey("flag_death.png");
-
-                        this.AddDeathToTeamTotal(((AdditionalPlayerInfo) this.m_dicPlayers[kKillerVictimDetails.Victim.SoldierName].Tag).m_cpiPlayer.TeamID);
                     }
 
                     this.tmrKillDeathHighlight.Enabled = true;
@@ -1842,7 +1857,7 @@ namespace PRoCon.Controls {
 
             Color clLighLightHighlight = ControlPaint.LightLight(SystemColors.Highlight);
 
-            foreach (KeyValuePair<string, ListViewItem> kvpPlayer in this.m_dicPlayers) {
+            foreach (KeyValuePair<string, ListViewItem> kvpPlayer in this.Players) {
                 if (kvpPlayer.Value.Tag != null && ((AdditionalPlayerInfo)kvpPlayer.Value.Tag).m_cpiPlayer != null) {
                     if (((AdditionalPlayerInfo)kvpPlayer.Value.Tag).m_cpiPlayer.TeamID == iTeamID) {
                         kvpPlayer.Value.BackColor = clLighLightHighlight;
@@ -1935,7 +1950,7 @@ namespace PRoCon.Controls {
 
                     bool isStillFadingKill = false;
 
-                    foreach (KeyValuePair<string, ListViewItem> kvpPlayer in this.m_dicPlayers) {
+                    foreach (KeyValuePair<string, ListViewItem> kvpPlayer in this.Players) {
                         if (kvpPlayer.Value.SubItems["kdr"].Tag != null && kvpPlayer.Value.SubItems["kdr"].Tag is Kill) {
 
                             TimeSpan tsDifference = DateTime.Now - ((Kill)kvpPlayer.Value.SubItems["kdr"].Tag).TimeOfDeath;
