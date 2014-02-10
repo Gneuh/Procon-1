@@ -126,10 +126,6 @@ namespace PRoCon.Controls {
             });
         }
 
-        private void RefreshSentRecvCounters() {
-            //this.lblOutputKiBs.Text = String.Format("D: {0:0.00} KiB's, U: {1:0.00} KiB's", (float)this.m_prcClient.Console.BytesRecieved / 1024F, (float)this.m_prcClient.Console.BytesSent / 1024F);
-        }
-
         public void SetColour(string strVariable, string strValue) {
             this.rtbConsoleBox.SetColour(strVariable, strValue);
         }
@@ -167,17 +163,9 @@ namespace PRoCon.Controls {
         }
 
         private void Console_WriteConsole(DateTime dtLoggedTime, string strLoggedText) {
-            this.InvokeIfRequired(() => {
-
-                this.RefreshSentRecvCounters();
-
-                if (this.chkEnableOutput.Checked == true) {
-
-                    string strFormattedConsoleOutput = String.Format("[{0}] {1}{2}", dtLoggedTime.ToString("HH:mm:ss"), strLoggedText, "\n");
-
-                    this.rtbConsoleBox.AppendText(strFormattedConsoleOutput);
-                }
-            });
+            if (this.chkEnableOutput.Checked == true) {
+                this.rtbConsoleBox.AppendText(String.Format("[{0}] {1}{2}", dtLoggedTime.ToString("HH:mm:ss"), strLoggedText, "\n"));
+            }
         }
 
         private void rtbConsoleBox_Flushed(object sender, EventArgs args) {
@@ -191,15 +179,9 @@ namespace PRoCon.Controls {
         }
 
         private void PunkbusterConsole_WriteConsole(DateTime dtLoggedTime, string strLoggedText) {
-
-            this.InvokeIfRequired(() => {
-                if (this.chkEnablePunkbusterOutput.Checked == true) {
-
-                    string strFormattedConsoleOutput = String.Format("{0}{1}", strLoggedText, "\n");
-
-                    this.rtbPunkbusterBox.AppendText(strFormattedConsoleOutput);
-                }
-            });
+            if (this.chkEnablePunkbusterOutput.Checked == true) {
+                this.rtbPunkbusterBox.AppendText(String.Format("{0}{1}", strLoggedText, "\n"));
+            }
         }
 
         private void rtbPunkbusterBox_Flushed(object sender, EventArgs args) {
