@@ -1959,18 +1959,38 @@ namespace PRoCon {
                     this.moveToSquadToolStripMenuItem.DropDownItems.Clear();
 
                     foreach (CTeamName team in this.m_prcClient.TeamNameList) {
-                        if (String.Compare(team.MapFilename, this.m_prcClient.CurrentServerInfo.Map, true) == 0 && String.Compare(team.Playlist, this.m_prcClient.CurrentServerInfo.GameMode, true) == 0 && team.TeamID != uscPlayerListPanel.INT_NEUTRAL_TEAM) {
-                            
-                            ToolStripMenuItem teamChange = new ToolStripMenuItem(this.m_clocLanguage.GetDefaultLocalized(String.Format("Team {0}", team.TeamID), "uscPlayerListPanel.ctxPlayerOptions.moveToSquadToolStripMenuItem.Team", this.m_clocLanguage.GetLocalized(team.LocalizationKey)));
-                            teamChange.Tag = new object[] { player, team };
-                            teamChange.Click += new EventHandler(teamChange_Click);
-                            
-                            if (team.TeamID == player.TeamID) {
-                                teamChange.Checked = true;
-                                teamChange.Enabled = false;
+                        if (this.m_prcClient.GameType == "BFBC2")
+                        {
+                            if (String.Compare(team.MapFilename, this.m_prcClient.CurrentServerInfo.Map, true) == 0 && team.TeamID != uscPlayerListPanel.INT_NEUTRAL_TEAM)
+                            {
+                                ToolStripMenuItem teamChange = new ToolStripMenuItem(this.m_clocLanguage.GetDefaultLocalized(String.Format("Team {0}", team.TeamID), "uscPlayerListPanel.ctxPlayerOptions.moveToSquadToolStripMenuItem.Team", this.m_clocLanguage.GetLocalized(team.LocalizationKey)));
+                                teamChange.Tag = new object[] { player, team };
+                                teamChange.Click += new EventHandler(teamChange_Click);
+                                if (team.TeamID == player.TeamID)
+                                {
+                                    teamChange.Checked = true;
+                                    teamChange.Enabled = false;
+                                }
+                                this.moveToSquadToolStripMenuItem.DropDownItems.Add(teamChange);
                             }
+                        }
+                        else
+                        {
+                            if (String.Compare(team.MapFilename, this.m_prcClient.CurrentServerInfo.Map, true) == 0 && String.Compare(team.Playlist, this.m_prcClient.CurrentServerInfo.GameMode, true) == 0 && team.TeamID != uscPlayerListPanel.INT_NEUTRAL_TEAM)
+                            {
 
-                            this.moveToSquadToolStripMenuItem.DropDownItems.Add(teamChange);
+                                ToolStripMenuItem teamChange = new ToolStripMenuItem(this.m_clocLanguage.GetDefaultLocalized(String.Format("Team {0}", team.TeamID), "uscPlayerListPanel.ctxPlayerOptions.moveToSquadToolStripMenuItem.Team", this.m_clocLanguage.GetLocalized(team.LocalizationKey)));
+                                teamChange.Tag = new object[] { player, team };
+                                teamChange.Click += new EventHandler(teamChange_Click);
+
+                                if (team.TeamID == player.TeamID)
+                                {
+                                    teamChange.Checked = true;
+                                    teamChange.Enabled = false;
+                                }
+
+                                this.moveToSquadToolStripMenuItem.DropDownItems.Add(teamChange);
+                            }
                         }
                     }
                         // uscPlayerListPanel.INT_NEUTRAL_TEAM
