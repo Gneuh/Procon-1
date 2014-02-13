@@ -1138,6 +1138,8 @@ namespace PRoCon.Controls {
         }
 
         private void tmrRefreshBanlist_Tick(object sender, EventArgs e) {
+            this.lsvBanlist.BeginUpdate();
+
             foreach (ListViewItem lviBanEntry in this.lsvBanlist.Items) {
 
                 if (lviBanEntry.SubItems["timeremaining"].Tag != null) {
@@ -1164,6 +1166,8 @@ namespace PRoCon.Controls {
                     }
                 }
             }
+
+            this.lsvBanlist.EndUpdate();
         }
 
         public void OnPbGuidUnban(CBanInfo unbanned) {
