@@ -966,7 +966,7 @@ namespace PRoCon.Controls {
 
             if (String.Compare("name", cbiPlayerBan.IdType, true) == 0 || String.Compare("persona", cbiPlayerBan.IdType, true) == 0) {
                 lviNewBanEntry = this.CreateBlankBanEntry(String.Format("{0}\r\n\r\n", cbiPlayerBan.SoldierName));
-                lviNewBanEntry.Text = (cbiPlayerBan.Offset + 1).ToString(CultureInfo.InvariantCulture);
+                lviNewBanEntry.Text = cbiPlayerBan.Offset.HasValue == true ? (cbiPlayerBan.Offset.Value + 1).ToString(CultureInfo.InvariantCulture) : "-";
 
                 lviNewBanEntry.SubItems["name"].Text = cbiPlayerBan.SoldierName;
 
@@ -981,7 +981,7 @@ namespace PRoCon.Controls {
             else if (String.Compare("ip", cbiPlayerBan.IdType, true) == 0) {
 
                 lviNewBanEntry = this.CreateBlankBanEntry(String.Format("\r\n{0}\r\n", cbiPlayerBan.IpAddress));
-                lviNewBanEntry.Text = (cbiPlayerBan.Offset + 1).ToString(CultureInfo.InvariantCulture);
+                lviNewBanEntry.Text = cbiPlayerBan.Offset.HasValue == true ? (cbiPlayerBan.Offset.Value + 1).ToString(CultureInfo.InvariantCulture) : "-";
 
                 lviNewBanEntry.SubItems["name"].Text = cbiPlayerBan.SoldierName;
                 lviNewBanEntry.SubItems["ip"].Text = cbiPlayerBan.IpAddress;
@@ -998,7 +998,7 @@ namespace PRoCon.Controls {
             else if (String.Compare("guid", cbiPlayerBan.IdType, true) == 0) {
 
                 lviNewBanEntry = this.CreateBlankBanEntry(String.Format("\r\n\r\n{0}", cbiPlayerBan.Guid));
-                lviNewBanEntry.Text = (cbiPlayerBan.Offset + 1).ToString(CultureInfo.InvariantCulture);
+                lviNewBanEntry.Text = cbiPlayerBan.Offset.HasValue == true ? (cbiPlayerBan.Offset.Value + 1).ToString(CultureInfo.InvariantCulture) : "-";
 
                 lviNewBanEntry.SubItems["name"].Text = cbiPlayerBan.SoldierName;
                 lviNewBanEntry.SubItems["guid"].Text = cbiPlayerBan.Guid;
@@ -1092,7 +1092,7 @@ namespace PRoCon.Controls {
                     }
                     else {
                         ListViewItem lviBanEntry = this.lsvBanlist.Items[strKey];
-                        lviBanEntry.Text = (cbiBan.Offset + 1).ToString(CultureInfo.InvariantCulture);
+                        lviBanEntry.Text = cbiBan.Offset.HasValue == true ? (cbiBan.Offset.Value + 1).ToString(CultureInfo.InvariantCulture) : "-";
                         lviBanEntry.SubItems["name"].Text = cbiBan.SoldierName;
                         lviBanEntry.SubItems["type"].Tag = cbiBan.IdType;
                         lviBanEntry.SubItems["type"].Text = this.GetFriendlyTypeName(cbiBan.IdType);
@@ -1122,11 +1122,19 @@ namespace PRoCon.Controls {
         }
 
         private void m_prcClient_PunkbusterPlayerUnbanned(PRoConClient sender, CBanInfo unbanned) {
-            this.InvokeIfRequired(() => this.BansSource.Remove(unbanned));
+            this.InvokeIfRequired(() => {
+                this.BansSource.Remove(unbanned);
+
+                this.OnSettingResponse("local.banlist.unban", true);
+            });
         }
 
         public void OnUnban(FrostbiteClient sender, CBanInfo unbanned) {
-            this.InvokeIfRequired(() => this.BansSource.Remove(unbanned));
+            this.InvokeIfRequired(() => { 
+                this.BansSource.Remove(unbanned);
+
+                this.OnSettingResponse("local.banlist.unban", true);
+            });
         }
 
         private void tmrRefreshBanlist_Tick(object sender, EventArgs e) {
@@ -1159,7 +1167,11 @@ namespace PRoCon.Controls {
         }
 
         public void OnPbGuidUnban(CBanInfo unbanned) {
-            this.InvokeIfRequired(() => this.BansSource.Remove(unbanned));
+            this.InvokeIfRequired(() => {
+                this.BansSource.Remove(unbanned);
+            
+                this.OnSettingResponse("local.banlist.unban", true);
+            });
         }
 
         public void OnPbGuidBan(PRoConClient sender, CBanInfo ban) {
@@ -1196,7 +1208,6 @@ namespace PRoCon.Controls {
                 }
 
                 this.m_prcClient.Game.SendBanListSavePacket();
-                this.m_prcClient.Game.SendBanListListPacket();
             }
         }
 
@@ -1244,7 +1255,6 @@ namespace PRoCon.Controls {
 
                 this.m_prcClient.Game.SendBanListClearPacket();
                 this.m_prcClient.Game.SendBanListSavePacket();
-                this.m_prcClient.Game.SendBanListListPacket();
             }
         }
 
@@ -1392,7 +1402,6 @@ namespace PRoCon.Controls {
             this.txtBanlistManualBanIP.Clear();
 
             this.m_prcClient.Game.SendBanListSavePacket();
-            this.m_prcClient.Game.SendBanListListPacket();
         }
 
         private void txtBanlistManualBanName_TextChanged(object sender, EventArgs e) {
