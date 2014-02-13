@@ -60,6 +60,11 @@ namespace PRoCon.Controls.Data {
 
         public event Action Changed;
 
+        public BansSource() {
+            this.Items = new List<CBanInfo>();
+            this.Filtered = new List<CBanInfo>();
+        }
+
         /// <summary>
         /// Fires off the change event
         /// </summary>
@@ -93,10 +98,71 @@ namespace PRoCon.Controls.Data {
             if (typeof(T) != typeof(CBanInfo)) throw new InvalidCastException();
 
             // If we have nothing yet or the items we do have are expired.
-            if (this.Items == null || this.Items.Count == 0 || this.ItemsAge > DateTime.Now.AddMinutes(-1)) {
-                this.Items = items.Cast<CBanInfo>().ToList();
+            if (this.Items.Count == 0 || this.ItemsAge > DateTime.Now.AddMinutes(-1)) {
+                // We never get the pbguid's in one hit to know what is and isn't there.
+                var pbItems = this.Items.Where(item => item.IdType == "pbguid").ToList();
+
+                this.Items = items.Cast<CBanInfo>().Union(pbItems).ToList();
+
+                //this.Items = items.Cast<CBanInfo>().ToList();
                 this.ItemsAge = DateTime.Now;
 
+                this.RefreshFilter();
+                this.OnChange();
+            }
+        }
+
+        /// <summary>
+        /// Remove a single item without firing any list change events
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="item">The item to append</param>
+        /// <returns>True if the item has been appended, false otherwise.</returns>
+        protected bool AppendItem<T>(T item) {
+            bool appended = false;
+
+            if (typeof(T) != typeof(CBanInfo)) throw new InvalidCastException();
+            var cast = item as CBanInfo;
+
+            if (cast != null) {
+                if (this.Items.Any(ban => ban.SoldierName == cast.SoldierName && ban.IpAddress == cast.IpAddress && ban.Guid == cast.Guid) == false) {
+                    this.Items.Add(item as CBanInfo);
+
+                    appended = true;
+                }
+            }
+
+            return appended;
+        }
+
+        public void Append<T>(T item) {
+            if (this.AppendItem(item) == false) {
+                this.RefreshFilter();
+                this.OnChange();
+            }
+        }
+
+        /// <summary>
+        /// Removes any instances of an item found in the source
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="item"></param>
+        /// <returns>True if the item has been removed</returns>
+        protected bool RemoveItem<T>(T item) {
+            bool removed = false;
+            if (typeof(T) != typeof(CBanInfo)) throw new InvalidCastException();
+
+            var cast = item as CBanInfo;
+
+            if (cast != null) {
+                removed = this.Items.RemoveAll(ban => ban.SoldierName == cast.SoldierName && ban.IpAddress == cast.IpAddress && ban.Guid == cast.Guid) > 0;
+            }
+
+            return removed;
+        }
+
+        public void Remove<T>(T item) {
+            if (this.RemoveItem(item) == true) {
                 this.RefreshFilter();
                 this.OnChange();
             }

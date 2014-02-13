@@ -2520,7 +2520,7 @@ namespace PRoCon.Core.Remote {
 
                 if (BanListList != null) {
                     cpRecievedPacket.Words.RemoveAt(0);
-                    this.BanListList(this, iRequestStartOffset, CBanInfo.GetVanillaBanlist(cpRecievedPacket.Words));
+                    this.BanListList(this, iRequestStartOffset, CBanInfo.GetVanillaBanlist(cpRecievedPacket.Words, iRequestStartOffset));
                 }
             }
         }

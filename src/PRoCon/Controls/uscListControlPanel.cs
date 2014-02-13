@@ -1,26 +1,7 @@
-﻿/*  Copyright 2010 Geoffrey 'Phogue' Green
-
-    http://www.phogue.net
- 
-    This file is part of PRoCon Frostbite.
-
-    PRoCon Frostbite is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    PRoCon Frostbite is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with PRoCon Frostbite.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using PRoCon.Controls.ControlsEx;
@@ -290,7 +271,7 @@ namespace PRoCon.Controls {
                 this.m_prcClient.PunkbusterPlayerUnbanned += new PRoConClient.PunkbusterBanHandler(m_prcClient_PunkbusterPlayerUnbanned);
                 this.m_prcClient.Game.BanListRemove += new FrostbiteClient.BanListRemoveHandler(this.OnUnban);
                 this.m_prcClient.PunkbusterPlayerBanned += new PRoConClient.PunkbusterBanHandler(this.OnPbGuidBan);
-
+                this.m_prcClient.Game.BanListAdd += new FrostbiteClient.BanListAddHandler(Game_BanListAdd);
 
                 this.m_prcClient.ProconPrivileges += new PRoConClient.ProconPrivilegesHandler(m_prcClient_ProconPrivileges);
 
@@ -915,6 +896,11 @@ namespace PRoCon.Controls {
             lviNewBanEntry.Name = strName;
             lviNewBanEntry.Text = String.Empty;
 
+            ListViewItem.ListViewSubItem lvisName = new ListViewItem.ListViewSubItem();
+            lvisName.Name = "name";
+            lvisName.Text = String.Empty;
+            lviNewBanEntry.SubItems.Add(lvisName);
+
             ListViewItem.ListViewSubItem lvisIp = new ListViewItem.ListViewSubItem();
             lvisIp.Name = "ip";
             lvisIp.Text = String.Empty;
@@ -980,7 +966,9 @@ namespace PRoCon.Controls {
 
             if (String.Compare("name", cbiPlayerBan.IdType, true) == 0 || String.Compare("persona", cbiPlayerBan.IdType, true) == 0) {
                 lviNewBanEntry = this.CreateBlankBanEntry(String.Format("{0}\r\n\r\n", cbiPlayerBan.SoldierName));
-                lviNewBanEntry.Text = cbiPlayerBan.SoldierName;
+                lviNewBanEntry.Text = (cbiPlayerBan.Offset + 1).ToString(CultureInfo.InvariantCulture);
+
+                lviNewBanEntry.SubItems["name"].Text = cbiPlayerBan.SoldierName;
 
                 lviNewBanEntry.SubItems["type"].Tag = cbiPlayerBan.IdType;
                 lviNewBanEntry.SubItems["type"].Text = this.GetFriendlyTypeName(cbiPlayerBan.IdType);
@@ -993,8 +981,9 @@ namespace PRoCon.Controls {
             else if (String.Compare("ip", cbiPlayerBan.IdType, true) == 0) {
 
                 lviNewBanEntry = this.CreateBlankBanEntry(String.Format("\r\n{0}\r\n", cbiPlayerBan.IpAddress));
-                lviNewBanEntry.Text = String.Empty;
+                lviNewBanEntry.Text = (cbiPlayerBan.Offset + 1).ToString(CultureInfo.InvariantCulture);
 
+                lviNewBanEntry.SubItems["name"].Text = cbiPlayerBan.SoldierName;
                 lviNewBanEntry.SubItems["ip"].Text = cbiPlayerBan.IpAddress;
 
                 lviNewBanEntry.SubItems["type"].Tag = cbiPlayerBan.IdType;
@@ -1009,7 +998,9 @@ namespace PRoCon.Controls {
             else if (String.Compare("guid", cbiPlayerBan.IdType, true) == 0) {
 
                 lviNewBanEntry = this.CreateBlankBanEntry(String.Format("\r\n\r\n{0}", cbiPlayerBan.Guid));
-                lviNewBanEntry.Text = cbiPlayerBan.SoldierName;
+                lviNewBanEntry.Text = (cbiPlayerBan.Offset + 1).ToString(CultureInfo.InvariantCulture);
+
+                lviNewBanEntry.SubItems["name"].Text = cbiPlayerBan.SoldierName;
                 lviNewBanEntry.SubItems["guid"].Text = cbiPlayerBan.Guid;
                 lviNewBanEntry.SubItems["ip"].Text = cbiPlayerBan.IpAddress;
 
@@ -1025,7 +1016,7 @@ namespace PRoCon.Controls {
             else if (String.Compare("pbguid", cbiPlayerBan.IdType, true) == 0) {
 
                 lviNewBanEntry = this.CreateBlankBanEntry(String.Format("\r\n\r\n{0}", cbiPlayerBan.Guid));
-                lviNewBanEntry.Text = cbiPlayerBan.SoldierName;
+                lviNewBanEntry.SubItems["name"].Text = cbiPlayerBan.SoldierName;
                 lviNewBanEntry.SubItems["guid"].Text = cbiPlayerBan.Guid;
                 lviNewBanEntry.SubItems["ip"].Text = cbiPlayerBan.IpAddress;
 
@@ -1055,12 +1046,9 @@ namespace PRoCon.Controls {
                         case "ip":
                             blFoundBan = (String.Compare(this.lsvBanlist.Items[i].Name, String.Format("\r\n{0}\r\n", cbiBan.IpAddress)) == 0);
                             break;
+                        case "pbguid":
                         case "guid":
                             blFoundBan = (String.Compare(this.lsvBanlist.Items[i].Name, String.Format("\r\n\r\n{0}", cbiBan.Guid)) == 0);
-                            break;
-                        case "pbguid":
-                            // Ignore pb ban entries, handled in the pb event method.
-                            blFoundBan = true;
                             break;
                         default:
                             break;
@@ -1071,7 +1059,7 @@ namespace PRoCon.Controls {
                     }
                 }
 
-                if (blFoundBan == false && String.Compare((string)this.lsvBanlist.Items[i].SubItems["type"].Tag, "pbguid") != 0) {
+                if (blFoundBan == false) {
                     this.lsvBanlist.Items.Remove(this.lsvBanlist.Items[i]);
                     i--;
                 }
@@ -1095,7 +1083,7 @@ namespace PRoCon.Controls {
                     else if (String.Compare(cbiBan.IdType, "ip") == 0) {
                         strKey = String.Format("\r\n{0}\r\n", cbiBan.IpAddress);
                     }
-                    else if (String.Compare(cbiBan.IdType, "guid") == 0) {
+                    else if (String.Compare(cbiBan.IdType, "guid") == 0 || String.Compare(cbiBan.IdType, "pbguid") == 0) {
                         strKey = String.Format("\r\n\r\n{0}", cbiBan.Guid);
                     }
 
@@ -1104,7 +1092,8 @@ namespace PRoCon.Controls {
                     }
                     else {
                         ListViewItem lviBanEntry = this.lsvBanlist.Items[strKey];
-                        lviBanEntry.Text = cbiBan.SoldierName;
+                        lviBanEntry.Text = (cbiBan.Offset + 1).ToString(CultureInfo.InvariantCulture);
+                        lviBanEntry.SubItems["name"].Text = cbiBan.SoldierName;
                         lviBanEntry.SubItems["type"].Tag = cbiBan.IdType;
                         lviBanEntry.SubItems["type"].Text = this.GetFriendlyTypeName(cbiBan.IdType);
                         lviBanEntry.SubItems["timeremaining"].Tag = cbiBan.BanLength;
@@ -1132,29 +1121,12 @@ namespace PRoCon.Controls {
             this.InvokeIfRequired(() => this.BansSource.Set(lstBans));
         }
 
-        private void m_prcClient_PunkbusterPlayerUnbanned(PRoConClient sender, CBanInfo cbiUnbannedPlayer) {
-            this.InvokeIfRequired(() => this.OnUnban(sender.Game, cbiUnbannedPlayer));
+        private void m_prcClient_PunkbusterPlayerUnbanned(PRoConClient sender, CBanInfo unbanned) {
+            this.InvokeIfRequired(() => this.BansSource.Remove(unbanned));
         }
 
-        public void OnUnban(FrostbiteClient sender, CBanInfo cbiBan) {
-            this.InvokeIfRequired(() => {
-                string strKey = String.Empty;
-
-                if (String.Compare(cbiBan.IdType, "name") == 0 || String.Compare(cbiBan.IdType, "persona") == 0) {
-                    strKey = String.Format("{0}\r\n\r\n", cbiBan.SoldierName);
-                }
-                else if (String.Compare(cbiBan.IdType, "ip") == 0) {
-                    strKey = String.Format("\r\n{0}\r\n", cbiBan.IpAddress);
-                }
-                else if (String.Compare(cbiBan.IdType, "guid") == 0 || String.Compare(cbiBan.IdType, "pbguid") == 0) {
-                    strKey = String.Format("\r\n\r\n{0}", cbiBan.Guid);
-                }
-
-                if (this.lsvBanlist.Items.ContainsKey(strKey) == true) {
-                    this.lsvBanlist.Items[strKey].Remove();
-                    this.OnSettingResponse("local.banlist.unban", true);
-                }
-            });
+        public void OnUnban(FrostbiteClient sender, CBanInfo unbanned) {
+            this.InvokeIfRequired(() => this.BansSource.Remove(unbanned));
         }
 
         private void tmrRefreshBanlist_Tick(object sender, EventArgs e) {
@@ -1186,40 +1158,16 @@ namespace PRoCon.Controls {
             }
         }
 
-        public void OnPbGuidUnban(CBanInfo cbiGuidBan) {
-            if (this.lsvBanlist.Items.ContainsKey(String.Format("\r\n\r\n{0}", cbiGuidBan.Guid)) == true) {
-                this.lsvBanlist.Items[String.Format("\r\n\r\n{0}", cbiGuidBan.Guid)].Remove();
-                this.OnSettingResponse("local.banlist.unban", true);
-            }
+        public void OnPbGuidUnban(CBanInfo unbanned) {
+            this.InvokeIfRequired(() => this.BansSource.Remove(unbanned));
         }
 
-        public void OnPbGuidBan(PRoConClient sender, CBanInfo cbiGuidBan) {
-            this.InvokeIfRequired(() => {
-                this.lsvBanlist.BeginUpdate();
+        public void OnPbGuidBan(PRoConClient sender, CBanInfo ban) {
+            this.InvokeIfRequired(() => this.BansSource.Append(ban));
+        }
 
-                if (this.lsvBanlist.Items.ContainsKey(String.Format("\r\n\r\n{0}", cbiGuidBan.Guid)) == false) {
-                    this.lsvBanlist.Items.Add(this.CreateBanEntry(cbiGuidBan));
-                }
-                else {
-                    ListViewItem lviBanEntry = this.lsvBanlist.Items[String.Format("\r\n\r\n{0}", cbiGuidBan.Guid)];
-                    lviBanEntry.Text = cbiGuidBan.SoldierName;
-                    lviBanEntry.SubItems["guid"].Text = cbiGuidBan.Guid;
-                    lviBanEntry.SubItems["ip"].Text = cbiGuidBan.IpAddress;
-
-                    lviBanEntry.SubItems["type"].Tag = cbiGuidBan.IdType;
-                    lviBanEntry.SubItems["type"].Text = this.GetFriendlyTypeName(cbiGuidBan.IdType);
-
-                    lviBanEntry.SubItems["timeremaining"].Tag = cbiGuidBan.BanLength;
-
-                    lviBanEntry.SubItems["reason"].Tag = cbiGuidBan.Reason.TrimEnd('"');
-                }
-
-                for (int i = 0; i < this.lsvBanlist.Columns.Count; i++) {
-                    this.lsvBanlist.Columns[i].Width = -2;
-                }
-
-                this.lsvBanlist.EndUpdate();
-            });
+        public void Game_BanListAdd(FrostbiteClient sender, CBanInfo ban) {
+            this.InvokeIfRequired(() => this.BansSource.Append(ban));
         }
         
         private void unbanToolStripMenuItem_Click(object sender, EventArgs e) {
@@ -1232,13 +1180,7 @@ namespace PRoCon.Controls {
                 this.WaitForSettingResponse("local.banlist.unban");
 
                 if (String.Compare((string)this.lsvBanlist.SelectedItems[0].SubItems["type"].Tag, "name") == 0 || String.Compare((string)this.lsvBanlist.SelectedItems[0].SubItems["type"].Tag, "persona") == 0) {
-// obsolet with BF3 R-8
-//                    if (this.m_prcClient.Game is BF3Client) {
-//                        this.SendCommand("banList.remove", "persona", this.lsvBanlist.SelectedItems[0].Text);
-//                    }
-//                    else {
-                        this.SendCommand("banList.remove", "name", this.lsvBanlist.SelectedItems[0].Text);
-//                    }
+                    this.SendCommand("banList.remove", "name", this.lsvBanlist.SelectedItems[0].SubItems["name"].Text);
                 }
                 else if (String.Compare((string)this.lsvBanlist.SelectedItems[0].SubItems["type"].Tag, "ip") == 0) {
                     this.SendCommand("banList.remove", "ip", this.lsvBanlist.SelectedItems[0].SubItems["ip"].Text);

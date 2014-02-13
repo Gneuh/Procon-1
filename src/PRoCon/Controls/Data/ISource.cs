@@ -36,6 +36,20 @@ namespace PRoCon.Controls.Data {
         void Set<T>(IEnumerable<T> items);
 
         /// <summary>
+        /// Append a single item to the source list
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="item">The item to append</param>
+        void Append<T>(T item);
+
+        /// <summary>
+        /// Remove a single item from the source list
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="item">The item to remove</param>
+        void Remove<T>(T item);
+
+        /// <summary>
         /// Fetch an enumerable of items from an offset
         /// </summary>
         /// <typeparam name="T">The type of item we are expecting</typeparam>

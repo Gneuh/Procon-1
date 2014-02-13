@@ -92,6 +92,11 @@ namespace PRoCon.Core {
             }
         }
 
+        /// <summary>
+        /// The place in the list offset this item was recorded at. e.g banList.list 100 => [{ 100 ..  }, { 101 ..  }, { 102 ..  }] etc.
+        /// </summary>
+        public int Offset { get; set; }
+
         public string SoldierName { get; private set; }
 
         public string Guid { get; private set; }
@@ -104,7 +109,7 @@ namespace PRoCon.Core {
 
         public TimeoutSubset BanLength { get; private set; }
 
-        public static List<CBanInfo> GetVanillaBanlist(List<string> lstWords) {
+        public static List<CBanInfo> GetVanillaBanlist(List<string> lstWords, int offset) {
 
             List<CBanInfo> lstBans = new List<CBanInfo>();
             int iBans = 0;
@@ -112,7 +117,9 @@ namespace PRoCon.Core {
             if (lstWords.Count >= 1 && int.TryParse(lstWords[0], out iBans) == true) {
                 lstWords.RemoveAt(0);
                 for (int i = 0; i < iBans; i++) {
-                    lstBans.Add(new CBanInfo(lstWords.GetRange(i * 5, 5)));
+                    lstBans.Add(new CBanInfo(lstWords.GetRange(i * 5, 5)) {
+                        Offset = offset + i
+                    });
                 }
             }
             else {
@@ -120,7 +127,9 @@ namespace PRoCon.Core {
                     List<string> words = lstWords.GetRange(i * 6, 6);
                     words.RemoveAt(4);
 
-                    lstBans.Add(new CBanInfo(words));
+                    lstBans.Add(new CBanInfo(words) {
+                        Offset = offset + i
+                    });
                 }
             }
 
