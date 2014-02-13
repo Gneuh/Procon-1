@@ -136,7 +136,7 @@ namespace PRoCon.Controls.Data {
         }
 
         public void Append<T>(T item) {
-            if (this.AppendItem(item) == false) {
+            if (this.AppendItem(item) == true) {
                 this.RefreshFilter();
                 this.OnChange();
             }
