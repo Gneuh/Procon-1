@@ -159,13 +159,13 @@ namespace PRoCon.Core.Remote {
                     },
                     // Cache all banlist responses for two minutes
                     new PacketCacheConfiguration() {
-                        Matching = new Regex(@"^banList\.list [0-9]*$", RegexOptions.Compiled),
-                        Ttl = new TimeSpan(0, 0, 2, 0)
+                        Matching = new Regex(@"^banList\.list[ 0-9]*$", RegexOptions.Compiled),
+                        Ttl = new TimeSpan(0, 0, 1, 0)
                     },
                     // Cache all reserved slit responses for one minute
                     new PacketCacheConfiguration() {
                         Matching = new Regex(@"^reservedSlotsList\.list [0-9]*$", RegexOptions.Compiled),
-                        Ttl = new TimeSpan(0, 0, 2, 0)
+                        Ttl = new TimeSpan(0, 0, 1, 0)
                     },
                     // Only initiate the punkbuster plist update everyminute (max)
                     new PacketCacheConfiguration() {
