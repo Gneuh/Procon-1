@@ -98,7 +98,7 @@ namespace PRoCon.Controls.Data {
             if (typeof(T) != typeof(CBanInfo)) throw new InvalidCastException();
 
             // If we have nothing yet or the items we do have are expired.
-            if (this.Items.Count == 0 || this.ItemsAge > DateTime.Now.AddMinutes(-1)) {
+            if (this.Items.Count == 0 || this.ItemsAge < DateTime.Now.AddMinutes(-1)) {
                 // We never get the pbguid's in one hit to know what is and isn't there.
                 var pbItems = this.Items.Where(item => item.IdType == "pbguid").ToList();
 
