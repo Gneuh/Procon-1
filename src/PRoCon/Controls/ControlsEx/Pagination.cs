@@ -18,7 +18,7 @@ namespace PRoCon.Controls.ControlsEx {
         /// The maximum number of pages.
         /// </summary>
         public int MaximumPage {
-            get { return this.Source != null ? (int)Math.Floor((decimal)this.Source.Count / this.ItemsPerPage) : 1; }
+            get { return this.Source != null ? (int)Math.Ceiling((decimal)this.Source.Count / this.ItemsPerPage) : 1; }
         }
 
         /// <summary>
