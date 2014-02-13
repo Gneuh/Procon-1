@@ -155,7 +155,12 @@ namespace PRoCon.Controls.Data {
             var cast = item as CBanInfo;
 
             if (cast != null) {
-                removed = this.Items.RemoveAll(ban => ban.SoldierName == cast.SoldierName && ban.IpAddress == cast.IpAddress && ban.Guid == cast.Guid) > 0;
+                if (cast.IdType == "pbguid") {
+                    removed = this.Items.RemoveAll(ban => ban.Guid == cast.Guid) > 0;
+                }
+                else {
+                    removed = this.Items.RemoveAll(ban => ban.SoldierName == cast.SoldierName && ban.IpAddress == cast.IpAddress && ban.Guid == cast.Guid) > 0;
+                }
             }
 
             return removed;
