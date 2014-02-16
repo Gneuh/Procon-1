@@ -544,6 +544,19 @@ namespace PRoCon.Core.Plugin {
             parameters.ReferencedAssemblies.Add("PRoCon.Core.dll");
             parameters.GenerateInMemory = false;
             parameters.IncludeDebugInformation = false;
+            if (parameters.IncludeDebugInformation == true) {
+                Directory.CreateDirectory(Path.Combine(this.PluginBaseDirectory, "Temp")); // checks also if folder exists, in that case does nothing
+                parameters.TempFiles = new TempFileCollection(Path.Combine(this.PluginBaseDirectory, "Temp"), true);
+            } else {
+                try {
+                    if (Directory.Exists(Path.Combine(this.PluginBaseDirectory, "Temp"))) {
+                        Directory.Delete(Path.Combine(this.PluginBaseDirectory, "Temp"), true);
+                    }
+                } 
+                catch (Exception e) {
+                    WritePluginConsole("^PluginManager.GenerateCompilerParameters(): delete Directory Error: {0};", e.Message);
+                }
+            }
             parameters.OutputAssembly = "Default.dll";
 
             return parameters;
