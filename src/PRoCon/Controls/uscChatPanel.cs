@@ -107,6 +107,8 @@ namespace PRoCon.Controls {
             this.cboDisplayChatTime.SelectedIndex = 4;
             this.cboDisplayList.SelectedIndex = 0;
 
+            this.rtbChatBox.Flushed += new Action<object, EventArgs>(rtbChatBox_Flushed);
+
             this.m_regRemoveCaretCodes = new Regex(@"\^[0-9]|\^b|\^i|\^n", RegexOptions.Compiled);
         }
 
@@ -280,17 +282,15 @@ namespace PRoCon.Controls {
         //private string m_strPreviousAddition = String.Empty;
 
         private void ChatConsole_WriteConsole(DateTime dtLoggedTime, string strLoggedText) {
-            this.InvokeIfRequired(() => {
-                string strFormattedConsoleOutput = String.Format("[{0}] {1}{2}", dtLoggedTime.ToString("HH:mm:ss"), strLoggedText, Environment.NewLine);
+            this.InvokeIfRequired(() => this.rtbChatBox.AppendText(String.Format("^n[{0}] {1}{2}", dtLoggedTime.ToString("HH:mm:ss"), strLoggedText, "\n")));
+        }
 
-                this.rtbChatBox.AppendText(strFormattedConsoleOutput);
+        private void rtbChatBox_Flushed(object arg1, EventArgs arg2) {
+            if (this.m_prcClient.ChatConsole.Scrolling == true) {
+                this.rtbChatBox.ScrollToCaret();
+            }
 
-                if (this.m_prcClient.ChatConsole.Scrolling == true) {
-                    this.rtbChatBox.ScrollToCaret();
-                }
-
-                this.rtbChatBox.TrimLines(this.m_prcClient.Variables.GetVariable<int>("MAX_CHAT_LINES", 75));
-            });
+            this.rtbChatBox.TrimLines(this.m_prcClient.Variables.GetVariable("MAX_CHAT_LINES", 75));
         }
 
         private void txtChat_KeyDown(object sender, KeyEventArgs e) {
