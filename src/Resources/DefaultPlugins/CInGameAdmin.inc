@@ -1939,10 +1939,14 @@ namespace PRoConEvents {
 		private bool TryGetTeamID(string formattedTeamName, out int iTeamID) {
 			bool blValidTeamForMap = false;
 			iTeamID = 0;
+            CTeamName destinationTeam = null;
 
 			if (this.m_currentMap != null) {
-				CTeamName destinationTeam = this.GetTeamNameByFormattedTeamName("{GameMode} {TeamName}", String.Format("{0} {1}", this.m_currentMap.GameMode, formattedTeamName));
-
+				if (this.m_strServerGameType == "bfbc2") {
+                    destinationTeam = this.GetTeamNameByFormattedTeamName("{GameMode} {TeamName}", String.Format("{0} {1}", this.m_currentMap.GameMode, formattedTeamName));
+                } else {
+                    destinationTeam = this.GetTeamNameByFormattedTeamName("{GameMode} {FileName} {TeamName}", String.Format("{0} {1} {2}", this.m_currentMap.GameMode, this.m_currentMap.FileName, formattedTeamName));
+                }
 				if (destinationTeam != null) {
 					iTeamID = destinationTeam.TeamID;
 					blValidTeamForMap = true;
