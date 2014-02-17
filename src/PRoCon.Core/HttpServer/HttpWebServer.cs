@@ -85,7 +85,7 @@ namespace PRoCon.Core.HttpServer {
                 IsOnline = true;
 
                 if (HttpServerOnline != null) {
-                    FrostbiteConnection.RaiseEvent(HttpServerOnline.GetInvocationList(), this);
+                    this.HttpServerOnline(this);
                 }
             }
             catch (SocketException) {
@@ -144,7 +144,7 @@ namespace PRoCon.Core.HttpServer {
                 sender.Respond(CachedResponses[sender.ToString()]);
             }
             else if (ProcessRequest != null) {
-                FrostbiteConnection.RaiseEvent(ProcessRequest.GetInvocationList(), sender);
+                this.ProcessRequest(sender);
             }
         }
 
@@ -168,7 +168,7 @@ namespace PRoCon.Core.HttpServer {
                 }
 
                 if (HttpServerOffline != null) {
-                    FrostbiteConnection.RaiseEvent(HttpServerOffline.GetInvocationList(), this);
+                    this.HttpServerOffline(this);
                 }
             }
             catch (Exception) {

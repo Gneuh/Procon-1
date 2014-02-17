@@ -41,7 +41,7 @@ namespace PRoCon.Core.Lists {
                 this.m_isManualBansVisible = value;
 
                 if (this.ManualBansVisibleChange != null) {
-                    FrostbiteConnection.RaiseEvent(this.ManualBansVisibleChange.GetInvocationList(), this.m_isManualBansVisible);
+                    this.ManualBansVisibleChange(this.m_isManualBansVisible);
                 }
             }
         }

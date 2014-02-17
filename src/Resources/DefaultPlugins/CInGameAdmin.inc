@@ -128,7 +128,7 @@ namespace PRoConEvents {
 		}
 
 		public string GetPluginVersion() {
-			return "3.3.0.6";
+			return "3.3.0.7";
 		}
 
 		public string GetPluginAuthor() {
@@ -167,6 +167,10 @@ namespace PRoConEvents {
 		</blockquote>
 
 <h2>History</h2>
+	<h3>3.3.0.7</h3>
+		<ul>
+			<li>Minor startup performance optimization</li>
+		</ul>
 	<h3>3.3.0.4</h3>
 		<ul>
 			<li>added endround command</li>
@@ -437,7 +441,7 @@ namespace PRoConEvents {
 			this.ExecuteCommand("procon.protected.pluginconsole.write", "^bIn-Game Admin ^1Disabled =(" );
 
 			this.m_isPluginEnabled = false;
-			this.UnregisterAllCommands();
+			this.UnregisterAllCommands(true);
 		}
 
 		// GetDisplayPluginVariables and GetPluginVariables
@@ -446,7 +450,7 @@ namespace PRoConEvents {
 		public void SetPluginVariable(string strVariable, string strValue) {
 
 			int iTimeSeconds = 8;
-			this.UnregisterAllCommands();
+			this.UnregisterAllCommands(false);
 
 			if (strVariable.CompareTo("Private Prefix") == 0) {
 				this.m_strPrivatePrefix = strValue;
@@ -545,432 +549,436 @@ namespace PRoConEvents {
 			this.RegisterAllCommands();
 		}
 
-		private void UnregisterAllCommands() {
+		private void UnregisterAllCommands(bool force) {
 			List<string> emptyList = new List<string>();
 
-			this.UnregisterCommand(
-				new MatchCommand(
-					emptyList,
-					this.m_strKickCommand,
-					this.Listify<MatchArgumentFormat>(
-						new MatchArgumentFormat(
-							"playername",
-							emptyList
-						),
-						new MatchArgumentFormat(
-							"optional: reason",
-							emptyList
+			if (this.m_isPluginEnabled == true || force == true) {
+				
+				this.UnregisterCommand(
+					new MatchCommand(
+						emptyList,
+						this.m_strKickCommand,
+						this.Listify<MatchArgumentFormat>(
+							new MatchArgumentFormat(
+								"playername",
+								emptyList
+							),
+							new MatchArgumentFormat(
+								"optional: reason",
+								emptyList
+							)
 						)
 					)
-				)
-			);
+				);
 
-			this.UnregisterCommand(
-				new MatchCommand(
-					emptyList,
-					this.m_strKillCommand,
-					this.Listify<MatchArgumentFormat>(
-						new MatchArgumentFormat(
-							"playername",
-							emptyList
-						),
-						new MatchArgumentFormat(
-							"optional: reason",
-							emptyList
+				this.UnregisterCommand(
+					new MatchCommand(
+						emptyList,
+						this.m_strKillCommand,
+						this.Listify<MatchArgumentFormat>(
+							new MatchArgumentFormat(
+								"playername",
+								emptyList
+							),
+							new MatchArgumentFormat(
+								"optional: reason",
+								emptyList
+							)
 						)
 					)
-				)
-			);
+				);
 
-			#region Move Command Registration
+				#region Move Command Registration
 
-			this.UnregisterCommand(
-				new MatchCommand(
-					emptyList,
-					this.m_strMoveCommand,
-					this.Listify<MatchArgumentFormat>(
-						new MatchArgumentFormat(
-							"playername",
-							emptyList
+				this.UnregisterCommand(
+					new MatchCommand(
+						emptyList,
+						this.m_strMoveCommand,
+						this.Listify<MatchArgumentFormat>(
+							new MatchArgumentFormat(
+								"playername",
+								emptyList
+							)
 						)
 					)
-				)
-			);
+				);
 
-			this.UnregisterCommand(
-				new MatchCommand(
-					emptyList,
-					this.m_strMoveCommand,
-					this.Listify<MatchArgumentFormat>(
-						new MatchArgumentFormat(
-							"playername",
-							emptyList
-						),
-						new MatchArgumentFormat(
-							"team",
-							emptyList
+				this.UnregisterCommand(
+					new MatchCommand(
+						emptyList,
+						this.m_strMoveCommand,
+						this.Listify<MatchArgumentFormat>(
+							new MatchArgumentFormat(
+								"playername",
+								emptyList
+							),
+							new MatchArgumentFormat(
+								"team",
+								emptyList
+							)
 						)
 					)
-				)
-			);
+				);
 
-			this.UnregisterCommand(
-				new MatchCommand(
-					emptyList,
-					this.m_strMoveCommand,
-					this.Listify<MatchArgumentFormat>(
-						new MatchArgumentFormat(
-							"playername",
-							emptyList
-						),
-						new MatchArgumentFormat(
-							"squad",
-							emptyList
+				this.UnregisterCommand(
+					new MatchCommand(
+						emptyList,
+						this.m_strMoveCommand,
+						this.Listify<MatchArgumentFormat>(
+							new MatchArgumentFormat(
+								"playername",
+								emptyList
+							),
+							new MatchArgumentFormat(
+								"squad",
+								emptyList
+							)
 						)
 					)
-				)
-			);
+				);
 
-			this.UnregisterCommand(
-				new MatchCommand(
-					emptyList,
-					this.m_strMoveCommand,
-					this.Listify<MatchArgumentFormat>(
-						new MatchArgumentFormat(
-							"playername",
-							emptyList
-						),
-						new MatchArgumentFormat(
-							"team",
-							emptyList
-						),
-						new MatchArgumentFormat(
-							"squad",
-							emptyList
+				this.UnregisterCommand(
+					new MatchCommand(
+						emptyList,
+						this.m_strMoveCommand,
+						this.Listify<MatchArgumentFormat>(
+							new MatchArgumentFormat(
+								"playername",
+								emptyList
+							),
+							new MatchArgumentFormat(
+								"team",
+								emptyList
+							),
+							new MatchArgumentFormat(
+								"squad",
+								emptyList
+							)
 						)
 					)
-				)
-			);
+				);
 
-			#endregion
+				#endregion
 
-			#region Force Move Command Registration
-			// Force Move
+				#region Force Move Command Registration
+				// Force Move
 
-			this.UnregisterCommand(
-				new MatchCommand(
-					emptyList,
-					this.m_strForceMoveCommand,
-					this.Listify<MatchArgumentFormat>(
-						new MatchArgumentFormat(
-							"playername",
-							emptyList
+				this.UnregisterCommand(
+					new MatchCommand(
+						emptyList,
+						this.m_strForceMoveCommand,
+						this.Listify<MatchArgumentFormat>(
+							new MatchArgumentFormat(
+								"playername",
+								emptyList
+							)
 						)
 					)
-				)
-			);
+				);
 
-			this.UnregisterCommand(
-				new MatchCommand(
-					emptyList,
-					this.m_strForceMoveCommand,
-					this.Listify<MatchArgumentFormat>(
-						new MatchArgumentFormat(
-							"playername",
-							emptyList
-						),
-						new MatchArgumentFormat(
-							"team",
-							emptyList
+				this.UnregisterCommand(
+					new MatchCommand(
+						emptyList,
+						this.m_strForceMoveCommand,
+						this.Listify<MatchArgumentFormat>(
+							new MatchArgumentFormat(
+								"playername",
+								emptyList
+							),
+							new MatchArgumentFormat(
+								"team",
+								emptyList
+							)
 						)
 					)
-				)
-			);
+				);
 
-			this.UnregisterCommand(
-				new MatchCommand(
-					emptyList,
-					this.m_strForceMoveCommand,
-					this.Listify<MatchArgumentFormat>(
-						new MatchArgumentFormat(
-							"playername",
-							emptyList
-						),
-						new MatchArgumentFormat(
-							"squad",
-							emptyList
+				this.UnregisterCommand(
+					new MatchCommand(
+						emptyList,
+						this.m_strForceMoveCommand,
+						this.Listify<MatchArgumentFormat>(
+							new MatchArgumentFormat(
+								"playername",
+								emptyList
+							),
+							new MatchArgumentFormat(
+								"squad",
+								emptyList
+							)
 						)
 					)
-				)
-			);
+				);
 
-			this.UnregisterCommand(
-				new MatchCommand(
-					emptyList,
-					this.m_strForceMoveCommand,
-					this.Listify<MatchArgumentFormat>(
-						new MatchArgumentFormat(
-							"playername",
-							emptyList
-						),
-						new MatchArgumentFormat(
-							"team",
-							emptyList
-						),
-						new MatchArgumentFormat(
-							"squad",
-							emptyList
+				this.UnregisterCommand(
+					new MatchCommand(
+						emptyList,
+						this.m_strForceMoveCommand,
+						this.Listify<MatchArgumentFormat>(
+							new MatchArgumentFormat(
+								"playername",
+								emptyList
+							),
+							new MatchArgumentFormat(
+								"team",
+								emptyList
+							),
+							new MatchArgumentFormat(
+								"squad",
+								emptyList
+							)
 						)
 					)
-				)
-			);
+				);
 
-			#endregion
+				#endregion
 
-			#region Nuking 
+				#region Nuking 
 
-			this.UnregisterCommand(
-				new MatchCommand(
-					emptyList,
-					this.m_strNukeCommand,
-					this.Listify<MatchArgumentFormat>()
-				)
-			);
+				this.UnregisterCommand(
+					new MatchCommand(
+						emptyList,
+						this.m_strNukeCommand,
+						this.Listify<MatchArgumentFormat>()
+					)
+				);
 
-			this.UnregisterCommand(
-				new MatchCommand(
-					emptyList,
-					this.m_strNukeCommand,
-					this.Listify<MatchArgumentFormat>(
-						new MatchArgumentFormat(
-							"team",
-							emptyList
+				this.UnregisterCommand(
+					new MatchCommand(
+						emptyList,
+						this.m_strNukeCommand,
+						this.Listify<MatchArgumentFormat>(
+							new MatchArgumentFormat(
+								"team",
+								emptyList
+							)
 						)
 					)
-				)
-			);
+				);
 
-			#endregion
+				#endregion
 
-			this.UnregisterCommand(
-				new MatchCommand(
-					emptyList,
-					this.m_strCancelCommand,
-					this.Listify<MatchArgumentFormat>()
-				)
-			);
+				this.UnregisterCommand(
+					new MatchCommand(
+						emptyList,
+						this.m_strCancelCommand,
+						this.Listify<MatchArgumentFormat>()
+					)
+				);
 
-			#region Perm/Temp Banning
+				#region Perm/Temp Banning
 
-			this.UnregisterCommand(
-				new MatchCommand(
-					emptyList,
-					this.m_strTemporaryBanCommand,
-					this.Listify<MatchArgumentFormat>(
-						new MatchArgumentFormat(
-							"playername",
-							emptyList
-						),
-						new MatchArgumentFormat(
-							"time in minutes",
-							MatchArgumentFormatTypes.Regex,
-							emptyList
-						),
-						new MatchArgumentFormat(
-							"optional: reason",
-							emptyList
+				this.UnregisterCommand(
+					new MatchCommand(
+						emptyList,
+						this.m_strTemporaryBanCommand,
+						this.Listify<MatchArgumentFormat>(
+							new MatchArgumentFormat(
+								"playername",
+								emptyList
+							),
+							new MatchArgumentFormat(
+								"time in minutes",
+								MatchArgumentFormatTypes.Regex,
+								emptyList
+							),
+							new MatchArgumentFormat(
+								"optional: reason",
+								emptyList
+							)
 						)
 					)
-				)
-			);
+				);
 
-			this.UnregisterCommand(
-				new MatchCommand(
-					emptyList,
-					this.m_strPermanentBanCommand,
-					this.Listify<MatchArgumentFormat>(
-						new MatchArgumentFormat(
-							"playername",
-							emptyList
-						),
-						new MatchArgumentFormat(
-							"optional: reason",
-							emptyList
+				this.UnregisterCommand(
+					new MatchCommand(
+						emptyList,
+						this.m_strPermanentBanCommand,
+						this.Listify<MatchArgumentFormat>(
+							new MatchArgumentFormat(
+								"playername",
+								emptyList
+							),
+							new MatchArgumentFormat(
+								"optional: reason",
+								emptyList
+							)
 						)
 					)
-				)
-			);
+				);
 
-			#endregion
+				#endregion
 
-			#region Say/Yell Commands
+				#region Say/Yell Commands
 
-			this.UnregisterCommand(
-				new MatchCommand(
-					emptyList,
-					this.m_strSayCommand,
-					this.Listify<MatchArgumentFormat>(
-						new MatchArgumentFormat(
-							"text",
-							emptyList
+				this.UnregisterCommand(
+					new MatchCommand(
+						emptyList,
+						this.m_strSayCommand,
+						this.Listify<MatchArgumentFormat>(
+							new MatchArgumentFormat(
+								"text",
+								emptyList
+							)
 						)
 					)
-				)
-			);
+				);
 
-			this.UnregisterCommand(
-				new MatchCommand(
-					emptyList,
-					this.m_strPlayerSayCommand,
-					this.Listify<MatchArgumentFormat>(
-						new MatchArgumentFormat(
-							"playername",
-							emptyList
-						),
-						new MatchArgumentFormat(
-							"text",
-							emptyList
+				this.UnregisterCommand(
+					new MatchCommand(
+						emptyList,
+						this.m_strPlayerSayCommand,
+						this.Listify<MatchArgumentFormat>(
+							new MatchArgumentFormat(
+								"playername",
+								emptyList
+							),
+							new MatchArgumentFormat(
+								"text",
+								emptyList
+							)
 						)
 					)
-				)
-			);
+				);
 
 
-			this.UnregisterCommand(
-				new MatchCommand(
-					emptyList,
-					this.m_strYellCommand,
-					this.Listify<MatchArgumentFormat>(
-						new MatchArgumentFormat(
-							"text",
-							emptyList
+				this.UnregisterCommand(
+					new MatchCommand(
+						emptyList,
+						this.m_strYellCommand,
+						this.Listify<MatchArgumentFormat>(
+							new MatchArgumentFormat(
+								"text",
+								emptyList
+							)
 						)
 					)
-				)
-			);
+				);
 
-			this.UnregisterCommand(
-				new MatchCommand(
-					emptyList,
-					this.m_strPlayerYellCommand,
-					this.Listify<MatchArgumentFormat>(
-						new MatchArgumentFormat(
-							"playername",
-							emptyList
-						),
-						new MatchArgumentFormat(
-							"text",
-							emptyList
+				this.UnregisterCommand(
+					new MatchCommand(
+						emptyList,
+						this.m_strPlayerYellCommand,
+						this.Listify<MatchArgumentFormat>(
+							new MatchArgumentFormat(
+								"playername",
+								emptyList
+							),
+							new MatchArgumentFormat(
+								"text",
+								emptyList
+							)
 						)
 					)
-				)
-			);
+				);
 
-			#endregion
+				#endregion
 
-			#region Restart/Next map functions
+				#region Restart/Next map functions
 
-			this.UnregisterCommand(
-				new MatchCommand(
-					emptyList,
-					this.m_strRestartLevelCommand,
-					this.Listify<MatchArgumentFormat>()
-				)
-			);
+				this.UnregisterCommand(
+					new MatchCommand(
+						emptyList,
+						this.m_strRestartLevelCommand,
+						this.Listify<MatchArgumentFormat>()
+					)
+				);
 
-			this.UnregisterCommand(
-				new MatchCommand(
-					emptyList,
-					this.m_strRestartLevelCommand,
-					this.Listify<MatchArgumentFormat>(
-						new MatchArgumentFormat(
-							"countdown between 0 and 60 seconds",
-							MatchArgumentFormatTypes.Regex,
-							emptyList
+				this.UnregisterCommand(
+					new MatchCommand(
+						emptyList,
+						this.m_strRestartLevelCommand,
+						this.Listify<MatchArgumentFormat>(
+							new MatchArgumentFormat(
+								"countdown between 0 and 60 seconds",
+								MatchArgumentFormatTypes.Regex,
+								emptyList
+							)
 						)
 					)
-				)
-			);
+				);
 
-			this.UnregisterCommand(
-				new MatchCommand(
-					emptyList,
-					this.m_strNextLevelCommand,
-					this.Listify<MatchArgumentFormat>()
-				)
-			);
+				this.UnregisterCommand(
+					new MatchCommand(
+						emptyList,
+						this.m_strNextLevelCommand,
+						this.Listify<MatchArgumentFormat>()
+					)
+				);
 
-			this.UnregisterCommand(
-				new MatchCommand(
-					emptyList,
-					this.m_strNextLevelCommand,
-					this.Listify<MatchArgumentFormat>(
-						new MatchArgumentFormat(
-							"optional: countdown between 0 and 60 seconds",
-							MatchArgumentFormatTypes.Regex,
-							emptyList
+				this.UnregisterCommand(
+					new MatchCommand(
+						emptyList,
+						this.m_strNextLevelCommand,
+						this.Listify<MatchArgumentFormat>(
+							new MatchArgumentFormat(
+								"optional: countdown between 0 and 60 seconds",
+								MatchArgumentFormatTypes.Regex,
+								emptyList
+							)
 						)
 					)
-				)
-			);
+				);
 
-			this.UnregisterCommand(
-				new MatchCommand(
-					emptyList,
-					this.m_strEndLevelCommand,
-					this.Listify<MatchArgumentFormat>(
-                        new MatchArgumentFormat(
-							"teamID",
-							emptyList
-						)
-                    )
-				)
-			);
-
-			this.UnregisterCommand(
-				new MatchCommand(
-					emptyList,
-					this.m_strEndLevelCommand,
-					this.Listify<MatchArgumentFormat>(
-						new MatchArgumentFormat(
-							"teamID",
-							emptyList
-						),
-                        new MatchArgumentFormat(
-							"optional: countdown between 0 and 60 seconds",
-							MatchArgumentFormatTypes.Regex,
-							emptyList
+				this.UnregisterCommand(
+					new MatchCommand(
+						emptyList,
+						this.m_strEndLevelCommand,
+						this.Listify<MatchArgumentFormat>(
+							new MatchArgumentFormat(
+								"teamID",
+								emptyList
+							)
 						)
 					)
-				)
-			);
+				);
 
-			#endregion
-
-			#region Config Execution
-
-			this.UnregisterCommand(
-				new MatchCommand(
-					emptyList,
-					this.m_strExecuteConfigCommand,
-					this.Listify<MatchArgumentFormat>()
-				)
-			);
-
-			this.UnregisterCommand(
-				new MatchCommand(
-					emptyList,
-					this.m_strExecuteConfigCommand,
-					this.Listify<MatchArgumentFormat>(
-						new MatchArgumentFormat(
-							"config",
-							emptyList
+				this.UnregisterCommand(
+					new MatchCommand(
+						emptyList,
+						this.m_strEndLevelCommand,
+						this.Listify<MatchArgumentFormat>(
+							new MatchArgumentFormat(
+								"teamID",
+								emptyList
+							),
+							new MatchArgumentFormat(
+								"optional: countdown between 0 and 60 seconds",
+								MatchArgumentFormatTypes.Regex,
+								emptyList
+							)
 						)
 					)
-				)
-			);
+				);
 
-			#endregion
+				#endregion
+
+				#region Config Execution
+
+				this.UnregisterCommand(
+					new MatchCommand(
+						emptyList,
+						this.m_strExecuteConfigCommand,
+						this.Listify<MatchArgumentFormat>()
+					)
+				);
+
+				this.UnregisterCommand(
+					new MatchCommand(
+						emptyList,
+						this.m_strExecuteConfigCommand,
+						this.Listify<MatchArgumentFormat>(
+							new MatchArgumentFormat(
+								"config",
+								emptyList
+							)
+						)
+					)
+				);
+
+				#endregion
+			
+			}
 		}
 
 		private void RegisterAllCommands() {

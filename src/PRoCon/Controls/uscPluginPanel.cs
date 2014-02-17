@@ -22,23 +22,18 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Text;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
-using System.ComponentModel.Design;
-
 using System.Threading;
 using System.Reflection;
 using System.Reflection.Emit;
+using PRoCon.Controls.ControlsEx;
+using PRoCon.Core;
+using PRoCon.Core.Plugin;
+using PRoCon.Core.Remote;
+using PRoCon.Forms;
 
-namespace PRoCon {
-    using Core;
-    using Core.Plugin;
-    using Core.Remote;
-    using PRoCon.Forms;
-    using PRoCon.Controls.ControlsEx;
-
+namespace PRoCon.Controls {
     public partial class uscPluginPanel : UserControl {
 
         private uscServerConnection m_uscParent;
@@ -136,7 +131,7 @@ table.nostyle td,table.nostyle th,table.nostyle tr.even td,table.nostyle tr:hove
         #endregion
 
         private bool m_blLocalPlugins;
-        [CategoryAttribute("PRoCon Settings"), DescriptionAttribute("The control is used for local plugins or remote")]
+        [Category("PRoCon Settings"), Description("The control is used for local plugins or remote")]
         public bool LocalPlugins {
             set {
                 //this.spltPlugins.Panel2Collapsed = value;
@@ -172,6 +167,8 @@ table.nostyle td,table.nostyle th,table.nostyle tr.even td,table.nostyle tr:hove
             this.m_cscPluginVariables = new CustomClass();
 
             this.m_blLocalPlugins = true;
+
+            this.rtbScriptConsole.Flushed += new Action<object, EventArgs>(rtbScriptConsole_Flushed);
 
             this.lsvLoadedPlugins.CreateGraphics();
         }
@@ -258,38 +255,13 @@ table.nostyle td,table.nostyle th,table.nostyle tr.even td,table.nostyle tr:hove
         }
 
         public void Write(DateTime dtLoggedTime, string strPluginConsoleOutput) {
+            this.rtbScriptConsole.AppendText(String.Format("[{0}] {1}{2}", dtLoggedTime.ToString("HH:mm:ss ff"), strPluginConsoleOutput, "\n"));
+        }
 
-            this.rtbScriptConsole.AppendText(String.Format("[{0}] {1}{2}", dtLoggedTime.ToString("HH:mm:ss ff"), strPluginConsoleOutput, Environment.NewLine));
-
+        private void rtbScriptConsole_Flushed(object arg1, EventArgs arg2) {
             this.rtbScriptConsole.ScrollToCaret();
 
             this.rtbScriptConsole.TrimLines(this.m_prcClient.Variables.GetVariable<int>("MAX_PLUGINCONSOLE_LINES", 75));
-
-            /*
-            this.rtbScriptConsole.ReadOnly = false;
-
-            int iMaxConsoleLines = this.m_prcClient.Variables.GetVariable<int>("MAX_PLUGINCONSOLE_LINES", 75);
-            int iConsoleBoxLines = this.rtbScriptConsole.LineLength;
-
-            if ((iConsoleBoxLines > iMaxConsoleLines && this.rtbScriptConsole.Focused == false) || iConsoleBoxLines > 3000) {
-
-                for (int i = 0; i < iConsoleBoxLines - iMaxConsoleLines; i++) {
-
-                    this.rtbScriptConsole.Select(0, this.rtbScriptConsole.PopFirstLine() + 1);
-
-                    this.rtbScriptConsole.SelectedText = String.Empty;
-                }
-            }
-            this.rtbScriptConsole.ReadOnly = true;
-
-            /*
-            while (this.rtbScriptConsole.Lines.Length > this.m_prcClient.Variables.GetVariable<int>("MAX_PLUGINCONSOLE_LINES", 75)) {
-                this.rtbScriptConsole.Select(0, this.rtbScriptConsole.Lines[0].Length + 1);
-                this.rtbScriptConsole.ReadOnly = false;
-                this.rtbScriptConsole.SelectedText = String.Empty;
-                this.rtbScriptConsole.ReadOnly = true;
-            }
-            */
         }
 
         public ListViewItem IsLoadedPlugin(string strClassName) {

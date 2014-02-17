@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace PRoCon.Core.Remote.Layer {
-    public class BF3LayerClient : FrostbiteLayerClient {
-
-        public BF3LayerClient(FrostbiteLayerConnection connection) : base(connection) {
-
+﻿namespace PRoCon.Core.Remote.Layer.PacketDispatchers {
+    public class Bf3PacketDispatcher : LayerPacketDispatcher {
+        public Bf3PacketDispatcher(ILayerConnection connection) : base(connection) {
             this.RequestDelegates.Add("admin.eventsEnabled", this.DispatchEventsEnabledRequest);
 
             // vars.idleTimeout is already included in FrostbiteLayerClient
@@ -72,6 +66,5 @@ namespace PRoCon.Core.Remote.Layer {
             this.RequestDelegates.Add("squad.listPlayers", this.DispatchSecureSafeListedRequest);
             this.RequestDelegates.Add("squad.private", this.DispatchSquadIsPrivateRequest);
         }
-
     }
 }

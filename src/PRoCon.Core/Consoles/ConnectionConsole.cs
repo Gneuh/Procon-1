@@ -36,6 +36,7 @@ namespace PRoCon.Core.Consoles {
             Client.Game.Connection.PacketDequeued += new FrostbiteConnection.PacketQueuedHandler(m_prcClient_PacketDequeued);
             Client.Game.Connection.PacketSent += new FrostbiteConnection.PacketDispatchHandler(m_prcClient_PacketSent);
             Client.Game.Connection.PacketReceived += new FrostbiteConnection.PacketDispatchHandler(m_prcClient_PacketRecieved);
+            Client.Game.Connection.PacketCacheIntercept += new FrostbiteConnection.PacketCacheDispatchHandler(Connection_PacketCacheIntercept);
 
             Client.ConnectAttempt += new PRoConClient.EmptyParamterHandler(m_prcClient_CommandConnectAttempt);
             Client.ConnectSuccess += new PRoConClient.EmptyParamterHandler(m_prcClient_CommandConnectSuccess);
@@ -49,6 +50,7 @@ namespace PRoCon.Core.Consoles {
             Client.Logout += new PRoConClient.EmptyParamterHandler(m_prcClient_CommandLogout);
         }
 
+
         public UInt32 BytesRecieved { get; private set; }
 
         public UInt32 BytesSent { get; private set; }
@@ -57,7 +59,7 @@ namespace PRoCon.Core.Consoles {
             get { return _logEventsConnection; }
             set {
                 if (LogEventsConnectionChanged != null) {
-                    FrostbiteConnection.RaiseEvent(LogEventsConnectionChanged.GetInvocationList(), value);
+                    this.LogEventsConnectionChanged(value);
                 }
 
                 _logEventsConnection = value;
@@ -68,7 +70,7 @@ namespace PRoCon.Core.Consoles {
             get { return _logDebugDetails; }
             set {
                 if (LogDebugDetailsChanged != null) {
-                    FrostbiteConnection.RaiseEvent(LogDebugDetailsChanged.GetInvocationList(), value);
+                    this.LogDebugDetailsChanged(value);
                 }
 
                 _logDebugDetails = value;
@@ -79,7 +81,7 @@ namespace PRoCon.Core.Consoles {
             get { return _displayConnection; }
             set {
                 if (DisplayConnectionChanged != null) {
-                    FrostbiteConnection.RaiseEvent(DisplayConnectionChanged.GetInvocationList(), value);
+                    this.DisplayConnectionChanged(value);
                 }
 
                 _displayConnection = value;
@@ -90,7 +92,7 @@ namespace PRoCon.Core.Consoles {
             get { return _displayPunkbuster; }
             set {
                 if (DisplayPunkbusterChanged != null) {
-                    FrostbiteConnection.RaiseEvent(DisplayPunkbusterChanged.GetInvocationList(), value);
+                    this.DisplayPunkbusterChanged(value);
                 }
 
                 _displayPunkbuster = value;
@@ -101,7 +103,7 @@ namespace PRoCon.Core.Consoles {
             get { return _conoleScrolling; }
             set {
                 if (ConScrollingChanged != null) {
-                    FrostbiteConnection.RaiseEvent(ConScrollingChanged.GetInvocationList(), value);
+                    this.ConScrollingChanged(value);
                 }
 
                 _conoleScrolling = value;
@@ -112,7 +114,7 @@ namespace PRoCon.Core.Consoles {
             get { return _punkbusterScrolling; }
             set {
                 if (PBScrollingChanged != null) {
-                    FrostbiteConnection.RaiseEvent(PBScrollingChanged.GetInvocationList(), value);
+                    this.PBScrollingChanged(value);
                 }
 
                 _punkbusterScrolling = value;
@@ -166,6 +168,19 @@ namespace PRoCon.Core.Consoles {
         public event IsEnabledHandler DisplayPunkbusterChanged;
         public event IsEnabledHandler ConScrollingChanged;
         public event IsEnabledHandler PBScrollingChanged;
+
+        private void Connection_PacketCacheIntercept(FrostbiteConnection sender, Packet request, Packet response) {
+            if (LogDebugDetails == true) {
+                if (request.OriginatedFromServer == false) {
+                    Write(GetDebugPacket("^7Cache", "^4", response, request));
+                }
+                else {
+                    if (LogEventsConnection == true) {
+                        Write(GetDebugPacket("^7Cache", "^4", response, request));
+                    }
+                }
+            }
+        }
 
         private void m_prcClient_PacketRecieved(FrostbiteConnection sender, bool isHandled, Packet packetBeforeDispatch) {
             Packet cpRequestPacket = Client.Game.Connection.GetRequestPacket(packetBeforeDispatch);
@@ -298,7 +313,7 @@ namespace PRoCon.Core.Consoles {
             WriteLogLine(String.Format("[{0}] {1}", dtLoggedTime.ToString("HH:mm:ss"), strText.Replace("{", "{{").Replace("}", "}}")));
 
             if (WriteConsole != null) {
-                FrostbiteConnection.RaiseEvent(WriteConsole.GetInvocationList(), dtLoggedTime, strText);
+                this.WriteConsole(dtLoggedTime, strText);
             }
         }
     }

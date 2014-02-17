@@ -1,33 +1,14 @@
-﻿/*  Copyright 2010 Geoffrey 'Phogue' Green
-
-    http://www.phogue.net
- 
-    This file is part of PRoCon Frostbite.
-
-    PRoCon Frostbite is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    PRoCon Frostbite is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with PRoCon Frostbite.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.IO;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 using System.Threading;
-using System.Windows.Forms;
 using System.Reflection;
+using PRoCon.Core.Remote.Cache;
 
 namespace PRoCon.Core.Remote {
     public class FrostbiteConnection {
@@ -83,6 +64,11 @@ namespace PRoCon.Core.Remote {
         public Packet LastPacketSent { get; protected set; }
 
         /// <summary>
+        /// Holds packet cache to avoid doubling up on calls to the server.
+        /// </summary>
+        public ICacheManager Cache { get; set; }
+
+        /// <summary>
         /// Why is this here?
         /// </summary>
         protected UInt32 SequenceNumber;
@@ -132,6 +118,12 @@ namespace PRoCon.Core.Remote {
         public delegate void PacketDispatchHandler(FrostbiteConnection sender, bool isHandled, Packet packet);
         public event PacketDispatchHandler PacketSent;
         public event PacketDispatchHandler PacketReceived;
+        
+        public delegate void PacketCacheDispatchHandler(FrostbiteConnection sender, Packet request, Packet response);
+        /// <summary>
+        /// A packet response has been pulled from cache, instead of being sent to the server.
+        /// </summary>
+        public event PacketCacheDispatchHandler PacketCacheIntercept;
 
         public delegate void SocketExceptionHandler(FrostbiteConnection sender, SocketException se);
         public event SocketExceptionHandler SocketException;
@@ -157,6 +149,31 @@ namespace PRoCon.Core.Remote {
 
             this.Hostname = hostname;
             this.Port = port;
+
+            this.Cache = new CacheManager() {
+                Configurations = new List<IPacketCacheConfiguration>() {
+                    // Cache all ping values for 30 seconds.
+                    new PacketCacheConfiguration() {
+                        Matching = new Regex(@"^player\.ping .*$", RegexOptions.Compiled),
+                        Ttl = new TimeSpan(0, 0, 0, 30)
+                    },
+                    // Cache all banlist responses for two minutes
+                    new PacketCacheConfiguration() {
+                        Matching = new Regex(@"^banList\.list[ 0-9]*$", RegexOptions.Compiled),
+                        Ttl = new TimeSpan(0, 0, 1, 0)
+                    },
+                    // Cache all reserved slit responses for one minute
+                    new PacketCacheConfiguration() {
+                        Matching = new Regex(@"^reservedSlotsList\.list [0-9]*$", RegexOptions.Compiled),
+                        Ttl = new TimeSpan(0, 0, 1, 0)
+                    },
+                    // Only initiate the punkbuster plist update everyminute (max)
+                    new PacketCacheConfiguration() {
+                        Matching = new Regex(@"^punkBuster\.pb_sv_command pb_sv_plist$", RegexOptions.Compiled),
+                        Ttl = new TimeSpan(0, 0, 1, 0)
+                    }
+                }
+            };
         }
 
         private void ClearConnection() {
@@ -167,44 +184,6 @@ namespace PRoCon.Core.Remote {
             
             this.ReceivedBuffer = new byte[FrostbiteConnection.BufferSize];
             this.PacketStream = null;
-        }
-
-        // TO DO: Move out of FrostbiteClient.
-        public static void RaiseEvent(Delegate[] invokes, params object[] arguments) {
-            for (int i = 0; i < invokes.Length; i++) {
-
-                try {
-                    if (invokes[i].Target is Form) {
-                        if (((Form)invokes[i].Target).Disposing == false && ((Form)invokes[i].Target).IsDisposed == false && ((Form)invokes[i].Target).IsHandleCreated == true) {
-                            try {
-                                ((Control)invokes[i].Target).Invoke(invokes[i], arguments);
-                            }
-                            catch (InvalidOperationException) { }
-                        }
-                    }
-                    else if (invokes[i].Target is Control) {
-                        if (((Control)invokes[i].Target).Disposing == false && ((Control)invokes[i].Target).IsDisposed == false) {//
-                            try {
-                                ((Control)invokes[i].Target).Invoke(invokes[i], arguments);
-                            }
-                            catch (InvalidOperationException) { }
-                        }
-                    }
-                    else {
-                        invokes[i].DynamicInvoke(arguments);
-                    }
-                }
-                catch (Exception e) {
-
-                    string strParams = String.Empty;
-
-                    if (arguments != null) {
-                        strParams = arguments.Aggregate(strParams, (current, objParam) => current + ("---" + objParam.ToString()));
-                    }
-
-                    FrostbiteConnection.LogError(String.Format("{0} ::: {1} ::: {2}", invokes[i].Target, invokes[i].Method, strParams), String.Empty, e);
-                }
-            }
         }
 
         public static void LogError(string strPacket, string strAdditional, Exception e) {
@@ -264,7 +243,7 @@ namespace PRoCon.Core.Remote {
                         response = true;
 
                         if (this.PacketQueued != null) {
-                            FrostbiteConnection.RaiseEvent(this.PacketQueued.GetInvocationList(), this, packet, Thread.CurrentThread.ManagedThreadId);
+                            this.PacketQueued(this, packet, Thread.CurrentThread.ManagedThreadId);
                         }
                     }
                     // else - response = false
@@ -285,7 +264,7 @@ namespace PRoCon.Core.Remote {
                         response = true;
 
                         if (this.PacketDequeued != null) {
-                            FrostbiteConnection.RaiseEvent(this.PacketDequeued.GetInvocationList(), this, nextPacket, Thread.CurrentThread.ManagedThreadId);
+                            this.PacketDequeued(this, nextPacket, Thread.CurrentThread.ManagedThreadId);
                         }
                     }
                     else {
@@ -309,7 +288,7 @@ namespace PRoCon.Core.Remote {
 
                         this.LastPacketSent = packet;
 
-                        FrostbiteConnection.RaiseEvent(this.PacketSent.GetInvocationList(), this, false, packet);
+                        this.PacketSent(this, false, packet);
                     }
                 }
             }
@@ -355,21 +334,32 @@ namespace PRoCon.Core.Remote {
 
         // Queue for sending.
         public void SendQueued(Packet cpPacket) {
-            // QueueUnqueuePacket
-            Packet cpNullPacket = null;
+            IPacketCache cache = this.Cache.Request(cpPacket);
 
-            if (cpPacket.OriginatedFromServer == true && cpPacket.IsResponse == true) {
-                this.SendAsync(cpPacket);
-            }
-            else {
-                // Null return because we're not popping a packet, just checking to see if this one needs to be queued.
-                if (this.QueueUnqueuePacket(true, cpPacket, out cpNullPacket) == false) {
-                    // No need to queue, queue is empty.  Send away..
+            if (cache == null) {
+                // QueueUnqueuePacket
+                Packet cpNullPacket = null;
+
+                if (cpPacket.OriginatedFromServer == true && cpPacket.IsResponse == true) {
                     this.SendAsync(cpPacket);
                 }
+                else {
+                    // Null return because we're not popping a packet, just checking to see if this one needs to be queued.
+                    if (this.QueueUnqueuePacket(true, cpPacket, out cpNullPacket) == false) {
+                        // No need to queue, queue is empty.  Send away..
+                        this.SendAsync(cpPacket);
+                    }
 
-                // Shutdown if we're just waiting for a response to an old packet.
-                this.RestartConnectionOnQueueFailure();
+                    // Shutdown if we're just waiting for a response to an old packet.
+                    this.RestartConnectionOnQueueFailure();
+                }
+            }
+            else if (this.PacketCacheIntercept != null) {
+                Packet cloned = (Packet)cache.Response.Clone();
+                cloned.SequenceNumber = cpPacket.SequenceNumber;
+
+                // Fake a response to this packet
+                this.PacketCacheIntercept(this, cpPacket, cloned);
             }
         }
 
@@ -426,7 +416,9 @@ namespace PRoCon.Core.Remote {
                                 if (this.PacketReceived != null) {
                                     this.LastPacketReceived = packet;
 
-                                    FrostbiteConnection.RaiseEvent(this.PacketReceived.GetInvocationList(), this, isProcessed, packet);
+                                    this.Cache.Response(packet);
+
+                                    this.PacketReceived(this, isProcessed, packet);
                                 }
 
                                 if (packet.OriginatedFromServer == true && packet.IsResponse == false) {
@@ -546,7 +538,7 @@ namespace PRoCon.Core.Remote {
 
                 // Alert the ProconClient of the error, explaining why the connection has been shut down.
                 if (this.ConnectionFailure != null) {
-                    FrostbiteConnection.RaiseEvent(this.ConnectionFailure.GetInvocationList(), this, new Exception("Connection timed out with two minutes of inactivity."));
+                    this.ConnectionFailure(this, new Exception("Connection timed out with two minutes of inactivity."));
                 }
             }
         }
@@ -558,14 +550,14 @@ namespace PRoCon.Core.Remote {
                 this.Client.NoDelay = true;
 
                 if (this.ConnectSuccess != null) {
-                    FrostbiteConnection.RaiseEvent(this.ConnectSuccess.GetInvocationList(), this);
+                    this.ConnectSuccess(this);
                 }
 
                 this.NetworkStream = this.Client.GetStream();
                 this.NetworkStream.BeginRead(this.ReceivedBuffer, 0, this.ReceivedBuffer.Length, this.ReceiveCallback, this);
 
                 if (this.ConnectionReady != null) {
-                    FrostbiteConnection.RaiseEvent(this.ConnectionReady.GetInvocationList(), this);
+                    this.ConnectionReady(this);
                 }
             }
             catch (SocketException se) {
@@ -611,7 +603,7 @@ namespace PRoCon.Core.Remote {
                 this.Client.BeginConnect(this.Hostname, this.Port, this.ConnectedCallback, this);
 
                 if (this.ConnectAttempt != null) {
-                    FrostbiteConnection.RaiseEvent(this.ConnectAttempt.GetInvocationList(), this);
+                    this.ConnectAttempt(this);
                 }
             }
             catch (SocketException se) {
@@ -626,7 +618,7 @@ namespace PRoCon.Core.Remote {
             this.ShutdownConnection();
 
             if (this.ConnectionFailure != null) {
-                FrostbiteConnection.RaiseEvent(this.ConnectionFailure.GetInvocationList(), this, e);
+                this.ConnectionFailure(this, e);
             }
             
         }
@@ -635,7 +627,7 @@ namespace PRoCon.Core.Remote {
             this.ShutdownConnection();
 
             if (this.SocketException != null) {
-                FrostbiteConnection.RaiseEvent(this.SocketException.GetInvocationList(), this, se);
+                this.SocketException(this, se);
             }
         }
 
@@ -661,18 +653,18 @@ namespace PRoCon.Core.Remote {
                         this.Client = null;
 
                         if (this.ConnectionClosed != null) {
-                            FrostbiteConnection.RaiseEvent(this.ConnectionClosed.GetInvocationList(), this);
+                            this.ConnectionClosed(this);
                         }
                     }
                     catch (SocketException se) {
                         if (this.SocketException != null) {
-                            FrostbiteConnection.RaiseEvent(this.SocketException.GetInvocationList(), this, se);
+                            this.SocketException(this, se);
                             //this.SocketException(se);
                         }
                     }
                     catch (Exception e) {
                         if (this.ConnectionFailure != null) {
-                            FrostbiteConnection.RaiseEvent(this.ConnectionFailure.GetInvocationList(), this, e);
+                            this.ConnectionFailure(this, e);
                         }
                     }
                 }

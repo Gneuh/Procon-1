@@ -53,7 +53,7 @@ namespace PRoCon.Controls.ServerSettings {
         }
 
         private void m_prcClient_GameTypeDiscovered(PRoConClient sender) {
-            this.Client.Game.ResponseError += new FrostbiteClient.ResponseErrorHandler(m_prcClient_ResponseError);
+            this.InvokeIfRequired(() => { this.Client.Game.ResponseError += new FrostbiteClient.ResponseErrorHandler(m_prcClient_ResponseError); });
         }
 
         private void m_prcClient_ResponseError(FrostbiteClient sender, Packet originalRequest, string errorMessage) {

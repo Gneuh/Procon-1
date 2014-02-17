@@ -32,7 +32,7 @@ namespace PRoCon.Core.Remote {
 
         public bool IsResponse { get; private set; }
 
-        public UInt32 SequenceNumber { get; private set; }
+        public UInt32 SequenceNumber { get; set; }
 
         public List<string> Words { get; private set; }
 
@@ -75,70 +75,68 @@ namespace PRoCon.Core.Remote {
 
         // Veeerrryy basic replacment for CommandLineToArgvW, since
         // I wasn't using anything that advanced in it anyway.
-        public static List<string> Wordify(string strCommand) {
-            List<string> lstReturn = new List<string>();
-            //lstReturn.RemoveAll(String.IsNullOrEmpty);
+        public static List<String> Wordify(String command) {
+            List<String> list = new List<String>();
 
-            string strFullWord = String.Empty;
-            int iQuoteStack = 0;
-            bool blEscaped = false;
+            String fullWord = String.Empty;
+            int quoteStack = 0;
+            bool escaped = false;
 
-            //for (int i = 0; i < strCommand.Length; i++) {
-            foreach (char cInput in strCommand) {
+            foreach (char c in command) {
 
-                if (cInput == ' ') {
-                    if (iQuoteStack == 0) {
-                        lstReturn.Add(strFullWord);
-                        strFullWord = String.Empty;
+                if (c == ' ') {
+                    if (quoteStack == 0) {
+                        list.Add(fullWord);
+                        fullWord = String.Empty;
                     }
                     else {
-                        strFullWord += ' ';
+                        fullWord += ' ';
                     }
                 }
-                else if (cInput == 'n' && blEscaped == true) {
-                    strFullWord += '\n';
-                    blEscaped = false;
+                else if (c == 'n' && escaped == true) {
+                    fullWord += '\n';
+                    escaped = false;
                 }
-                else if (cInput == 'r' && blEscaped == true) {
-                    strFullWord += '\r';
-                    blEscaped = false;
+                else if (c == 'r' && escaped == true) {
+                    fullWord += '\r';
+                    escaped = false;
                 }
-                else if (cInput == 't' && blEscaped == true) {
-                    strFullWord += '\t';
-                    blEscaped = false;
+                else if (c == 't' && escaped == true) {
+                    fullWord += '\t';
+                    escaped = false;
                 }
-                else if (cInput == '"') {
-                    if (blEscaped == false) {
-                        if (iQuoteStack == 0) {
-                            iQuoteStack++;
+                else if (c == '"') {
+                    if (escaped == false) {
+                        if (quoteStack == 0) {
+                            quoteStack++;
                         }
                         else {
-                            iQuoteStack--;
+                            quoteStack--;
                         }
                     }
                     else {
-                        strFullWord += '"';
-                        blEscaped = false;
+                        fullWord += '"';
+                        escaped = false;
                     }
                 }
-                else if (cInput == '\\') {
-                    if (blEscaped == true) {
-                        strFullWord += '\\';
-                        blEscaped = false;
+                else if (c == '\\') {
+                    if (escaped == true) {
+                        fullWord += '\\';
+                        escaped = false;
                     }
                     else {
-                        blEscaped = true;
+                        escaped = true;
                     }
                 }
                 else {
-                    strFullWord += cInput;
-                    blEscaped = false;
+                    fullWord += c;
+                    escaped = false;
                 }
             }
 
-            lstReturn.Add(strFullWord);
+            list.Add(fullWord);
 
-            return lstReturn;
+            return list;
         }
 
         public static string Bltos(bool blBoolean) {

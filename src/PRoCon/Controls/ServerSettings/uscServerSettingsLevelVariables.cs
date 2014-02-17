@@ -102,33 +102,35 @@ namespace PRoCon.Controls.ServerSettings {
 
 
         private void m_prcClient_GameTypeDiscovered(PRoConClient sender) {
+            this.InvokeIfRequired(() => {
+                this.Client.Login += new PRoConClient.EmptyParamterHandler(m_prcClient_CommandLogin);
 
-            this.Client.Login += new PRoConClient.EmptyParamterHandler(m_prcClient_CommandLogin);
+                this.Client.Game.LevelVariablesList += new FrostbiteClient.LevelVariableListHandler(m_prcClient_LevelVariablesList);
+                this.Client.Game.LevelVariablesClear += new FrostbiteClient.LevelVariableHandler(m_prcClient_LevelVariablesClear);
+                this.Client.Game.LevelVariablesSet += new FrostbiteClient.LevelVariableHandler(m_prcClient_LevelVariablesSet);
 
-            this.Client.Game.LevelVariablesList += new FrostbiteClient.LevelVariableListHandler(m_prcClient_LevelVariablesList);
-            this.Client.Game.LevelVariablesClear += new FrostbiteClient.LevelVariableHandler(m_prcClient_LevelVariablesClear);
-            this.Client.Game.LevelVariablesSet += new FrostbiteClient.LevelVariableHandler(m_prcClient_LevelVariablesSet);
+                foreach (CMap gamemodeMap in this.Client.GetGamemodeList()) {
+                    this.cboSettingsGamemodes.Items.Add(gamemodeMap);
+                }
 
-            foreach (CMap gamemodeMap in this.Client.GetGamemodeList()) {
-                this.cboSettingsGamemodes.Items.Add(gamemodeMap);
-            }
-
-            foreach (CMap map in this.Client.MapListPool) {
-                this.cboSettingsLevels.Items.Add(map);
-            }
+                foreach (CMap map in this.Client.MapListPool) {
+                    this.cboSettingsLevels.Items.Add(map);
+                }
+            });
         }
 
         private void m_prcClient_CommandLogin(PRoConClient sender) {
+            this.InvokeIfRequired(() => {
+                this.GetSelectedLevelVariables();
 
-            this.GetSelectedLevelVariables();
+                if (this.cboSettingsGamemodes.Items.Count > 0) {
+                    this.cboSettingsGamemodes.SelectedIndex = 0;
+                }
 
-            if (this.cboSettingsGamemodes.Items.Count > 0) {
-                this.cboSettingsGamemodes.SelectedIndex = 0;
-            }
-
-            if (this.cboSettingsLevels.Items.Count > 0) {
-                this.cboSettingsLevels.SelectedIndex = 0;
-            }
+                if (this.cboSettingsLevels.Items.Count > 0) {
+                    this.cboSettingsLevels.SelectedIndex = 0;
+                }
+            });
         }
 
         #region Level Variable Settings
@@ -187,24 +189,25 @@ namespace PRoCon.Controls.ServerSettings {
         }
 
         private void GetSelectedLevelVariables() {
+            this.InvokeIfRequired(() => {
+                LevelVariableContext selectedContext = this.GetSelectedContext();
 
-            LevelVariableContext selectedContext = this.GetSelectedContext();
+                this.lsvEvaluatedEffect.Items.Clear();
 
-            this.lsvEvaluatedEffect.Items.Clear();
+                // If we just got a gamemode or level
+                if (selectedContext.ContextType == LevelVariableContextType.GameMode || selectedContext.ContextType == LevelVariableContextType.Level) {
+                    // Then we need the context of "all" to evaluate the effect.
+                    this.GetLevelVariablesByContext(new LevelVariableContext(LevelVariableContextType.All, String.Empty));
 
-            // If we just got a gamemode or level
-            if (selectedContext.ContextType == LevelVariableContextType.GameMode || selectedContext.ContextType == LevelVariableContextType.Level) {
-                // Then we need the context of "all" to evaluate the effect.
-                this.GetLevelVariablesByContext(new LevelVariableContext(LevelVariableContextType.All, String.Empty));
-
-                // If we just got a level
-                if (selectedContext.ContextType == LevelVariableContextType.Level && this.cboSettingsLevels.SelectedItem != null) {
-                    // Then we need the context of the levels gamemode to evaluate the effect.
-                    this.GetLevelVariablesByContext(new LevelVariableContext(LevelVariableContextType.GameMode, ((CMap)this.cboSettingsLevels.SelectedItem).PlayList));
+                    // If we just got a level
+                    if (selectedContext.ContextType == LevelVariableContextType.Level && this.cboSettingsLevels.SelectedItem != null) {
+                        // Then we need the context of the levels gamemode to evaluate the effect.
+                        this.GetLevelVariablesByContext(new LevelVariableContext(LevelVariableContextType.GameMode, ((CMap) this.cboSettingsLevels.SelectedItem).PlayList));
+                    }
                 }
-            }
 
-            this.GetLevelVariablesByContext(selectedContext);
+                this.GetLevelVariablesByContext(selectedContext);
+            });
         }
 
         #endregion
@@ -281,61 +284,53 @@ namespace PRoCon.Controls.ServerSettings {
         }
 
         private void SetLevelVariable(LevelVariable levelVar) {
+            this.InvokeIfRequired(() => {
+                object value = null;
 
-            object value = null;
+                if (String.Compare(levelVar.VariableName, "vehiclesdisabled", true) == 0) {
+                    value = levelVar.GetValue<bool>(false);
+                }
+                else {
+                    value = levelVar.GetValue<decimal>(100);
+                }
 
-            if (String.Compare(levelVar.VariableName, "vehiclesdisabled", true) == 0) {
-                value = levelVar.GetValue<bool>(false);
-            }
-            else {
-                value = levelVar.GetValue<decimal>(100);
-            }
+                string responseKey = String.Format("levelvars.set {0}", levelVar.VariableName.ToLower());
 
-            string responseKey = String.Format("levelvars.set {0}", levelVar.VariableName.ToLower());
+                this.OnSettingResponse(responseKey, value, true);
 
-            this.OnSettingResponse(responseKey, value, true);
-
-            if (this.AsyncSettingControls.ContainsKey(responseKey) == true) {
-                foreach (Control enableControl in this.AsyncSettingControls[responseKey].ma_ctrlEnabledInputs) {
-                    if ((enableControl is Label && !(enableControl is LinkLabel)) || enableControl is CheckBox) {
-                        enableControl.ForeColor = Color.LightSeaGreen;
-                        enableControl.Font = new Font(this.Font, FontStyle.Bold);
+                if (this.AsyncSettingControls.ContainsKey(responseKey) == true) {
+                    foreach (Control enableControl in this.AsyncSettingControls[responseKey].ma_ctrlEnabledInputs) {
+                        if ((enableControl is Label && !(enableControl is LinkLabel)) || enableControl is CheckBox) {
+                            enableControl.ForeColor = Color.LightSeaGreen;
+                            enableControl.Font = new Font(this.Font, FontStyle.Bold);
+                        }
                     }
                 }
-            }
+            });
         }
 
         #region Evaluated effects
 
         private void SetCurrentSelectedLevelVariables(List<LevelVariable> lstReturnedValues) {
+            this.InvokeIfRequired(() => {
+                this.lblLevelTicketBleedSpeed.Font = this.lblLevelTickets.Font = this.lblLevelVehicleSpawnRate.Font = this.lblLevelStartDelay.Font = this.lblLevelRespawnDelay.Font = this.chkLevelVehiclesDisabled.Font = new Font(this.Font, FontStyle.Regular);
 
-            this.lblLevelTicketBleedSpeed.Font =
-                this.lblLevelTickets.Font =
-                this.lblLevelVehicleSpawnRate.Font =
-                this.lblLevelStartDelay.Font =
-                this.lblLevelRespawnDelay.Font =
-                this.chkLevelVehiclesDisabled.Font = new Font(this.Font, FontStyle.Regular);
+                this.lblLevelTicketBleedSpeed.ForeColor = this.lblLevelTickets.ForeColor = this.lblLevelVehicleSpawnRate.ForeColor = this.lblLevelStartDelay.ForeColor = this.lblLevelRespawnDelay.ForeColor = this.chkLevelVehiclesDisabled.ForeColor = SystemColors.WindowText;
 
-            this.lblLevelTicketBleedSpeed.ForeColor =
-                 this.lblLevelTickets.ForeColor =
-                 this.lblLevelVehicleSpawnRate.ForeColor =
-                 this.lblLevelStartDelay.ForeColor =
-                 this.lblLevelRespawnDelay.ForeColor =
-                 this.chkLevelVehiclesDisabled.ForeColor = SystemColors.WindowText;
+                // Set all to default values.  This might be expanded on in the future to be context sensitive (e.g more spawn delay for SQDM)
+                this.IgnoreEvents = true;
+                this.numLevelTickets.Value = 100;
+                this.numLevelTicketBleedSpeed.Value = 100;
+                this.numLevelVehicleSpawnRate.Value = 100;
+                this.numLevelStartDelay.Value = 10;
+                this.numLevelRespawnDelay.Value = 20;
+                this.chkLevelVehiclesDisabled.Checked = false;
+                this.IgnoreEvents = false;
 
-            // Set all to default values.  This might be expanded on in the future to be context sensitive (e.g more spawn delay for SQDM)
-            this.IgnoreEvents = true;
-            this.numLevelTickets.Value = 100;
-            this.numLevelTicketBleedSpeed.Value = 100;
-            this.numLevelVehicleSpawnRate.Value = 100;
-            this.numLevelStartDelay.Value = 10;
-            this.numLevelRespawnDelay.Value = 20;
-            this.chkLevelVehiclesDisabled.Checked = false;
-            this.IgnoreEvents = false;
-
-            foreach (LevelVariable levelVar in lstReturnedValues) {
-                this.SetLevelVariable(levelVar);
-            }
+                foreach (LevelVariable levelVar in lstReturnedValues) {
+                    this.SetLevelVariable(levelVar);
+                }
+            });
         }
 
         private void UpdateTotalEffects() {
@@ -361,21 +356,22 @@ namespace PRoCon.Controls.ServerSettings {
         }
 
         private void SetLevelVariablesToEffects(LevelVariable lvRequestedContext, List<LevelVariable> lstReturnedValues) {
-
-            if (this.lsvEvaluatedEffect.Items.ContainsKey(lvRequestedContext.Context.ToString()) == true) {
-                ListViewItem item = this.lsvEvaluatedEffect.Items[lvRequestedContext.Context.ToString()];
-                foreach (LevelVariable variable in lstReturnedValues) {
-                    if (item.SubItems.ContainsKey(variable.VariableName) == true) {
-                        item.SubItems[variable.VariableName].Text = variable.RawValue;
+            this.InvokeIfRequired(() => {
+                if (this.lsvEvaluatedEffect.Items.ContainsKey(lvRequestedContext.Context.ToString()) == true) {
+                    ListViewItem item = this.lsvEvaluatedEffect.Items[lvRequestedContext.Context.ToString()];
+                    foreach (LevelVariable variable in lstReturnedValues) {
+                        if (item.SubItems.ContainsKey(variable.VariableName) == true) {
+                            item.SubItems[variable.VariableName].Text = variable.RawValue;
+                        }
                     }
-                }
 
-                foreach (ColumnHeader col in this.lsvEvaluatedEffect.Columns) {
-                    col.Width = -2;
-                }
+                    foreach (ColumnHeader col in this.lsvEvaluatedEffect.Columns) {
+                        col.Width = -2;
+                    }
 
-                this.UpdateTotalEffects();
-            }
+                    this.UpdateTotalEffects();
+                }
+            });
         }
 
         private ListViewItem CreateVariableEffectItem(string name, string text, Font font) {
@@ -469,24 +465,26 @@ namespace PRoCon.Controls.ServerSettings {
         }
 
         private void ValidateAddLevelVariablesToEffects(LevelVariable lvRequestedContext, List<LevelVariable> lstReturnedValues) {
-            LevelVariableContext selectedContext = this.GetSelectedContext();
+            this.InvokeIfRequired(() => {
+                LevelVariableContext selectedContext = this.GetSelectedContext();
 
-            if (this.isApplicableContext(lvRequestedContext) == true) {
-                this.AddLevelVariablesToEffects(lvRequestedContext, lstReturnedValues);
+                if (this.isApplicableContext(lvRequestedContext) == true) {
+                    this.AddLevelVariablesToEffects(lvRequestedContext, lstReturnedValues);
 
-                if (lvRequestedContext.Context.CompareTo(selectedContext) == 0) {
+                    if (lvRequestedContext.Context.CompareTo(selectedContext) == 0) {
 
-                    if (this.lsvEvaluatedEffect.Items.ContainsKey("totalEvaluatedEffects") == false) {
-                        this.lsvEvaluatedEffect.Items.Add(this.CreateVariableEffectItem("totalEvaluatedEffects", this.Language.GetLocalized("uscServerSettingsPanel.lsvEvaluatedEffect.items.totalEvaluatedEffects"), new Font(this.Font, FontStyle.Bold)));
+                        if (this.lsvEvaluatedEffect.Items.ContainsKey("totalEvaluatedEffects") == false) {
+                            this.lsvEvaluatedEffect.Items.Add(this.CreateVariableEffectItem("totalEvaluatedEffects", this.Language.GetLocalized("uscServerSettingsPanel.lsvEvaluatedEffect.items.totalEvaluatedEffects"), new Font(this.Font, FontStyle.Bold)));
+                        }
+
+                        this.UpdateTotalEffects();
                     }
-
-                    this.UpdateTotalEffects();
                 }
-            }
 
-            foreach (ColumnHeader col in this.lsvEvaluatedEffect.Columns) {
-                col.Width = -2;
-            }
+                foreach (ColumnHeader col in this.lsvEvaluatedEffect.Columns) {
+                    col.Width = -2;
+                }
+            });
         }
 
         #endregion

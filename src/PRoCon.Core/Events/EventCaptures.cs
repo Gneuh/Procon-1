@@ -43,7 +43,7 @@ namespace PRoCon.Core.Events {
                 this.m_isOptionsVisible = value;
 
                 if (this.OptionsVisibleChange != null) {
-                    FrostbiteConnection.RaiseEvent(this.OptionsVisibleChange.GetInvocationList(), this.m_isOptionsVisible);
+                    this.OptionsVisibleChange(this.m_isOptionsVisible);
                 }
             }
         }
@@ -59,7 +59,7 @@ namespace PRoCon.Core.Events {
                 this.m_iMaximumDisplayedEvents = value;
 
                 if (this.MaximumDisplayedEventsChange != null) {
-                    FrostbiteConnection.RaiseEvent(this.MaximumDisplayedEventsChange.GetInvocationList(), this.m_iMaximumDisplayedEvents);
+                    this.MaximumDisplayedEventsChange(this.m_iMaximumDisplayedEvents);
                 }
             }
         }
@@ -72,7 +72,7 @@ namespace PRoCon.Core.Events {
                 this.m_blScrollingEnabled = value;
 
                 if (this.ScrollingEnabledChange != null) {
-                    FrostbiteConnection.RaiseEvent(this.ScrollingEnabledChange.GetInvocationList(), this.m_blScrollingEnabled);
+                    this.ScrollingEnabledChange(this.m_blScrollingEnabled);
                 }
             }
         }
@@ -447,7 +447,7 @@ namespace PRoCon.Core.Events {
                 }
 
                 if (this.LoggedEvent != null) {
-                    FrostbiteConnection.RaiseEvent(this.LoggedEvent.GetInvocationList(), capture);
+                    this.LoggedEvent(capture);
                 }
             }
         }

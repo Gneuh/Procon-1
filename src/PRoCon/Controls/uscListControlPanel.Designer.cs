@@ -1,4 +1,4 @@
-﻿namespace PRoCon {
+﻿namespace PRoCon.Controls {
     partial class uscListControlPanel {
         /// <summary> 
         /// Required designer variable.
@@ -30,6 +30,9 @@
             this.tbcLists = new System.Windows.Forms.TabControl();
             this.tabBanlist = new System.Windows.Forms.TabPage();
             this.spltBanlistManualBans = new System.Windows.Forms.SplitContainer();
+            this.picBansFilterMagnifier = new System.Windows.Forms.PictureBox();
+            this.BansFilter = new System.Windows.Forms.TextBox();
+            this.pagination1 = new PRoCon.Controls.ControlsEx.Pagination();
             this.btnBanlistRefresh = new System.Windows.Forms.Button();
             this.picCloseOpenManualBans = new System.Windows.Forms.PictureBox();
             this.lnkCloseOpenManualBans = new System.Windows.Forms.LinkLabel();
@@ -109,11 +112,13 @@
             this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.unbanToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.colOffset = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tbcLists.SuspendLayout();
             this.tabBanlist.SuspendLayout();
             this.spltBanlistManualBans.Panel1.SuspendLayout();
             this.spltBanlistManualBans.Panel2.SuspendLayout();
             this.spltBanlistManualBans.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picBansFilterMagnifier)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picCloseOpenManualBans)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picClearLists)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picUnbanPlayer)).BeginInit();
@@ -176,6 +181,9 @@
             // 
             // spltBanlistManualBans.Panel1
             // 
+            this.spltBanlistManualBans.Panel1.Controls.Add(this.picBansFilterMagnifier);
+            this.spltBanlistManualBans.Panel1.Controls.Add(this.BansFilter);
+            this.spltBanlistManualBans.Panel1.Controls.Add(this.pagination1);
             this.spltBanlistManualBans.Panel1.Controls.Add(this.btnBanlistRefresh);
             this.spltBanlistManualBans.Panel1.Controls.Add(this.picCloseOpenManualBans);
             this.spltBanlistManualBans.Panel1.Controls.Add(this.lnkCloseOpenManualBans);
@@ -206,6 +214,37 @@
             this.spltBanlistManualBans.Size = new System.Drawing.Size(1022, 812);
             this.spltBanlistManualBans.SplitterDistance = 690;
             this.spltBanlistManualBans.TabIndex = 94;
+            // 
+            // picBansFilterMagnifier
+            // 
+            this.picBansFilterMagnifier.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.picBansFilterMagnifier.Location = new System.Drawing.Point(292, 634);
+            this.picBansFilterMagnifier.Name = "picBansFilterMagnifier";
+            this.picBansFilterMagnifier.Size = new System.Drawing.Size(16, 16);
+            this.picBansFilterMagnifier.TabIndex = 110;
+            this.picBansFilterMagnifier.TabStop = false;
+            // 
+            // BansFilter
+            // 
+            this.BansFilter.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.BansFilter.Location = new System.Drawing.Point(314, 630);
+            this.BansFilter.Name = "BansFilter";
+            this.BansFilter.Size = new System.Drawing.Size(280, 23);
+            this.BansFilter.TabIndex = 109;
+            this.BansFilter.TextChanged += new System.EventHandler(this.BansFilter_TextChanged);
+            // 
+            // pagination1
+            // 
+            this.pagination1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.pagination1.CurrentPage = 1;
+            this.pagination1.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.pagination1.ItemsPerPage = 0;
+            this.pagination1.Location = new System.Drawing.Point(44, 630);
+            this.pagination1.Name = "pagination1";
+            this.pagination1.Size = new System.Drawing.Size(242, 23);
+            this.pagination1.Source = null;
+            this.pagination1.TabIndex = 108;
             // 
             // btnBanlistRefresh
             // 
@@ -295,6 +334,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lsvBanlist.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.colOffset,
             this.colName,
             this.colIP,
             this.colGUID,
@@ -1040,6 +1080,10 @@
             this.unbanToolStripMenuItem.Text = "Unban";
             this.unbanToolStripMenuItem.Click += new System.EventHandler(this.unbanToolStripMenuItem_Click);
             // 
+            // colOffset
+            // 
+            this.colOffset.Text = "#";
+            // 
             // uscListControlPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -1056,6 +1100,7 @@
             this.spltBanlistManualBans.Panel2.ResumeLayout(false);
             this.spltBanlistManualBans.Panel2.PerformLayout();
             this.spltBanlistManualBans.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.picBansFilterMagnifier)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picCloseOpenManualBans)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picClearLists)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picUnbanPlayer)).EndInit();
@@ -1175,5 +1220,9 @@
         private System.Windows.Forms.Panel panel5;
         private Controls.ControlsEx.ListViewNF lsvSpectatorList;
         private System.Windows.Forms.ColumnHeader colSpectatorSoldierNames;
+        private ControlsEx.Pagination pagination1;
+        private System.Windows.Forms.TextBox BansFilter;
+        private System.Windows.Forms.PictureBox picBansFilterMagnifier;
+        private System.Windows.Forms.ColumnHeader colOffset;
     }
 }

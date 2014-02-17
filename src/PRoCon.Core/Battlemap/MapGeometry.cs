@@ -50,13 +50,13 @@ namespace PRoCon.Core.Battlemap {
                 if (System.String.Compare(CurrentMapFileName, zone.LevelFileName, System.StringComparison.OrdinalIgnoreCase) == 0) {
                     if ((trespassArea = zone.TrespassArea(kKillerVictimDetails.KillerLocation, 14.14F)) > 0.0F) {
                         if (MapZoneTrespassed != null) {
-                            FrostbiteConnection.RaiseEvent(MapZoneTrespassed.GetInvocationList(), kKillerVictimDetails.Killer, ZoneAction.Kill, new MapZone(zone.UID, zone.LevelFileName, zone.Tags.ToString(), zone.ZonePolygon, true), kKillerVictimDetails.KillerLocation, trespassArea, kKillerVictimDetails);
+                            this.MapZoneTrespassed(kKillerVictimDetails.Killer, ZoneAction.Kill, new MapZone(zone.UID, zone.LevelFileName, zone.Tags.ToString(), zone.ZonePolygon, true), kKillerVictimDetails.KillerLocation, trespassArea, kKillerVictimDetails);
                         }
                     }
 
                     if ((trespassArea = zone.TrespassArea(kKillerVictimDetails.VictimLocation, 14.14F)) > 0.0F) {
                         if (MapZoneTrespassed != null) {
-                            FrostbiteConnection.RaiseEvent(MapZoneTrespassed.GetInvocationList(), kKillerVictimDetails.Victim, ZoneAction.Death, new MapZone(zone.UID, zone.LevelFileName, zone.Tags.ToString(), zone.ZonePolygon, true), kKillerVictimDetails.VictimLocation, trespassArea, kKillerVictimDetails);
+                            this.MapZoneTrespassed(kKillerVictimDetails.Victim, ZoneAction.Death, new MapZone(zone.UID, zone.LevelFileName, zone.Tags.ToString(), zone.ZonePolygon, true), kKillerVictimDetails.VictimLocation, trespassArea, kKillerVictimDetails);
                         }
                     }
                 }

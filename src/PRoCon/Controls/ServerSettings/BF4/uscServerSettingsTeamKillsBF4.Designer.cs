@@ -1,4 +1,4 @@
-﻿namespace PRoCon.Controls.ServerSettings {
+﻿namespace PRoCon.Controls.ServerSettings.BF4 {
     partial class uscServerSettingsTeamKillsBF4 {
         /// <summary> 
         /// Required designer variable.

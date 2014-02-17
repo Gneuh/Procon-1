@@ -19,30 +19,18 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Text;
 using System.Windows.Forms;
-using System.Net;
-using System.Net.Sockets;
-using System.Threading;
-using System.IO;
+using PRoCon.Controls.ServerSettings.BF4;
+using PRoCon.Core;
+using PRoCon.Core.Remote;
+using PRoCon.Controls.ServerSettings;
+using PRoCon.Controls.ServerSettings.BFBC2;
+using PRoCon.Controls.ServerSettings.MOH;
+using PRoCon.Controls.ServerSettings.BF3;
+using PRoCon.Controls.ServerSettings.MOHW;
+using PRoCon.Forms;
 
-namespace PRoCon {
-    using Core;
-    using Core.Plugin;
-    using Core.Remote;
-    using Core.Settings;
-    using Controls.ServerSettings;
-    using Controls.ServerSettings.BFBC2;
-    using Controls.ServerSettings.MOH;
-    using Controls.ServerSettings.BF3;
-    using Controls.ServerSettings.BF4;
-    using Controls.ServerSettings.MOHW;
-    using PRoCon.Forms;
-
+namespace PRoCon.Controls {
     public partial class uscServerSettingsPanel : UserControl {
 
         private frmMain m_frmMain;
@@ -92,104 +80,106 @@ namespace PRoCon {
         }
 
         private void prcClient_GameTypeDiscovered(PRoConClient sender) {
-            sender.ProconPrivileges += new PRoConClient.ProconPrivilegesHandler(sender_ProconPrivileges);
+            this.InvokeIfRequired(() => {
+                sender.ProconPrivileges += new PRoConClient.ProconPrivilegesHandler(sender_ProconPrivileges);
 
-            if (sender.Game is BF3Client) {
-                this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsDetailsBF3());
-            }
-            else if (sender.Game is BF4Client) {
-                this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsDetailsBF4());
-            }
-            else if (sender.Game is MOHWClient) {
-                this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsDetailsBF3());
-            }
-            else {
-                this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsDetails());
-            }
-            
-            if (sender.Game is BF3Client) {
-                this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsConfigurationBF3());
-            }
-            else if (sender.Game is BF4Client) {
-                this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsConfigurationBF4());
-            }
-            else if (sender.Game is MOHWClient) {
-                this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsConfigurationMOHW());
-            }
-            else
-            {
-                this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsConfiguration());
-            }
-
-            if (sender.Game is BFBC2Client) {
-                this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsGameplayBFBC2());
-            }
-            else if (sender.Game is MoHClient) {
-                this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsGameplayMoH());
-            }
-            else if (sender.Game is BF3Client) {
-                this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsGameplayBF3());
-            }
-            else if (sender.Game is BF4Client) {
-                this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsGameplayBF4());
-            }
-            else if (sender.Game is MOHWClient) {
-                this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsGameplayMOHW());
-            }
-
-            if (sender.Game is BFBC2Client || sender.Game is MoHClient) {
-                this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsTextChatModeration());
-                this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsLevelVariables());
-            }
-
-            if (sender.Game is BF4Client) {
-                this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsTeamKillsBF4());
-            } else {
-                this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsTeamKills());
-            }
-            
-            if (sender.Game is BFBC2Client) {
-                this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsConfigGeneratorBFBC2());
-            }
-            else if (sender.Game is MoHClient) {
-                this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsConfigGeneratorMoH());
-            }
-            else if (sender.Game is BF3Client) {
-                this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsConfigGeneratorBF3());
-            }
-            else if (sender.Game is BF4Client) {
-                this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsConfigGeneratorBF4());
-            }
-            else if (sender.Game is MOHWClient) {
-                this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsConfigGeneratorMOHW());
-            }
-
-            foreach (uscServerSettings page in this.cboSelectedSettingsPanel.Items) {
-                if (this.pnlSettingsPanels.Controls.Contains(page) == false) {
-                    this.pnlSettingsPanels.Controls.Add(page);
-                    page.Dock = DockStyle.Fill;
+                if (sender.Game is BF3Client) {
+                    this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsDetailsBF3());
+                }
+                else if (sender.Game is BF4Client) {
+                    this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsDetailsBF4());
+                }
+                else if (sender.Game is MOHWClient) {
+                    this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsDetailsBF3());
+                }
+                else {
+                    this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsDetails());
                 }
 
-                if (this.cboSelectedSettingsPanel.SelectedItem == null) {
-                    this.cboSelectedSettingsPanel.SelectedItem = page;
+                if (sender.Game is BF3Client) {
+                    this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsConfigurationBF3());
+                }
+                else if (sender.Game is BF4Client) {
+                    this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsConfigurationBF4());
+                }
+                else if (sender.Game is MOHWClient) {
+                    this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsConfigurationMOHW());
+                }
+                else {
+                    this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsConfiguration());
                 }
 
-                if (this.m_frmMain != null) {
-                    page.SettingLoading = this.m_frmMain.picAjaxStyleLoading.Image;
-                    page.SettingFail = this.m_frmMain.picAjaxStyleFail.Image;
-                    page.SettingSuccess = this.m_frmMain.picAjaxStyleSuccess.Image;
+                if (sender.Game is BFBC2Client) {
+                    this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsGameplayBFBC2());
+                }
+                else if (sender.Game is MoHClient) {
+                    this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsGameplayMoH());
+                }
+                else if (sender.Game is BF3Client) {
+                    this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsGameplayBF3());
+                }
+                else if (sender.Game is BF4Client) {
+                    this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsGameplayBF4());
+                }
+                else if (sender.Game is MOHWClient) {
+                    this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsGameplayMOHW());
                 }
 
-                page.SetConnection(sender);
-
-                if (this.m_clocLanguage != null) {
-                    page.SetLocalization(this.m_clocLanguage);
+                if (sender.Game is BFBC2Client || sender.Game is MoHClient) {
+                    this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsTextChatModeration());
+                    this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsLevelVariables());
                 }
-            }
+
+                if (sender.Game is BF4Client) {
+                    this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsTeamKillsBF4());
+                }
+                else {
+                    this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsTeamKills());
+                }
+
+                if (sender.Game is BFBC2Client) {
+                    this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsConfigGeneratorBFBC2());
+                }
+                else if (sender.Game is MoHClient) {
+                    this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsConfigGeneratorMoH());
+                }
+                else if (sender.Game is BF3Client) {
+                    this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsConfigGeneratorBF3());
+                }
+                else if (sender.Game is BF4Client) {
+                    this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsConfigGeneratorBF4());
+                }
+                else if (sender.Game is MOHWClient) {
+                    this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsConfigGeneratorMOHW());
+                }
+
+                foreach (uscServerSettings page in this.cboSelectedSettingsPanel.Items) {
+                    if (this.pnlSettingsPanels.Controls.Contains(page) == false) {
+                        this.pnlSettingsPanels.Controls.Add(page);
+                        page.Dock = DockStyle.Fill;
+                    }
+
+                    if (this.cboSelectedSettingsPanel.SelectedItem == null) {
+                        this.cboSelectedSettingsPanel.SelectedItem = page;
+                    }
+
+                    if (this.m_frmMain != null) {
+                        page.SettingLoading = this.m_frmMain.picAjaxStyleLoading.Image;
+                        page.SettingFail = this.m_frmMain.picAjaxStyleFail.Image;
+                        page.SettingSuccess = this.m_frmMain.picAjaxStyleSuccess.Image;
+                    }
+
+                    page.SetConnection(sender);
+
+                    if (this.m_clocLanguage != null) {
+                        page.SetLocalization(this.m_clocLanguage);
+                    }
+                }
+            });
         }
 
         public void sender_ProconPrivileges(PRoConClient sender, CPrivileges spPrivs) {
-            this.pnlSettingsPanels.Enabled = spPrivs.CanAlterServerSettings;
+            this.InvokeIfRequired(() => { this.pnlSettingsPanels.Enabled = spPrivs.CanAlterServerSettings; });
         }
 
         private void cboSelectedSettingsPanel_SelectedIndexChanged(object sender, EventArgs e) {

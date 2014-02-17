@@ -81,43 +81,47 @@ namespace PRoCon.Controls.ServerSettings {
 
 
         private void Client_GameTypeDiscovered(PRoConClient sender) {
-
-            this.Client.Game.ServerName += new FrostbiteClient.ServerNameHandler(m_prcClient_ServerName);
-            this.Client.Game.BannerUrl += new FrostbiteClient.BannerUrlHandler(m_prcClient_BannerUrl);
-            this.Client.Game.ServerDescription += new FrostbiteClient.ServerDescriptionHandler(m_prcClient_ServerDescription);
-            
+            this.InvokeIfRequired(() => {
+                this.Client.Game.ServerName += new FrostbiteClient.ServerNameHandler(m_prcClient_ServerName);
+                this.Client.Game.BannerUrl += new FrostbiteClient.BannerUrlHandler(m_prcClient_BannerUrl);
+                this.Client.Game.ServerDescription += new FrostbiteClient.ServerDescriptionHandler(m_prcClient_ServerDescription);
+            });
         }
 
         #region Banner URL
 
         private void m_prcClient_BannerUrl(FrostbiteClient sender, string url) {
-            this.OnSettingResponse("vars.bannerurl", url, true);
+            this.InvokeIfRequired(() => {
+                this.OnSettingResponse("vars.bannerurl", url, true);
 
-            if (String.Compare(this.m_strPreviousSuccessBannerURL, url) != 0) {
+                if (String.Compare(this.m_strPreviousSuccessBannerURL, url) != 0) {
 
-                if (String.IsNullOrEmpty(url) == false) {
-                    this.DownloadBannerURL(url);
+                    if (String.IsNullOrEmpty(url) == false) {
+                        this.DownloadBannerURL(url);
+                    }
+                    else {
+                        this.cdfBanner_DownloadComplete(null);
+                    }
                 }
-                else {
-                    this.cdfBanner_DownloadComplete(null);
-                }
-            }
 
-            this.m_strPreviousSuccessBannerURL = url;
+                this.m_strPreviousSuccessBannerURL = url;
+            });
         }
 
         public void OnSettingsBannerURLSuccess(FrostbiteClient sender, string strSuccessBannerURL) {
-            if (String.Compare(this.m_strPreviousSuccessBannerURL, strSuccessBannerURL) != 0) {
+            this.InvokeIfRequired(() => {
+                if (String.Compare(this.m_strPreviousSuccessBannerURL, strSuccessBannerURL) != 0) {
 
-                if (String.IsNullOrEmpty(strSuccessBannerURL) == false) {
-                    this.DownloadBannerURL(strSuccessBannerURL);
+                    if (String.IsNullOrEmpty(strSuccessBannerURL) == false) {
+                        this.DownloadBannerURL(strSuccessBannerURL);
+                    }
+                    else {
+                        this.cdfBanner_DownloadComplete(null);
+                    }
                 }
-                else {
-                    this.cdfBanner_DownloadComplete(null);
-                }
-            }
 
-            this.m_strPreviousSuccessBannerURL = strSuccessBannerURL;
+                this.m_strPreviousSuccessBannerURL = strSuccessBannerURL;
+            });
         }
 
         private void lnkSettingsSetBannerURL_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {

@@ -39,7 +39,7 @@ namespace PRoCon {
 
         protected override void InsertItem(int index, PRoConClient item) {
             if (this.ConnectionAdded != null) {
-                FrostbiteConnection.RaiseEvent(this.ConnectionAdded.GetInvocationList(), item);
+                this.ConnectionAdded(item);
             }
 
             base.InsertItem(index, item);
@@ -51,13 +51,13 @@ namespace PRoCon {
             base.RemoveItem(index);
 
             if (this.ConnectionRemoved != null) {
-                FrostbiteConnection.RaiseEvent(this.ConnectionRemoved.GetInvocationList(), prcClient);
+                this.ConnectionRemoved(prcClient);
             }
         }
 
         protected override void SetItem(int index, PRoConClient item) {
             if (this.ConnectionChanged != null) {
-                FrostbiteConnection.RaiseEvent(this.ConnectionChanged.GetInvocationList(), item);
+                this.ConnectionChanged(item);
             }
 
             base.SetItem(index, item);

@@ -1,4 +1,6 @@
-﻿namespace PRoCon {
+﻿using PRoCon.Controls.ControlsEx;
+
+namespace PRoCon.Controls {
     partial class uscPluginPanel {
         /// <summary> 
         /// Required designer variable.
@@ -27,7 +29,7 @@
             this.ppgScriptSettings = new System.Windows.Forms.PropertyGrid();
             this.lblLoadedPlugins = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.rtbScriptConsole = new PRoCon.CodRichTextBox();
+            this.rtbScriptConsole = new CodRichTextBox();
             this.tabPluginDetails = new System.Windows.Forms.TabPage();
             this.spltPlugins = new System.Windows.Forms.SplitContainer();
             this.lnkReloadPlugins = new System.Windows.Forms.LinkLabel();

@@ -49,7 +49,7 @@ namespace PRoCon.Core.Players {
 
         protected override void InsertItem(int index, CPlayerInfo item) {
             if (this.PlayerAdded != null) {
-                FrostbiteConnection.RaiseEvent(this.PlayerAdded.GetInvocationList(), item);
+                this.PlayerAdded(item);
             }
 
             base.InsertItem(index, item);
@@ -58,7 +58,7 @@ namespace PRoCon.Core.Players {
         protected override void RemoveItem(int index) {
 
             if (this.PlayerUpdated != null) {
-                FrostbiteConnection.RaiseEvent(this.PlayerUpdated.GetInvocationList(), this[index]);
+                this.PlayerUpdated(this[index]);
             }
 
             base.RemoveItem(index);
@@ -66,7 +66,7 @@ namespace PRoCon.Core.Players {
 
         protected override void SetItem(int index, CPlayerInfo item) {
             if (this.PlayerRemoved != null) {
-                FrostbiteConnection.RaiseEvent(this.PlayerRemoved.GetInvocationList(), item);
+                this.PlayerRemoved(item);
             }
 
             base.SetItem(index, item);

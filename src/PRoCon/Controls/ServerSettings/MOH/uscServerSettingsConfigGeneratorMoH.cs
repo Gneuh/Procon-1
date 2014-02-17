@@ -30,18 +30,20 @@ namespace PRoCon.Controls.ServerSettings.MOH {
         }
 
         private void Client_GameTypeDiscovered(PRoConClient sender) {
-            this.Client.Game.ClanTeams += new FrostbiteClient.IsEnabledHandler(Game_ClanTeams);
-            this.Client.Game.NoCrosshairs += new FrostbiteClient.IsEnabledHandler(Game_NoCrosshairs);
-            this.Client.Game.RealisticHealth += new FrostbiteClient.IsEnabledHandler(Game_RealisticHealth);
-            this.Client.Game.NoUnlocks += new FrostbiteClient.IsEnabledHandler(Game_NoUnlocks);
-            this.Client.Game.NoAmmoPickups += new FrostbiteClient.IsEnabledHandler(Game_NoAmmoPickups);
+            this.InvokeIfRequired(() => {
+                this.Client.Game.ClanTeams += new FrostbiteClient.IsEnabledHandler(Game_ClanTeams);
+                this.Client.Game.NoCrosshairs += new FrostbiteClient.IsEnabledHandler(Game_NoCrosshairs);
+                this.Client.Game.RealisticHealth += new FrostbiteClient.IsEnabledHandler(Game_RealisticHealth);
+                this.Client.Game.NoUnlocks += new FrostbiteClient.IsEnabledHandler(Game_NoUnlocks);
+                this.Client.Game.NoAmmoPickups += new FrostbiteClient.IsEnabledHandler(Game_NoAmmoPickups);
 
-            this.Client.Game.TdmScoreCounterMaxScore += new FrostbiteClient.LimitHandler(Game_TdmScoreCounterMaxScore);
-            this.Client.Game.SkillLimit += new FrostbiteClient.UpperLowerLimitHandler(Game_SkillLimit);
-            this.Client.Game.RoundStartTimer += new FrostbiteClient.IsEnabledHandler(Game_RoundStartTimer);
-            this.Client.Game.RoundStartTimerDelay += new FrostbiteClient.LimitHandler(Game_RoundStartTimerDelay);
-            this.Client.Game.RoundStartTimerPlayerLimit += new FrostbiteClient.LimitHandler(Game_RoundStartTimerPlayerLimit);
-            this.Client.Game.PreRoundLimit += new FrostbiteClient.UpperLowerLimitHandler(Game_PreRoundLimit);
+                this.Client.Game.TdmScoreCounterMaxScore += new FrostbiteClient.LimitHandler(Game_TdmScoreCounterMaxScore);
+                this.Client.Game.SkillLimit += new FrostbiteClient.UpperLowerLimitHandler(Game_SkillLimit);
+                this.Client.Game.RoundStartTimer += new FrostbiteClient.IsEnabledHandler(Game_RoundStartTimer);
+                this.Client.Game.RoundStartTimerDelay += new FrostbiteClient.LimitHandler(Game_RoundStartTimerDelay);
+                this.Client.Game.RoundStartTimerPlayerLimit += new FrostbiteClient.LimitHandler(Game_RoundStartTimerPlayerLimit);
+                this.Client.Game.PreRoundLimit += new FrostbiteClient.UpperLowerLimitHandler(Game_PreRoundLimit);
+            });
         }
 
         private void Game_PreRoundLimit(FrostbiteClient sender, int upperLimit, int lowerLimit) {

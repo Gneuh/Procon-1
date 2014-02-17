@@ -1,23 +1,4 @@
-﻿// Copyright 2010 Geoffrey 'Phogue' Green
-// 
-// http://www.phogue.net
-//  
-// This file is part of PRoCon Frostbite.
-// 
-// PRoCon Frostbite is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-// 
-// PRoCon Frostbite is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-// 
-// You should have received a copy of the GNU General Public License
-// along with PRoCon Frostbite.  If not, see <http://www.gnu.org/licenses/>.
-
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
@@ -137,92 +118,92 @@ namespace PRoCon.Controls {
         }
 
         private void UpdateConnections() {
+            this.InvokeIfRequired(() => {
+                ArrayList connectionsArray = new ArrayList();
 
-            ArrayList connectionsArray = new ArrayList();
+                int playerCount = 0, playerSlotsTotal = 0;
 
-            int playerCount = 0, playerSlotsTotal = 0;
+                if (this._startPageTemplates != null && this._proconApplication != null) {
+                    foreach (PRoConClient client in this._proconApplication.Connections) {
 
-            if (this._startPageTemplates != null && this._proconApplication != null) {
-                foreach (PRoConClient client in this._proconApplication.Connections) {
+                        Hashtable connectionHtml = new Hashtable();
 
-                    Hashtable connectionHtml = new Hashtable();
+                        string replacedTemplate = String.Empty;
 
-                    string replacedTemplate = String.Empty;
-
-                    if (client.State == ConnectionState.Connected == true && client.IsLoggedIn == true) {
-                        replacedTemplate = this._startPageTemplates.GetLocalized(client.CurrentServerInfo != null ? "connections.online" : "connections.online.noInfo");
-                    }
-                    else if (client.State == ConnectionState.Connecting || (client.State == ConnectionState.Connected && client.IsLoggedIn == false)) {
-                        replacedTemplate = this._startPageTemplates.GetLocalized("connections.connect-attempt.noInfo");
-                    }
-                    else if (client.State == ConnectionState.Error) {
-                        replacedTemplate = this._startPageTemplates.GetLocalized(client.CurrentServerInfo != null ? "connections.error" : "connections.error.noInfo");
-                    }
-                    else {
-                        replacedTemplate = this._startPageTemplates.GetLocalized(client.CurrentServerInfo != null ? "connections.offline" : "connections.offline.noInfo");
-                    }
-
-                    replacedTemplate = replacedTemplate.Replace("%connections.online.options%", this._startPageTemplates.GetLocalized("connections.online.options"));
-                    replacedTemplate = replacedTemplate.Replace("%connections.offline.options%", this._startPageTemplates.GetLocalized("connections.offline.options"));
-
-                    if (client.Language != null) {
-                        replacedTemplate = replacedTemplate.Replace("%pStartPage-lblQuickConnect%", client.Language.GetDefaultLocalized("connect", "pStartPage-lblQuickConnect"));
-                        replacedTemplate = replacedTemplate.Replace("%pStartPage-lblQuickDisconnect%", client.Language.GetDefaultLocalized("disconnect", "pStartPage-lblQuickDisconnect"));
-                        replacedTemplate = replacedTemplate.Replace("%pStartPage-lblQuickDelete%", client.Language.GetDefaultLocalized("delete", "pStartPage-lblQuickDelete"));
-                    }
-                    else {
-                        replacedTemplate = replacedTemplate.Replace("%pStartPage-lblQuickConnect%", "connect");
-                        replacedTemplate = replacedTemplate.Replace("%pStartPage-lblQuickDisconnect%", "disconnect");
-                        replacedTemplate = replacedTemplate.Replace("%pStartPage-lblQuickDelete%", "delete");
-                    }
-
-
-
-                    replacedTemplate = replacedTemplate.Replace("%server_hostnameport%", client.HostNamePort);
-                    
-                    if (client.CurrentServerInfo != null) {
-                        replacedTemplate = replacedTemplate.Replace("%players%", client.CurrentServerInfo.PlayerCount.ToString(CultureInfo.InvariantCulture));
-                        replacedTemplate = replacedTemplate.Replace("%max_players%", client.CurrentServerInfo.MaxPlayerCount.ToString(CultureInfo.InvariantCulture));
-                        replacedTemplate = replacedTemplate.Replace("%server_name%", client.CurrentServerInfo.ServerName);
-
-                        if (this._proconApplication != null && this._proconApplication.CurrentLanguage != null) {
-                            CMap tmpMap = client.GetFriendlyMapByFilenamePlayList(client.CurrentServerInfo.Map, client.CurrentServerInfo.GameMode);
-                            int iTmpCurRounds = client.CurrentServerInfo.CurrentRound;
-                            if (client.GameType == "BF3" || client.GameType == "MOHW" || client.GameType == "BF4")
-                            {
-                                iTmpCurRounds++;
-                            }
-
-                            if (tmpMap != null) {
-                                replacedTemplate = replacedTemplate.Replace("%server_additonal%", this._startPageTemplates.GetLocalized("connections.online.additional", tmpMap.GameMode, tmpMap.PublicLevelName, iTmpCurRounds.ToString(CultureInfo.InvariantCulture), client.CurrentServerInfo.TotalRounds.ToString(CultureInfo.InvariantCulture)));
-                            }
+                        if (client.State == ConnectionState.Connected == true && client.IsLoggedIn == true) {
+                            replacedTemplate = this._startPageTemplates.GetLocalized(client.CurrentServerInfo != null ? "connections.online" : "connections.online.noInfo");
+                        }
+                        else if (client.State == ConnectionState.Connecting || (client.State == ConnectionState.Connected && client.IsLoggedIn == false)) {
+                            replacedTemplate = this._startPageTemplates.GetLocalized("connections.connect-attempt.noInfo");
+                        }
+                        else if (client.State == ConnectionState.Error) {
+                            replacedTemplate = this._startPageTemplates.GetLocalized(client.CurrentServerInfo != null ? "connections.error" : "connections.error.noInfo");
+                        }
+                        else {
+                            replacedTemplate = this._startPageTemplates.GetLocalized(client.CurrentServerInfo != null ? "connections.offline" : "connections.offline.noInfo");
                         }
 
-                        playerCount += client.CurrentServerInfo.PlayerCount;
-                        playerSlotsTotal += client.CurrentServerInfo.MaxPlayerCount;
+                        replacedTemplate = replacedTemplate.Replace("%connections.online.options%", this._startPageTemplates.GetLocalized("connections.online.options"));
+                        replacedTemplate = replacedTemplate.Replace("%connections.offline.options%", this._startPageTemplates.GetLocalized("connections.offline.options"));
+
+                        if (client.Language != null) {
+                            replacedTemplate = replacedTemplate.Replace("%pStartPage-lblQuickConnect%", client.Language.GetDefaultLocalized("connect", "pStartPage-lblQuickConnect"));
+                            replacedTemplate = replacedTemplate.Replace("%pStartPage-lblQuickDisconnect%", client.Language.GetDefaultLocalized("disconnect", "pStartPage-lblQuickDisconnect"));
+                            replacedTemplate = replacedTemplate.Replace("%pStartPage-lblQuickDelete%", client.Language.GetDefaultLocalized("delete", "pStartPage-lblQuickDelete"));
+                        }
+                        else {
+                            replacedTemplate = replacedTemplate.Replace("%pStartPage-lblQuickConnect%", "connect");
+                            replacedTemplate = replacedTemplate.Replace("%pStartPage-lblQuickDisconnect%", "disconnect");
+                            replacedTemplate = replacedTemplate.Replace("%pStartPage-lblQuickDelete%", "delete");
+                        }
+
+
+
+                        replacedTemplate = replacedTemplate.Replace("%server_hostnameport%", client.HostNamePort);
+
+                        if (client.CurrentServerInfo != null) {
+                            replacedTemplate = replacedTemplate.Replace("%players%", client.CurrentServerInfo.PlayerCount.ToString(CultureInfo.InvariantCulture));
+                            replacedTemplate = replacedTemplate.Replace("%max_players%", client.CurrentServerInfo.MaxPlayerCount.ToString(CultureInfo.InvariantCulture));
+                            replacedTemplate = replacedTemplate.Replace("%server_name%", client.CurrentServerInfo.ServerName);
+
+                            if (this._proconApplication != null && this._proconApplication.CurrentLanguage != null) {
+                                CMap tmpMap = client.GetFriendlyMapByFilenamePlayList(client.CurrentServerInfo.Map, client.CurrentServerInfo.GameMode);
+                                int iTmpCurRounds = client.CurrentServerInfo.CurrentRound;
+                                if (client.GameType == "BF3" || client.GameType == "MOHW" || client.GameType == "BF4") {
+                                    iTmpCurRounds++;
+                                }
+
+                                if (tmpMap != null) {
+                                    replacedTemplate = replacedTemplate.Replace("%server_additonal%", this._startPageTemplates.GetLocalized("connections.online.additional", tmpMap.GameMode, tmpMap.PublicLevelName, iTmpCurRounds.ToString(CultureInfo.InvariantCulture), client.CurrentServerInfo.TotalRounds.ToString(CultureInfo.InvariantCulture)));
+                                }
+                            }
+
+                            playerCount += client.CurrentServerInfo.PlayerCount;
+                            playerSlotsTotal += client.CurrentServerInfo.MaxPlayerCount;
+                        }
+
+                        if (client.ConnectionServerName != String.Empty) {
+                            replacedTemplate = replacedTemplate.Replace("%server_name%", client.ConnectionServerName);
+                        }
+
+                        connectionHtml.Add("safehostport", Regex.Replace(client.FileHostNamePort, "[^0-9a-zA-Z]", ""));
+                        connectionHtml.Add("html", replacedTemplate);
+
+                        connectionsArray.Add(connectionHtml);
                     }
 
-                    if (client.ConnectionServerName != String.Empty) {
-                        replacedTemplate = replacedTemplate.Replace("%server_name%", client.ConnectionServerName);
+                    if (this.webBrowser1.IsDisposed == false && this.webBrowser1.Document != null) {
+                        if (playerSlotsTotal > 0 && this._language != null && this._isDocumentReady == true) {
+                            this.webBrowser1.Document.InvokeScript("fnSetLocalization", new object[] {"pStartPage-lblConnectionsSummary", this._language.GetDefaultLocalized(String.Format("{0} of {1} slots used", playerCount, playerSlotsTotal), "pStartPage-lblConnectionsSummary", playerCount, playerSlotsTotal)});
+                        }
+
+                        if (this._isDocumentReady == true) {
+
+                            this.webBrowser1.Document.InvokeScript("fnUpdateConnectionsList", new object[] {JSON.JsonEncode(connectionsArray)});
+                        }
                     }
-
-                    connectionHtml.Add("safehostport", Regex.Replace(client.FileHostNamePort, "[^0-9a-zA-Z]", ""));
-                    connectionHtml.Add("html", replacedTemplate);
-
-                    connectionsArray.Add(connectionHtml);
                 }
-
-                if (this.webBrowser1.Document != null) {
-                    if (playerSlotsTotal > 0 && this._language != null && this._isDocumentReady == true) {
-                        this.webBrowser1.Document.InvokeScript("fnSetLocalization", new object[] { "pStartPage-lblConnectionsSummary", this._language.GetDefaultLocalized(String.Format("{0} of {1} slots used", playerCount, playerSlotsTotal), "pStartPage-lblConnectionsSummary", playerCount, playerSlotsTotal) });
-                    }
-
-                    if (this._isDocumentReady == true) {
-
-                        this.webBrowser1.Document.InvokeScript("fnUpdateConnectionsList", new object[] { JSON.JsonEncode(connectionsArray) });
-                    }
-                }
-            }
+            });
         }
         
         private void Connections_ConnectionAdded(PRoConClient item) {
@@ -235,25 +216,27 @@ namespace PRoCon.Controls {
         }
         
         private void Connections_ConnectionRemoved(PRoConClient item) {
-            item.ConnectionClosed -= new PRoConClient.EmptyParamterHandler(item_ConnectionClosed);
-            item.Login -= new PRoConClient.EmptyParamterHandler(item_Login);
-            item.GameTypeDiscovered -= new PRoConClient.EmptyParamterHandler(item_GameTypeDiscovered);
+            this.InvokeIfRequired(() => {
+                item.ConnectionClosed -= new PRoConClient.EmptyParamterHandler(item_ConnectionClosed);
+                item.Login -= new PRoConClient.EmptyParamterHandler(item_Login);
+                item.GameTypeDiscovered -= new PRoConClient.EmptyParamterHandler(item_GameTypeDiscovered);
 
-            if (item.Game != null) {
-                item.Game.ServerInfo -= new FrostbiteClient.ServerInfoHandler(Game_ServerInfo);
-            }
+                if (item.Game != null) {
+                    item.Game.ServerInfo -= new FrostbiteClient.ServerInfoHandler(Game_ServerInfo);
+                }
 
-            if (this._isDocumentReady == true && this.webBrowser1.Document != null) {
-                this.webBrowser1.Document.InvokeScript("fnRemoveConnection", new object[] { Regex.Replace(item.FileHostNamePort, "[^0-9a-zA-Z]", "") });
-            }
-
-            //this.UpdateConnections();
+                if (this._isDocumentReady == true && this.webBrowser1.Document != null) {
+                    this.webBrowser1.Document.InvokeScript("fnRemoveConnection", new object[] {Regex.Replace(item.FileHostNamePort, "[^0-9a-zA-Z]", "")});
+                }
+            });
         }
 
         private void item_GameTypeDiscovered(PRoConClient sender) {
-            if (sender.Game != null) {
-                sender.Game.ServerInfo += new FrostbiteClient.ServerInfoHandler(Game_ServerInfo);
-            }
+            this.InvokeIfRequired(() => {
+                if (sender.Game != null) {
+                    sender.Game.ServerInfo += new FrostbiteClient.ServerInfoHandler(Game_ServerInfo);
+                }
+            });
         }
 
         private void item_ConnectAttempt(PRoConClient sender) {
@@ -388,25 +371,29 @@ namespace PRoCon.Controls {
         }
 
         private void m_proconApplication_RssUpdateSuccess(PRoConApplication instance, XmlDocument rssDocument) {
-            this.ReplaceRssContent(rssDocument);
+            this.InvokeIfRequired(() => this.ReplaceRssContent(rssDocument));
         }
 
         private void m_proconApplication_PromoUpdateSuccess(PRoConApplication instance, XmlDocument rssDocument) {
-            this.ReplacePromoContent(rssDocument);
+            this.InvokeIfRequired(() => this.ReplacePromoContent(rssDocument));
         }
 
         private void m_proconApplication_RssUpdateError(PRoConApplication instance) {
-            if (this._isDocumentReady == true && this.webBrowser1.Document != null) {
-                this.webBrowser1.Document.InvokeScript("UpdateRssMonthlySummaryFeed", new object[] { "" });
-                this.webBrowser1.Document.InvokeScript("UpdateRssDonationFeed", new object[] { "" });
-                this.webBrowser1.Document.InvokeScript("UpdateRssFeed", new object[] { "" });
-            }
+            this.InvokeIfRequired(() => {
+                if (this._isDocumentReady == true && this.webBrowser1.Document != null) {
+                    this.webBrowser1.Document.InvokeScript("UpdateRssMonthlySummaryFeed", new object[] {""});
+                    this.webBrowser1.Document.InvokeScript("UpdateRssDonationFeed", new object[] {""});
+                    this.webBrowser1.Document.InvokeScript("UpdateRssFeed", new object[] {""});
+                }
+            });
         }
 
         private void m_proconApplication_BeginRssUpdate(PRoConApplication instance) {
-            if (this._isDocumentReady == true && this.webBrowser1.Document != null) {
-                this.webBrowser1.Document.InvokeScript("LoadingRssFeed");
-            }
+            this.InvokeIfRequired(() => {
+                if (this._isDocumentReady == true && this.webBrowser1.Document != null) {
+                    this.webBrowser1.Document.InvokeScript("LoadingRssFeed");
+                }
+            });
         }
 
         internal class RssArticleItem {

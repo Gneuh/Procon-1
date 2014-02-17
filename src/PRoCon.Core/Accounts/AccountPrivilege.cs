@@ -18,7 +18,7 @@ namespace PRoCon.Core.Accounts {
             Privileges = cpUpdatedPrivileges;
 
             if (AccountPrivilegesChanged != null) {
-                FrostbiteConnection.RaiseEvent(AccountPrivilegesChanged.GetInvocationList(), this);
+                this.AccountPrivilegesChanged(this);
             }
         }
     }

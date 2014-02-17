@@ -134,39 +134,41 @@ namespace PRoCon.Controls.ServerSettings.MOHW {
         }
 
         private void m_prcClient_GameTypeDiscovered(PRoConClient sender) {
-            this.Client.Game.TeamBalance += new FrostbiteClient.IsEnabledHandler(m_prcClient_TeamBalance);
-            this.Client.Game.KillCam += new FrostbiteClient.IsEnabledHandler(m_prcClient_KillCam);
+            this.InvokeIfRequired(() => {
+                this.Client.Game.TeamBalance += new FrostbiteClient.IsEnabledHandler(m_prcClient_TeamBalance);
+                this.Client.Game.KillCam += new FrostbiteClient.IsEnabledHandler(m_prcClient_KillCam);
 
-            // deprecated R-5 this.Client.Game.AllUnlocksUnlocked += new FrostbiteClient.IsEnabledHandler(Game_AllUnlocksUnlocked);
-            this.Client.Game.BuddyOutline += new FrostbiteClient.IsEnabledHandler(Game_BuddyOutline);
+                // deprecated R-5 this.Client.Game.AllUnlocksUnlocked += new FrostbiteClient.IsEnabledHandler(Game_AllUnlocksUnlocked);
+                this.Client.Game.BuddyOutline += new FrostbiteClient.IsEnabledHandler(Game_BuddyOutline);
 
-            this.Client.Game.HudBuddyInfo += new FrostbiteClient.IsEnabledHandler(m_prcClient_HudBuddyInfo);
-            this.Client.Game.HudClassAbility += new FrostbiteClient.IsEnabledHandler(m_prcClient_HudClassAbility);
-            this.Client.Game.HudCrosshair += new FrostbiteClient.IsEnabledHandler(m_prcClient_HudCrosshair);
-            this.Client.Game.HudEnemyTag += new FrostbiteClient.IsEnabledHandler(Game_HudEnemyTag);
-            this.Client.Game.HudExplosiveIcons += new FrostbiteClient.IsEnabledHandler(Game_HudExplosiveIcons);
-            this.Client.Game.HudGameMode += new FrostbiteClient.IsEnabledHandler(Game_HudGameMode);
-            this.Client.Game.HudHealthAmmo += new FrostbiteClient.IsEnabledHandler(Game_HudHealthAmmo);
-            this.Client.Game.HudMinimap += new FrostbiteClient.IsEnabledHandler(m_prcClient_HudMinimap);
-            this.Client.Game.HudObiturary += new FrostbiteClient.IsEnabledHandler(m_prcClient_HudObiturary);
-            this.Client.Game.HudPointsTracker += new FrostbiteClient.IsEnabledHandler(m_prcClient_HudPointsTracker);
-            this.Client.Game.HudUnlocks += new FrostbiteClient.IsEnabledHandler(m_prcClient_HudUnlocks);
-            
-            this.Client.Game.ThirdPersonVehicleCameras += new FrostbiteClient.IsEnabledHandler(m_prcClient_ThirdPersonVehicleCameras);
+                this.Client.Game.HudBuddyInfo += new FrostbiteClient.IsEnabledHandler(m_prcClient_HudBuddyInfo);
+                this.Client.Game.HudClassAbility += new FrostbiteClient.IsEnabledHandler(m_prcClient_HudClassAbility);
+                this.Client.Game.HudCrosshair += new FrostbiteClient.IsEnabledHandler(m_prcClient_HudCrosshair);
+                this.Client.Game.HudEnemyTag += new FrostbiteClient.IsEnabledHandler(Game_HudEnemyTag);
+                this.Client.Game.HudExplosiveIcons += new FrostbiteClient.IsEnabledHandler(Game_HudExplosiveIcons);
+                this.Client.Game.HudGameMode += new FrostbiteClient.IsEnabledHandler(Game_HudGameMode);
+                this.Client.Game.HudHealthAmmo += new FrostbiteClient.IsEnabledHandler(Game_HudHealthAmmo);
+                this.Client.Game.HudMinimap += new FrostbiteClient.IsEnabledHandler(m_prcClient_HudMinimap);
+                this.Client.Game.HudObiturary += new FrostbiteClient.IsEnabledHandler(m_prcClient_HudObiturary);
+                this.Client.Game.HudPointsTracker += new FrostbiteClient.IsEnabledHandler(m_prcClient_HudPointsTracker);
+                this.Client.Game.HudUnlocks += new FrostbiteClient.IsEnabledHandler(m_prcClient_HudUnlocks);
 
-            this.Client.Game.RegenerateHealth += new FrostbiteClient.IsEnabledHandler(Game_RegenerateHealth);
-            
-            this.Client.Game.BulletDamage += new FrostbiteClient.LimitHandler(Game_BulletDamage);
-            this.Client.Game.RoundRestartPlayerCount += new FrostbiteClient.LimitHandler(Game_RoundRestartPlayerCount);
-            this.Client.Game.RoundStartPlayerCount += new FrostbiteClient.LimitHandler(Game_RoundStartPlayerCount);
+                this.Client.Game.ThirdPersonVehicleCameras += new FrostbiteClient.IsEnabledHandler(m_prcClient_ThirdPersonVehicleCameras);
 
-            this.Client.Game.SoldierHealth += new FrostbiteClient.LimitHandler(Game_SoldierHealth);
+                this.Client.Game.RegenerateHealth += new FrostbiteClient.IsEnabledHandler(Game_RegenerateHealth);
 
-            this.Client.Game.PlayerRespawnTime += new FrostbiteClient.LimitHandler(Game_PlayerRespawnTime);
+                this.Client.Game.BulletDamage += new FrostbiteClient.LimitHandler(Game_BulletDamage);
+                this.Client.Game.RoundRestartPlayerCount += new FrostbiteClient.LimitHandler(Game_RoundRestartPlayerCount);
+                this.Client.Game.RoundStartPlayerCount += new FrostbiteClient.LimitHandler(Game_RoundStartPlayerCount);
 
-            this.Client.Game.Playlist += new FrostbiteClient.PlaylistSetHandler(Game_Playlist);
+                this.Client.Game.SoldierHealth += new FrostbiteClient.LimitHandler(Game_SoldierHealth);
 
-            this.Client.Game.GameModeCounter += new FrostbiteClient.LimitHandler(Game_GameModeCounter);
+                this.Client.Game.PlayerRespawnTime += new FrostbiteClient.LimitHandler(Game_PlayerRespawnTime);
+
+                this.Client.Game.Playlist += new FrostbiteClient.PlaylistSetHandler(Game_Playlist);
+
+                this.Client.Game.GameModeCounter += new FrostbiteClient.LimitHandler(Game_GameModeCounter);
+            });
         }
 
 
@@ -657,10 +659,12 @@ namespace PRoCon.Controls.ServerSettings.MOHW {
         private string m_strPreviousSuccessPlaylist;
 
         private void Game_Playlist(FrostbiteClient sender, string mode) {
-            this.m_strPreviousSuccessPlaylist = mode.ToString();
-            this.OnSettingResponse("vars.playlist", mode.ToString(), true);
+            this.InvokeIfRequired(() => {
+                this.m_strPreviousSuccessPlaylist = mode.ToString();
+                this.OnSettingResponse("vars.playlist", mode.ToString(), true);
 
-            this.cboSettingsPlaylist.SelectedValue = mode.ToString();
+                this.cboSettingsPlaylist.SelectedValue = mode.ToString();
+            });
         }
 
         private void lnkSettingsPlaylist_LinkClicked(object sender, EventArgs e) {

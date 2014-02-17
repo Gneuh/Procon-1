@@ -61,14 +61,16 @@ namespace PRoCon.Controls.ServerSettings.BFBC2 {
         }
 
         private void m_prcClient_GameTypeDiscovered(PRoConClient sender) {
-            this.Client.Game.TeamBalance += new FrostbiteClient.IsEnabledHandler(m_prcClient_TeamBalance);
-            this.Client.Game.KillCam += new FrostbiteClient.IsEnabledHandler(m_prcClient_KillCam);
-            this.Client.Game.MiniMap += new FrostbiteClient.IsEnabledHandler(m_prcClient_MiniMap);
-            this.Client.Game.CrossHair += new FrostbiteClient.IsEnabledHandler(m_prcClient_CrossHair);
-            this.Client.Game.ThreeDSpotting += new FrostbiteClient.IsEnabledHandler(m_prcClient_ThreeDSpotting);
-            this.Client.Game.MiniMapSpotting += new FrostbiteClient.IsEnabledHandler(m_prcClient_MiniMapSpotting);
-            this.Client.Game.ThirdPersonVehicleCameras += new FrostbiteClient.IsEnabledHandler(m_prcClient_ThirdPersonVehicleCameras);
-            this.Client.Game.RankLimit += new FrostbiteClient.LimitHandler(m_prcClient_RankLimit);
+            this.InvokeIfRequired(() => {
+                this.Client.Game.TeamBalance += new FrostbiteClient.IsEnabledHandler(m_prcClient_TeamBalance);
+                this.Client.Game.KillCam += new FrostbiteClient.IsEnabledHandler(m_prcClient_KillCam);
+                this.Client.Game.MiniMap += new FrostbiteClient.IsEnabledHandler(m_prcClient_MiniMap);
+                this.Client.Game.CrossHair += new FrostbiteClient.IsEnabledHandler(m_prcClient_CrossHair);
+                this.Client.Game.ThreeDSpotting += new FrostbiteClient.IsEnabledHandler(m_prcClient_ThreeDSpotting);
+                this.Client.Game.MiniMapSpotting += new FrostbiteClient.IsEnabledHandler(m_prcClient_MiniMapSpotting);
+                this.Client.Game.ThirdPersonVehicleCameras += new FrostbiteClient.IsEnabledHandler(m_prcClient_ThirdPersonVehicleCameras);
+                this.Client.Game.RankLimit += new FrostbiteClient.LimitHandler(m_prcClient_RankLimit);
+            });
         }
 
         #region Third Person Vehicle Cameras

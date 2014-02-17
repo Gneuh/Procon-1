@@ -19,16 +19,12 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
 using System.Text;
 using System.Windows.Forms;
+using PRoCon.Core;
+using PRoCon.Core.Remote;
 
-namespace PRoCon.Controls.ServerSettings {
-    using Core;
-    using Core.Remote;
+namespace PRoCon.Controls.ServerSettings.BF4 {
     public partial class uscServerSettingsTeamKillsBF4 : uscServerSettings {
         public uscServerSettingsTeamKillsBF4() {
             InitializeComponent();
@@ -83,14 +79,15 @@ namespace PRoCon.Controls.ServerSettings {
         }
 
         private void m_prcClient_GameTypeDiscovered(PRoConClient sender) {
+            this.InvokeIfRequired(() => {
+                this.Client.Game.TeamKillCountForKick += new FrostbiteClient.LimitHandler(m_prcClient_TeamKillCountForKick);
+                this.Client.Game.TeamKillValueForKick += new FrostbiteClient.LimitHandler(m_prcClient_TeamKillValueForKick);
+                this.Client.Game.TeamKillKickForBan += new FrostbiteClient.LimitHandler(m_prcClient_TeamKillKickForBan);
+                this.Client.Game.TeamKillValueIncrease += new FrostbiteClient.LimitHandler(m_prcClient_TeamKillValueIncrease);
+                this.Client.Game.TeamKillValueDecreasePerSecond += new FrostbiteClient.LimitHandler(m_prcClient_TeamKillValueDecreasePerSecond);
 
-            this.Client.Game.TeamKillCountForKick += new FrostbiteClient.LimitHandler(m_prcClient_TeamKillCountForKick);
-            this.Client.Game.TeamKillValueForKick += new FrostbiteClient.LimitHandler(m_prcClient_TeamKillValueForKick);
-            this.Client.Game.TeamKillKickForBan += new FrostbiteClient.LimitHandler(m_prcClient_TeamKillKickForBan);
-            this.Client.Game.TeamKillValueIncrease += new FrostbiteClient.LimitHandler(m_prcClient_TeamKillValueIncrease);
-            this.Client.Game.TeamKillValueDecreasePerSecond += new FrostbiteClient.LimitHandler(m_prcClient_TeamKillValueDecreasePerSecond);
-
-            this.Client.Game.BF4preset += new FrostbiteClient.BF4presetHandler(Tab_BF4preset);
+                this.Client.Game.BF4preset += new FrostbiteClient.BF4presetHandler(Tab_BF4preset);
+            });
         }
 
         private void Tab_BF4preset(FrostbiteClient sender, string mode, bool locked) {

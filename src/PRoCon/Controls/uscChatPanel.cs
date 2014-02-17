@@ -20,20 +20,14 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Text;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
-using System.IO;
+using PRoCon.Core;
+using PRoCon.Core.Players;
+using PRoCon.Core.Remote;
 
-namespace PRoCon {
-    using Core;
-    using Core.Players;
-    using Core.Plugin;
-    using Core.Remote;
-
+namespace PRoCon.Controls {
     public partial class uscChatPanel : uscPage {
 
         private uscServerConnection m_uscParent;
@@ -113,9 +107,11 @@ namespace PRoCon {
             this.cboDisplayChatTime.SelectedIndex = 4;
             this.cboDisplayList.SelectedIndex = 0;
 
+            this.rtbChatBox.Flushed += new Action<object, EventArgs>(rtbChatBox_Flushed);
+
             this.m_regRemoveCaretCodes = new Regex(@"\^[0-9]|\^b|\^i|\^n", RegexOptions.Compiled);
         }
-        
+
         private void uscChatPanel_Load(object sender, EventArgs e) {
             if (this.m_prcClient != null) {
 
@@ -127,8 +123,7 @@ namespace PRoCon {
                 this.m_prcClient.ChatConsole.DisplayTypeIndex = this.m_prcClient.ChatConsole.DisplayTypeIndex;
                 this.m_prcClient.ChatConsole.DisplayTimeIndex = this.m_prcClient.ChatConsole.DisplayTimeIndex;
 
-                if (System.String.Compare(this.m_prcClient.GameType, "BF4", System.StringComparison.OrdinalIgnoreCase) != 0)
-                {
+                if (System.String.Compare(this.m_prcClient.GameType, "BF4", System.StringComparison.OrdinalIgnoreCase) != 0) {
                     this.chkDisplayComRoseMsg.Enabled = false;
                     this.chkDisplayComRoseMsg.Visible = false;
                 }
@@ -149,29 +144,31 @@ namespace PRoCon {
         }
 
         private void m_prcClient_GameTypeDiscovered(PRoConClient sender) {
-            this.m_prcClient.ChatConsole.WriteConsole += new PRoCon.Core.Logging.Loggable.WriteConsoleHandler(ChatConsole_WriteConsole);
-            this.m_prcClient.ChatConsole.LogJoinLeavingChanged += new PRoCon.Core.Consoles.ChatConsole.IsEnabledHandler(ChatConsole_LogJoinLeavingChanged);
-            this.m_prcClient.ChatConsole.LogKillsChanged += new PRoCon.Core.Consoles.ChatConsole.IsEnabledHandler(ChatConsole_LogKillsChanged);
-            this.m_prcClient.ChatConsole.ScrollingChanged += new PRoCon.Core.Consoles.ChatConsole.IsEnabledHandler(ChatConsole_ScrollingChanged);
-            this.m_prcClient.ChatConsole.LogComRoseMessagesChanged += new PRoCon.Core.Consoles.ChatConsole.IsEnabledHandler(ChatConsole_LogComRoseMessagesChanged);
+            this.InvokeIfRequired(() => {
+                this.m_prcClient.ChatConsole.WriteConsole += new PRoCon.Core.Logging.Loggable.WriteConsoleHandler(ChatConsole_WriteConsole);
+                this.m_prcClient.ChatConsole.LogJoinLeavingChanged += new PRoCon.Core.Consoles.ChatConsole.IsEnabledHandler(ChatConsole_LogJoinLeavingChanged);
+                this.m_prcClient.ChatConsole.LogKillsChanged += new PRoCon.Core.Consoles.ChatConsole.IsEnabledHandler(ChatConsole_LogKillsChanged);
+                this.m_prcClient.ChatConsole.ScrollingChanged += new PRoCon.Core.Consoles.ChatConsole.IsEnabledHandler(ChatConsole_ScrollingChanged);
+                this.m_prcClient.ChatConsole.LogComRoseMessagesChanged += new PRoCon.Core.Consoles.ChatConsole.IsEnabledHandler(ChatConsole_LogComRoseMessagesChanged);
 
-            this.m_prcClient.ChatConsole.DisplayTimeChanged += new PRoCon.Core.Consoles.ChatConsole.IndexChangedHandler(ChatConsole_DisplayTimeChanged);
-            this.m_prcClient.ChatConsole.DisplayTypeChanged += new PRoCon.Core.Consoles.ChatConsole.IndexChangedHandler(ChatConsole_DisplayTypeChanged);
+                this.m_prcClient.ChatConsole.DisplayTimeChanged += new PRoCon.Core.Consoles.ChatConsole.IndexChangedHandler(ChatConsole_DisplayTimeChanged);
+                this.m_prcClient.ChatConsole.DisplayTypeChanged += new PRoCon.Core.Consoles.ChatConsole.IndexChangedHandler(ChatConsole_DisplayTypeChanged);
 
-            this.m_prcClient.Game.ListPlayers += new FrostbiteClient.ListPlayersHandler(m_prcClient_ListPlayers);
-            this.m_prcClient.Game.ServerInfo += new FrostbiteClient.ServerInfoHandler(m_prcClient_ServerInfo);
+                this.m_prcClient.Game.ListPlayers += new FrostbiteClient.ListPlayersHandler(m_prcClient_ListPlayers);
+                this.m_prcClient.Game.ServerInfo += new FrostbiteClient.ServerInfoHandler(m_prcClient_ServerInfo);
 
-            if (sender.Game is MoHClient) {
-                this.cboDisplayList.Items.RemoveAt(1);
-            }
-            if (sender.Game is MOHWClient) {
-                this.lblDisplayFor.Visible = false;
-                this.cboDisplayChatTime.Visible = false;
-            }
-            if (sender.Game is BF4Client || sender.Game is BF3Client || sender.Game is MOHWClient) {
-                this.m_iCanLongMsg = 1;
-                this.m_iChat_MaxLength = 128;
-            }
+                if (sender.Game is MoHClient) {
+                    this.cboDisplayList.Items.RemoveAt(1);
+                }
+                if (sender.Game is MOHWClient) {
+                    this.lblDisplayFor.Visible = false;
+                    this.cboDisplayChatTime.Visible = false;
+                }
+                if (sender.Game is BF4Client || sender.Game is BF3Client || sender.Game is MOHWClient) {
+                    this.m_iCanLongMsg = 1;
+                    this.m_iChat_MaxLength = 128;
+                }
+            });
         }
 
         public void Initialize(uscServerConnection uscParent) {
@@ -238,124 +235,62 @@ namespace PRoCon {
         }
 
         private void m_prcClient_ListPlayers(FrostbiteClient sender, List<CPlayerInfo> lstPlayers, CPlayerSubset cpsSubset) {
-            if (cpsSubset.Subset == CPlayerSubset.PlayerSubsetType.All) {
+            this.InvokeIfRequired(() => {
+                if (cpsSubset.Subset == CPlayerSubset.PlayerSubsetType.All) {
 
-                lstPlayers.Sort((x, y) => String.Compare(x.SoldierName, y.SoldierName));
+                    lstPlayers.Sort((x, y) => String.Compare(x.SoldierName, y.SoldierName));
 
-                CPlayerInfo objSelected = (CPlayerInfo)this.cboPlayerList.SelectedItem;
+                    CPlayerInfo objSelected = (CPlayerInfo) this.cboPlayerList.SelectedItem;
 
-                this.cboPlayerList.BeginUpdate();
+                    this.cboPlayerList.BeginUpdate();
 
-                //MoHW R-6 can't address individual players
-                if (sender.GameType != "MOHW") {
-                    // org.
-                    for (int i = 0; i < this.cboPlayerList.Items.Count; i++) {
-                        CPlayerInfo cpiInfo = (CPlayerInfo)this.cboPlayerList.Items[i];
+                    //MoHW R-6 can't address individual players
+                    if (sender.GameType != "MOHW") {
+                        // org.
+                        for (int i = 0; i < this.cboPlayerList.Items.Count; i++) {
+                            CPlayerInfo cpiInfo = (CPlayerInfo) this.cboPlayerList.Items[i];
 
-                        if (cpiInfo.SquadID != -10 && cpiInfo.TeamID != -10) {
-                            this.cboPlayerList.Items.RemoveAt(i);
-                            i--;
+                            if (cpiInfo.SquadID != -10 && cpiInfo.TeamID != -10) {
+                                this.cboPlayerList.Items.RemoveAt(i);
+                                i--;
+                            }
                         }
-                    }
 
-                    foreach (CPlayerInfo cpiPlayer in lstPlayers) {
-                        if (this.isInComboList(cpiPlayer) == false) {
-                            this.cboPlayerList.Items.Add(cpiPlayer);
+                        foreach (CPlayerInfo cpiPlayer in lstPlayers) {
+                            if (this.isInComboList(cpiPlayer) == false) {
+                                this.cboPlayerList.Items.Add(cpiPlayer);
+                            }
                         }
-                    }
 
-                    this.cboPlayerList.SelectedIndex = 0;
-                    for (int i = 0; i < this.cboPlayerList.Items.Count; i++) {
-                        CPlayerInfo cpiInfo = (CPlayerInfo)this.cboPlayerList.Items[i];
-                        if (String.Compare(cpiInfo.SoldierName, objSelected.SoldierName) == 0) {
-                            this.cboPlayerList.SelectedIndex = i;
-                            break;
+                        this.cboPlayerList.SelectedIndex = 0;
+                        for (int i = 0; i < this.cboPlayerList.Items.Count; i++) {
+                            CPlayerInfo cpiInfo = (CPlayerInfo) this.cboPlayerList.Items[i];
+                            if (String.Compare(cpiInfo.SoldierName, objSelected.SoldierName) == 0) {
+                                this.cboPlayerList.SelectedIndex = i;
+                                break;
+                            }
                         }
-                    }
-                } // end hack
+                    } // end hack
 
-                this.cboPlayerList.EndUpdate();
+                    this.cboPlayerList.EndUpdate();
 
-            }
-        }
-
-        //public void OnPlayerList(List<CPlayerInfo> lstPlayers) {
-
-
-        //}
-
-        /*
-        public void OnPlayerKilled(string strKillerName, string strVictimName) {
-            if (this.chkDisplayOnKilledEvents.Checked == true) {
-
-                foreach (CPlayerInfo cpiInfo in this.cboPlayerList.Items) {
-                    if (String.Compare(cpiInfo.SoldierName, strKillerName) == 0) {
-                        strKillerName = String.Format("{0} {1}", cpiInfo.ClanTag, cpiInfo.SoldierName);
-                    }
-
-                    if (String.Compare(cpiInfo.SoldierName, strVictimName) == 0) {
-                        strVictimName = String.Format("{0} {1}", cpiInfo.ClanTag, cpiInfo.SoldierName);
-                    }
                 }
-
-                // Silly bug =\
-                this.m_strPreviousAddition = String.Empty;
-                this.Write(String.Format("{0} [^3{1}^0] {2}", strKillerName, this.m_clocLanguage.GetLocalized("uscChatPanel.chkDisplayOnKilledEvents.Killed", null), strVictimName));
-            }
+            });
         }
-        
-
-        public void OnPlayerJoin(string strSoldierName) {
-            if (this.chkDisplayOnJoinLeaveEvents.Checked == true) {
-                this.Write(String.Format("^4{0}", this.m_clocLanguage.GetLocalized("uscChatPanel.chkDisplayOnJoinLeaveEvents.Joined", new string[] { strSoldierName })));
-            }
-        }
-
-        public void OnPlayerLeave(string strSoldierName) {
-            if (this.chkDisplayOnJoinLeaveEvents.Checked == true) {
-                this.Write(String.Format("^1{0}", this.m_clocLanguage.GetLocalized("uscChatPanel.chkDisplayOnJoinLeaveEvents.Left", new string[] { strSoldierName })));
-            }
-        }
-        
-
-        public void OnChat(List<string> lstRawChat) {
-
-            if (String.Compare(lstRawChat[0], "server", true) != 0) {
-                if (lstRawChat.Count == 2) { // < R9 Support.
-                    this.Write(String.Format("^b^4{0}^0 > ^4{1}", lstRawChat[0], lstRawChat[1]));
-                }
-                else if (lstRawChat.Count == 3 && String.Compare(lstRawChat[2], "all", true) == 0) {
-                    this.Write(String.Format("^b^4{0}^0 > ^4{1}", lstRawChat[0], lstRawChat[1]));
-                }
-                else if (lstRawChat.Count >= 4 && String.Compare(lstRawChat[2], "team", true) == 0) {
-                    this.Write(String.Format("^b^4{0}^0 - ^4{1}^0 >^4 {2}", lstRawChat[0], this.GetLocalizedTeamName(lstRawChat[3]), lstRawChat[1]));
-                }
-                else if (lstRawChat.Count >= 5 && String.Compare(lstRawChat[2], "squad", true) == 0) {
-                    if (String.Compare(lstRawChat[4], "0") != 0) {
-                        this.Write(String.Format("^b^4{0}^0 - ^4{1}^0 - ^4{2}^0 >^4 {3}", lstRawChat[0], this.GetLocalizedTeamName(lstRawChat[3]), this.m_clocLanguage.GetLocalized("global.Squad" + lstRawChat[4], null), lstRawChat[1]));
-                    }
-                    else {
-                        // TO DO: Localize and change uscPlayerListPanel.lsvPlayers.colSquad 
-                        this.Write(String.Format("^b^4{0}^0 - ^4{1}^0 - ^4{2}^0 >^4 {3}", lstRawChat[0], this.GetLocalizedTeamName(lstRawChat[3]), this.m_clocLanguage.GetLocalized("uscPlayerListPanel.lsvPlayers.colSquad", null), lstRawChat[1]));
-                    }
-                }
-            }
-        }
-        */
 
         // Quick R3 hack to stop the chat getting spammed out..
         //private string m_strPreviousAddition = String.Empty;
 
         private void ChatConsole_WriteConsole(DateTime dtLoggedTime, string strLoggedText) {
-            string strFormattedConsoleOutput = String.Format("[{0}] {1}{2}", dtLoggedTime.ToString("HH:mm:ss"), strLoggedText, Environment.NewLine);
+            this.InvokeIfRequired(() => this.rtbChatBox.AppendText(String.Format("^n[{0}] {1}{2}", dtLoggedTime.ToString("HH:mm:ss"), strLoggedText, "\n")));
+        }
 
-            this.rtbChatBox.AppendText(strFormattedConsoleOutput);
-
+        private void rtbChatBox_Flushed(object arg1, EventArgs arg2) {
             if (this.m_prcClient.ChatConsole.Scrolling == true) {
                 this.rtbChatBox.ScrollToCaret();
             }
 
-            this.rtbChatBox.TrimLines(this.m_prcClient.Variables.GetVariable<int>("MAX_CHAT_LINES", 75));
+            this.rtbChatBox.TrimLines(this.m_prcClient.Variables.GetVariable("MAX_CHAT_LINES", 75));
         }
 
         private void txtChat_KeyDown(object sender, KeyEventArgs e) {
@@ -372,7 +307,7 @@ namespace PRoCon {
                 this.txtChat.Clear();
                 this.txtChat.Focus();
                 e.SuppressKeyPress = true;
-                
+
                 // update max length
                 this.chatUpdTxtLength();
             }
@@ -426,12 +361,10 @@ namespace PRoCon {
                         sayOutput = this.txtChat.Text;
                     }
                     else {
-                        if (Program.ProconApplication.OptionsSettings.ChatDisplayAdminName)
-                        {
+                        if (Program.ProconApplication.OptionsSettings.ChatDisplayAdminName) {
                             sayOutput = String.Format("{0}: {1}", this.m_prcClient.Username.Length > 0 ? this.m_prcClient.Username : "Admin", this.txtChat.Text);
                         }
-                        else
-                        {
+                        else {
                             sayOutput = this.txtChat.Text;
                         }
                     }
@@ -464,14 +397,14 @@ namespace PRoCon {
                     }
                 }
             }
-            
+
             this.txtChat.Clear();
             this.txtChat.Focus();
             // update max length
             this.chatUpdTxtLength();
         }
-        private void btnclearchat_Click(object sender, EventArgs e)
-        {
+
+        private void btnclearchat_Click(object sender, EventArgs e) {
             this.rtbChatBox.Clear();
             // update max length
             this.chatUpdTxtLength();
@@ -495,33 +428,35 @@ namespace PRoCon {
         string m_strCurrentMapFileName = String.Empty;
 
         private void m_prcClient_ServerInfo(FrostbiteClient sender, CServerInfo csiServerInfo) {
-            this.cboPlayerList.BeginUpdate();
+            this.InvokeIfRequired(() => {
+                this.cboPlayerList.BeginUpdate();
 
-            int iTotalTeams = this.m_prcClient.GetLocalizedTeamNameCount(csiServerInfo.Map, csiServerInfo.GameMode);
-            this.m_strCurrentMapFileName = csiServerInfo.Map;
+                int iTotalTeams = this.m_prcClient.GetLocalizedTeamNameCount(csiServerInfo.Map, csiServerInfo.GameMode);
+                this.m_strCurrentMapFileName = csiServerInfo.Map;
 
-            // Add all the teams.
-            for (int i = 1; i < iTotalTeams; i++) {
+                // Add all the teams.
+                for (int i = 1; i < iTotalTeams; i++) {
 
-                int iTeamIndex = -1;
+                    int iTeamIndex = -1;
 
-                if ((iTeamIndex = this.ListContainsTeam(i)) == -1) {
-                    this.cboPlayerList.Items.Insert(1, new CPlayerInfo(this.m_prcClient.GetLocalizedTeamName(i, csiServerInfo.Map, csiServerInfo.GameMode), String.Empty, i, -10));
+                    if ((iTeamIndex = this.ListContainsTeam(i)) == -1) {
+                        this.cboPlayerList.Items.Insert(1, new CPlayerInfo(this.m_prcClient.GetLocalizedTeamName(i, csiServerInfo.Map, csiServerInfo.GameMode), String.Empty, i, -10));
+                    }
+                    else if (iTeamIndex >= 0 && iTeamIndex < this.cboPlayerList.Items.Count) {
+                        this.cboPlayerList.Items[iTeamIndex] = new CPlayerInfo(this.m_prcClient.GetLocalizedTeamName(i, csiServerInfo.Map, csiServerInfo.GameMode), String.Empty, i, -10);
+                    }
                 }
-                else if (iTeamIndex >= 0 && iTeamIndex < this.cboPlayerList.Items.Count) {
-                    this.cboPlayerList.Items[iTeamIndex] = new CPlayerInfo(this.m_prcClient.GetLocalizedTeamName(i, csiServerInfo.Map, csiServerInfo.GameMode), String.Empty, i, -10);
-                }
-            }
 
-            // Remove any excess teams (change gamemode)
-            for (int i = 0; i < this.cboPlayerList.Items.Count; i++) {
-                if (((CPlayerInfo)cboPlayerList.Items[i]).SquadID == -10 && ((CPlayerInfo)cboPlayerList.Items[i]).TeamID > iTotalTeams) {
-                    cboPlayerList.Items.RemoveAt(i);
-                    i--;
+                // Remove any excess teams (change gamemode)
+                for (int i = 0; i < this.cboPlayerList.Items.Count; i++) {
+                    if (((CPlayerInfo)cboPlayerList.Items[i]).SquadID == -10 && ((CPlayerInfo)cboPlayerList.Items[i]).TeamID > iTotalTeams) {
+                        cboPlayerList.Items.RemoveAt(i);
+                        i--;
+                    }
                 }
-            }
 
-            this.cboPlayerList.EndUpdate();
+                this.cboPlayerList.EndUpdate();
+            });
         }
         /*
         public void OnServerInfo(CServerInfo csiInfo) {
@@ -529,13 +464,13 @@ namespace PRoCon {
         }
         */
         private void cboPlayerList_DrawItem(object sender, DrawItemEventArgs e) {
-            
+
             if (e.Index != -1) {
                 //e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
                 CPlayerInfo cpiDraw = ((CPlayerInfo)cboPlayerList.Items[e.Index]);
 
                 e.Graphics.FillRectangle(SystemBrushes.Window, e.Bounds);
-                
+
                 if (cpiDraw.SquadID == -10 && cpiDraw.TeamID == -10) {
                     e.Graphics.DrawString(this.m_strAllPlayers, new Font("Calibri", 10, FontStyle.Bold), SystemBrushes.WindowText, e.Bounds.Left + 5, e.Bounds.Top, StringFormat.GenericDefault);
                 }
@@ -556,7 +491,7 @@ namespace PRoCon {
                 }
             }
         }
-        
+
         private void cboDisplayList_SelectedIndexChanged(object sender, EventArgs e) {
             if (this.m_prcClient != null) {
                 this.m_prcClient.ChatConsole.DisplayTypeIndex = this.cboDisplayList.SelectedIndex;
@@ -564,29 +499,31 @@ namespace PRoCon {
         }
 
         private void ChatConsole_DisplayTypeChanged(int index) {
-            if (index >= 0 && index < this.cboDisplayList.Items.Count) {
-                this.cboDisplayList.SelectedIndex = index;
-            }
+            this.InvokeIfRequired(() => {
+                if (index >= 0 && index < this.cboDisplayList.Items.Count) {
+                    this.cboDisplayList.SelectedIndex = index;
+                }
 
-            if (this.cboDisplayList.SelectedIndex == 0) {
-                this.lblDisplayFor.Enabled = false;
-                this.cboDisplayChatTime.Enabled = false;
-                this.m_iChat_MaxLength = 100;
-                if (this.m_iCanLongMsg == 1) {
-                    this.m_iChat_MaxLength = 128;
-                    this.txtChat.Clear();
+                if (this.cboDisplayList.SelectedIndex == 0) {
+                    this.lblDisplayFor.Enabled = false;
+                    this.cboDisplayChatTime.Enabled = false;
+                    this.m_iChat_MaxLength = 100;
+                    if (this.m_iCanLongMsg == 1) {
+                        this.m_iChat_MaxLength = 128;
+                        this.txtChat.Clear();
+                    }
+                    this.chatUpdTxtLength();
                 }
-                this.chatUpdTxtLength();
-            }
-            else if (this.cboDisplayList.SelectedIndex == 1) {
-                this.lblDisplayFor.Enabled = true;
-                this.cboDisplayChatTime.Enabled = true;
-                this.m_iChat_MaxLength = 100;
-                if (this.m_iCanLongMsg == 1) {
-                    this.m_iChat_MaxLength = 255;
+                else if (this.cboDisplayList.SelectedIndex == 1) {
+                    this.lblDisplayFor.Enabled = true;
+                    this.cboDisplayChatTime.Enabled = true;
+                    this.m_iChat_MaxLength = 100;
+                    if (this.m_iCanLongMsg == 1) {
+                        this.m_iChat_MaxLength = 255;
+                    }
+                    this.chatUpdTxtLength();
                 }
-                this.chatUpdTxtLength();
-            }
+            });
         }
 
         private void chkDisplayOnJoinLeaveEvents_CheckedChanged(object sender, EventArgs e) {
@@ -601,18 +538,14 @@ namespace PRoCon {
             }
         }
 
-        private void chkDisplayScrollingEvents_CheckedChanged(object sender, EventArgs e)
-        {
-            if (this.m_prcClient != null)
-            {
+        private void chkDisplayScrollingEvents_CheckedChanged(object sender, EventArgs e) {
+            if (this.m_prcClient != null) {
                 this.m_prcClient.ChatConsole.Scrolling = this.chkDisplayScrollingEvents.Checked;
             }
         }
 
-        private void chkDisplayComRoseMsg_CheckedChanged(object sender, EventArgs e)
-        {
-            if (this.m_prcClient != null)
-            {
+        private void chkDisplayComRoseMsg_CheckedChanged(object sender, EventArgs e) {
+            if (this.m_prcClient != null) {
                 this.m_prcClient.ChatConsole.LogComRoseMessages = this.chkDisplayComRoseMsg.Checked;
             }
         }
@@ -622,7 +555,7 @@ namespace PRoCon {
             this.chatUpdTxtLength();
             this.txtChat.Clear();
         }
-        
+
         private void ChatConsole_LogKillsChanged(bool isEnabled) {
             this.chkDisplayOnKilledEvents.Checked = isEnabled;
         }
@@ -647,22 +580,17 @@ namespace PRoCon {
             }
         }
 
-        private void chatUpdTxtLength()
-        {
+        private void chatUpdTxtLength() {
             // update max length
-            if (Program.ProconApplication.OptionsSettings.ChatDisplayAdminName)
-            {
-                if (this.m_prcClient.Username.Length > 0)
-                {
+            if (Program.ProconApplication.OptionsSettings.ChatDisplayAdminName) {
+                if (this.m_prcClient.Username.Length > 0) {
                     this.txtChat.MaxLength = this.m_iChat_MaxLength - (this.m_prcClient.Username.Length + 2);
                 }
-                else
-                {
+                else {
                     this.txtChat.MaxLength = this.m_iChat_MaxLength - 7; // "Admin: "
                 }
             }
-            else
-            {
+            else {
                 this.txtChat.MaxLength = this.m_iChat_MaxLength;
             }
             //

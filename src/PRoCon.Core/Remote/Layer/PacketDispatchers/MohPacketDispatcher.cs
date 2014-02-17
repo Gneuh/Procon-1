@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace PRoCon.Core.Remote.Layer {
-    public class MoHLayerClient : FrostbiteLayerClient {
-
-        public MoHLayerClient(FrostbiteLayerConnection connection)
-            : base(connection) {
-
+﻿namespace PRoCon.Core.Remote.Layer.PacketDispatchers {
+    public class MohPacketDispatcher : LayerPacketDispatcher {
+        public MohPacketDispatcher(ILayerConnection connection) : base(connection) {
             this.RequestDelegates.Add("vars.clanTeams", this.DispatchVarsRequest);
             this.RequestDelegates.Add("vars.noAmmoPickups", this.DispatchVarsRequest);
             this.RequestDelegates.Add("vars.noCrosshairs", this.DispatchVarsRequest);

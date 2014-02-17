@@ -26,7 +26,7 @@ namespace PRoCon.Core.Accounts {
                 _password = value;
                 
                 if (AccountPasswordChanged != null) {
-                    FrostbiteConnection.RaiseEvent(AccountPasswordChanged.GetInvocationList(), this);
+                    this.AccountPasswordChanged(this);
                 }
             }
         }

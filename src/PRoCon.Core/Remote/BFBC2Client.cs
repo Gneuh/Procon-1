@@ -100,7 +100,7 @@ namespace PRoCon.Core.Remote {
         protected override void DispatchPlayerOnSpawnRequest(FrostbiteConnection sender, Packet cpRequestPacket) {
             if (cpRequestPacket.Words.Count >= 9) {
                 if (PlayerSpawned != null) {
-                    FrostbiteConnection.RaiseEvent(PlayerSpawned.GetInvocationList(), this, cpRequestPacket.Words[1], cpRequestPacket.Words[2], cpRequestPacket.Words.GetRange(3, 3), cpRequestPacket.Words.GetRange(6, 3)); // new Inventory(cpRequestPacket.Words[3], cpRequestPacket.Words[4], cpRequestPacket.Words[5], cpRequestPacket.Words[6], cpRequestPacket.Words[7], cpRequestPacket.Words[8]));
+                    this.PlayerSpawned(this, cpRequestPacket.Words[1], cpRequestPacket.Words[2], cpRequestPacket.Words.GetRange(3, 3), cpRequestPacket.Words.GetRange(6, 3)); // new Inventory(cpRequestPacket.Words[3], cpRequestPacket.Words[4], cpRequestPacket.Words[5], cpRequestPacket.Words[6], cpRequestPacket.Words[7], cpRequestPacket.Words[8]));
                 }
             }
         }
@@ -108,7 +108,7 @@ namespace PRoCon.Core.Remote {
         protected override void DispatchAdminSetPlaylistResponse(FrostbiteConnection sender, Packet cpRecievedPacket, Packet cpRequestPacket) {
             if (cpRequestPacket.Words.Count >= 2) {
                 if (PlaylistSet != null) {
-                    FrostbiteConnection.RaiseEvent(PlaylistSet.GetInvocationList(), this, cpRequestPacket.Words[1]);
+                    this.PlaylistSet(this, cpRequestPacket.Words[1]);
                 }
             }
         }
@@ -116,7 +116,7 @@ namespace PRoCon.Core.Remote {
         protected override void DispatchAdminGetPlaylistResponse(FrostbiteConnection sender, Packet cpRecievedPacket, Packet cpRequestPacket) {
             if (cpRequestPacket.Words.Count >= 1 && cpRecievedPacket.Words.Count >= 2) {
                 if (PlaylistSet != null) {
-                    FrostbiteConnection.RaiseEvent(PlaylistSet.GetInvocationList(), this, cpRecievedPacket.Words[1]);
+                    this.PlaylistSet(this, cpRecievedPacket.Words[1]);
                 }
             }
         }
@@ -125,10 +125,10 @@ namespace PRoCon.Core.Remote {
             if (cpRequestPacket.Words.Count >= 1) {
                 if (RankLimit != null) {
                     if (cpRecievedPacket.Words.Count == 2) {
-                        FrostbiteConnection.RaiseEvent(RankLimit.GetInvocationList(), this, Convert.ToInt32(cpRecievedPacket.Words[1]));
+                        this.RankLimit(this, Convert.ToInt32(cpRecievedPacket.Words[1]));
                     }
                     else if (cpRequestPacket.Words.Count >= 2) {
-                        FrostbiteConnection.RaiseEvent(RankLimit.GetInvocationList(), this, Convert.ToInt32(cpRequestPacket.Words[1]));
+                        this.RankLimit(this, Convert.ToInt32(cpRequestPacket.Words[1]));
                     }
                 }
             }

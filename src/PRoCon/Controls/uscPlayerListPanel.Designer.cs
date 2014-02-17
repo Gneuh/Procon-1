@@ -1,4 +1,4 @@
-﻿namespace PRoCon {
+﻿namespace PRoCon.Controls {
     partial class uscPlayerListPanel {
         /// <summary> 
         /// Required designer variable.
@@ -160,9 +160,9 @@
             this.lblGUID = new System.Windows.Forms.Label();
             this.tbcCourtMartial = new System.Windows.Forms.TabControl();
             this.tabCourtMartialBFBC = new System.Windows.Forms.TabPage();
-            this.kbpBfbcPunishPanel = new PRoCon.uscPlayerPunishPanel();
+            this.kbpBfbcPunishPanel = new uscPlayerPunishPanel();
             this.tabCourtMartialPunkbuster = new System.Windows.Forms.TabPage();
-            this.kbpPunkbusterPunishPanel = new PRoCon.uscPlayerPunishPanel();
+            this.kbpPunkbusterPunishPanel = new uscPlayerPunishPanel();
             this.tmrKillDeathHighlight = new System.Windows.Forms.Timer(this.components);
             this.ctxPlayerOptions = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.moveToSquadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();

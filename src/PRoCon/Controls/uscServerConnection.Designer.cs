@@ -1,4 +1,4 @@
-﻿namespace PRoCon {
+﻿namespace PRoCon.Controls {
     partial class uscServerConnection {
         /// <summary> 
         /// Required designer variable.
@@ -26,9 +26,9 @@
             this.components = new System.ComponentModel.Container();
             this.tbcClientTabs = new System.Windows.Forms.TabControl();
             this.tabPlayerList = new System.Windows.Forms.TabPage();
-            this.uscPlayers = new PRoCon.uscPlayerListPanel();
+            this.uscPlayers = new uscPlayerListPanel();
             this.tabChat = new System.Windows.Forms.TabPage();
-            this.uscChat = new PRoCon.uscChatPanel();
+            this.uscChat = new uscChatPanel();
             this.pnlChatEnclosure = new System.Windows.Forms.Panel();
             this.rtbChatBox = new System.Windows.Forms.RichTextBox();
             this.txtMessage = new System.Windows.Forms.TextBox();
@@ -38,22 +38,22 @@
             this.tabMapView = new System.Windows.Forms.TabPage();
             this.uscMap = new PRoCon.Controls.uscMapViewer();
             this.tabEvents = new System.Windows.Forms.TabPage();
-            this.uscEvents = new PRoCon.uscEventsPanel();
+            this.uscEvents = new uscEventsPanel();
             this.tabLists = new System.Windows.Forms.TabPage();
-            this.uscLists = new PRoCon.uscListControlPanel();
+            this.uscLists = new uscListControlPanel();
             this.tabServerSettings = new System.Windows.Forms.TabPage();
-            this.uscSettings = new PRoCon.uscServerSettingsPanel();
+            this.uscSettings = new uscServerSettingsPanel();
             this.tabPlugins = new System.Windows.Forms.TabPage();
-            this.uscPlugins = new PRoCon.uscPluginPanel();
+            this.uscPlugins = new uscPluginPanel();
             this.tabAccounts = new System.Windows.Forms.TabPage();
-            this.uscAccounts = new PRoCon.uscAccountsPanel();
+            this.uscAccounts = new uscAccountsPanel();
             this.tabConsole = new System.Windows.Forms.TabPage();
-            this.uscServerConsole = new PRoCon.uscConsolePanel();
+            this.uscServerConsole = new uscConsolePanel();
             this.lblCurrentMapName = new System.Windows.Forms.Label();
             this.lblVersion = new System.Windows.Forms.Label();
             this.tmrPortCheckTester = new System.Windows.Forms.Timer(this.components);
             this.lblCurrentRound = new System.Windows.Forms.Label();
-            this.uscLogin = new PRoCon.uscLoginPanel();
+            this.uscLogin = new uscLoginPanel();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.lblRoundTime = new System.Windows.Forms.Label();
             this.pnlMapControls = new System.Windows.Forms.FlowLayoutPanel();

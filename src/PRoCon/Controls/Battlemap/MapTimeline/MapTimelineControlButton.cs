@@ -80,7 +80,7 @@ namespace PRoCon.Controls.Battlemap.MapTimeline {
 
             if (this.TimelineControlButtonClicked != null) {
                 this.TimelineControlButtonClicked(this, this.ButtonType);
-                //FrostbiteConnection.RaiseEvent(this.TimelineControlButtonClicked.GetInvocationList(), this.ButtonType);
+                //this.TimelineControlButtonClicked(this.ButtonType);
             }
         }
 

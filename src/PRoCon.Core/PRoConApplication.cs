@@ -98,7 +98,7 @@ namespace PRoCon.Core {
                     this.m_clocCurrentLanguage = value;
 
                     if (this.CurrentLanguageChanged != null) {
-                        FrostbiteConnection.RaiseEvent(this.CurrentLanguageChanged.GetInvocationList(), value);
+                        this.CurrentLanguageChanged(value);
                     }
 
                     this.SaveMainConfig();
@@ -221,8 +221,8 @@ namespace PRoCon.Core {
         
         #endregion
 
-        private bool m_isCheckerRunning;
-        private Thread m_thChecker;
+        //private Thread m_thChecker;
+        protected Timer Checker { get; set; }
 
         private void GetGspSettings() {
 
@@ -481,9 +481,7 @@ namespace PRoCon.Core {
             this.ExecuteMainConfig("procon.cfg");
             this.LoadingMainConfig = false;
 
-            this.m_isCheckerRunning = true;
-            this.m_thChecker = new Thread(this.ReconnectVersionChecker);
-            this.m_thChecker.Start();
+            this.Checker = new Timer(o => this.ReconnectVersionChecker(), null, 20000, 20000);
         }
 
         private void HttpWebServer_ProcessRequest(HttpWebServerRequest sender) {
@@ -1389,14 +1387,14 @@ namespace PRoCon.Core {
                 {
                     if (this.ShowNotification != null)
                     {
-                        FrostbiteConnection.RaiseEvent(this.ShowNotification.GetInvocationList(), 2000, lstWords[1], lstWords[2], blError);
+                        this.ShowNotification(2000, lstWords[1], lstWords[2], blError);
                     }
                 }
                 else
                 {
                     if (this.ShowNotification != null)
                     {
-                        FrostbiteConnection.RaiseEvent(this.ShowNotification.GetInvocationList(), 2000, lstWords[1], lstWords[2], false);
+                        this.ShowNotification(2000, lstWords[1], lstWords[2], false);
                     }
                 }
             }
@@ -2212,14 +2210,14 @@ namespace PRoCon.Core {
                 {
                     if (this.ShowNotification != null)
                     {
-                        FrostbiteConnection.RaiseEvent(this.ShowNotification.GetInvocationList(), 2000, lstWords[1], lstWords[2], blError);
+                        this.ShowNotification(2000, lstWords[1], lstWords[2], blError);
                     }
                 }
                 else
                 {
                     if (this.ShowNotification != null)
                     {
-                        FrostbiteConnection.RaiseEvent(this.ShowNotification.GetInvocationList(), 2000, lstWords[1], lstWords[2], false);
+                        this.ShowNotification(2000, lstWords[1], lstWords[2], false);
                     }
                 }
             }
@@ -2388,13 +2386,13 @@ namespace PRoCon.Core {
 
         private void HttpWebServer_HttpServerOffline(HttpWebServer sender) {
             if (this.HttpServerOffline != null) {
-                FrostbiteConnection.RaiseEvent(this.HttpServerOffline.GetInvocationList(), sender);
+                this.HttpServerOffline(sender);
             }
         }
 
         private void HttpWebServer_HttpServerOnline(HttpWebServer sender) {
             if (this.HttpServerOnline != null) {
-                FrostbiteConnection.RaiseEvent(this.HttpServerOnline.GetInvocationList(), sender);
+                this.HttpServerOnline(sender);
             }
         }
 
@@ -2406,7 +2404,7 @@ namespace PRoCon.Core {
             
             // Begin RSS Update
             if (this.BeginRssUpdate != null) {
-                FrostbiteConnection.RaiseEvent(this.BeginRssUpdate.GetInvocationList(), this);
+                this.BeginRssUpdate(this);
             }
 
             CDownloadFile downloadRssFeed = new CDownloadFile("https://forum.myrcon.com/external.php?do=rss&type=newcontent&sectionid=1&days=120&count=10");
@@ -2435,7 +2433,7 @@ namespace PRoCon.Core {
                 }
                 */
                 if (this.RssUpdateSuccess != null) {
-                    FrostbiteConnection.RaiseEvent(this.RssUpdateSuccess.GetInvocationList(), this, rssDocument);
+                    this.RssUpdateSuccess(this, rssDocument);
                 }
             }
             catch (Exception) { }
@@ -2446,7 +2444,7 @@ namespace PRoCon.Core {
 
             // RSS Error
             if (this.RssUpdateError != null) {
-                FrostbiteConnection.RaiseEvent(this.RssUpdateError.GetInvocationList(), this);
+                this.RssUpdateError(this);
             }
 
         }
@@ -2461,7 +2459,7 @@ namespace PRoCon.Core {
                 rssDocument.LoadXml(xmlDocumentText);
 
                 if (this.RssUpdateSuccess != null) {
-                    FrostbiteConnection.RaiseEvent(this.PromoUpdateSuccess.GetInvocationList(), this, rssDocument);
+                    this.PromoUpdateSuccess(this, rssDocument);
                 }
             }
             catch (Exception) { }
@@ -2472,7 +2470,7 @@ namespace PRoCon.Core {
 
             // RSS Error
             if (this.RssUpdateError != null) {
-                FrostbiteConnection.RaiseEvent(this.PromoUpdateError.GetInvocationList(), this);
+                this.PromoUpdateError(this);
             }
 
         }
@@ -2690,7 +2688,7 @@ namespace PRoCon.Core {
 
                 XmlNode layer = document.CreateElement("layer");
                 layer.AppendChild(this.CreateNode(document, "port", client.Layer.ListeningPort.ToString()));
-                layer.AppendChild(this.CreateNode(document, "is_enabled", client.Layer.IsLayerOnline.ToString()));
+                layer.AppendChild(this.CreateNode(document, "is_enabled", client.Layer.IsOnline.ToString()));
                 connection.AppendChild(layer);
 
                 XmlNode plugins = document.CreateElement("plugins");
@@ -2761,103 +2759,86 @@ namespace PRoCon.Core {
         }
 
         private void ReconnectVersionChecker() {
+            // Send a report naow, next in 30 mins.
+            if (this.m_blInitialUsageDataSent == false && this.OptionsSettings.AllowAnonymousUsageData == true) {
+                this.SendUsageData();
 
-            while (this.m_isCheckerRunning == true) {
-                Thread.Sleep(20000);
-
-                // Send a report naow, next in 30 mins.
-                if (this.m_blInitialUsageDataSent == false && this.OptionsSettings.AllowAnonymousUsageData == true) {
-                    this.SendUsageData();
-
-                    this.m_blInitialUsageDataSent =  true;
-                }
-
-                if (this.m_blInitialVersionCheck == false && this.OptionsSettings.AutoCheckDownloadUpdates == true) {
-                    this.AutoUpdater.CheckVersion();
-
-                    this.m_blInitialVersionCheck = true;
-                }
-
-                
-
-                // Loop through each connection
-                foreach (PRoConClient prcClient in this.Connections) {
-
-                    // If an error occurs
-                    if (prcClient.State == ConnectionState.Error
-                    || (prcClient.State != ConnectionState.Connected && prcClient.AutomaticallyConnect == true)
-                    || (this.ConsoleMode == true && prcClient.State != ConnectionState.Connected)) {
-                        prcClient.Connect();
-                    }
-
-                    prcClient.Poke();
-
-                    //if (((prcClient.ConnectionError == true && prcClient.IsConnected == false) || (prcClient.IsConnected == false && prcClient.ManuallyDisconnected == false)) && prcClient.AutomaticallyConnect == true) {
-
-                    //}
-                }
-
-                // If it's ticked over to a new day..
-                if (this.m_dtDayCheck.Day != DateTime.Now.Day) {
-
-                    foreach (PRoConClient prcClient in this.Connections) {
-                        if (prcClient.ChatConsole != null) {
-                            prcClient.ChatConsole.Logging = false;
-                            prcClient.ChatConsole.Logging = this.OptionsSettings.ChatLogging;
-                        }
-
-                        if (prcClient.EventsLogging != null) {
-                            prcClient.EventsLogging.Logging = false;
-                            prcClient.EventsLogging.Logging = this.OptionsSettings.EventsLogging;
-                        }
-
-                        if (prcClient.Console != null) {
-                            prcClient.Console.Logging = false;
-                            prcClient.Console.Logging = this.OptionsSettings.ConsoleLogging;
-                        }
-                            
-                        if (prcClient.PluginConsole != null) {
-                            prcClient.PluginConsole.Logging = false;
-                            prcClient.PluginConsole.Logging = this.OptionsSettings.PluginLogging;
-                        }
-                    }
-                }
-
-                this.m_dtDayCheck = DateTime.Now;
-
-                // If it's been 3 hours (this ticks every 20 seconds) and we're checking for updates..
-
-                if (this.m_iVersionTicks >= 540 && this.OptionsSettings.AutoCheckDownloadUpdates == true) {
-
-                    this.AutoUpdater.CheckVersion();
-
-                    this.m_iVersionTicks = 0;
-                }
-
-                // Still sends usage data every 30 minutes
-                if (this.m_iUsageDataTicks >= 90 && this.OptionsSettings.AllowAnonymousUsageData == true) {
-
-                    this.SendUsageData();
-
-                    this.m_iUsageDataTicks = 0;
-                }
-
-                this.m_iUsageDataTicks++;
-                this.m_iVersionTicks++;
+                this.m_blInitialUsageDataSent =  true;
             }
+
+            if (this.m_blInitialVersionCheck == false && this.OptionsSettings.AutoCheckDownloadUpdates == true) {
+                this.AutoUpdater.CheckVersion();
+
+                this.m_blInitialVersionCheck = true;
+            }
+
+            // Loop through each connection
+            foreach (PRoConClient prcClient in this.Connections) {
+
+                // If an error occurs
+                if (prcClient.State == ConnectionState.Error
+                || (prcClient.State != ConnectionState.Connected && prcClient.AutomaticallyConnect == true)
+                || (this.ConsoleMode == true && prcClient.State != ConnectionState.Connected)) {
+                    prcClient.Connect();
+                }
+
+                prcClient.Poke();
+            }
+
+            // If it's ticked over to a new day..
+            if (this.m_dtDayCheck.Day != DateTime.Now.Day) {
+
+                foreach (PRoConClient prcClient in this.Connections) {
+                    if (prcClient.ChatConsole != null) {
+                        prcClient.ChatConsole.Logging = false;
+                        prcClient.ChatConsole.Logging = this.OptionsSettings.ChatLogging;
+                    }
+
+                    if (prcClient.EventsLogging != null) {
+                        prcClient.EventsLogging.Logging = false;
+                        prcClient.EventsLogging.Logging = this.OptionsSettings.EventsLogging;
+                    }
+
+                    if (prcClient.Console != null) {
+                        prcClient.Console.Logging = false;
+                        prcClient.Console.Logging = this.OptionsSettings.ConsoleLogging;
+                    }
+                            
+                    if (prcClient.PluginConsole != null) {
+                        prcClient.PluginConsole.Logging = false;
+                        prcClient.PluginConsole.Logging = this.OptionsSettings.PluginLogging;
+                    }
+                }
+            }
+
+            this.m_dtDayCheck = DateTime.Now;
+
+            // If it's been 3 hours (this ticks every 20 seconds) and we're checking for updates..
+
+            if (this.m_iVersionTicks >= 540 && this.OptionsSettings.AutoCheckDownloadUpdates == true) {
+
+                this.AutoUpdater.CheckVersion();
+
+                this.m_iVersionTicks = 0;
+            }
+
+            // Still sends usage data every 30 minutes
+            if (this.m_iUsageDataTicks >= 90 && this.OptionsSettings.AllowAnonymousUsageData == true) {
+
+                this.SendUsageData();
+
+                this.m_iUsageDataTicks = 0;
+            }
+
+            this.m_iUsageDataTicks++;
+            this.m_iVersionTicks++;
         }
 
         #endregion
 
         public void Shutdown() {
 
-            this.m_isCheckerRunning = false;
-
-            // This is mostly for debug so I don't need to wait 20 seconds to exit
-            try {
-                this.m_thChecker.Abort();
-            }
-            catch (Exception) { }
+            this.Checker.Dispose();
 
             this.SaveAccountsConfig();
             this.SaveMainConfig();

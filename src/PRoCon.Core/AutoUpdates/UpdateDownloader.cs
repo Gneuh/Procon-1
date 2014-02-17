@@ -55,7 +55,7 @@ namespace PRoCon.Core.AutoUpdates {
                 ProconUpdate.DownloadComplete += new CDownloadFile.DownloadFileEventDelegate(cdfPRoConUpdate_DownloadComplete);
 
                 if (UpdateDownloading != null) {
-                    FrostbiteConnection.RaiseEvent(UpdateDownloading.GetInvocationList(), ProconUpdate);
+                    this.UpdateDownloading(ProconUpdate);
                 }
 
                 ProconUpdate.BeginDownload();
@@ -76,18 +76,18 @@ namespace PRoCon.Core.AutoUpdates {
                     }
 
                     if (DownloadUnzipComplete != null) {
-                        FrostbiteConnection.RaiseEvent(DownloadUnzipComplete.GetInvocationList());
+                        this.DownloadUnzipComplete();
                     }
                 }
                 catch (Exception e) {
                     if (CustomDownloadError != null) {
-                        FrostbiteConnection.RaiseEvent(CustomDownloadError.GetInvocationList(), e.Message);
+                        this.CustomDownloadError(e.Message);
                     }
                 }
             }
             else {
                 if (CustomDownloadError != null) {
-                    FrostbiteConnection.RaiseEvent(CustomDownloadError.GetInvocationList(), "Downloaded file failed checksum, please try again or download direct from https://myrcon.com");
+                    this.CustomDownloadError("Downloaded file failed checksum, please try again or download direct from https://myrcon.com");
                 }
             }
         }

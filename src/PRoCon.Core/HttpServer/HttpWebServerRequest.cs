@@ -53,7 +53,7 @@ namespace PRoCon.Core.HttpServer {
                 Data = new HttpWebServerRequestData(packet);
 
                 if (ProcessRequest != null) {
-                    FrostbiteConnection.RaiseEvent(ProcessRequest.GetInvocationList(), this);
+                    this.ProcessRequest(this);
                 }
             }
         }
@@ -104,7 +104,7 @@ namespace PRoCon.Core.HttpServer {
                 Stream = null;
 
                 if (ClientShutdown != null) {
-                    FrostbiteConnection.RaiseEvent(ClientShutdown.GetInvocationList(), this);
+                    this.ClientShutdown(this);
                 }
             }
         }
@@ -121,7 +121,7 @@ namespace PRoCon.Core.HttpServer {
                     Stream.Write(bData, 0, bData.Length);
 
                     if (ResponseSent != null) {
-                        FrostbiteConnection.RaiseEvent(ResponseSent.GetInvocationList(), this, response);
+                        this.ResponseSent(this, response);
                     }
 
                     Shutdown();

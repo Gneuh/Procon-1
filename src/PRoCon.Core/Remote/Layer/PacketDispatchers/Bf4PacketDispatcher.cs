@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace PRoCon.Core.Remote.Layer {
-    public class BF4LayerClient : FrostbiteLayerClient {
-
-        public BF4LayerClient(FrostbiteLayerConnection connection) : base(connection) {
-
+﻿namespace PRoCon.Core.Remote.Layer.PacketDispatchers {
+    public class Bf4PacketDispatcher : LayerPacketDispatcher {
+        public Bf4PacketDispatcher(ILayerConnection connection) : base(connection) {
             this.RequestDelegates.Add("admin.eventsEnabled", this.DispatchEventsEnabledRequest);
 
             // vars.idleTimeout is already included in FrostbiteLayerClient

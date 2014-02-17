@@ -17,7 +17,7 @@ namespace PRoCon.Core.Accounts {
             base.InsertItem(index, item);
 
             if (AccountPrivilegeAdded != null) {
-                FrostbiteConnection.RaiseEvent(AccountPrivilegeAdded.GetInvocationList(), item);
+                this.AccountPrivilegeAdded(item);
             }
         }
 
@@ -27,13 +27,13 @@ namespace PRoCon.Core.Accounts {
             base.RemoveItem(index);
 
             if (AccountPrivilegeRemoved != null) {
-                FrostbiteConnection.RaiseEvent(AccountPrivilegeRemoved.GetInvocationList(), apRemoved);
+                this.AccountPrivilegeRemoved(apRemoved);
             }
         }
 
         protected override void SetItem(int index, AccountPrivilege item) {
             if (AccountPrivilegeChanged != null) {
-                FrostbiteConnection.RaiseEvent(AccountPrivilegeChanged.GetInvocationList(), item);
+                this.AccountPrivilegeChanged(item);
             }
 
             base.SetItem(index, item);

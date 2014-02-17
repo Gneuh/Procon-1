@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Text;
 using System.Windows.Forms;
 using System.Security.Permissions;
+using PRoCon.Core;
+using PRoCon.Core.Remote;
 
-namespace PRoCon {
-    using PRoCon.Core;
-    using PRoCon.Core.Remote;
+namespace PRoCon.Controls {
     [PermissionSet(SecurityAction.Demand, Name = "FullTrust")]
     [System.Runtime.InteropServices.ComVisibleAttribute(true)]
     public partial class uscPage : UserControl {
@@ -161,48 +158,49 @@ namespace PRoCon {
         }
 
         public void OnSettingResponse(string strResponseCommand, object objValue, bool blSuccess) {
+            this.InvokeIfRequired(() => {
+                if (this.AsyncSettingControls.ContainsKey(strResponseCommand) == true) {
 
-            if (this.AsyncSettingControls.ContainsKey(strResponseCommand) == true) {
-
-                foreach (Control ctrlEnable in this.AsyncSettingControls[strResponseCommand].ma_ctrlEnabledInputs) {
-                    if (ctrlEnable is TextBox) {
-                        ((TextBox)ctrlEnable).ReadOnly = false;
+                    foreach (Control ctrlEnable in this.AsyncSettingControls[strResponseCommand].ma_ctrlEnabledInputs) {
+                        if (ctrlEnable is TextBox) {
+                            ((TextBox) ctrlEnable).ReadOnly = false;
+                        }
+                        else if (ctrlEnable is NumericUpDown) {
+                            ((NumericUpDown) ctrlEnable).ReadOnly = false;
+                        }
+                        else {
+                            ctrlEnable.Enabled = true;
+                        }
                     }
-                    else if (ctrlEnable is NumericUpDown) {
-                        ((NumericUpDown)ctrlEnable).ReadOnly = false;
-                    }
-                    else {
-                        ctrlEnable.Enabled = true;
-                    }
-                }
 
-                this.AsyncSettingControls[strResponseCommand].IgnoreEvent = true;
+                    this.AsyncSettingControls[strResponseCommand].IgnoreEvent = true;
 
-                if (blSuccess == true) {
-                    this.SetControlValue(this.AsyncSettingControls[strResponseCommand].m_ctrlResponseTarget, objValue);
-                    this.AsyncSettingControls[strResponseCommand].m_picStatus.Image = this.SettingSuccess;
-                    //this.m_dicAsyncSettingControls[strResponseCommand].m_iImageIndex = CAsyncSetting.INT_ICON_ANIMATEDSETTING_SET_SUCCESS;
-                    this.AsyncSettingControls[strResponseCommand].m_iTimeout = AsyncStyleSetting.INT_ANIMATEDSETTING_SHOWRESULT_TICKS;
-
-                    this.AsyncSettingControls[strResponseCommand].m_blSuccess = true;
-                }
-                else {
-                    this.SetControlValue(this.AsyncSettingControls[strResponseCommand].m_ctrlResponseTarget, this.AsyncSettingControls[strResponseCommand].m_objOriginalValue);
-                    this.AsyncSettingControls[strResponseCommand].m_picStatus.Image = this.SettingFail;
-                    //this.m_dicAsyncSettingControls[strResponseCommand].m_iImageIndex = CAsyncSetting.INT_ICON_ANIMATEDSETTING_SET_FAILURE;
-                    this.AsyncSettingControls[strResponseCommand].m_blSuccess = false;
-                    if (objValue != null) {
+                    if (blSuccess == true) {
+                        this.SetControlValue(this.AsyncSettingControls[strResponseCommand].m_ctrlResponseTarget, objValue);
+                        this.AsyncSettingControls[strResponseCommand].m_picStatus.Image = this.SettingSuccess;
+                        //this.m_dicAsyncSettingControls[strResponseCommand].m_iImageIndex = CAsyncSetting.INT_ICON_ANIMATEDSETTING_SET_SUCCESS;
                         this.AsyncSettingControls[strResponseCommand].m_iTimeout = AsyncStyleSetting.INT_ANIMATEDSETTING_SHOWRESULT_TICKS;
+
+                        this.AsyncSettingControls[strResponseCommand].m_blSuccess = true;
                     }
                     else {
-                        // TO DO: objValue will hold the error recieved from BFBC2 server
+                        this.SetControlValue(this.AsyncSettingControls[strResponseCommand].m_ctrlResponseTarget, this.AsyncSettingControls[strResponseCommand].m_objOriginalValue);
+                        this.AsyncSettingControls[strResponseCommand].m_picStatus.Image = this.SettingFail;
+                        //this.m_dicAsyncSettingControls[strResponseCommand].m_iImageIndex = CAsyncSetting.INT_ICON_ANIMATEDSETTING_SET_FAILURE;
+                        this.AsyncSettingControls[strResponseCommand].m_blSuccess = false;
+                        if (objValue != null) {
+                            this.AsyncSettingControls[strResponseCommand].m_iTimeout = AsyncStyleSetting.INT_ANIMATEDSETTING_SHOWRESULT_TICKS;
+                        }
+                        else {
+                            // TO DO: objValue will hold the error recieved from BFBC2 server
+                        }
                     }
+
+                    this.tmrTimeoutCheck.Enabled = true;
+
+                    this.AsyncSettingControls[strResponseCommand].IgnoreEvent = false;
                 }
-
-                this.tmrTimeoutCheck.Enabled = true;
-
-                this.AsyncSettingControls[strResponseCommand].IgnoreEvent = false;
-            }
+            });
         }
 
         private int CountTicking() {

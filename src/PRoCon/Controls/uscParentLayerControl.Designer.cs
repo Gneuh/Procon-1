@@ -1,4 +1,4 @@
-﻿namespace PRoCon {
+﻿namespace PRoCon.Controls {
     partial class uscParentLayerControl {
         /// <summary> 
         /// Required designer variable.
@@ -26,7 +26,7 @@
             this.components = new System.ComponentModel.Container();
             this.tbcLayerControl = new System.Windows.Forms.TabControl();
             this.tabPlugins = new System.Windows.Forms.TabPage();
-            this.uscPlugins = new PRoCon.uscPluginPanel();
+            this.uscPlugins = new uscPluginPanel();
             this.tabAccounts = new System.Windows.Forms.TabPage();
             this.pnlMainLayerServer = new System.Windows.Forms.Panel();
             this.spltLayerSetupPrivs = new System.Windows.Forms.SplitContainer();
@@ -62,7 +62,7 @@
             this.lblLayerAssignAccountPrivilegesTitle = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.pnlAccountPrivileges = new System.Windows.Forms.Panel();
-            this.uscPrivileges = new PRoCon.uscPrivilegesSelection();
+            this.uscPrivileges = new uscPrivilegesSelection();
             this.tmrTimeoutCheck = new System.Windows.Forms.Timer(this.components);
             this.tbcLayerControl.SuspendLayout();
             this.tabPlugins.SuspendLayout();
@@ -117,9 +117,9 @@
             this.uscPlugins.Name = "uscPlugins";
             this.uscPlugins.Size = new System.Drawing.Size(975, 1248);
             this.uscPlugins.TabIndex = 0;
-            this.uscPlugins.GetPluginDetails += new PRoCon.uscPluginPanel.GetPluginDetailsDelegate(this.uscPlugins_GetPluginDetails);
-            this.uscPlugins.SetPluginVariable += new PRoCon.uscPluginPanel.SetPluginVariableDelegate(this.uscPlugins_SetPluginVariable);
-            this.uscPlugins.PluginEnabled += new PRoCon.uscPluginPanel.PluginEnabledDelegate(this.uscPlugins_PluginEnabled);
+            this.uscPlugins.GetPluginDetails += new uscPluginPanel.GetPluginDetailsDelegate(this.uscPlugins_GetPluginDetails);
+            this.uscPlugins.SetPluginVariable += new uscPluginPanel.SetPluginVariableDelegate(this.uscPlugins_SetPluginVariable);
+            this.uscPlugins.PluginEnabled += new uscPluginPanel.PluginEnabledDelegate(this.uscPlugins_PluginEnabled);
             // 
             // tabAccounts
             // 

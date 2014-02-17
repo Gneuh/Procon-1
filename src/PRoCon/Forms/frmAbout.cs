@@ -56,8 +56,6 @@ namespace PRoCon.Forms {
             this.tabCopyright.Text = this.m_clocLanguage.GetLocalized("frmAbout.tabCopyright.Title", null);
         }
 
-        #region Assembly Attribute Accessors
-
         public string AssemblyTitle {
             get {
                 object[] attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyTitleAttribute), false);
@@ -116,7 +114,6 @@ namespace PRoCon.Forms {
                 return ((AssemblyCompanyAttribute)attributes[0]).Company;
             }
         }
-        #endregion
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
             System.Diagnostics.Process.Start("https://myrcon.com/");

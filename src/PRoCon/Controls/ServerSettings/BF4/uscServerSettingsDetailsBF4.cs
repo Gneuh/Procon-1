@@ -81,11 +81,11 @@ namespace PRoCon.Controls.ServerSettings.BF4 {
 
 
         private void Client_GameTypeDiscovered(PRoConClient sender) {
-
-            this.Client.Game.ServerName += new FrostbiteClient.ServerNameHandler(m_prcClient_ServerName);
-            this.Client.Game.ServerDescription += new FrostbiteClient.ServerDescriptionHandler(m_prcClient_ServerDescription);
-            this.Client.Game.ServerMessage += new FrostbiteClient.ServerMessageHandler(m_prcClient_ServerMessage);
-            
+            this.InvokeIfRequired(() => {
+                this.Client.Game.ServerName += new FrostbiteClient.ServerNameHandler(m_prcClient_ServerName);
+                this.Client.Game.ServerDescription += new FrostbiteClient.ServerDescriptionHandler(m_prcClient_ServerDescription);
+                this.Client.Game.ServerMessage += new FrostbiteClient.ServerMessageHandler(m_prcClient_ServerMessage);
+            });
         }
 
         #region Server Description

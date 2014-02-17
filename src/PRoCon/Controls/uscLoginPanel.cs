@@ -19,18 +19,12 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Text;
 using System.Windows.Forms;
+using PRoCon.Core;
+using PRoCon.Core.Remote;
+using PRoCon.Forms;
 
-namespace PRoCon {
-    using Core;
-    using Core.Remote;
-    using PRoCon.Forms;
-
+namespace PRoCon.Controls {
     public partial class uscLoginPanel : UserControl {
 
         private uscServerConnection m_uscConnectionPanel;
@@ -99,45 +93,51 @@ namespace PRoCon {
         }
 
         private void m_prcClient_ConnectAttempt(PRoConClient sender) {
-            this.Connecting = true;
+            this.InvokeIfRequired(() => { this.Connecting = true; });
         }
 
         private void m_prcClient_CommandLogout(PRoConClient sender) {
-            this.LoggedIn = false;
+            this.InvokeIfRequired(() => { this.LoggedIn = false; });
         }
 
         private void m_prcClient_Login(PRoConClient sender) {
-            this.LoggedIn = true;
+            this.InvokeIfRequired(() => { this.LoggedIn = true; });
         }
 
         private void m_prcClient_CommandLoginFailure(PRoConClient sender, string strError) {
-            if (String.Compare(strError, "InsufficientPrivileges", true) == 0) {
-                this.ErrorMessage = this.m_clocLanguage.GetLocalized("uscLoginPanel.ErrorMessage.InsufficientPrivileges");
-            }
-            else if (String.Compare(strError, "InvalidUsername", true) == 0) {
-                this.ErrorMessage = this.m_clocLanguage.GetLocalized("uscLoginPanel.ErrorMessage.InvalidUsername");
-            }
-            else if (String.Compare(strError, "InvalidPassword", true) == 0 || String.Compare(strError, "InvalidPasswordHash", true) == 0) {
-                this.ErrorMessage = this.m_clocLanguage.GetLocalized("uscLoginPanel.ErrorMessage.InvalidPassword");
-            }
+            this.InvokeIfRequired(() => {
+                if (String.Compare(strError, "InsufficientPrivileges", true) == 0) {
+                    this.ErrorMessage = this.m_clocLanguage.GetLocalized("uscLoginPanel.ErrorMessage.InsufficientPrivileges");
+                }
+                else if (String.Compare(strError, "InvalidUsername", true) == 0) {
+                    this.ErrorMessage = this.m_clocLanguage.GetLocalized("uscLoginPanel.ErrorMessage.InvalidUsername");
+                }
+                else if (String.Compare(strError, "InvalidPassword", true) == 0 || String.Compare(strError, "InvalidPasswordHash", true) == 0) {
+                    this.ErrorMessage = this.m_clocLanguage.GetLocalized("uscLoginPanel.ErrorMessage.InvalidPassword");
+                }
 
-            this.Connecting = this.LoggedIn = false;
+                this.Connecting = this.LoggedIn = false;
+            });
         }
 
         private void m_prcClient_ConnectionFailure(PRoConClient sender, Exception exception) {
-            this.ErrorMessage = this.m_clocLanguage.GetLocalized("uscServerConnection.OnServerConnectionFailure", exception.Message);
+            this.InvokeIfRequired(() => {
+                this.ErrorMessage = this.m_clocLanguage.GetLocalized("uscServerConnection.OnServerConnectionFailure", exception.Message);
 
-            this.Connecting = this.LoggedIn = false;
+                this.Connecting = this.LoggedIn = false;
+            });
         }
 
         private void m_prcClient_SocketException(PRoConClient sender, System.Net.Sockets.SocketException se) {
-            this.ErrorMessage = this.m_clocLanguage.GetLocalized("uscServerConnection.OnServerConnectionFailure", se.Message);
+            this.InvokeIfRequired(() => {
+                this.ErrorMessage = this.m_clocLanguage.GetLocalized("uscServerConnection.OnServerConnectionFailure", se.Message);
 
-            this.Connecting = this.LoggedIn = false;
+                this.Connecting = this.LoggedIn = false;
+            });
         }
 
         private void m_prcClient_ConnectionClosed(PRoConClient sender) {
-            this.Connecting = this.LoggedIn = false;
+            this.InvokeIfRequired(() => { this.Connecting = this.LoggedIn = false; });
         }
 
         public void SetLocalization(CLocalization clocLanguage) {
@@ -178,7 +178,7 @@ namespace PRoCon {
         }
 
         void m_prcClient_AutomaticallyConnectChanged(PRoConClient sender, bool isEnabled) {
-            this.chkAutomaticallyConnect.Checked = isEnabled;
+            this.InvokeIfRequired(() => { this.chkAutomaticallyConnect.Checked = isEnabled; });
         }
     }
 }

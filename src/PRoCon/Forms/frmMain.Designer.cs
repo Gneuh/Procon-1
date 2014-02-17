@@ -532,6 +532,7 @@
             this.iglIcons.Images.SetKeyName(60, "home.png");
             this.iglIcons.Images.SetKeyName(61, "wrench.png");
             this.iglIcons.Images.SetKeyName(62, "check.png");
+            this.iglIcons.Images.SetKeyName(63, "magnifier.png");
             // 
             // tltpUpdateComplete
             // 

@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-using PRoCon;
 
 namespace PRoCon.Forms {
     using Core;
@@ -16,62 +11,65 @@ namespace PRoCon.Forms {
         public delegate PRoConApplication WindowLoadedHandler(bool execute);
         public event WindowLoadedHandler WindowLoaded;
 
-        private PRoConApplication m_praApplication;
+        private PRoConApplication _application;
 
         public BasicConsole() {
             InitializeComponent();
         }
 
         private void BasicConsole_Load(object sender, EventArgs e) {
+            this.InvokeIfRequired(() => {
+                this._application = this.WindowLoaded(false);
+                this._application.Connections.ConnectionAdded += new ConnectionDictionary.ConnectionAlteredHandler(Connections_ConnectionAdded);
+                this._application.Execute();
 
-            this.m_praApplication = this.WindowLoaded(false);
-            this.m_praApplication.Connections.ConnectionAdded += new ConnectionDictionary.ConnectionAlteredHandler(Connections_ConnectionAdded);
-            this.m_praApplication.Execute();
-
-            if (this.m_praApplication.CustomTitle.Length > 0) {
-                this.Text = this.m_praApplication.CustomTitle;
-            }
+                if (this._application.CustomTitle.Length > 0) {
+                    this.Text = this._application.CustomTitle;
+                }
+            });
         }
 
         private void Connections_ConnectionAdded(PRoConClient item) {
-            item.GameTypeDiscovered += new PRoConClient.EmptyParamterHandler(item_GameTypeDiscovered);
-            
+            this.InvokeIfRequired(() => { item.GameTypeDiscovered += new PRoConClient.EmptyParamterHandler(item_GameTypeDiscovered); });
         }
 
         private void item_GameTypeDiscovered(PRoConClient sender) {
-            sender.ConnectionClosed += new PRoConClient.EmptyParamterHandler(sender_ConnectionClosed);
-            sender.ConnectionFailure += new PRoConClient.FailureHandler(sender_ConnectionFailure);
-            sender.ConnectSuccess += new PRoConClient.EmptyParamterHandler(sender_ConnectSuccess);
-            sender.Login += new PRoConClient.EmptyParamterHandler(sender_Login);
-            sender.LoginAttempt += new PRoConClient.EmptyParamterHandler(sender_LoginAttempt);
-            sender.LoginFailure += new PRoConClient.AuthenticationFailureHandler(sender_LoginFailure);
-            sender.Logout += new PRoConClient.EmptyParamterHandler(sender_Logout);
+            this.InvokeIfRequired(() => {
+                sender.ConnectionClosed += new PRoConClient.EmptyParamterHandler(sender_ConnectionClosed);
+                sender.ConnectionFailure += new PRoConClient.FailureHandler(sender_ConnectionFailure);
+                sender.ConnectSuccess += new PRoConClient.EmptyParamterHandler(sender_ConnectSuccess);
+                sender.Login += new PRoConClient.EmptyParamterHandler(sender_Login);
+                sender.LoginAttempt += new PRoConClient.EmptyParamterHandler(sender_LoginAttempt);
+                sender.LoginFailure += new PRoConClient.AuthenticationFailureHandler(sender_LoginFailure);
+                sender.Logout += new PRoConClient.EmptyParamterHandler(sender_Logout);
+            });
         }
 
         private void UpdateConnectionsLabel() {
+            this.InvokeIfRequired(() => {
+                StringBuilder builder = new StringBuilder();
 
-            StringBuilder builder = new StringBuilder();
+                foreach (PRoConClient client in this._application.Connections) {
 
-            foreach (PRoConClient client in this.m_praApplication.Connections) {
+                    if (client.State == ConnectionState.Connected && client.IsLoggedIn == true) {
+                        builder.AppendFormat("{0,15}: {1}\r\n", "LoggedIn", client.HostNamePort);
+                    }
+                    else if (client.State == ConnectionState.Connected) {
+                        builder.AppendFormat("{0,15}: {1}\r\n", "Connected", client.HostNamePort);
+                    }
+                    else if (client.State == ConnectionState.Connecting) {
+                        builder.AppendFormat("{0,15}: {1}\r\n", "Connecting", client.HostNamePort);
+                    }
+                    else if (client.State == ConnectionState.Error) {
+                        builder.AppendFormat("{0,15}: {1}\r\n", "Connection Error", client.HostNamePort);
+                    }
+                    else {
+                        builder.AppendFormat("{0,15}: {1}\r\n", "Disconnected", client.HostNamePort);
+                    }
+                }
 
-                if (client.State == ConnectionState.Connected && client.IsLoggedIn == true) {
-                    builder.AppendFormat("{0,15}: {1}\r\n", "LoggedIn", client.HostNamePort);
-                }
-                else if (client.State == ConnectionState.Connected) {
-                    builder.AppendFormat("{0,15}: {1}\r\n", "Connected", client.HostNamePort);
-                }
-                else if (client.State == ConnectionState.Connecting) {
-                    builder.AppendFormat("{0,15}: {1}\r\n", "Connecting", client.HostNamePort);
-                }
-                else if (client.State == ConnectionState.Error) {
-                    builder.AppendFormat("{0,15}: {1}\r\n", "Connection Error", client.HostNamePort);
-                }
-                else {
-                    builder.AppendFormat("{0,15}: {1}\r\n", "Disconnected", client.HostNamePort);
-                }
-            }
-
-            this.label1.Text = builder.ToString();
+                this.label1.Text = builder.ToString();
+            });
         }
 
         void sender_Logout(PRoConClient sender) {
@@ -103,7 +101,7 @@ namespace PRoCon.Forms {
         }
                 
         private void BasicConsole_FormClosing(object sender, FormClosingEventArgs e) {
-            this.m_praApplication.Shutdown();
+            this._application.Shutdown();
         }
     }
 }

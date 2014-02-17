@@ -1,4 +1,6 @@
-﻿namespace PRoCon.Forms {
+﻿using PRoCon.Controls;
+
+namespace PRoCon.Forms {
     partial class frmManageAccounts {
         /// <summary>
         /// Required designer variable.
@@ -62,7 +64,7 @@
             this.lblCreateNewAccountTitle = new System.Windows.Forms.Label();
             this.btnClose = new System.Windows.Forms.Button();
             this.pnlAlterPrivileges = new System.Windows.Forms.Panel();
-            this.uscSetPrivileges = new PRoCon.uscPrivilegesSelection();
+            this.uscSetPrivileges = new uscPrivilegesSelection();
             this.pnlChooseAccount.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picCreateNewAccount)).BeginInit();
             this.pnlEditingUser.SuspendLayout();

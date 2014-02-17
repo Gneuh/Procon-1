@@ -154,38 +154,40 @@ namespace PRoCon.Controls.ServerSettings.BF3 {
         }
 
         private void m_prcClient_GameTypeDiscovered(PRoConClient sender) {
-            this.Client.Game.TeamBalance += new FrostbiteClient.IsEnabledHandler(m_prcClient_TeamBalance);
-            this.Client.Game.KillCam += new FrostbiteClient.IsEnabledHandler(m_prcClient_KillCam);
-            this.Client.Game.MiniMap += new FrostbiteClient.IsEnabledHandler(m_prcClient_MiniMap);
-            this.Client.Game.CrossHair += new FrostbiteClient.IsEnabledHandler(m_prcClient_CrossHair);
-            this.Client.Game.ThreeDSpotting += new FrostbiteClient.IsEnabledHandler(m_prcClient_ThreeDSpotting);
-            this.Client.Game.MiniMapSpotting += new FrostbiteClient.IsEnabledHandler(m_prcClient_MiniMapSpotting);
-            this.Client.Game.ThirdPersonVehicleCameras += new FrostbiteClient.IsEnabledHandler(m_prcClient_ThirdPersonVehicleCameras);
+            this.InvokeIfRequired(() => {
+                this.Client.Game.TeamBalance += new FrostbiteClient.IsEnabledHandler(m_prcClient_TeamBalance);
+                this.Client.Game.KillCam += new FrostbiteClient.IsEnabledHandler(m_prcClient_KillCam);
+                this.Client.Game.MiniMap += new FrostbiteClient.IsEnabledHandler(m_prcClient_MiniMap);
+                this.Client.Game.CrossHair += new FrostbiteClient.IsEnabledHandler(m_prcClient_CrossHair);
+                this.Client.Game.ThreeDSpotting += new FrostbiteClient.IsEnabledHandler(m_prcClient_ThreeDSpotting);
+                this.Client.Game.MiniMapSpotting += new FrostbiteClient.IsEnabledHandler(m_prcClient_MiniMapSpotting);
+                this.Client.Game.ThirdPersonVehicleCameras += new FrostbiteClient.IsEnabledHandler(m_prcClient_ThirdPersonVehicleCameras);
 
-            this.Client.Game.NameTag += new FrostbiteClient.IsEnabledHandler(Game_NameTag);
-            this.Client.Game.OnlySquadLeaderSpawn += new FrostbiteClient.IsEnabledHandler(Game_OnlySquadLeaderSpawn);
-            this.Client.Game.RegenerateHealth += new FrostbiteClient.IsEnabledHandler(Game_RegenerateHealth);
-            this.Client.Game.Hud += new FrostbiteClient.IsEnabledHandler(Game_Hud);
-            
-            this.Client.Game.UnlockMode += new FrostbiteClient.UnlockModeHandler(Game_UnlockMode);
-            this.Client.Game.GunMasterWeaponsPreset += new FrostbiteClient.GunMasterWeaponsPresetHandler(Game_GunMasterWeaponsPreset);
+                this.Client.Game.NameTag += new FrostbiteClient.IsEnabledHandler(Game_NameTag);
+                this.Client.Game.OnlySquadLeaderSpawn += new FrostbiteClient.IsEnabledHandler(Game_OnlySquadLeaderSpawn);
+                this.Client.Game.RegenerateHealth += new FrostbiteClient.IsEnabledHandler(Game_RegenerateHealth);
+                this.Client.Game.Hud += new FrostbiteClient.IsEnabledHandler(Game_Hud);
 
-            this.Client.Game.VehicleSpawnAllowed += new FrostbiteClient.IsEnabledHandler(Game_VehicleSpawnAllowed);
-            this.Client.Game.VehicleSpawnDelay += new FrostbiteClient.LimitHandler(Game_VehicleSpawnDelay);
+                this.Client.Game.UnlockMode += new FrostbiteClient.UnlockModeHandler(Game_UnlockMode);
+                this.Client.Game.GunMasterWeaponsPreset += new FrostbiteClient.GunMasterWeaponsPresetHandler(Game_GunMasterWeaponsPreset);
 
-            this.Client.Game.BulletDamage += new FrostbiteClient.LimitHandler(Game_BulletDamage);
-            this.Client.Game.RoundRestartPlayerCount += new FrostbiteClient.LimitHandler(Game_RoundRestartPlayerCount);
-            this.Client.Game.RoundStartPlayerCount += new FrostbiteClient.LimitHandler(Game_RoundStartPlayerCount);
+                this.Client.Game.VehicleSpawnAllowed += new FrostbiteClient.IsEnabledHandler(Game_VehicleSpawnAllowed);
+                this.Client.Game.VehicleSpawnDelay += new FrostbiteClient.LimitHandler(Game_VehicleSpawnDelay);
 
-            this.Client.Game.SoldierHealth += new FrostbiteClient.LimitHandler(Game_SoldierHealth);
-            this.Client.Game.PlayerManDownTime += new FrostbiteClient.LimitHandler(Game_PlayerManDownTime);
+                this.Client.Game.BulletDamage += new FrostbiteClient.LimitHandler(Game_BulletDamage);
+                this.Client.Game.RoundRestartPlayerCount += new FrostbiteClient.LimitHandler(Game_RoundRestartPlayerCount);
+                this.Client.Game.RoundStartPlayerCount += new FrostbiteClient.LimitHandler(Game_RoundStartPlayerCount);
 
-            this.Client.Game.PlayerRespawnTime += new FrostbiteClient.LimitHandler(Game_PlayerRespawnTime);
+                this.Client.Game.SoldierHealth += new FrostbiteClient.LimitHandler(Game_SoldierHealth);
+                this.Client.Game.PlayerManDownTime += new FrostbiteClient.LimitHandler(Game_PlayerManDownTime);
 
-            this.Client.Game.GameModeCounter += new FrostbiteClient.LimitHandler(Game_GameModeCounter);
-            this.Client.Game.CtfRoundTimeModifier +=new FrostbiteClient.LimitHandler(Game_CtfRoundTimeModifier);
-            this.Client.Game.RoundLockdownCountdown += new FrostbiteClient.LimitHandler(Game_RoundLockdownCountdown);
-            this.Client.Game.RoundWarmupTimeout += new FrostbiteClient.LimitHandler(Game_RoundWarmupTimeout);
+                this.Client.Game.PlayerRespawnTime += new FrostbiteClient.LimitHandler(Game_PlayerRespawnTime);
+
+                this.Client.Game.GameModeCounter += new FrostbiteClient.LimitHandler(Game_GameModeCounter);
+                this.Client.Game.CtfRoundTimeModifier += new FrostbiteClient.LimitHandler(Game_CtfRoundTimeModifier);
+                this.Client.Game.RoundLockdownCountdown += new FrostbiteClient.LimitHandler(Game_RoundLockdownCountdown);
+                this.Client.Game.RoundWarmupTimeout += new FrostbiteClient.LimitHandler(Game_RoundWarmupTimeout);
+            });
         }
 
 
@@ -394,12 +396,13 @@ namespace PRoCon.Controls.ServerSettings.BF3 {
 
         private string m_strPreviousSuccessUnlockMode;
 
-        private void Game_UnlockMode(FrostbiteClient sender, string mode)
-        {
-            this.m_strPreviousSuccessUnlockMode = mode.ToString();
-            this.OnSettingResponse("vars.unlockmode", mode.ToString(), true);
+        private void Game_UnlockMode(FrostbiteClient sender, string mode) {
+            this.InvokeIfRequired(() => {
+                this.m_strPreviousSuccessUnlockMode = mode.ToString();
+                this.OnSettingResponse("vars.unlockmode", mode.ToString(), true);
 
-            this.cboSettingsUnlockMode.SelectedValue = mode.ToString().ToLower();
+                this.cboSettingsUnlockMode.SelectedValue = mode.ToString().ToLower();
+            });
         }
 
         private void lnkSettingsUnlockMode_LinkClicked(object sender, EventArgs e)
@@ -422,12 +425,13 @@ namespace PRoCon.Controls.ServerSettings.BF3 {
 
         private int m_iPreviousSuccessGunMasterWeaponsPreset;
 
-        private void Game_GunMasterWeaponsPreset(FrostbiteClient sender, int preset)
-        {
-            this.m_iPreviousSuccessGunMasterWeaponsPreset = preset;
-            this.OnSettingResponse("vars.gunMasterWeaponsPreset", (decimal)preset, true);
+        private void Game_GunMasterWeaponsPreset(FrostbiteClient sender, int preset) {
+            this.InvokeIfRequired(() => {
+                this.m_iPreviousSuccessGunMasterWeaponsPreset = preset;
+                this.OnSettingResponse("vars.gunMasterWeaponsPreset", (decimal) preset, true);
 
-            this.cboSettingsGunMasterWeaponsPreset.SelectedValue = preset.ToString();
+                this.cboSettingsGunMasterWeaponsPreset.SelectedValue = preset.ToString();
+            });
         }
 
         private void lnkSettingsGunMasterWeaponsPreset_LinkClicked(object sender, EventArgs e)

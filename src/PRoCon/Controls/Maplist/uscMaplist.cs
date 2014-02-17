@@ -118,26 +118,28 @@ namespace PRoCon.Controls.Maplist {
         }
 
         private void m_prcClient_GameTypeDiscovered(PRoConClient sender) {
+            this.InvokeIfRequired(() => {
 
-            this.m_client.Game.PlaylistSet += new FrostbiteClient.PlaylistSetHandler(Game_PlaylistSet);
+                this.m_client.Game.PlaylistSet += new FrostbiteClient.PlaylistSetHandler(Game_PlaylistSet);
 
-            this.m_client.Game.MapListSave += new FrostbiteClient.EmptyParamterHandler(Game_MapListSave);
-            this.m_client.Game.MapListMapAppended += new FrostbiteClient.MapListAppendedHandler(Game_MapListMapAppended);
-            this.m_client.Game.MapListCleared += new FrostbiteClient.EmptyParamterHandler(Game_MapListCleared);
-            this.m_client.Game.MapListListed += new FrostbiteClient.MapListListedHandler(Game_MapListListed);
-            this.m_client.Game.MapListMapInserted += new FrostbiteClient.MapListMapInsertedHandler(Game_MapListMapInserted);
-            this.m_client.Game.MapListMapRemoved += new FrostbiteClient.MapListLevelIndexHandler(Game_MapListMapRemoved);
+                this.m_client.Game.MapListSave += new FrostbiteClient.EmptyParamterHandler(Game_MapListSave);
+                this.m_client.Game.MapListMapAppended += new FrostbiteClient.MapListAppendedHandler(Game_MapListMapAppended);
+                this.m_client.Game.MapListCleared += new FrostbiteClient.EmptyParamterHandler(Game_MapListCleared);
+                this.m_client.Game.MapListListed += new FrostbiteClient.MapListListedHandler(Game_MapListListed);
+                this.m_client.Game.MapListMapInserted += new FrostbiteClient.MapListMapInsertedHandler(Game_MapListMapInserted);
+                this.m_client.Game.MapListMapRemoved += new FrostbiteClient.MapListLevelIndexHandler(Game_MapListMapRemoved);
 
-            this.m_client.Game.MapListGetMapIndices += new FrostbiteClient.MapListGetMapIndicesHandler(Game_MapListGetMapIndices);
-            this.m_client.Game.MapListNextLevelIndex += new FrostbiteClient.MapListLevelIndexHandler(Game_MapListNextLevelIndex);
+                this.m_client.Game.MapListGetMapIndices += new FrostbiteClient.MapListGetMapIndicesHandler(Game_MapListGetMapIndices);
+                this.m_client.Game.MapListNextLevelIndex += new FrostbiteClient.MapListLevelIndexHandler(Game_MapListNextLevelIndex);
 
-            this.m_client.MapListPool.ItemAdded += new NotificationList<CMap>.ItemModifiedHandler(MapListPool_ItemAdded);
+                this.m_client.MapListPool.ItemAdded += new NotificationList<CMap>.ItemModifiedHandler(MapListPool_ItemAdded);
 
-            this.m_client.ProconPrivileges += new PRoConClient.ProconPrivilegesHandler(m_prcClient_ProconPrivileges);
+                this.m_client.ProconPrivileges += new PRoConClient.ProconPrivilegesHandler(m_prcClient_ProconPrivileges);
 
-            this.splitContainer1.Panel1Collapsed = this.m_client.Game.HasOpenMaplist;
+                this.splitContainer1.Panel1Collapsed = this.m_client.Game.HasOpenMaplist;
 
-            this.RefreshLocalMaplist();
+                this.RefreshLocalMaplist();
+            });
         }
         
         private void RefreshLocalMaplist() {
@@ -220,93 +222,101 @@ namespace PRoCon.Controls.Maplist {
         }
 
         private void m_prcClient_ProconPrivileges(PRoConClient sender, CPrivileges spPrivs) {
-            this.m_privileges = spPrivs;
+            this.InvokeIfRequired(() => {
+                this.m_privileges = spPrivs;
 
-            this.lsvMaplistPool.Enabled = this.m_privileges.CanEditMapList;
-            this.pnlMaplistAddMap.Enabled = this.m_privileges.CanEditMapList;
-            this.lnkMaplistChangePlaylist.Enabled = this.m_privileges.CanEditMapList;
+                this.lsvMaplistPool.Enabled = this.m_privileges.CanEditMapList;
+                this.pnlMaplistAddMap.Enabled = this.m_privileges.CanEditMapList;
+                this.lnkMaplistChangePlaylist.Enabled = this.m_privileges.CanEditMapList;
 
-            // The main map list though can be used if the user can use map functions (skip map, restart etc)
-            this.lsvMaplist.Enabled = this.m_privileges.CanEditMapList || this.m_privileges.CanUseMapFunctions;
+                // The main map list though can be used if the user can use map functions (skip map, restart etc)
+                this.lsvMaplist.Enabled = this.m_privileges.CanEditMapList || this.m_privileges.CanUseMapFunctions;
+            });
         }
 
         private void MapListPool_ItemAdded(int iIndex, CMap item) {
-            this.RefreshLocalMaplist();
+            this.InvokeIfRequired(this.RefreshLocalMaplist);
         }
 
         private void Game_MapListMapInserted(FrostbiteClient sender, MaplistEntry mapEntry) {// int mapIndex, string mapFileName, int rounds) {
-            this.InsertMapInMapList(mapEntry.Index, mapEntry);
+            this.InvokeIfRequired(() => this.InsertMapInMapList(mapEntry.Index, mapEntry));
         }
 
         private void Game_MapListMapRemoved(FrostbiteClient sender, int mapIndex) {
-            if (this.lsvMaplist.Items.Count > mapIndex) {
-                this.lsvMaplist.Items.RemoveAt(mapIndex);
+            this.InvokeIfRequired(() => {
+                if (this.lsvMaplist.Items.Count > mapIndex) {
+                    this.lsvMaplist.Items.RemoveAt(mapIndex);
 
-                if (this.m_iReselectShufflingMapIndex < this.lsvMaplist.Items.Count) {
-                    this.lsvMaplist.Items[this.m_iReselectShufflingMapIndex].Selected = true;
+                    if (this.m_iReselectShufflingMapIndex < this.lsvMaplist.Items.Count) {
+                        this.lsvMaplist.Items[this.m_iReselectShufflingMapIndex].Selected = true;
+                    }
+
+                    this.UpdateMaplistIndexes();
                 }
-
-                this.UpdateMaplistIndexes();
-            }
+            });
         }
 
         private void Game_MapListListed(FrostbiteClient sender, List<Core.Maps.MaplistEntry> lstMapList) {
-            this.lsvMaplist.BeginUpdate();
+            this.InvokeIfRequired(() => {
+                this.lsvMaplist.BeginUpdate();
 
-            this.lsvMaplist.Items.Clear();
-            
-            for (int i = 0; i < lstMapList.Count; i++) {
-                ListViewItem lviMap = new ListViewItem();
-                lviMap.Tag = lstMapList[i];
-                lviMap.Name = lstMapList[i].MapFileName;
-                lviMap.Text = Convert.ToString(i + 1);
+                this.lsvMaplist.Items.Clear();
 
-                if (lstMapList[i].Gamemode != null && lstMapList[i].Gamemode.Length > 0) {
-                    //lviMap.SubItems.Add(this.m_client.GetFriendlyGamemode(lstMapList[i].Gamemode));
-                    CMap tmpMap = this.m_client.GetFriendlyMapByFilenamePlayList(lstMapList[i].MapFileName, lstMapList[i].Gamemode);
-                    lviMap.SubItems.Add(tmpMap != null ? tmpMap.GameMode : String.Empty);
-                    lviMap.SubItems.Add(tmpMap != null ? tmpMap.PublicLevelName : String.Empty);
+                for (int i = 0; i < lstMapList.Count; i++) {
+                    ListViewItem lviMap = new ListViewItem();
+                    lviMap.Tag = lstMapList[i];
+                    lviMap.Name = lstMapList[i].MapFileName;
+                    lviMap.Text = Convert.ToString(i + 1);
+
+                    if (lstMapList[i].Gamemode != null && lstMapList[i].Gamemode.Length > 0) {
+                        //lviMap.SubItems.Add(this.m_client.GetFriendlyGamemode(lstMapList[i].Gamemode));
+                        CMap tmpMap = this.m_client.GetFriendlyMapByFilenamePlayList(lstMapList[i].MapFileName, lstMapList[i].Gamemode);
+                        lviMap.SubItems.Add(tmpMap != null ? tmpMap.GameMode : String.Empty);
+                        lviMap.SubItems.Add(tmpMap != null ? tmpMap.PublicLevelName : String.Empty);
+                    }
+                    else {
+                        lviMap.SubItems.Add(this.m_client.GetFriendlyGamemodeByMap(lstMapList[i].MapFileName));
+                        lviMap.SubItems.Add(this.m_client.GetFriendlyMapname(lstMapList[i].MapFileName));
+                    }
+
+                    //lviMap.SubItems.Add(this.m_client.GetFriendlyMapname(lstMapList[i].MapFileName));
+                    lviMap.SubItems.Add(lstMapList[i].MapFileName);
+
+                    ListViewItem.ListViewSubItem lviRounds = new ListViewItem.ListViewSubItem();
+                    lviRounds.Name = "rounds";
+
+                    if (lstMapList[i].Rounds == 0) {
+                        lviRounds.Text = "2";
+                        lviRounds.Tag = 0;
+                    }
+                    else {
+                        lviRounds.Text = lstMapList[i].Rounds.ToString();
+                        lviRounds.Tag = lstMapList[i].Rounds;
+                    }
+
+                    lviMap.SubItems.Add(lviRounds);
+
+                    this.lsvMaplist.Items.Add(lviMap);
                 }
-                else {
-                    lviMap.SubItems.Add(this.m_client.GetFriendlyGamemodeByMap(lstMapList[i].MapFileName));
-                    lviMap.SubItems.Add(this.m_client.GetFriendlyMapname(lstMapList[i].MapFileName));
+
+                for (int i = 0; i < this.lsvMaplist.Columns.Count; i++) {
+                    this.lsvMaplist.Columns[i].Width = -2;
                 }
 
-                //lviMap.SubItems.Add(this.m_client.GetFriendlyMapname(lstMapList[i].MapFileName));
-                lviMap.SubItems.Add(lstMapList[i].MapFileName);
+                this.Game_MapListDoUpdateMarkers(m_iCurMapIndex, m_iNextMapIndex);
 
-                ListViewItem.ListViewSubItem lviRounds = new ListViewItem.ListViewSubItem();
-                lviRounds.Name = "rounds";
-
-                if (lstMapList[i].Rounds == 0) {
-                    lviRounds.Text = "2";
-                    lviRounds.Tag = 0;
-                }
-                else {
-                    lviRounds.Text = lstMapList[i].Rounds.ToString();
-                    lviRounds.Tag = lstMapList[i].Rounds;
-                }
-
-                lviMap.SubItems.Add(lviRounds);
-
-                this.lsvMaplist.Items.Add(lviMap);
-            }
-
-            for (int i = 0; i < this.lsvMaplist.Columns.Count; i++) {
-                this.lsvMaplist.Columns[i].Width = -2;
-            }
-            
-            this.Game_MapListDoUpdateMarkers(m_iCurMapIndex, m_iNextMapIndex);
-
-            this.lsvMaplist.EndUpdate();
+                this.lsvMaplist.EndUpdate();
+            });
         }
 
         private void Game_MapListCleared(FrostbiteClient sender) {
-            this.lsvMaplist.BeginUpdate();
+            this.InvokeIfRequired(() => {
+                this.lsvMaplist.BeginUpdate();
 
-            this.lsvMaplist.Items.Clear();
+                this.lsvMaplist.Items.Clear();
 
-            this.lsvMaplist.EndUpdate();
+                this.lsvMaplist.EndUpdate();
+            });
         }
 
         private void UpdateMaplistIndexes() {
@@ -315,41 +325,35 @@ namespace PRoCon.Controls.Maplist {
             }
         }
 
-        private void Game_MapListNextLevelIndex(FrostbiteClient sender, int nextIndex)
-        {
-            this.Game_MapListDoUpdateMarkers(this.m_iCurMapIndex, nextIndex);
+        private void Game_MapListNextLevelIndex(FrostbiteClient sender, int nextIndex) {
+            this.InvokeIfRequired(() => this.Game_MapListDoUpdateMarkers(this.m_iCurMapIndex, nextIndex));
         }
 
-        private void Game_MapListGetMapIndices(FrostbiteClient sender, int mapIndex, int nextIndex)
-        {
-            this.Game_MapListDoUpdateMarkers(mapIndex, nextIndex);
+        private void Game_MapListGetMapIndices(FrostbiteClient sender, int mapIndex, int nextIndex) {
+            this.InvokeIfRequired(() => this.Game_MapListDoUpdateMarkers(mapIndex, nextIndex));
         }
 
-        private void Game_MapListDoUpdateMarkers(int mapIndex, int nextIndex)
-        {
-            this.lsvMaplist.BeginUpdate();
-            for (int i = 0; i < this.lsvMaplist.Items.Count; i++)
-            {
-                if (i == mapIndex || i == nextIndex)
-                {
-                    if (i == mapIndex)
-                    {
-                        this.m_iCurMapIndex = mapIndex;
-                        //this.lsvMaplist.Items[i].BackColor = Color.Silver;
-                        this.lsvMaplist.Items[i].BackColor = Color.LightSteelBlue;
+        private void Game_MapListDoUpdateMarkers(int mapIndex, int nextIndex) {
+            this.InvokeIfRequired(() => {
+                this.lsvMaplist.BeginUpdate();
+                for (int i = 0; i < this.lsvMaplist.Items.Count; i++) {
+                    if (i == mapIndex || i == nextIndex) {
+                        if (i == mapIndex) {
+                            this.m_iCurMapIndex = mapIndex;
+                            //this.lsvMaplist.Items[i].BackColor = Color.Silver;
+                            this.lsvMaplist.Items[i].BackColor = Color.LightSteelBlue;
+                        }
+                        if (i == nextIndex) {
+                            this.m_iNextMapIndex = nextIndex;
+                            this.lsvMaplist.Items[i].BackColor = Color.Gainsboro;
+                        }
                     }
-                    if (i == nextIndex)
-                    {
-                        this.m_iNextMapIndex = nextIndex;
-                        this.lsvMaplist.Items[i].BackColor = Color.Gainsboro;
+                    else {
+                        this.lsvMaplist.Items[i].BackColor = SystemColors.Window;
                     }
                 }
-                else
-                {
-                    this.lsvMaplist.Items[i].BackColor = SystemColors.Window;
-                }
-            }
-            this.lsvMaplist.EndUpdate();
+                this.lsvMaplist.EndUpdate();
+            });
         }
 
         private void InsertMapInMapList(int insertIndex, Core.Maps.MaplistEntry mapEntry) {
@@ -410,62 +414,65 @@ namespace PRoCon.Controls.Maplist {
         }
 
         private void Game_MapListMapAppended(FrostbiteClient sender, Core.Maps.MaplistEntry mapEntry) {
-            this.InsertMapInMapList(-1, mapEntry);
+            this.InvokeIfRequired(() => this.InsertMapInMapList(-1, mapEntry));
         }
 
         private void Game_MapListSave(FrostbiteClient sender) {
-            if (this.m_iReselectShufflingMapIndex < this.lsvMaplist.Items.Count) {
-                this.lsvMaplist.Items[this.m_iReselectShufflingMapIndex].Selected = true;
-            }
+            this.InvokeIfRequired(() => {
+                if (this.m_iReselectShufflingMapIndex < this.lsvMaplist.Items.Count) {
+                    this.lsvMaplist.Items[this.m_iReselectShufflingMapIndex].Selected = true;
+                }
 
-            if (this.m_blSettingNewPlaylist == true) {
-                this.OnSettingResponse("local.playlist.change", true);
-            }
+                if (this.m_blSettingNewPlaylist == true) {
+                    this.OnSettingResponse("local.playlist.change", true);
+                }
 
-            this.OnSettingResponse("local.maplist.change", true);
+                this.OnSettingResponse("local.maplist.change", true);
 
-            this.m_blSettingNewPlaylist = false;
+                this.m_blSettingNewPlaylist = false;
 
-            this.lsvMaplist.EndUpdate();
+                this.lsvMaplist.EndUpdate();
+            });
         }
 
         private void Game_PlaylistSet(FrostbiteClient sender, string playlist) {
+            this.InvokeIfRequired(() => {
+                // If we've just set the playlist..
+                if (this.m_blSettingNewPlaylist == true && this.m_client.MapListPool.Find(map => String.Compare(map.PlayList, playlist, true) == 0) != null) {
+                    // Add all the supported maps
 
-            // If we've just set the playlist..
-            if (this.m_blSettingNewPlaylist == true && this.m_client.MapListPool.Find(map => String.Compare(map.PlayList, playlist, true) == 0) != null) {
-                // Add all the supported maps
+                    this.WaitForSettingResponse("local.playlist.change");
+                    this.WaitForSettingResponse("local.maplist.change");
 
-                this.WaitForSettingResponse("local.playlist.change");
-                this.WaitForSettingResponse("local.maplist.change");
+                    this.lsvMaplist.BeginUpdate();
 
-                this.lsvMaplist.BeginUpdate();
+                    sender.SendMapListClearPacket();
 
-                sender.SendMapListClearPacket();
+                    foreach (CMap map in this.m_client.MapListPool.FindAll(map => String.Compare(map.PlayList, playlist, true) == 0)) {
+                        sender.SendMapListAppendPacket(new MaplistEntry(map.PlayList, map.FileName, 0));
+                    }
 
-                foreach (CMap map in this.m_client.MapListPool.FindAll(map => String.Compare(map.PlayList, playlist, true) == 0)) {
-                    sender.SendMapListAppendPacket( new MaplistEntry(map.PlayList, map.FileName, 0));
+                    sender.SendMapListSavePacket();
                 }
 
-                sender.SendMapListSavePacket();
-            }
+                foreach (CMap cmPlayList in this.cboMaplistPlaylists.Items) {
+                    if (String.Compare(playlist, cmPlayList.PlayList, true) == 0) {
+                        this.cboMaplistPlaylists.SelectedItem = cmPlayList;
 
-            foreach (CMap cmPlayList in this.cboMaplistPlaylists.Items) {
-                if (String.Compare(playlist, cmPlayList.PlayList, true) == 0) {
-                    this.cboMaplistPlaylists.SelectedItem = cmPlayList;
+                        this.lnkMaplistChangePlaylist.Enabled = false;
+                        this.pnlMaplistAddMap.Enabled = true && this.m_privileges.CanEditMapList;
+                        //this.pnlMaplistAddMap.Enabled = true && this.m_privileges.CanEditMapList && this.lsvMaplist.SelectedItems.Count > 0;
 
-                    this.lnkMaplistChangePlaylist.Enabled = false;
-                    this.pnlMaplistAddMap.Enabled = true && this.m_privileges.CanEditMapList;
-                    //this.pnlMaplistAddMap.Enabled = true && this.m_privileges.CanEditMapList && this.lsvMaplist.SelectedItems.Count > 0;
+                        this.lblMaplistMustChangeWarning.Visible = false;
 
-                    this.lblMaplistMustChangeWarning.Visible = false;
+                        this.cboMaplistPlaylists.Refresh();
 
-                    this.cboMaplistPlaylists.Refresh();
-
-                    this.RefreshLocalMaplist();
+                        this.RefreshLocalMaplist();
+                    }
                 }
-            }
 
-            this.cboMaplistPlaylists_SelectedIndexChanged(null, null);
+                this.cboMaplistPlaylists_SelectedIndexChanged(null, null);
+            });
         }
 
         private void cboMaplistPlaylists_SelectedIndexChanged(object sender, EventArgs e) {

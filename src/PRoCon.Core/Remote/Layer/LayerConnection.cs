@@ -5,7 +5,7 @@ using System.Net.Sockets;
 using System.Text;
 
 namespace PRoCon.Core.Remote.Layer {
-    public class FrostbiteLayerConnection {
+    public class LayerConnection : ILayerConnection {
         protected const UInt32 MaxGarbageBytes = 4194304;
 
         /// <summary>
@@ -13,27 +13,42 @@ namespace PRoCon.Core.Remote.Layer {
         /// </summary>
         protected readonly Object AcquireSequenceNumberLock = new Object();
 
+        /// <summary>
+        /// The underlying tcp client
+        /// </summary>
         protected TcpClient Client;
+
+        /// <summary>
+        /// Buffer to hold chunks of recieved data in the order they were recieved
+        /// </summary>
         protected byte[] PacketStream;
+
+        /// <summary>
+        /// Buffer to accept recieved data into (chunk)
+        /// </summary>
         protected byte[] ReceivedBuffer;
+        /// <summary>
+        /// The current sequence number (or last sequence number sent)
+        /// </summary>
         protected UInt32 SequenceNumber;
+
+        /// <summary>
+        /// Lock used when shutting down the connection
+        /// </summary>
         protected Object ShutdownConnectionLock = new Object();
+
+        /// <summary>
+        /// The stream from Client
+        /// </summary>
         protected NetworkStream NetworkStream;
 
-        #region Events
+        public Action<ILayerConnection> ConnectionClosed { get; set; }
 
-        public delegate void EmptyParameterHandler(FrostbiteLayerConnection sender);
+        public Action<ILayerConnection, Packet> PacketSent { get; set; }
 
-        public delegate void PacketDispatchHandler(FrostbiteLayerConnection sender, Packet packet);
+        public Action<ILayerConnection, Packet> PacketReceived { get; set; }
 
-        public event EmptyParameterHandler ConnectionClosed;
-
-        public event PacketDispatchHandler PacketSent;
-        public event PacketDispatchHandler PacketReceived;
-
-        #endregion
-
-        public FrostbiteLayerConnection(TcpClient acceptedConnection) {
+        public LayerConnection(TcpClient acceptedConnection) {
             ReceivedBuffer = new byte[4096];
             PacketStream = null;
 
@@ -62,8 +77,7 @@ namespace PRoCon.Core.Remote.Layer {
             }
         }
 
-        //private string m_strClientIPPort = String.Empty;
-        public string IPPort {
+        public String IPPort {
             get {
                 string strClientIPPort = String.Empty;
 
@@ -81,9 +95,7 @@ namespace PRoCon.Core.Remote.Layer {
                 if (NetworkStream != null) {
                     NetworkStream.EndWrite(ar);
 
-                    if (PacketSent != null) {
-                        FrostbiteConnection.RaiseEvent(PacketSent.GetInvocationList(), this, (Packet)ar.AsyncState);
-                    }
+                    this.OnPacketSent((Packet)ar.AsyncState);
                 }
             }
             catch (SocketException) {
@@ -94,7 +106,7 @@ namespace PRoCon.Core.Remote.Layer {
             }
         }
 
-        public void SendAsync(Packet packet) {
+        public void Send(Packet packet) {
             try {
                 if (NetworkStream != null) {
                     byte[] bytePacket = packet.EncodePacket();
@@ -143,10 +155,7 @@ namespace PRoCon.Core.Remote.Layer {
                             LastPacketReceived = deserializedPacket;
 
                             // Dispatch the completed packet.
-                            if (PacketReceived != null) {
-                                FrostbiteConnection.RaiseEvent(PacketReceived.GetInvocationList(), this, deserializedPacket);
-                            }
-                            //this.DispatchPacket(cpCompletePacket);
+                            this.OnPacketReceived(deserializedPacket);
 
                             // Now remove the completed packet from the beginning of the stream
                             var updatedSteam = new byte[PacketStream.Length - packetSize];
@@ -158,7 +167,6 @@ namespace PRoCon.Core.Remote.Layer {
 
                         // If we've recieved 16 kb's and still don't have a full command then shutdown the connection.
                         if (ReceivedBuffer.Length >= MaxGarbageBytes) {
-                            ReceivedBuffer = null;
                             Shutdown();
                         }
 
@@ -179,18 +187,6 @@ namespace PRoCon.Core.Remote.Layer {
             }
         }
 
-        /// <summary>
-        ///     Pokes the connection, ensuring that the connection is still alive. If
-        ///     this method determines that the connection is dead then it will call for
-        ///     a shutdown.
-        /// </summary>
-        /// <remarks>
-        ///     <para>
-        ///         This method is a final check to make sure communications are proceeding in both directions in
-        ///         the last five minutes. If nothing has been sent and received in the last five minutes then the connection is assumed
-        ///         dead and a shutdown is initiated.
-        ///     </para>
-        /// </remarks>
         public virtual void Poke() {
             bool downstreamDead = this.LastPacketReceived != null && this.LastPacketReceived.Stamp < DateTime.Now.AddMinutes(-2);
             bool upstreamDead = this.LastPacketSent != null && this.LastPacketSent.Stamp < DateTime.Now.AddMinutes(-2);
@@ -204,31 +200,61 @@ namespace PRoCon.Core.Remote.Layer {
             }
         }
 
+        protected void OnPacketSent(Packet packet) {
+            var handler = this.PacketSent;
+            if (handler != null) {
+                handler(this, packet);
+            }
+        }
+
+        protected void OnPacketReceived(Packet packet) {
+            var handler = this.PacketReceived;
+            if (handler != null) {
+                handler(this, packet);
+            }
+        }
+
+        protected void OnConnectionClosed() {
+            var handler = this.ConnectionClosed;
+            if (handler != null) {
+                handler(this);
+            }
+        }
+
+        /// <summary>
+        /// Nulls out all of the actions, 
+        /// </summary>
+        protected void NullActions() {
+            this.ConnectionClosed = null;
+            this.PacketReceived = null;
+            this.PacketSent = null;
+        }
+
         // TO DO: Better error reporting on this method.
         public void Shutdown() {
-            if (Client != null) {
-                try {
-                    lock (ShutdownConnectionLock) {
-                        if (NetworkStream != null) {
-                            NetworkStream.Close();
-                            NetworkStream.Dispose();
-                            NetworkStream = null;
-                        }
-
+            try {
+                lock (ShutdownConnectionLock) {
+                    if (NetworkStream != null) {
+                        NetworkStream.Close();
+                        NetworkStream.Dispose();
+                        NetworkStream = null;
+                    }
+                    if (Client != null) {
                         Client.Close();
                         Client = null;
-
-                        if (ConnectionClosed != null) {
-                            FrostbiteConnection.RaiseEvent(ConnectionClosed.GetInvocationList(), this);
-                        }
                     }
+
+                    this.OnConnectionClosed();
                 }
-                catch (SocketException) {
-                    // TO DO: Error reporting, possibly in a log file.
-                }
-                catch (Exception e) {
-                    FrostbiteConnection.LogError("FrostbiteLayerConnection.Shutdown", "catch (Exception e)", e);
-                }
+            }
+            catch (SocketException) {
+                // TO DO: Error reporting, possibly in a log file.
+            }
+            catch (Exception e) {
+                FrostbiteConnection.LogError("FrostbiteLayerConnection.Shutdown", "catch (Exception e)", e);
+            }
+            finally {
+                this.NullActions();
             }
         }
 
