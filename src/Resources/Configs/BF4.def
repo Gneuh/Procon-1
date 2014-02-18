@@ -1,6 +1,6 @@
 /////////////////////////////////////////////
 // This definitions file will be overwritten during an update.
-//  (2014-02-18.01)
+//  (2014-02-18.02)
 // This file contains the standard defintions required to run procon 
 // connected to a BF4 server
 /////////////////////////////////////////////
@@ -397,6 +397,52 @@ procon.protected.maps.add "AirSuperiority0" "XP1_002" "Air Superiority" "Altai R
 procon.protected.maps.add "AirSuperiority0" "XP1_003" "Air Superiority" "Guilin Peaks" 0
 procon.protected.maps.add "AirSuperiority0" "XP1_004" "Air Superiority" "Dragon Pass" 0
 
+// XP2 (Second Assault)
+procon.protected.maps.add "ConquestLarge0" "XP0_Caspian" "Conquest Large" "Caspian Border 2014" 0
+procon.protected.maps.add "ConquestLarge0" "XP0_Firestorm" "Conquest Large" "Operation Firestorm 2014" 0
+procon.protected.maps.add "ConquestLarge0" "XP0_Metro" "Conquest Large" "Operation Metro 2014" 0
+procon.protected.maps.add "ConquestLarge0" "XP0_Oman" "Conquest Large" "Gulf of Oman 2014" 0
+
+procon.protected.maps.add "ConquestSmall0" "XP0_Caspian" "Conquest Small" "Caspian Border 2014" 0
+procon.protected.maps.add "ConquestSmall0" "XP0_Firestorm" "Conquest Small" "Operation Firestorm 2014" 0
+procon.protected.maps.add "ConquestSmall0" "XP0_Metro" "Conquest Small" "Operation Metro 2014" 0
+procon.protected.maps.add "ConquestSmall0" "XP0_Oman" "Conquest Small" "Gulf of Oman 2014" 0
+
+procon.protected.maps.add "Domination0" "XP0_Caspian" "Domination" "Caspian Border 2014" 0
+procon.protected.maps.add "Domination0" "XP0_Firestorm" "Domination" "Operation Firestorm 2014" 0
+procon.protected.maps.add "Domination0" "XP0_Metro" "Domination" "Operation Metro 2014" 0
+procon.protected.maps.add "Domination0" "XP0_Oman" "Domination" "Gulf of Oman 2014" 0
+
+procon.protected.maps.add "Elimination0" "XP0_Caspian" "Defuse" "Caspian Border 2014" 0
+procon.protected.maps.add "Elimination0" "XP0_Firestorm" "Defuse" "Operation Firestorm 2014" 0
+procon.protected.maps.add "Elimination0" "XP0_Metro" "Defuse" "Operation Metro 2014" 0
+procon.protected.maps.add "Elimination0" "XP0_Oman" "Defuse" "Gulf of Oman 2014" 0
+
+procon.protected.maps.add "Obliteration" "XP0_Caspian" "Obliteration" "Caspian Border 2014" 0
+procon.protected.maps.add "Obliteration" "XP0_Firestorm" "Obliteration" "Operation Firestorm 2014" 0
+procon.protected.maps.add "Obliteration" "XP0_Metro" "Obliteration" "Operation Metro 2014" 0
+procon.protected.maps.add "Obliteration" "XP0_Oman" "Obliteration" "Gulf of Oman 2014" 0
+
+procon.protected.maps.add "RushLarge0" "XP0_Caspian" "Rush" "Caspian Border 2014" 0
+procon.protected.maps.add "RushLarge0" "XP0_Firestorm" "Rush" "Operation Firestorm 2014" 0
+procon.protected.maps.add "RushLarge0" "XP0_Metro" "Rush" "Operation Metro 2014" 0
+procon.protected.maps.add "RushLarge0" "XP0_Oman" "Rush" "Gulf of Oman 2014" 0
+
+procon.protected.maps.add "SquadDeathMatch0" "XP0_Caspian" "Squad Deathmatch" "Caspian Border 2014" 0
+procon.protected.maps.add "SquadDeathMatch0" "XP0_Firestorm" "Squad Deathmatch" "Operation Firestorm 2014" 0
+procon.protected.maps.add "SquadDeathMatch0" "XP0_Metro" "Squad Deathmatch" "Operation Metro 2014" 0
+procon.protected.maps.add "SquadDeathMatch0" "XP0_Oman" "Squad Deathmatch" "Gulf of Oman 2014" 0
+
+procon.protected.maps.add "TeamDeathMatch0" "XP0_Caspian" "Team Deathmatch" "Caspian Border 2014" 0
+procon.protected.maps.add "TeamDeathMatch0" "XP0_Firestorm" "Team Deathmatch" "Operation Firestorm 2014" 0
+procon.protected.maps.add "TeamDeathMatch0" "XP0_Metro" "Team Deathmatch" "Operation Metro 2014" 0
+procon.protected.maps.add "TeamDeathMatch0" "XP0_Oman" "Team Deathmatch" "Gulf of Oman 2014" 0
+
+procon.protected.maps.add "CaptureTheFlag0" "XP0_Caspian" "CTF" "Caspian Border 2014" 0
+procon.protected.maps.add "CaptureTheFlag0" "XP0_Firestorm" "CTF" "Operation Firestorm 2014" 0
+procon.protected.maps.add "CaptureTheFlag0" "XP0_Metro" "CTF" "Operation Metro 2014" 0
+procon.protected.maps.add "CaptureTheFlag0" "XP0_Oman" "CTF" "Gulf of Oman 2014" 0
+
 procon.protected.teamnames.clear
 
 // Conquest Large
@@ -459,6 +505,23 @@ procon.protected.teamnames.add "XP1_004" 0 "global.conquest.neutral" "" "Conques
 procon.protected.teamnames.add "XP1_004" 1 "global.conquest.us" "us.png" "ConquestLarge0"
 procon.protected.teamnames.add "XP1_004" 2 "global.conquest.cn" "cn.png" "ConquestLarge0"
 
+// XP2 (Second Assault)
+procon.protected.teamnames.add "XP0_Caspian" 0 "global.conquest.neutral" "" "ConquestLarge0"
+procon.protected.teamnames.add "XP0_Caspian" 1 "global.conquest.us" "us.png" "ConquestLarge0"
+procon.protected.teamnames.add "XP0_Caspian" 2 "global.conquest.ru" "ru.png" "ConquestLarge0"
+
+procon.protected.teamnames.add "XP0_Firestorm" 0 "global.conquest.neutral" "" "ConquestLarge0"
+procon.protected.teamnames.add "XP0_Firestorm" 1 "global.conquest.us" "us.png" "ConquestLarge0"
+procon.protected.teamnames.add "XP0_Firestorm" 2 "global.conquest.ru" "ru.png" "ConquestLarge0"
+
+procon.protected.teamnames.add "XP0_Metro" 0 "global.conquest.neutral" "" "ConquestLarge0"
+procon.protected.teamnames.add "XP0_Metro" 1 "global.conquest.us" "us.png" "ConquestLarge0"
+procon.protected.teamnames.add "XP0_Metro" 2 "global.conquest.ru" "ru.png" "ConquestLarge0"
+
+procon.protected.teamnames.add "XP0_Oman" 0 "global.conquest.neutral" "" "ConquestLarge0"
+procon.protected.teamnames.add "XP0_Oman" 1 "global.conquest.us" "us.png" "ConquestLarge0"
+procon.protected.teamnames.add "XP0_Oman" 2 "global.conquest.ru" "ru.png" "ConquestLarge0"
+
 
 // Conquest Small
 ///////////////////////////////////////////////////////////////////////////////
@@ -519,6 +582,23 @@ procon.protected.teamnames.add "XP1_003" 2 "global.conquest.cn" "cn.png" "Conque
 procon.protected.teamnames.add "XP1_004" 0 "global.conquest.neutral" "" "ConquestSmall0"
 procon.protected.teamnames.add "XP1_004" 1 "global.conquest.us" "us.png" "ConquestSmall0"
 procon.protected.teamnames.add "XP1_004" 2 "global.conquest.cn" "cn.png" "ConquestSmall0"
+
+// XP2 (Second Assault)
+procon.protected.teamnames.add "XP0_Caspian" 0 "global.conquest.neutral" "" "ConquestSmall0"
+procon.protected.teamnames.add "XP0_Caspian" 1 "global.conquest.us" "us.png" "ConquestSmall0"
+procon.protected.teamnames.add "XP0_Caspian" 2 "global.conquest.ru" "ru.png" "ConquestSmall0"
+
+procon.protected.teamnames.add "XP0_Firestorm" 0 "global.conquest.neutral" "" "ConquestSmall0"
+procon.protected.teamnames.add "XP0_Firestorm" 1 "global.conquest.us" "us.png" "ConquestSmall0"
+procon.protected.teamnames.add "XP0_Firestorm" 2 "global.conquest.ru" "ru.png" "ConquestSmall0"
+
+procon.protected.teamnames.add "XP0_Metro" 0 "global.conquest.neutral" "" "ConquestSmall0"
+procon.protected.teamnames.add "XP0_Metro" 1 "global.conquest.us" "us.png" "ConquestSmall0"
+procon.protected.teamnames.add "XP0_Metro" 2 "global.conquest.ru" "ru.png" "ConquestSmall0"
+
+procon.protected.teamnames.add "XP0_Oman" 0 "global.conquest.neutral" "" "ConquestSmall0"
+procon.protected.teamnames.add "XP0_Oman" 1 "global.conquest.us" "us.png" "ConquestSmall0"
+procon.protected.teamnames.add "XP0_Oman" 2 "global.conquest.ru" "ru.png" "ConquestSmall0"
 
 
 // Domination
@@ -581,6 +661,23 @@ procon.protected.teamnames.add "XP1_004" 0 "global.conquest.neutral" "" "Dominat
 procon.protected.teamnames.add "XP1_004" 1 "global.conquest.us" "us.png" "Domination0"
 procon.protected.teamnames.add "XP1_004" 2 "global.conquest.cn" "cn.png" "Domination0"
 
+// XP2 (Second Assault)
+procon.protected.teamnames.add "XP0_Caspian" 0 "global.conquest.neutral" "" "Domination0"
+procon.protected.teamnames.add "XP0_Caspian" 1 "global.conquest.us" "us.png" "Domination0"
+procon.protected.teamnames.add "XP0_Caspian" 2 "global.conquest.ru" "ru.png" "Domination0"
+
+procon.protected.teamnames.add "XP0_Firestorm" 0 "global.conquest.neutral" "" "Domination0"
+procon.protected.teamnames.add "XP0_Firestorm" 1 "global.conquest.us" "us.png" "Domination0"
+procon.protected.teamnames.add "XP0_Firestorm" 2 "global.conquest.ru" "ru.png" "Domination0"
+
+procon.protected.teamnames.add "XP0_Metro" 0 "global.conquest.neutral" "" "Domination0"
+procon.protected.teamnames.add "XP0_Metro" 1 "global.conquest.us" "us.png" "Domination0"
+procon.protected.teamnames.add "XP0_Metro" 2 "global.conquest.ru" "ru.png" "Domination0"
+
+procon.protected.teamnames.add "XP0_Oman" 0 "global.conquest.neutral" "" "Domination0"
+procon.protected.teamnames.add "XP0_Oman" 1 "global.conquest.us" "us.png" "Domination0"
+procon.protected.teamnames.add "XP0_Oman" 2 "global.conquest.ru" "ru.png" "Domination0"
+
 
 // Defuse
 ///////////////////////////////////////////////////////////////////////////////
@@ -641,6 +738,23 @@ procon.protected.teamnames.add "XP1_003" 2 "global.conquest.cn" "cn.png" "Elimin
 procon.protected.teamnames.add "XP1_004" 0 "global.conquest.neutral" "" "Elimination0"
 procon.protected.teamnames.add "XP1_004" 1 "global.conquest.us" "us.png" "Elimination0"
 procon.protected.teamnames.add "XP1_004" 2 "global.conquest.cn" "cn.png" "Elimination0"
+
+// XP2 (Second Assault)
+procon.protected.teamnames.add "XP0_Caspian" 0 "global.conquest.neutral" "" "Elimination0"
+procon.protected.teamnames.add "XP0_Caspian" 1 "global.conquest.us" "us.png" "Elimination0"
+procon.protected.teamnames.add "XP0_Caspian" 2 "global.conquest.ru" "ru.png" "Elimination0"
+
+procon.protected.teamnames.add "XP0_Firestorm" 0 "global.conquest.neutral" "" "Elimination0"
+procon.protected.teamnames.add "XP0_Firestorm" 1 "global.conquest.us" "us.png" "Elimination0"
+procon.protected.teamnames.add "XP0_Firestorm" 2 "global.conquest.ru" "ru.png" "Elimination0"
+
+procon.protected.teamnames.add "XP0_Metro" 0 "global.conquest.neutral" "" "Elimination0"
+procon.protected.teamnames.add "XP0_Metro" 1 "global.conquest.us" "us.png" "Elimination0"
+procon.protected.teamnames.add "XP0_Metro" 2 "global.conquest.ru" "ru.png" "Elimination0"
+
+procon.protected.teamnames.add "XP0_Oman" 0 "global.conquest.neutral" "" "Elimination0"
+procon.protected.teamnames.add "XP0_Oman" 1 "global.conquest.us" "us.png" "Elimination0"
+procon.protected.teamnames.add "XP0_Oman" 2 "global.conquest.ru" "ru.png" "Elimination0"
 
 
 // Obliteration
@@ -703,6 +817,23 @@ procon.protected.teamnames.add "XP1_004" 0 "global.conquest.neutral" "" "Obliter
 procon.protected.teamnames.add "XP1_004" 1 "global.conquest.us" "us.png" "Obliteration"
 procon.protected.teamnames.add "XP1_004" 2 "global.conquest.cn" "cn.png" "Obliteration"
 
+// XP2 (Second Assault)
+procon.protected.teamnames.add "XP0_Caspian" 0 "global.conquest.neutral" "" "Obliteration"
+procon.protected.teamnames.add "XP0_Caspian" 1 "global.conquest.us" "us.png" "Obliteration"
+procon.protected.teamnames.add "XP0_Caspian" 2 "global.conquest.ru" "ru.png" "Obliteration"
+
+procon.protected.teamnames.add "XP0_Firestorm" 0 "global.conquest.neutral" "" "Obliteration"
+procon.protected.teamnames.add "XP0_Firestorm" 1 "global.conquest.us" "us.png" "Obliteration"
+procon.protected.teamnames.add "XP0_Firestorm" 2 "global.conquest.ru" "ru.png" "Obliteration"
+
+procon.protected.teamnames.add "XP0_Metro" 0 "global.conquest.neutral" "" "Obliteration"
+procon.protected.teamnames.add "XP0_Metro" 1 "global.conquest.us" "us.png" "Obliteration"
+procon.protected.teamnames.add "XP0_Metro" 2 "global.conquest.ru" "ru.png" "Obliteration"
+
+procon.protected.teamnames.add "XP0_Oman" 0 "global.conquest.neutral" "" "Obliteration"
+procon.protected.teamnames.add "XP0_Oman" 1 "global.conquest.us" "us.png" "Obliteration"
+procon.protected.teamnames.add "XP0_Oman" 2 "global.conquest.ru" "ru.png" "Obliteration"
+
 
 // Rush
 ///////////////////////////////////////////////////////////////////////////////
@@ -763,6 +894,23 @@ procon.protected.teamnames.add "XP1_003" 2 "global.rush.defenders" "cn.png" "Rus
 procon.protected.teamnames.add "XP1_004" 0 "global.rush.neutral" "" "RushLarge0"
 procon.protected.teamnames.add "XP1_004" 1 "global.rush.attackers" "us.png" "RushLarge0"
 procon.protected.teamnames.add "XP1_004" 2 "global.rush.defenders" "cn.png" "RushLarge0"
+
+// XP2 (Second Assault)
+procon.protected.teamnames.add "XP0_Caspian" 0 "global.rush.neutral" "" "RushLarge0"
+procon.protected.teamnames.add "XP0_Caspian" 1 "global.rush.attackers" "us.png" "RushLarge0"
+procon.protected.teamnames.add "XP0_Caspian" 2 "global.rush.defenders" "ru.png" "RushLarge0"
+
+procon.protected.teamnames.add "XP0_Firestorm" 0 "global.rush.neutral" "" "RushLarge0"
+procon.protected.teamnames.add "XP0_Firestorm" 1 "global.rush.attackers" "us.png" "RushLarge0"
+procon.protected.teamnames.add "XP0_Firestorm" 2 "global.rush.defenders" "ru.png" "RushLarge0"
+
+procon.protected.teamnames.add "XP0_Metro" 0 "global.rush.neutral" "" "RushLarge0"
+procon.protected.teamnames.add "XP0_Metro" 1 "global.rush.attackers" "us.png" "RushLarge0"
+procon.protected.teamnames.add "XP0_Metro" 2 "global.rush.defenders" "ru.png" "RushLarge0"
+
+procon.protected.teamnames.add "XP0_Oman" 0 "global.rush.neutral" "" "RushLarge0"
+procon.protected.teamnames.add "XP0_Oman" 1 "global.rush.attackers" "us.png" "RushLarge0"
+procon.protected.teamnames.add "XP0_Oman" 2 "global.rush.defenders" "ru.png" "RushLarge0"
 
 
 // Squad Deathmatch
@@ -853,6 +1001,31 @@ procon.protected.teamnames.add "XP1_004" 2 "global.Squad2" "cn.png" "SquadDeathM
 procon.protected.teamnames.add "XP1_004" 3 "global.Squad3" "us.png" "SquadDeathMatch0"
 procon.protected.teamnames.add "XP1_004" 4 "global.Squad4" "cn.png" "SquadDeathMatch0"
 
+// XP2 (Second Assault)
+procon.protected.teamnames.add "XP0_Caspian" 0 "global.conquest.neutral" "" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP0_Caspian" 1 "global.Squad1" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP0_Caspian" 2 "global.Squad2" "ru.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP0_Caspian" 3 "global.Squad3" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP0_Caspian" 4 "global.Squad4" "ru.png" "SquadDeathMatch0"
+
+procon.protected.teamnames.add "XP0_Firestorm" 0 "global.conquest.neutral" "" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP0_Firestorm" 1 "global.Squad1" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP0_Firestorm" 2 "global.Squad2" "ru.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP0_Firestorm" 3 "global.Squad3" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP0_Firestorm" 4 "global.Squad4" "ru.png" "SquadDeathMatch0"
+
+procon.protected.teamnames.add "XP0_Metro" 0 "global.conquest.neutral" "" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP0_Metro" 1 "global.Squad1" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP0_Metro" 2 "global.Squad2" "ru.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP0_Metro" 3 "global.Squad3" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP0_Metro" 4 "global.Squad4" "ru.png" "SquadDeathMatch0"
+
+procon.protected.teamnames.add "XP0_Oman" 0 "global.conquest.neutral" "" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP0_Oman" 1 "global.Squad1" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP0_Oman" 2 "global.Squad2" "ru.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP0_Oman" 3 "global.Squad3" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP0_Oman" 4 "global.Squad4" "ru.png" "SquadDeathMatch0"
+
 
 // Team Deathmatch
 ///////////////////////////////////////////////////////////////////////////////
@@ -914,6 +1087,23 @@ procon.protected.teamnames.add "XP1_004" 0 "global.tdm.neutral" "" "TeamDeathMat
 procon.protected.teamnames.add "XP1_004" 1 "global.tdm.us" "us.png" "TeamDeathMatch0"
 procon.protected.teamnames.add "XP1_004" 2 "global.tdm.cn" "cn.png" "TeamDeathMatch0"
 
+// XP2 (Second Assault)
+procon.protected.teamnames.add "XP0_Caspian" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP0_Caspian" 1 "global.tdm.us" "us.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP0_Caspian" 2 "global.tdm.ru" "ru.png" "TeamDeathMatch0"
+
+procon.protected.teamnames.add "XP0_Firestorm" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP0_Firestorm" 1 "global.tdm.us" "us.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP0_Firestorm" 2 "global.tdm.ru" "ru.png" "TeamDeathMatch0"
+
+procon.protected.teamnames.add "XP0_Metro" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP0_Metro" 1 "global.tdm.us" "us.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP0_Metro" 2 "global.tdm.ru" "ru.png" "TeamDeathMatch0"
+
+procon.protected.teamnames.add "XP0_Oman" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP0_Oman" 1 "global.tdm.us" "us.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP0_Oman" 2 "global.tdm.ru" "ru.png" "TeamDeathMatch0"
+
 
 // Air Superiority (XP1 - China Rising)
 ///////////////////////////////////////////////////////////////////////////////
@@ -933,6 +1123,26 @@ procon.protected.teamnames.add "XP1_003" 2 "global.conquest.cn" "cn.png" "AirSup
 procon.protected.teamnames.add "XP1_004" 0 "global.conquest.neutral" "" "AirSuperiority0"
 procon.protected.teamnames.add "XP1_004" 1 "global.conquest.us" "us.png" "AirSuperiority0"
 procon.protected.teamnames.add "XP1_004" 2 "global.conquest.cn" "cn.png" "AirSuperiority0"
+
+
+// Capture The Flag (XP2 - Second Assault)
+///////////////////////////////////////////////////////////////////////////////
+
+procon.protected.teamnames.add "XP0_Caspian" 0 "global.conquest.neutral" "" "CaptureTheFlag0"
+procon.protected.teamnames.add "XP0_Caspian" 1 "global.conquest.us" "us.png" "CaptureTheFlag0"
+procon.protected.teamnames.add "XP0_Caspian" 2 "global.conquest.ru" "ru.png" "CaptureTheFlag0"
+
+procon.protected.teamnames.add "XP0_Firestorm" 0 "global.conquest.neutral" "" "CaptureTheFlag0"
+procon.protected.teamnames.add "XP0_Firestorm" 1 "global.conquest.us" "us.png" "CaptureTheFlag0"
+procon.protected.teamnames.add "XP0_Firestorm" 2 "global.conquest.ru" "ru.png" "CaptureTheFlag0"
+
+procon.protected.teamnames.add "XP0_Metro" 0 "global.conquest.neutral" "" "CaptureTheFlag0"
+procon.protected.teamnames.add "XP0_Metro" 1 "global.conquest.us" "us.png" "CaptureTheFlag0"
+procon.protected.teamnames.add "XP0_Metro" 2 "global.conquest.ru" "ru.png" "CaptureTheFlag0"
+
+procon.protected.teamnames.add "XP0_Oman" 0 "global.conquest.neutral" "" "CaptureTheFlag0"
+procon.protected.teamnames.add "XP0_Oman" 1 "global.conquest.us" "us.png" "CaptureTheFlag0"
+procon.protected.teamnames.add "XP0_Oman" 2 "global.conquest.ru" "ru.png" "CaptureTheFlag0"
 
 
 ///////////////////////////////////////////////////////////////////////////////
