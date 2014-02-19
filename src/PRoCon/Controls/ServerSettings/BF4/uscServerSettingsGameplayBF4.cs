@@ -46,7 +46,7 @@ namespace PRoCon.Controls.ServerSettings.BF4 {
             this.AsyncSettingControls.Add("vars.roundrestartplayercount", new AsyncStyleSetting(this.picSettingsRoundRestartPlayerCount, this.numSettingsRoundRestartPlayerCount, new Control[] { this.numSettingsRoundRestartPlayerCount, this.lnkSettingsRoundRestartPlayerCount }, true));
             this.AsyncSettingControls.Add("vars.roundstartplayercount", new AsyncStyleSetting(this.picSettingsRoundStartPlayerCount, this.numSettingsRoundStartPlayerCount, new Control[] { this.numSettingsRoundStartPlayerCount, this.lnkSettingsRoundStartPlayerCount }, false));
             this.AsyncSettingControls.Add("vars.soldierhealth", new AsyncStyleSetting(this.picSettingsSoldierHealth, this.numSettingsSoldierHealth, new Control[] { this.numSettingsSoldierHealth, this.lnkSettingsSoldierHealth }, false));
-            this.AsyncSettingControls.Add("vars.playermandowntime", new AsyncStyleSetting(this.picSettingsPlayerManDownTime, this.numSettingsPlayerManDownTime, new Control[] { this.numSettingsPlayerManDownTime, this.lnkSettingsPlayerManDownTime }, true));
+            //this.AsyncSettingControls.Add("vars.playermandowntime", new AsyncStyleSetting(this.picSettingsPlayerManDownTime, this.numSettingsPlayerManDownTime, new Control[] { this.numSettingsPlayerManDownTime, this.lnkSettingsPlayerManDownTime }, true));
             this.AsyncSettingControls.Add("vars.playerrespawntime", new AsyncStyleSetting(this.picSettingsPlayerRespawnTime, this.numSettingsPlayerRespawnTime, new Control[] { this.numSettingsPlayerRespawnTime, this.lnkSettingsPlayerRespawnTime }, true));
 
             this.AsyncSettingControls.Add("vars.gameModeCounter", new AsyncStyleSetting(this.picSettingsGameModeCounter, this.numSettingsGameModeCounter, new Control[] { this.numSettingsGameModeCounter, this.lnkSettingsGameModeCounter }, false));
@@ -162,7 +162,10 @@ namespace PRoCon.Controls.ServerSettings.BF4 {
             this.cboSettingsGunMasterWeaponsPreset.DisplayMember = "LongName";
             this.cboSettingsGunMasterWeaponsPreset.ValueMember = "ShortName";
 
-
+            this.lblSettingsPlayerManDownTime.Visible = false;
+            this.numSettingsPlayerManDownTime.Visible = false;
+            this.lnkSettingsPlayerManDownTime.Visible = false;
+            this.picSettingsPlayerManDownTime.Visible = false;
         }
 
         public override void SetConnection(Core.Remote.PRoConClient prcClient) {

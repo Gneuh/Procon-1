@@ -3316,15 +3316,22 @@ namespace PRoCon.Core.Remote {
                     this.RunScriptError(this, "", Convert.ToInt32(cpRecievedPacket.Words[1]), cpRecievedPacket.Words[2]);
                 }
             }
-                // Else it is an error..
-            else {
+            else if (cpRecievedPacket.Words.Count == 1 && String.Compare(cpRecievedPacket.Words[0], "ExecutedOnNextRound", StringComparison.OrdinalIgnoreCase) == 0) {
+                if (ResponseDelegates.ContainsKey(cpRequestPacket.Words[0]) == true) {
+                    ResponseDelegates[cpRequestPacket.Words[0]](sender, cpRecievedPacket, cpRequestPacket);
+                }
+            }
+            // Else it is an error..
+            else
+            {
                 // InvalidArguments
                 // TooLongMessage
                 // InvalidDuration
                 // InvalidFileName
                 // InvalidLevelName
                 // More...
-                if (ResponseError != null) {
+                if (ResponseError != null)
+                {
                     this.ResponseError(this, cpRequestPacket, cpRecievedPacket.Words[0]);
                 }
             }
