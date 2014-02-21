@@ -1,6 +1,6 @@
 /////////////////////////////////////////////
 // This definitions file will be overwritten during an update.
-//  (2014-02-18.02)
+//  (2014-02-21.01)
 // This file contains the standard defintions required to run procon 
 // connected to a BF4 server
 /////////////////////////////////////////////
@@ -955,7 +955,7 @@ procon.protected.teamnames.add "MP_Prison" 4 "global.Squad4" "ru.png" "SquadDeat
 procon.protected.teamnames.add "MP_Resort" 0 "global.conquest.neutral" "" "SquadDeathMatch0"
 procon.protected.teamnames.add "MP_Resort" 1 "global.Squad1" "us.png" "SquadDeathMatch0"
 procon.protected.teamnames.add "MP_Resort" 2 "global.Squad2" "cn.png" "SquadDeathMatch0"
-procon.protected.teamnames.add "MP_Resort" 3 "global.Squad4" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "MP_Resort" 3 "global.Squad3" "us.png" "SquadDeathMatch0"
 procon.protected.teamnames.add "MP_Resort" 4 "global.Squad4" "cn.png" "SquadDeathMatch0"
 
 procon.protected.teamnames.add "MP_Siege" 0 "global.conquest.neutral" "" "SquadDeathMatch0"
