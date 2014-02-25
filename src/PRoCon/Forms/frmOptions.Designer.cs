@@ -50,11 +50,11 @@
             this.lblBasicsAuthor = new System.Windows.Forms.Label();
             this.cboBasicsLanguagePicker = new PRoCon.Controls.ControlsEx.ComboBoxEx();
             this.tabPlugins = new System.Windows.Forms.TabPage();
-            this.lblPluginsChangesAfterRestart = new System.Windows.Forms.Label();
-            this.pnlSandboxOptions = new System.Windows.Forms.Panel();
             this.chkEnablePluginDebugging = new System.Windows.Forms.CheckBox();
             this.lblPluginsDebug = new System.Windows.Forms.Label();
+            this.lblPluginsChangesAfterRestart = new System.Windows.Forms.Label();
             this.panel19 = new System.Windows.Forms.Panel();
+            this.pnlSandboxOptions = new System.Windows.Forms.Panel();
             this.numPluginMaxRuntimeSec = new System.Windows.Forms.NumericUpDown();
             this.numPluginMaxRuntimeMin = new System.Windows.Forms.NumericUpDown();
             this.lblPluginMaxRuntimeSec = new System.Windows.Forms.Label();
@@ -478,6 +478,27 @@
             this.tabPlugins.Text = "Plugins";
             this.tabPlugins.UseVisualStyleBackColor = true;
             // 
+            // chkEnablePluginDebugging
+            // 
+            this.chkEnablePluginDebugging.AutoSize = true;
+            this.chkEnablePluginDebugging.Location = new System.Drawing.Point(32, 408);
+            this.chkEnablePluginDebugging.Name = "chkEnablePluginDebugging";
+            this.chkEnablePluginDebugging.Size = new System.Drawing.Size(159, 19);
+            this.chkEnablePluginDebugging.TabIndex = 287;
+            this.chkEnablePluginDebugging.Text = "Enable plugin debugging";
+            this.chkEnablePluginDebugging.UseVisualStyleBackColor = true;
+            this.chkEnablePluginDebugging.CheckedChanged += new System.EventHandler(this.chkEnablePluginDebugging_CheckedChanged);
+            // 
+            // lblPluginsDebug
+            // 
+            this.lblPluginsDebug.AutoSize = true;
+            this.lblPluginsDebug.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblPluginsDebug.Location = new System.Drawing.Point(18, 387);
+            this.lblPluginsDebug.Name = "lblPluginsDebug";
+            this.lblPluginsDebug.Size = new System.Drawing.Size(68, 15);
+            this.lblPluginsDebug.TabIndex = 285;
+            this.lblPluginsDebug.Text = "Debugging";
+            // 
             // lblPluginsChangesAfterRestart
             // 
             this.lblPluginsChangesAfterRestart.Location = new System.Drawing.Point(17, 434);
@@ -486,6 +507,16 @@
             this.lblPluginsChangesAfterRestart.TabIndex = 25;
             this.lblPluginsChangesAfterRestart.Text = "Changes to plugin security require PRoCon to be restarted before they come into e" +
     "ffect";
+            // 
+            // panel19
+            // 
+            this.panel19.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel19.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.panel19.Location = new System.Drawing.Point(21, 396);
+            this.panel19.Name = "panel19";
+            this.panel19.Size = new System.Drawing.Size(355, 1);
+            this.panel19.TabIndex = 286;
             // 
             // pnlSandboxOptions
             // 
@@ -508,36 +539,6 @@
             this.pnlSandboxOptions.Name = "pnlSandboxOptions";
             this.pnlSandboxOptions.Size = new System.Drawing.Size(381, 324);
             this.pnlSandboxOptions.TabIndex = 24;
-            // 
-            // chkEnablePluginDebugging
-            // 
-            this.chkEnablePluginDebugging.AutoSize = true;
-            this.chkEnablePluginDebugging.Location = new System.Drawing.Point(32, 408);
-            this.chkEnablePluginDebugging.Name = "chkEnablePluginDebugging";
-            this.chkEnablePluginDebugging.Size = new System.Drawing.Size(159, 19);
-            this.chkEnablePluginDebugging.TabIndex = 287;
-            this.chkEnablePluginDebugging.Text = "Enable plugin debugging";
-            this.chkEnablePluginDebugging.UseVisualStyleBackColor = true;
-            // 
-            // lblPluginsDebug
-            // 
-            this.lblPluginsDebug.AutoSize = true;
-            this.lblPluginsDebug.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblPluginsDebug.Location = new System.Drawing.Point(18, 387);
-            this.lblPluginsDebug.Name = "lblPluginsDebug";
-            this.lblPluginsDebug.Size = new System.Drawing.Size(68, 15);
-            this.lblPluginsDebug.TabIndex = 285;
-            this.lblPluginsDebug.Text = "Debugging";
-            // 
-            // panel19
-            // 
-            this.panel19.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel19.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.panel19.Location = new System.Drawing.Point(21, 396);
-            this.panel19.Name = "panel19";
-            this.panel19.Size = new System.Drawing.Size(355, 1);
-            this.panel19.TabIndex = 286;
             // 
             // numPluginMaxRuntimeSec
             // 
