@@ -44,6 +44,8 @@ namespace PRoCon.Core.Options {
 
         public event OptionsEnabledHandler UsePluginOldStyleLoadChanged;
 
+        public event OptionsEnabledHandler EnablePluginDebuggingChanged;
+
         private bool m_isConsoleLoggingEnabled;
         public bool ConsoleLogging {
             get {
@@ -475,6 +477,24 @@ namespace PRoCon.Core.Options {
             }
         }
 
+        private bool m_isPluginDebuggingEnabled;
+        public bool EnablePluginDebugging {
+            get
+            {
+                return this.m_isPluginDebuggingEnabled;
+            }
+            set
+            {
+                this.m_isPluginDebuggingEnabled = value;
+                this.m_praApplication.SaveMainConfig();
+
+                if (this.EnablePluginDebuggingChanged != null)
+                {
+                    this.EnablePluginDebuggingChanged(value);
+                }
+            }
+        }
+
         public PermissionSet PluginPermissions
         {
 
@@ -575,6 +595,7 @@ namespace PRoCon.Core.Options {
             this.PluginMaxRuntime_m = 0;
 
             this.UsePluginOldStyleLoad = false;
+            this.EnablePluginDebugging = false;
         }
     }
 }

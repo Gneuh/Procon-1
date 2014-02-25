@@ -103,6 +103,8 @@ namespace PRoCon.Forms {
 
             this.m_praApplication.OptionsSettings.UsePluginOldStyleLoadChanged += new PRoCon.Core.Options.OptionsSettings.OptionsEnabledHandler(OptionsSettings_UsePluginOldStyleLoadChanged);
 
+            this.m_praApplication.OptionsSettings.EnablePluginDebuggingChanged += new PRoCon.Core.Options.OptionsSettings.OptionsEnabledHandler(OptionsSettings_EnablePluginDebuggingChanged);
+
             //m_fntComboBoxFont = new Font("Calibri", 10);
             this.m_frmParent = frmParent;
             this.picHttpServerServerStatus.Image = this.m_frmParent.picLayerOffline.Image;
@@ -180,6 +182,8 @@ namespace PRoCon.Forms {
                     this.numPluginMaxRuntimeMin.Enabled = false;
                     this.numPluginMaxRuntimeSec.Enabled = false;
                 }
+
+                this.m_praApplication.OptionsSettings.EnablePluginDebugging = this.m_praApplication.OptionsSettings.EnablePluginDebugging;
 
                 this.lsvTrustedHostDomainPorts.Items.Clear();
                 foreach (TrustedHostWebsitePort trusted in this.m_praApplication.OptionsSettings.TrustedHostsWebsitesPorts) {
@@ -933,5 +937,13 @@ namespace PRoCon.Forms {
             this.m_praApplication.OptionsSettings.UsePluginOldStyleLoad = this.chkAdvUsePluginOldStyleLoad.Checked;
         }
         #endregion
+
+        void OptionsSettings_EnablePluginDebuggingChanged(bool blEnabled) {
+            this.chkEnablePluginDebugging.Checked = blEnabled;
+        }
+
+        private void chkEnablePluginDebugging_CheckedChanged(object sender, EventArgs e) {
+            this.m_praApplication.OptionsSettings.EnablePluginDebugging = this.chkEnablePluginDebugging.Checked;
+        }
     }
 }
