@@ -248,8 +248,6 @@ namespace PRoCon.Forms {
             this.chkAllowODBCConnections.Text = clocLanguage.GetLocalized("frmOptions.tabPlugins.chkAllowODBCConnections");
             this.lblPluginsMail.Text = clocLanguage.GetLocalized("frmOptions.tabPlugins.lblPluginsMail");
             this.chkAllowSmtpConnections.Text = clocLanguage.GetLocalized("frmOptions.tabPlugins.chkAllowSmtpConnections");
-            this.lblPluginsDebug.Text = clocLanguage.GetLocalized("frmOptions.tabPlugins.lblPluginsDebug");
-            this.chkEnablePluginDebugging.Text = clocLanguage.GetLocalized("frmOptions.tabPlugins.chkEnablePluginDebugging");
 
             this.lblPluginsChangesAfterRestart.Text = clocLanguage.GetLocalized("frmOptions.tabPlugins.lblPluginsChangesAfterRestart");
 
@@ -310,6 +308,10 @@ namespace PRoCon.Forms {
             this.lblAdvStartup.Text = clocLanguage.GetDefaultLocalized(this.lblAdvStartup.Text, "frmOptions.tabAdvanced.lblAdvSpecialSwitches.chkAdvStartup");
             this.chkAdvUsePluginOldStyleLoad.Text = clocLanguage.GetDefaultLocalized(this.chkAdvUsePluginOldStyleLoad.Text, "frmOptions.tabAdvanced.lblAdvSpecialSwitches.chkAdvUsePluginOldStyleLoad");
             this.lblAdvStartupChangeNotice.Text = clocLanguage.GetDefaultLocalized(this.lblAdvStartupChangeNotice.Text, "frmOptions.tabAdvanced.lblAdvSpecialSwitches.lblAdvStartupChangeNotice");
+
+            // EnablePluginDebugging
+            this.lblPluginsDebug.Text = clocLanguage.GetLocalized("frmOptions.tabPlugins.lblPluginDebugging");
+            this.chkEnablePluginDebugging.Text = clocLanguage.GetLocalized("frmOptions.tabPlugins.chkEnablePluginDebugging");
 
             //this.m_strSetLanguageFileName = clocLanguage.FileName;
         }
