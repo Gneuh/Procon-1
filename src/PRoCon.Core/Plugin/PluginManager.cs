@@ -485,6 +485,11 @@ namespace PRoCon.Core.Plugin {
                         File.Delete(file);
                     }
                 }
+
+                // Remove PDB files from plugin directory
+                foreach (string file in Directory.GetFiles(PluginBaseDirectory, "*.pdb")) {
+                    File.Delete(file);
+                }
             }
             catch {
             }
@@ -524,6 +529,33 @@ namespace PRoCon.Core.Plugin {
             parameters.ReferencedAssemblies.Add("PRoCon.Core.dll");
             parameters.GenerateInMemory = false;
             parameters.IncludeDebugInformation = this.ProconClient.Parent.OptionsSettings.EnablePluginDebugging;
+
+            if (this.ProconClient.Parent.OptionsSettings.EnablePluginDebugging == true)
+            {
+                Directory.CreateDirectory(PluginDebugTempDirectory); // checks also if folder exists, in that case does nothing
+                
+                if (!Directory.Exists(PluginDebugTempDirectory))
+                {
+                    WritePluginConsole("^1PluginManager.CompilePlugin(): failed to create temp directory");
+                    // TODO: Disable debugging when directory creation fails?
+                    //parameters.IncludeDebugInformation = false;
+                }
+            }
+            else
+            {
+                try
+                {
+                    if (Directory.Exists(PluginDebugTempDirectory))
+                    {
+                        Directory.Delete(PluginDebugTempDirectory, true);
+                    }
+                }
+                catch (Exception e)
+                {
+                    WritePluginConsole("^1PluginManager.CompilePlugin(): delete directory error: {0};", e.Message);
+                }
+            }
+
             parameters.OutputAssembly = "Default.dll";
 
             return parameters;
@@ -626,33 +658,7 @@ namespace PRoCon.Core.Plugin {
 
                 try {
                     parameters.OutputAssembly = outputAssembly;
-
-                    if (parameters.IncludeDebugInformation == true)
-                    {
-                        Directory.CreateDirectory(PluginDebugTempDirectory); // checks also if folder exists, in that case does nothing
-                        parameters.TempFiles = new TempFileCollection(PluginDebugTempDirectory, true);
-
-                        if (!Directory.Exists(PluginDebugTempDirectory))
-                        {
-                            WritePluginConsole("^1PluginManager.CompilePlugin(): failed to create temp directory");
-                            // TODO: Disable debugging when directory creation fails?
-                            //parameters.IncludeDebugInformation = false;
-                        }
-                    }
-                    else
-                    {
-                        try
-                        {
-                            if (Directory.Exists(Path.Combine(this.PluginBaseDirectory, "Temp")))
-                            {
-                                Directory.Delete(Path.Combine(this.PluginBaseDirectory, "Temp"), true);
-                            }
-                        }
-                        catch (Exception e)
-                        {
-                            WritePluginConsole("^1PluginManager.CompilePlugin(): delete directory error: {0};", e.Message);
-                        }
-                    }
+                    parameters.TempFiles = new TempFileCollection(PluginDebugTempDirectory, true);
 
                     // 4. Now compile the plugin
                     this.PrintPluginResults(pluginFile, pluginsCodeDomProvider.CompileAssemblyFromSource(parameters, fullPluginSource));
