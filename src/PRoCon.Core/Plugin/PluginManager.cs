@@ -658,7 +658,9 @@ namespace PRoCon.Core.Plugin {
 
                 try {
                     parameters.OutputAssembly = outputAssembly;
-                    parameters.TempFiles = new TempFileCollection(PluginDebugTempDirectory, true);
+                    if (this.ProconClient.Parent.OptionsSettings.EnablePluginDebugging == true) {
+                        parameters.TempFiles = new TempFileCollection(PluginDebugTempDirectory, true);
+                    }
 
                     // 4. Now compile the plugin
                     this.PrintPluginResults(pluginFile, pluginsCodeDomProvider.CompileAssemblyFromSource(parameters, fullPluginSource));
