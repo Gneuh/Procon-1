@@ -244,6 +244,8 @@ namespace PRoCon.Forms {
             this.chkAllowODBCConnections.Text = clocLanguage.GetLocalized("frmOptions.tabPlugins.chkAllowODBCConnections");
             this.lblPluginsMail.Text = clocLanguage.GetLocalized("frmOptions.tabPlugins.lblPluginsMail");
             this.chkAllowSmtpConnections.Text = clocLanguage.GetLocalized("frmOptions.tabPlugins.chkAllowSmtpConnections");
+            this.lblPluginsDebug.Text = clocLanguage.GetLocalized("frmOptions.tabPlugins.lblPluginsDebug");
+            this.chkEnablePluginDebugging.Text = clocLanguage.GetLocalized("frmOptions.tabPlugins.chkEnablePluginDebugging");
 
             this.lblPluginsChangesAfterRestart.Text = clocLanguage.GetLocalized("frmOptions.tabPlugins.lblPluginsChangesAfterRestart");
 
