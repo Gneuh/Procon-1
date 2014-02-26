@@ -1,5 +1,4 @@
 # Procon 1 #
-----------
 
 Procon 1 is developed by [Myrcon Ptd. Ltd.](https://myrcon.com "Official homepage of Myrcon Ptd. Ltd.").
 
@@ -22,17 +21,21 @@ Please refer to the [issues section](https://github.com/Myrcon/Procon-1/issues?l
 ## Changelog ##
 To check out older changelogs, please refer to our [full changelogs list](https://forum.myrcon.com/showthread.php?240-Full-Change-Log "Full changelog of Procon 1") on the Myrcon Community forums.
 
-### 1.4.1.5 to 1.4.1.6 ###
+### 1.4.1.6 to 1.4.2.0 ###
 #### Battlefield 4 ####
-- Added weapon definitions and localisation for the *Second Assault* DLC
+- Fixed problem with team/squad mapping on BF4 maps (resulting in wrong moves/kicks etc.)
+- Added map definitions for *Second Assault* DLC
+- Additional changes to definitions for BF4
+
+#### Core ####
+- Improved event handling in Procon, allowing for better performance and debugging
+- General (crazy) improvements by the almighty phogue (see [here](https://github.com/Myrcon/Procon-1/issues/92))
 
 #### UI ####
-- Fixed the "vars.teamFactionOverride" settings not showing up in the config generator
-- Added checkbox to toggle scrolling in the *Events* tab
-- Removed the old "Gameplay presets" setting from the BF4 UI since the game provides a preset itself
+- Fixed "Move to" menu in player list showing entries multiple times for BF4
 
 #### Plugins ####
-- Updated the default *Ingame Admin* and *Spambot* Plugin to set the yell duration properly for BF4
+- Slight startup improvement for the ingame admin plugin
 
 
 ## Credits & contributions ##
