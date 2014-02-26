@@ -122,6 +122,10 @@ namespace PRoCon.Core.Plugin {
             get { return Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, PluginsDirectoryName), ProconClient.GameType); }
         }
 
+        public string PluginDebugTempDirectory {
+            get { return Path.Combine(this.PluginBaseDirectory, "Temp"); }
+        }
+
         #endregion
 
         public PluginManager(PRoConClient cpcClient) {
@@ -474,6 +478,18 @@ namespace PRoCon.Core.Plugin {
                 File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "PRoCon.Core.dll"), Path.Combine(PluginBaseDirectory, "PRoCon.Core.dll"), true);
                 File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "MySql.Data.dll"), Path.Combine(PluginBaseDirectory, "MySql.Data.dll"), true);
                 File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "PRoCon.Core.pdb"), Path.Combine(PluginBaseDirectory, "PRoCon.Core.pdb"), true);
+
+                // Clean up temp directory
+                if (Directory.Exists(PluginDebugTempDirectory) == true) {
+                    foreach (string file in Directory.GetFiles(PluginDebugTempDirectory)) {
+                        File.Delete(file);
+                    }
+                }
+
+                // Remove PDB files from plugin directory
+                foreach (string file in Directory.GetFiles(PluginBaseDirectory, "*.pdb")) {
+                    File.Delete(file);
+                }
             }
             catch {
             }
@@ -512,20 +528,34 @@ namespace PRoCon.Core.Plugin {
             parameters.ReferencedAssemblies.Add("MySql.Data.dll");
             parameters.ReferencedAssemblies.Add("PRoCon.Core.dll");
             parameters.GenerateInMemory = false;
-            parameters.IncludeDebugInformation = false;
-            if (parameters.IncludeDebugInformation == true) {
-                Directory.CreateDirectory(Path.Combine(this.PluginBaseDirectory, "Temp")); // checks also if folder exists, in that case does nothing
-                parameters.TempFiles = new TempFileCollection(Path.Combine(this.PluginBaseDirectory, "Temp"), true);
-            } else {
-                try {
-                    if (Directory.Exists(Path.Combine(this.PluginBaseDirectory, "Temp"))) {
-                        Directory.Delete(Path.Combine(this.PluginBaseDirectory, "Temp"), true);
-                    }
-                } 
-                catch (Exception e) {
-                    WritePluginConsole("^PluginManager.GenerateCompilerParameters(): delete Directory Error: {0};", e.Message);
+            parameters.IncludeDebugInformation = this.ProconClient.Parent.OptionsSettings.EnablePluginDebugging;
+
+            if (this.ProconClient.Parent.OptionsSettings.EnablePluginDebugging == true)
+            {
+                Directory.CreateDirectory(PluginDebugTempDirectory); // checks also if folder exists, in that case does nothing
+                
+                if (!Directory.Exists(PluginDebugTempDirectory))
+                {
+                    WritePluginConsole("^1PluginManager.CompilePlugin(): failed to create temp directory");
+                    // TODO: Disable debugging when directory creation fails?
+                    //parameters.IncludeDebugInformation = false;
                 }
             }
+            else
+            {
+                try
+                {
+                    if (Directory.Exists(PluginDebugTempDirectory))
+                    {
+                        Directory.Delete(PluginDebugTempDirectory, true);
+                    }
+                }
+                catch (Exception e)
+                {
+                    WritePluginConsole("^1PluginManager.CompilePlugin(): delete directory error: {0};", e.Message);
+                }
+            }
+
             parameters.OutputAssembly = "Default.dll";
 
             return parameters;
@@ -613,8 +643,9 @@ namespace PRoCon.Core.Plugin {
 
             String outputAssembly = Path.Combine(PluginBaseDirectory, pluginClassName + ".dll");
 
-            if (requiresRecompiling == true || File.Exists(outputAssembly) == false) {
-
+            // 2.1: check if plugin debugging is enabled, always force compilation if true
+            if (requiresRecompiling == true || File.Exists(outputAssembly) == false || this.ProconClient.Parent.OptionsSettings.EnablePluginDebugging == true)
+            {
                 // 3. If a compiled plugin exists already, remove it now.
                 if (File.Exists(outputAssembly) == true) {
                     try {
@@ -627,6 +658,9 @@ namespace PRoCon.Core.Plugin {
 
                 try {
                     parameters.OutputAssembly = outputAssembly;
+                    if (this.ProconClient.Parent.OptionsSettings.EnablePluginDebugging == true) {
+                        parameters.TempFiles = new TempFileCollection(PluginDebugTempDirectory, true);
+                    }
 
                     // 4. Now compile the plugin
                     this.PrintPluginResults(pluginFile, pluginsCodeDomProvider.CompileAssemblyFromSource(parameters, fullPluginSource));
@@ -787,6 +821,10 @@ namespace PRoCon.Core.Plugin {
 
                 WritePluginConsole("Compiling and loading plugins..");
 
+                if (this.ProconClient.Parent.OptionsSettings.EnablePluginDebugging == true) {
+                    WritePluginConsole("^b^1*** PLUGIN DEBUGGING ENABLED ***^0^n");
+                    WritePluginConsole("^b^1If you're not actively testing or debugging a plugin, please disable this setting in Procon's options!^0^n");
+                }
 
                 var pluginsDirectoryInfo = new DirectoryInfo(PluginBaseDirectory);
                 string className = string.Empty;

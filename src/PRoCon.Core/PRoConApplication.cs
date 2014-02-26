@@ -773,6 +773,8 @@ namespace PRoCon.Core {
 
                         stwConfig.WriteLine("procon.private.options.UsePluginOldStyleLoad {0}", this.OptionsSettings.UsePluginOldStyleLoad);
 
+                        stwConfig.WriteLine("procon.private.options.enablePluginDebugging {0}", this.OptionsSettings.EnablePluginDebugging);
+
                         foreach (PRoConClient prcClient in this.Connections) {
 
                             string strAddServerCommand = String.Format("procon.private.servers.add \"{0}\" {1}", prcClient.HostName, prcClient.Port);
@@ -1376,6 +1378,15 @@ namespace PRoCon.Core {
 
                 if (bool.TryParse(lstWords[1], out blEnabled) == true) {
                     this.OptionsSettings.UsePluginOldStyleLoad = blEnabled;
+                }
+            }
+            else if (lstWords.Count >= 2 && String.Compare(lstWords[0], "procon.private.options.enablePluginDebugging", true) == 0 && objSender == this)
+            {
+                bool blEnabled = false;
+
+                if (bool.TryParse(lstWords[1], out blEnabled) == true)
+                {
+                    this.OptionsSettings.EnablePluginDebugging = blEnabled;
                 }
             }
             else if (lstWords.Count >= 3 && String.Compare(lstWords[0], "procon.protected.notification.write", true) == 0 && objSender is PRoConClient)

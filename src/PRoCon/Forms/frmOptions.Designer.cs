@@ -50,7 +50,10 @@
             this.lblBasicsAuthor = new System.Windows.Forms.Label();
             this.cboBasicsLanguagePicker = new PRoCon.Controls.ControlsEx.ComboBoxEx();
             this.tabPlugins = new System.Windows.Forms.TabPage();
+            this.chkEnablePluginDebugging = new System.Windows.Forms.CheckBox();
+            this.lblPluginsDebug = new System.Windows.Forms.Label();
             this.lblPluginsChangesAfterRestart = new System.Windows.Forms.Label();
+            this.panel19 = new System.Windows.Forms.Panel();
             this.pnlSandboxOptions = new System.Windows.Forms.Panel();
             this.numPluginMaxRuntimeSec = new System.Windows.Forms.NumericUpDown();
             this.numPluginMaxRuntimeMin = new System.Windows.Forms.NumericUpDown();
@@ -121,6 +124,9 @@
             this.panel9 = new System.Windows.Forms.Panel();
             this.panel12 = new System.Windows.Forms.Panel();
             this.tabAdv2 = new System.Windows.Forms.TabPage();
+            this.chkAdv2EnableAdminReason = new System.Windows.Forms.CheckBox();
+            this.lblAdv2BanTab = new System.Windows.Forms.Label();
+            this.panel18 = new System.Windows.Forms.Panel();
             this.tabPlayerLookup = new System.Windows.Forms.TabPage();
             this.lblStatsLinkHelpText = new System.Windows.Forms.Label();
             this.pnlStatsLinkManage = new System.Windows.Forms.Panel();
@@ -136,9 +142,6 @@
             this.lblStatsPlayerTab = new System.Windows.Forms.Label();
             this.panel15 = new System.Windows.Forms.Panel();
             this.btnClose = new System.Windows.Forms.Button();
-            this.chkAdv2EnableAdminReason = new System.Windows.Forms.CheckBox();
-            this.lblAdv2BanTab = new System.Windows.Forms.Label();
-            this.panel18 = new System.Windows.Forms.Panel();
             this.tbcOptions.SuspendLayout();
             this.tabBasics.SuspendLayout();
             this.tabPlugins.SuspendLayout();
@@ -459,7 +462,10 @@
             // 
             // tabPlugins
             // 
+            this.tabPlugins.Controls.Add(this.chkEnablePluginDebugging);
+            this.tabPlugins.Controls.Add(this.lblPluginsDebug);
             this.tabPlugins.Controls.Add(this.lblPluginsChangesAfterRestart);
+            this.tabPlugins.Controls.Add(this.panel19);
             this.tabPlugins.Controls.Add(this.pnlSandboxOptions);
             this.tabPlugins.Controls.Add(this.lblPluginsSecurity);
             this.tabPlugins.Controls.Add(this.panel6);
@@ -472,14 +478,45 @@
             this.tabPlugins.Text = "Plugins";
             this.tabPlugins.UseVisualStyleBackColor = true;
             // 
+            // chkEnablePluginDebugging
+            // 
+            this.chkEnablePluginDebugging.AutoSize = true;
+            this.chkEnablePluginDebugging.Location = new System.Drawing.Point(32, 408);
+            this.chkEnablePluginDebugging.Name = "chkEnablePluginDebugging";
+            this.chkEnablePluginDebugging.Size = new System.Drawing.Size(159, 19);
+            this.chkEnablePluginDebugging.TabIndex = 287;
+            this.chkEnablePluginDebugging.Text = "Enable plugin debugging";
+            this.chkEnablePluginDebugging.UseVisualStyleBackColor = true;
+            this.chkEnablePluginDebugging.CheckedChanged += new System.EventHandler(this.chkEnablePluginDebugging_CheckedChanged);
+            // 
+            // lblPluginsDebug
+            // 
+            this.lblPluginsDebug.AutoSize = true;
+            this.lblPluginsDebug.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblPluginsDebug.Location = new System.Drawing.Point(18, 387);
+            this.lblPluginsDebug.Name = "lblPluginsDebug";
+            this.lblPluginsDebug.Size = new System.Drawing.Size(68, 15);
+            this.lblPluginsDebug.TabIndex = 285;
+            this.lblPluginsDebug.Text = "Debugging";
+            // 
             // lblPluginsChangesAfterRestart
             // 
-            this.lblPluginsChangesAfterRestart.Location = new System.Drawing.Point(17, 424);
+            this.lblPluginsChangesAfterRestart.Location = new System.Drawing.Point(17, 434);
             this.lblPluginsChangesAfterRestart.Name = "lblPluginsChangesAfterRestart";
             this.lblPluginsChangesAfterRestart.Size = new System.Drawing.Size(355, 38);
             this.lblPluginsChangesAfterRestart.TabIndex = 25;
             this.lblPluginsChangesAfterRestart.Text = "Changes to plugin security require PRoCon to be restarted before they come into e" +
     "ffect";
+            // 
+            // panel19
+            // 
+            this.panel19.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel19.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.panel19.Location = new System.Drawing.Point(21, 396);
+            this.panel19.Name = "panel19";
+            this.panel19.Size = new System.Drawing.Size(355, 1);
+            this.panel19.TabIndex = 286;
             // 
             // pnlSandboxOptions
             // 
@@ -500,13 +537,13 @@
             this.pnlSandboxOptions.Controls.Add(this.panel5);
             this.pnlSandboxOptions.Location = new System.Drawing.Point(3, 60);
             this.pnlSandboxOptions.Name = "pnlSandboxOptions";
-            this.pnlSandboxOptions.Size = new System.Drawing.Size(381, 361);
+            this.pnlSandboxOptions.Size = new System.Drawing.Size(381, 324);
             this.pnlSandboxOptions.TabIndex = 24;
             // 
             // numPluginMaxRuntimeSec
             // 
             this.numPluginMaxRuntimeSec.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.numPluginMaxRuntimeSec.Location = new System.Drawing.Point(183, 333);
+            this.numPluginMaxRuntimeSec.Location = new System.Drawing.Point(184, 294);
             this.numPluginMaxRuntimeSec.Maximum = new decimal(new int[] {
             59,
             0,
@@ -526,7 +563,7 @@
             // numPluginMaxRuntimeMin
             // 
             this.numPluginMaxRuntimeMin.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.numPluginMaxRuntimeMin.Location = new System.Drawing.Point(100, 333);
+            this.numPluginMaxRuntimeMin.Location = new System.Drawing.Point(101, 294);
             this.numPluginMaxRuntimeMin.Maximum = new decimal(new int[] {
             59,
             0,
@@ -541,7 +578,7 @@
             // lblPluginMaxRuntimeSec
             // 
             this.lblPluginMaxRuntimeSec.AutoSize = true;
-            this.lblPluginMaxRuntimeSec.Location = new System.Drawing.Point(233, 335);
+            this.lblPluginMaxRuntimeSec.Location = new System.Drawing.Point(234, 296);
             this.lblPluginMaxRuntimeSec.Name = "lblPluginMaxRuntimeSec";
             this.lblPluginMaxRuntimeSec.Size = new System.Drawing.Size(24, 15);
             this.lblPluginMaxRuntimeSec.TabIndex = 33;
@@ -550,7 +587,7 @@
             // lblPluginMaxRuntimeMin
             // 
             this.lblPluginMaxRuntimeMin.AutoSize = true;
-            this.lblPluginMaxRuntimeMin.Location = new System.Drawing.Point(150, 335);
+            this.lblPluginMaxRuntimeMin.Location = new System.Drawing.Point(151, 296);
             this.lblPluginMaxRuntimeMin.Name = "lblPluginMaxRuntimeMin";
             this.lblPluginMaxRuntimeMin.Size = new System.Drawing.Size(28, 15);
             this.lblPluginMaxRuntimeMin.TabIndex = 27;
@@ -560,7 +597,7 @@
             // 
             this.lblPluginMaxRuntime.AutoSize = true;
             this.lblPluginMaxRuntime.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblPluginMaxRuntime.Location = new System.Drawing.Point(14, 314);
+            this.lblPluginMaxRuntime.Location = new System.Drawing.Point(15, 275);
             this.lblPluginMaxRuntime.Name = "lblPluginMaxRuntime";
             this.lblPluginMaxRuntime.Size = new System.Drawing.Size(184, 15);
             this.lblPluginMaxRuntime.TabIndex = 30;
@@ -571,7 +608,7 @@
             this.panel16.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel16.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.panel16.Location = new System.Drawing.Point(17, 323);
+            this.panel16.Location = new System.Drawing.Point(18, 284);
             this.panel16.Name = "panel16";
             this.panel16.Size = new System.Drawing.Size(355, 1);
             this.panel16.TabIndex = 31;
@@ -579,7 +616,7 @@
             // chkAllowSmtpConnections
             // 
             this.chkAllowSmtpConnections.AutoSize = true;
-            this.chkAllowSmtpConnections.Location = new System.Drawing.Point(28, 289);
+            this.chkAllowSmtpConnections.Location = new System.Drawing.Point(29, 250);
             this.chkAllowSmtpConnections.Name = "chkAllowSmtpConnections";
             this.chkAllowSmtpConnections.Size = new System.Drawing.Size(225, 19);
             this.chkAllowSmtpConnections.TabIndex = 29;
@@ -591,7 +628,7 @@
             // 
             this.lblPluginsMail.AutoSize = true;
             this.lblPluginsMail.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblPluginsMail.Location = new System.Drawing.Point(14, 268);
+            this.lblPluginsMail.Location = new System.Drawing.Point(15, 229);
             this.lblPluginsMail.Name = "lblPluginsMail";
             this.lblPluginsMail.Size = new System.Drawing.Size(30, 15);
             this.lblPluginsMail.TabIndex = 27;
@@ -602,7 +639,7 @@
             this.panel13.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel13.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.panel13.Location = new System.Drawing.Point(17, 277);
+            this.panel13.Location = new System.Drawing.Point(18, 238);
             this.panel13.Name = "panel13";
             this.panel13.Size = new System.Drawing.Size(355, 1);
             this.panel13.TabIndex = 28;
@@ -610,7 +647,7 @@
             // chkAllowODBCConnections
             // 
             this.chkAllowODBCConnections.AutoSize = true;
-            this.chkAllowODBCConnections.Location = new System.Drawing.Point(28, 245);
+            this.chkAllowODBCConnections.Location = new System.Drawing.Point(29, 206);
             this.chkAllowODBCConnections.Name = "chkAllowODBCConnections";
             this.chkAllowODBCConnections.Size = new System.Drawing.Size(226, 19);
             this.chkAllowODBCConnections.TabIndex = 26;
@@ -622,7 +659,7 @@
             // 
             this.lblPluginsDatabases.AutoSize = true;
             this.lblPluginsDatabases.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblPluginsDatabases.Location = new System.Drawing.Point(14, 224);
+            this.lblPluginsDatabases.Location = new System.Drawing.Point(15, 185);
             this.lblPluginsDatabases.Name = "lblPluginsDatabases";
             this.lblPluginsDatabases.Size = new System.Drawing.Size(63, 15);
             this.lblPluginsDatabases.TabIndex = 24;
@@ -633,7 +670,7 @@
             this.panel8.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel8.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.panel8.Location = new System.Drawing.Point(17, 233);
+            this.panel8.Location = new System.Drawing.Point(18, 194);
             this.panel8.Name = "panel8";
             this.panel8.Size = new System.Drawing.Size(355, 1);
             this.panel8.TabIndex = 25;
@@ -649,7 +686,7 @@
             this.pnlPluginsAllowedDomains.Controls.Add(this.lblPluginsTrustedHostDomain);
             this.pnlPluginsAllowedDomains.Location = new System.Drawing.Point(3, 31);
             this.pnlPluginsAllowedDomains.Name = "pnlPluginsAllowedDomains";
-            this.pnlPluginsAllowedDomains.Size = new System.Drawing.Size(375, 190);
+            this.pnlPluginsAllowedDomains.Size = new System.Drawing.Size(375, 149);
             this.pnlPluginsAllowedDomains.TabIndex = 23;
             // 
             // lsvTrustedHostDomainPorts
@@ -663,7 +700,7 @@
             this.lsvTrustedHostDomainPorts.Location = new System.Drawing.Point(25, 51);
             this.lsvTrustedHostDomainPorts.MultiSelect = false;
             this.lsvTrustedHostDomainPorts.Name = "lsvTrustedHostDomainPorts";
-            this.lsvTrustedHostDomainPorts.Size = new System.Drawing.Size(304, 136);
+            this.lsvTrustedHostDomainPorts.Size = new System.Drawing.Size(304, 96);
             this.lsvTrustedHostDomainPorts.TabIndex = 26;
             this.lsvTrustedHostDomainPorts.UseCompatibleStateImageBehavior = false;
             this.lsvTrustedHostDomainPorts.View = System.Windows.Forms.View.Details;
@@ -684,7 +721,7 @@
             this.btnPluginsAddTrustedHostDomain.Enabled = false;
             this.btnPluginsAddTrustedHostDomain.FlatAppearance.BorderSize = 0;
             this.btnPluginsAddTrustedHostDomain.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnPluginsAddTrustedHostDomain.Location = new System.Drawing.Point(334, 22);
+            this.btnPluginsAddTrustedHostDomain.Location = new System.Drawing.Point(334, 1);
             this.btnPluginsAddTrustedHostDomain.Name = "btnPluginsAddTrustedHostDomain";
             this.btnPluginsAddTrustedHostDomain.Size = new System.Drawing.Size(35, 23);
             this.btnPluginsAddTrustedHostDomain.TabIndex = 25;
@@ -697,7 +734,7 @@
             this.btnPluginsRemoveTrustedHostDomain.Enabled = false;
             this.btnPluginsRemoveTrustedHostDomain.FlatAppearance.BorderSize = 0;
             this.btnPluginsRemoveTrustedHostDomain.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnPluginsRemoveTrustedHostDomain.Location = new System.Drawing.Point(335, 101);
+            this.btnPluginsRemoveTrustedHostDomain.Location = new System.Drawing.Point(335, 80);
             this.btnPluginsRemoveTrustedHostDomain.Name = "btnPluginsRemoveTrustedHostDomain";
             this.btnPluginsRemoveTrustedHostDomain.Size = new System.Drawing.Size(35, 23);
             this.btnPluginsRemoveTrustedHostDomain.TabIndex = 24;
@@ -1180,7 +1217,7 @@
             this.lblAdvLayerTabs.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblAdvLayerTabs.Location = new System.Drawing.Point(17, 104);
             this.lblAdvLayerTabs.Name = "lblAdvLayerTabs";
-            this.lblAdvLayerTabs.Size = new System.Drawing.Size(65, 15);
+            this.lblAdvLayerTabs.Size = new System.Drawing.Size(64, 15);
             this.lblAdvLayerTabs.TabIndex = 19;
             this.lblAdvLayerTabs.Text = "Layer Tabs";
             // 
@@ -1213,7 +1250,7 @@
             this.lblAdvChatTab.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblAdvChatTab.Location = new System.Drawing.Point(17, 64);
             this.lblAdvChatTab.Name = "lblAdvChatTab";
-            this.lblAdvChatTab.Size = new System.Drawing.Size(55, 15);
+            this.lblAdvChatTab.Size = new System.Drawing.Size(54, 15);
             this.lblAdvChatTab.TabIndex = 16;
             this.lblAdvChatTab.Text = "Chat Tab";
             // 
@@ -1244,7 +1281,7 @@
             this.lblAdvPlayerTab.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblAdvPlayerTab.Location = new System.Drawing.Point(17, 24);
             this.lblAdvPlayerTab.Name = "lblAdvPlayerTab";
-            this.lblAdvPlayerTab.Size = new System.Drawing.Size(64, 15);
+            this.lblAdvPlayerTab.Size = new System.Drawing.Size(63, 15);
             this.lblAdvPlayerTab.TabIndex = 1;
             this.lblAdvPlayerTab.Text = "Player Tab";
             // 
@@ -1280,6 +1317,37 @@
             this.tabAdv2.TabIndex = 5;
             this.tabAdv2.Text = "Advanced2";
             this.tabAdv2.UseVisualStyleBackColor = true;
+            // 
+            // chkAdv2EnableAdminReason
+            // 
+            this.chkAdv2EnableAdminReason.AutoSize = true;
+            this.chkAdv2EnableAdminReason.Location = new System.Drawing.Point(30, 42);
+            this.chkAdv2EnableAdminReason.Name = "chkAdv2EnableAdminReason";
+            this.chkAdv2EnableAdminReason.Size = new System.Drawing.Size(207, 19);
+            this.chkAdv2EnableAdminReason.TabIndex = 18;
+            this.chkAdv2EnableAdminReason.Text = "Enable Admin name in ban reason";
+            this.chkAdv2EnableAdminReason.UseVisualStyleBackColor = true;
+            this.chkAdv2EnableAdminReason.CheckedChanged += new System.EventHandler(this.chkAdv2EnableAdminReason_CheckedChanged);
+            // 
+            // lblAdv2BanTab
+            // 
+            this.lblAdv2BanTab.AutoSize = true;
+            this.lblAdv2BanTab.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblAdv2BanTab.Location = new System.Drawing.Point(17, 24);
+            this.lblAdv2BanTab.Name = "lblAdv2BanTab";
+            this.lblAdv2BanTab.Size = new System.Drawing.Size(33, 15);
+            this.lblAdv2BanTab.TabIndex = 16;
+            this.lblAdv2BanTab.Text = "Bans";
+            // 
+            // panel18
+            // 
+            this.panel18.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel18.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.panel18.Location = new System.Drawing.Point(20, 33);
+            this.panel18.Name = "panel18";
+            this.panel18.Size = new System.Drawing.Size(355, 1);
+            this.panel18.TabIndex = 17;
             // 
             // tabPlayerLookup
             // 
@@ -1411,7 +1479,7 @@
             this.lblStatsPlayerTab.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblStatsPlayerTab.Location = new System.Drawing.Point(17, 24);
             this.lblStatsPlayerTab.Name = "lblStatsPlayerTab";
-            this.lblStatsPlayerTab.Size = new System.Drawing.Size(64, 15);
+            this.lblStatsPlayerTab.Size = new System.Drawing.Size(63, 15);
             this.lblStatsPlayerTab.TabIndex = 12;
             this.lblStatsPlayerTab.Text = "Player Tab";
             // 
@@ -1434,37 +1502,6 @@
             this.btnClose.Size = new System.Drawing.Size(75, 23);
             this.btnClose.TabIndex = 25;
             this.btnClose.Text = "Close";
-            // 
-            // lblAdv2BanTab
-            // 
-            this.lblAdv2BanTab.AutoSize = true;
-            this.lblAdv2BanTab.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblAdv2BanTab.Location = new System.Drawing.Point(17, 24);
-            this.lblAdv2BanTab.Name = "lblAdv2BanTab";
-            this.lblAdv2BanTab.Size = new System.Drawing.Size(33, 15);
-            this.lblAdv2BanTab.TabIndex = 16;
-            this.lblAdv2BanTab.Text = "Bans";
-            // 
-            // chkAdv2EnableAdminReason
-            // 
-            this.chkAdv2EnableAdminReason.AutoSize = true;
-            this.chkAdv2EnableAdminReason.Location = new System.Drawing.Point(30, 42);
-            this.chkAdv2EnableAdminReason.Name = "chkAdv2EnableAdminReason";
-            this.chkAdv2EnableAdminReason.Size = new System.Drawing.Size(207, 19);
-            this.chkAdv2EnableAdminReason.TabIndex = 18;
-            this.chkAdv2EnableAdminReason.Text = "Enable Admin name in ban reason";
-            this.chkAdv2EnableAdminReason.UseVisualStyleBackColor = true;
-            this.chkAdv2EnableAdminReason.CheckedChanged += new System.EventHandler(this.chkAdv2EnableAdminReason_CheckedChanged);
-            // 
-            // panel18
-            // 
-            this.panel18.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel18.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.panel18.Location = new System.Drawing.Point(20, 33);
-            this.panel18.Name = "panel18";
-            this.panel18.Size = new System.Drawing.Size(355, 1);
-            this.panel18.TabIndex = 17;
             // 
             // frmOptions
             // 
@@ -1632,5 +1669,8 @@
         private System.Windows.Forms.CheckBox chkAdv2EnableAdminReason;
         private System.Windows.Forms.Label lblAdv2BanTab;
         private System.Windows.Forms.Panel panel18;
+        private System.Windows.Forms.CheckBox chkEnablePluginDebugging;
+        private System.Windows.Forms.Label lblPluginsDebug;
+        private System.Windows.Forms.Panel panel19;
     }
 }
