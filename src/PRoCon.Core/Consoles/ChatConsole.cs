@@ -46,6 +46,8 @@ namespace PRoCon.Core.Consoles {
 
         private bool _logComRoseMessages;
 
+        private bool _logPlayerDisconnected;
+
         private int _displayTimeIndex;
 
         private int _displayTypeIndex;
@@ -125,6 +127,17 @@ namespace PRoCon.Core.Consoles {
             }
         }
 
+        public bool LogPlayerDisconnected {
+            get { return _logPlayerDisconnected; }
+            set {
+                if (LogPlayerDisconnectedChanged != null) {
+                    this.LogPlayerDisconnectedChanged(value);
+                }
+
+                _logPlayerDisconnected = value;
+            }
+        }
+
         public int DisplayTypeIndex {
             get { return _displayTypeIndex; }
             set {
@@ -155,7 +168,8 @@ namespace PRoCon.Core.Consoles {
                     Scrolling.ToString(),
                     DisplayTypeIndex.ToString(CultureInfo.InvariantCulture),
                     DisplayTimeIndex.ToString(CultureInfo.InvariantCulture),
-                    LogComRoseMessages.ToString()
+                    LogComRoseMessages.ToString(),
+                    LogPlayerDisconnected.ToString()
                 };
             }
             set {
@@ -186,6 +200,11 @@ namespace PRoCon.Core.Consoles {
                     if (value.Count >= 6 && bool.TryParse(value[5], out isEnabled) == true) {
                         LogComRoseMessages = isEnabled;
                     }
+
+                    if (value.Count >= 7 && bool.TryParse(value[6], out isEnabled) == true)
+                    {
+                        LogPlayerDisconnected = isEnabled;
+                    }
                 }
             }
         }
@@ -196,6 +215,7 @@ namespace PRoCon.Core.Consoles {
         public event IsEnabledHandler LogKillsChanged;
         public event IsEnabledHandler ScrollingChanged;
         public event IsEnabledHandler LogComRoseMessagesChanged;
+        public event IsEnabledHandler LogPlayerDisconnectedChanged;
         public event IndexChangedHandler DisplayTypeChanged;
         public event IndexChangedHandler DisplayTimeChanged;
 
@@ -421,8 +441,9 @@ namespace PRoCon.Core.Consoles {
         }
 
         private void m_prcClient_PlayerDisconnected(FrostbiteClient sender, string playerName, string reason) {
-            // TODO: add checkbox to disable messages
-            Write(DateTime.UtcNow.ToUniversalTime().AddHours(Client.Game.UtcOffset).ToLocalTime(), String.IsNullOrEmpty(reason) ? String.Format("^1{0}", Client.Language.GetLocalized("uscChatPanel.chkDisplayOnJoinLeaveEvents.Disconnected", playerName)) : String.Format("^1{0}", Client.Language.GetLocalized("uscChatPanel.chkDisplayOnJoinLeaveEvents.DisconnectedReason", playerName, reason)));
+            if (LogPlayerDisconnected == true) {
+                Write(DateTime.UtcNow.ToUniversalTime().AddHours(Client.Game.UtcOffset).ToLocalTime(), String.IsNullOrEmpty(reason) ? String.Format("^1{0}", Client.Language.GetLocalized("uscChatPanel.chkDisplayPlayerDisconnected.Disconnected", playerName)) : String.Format("^1{0}", Client.Language.GetLocalized("uscChatPanel.chkDisplayPlayerDisconnected.DisconnectedReason", playerName, reason)));
+            }
         }
 
         private void m_prcClient_PlayerJoin(FrostbiteClient sender, string playerName) {

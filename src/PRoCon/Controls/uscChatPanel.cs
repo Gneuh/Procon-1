@@ -120,6 +120,7 @@ namespace PRoCon.Controls {
                 this.m_prcClient.ChatConsole.LogKills = this.m_prcClient.ChatConsole.LogKills;
                 this.m_prcClient.ChatConsole.Scrolling = this.m_prcClient.ChatConsole.Scrolling;
                 this.m_prcClient.ChatConsole.LogComRoseMessages = this.m_prcClient.ChatConsole.LogComRoseMessages;
+                this.m_prcClient.ChatConsole.LogPlayerDisconnected = this.m_prcClient.ChatConsole.LogPlayerDisconnected;
                 this.m_prcClient.ChatConsole.DisplayTypeIndex = this.m_prcClient.ChatConsole.DisplayTypeIndex;
                 this.m_prcClient.ChatConsole.DisplayTimeIndex = this.m_prcClient.ChatConsole.DisplayTimeIndex;
 
@@ -150,6 +151,7 @@ namespace PRoCon.Controls {
                 this.m_prcClient.ChatConsole.LogKillsChanged += new PRoCon.Core.Consoles.ChatConsole.IsEnabledHandler(ChatConsole_LogKillsChanged);
                 this.m_prcClient.ChatConsole.ScrollingChanged += new PRoCon.Core.Consoles.ChatConsole.IsEnabledHandler(ChatConsole_ScrollingChanged);
                 this.m_prcClient.ChatConsole.LogComRoseMessagesChanged += new PRoCon.Core.Consoles.ChatConsole.IsEnabledHandler(ChatConsole_LogComRoseMessagesChanged);
+                this.m_prcClient.ChatConsole.LogPlayerDisconnectedChanged += new PRoCon.Core.Consoles.ChatConsole.IsEnabledHandler(ChatConsole_LogPlayerDisconnectedChanged);
 
                 this.m_prcClient.ChatConsole.DisplayTimeChanged += new PRoCon.Core.Consoles.ChatConsole.IndexChangedHandler(ChatConsole_DisplayTimeChanged);
                 this.m_prcClient.ChatConsole.DisplayTypeChanged += new PRoCon.Core.Consoles.ChatConsole.IndexChangedHandler(ChatConsole_DisplayTypeChanged);
@@ -202,6 +204,7 @@ namespace PRoCon.Controls {
             this.chkDisplayOnKilledEvents.Text = this.m_clocLanguage.GetLocalized("uscChatPanel.chkDisplayOnKilledEvents", null);
             this.chkDisplayScrollingEvents.Text = this.m_clocLanguage.GetLocalized("uscChatPanel.chkDisplayScrolling", null);
             this.chkDisplayComRoseMsg.Text = this.m_clocLanguage.GetLocalized("uscChatPanel.chkDisplayComRoseMsg", null);
+            this.chkDisplayPlayerDisconnected.Text = this.m_clocLanguage.GetLocalized("uscChatPanel.chkDisplayPlayerDisconnected", null);
             this.btnclearchat.Text = this.m_clocLanguage.GetLocalized("uscChatPanel.btnclearchat", null);
             this.cboDisplayChatTime.Refresh();
         }
@@ -550,6 +553,12 @@ namespace PRoCon.Controls {
             }
         }
 
+        private void chkDisplayPlayerDisconnected_CheckedChanged(object sender, EventArgs e) {
+            if (this.m_prcClient != null) {
+                this.m_prcClient.ChatConsole.LogPlayerDisconnected = this.chkDisplayPlayerDisconnected.Checked;
+            }
+        }
+
         private void ChatConsole_ScrollingChanged(bool isEnabled) {
             this.chkDisplayScrollingEvents.Checked = isEnabled;
             this.chatUpdTxtLength();
@@ -566,6 +575,11 @@ namespace PRoCon.Controls {
 
         private void ChatConsole_LogComRoseMessagesChanged(bool isEnabled) {
             this.chkDisplayComRoseMsg.Checked = isEnabled;
+        }
+
+        private void ChatConsole_LogPlayerDisconnectedChanged(bool isEnabled)
+        {
+            this.chkDisplayPlayerDisconnected.Checked = isEnabled;
         }
 
         private void ChatConsole_DisplayTimeChanged(int index) {
