@@ -160,6 +160,7 @@ namespace PRoCon.Core.Remote {
             RequestDelegates = new Dictionary<string, RequestPacketHandler>() {
                 {"player.onJoin", DispatchPlayerOnJoinRequest},
                 {"player.onLeave", DispatchPlayerOnLeaveRequest},
+                {"player.onDisconnect", DispatchPlayerOnDisconnectRequest},
                 {"player.onAuthenticated", DispatchPlayerOnAuthenticatedRequest},
                 {"player.onKill", DispatchPlayerOnKillRequest},
                 {"player.onChat", DispatchPlayerOnChatRequest},
@@ -1981,6 +1982,8 @@ namespace PRoCon.Core.Remote {
 
         public delegate void PlayerLeaveHandler(FrostbiteClient sender, string playerName, CPlayerInfo cpiPlayer);
 
+        public delegate void PlayerDisconnectedHandler(FrostbiteClient sender, string playerName, string reason);
+
         public delegate void PlayerMovedByAdminHandler(FrostbiteClient sender, string soldierName, int destinationTeamId, int destinationSquadId, bool forceKilled);
 
         public delegate void PlayerPingedByAdminHandler(FrostbiteClient sender, string soldierName, int ping);
@@ -3373,6 +3376,14 @@ namespace PRoCon.Core.Remote {
             }
         }
 
+        protected virtual void DispatchPlayerOnDisconnectRequest(FrostbiteConnection sender, Packet cpRequestPacket) {
+            if (cpRequestPacket.Words.Count >= 3) {
+                if (PlayerDisconnected != null) {
+                    this.PlayerDisconnected(this, cpRequestPacket.Words[1], cpRequestPacket.Words[2]);
+                }
+            }
+        }
+
         protected virtual void DispatchPlayerOnAuthenticatedRequest(FrostbiteConnection sender, Packet cpRequestPacket) {
             if (cpRequestPacket.Words.Count >= 3) {
                 if (PlayerAuthenticated != null) {
@@ -3573,6 +3584,7 @@ namespace PRoCon.Core.Remote {
 
         public virtual event PlayerEventHandler PlayerJoin;
         public virtual event PlayerLeaveHandler PlayerLeft;
+        public virtual event PlayerDisconnectedHandler PlayerDisconnected;
         public virtual event PlayerAuthenticatedHandler PlayerAuthenticated;
         public virtual event PlayerKickedHandler PlayerKicked;
         public virtual event PlayerTeamChangeHandler PlayerChangedTeam;

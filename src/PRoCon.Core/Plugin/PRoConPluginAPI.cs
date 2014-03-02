@@ -376,6 +376,18 @@ namespace PRoCon.Core.Plugin {
             }
         }
 
+        public virtual void OnPlayerDisconnected(string soldierName, string reason) {
+            if (this.PunkbusterPlayerInfoList.ContainsKey(soldierName) == true)
+            {
+                this.PunkbusterPlayerInfoList.Remove(soldierName);
+            }
+
+            if (this.FrostbitePlayerInfoList.ContainsKey(soldierName) == true)
+            {
+                this.FrostbitePlayerInfoList.Remove(soldierName);
+            }
+        }
+
         public virtual void OnPlayerAuthenticated(string soldierName, string guid) { }
         public virtual void OnPlayerKilled(Kill kKillerVictimDetails) { }
         public virtual void OnPlayerKicked(string soldierName, string reason) { }

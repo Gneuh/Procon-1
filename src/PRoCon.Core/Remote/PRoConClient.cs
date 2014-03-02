@@ -499,6 +499,7 @@ namespace PRoCon.Core.Remote {
 
                 Game.ListPlayers += OnListPlayers;
                 Game.PlayerLeft += OnPlayerLeft;
+                Game.PlayerDisconnected += OnPlayerDisconnected;
                 Game.PunkbusterMessage += OnPunkbusterMessage;
 
                 // this.Game.ServerInfo += this.OnServerInfo;
@@ -2642,6 +2643,12 @@ namespace PRoCon.Core.Remote {
         }
 
         protected void OnPlayerLeft(FrostbiteClient sender, string strSoldierName, CPlayerInfo cpiPlayer) {
+            if (PlayerList.Contains(strSoldierName) == true) {
+                PlayerList.Remove(strSoldierName);
+            }
+        }
+
+        protected void OnPlayerDisconnected(FrostbiteClient sender, string strSoldierName, string reason) {
             if (PlayerList.Contains(strSoldierName) == true) {
                 PlayerList.Remove(strSoldierName);
             }

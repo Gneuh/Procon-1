@@ -901,6 +901,7 @@ namespace PRoCon.Core.Plugin {
 
             ProconClient.Game.PlayerJoin -= new FrostbiteClient.PlayerEventHandler(m_prcClient_PlayerJoin);
             ProconClient.Game.PlayerLeft -= new FrostbiteClient.PlayerLeaveHandler(m_prcClient_PlayerLeft);
+            ProconClient.Game.PlayerDisconnected -= new FrostbiteClient.PlayerDisconnectedHandler(m_prcClient_PlayerDisconnected);
             ProconClient.Game.PlayerAuthenticated -= new FrostbiteClient.PlayerAuthenticatedHandler(m_prcClient_PlayerAuthenticated);
             ProconClient.Game.PlayerKicked -= new FrostbiteClient.PlayerKickedHandler(m_prcClient_PlayerKicked);
             ProconClient.Game.PlayerChangedTeam -= new FrostbiteClient.PlayerTeamChangeHandler(m_prcClient_PlayerChangedTeam);
@@ -1147,6 +1148,7 @@ namespace PRoCon.Core.Plugin {
 
             ProconClient.Game.PlayerJoin += new FrostbiteClient.PlayerEventHandler(m_prcClient_PlayerJoin);
             ProconClient.Game.PlayerLeft += new FrostbiteClient.PlayerLeaveHandler(m_prcClient_PlayerLeft);
+            ProconClient.Game.PlayerDisconnected += new FrostbiteClient.PlayerDisconnectedHandler(m_prcClient_PlayerDisconnected);
             ProconClient.Game.PlayerAuthenticated += new FrostbiteClient.PlayerAuthenticatedHandler(m_prcClient_PlayerAuthenticated);
             ProconClient.Game.PlayerKicked += new FrostbiteClient.PlayerKickedHandler(m_prcClient_PlayerKicked);
             ProconClient.Game.PlayerChangedTeam += new FrostbiteClient.PlayerTeamChangeHandler(m_prcClient_PlayerChangedTeam);
@@ -1553,6 +1555,10 @@ namespace PRoCon.Core.Plugin {
 
             // OBSOLETE
             //this.InvokeOnAllEnabled("OnPlayerLeft", playerName);
+        }
+
+        private void m_prcClient_PlayerDisconnected(FrostbiteClient sender, string playerName, string reason) {
+            InvokeOnAllEnabled("OnPlayerDisconnected", playerName, reason);
         }
 
         private void m_prcClient_PlayerAuthenticated(FrostbiteClient sender, string playerName, string playerGuid) {

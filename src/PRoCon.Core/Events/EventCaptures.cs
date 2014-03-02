@@ -167,6 +167,7 @@ namespace PRoCon.Core.Events {
 
                 this.m_prcClient.Game.PlayerJoin += new FrostbiteClient.PlayerEventHandler(m_prcClient_PlayerJoin);
                 this.m_prcClient.Game.PlayerLeft += new FrostbiteClient.PlayerLeaveHandler(m_prcClient_PlayerLeft);
+                this.m_prcClient.Game.PlayerDisconnected += new FrostbiteClient.PlayerDisconnectedHandler(m_prcClient_PlayerDisconnected);
                 this.m_prcClient.Game.PlayerKicked += new FrostbiteClient.PlayerKickedHandler(m_prcClient_PlayerKicked);
 
                 this.m_prcClient.Game.PlayerKickedByAdmin += new FrostbiteClient.PlayerKickedHandler(Game_PlayerKickedByAdmin);
@@ -380,6 +381,10 @@ namespace PRoCon.Core.Events {
 
         private void m_prcClient_PlayerJoin(FrostbiteClient sender, string playerName) {
             this.ProcessEvent(EventType.Playerlist, CapturableEvents.PlayerJoin, playerName);
+        }
+
+        private void m_prcClient_PlayerDisconnected(FrostbiteClient sender, string playerName, string reason) {
+            this.ProcessEvent(EventType.Playerlist, CapturableEvents.PlayerDisconnected, playerName, reason);
         }
 
         private void m_prcClient_CommandLoginFailure(PRoConClient sender, string strError) {

@@ -71,6 +71,7 @@ namespace PRoCon.Core.Consoles {
             Client.PlayerKilled += new PRoConClient.PlayerKilledHandler(m_prcClient_PlayerKilled);
             Client.Game.PlayerJoin += new FrostbiteClient.PlayerEventHandler(m_prcClient_PlayerJoin);
             Client.Game.PlayerLeft += new FrostbiteClient.PlayerLeaveHandler(m_prcClient_PlayerLeft);
+            Client.Game.PlayerDisconnected += new FrostbiteClient.PlayerDisconnectedHandler(m_prcClient_PlayerDisconnected);
 
             Client.ProconAdminSaying += new PRoConClient.ProconAdminSayingHandler(m_prcClient_ProconAdminSaying);
             Client.ProconAdminYelling += new PRoConClient.ProconAdminYellingHandler(m_prcClient_ProconAdminYelling);
@@ -417,6 +418,11 @@ namespace PRoCon.Core.Consoles {
                     Write(DateTime.UtcNow.ToUniversalTime().AddHours(Client.Game.UtcOffset).ToLocalTime(), String.Format("^1{0}", Client.Language.GetLocalized("uscChatPanel.chkDisplayOnJoinLeaveEvents.Left", playerName)));
                 }
             }
+        }
+
+        private void m_prcClient_PlayerDisconnected(FrostbiteClient sender, string playerName, string reason) {
+            // TODO: add checkbox to disable messages
+            Write(DateTime.UtcNow.ToUniversalTime().AddHours(Client.Game.UtcOffset).ToLocalTime(), String.IsNullOrEmpty(reason) ? String.Format("^1{0}", Client.Language.GetLocalized("uscChatPanel.chkDisplayOnJoinLeaveEvents.Disconnected", playerName)) : String.Format("^1{0}", Client.Language.GetLocalized("uscChatPanel.chkDisplayOnJoinLeaveEvents.DisconnectedReason", playerName, reason)));
         }
 
         private void m_prcClient_PlayerJoin(FrostbiteClient sender, string playerName) {

@@ -3,6 +3,7 @@
         // BFBC2 Server events
         PlayerJoin,
         PlayerLeave,
+        PlayerDisconnected,
         PlayerKilled,
         PlayerKicked,
         IPKicked,
