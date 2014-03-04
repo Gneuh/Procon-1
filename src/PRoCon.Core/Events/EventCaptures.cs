@@ -384,7 +384,7 @@ namespace PRoCon.Core.Events {
         }
 
         private void m_prcClient_PlayerDisconnected(FrostbiteClient sender, string playerName, string reason) {
-            this.ProcessEvent(EventType.Playerlist, CapturableEvents.PlayerDisconnected, playerName, reason);
+            this.ProcessEvent(EventType.Playerlist, CapturableEvents.PlayerDisconnected, playerName, m_prcClient.Language.GetDefaultLocalized(reason, String.Format("uscChatPanel.{0}", reason)));
         }
 
         private void m_prcClient_CommandLoginFailure(PRoConClient sender, string strError) {

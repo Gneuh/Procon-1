@@ -442,7 +442,7 @@ namespace PRoCon.Core.Consoles {
 
         private void m_prcClient_PlayerDisconnected(FrostbiteClient sender, string playerName, string reason) {
             if (LogPlayerDisconnected == true) {
-                Write(DateTime.UtcNow.ToUniversalTime().AddHours(Client.Game.UtcOffset).ToLocalTime(), String.IsNullOrEmpty(reason) ? String.Format("^1{0}", Client.Language.GetLocalized("uscChatPanel.chkDisplayPlayerDisconnected.Disconnected", playerName)) : String.Format("^1{0}", Client.Language.GetLocalized("uscChatPanel.chkDisplayPlayerDisconnected.DisconnectedReason", playerName, reason)));
+                Write(DateTime.UtcNow.ToUniversalTime().AddHours(Client.Game.UtcOffset).ToLocalTime(), String.IsNullOrEmpty(reason) ? String.Format("^1{0}", Client.Language.GetLocalized("uscChatPanel.chkDisplayPlayerDisconnected.Disconnected", playerName)) : String.Format("^1{0}", Client.Language.GetLocalized("uscChatPanel.chkDisplayPlayerDisconnected.DisconnectedReason", playerName, Client.Language.GetDefaultLocalized(reason, String.Format("uscChatPanel.{0}", reason)))));
             }
         }
 
