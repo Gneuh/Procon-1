@@ -137,6 +137,7 @@ namespace PRoCon.Core.Remote.Layer {
                 { "vars.playerLimit", this.DispatchVarsRequest },
                 { "vars.currentPlayerLimit", this.DispatchVarsRequest },
                 { "vars.maxPlayerLimit", this.DispatchVarsRequest },
+                { "vars.teamFactionOverride", this.DispatchVarsRequest },
 
                 #endregion
 
