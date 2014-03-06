@@ -129,7 +129,7 @@ namespace PRoCon.Forms {
         }
         
         private void m_praApplication_CurrentLanguageChanged(CLocalization language) {
-            cboBasicsLanguagePicker.SelectedItem = language;
+            this.InvokeIfRequired(() => { cboBasicsLanguagePicker.SelectedItem = language; });
         }
 
         private bool m_isLoadingForm;

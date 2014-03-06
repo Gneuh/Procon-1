@@ -223,7 +223,7 @@ namespace PRoCon.Forms {
         #region Manage accounts and options events
 
         private void m_paProcon_CurrentLanguageChanged(CLocalization language) {
-            this.SetLocalization(language);
+            this.InvokeIfRequired(() => this.SetLocalization(language));
         }
 
         void OptionsSettings_ShowTrayIconChanged(bool blEnabled) {
