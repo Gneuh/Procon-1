@@ -466,7 +466,7 @@ namespace PRoCon.Controls {
 
             this.toolTipMapControls.SetToolTip(this.lblCurrentMapName, csiServerInfo.Map);
 
-            if (this.Client.Game is BF4Client || this.Client.Game is BF3Client || this.Client.Game is MOHWClient) {
+            if ((this.Client.Game is BF4Client || this.Client.Game is BF3Client || this.Client.Game is MOHWClient) && (csiServerInfo.CurrentRound != csiServerInfo.TotalRounds)) {
                 this.lblCurrentRound.Text = this.m_clocLanguage.GetLocalized("uscServerConnection.lblCurrentRound", (csiServerInfo.CurrentRound + 1).ToString(), csiServerInfo.TotalRounds.ToString());
             }
             else {
