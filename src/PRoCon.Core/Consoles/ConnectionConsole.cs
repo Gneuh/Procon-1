@@ -291,13 +291,19 @@ namespace PRoCon.Core.Consoles {
         protected static string GetDebugPacket(string connectionPrefix, string packetColour, Packet packet, Packet requestPacket) {
             string debugString = String.Empty;
 
-            debugString = string.Format("{0,10}: {1,-12} S: {2,-6} {3}{4}", connectionPrefix, GetRequestResponseColour(packet), packet.SequenceNumber, packetColour, packet.ToDebugString().Replace("\r", "").Replace("\n", ""));
+            try {
+                debugString = string.Format("{0,10}: {1,-12} S: {2,-6} {3}{4}", connectionPrefix, GetRequestResponseColour(packet), packet.SequenceNumber, packetColour, packet.ToDebugString().Replace("\r", "").Replace("\n", ""));
 
-            if (requestPacket != null) {
-                debugString = String.Format("{0} ^0(RE: ^2{1}^0)", debugString, requestPacket.ToDebugString().TrimEnd('\r', '\n'));
+                if (requestPacket != null) {
+                    debugString = String.Format("{0} ^0(RE: ^2{1}^0)", debugString, requestPacket.ToDebugString().TrimEnd('\r', '\n'));
+                }
+
+                debugString = debugString.Replace("{", "{{").Replace("}", "}}");
             }
-
-            debugString = debugString.Replace("{", "{{").Replace("}", "}}");
+            catch (Exception e) {
+                FrostbiteConnection.LogError(String.Join(", ", new[] { connectionPrefix, packetColour, packet.ToString(), requestPacket != null ? requestPacket.ToString() : "" }), "", e);
+                debugString = "";
+            }
 
             return debugString;
         }
@@ -308,12 +314,20 @@ namespace PRoCon.Core.Consoles {
 
         public void Write(string strFormat, params object[] arguments) {
             DateTime dtLoggedTime = DateTime.UtcNow.ToUniversalTime().AddHours(Client.Game.UtcOffset).ToLocalTime();
-            string strText = String.Format(strFormat, arguments);
+            string text = "";
 
-            WriteLogLine(String.Format("[{0}] {1}", dtLoggedTime.ToString("HH:mm:ss"), strText.Replace("{", "{{").Replace("}", "}}")));
+            try {
+                text = String.Format(strFormat, arguments);
+            }
+            catch (Exception e) {
+                FrostbiteConnection.LogError(String.Join(", ", new[] { strFormat, }), "", e);
+                text = "";
+            }
+
+            WriteLogLine(String.Format("[{0}] {1}", dtLoggedTime.ToString("HH:mm:ss"), text.Replace("{", "{{").Replace("}", "}}")));
 
             if (WriteConsole != null) {
-                this.WriteConsole(dtLoggedTime, strText);
+                this.WriteConsole(dtLoggedTime, text);
             }
         }
     }
