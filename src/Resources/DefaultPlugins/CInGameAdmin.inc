@@ -128,7 +128,7 @@ namespace PRoConEvents {
 		}
 
 		public string GetPluginVersion() {
-			return "3.3.0.8";
+			return "3.3.0.9";
 		}
 
 		public string GetPluginAuthor() {
@@ -1928,7 +1928,7 @@ namespace PRoConEvents {
                 if (this.m_strServerGameType == "bfbc2") {
                         iTeamsCount = this.GetTeamList("{TeamName}", this.m_currentMap.PlayList).Count;
                 } else {
-                        iTeamsCount = this.GetTeamListByPlayList("{TeamName}", this.m_currentMap.PlayList).Count;
+                        iTeamsCount = this.GetTeamListByPlayListForMap("{TeamName}", this.m_currentMap.FileName, this.m_currentMap.PlayList).Count;
                 }
 
 			}

@@ -571,6 +571,28 @@ namespace PRoCon.Core.Plugin {
             return returnMapList;
         }
 
+        protected List<string> GetTeamListByPlayListForMap(string format, string FileName, params string[] playList) {
+            var returnMapList = new List<string>();
+
+            foreach (CMap map in GetMapDefines()) {
+                if (IsValidPlaylist(map.PlayList, playList) == true) {
+                    if (String.CompareOrdinal(map.FileName, FileName) == 0) {
+                        foreach (CTeamName teamname in map.TeamNames) {
+                            if (String.CompareOrdinal(teamname.Playlist, playList[0]) == 0) {
+                                string formattedTeamName = format.Replace("{PublicLevelName}", map.PublicLevelName).Replace("{GameMode}", map.GameMode).Replace("{FileName}", map.FileName).Replace("{TeamName}", GetLocalized(teamname.LocalizationKey, teamname.LocalizationKey));
+
+                                if (returnMapList.Contains(formattedTeamName) == false) {
+                                    returnMapList.Add(formattedTeamName);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            return returnMapList;
+        }
+
         /// <summary>
         /// </summary>
         /// <param name="variableName">The name to display in the plugin settings</param>
