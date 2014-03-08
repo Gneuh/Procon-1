@@ -17,6 +17,11 @@ namespace PRoCon {
             // Suppress object disposed which can occur while we are shutting down.
             catch (ObjectDisposedException) { }
             catch (InvalidOperationException) { }
+            // This particular catch fixes #115
+            catch (InvalidAsynchronousStateException) { }
+            // Suppress all the exceptions!
+            // This is here simply because there is far to much legacy code to go through.
+            catch { }
         }
     }
 }
