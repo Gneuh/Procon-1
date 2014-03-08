@@ -157,6 +157,12 @@ namespace PRoConUpdater {
                         zip.AddFile(config.FullName, "");
                     }
 
+                    DirectoryInfo[] connectionConfigDirectories = configsDirectory.GetDirectories("*_*");
+
+                    foreach (DirectoryInfo connectionConfigDirectory in connectionConfigDirectories) {
+                        zip.AddDirectory(connectionConfigDirectory.FullName, connectionConfigDirectory.Name);
+                    }
+
                     if (Directory.Exists(Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Configs"), "Backups")) == false) {
                         Directory.CreateDirectory(Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Configs"), "Backups"));
                     }
