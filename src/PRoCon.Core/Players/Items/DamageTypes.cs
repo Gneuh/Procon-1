@@ -40,6 +40,8 @@ namespace PRoCon.Core.Players.Items {
         VehicleWater,
         VehicleAir,
         VehicleStationary,
+        VehiclePersonal,
+        VehicleTransport,
         VehicleLight,
         VehicleHeavy,
         DMR,

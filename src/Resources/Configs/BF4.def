@@ -44,7 +44,9 @@ procon.protected.weapons.add None "Melee" Secondary Melee
 procon.protected.weapons.add None "RoadKill" Primary None
 procon.protected.weapons.add None "SoldierCollision" Primary Suicide
 procon.protected.weapons.add None "Suicide" Primary Suicide
+procon.protected.weapons.add None "VehicleUpsideDown" Primary Suicide
 procon.protected.weapons.add None "U_870" Primary Shotgun
+procon.protected.weapons.add Demolition "AA Mine" Secondary Explosive
 procon.protected.weapons.add None "U_A91" Primary Carbine
 procon.protected.weapons.add None "U_ACR" Primary Carbine
 procon.protected.weapons.add Assault "U_AEK971" Primary AssaultRifle
@@ -52,6 +54,7 @@ procon.protected.weapons.add Assault "U_AEK971_M26_Buck" Secondary Shotgun
 procon.protected.weapons.add Assault "U_AEK971_M26_Flechette" Secondary Shotgun
 procon.protected.weapons.add Assault "U_AEK971_M26_Frag" Secondary Shotgun
 procon.protected.weapons.add Assault "U_AEK971_M26_Slug" Secondary Shotgun
+procon.protected.weapons.add Assault "U_AEK971_M320_3GL" Secondary ProjectileExplosive
 procon.protected.weapons.add Assault "U_AEK971_M320_FLASH" Secondary Impact
 procon.protected.weapons.add Assault "U_AEK971_M320_HE" Secondary ProjectileExplosive
 procon.protected.weapons.add Assault "U_AEK971_M320_LVG" Secondary ProjectileExplosive
@@ -62,6 +65,7 @@ procon.protected.weapons.add Assault "U_AK12_M26_Buck" Secondary Shotgun
 procon.protected.weapons.add Assault "U_AK12_M26_Flechette" Secondary Shotgun
 procon.protected.weapons.add Assault "U_AK12_M26_Frag" Secondary Shotgun
 procon.protected.weapons.add Assault "U_AK12_M26_Slug" Secondary Shotgun
+procon.protected.weapons.add Assault "U_AK12_M320_3GL" Secondary ProjectileExplosive
 procon.protected.weapons.add Assault "U_AK12_M320_FLASH" Secondary Impact
 procon.protected.weapons.add Assault "U_AK12_M320_HE" Secondary ProjectileExplosive
 procon.protected.weapons.add Assault "U_AK12_M320_LVG" Secondary ProjectileExplosive
@@ -72,8 +76,16 @@ procon.protected.weapons.add None "U_AKU12" Primary Carbine
 procon.protected.weapons.add None "U_AMR2" Primary SniperRifle
 procon.protected.weapons.add None "U_AMR2_CQB" Primary SniperRifle
 procon.protected.weapons.add None "U_AMR2_MED" Primary SniperRifle
+procon.protected.weapons.add Assault "U_AR160" Primary AssaultRifle
+procon.protected.weapons.add Assault "U_AR160_M320_3GL" Secondary ProjectileExplosive
+procon.protected.weapons.add Assault "U_AR160_M320_FLASH" Secondary Impact
+procon.protected.weapons.add Assault "U_AR160_M320_HE" Secondary ProjectileExplosive
+procon.protected.weapons.add Assault "U_AR160_M320_LVG" Secondary ProjectileExplosive
+procon.protected.weapons.add Assault "U_AR160_M320_SHG" Secondary Shotgun
+procon.protected.weapons.add Assault "U_AR160_M320_SMK" Secondary Impact
 procon.protected.weapons.add Demolition "U_ASVAL" Primary SMG
 procon.protected.weapons.add Demolition "U_AT4" Secondary ProjectileExplosive
+procon.protected.weapons.add Support "U_AWS" Primary LMG
 procon.protected.weapons.add Recon "U_C4" Secondary Explosive
 procon.protected.weapons.add Support "U_C4_Support" Secondary Explosive
 procon.protected.weapons.add Demolition "U_CBJ-MS" Primary SMG
@@ -85,6 +97,7 @@ procon.protected.weapons.add Assault "U_CZ805_M26_Buck" Secondary Shotgun
 procon.protected.weapons.add Assault "U_CZ805_M26_Flechette" Secondary Shotgun
 procon.protected.weapons.add Assault "U_CZ805_M26_Frag" Secondary Shotgun
 procon.protected.weapons.add Assault "U_CZ805_M26_Slug" Secondary Shotgun
+procon.protected.weapons.add Assault "U_CZ805_M320_3GL" Secondary ProjectileExplosive
 procon.protected.weapons.add Assault "U_CZ805_M320_FLASH" Secondary Impact
 procon.protected.weapons.add Assault "U_CZ805_M320_HE" Secondary ProjectileExplosive
 procon.protected.weapons.add Assault "U_CZ805_M320_LVG" Secondary ProjectileExplosive
@@ -94,6 +107,7 @@ procon.protected.weapons.add None "U_CZ75" Auxiliary Handgun
 procon.protected.weapons.add None "U_DAO12" Primary Shotgun
 procon.protected.weapons.add None "U_DBV12" Primary Shotgun
 procon.protected.weapons.add Assault "U_Defib" Secondary Melee
+procon.protected.weapons.add Demolition "EODBot" Secondary Impact
 procon.protected.weapons.add Assault "U_F2000" Primary AssaultRifle
 procon.protected.weapons.add Assault "U_FAMAS" Primary AssaultRifle
 procon.protected.weapons.add Demolition "U_FGM148" Secondary ProjectileExplosive
@@ -114,6 +128,7 @@ procon.protected.weapons.add None "U_HK45C" Auxiliary Handgun
 procon.protected.weapons.add Recon "U_JNG90" Primary SniperRifle
 procon.protected.weapons.add Demolition "U_JS2" Primary SMG
 procon.protected.weapons.add Assault "U_L85A2" Primary AssaultRifle
+procon.protected.weapons.add Assault "U_L85A2_M320_3GL_V2" Secondary ProjectileExplosive
 procon.protected.weapons.add Assault "U_L85A2_M320_FLASH_V2" Secondary Impact
 procon.protected.weapons.add Assault "U_L85A2_M320_HE_V2" Secondary ProjectileExplosive
 procon.protected.weapons.add Assault "U_L85A2_M320_LVG_V2" Secondary ProjectileExplosive
@@ -128,6 +143,7 @@ procon.protected.weapons.add Assault "U_M16A4_M26_Buck" Secondary Shotgun
 procon.protected.weapons.add Assault "U_M16A4_M26_Flechette" Secondary Shotgun
 procon.protected.weapons.add Assault "U_M16A4_M26_Frag" Secondary Shotgun
 procon.protected.weapons.add Assault "U_M16A4_M26_Slug" Secondary Shotgun
+procon.protected.weapons.add Assault "U_M16A4_M320_3GL" Secondary ProjectileExplosive
 procon.protected.weapons.add Assault "U_M16A4_M320_FLASH" Secondary Impact
 procon.protected.weapons.add Assault "U_M16A4_M320_HE" Secondary ProjectileExplosive
 procon.protected.weapons.add Assault "U_M16A4_M320_LVG" Secondary ProjectileExplosive
@@ -135,12 +151,14 @@ procon.protected.weapons.add Assault "U_M16A4_M320_SHG" Secondary Shotgun
 procon.protected.weapons.add Assault "U_M16A4_M320_SMK" Secondary Impact
 procon.protected.weapons.add None "U_M1911" Auxiliary Handgun
 procon.protected.weapons.add Recon "U_M200" Primary SniperRifle
+procon.protected.weapons.add Support "M224" Secondary ProjectileExplosive
 procon.protected.weapons.add Support "U_M240" Primary LMG
 procon.protected.weapons.add Support "U_M249" Primary LMG
 procon.protected.weapons.add Assault "U_M26Mass" Secondary Shotgun
 procon.protected.weapons.add Assault "U_M26Mass_Flechette" Secondary Shotgun
 procon.protected.weapons.add Assault "U_M26Mass_Frag" Secondary Shotgun
 procon.protected.weapons.add Assault "U_M26Mass_Slug" Secondary Shotgun
+procon.protected.weapons.add Assault "U_M320_3GL" Secondary ProjectileExplosive
 procon.protected.weapons.add Assault "U_M320_FLASH" Secondary Impact
 procon.protected.weapons.add Assault "U_M320_HE" Secondary ProjectileExplosive
 procon.protected.weapons.add Assault "U_M320_LVG" Secondary ProjectileExplosive
@@ -154,6 +172,7 @@ procon.protected.weapons.add Assault "U_M416_M26_Buck" Secondary Shotgun
 procon.protected.weapons.add Assault "U_M416_M26_Flechette" Secondary Shotgun
 procon.protected.weapons.add Assault "U_M416_M26_Frag" Secondary Shotgun
 procon.protected.weapons.add Assault "U_M416_M26_Slug" Secondary Shotgun
+procon.protected.weapons.add Assault "U_M416_M320_3GL" Secondary ProjectileExplosive
 procon.protected.weapons.add Assault "U_M416_M320_FLASH" Secondary Impact
 procon.protected.weapons.add Assault "U_M416_M320_HE" Secondary ProjectileExplosive
 procon.protected.weapons.add Assault "U_M416_M320_LVG" Secondary ProjectileExplosive
@@ -169,6 +188,7 @@ procon.protected.weapons.add None "U_M9" Auxiliary Handgun
 procon.protected.weapons.add None "U_M93R" Auxiliary Handgun
 procon.protected.weapons.add Recon "U_M98B" Primary SniperRifle
 procon.protected.weapons.add Demolition "U_MagpulPDR" Primary SMG
+procon.protected.weapons.add Recon "Gameplay/Gadgets/MAV/MAV" Secondary Impact
 procon.protected.weapons.add Assault "U_Medkit" Auxiliary Nonlethal
 procon.protected.weapons.add Support "U_MG4" Primary LMG
 procon.protected.weapons.add None "U_MGL" Primary ProjectileExplosive
@@ -192,6 +212,7 @@ procon.protected.weapons.add Assault "U_QBZ951_M26_Buck" Secondary Shotgun
 procon.protected.weapons.add Assault "U_QBZ951_M26_Flechette" Secondary Shotgun
 procon.protected.weapons.add Assault "U_QBZ951_M26_Frag" Secondary Shotgun
 procon.protected.weapons.add Assault "U_QBZ951_M26_Slug" Secondary Shotgun
+procon.protected.weapons.add Assault "U_QBZ951_M320_3GL" Secondary ProjectileExplosive
 procon.protected.weapons.add Assault "U_QBZ951_M320_FLASH" Secondary Impact
 procon.protected.weapons.add Assault "U_QBZ951_M320_HE" Secondary ProjectileExplosive
 procon.protected.weapons.add Assault "U_QBZ951_M320_LVG" Secondary ProjectileExplosive
@@ -210,6 +231,7 @@ procon.protected.weapons.add Assault "U_SAR21_M26_Buck" Secondary Shotgun
 procon.protected.weapons.add Assault "U_SAR21_M26_Flechette" Secondary Shotgun
 procon.protected.weapons.add Assault "U_SAR21_M26_Frag" Secondary Shotgun
 procon.protected.weapons.add Assault "U_SAR21_M26_Slug" Secondary Shotgun
+procon.protected.weapons.add Assault "U_SAR21_M320_3GL" Secondary ProjectileExplosive
 procon.protected.weapons.add Assault "U_SAR21_M320_FLASH" Secondary Impact
 procon.protected.weapons.add Assault "U_SAR21_M320_HE" Secondary ProjectileExplosive
 procon.protected.weapons.add Assault "U_SAR21_M320_LVG" Secondary ProjectileExplosive
@@ -220,6 +242,7 @@ procon.protected.weapons.add Assault "U_SCAR-H_M26_Buck" Secondary Shotgun
 procon.protected.weapons.add Assault "U_SCAR-H_M26_Flechette" Secondary Shotgun
 procon.protected.weapons.add Assault "U_SCAR-H_M26_Frag" Secondary Shotgun
 procon.protected.weapons.add Assault "U_SCAR-H_M26_Slug" Secondary Shotgun
+procon.protected.weapons.add Assault "U_SCAR-H_M320_3GL" Secondary ProjectileExplosive
 procon.protected.weapons.add Assault "U_SCAR-H_M320_FLASH" Secondary Impact
 procon.protected.weapons.add Assault "U_SCAR-H_M320_HE" Secondary ProjectileExplosive
 procon.protected.weapons.add Assault "U_SCAR-H_M320_LVG" Secondary ProjectileExplosive
@@ -234,6 +257,7 @@ procon.protected.weapons.add None "U_SKS" Primary DMR
 procon.protected.weapons.add Demolition "U_SLAM" Auxiliary Explosive
 procon.protected.weapons.add Demolition "U_SMAW" Secondary ProjectileExplosive
 procon.protected.weapons.add None "U_SPAS12" Primary Shotgun
+procon.protected.weapons.add Demolition "U_SR2" Primary SMG
 procon.protected.weapons.add Demolition "U_SRAW" Secondary ProjectileExplosive
 procon.protected.weapons.add Recon "U_SRS" Primary SniperRifle
 procon.protected.weapons.add Demolition "U_Starstreak" Secondary ProjectileExplosive
@@ -242,6 +266,7 @@ procon.protected.weapons.add Assault "U_SteyrAug_M26_Buck" Secondary Shotgun
 procon.protected.weapons.add Assault "U_SteyrAug_M26_Flechette" Secondary Shotgun
 procon.protected.weapons.add Assault "U_SteyrAug_M26_Frag" Secondary Shotgun
 procon.protected.weapons.add Assault "U_SteyrAug_M26_Slug" Secondary Shotgun
+procon.protected.weapons.add Assault "U_SteyrAug_M320_3GL" Secondary ProjectileExplosive
 procon.protected.weapons.add Assault "U_SteyrAug_M320_FLASH" Secondary Impact
 procon.protected.weapons.add Assault "U_SteyrAug_M320_HE" Secondary ProjectileExplosive
 procon.protected.weapons.add Assault "U_SteyrAug_M320_LVG" Secondary ProjectileExplosive
@@ -249,10 +274,13 @@ procon.protected.weapons.add Assault "U_SteyrAug_M320_SHG" Secondary Shotgun
 procon.protected.weapons.add Assault "U_SteyrAug_M320_SMK" Secondary Impact
 procon.protected.weapons.add Recon "U_SV98" Primary SniperRifle
 procon.protected.weapons.add None "U_SVD12" Primary DMR
+procon.protected.weapons.add None "U_SW40" Auxiliary Handgun
 procon.protected.weapons.add None "U_Taurus44" Auxiliary Handgun
 procon.protected.weapons.add None "U_Tomahawk" Primary VehicleLight
 procon.protected.weapons.add Support "U_Type88" Primary LMG
 procon.protected.weapons.add None "U_Type95B" Primary Carbine
+procon.protected.weapons.add Support "UCAV" Secondary Explosive
+procon.protected.weapons.add Support "XP1/Gameplay/Gadgets/UCAV/UCAV_Launcher" Secondary Explosive
 procon.protected.weapons.add Support "U_Ultimax" Primary LMG
 procon.protected.weapons.add Demolition "U_UMP9" Primary SMG
 procon.protected.weapons.add Demolition "U_UMP45" Primary SMG
@@ -263,6 +291,70 @@ procon.protected.weapons.add None "U_V40" Auxiliary Explosive
 procon.protected.weapons.add Support "U_XM25" Secondary ProjectileExplosive
 procon.protected.weapons.add Support "U_XM25_Flechette" Secondary Shotgun
 procon.protected.weapons.add Support "U_XM25_Smoke" Secondary Impact
+
+// Personal vehicles
+procon.protected.weapons.add None "DPV" Primary VehiclePersonal
+procon.protected.weapons.add None "XP1/Gameplay/Vehicles/KLR650/KLR650" Primary VehiclePersonal
+procon.protected.weapons.add None "Gameplay/Vehicles/QuadBike/QUADBIKE" Primary VehiclePersonal
+
+// Transport vehicles
+procon.protected.weapons.add None "Gameplay/Vehicles/AAV-7A1/AAV-7A1" Primary VehicleTransport
+procon.protected.weapons.add None "Gameplay/Vehicles/CH_LTHE_Z-9/CH_LTHE_Z-9" Primary VehicleTransport
+procon.protected.weapons.add None "Gameplay/Vehicles/CH_FAV_LYT2021/CH_FAV_LYT2021" Primary VehicleTransport
+procon.protected.weapons.add None "Gameplay/Vehicles/GrowlerITV/GrowlerITV" Primary VehicleTransport
+procon.protected.weapons.add None "Ka-60" Primary VehicleTransport
+procon.protected.weapons.add None "Gameplay/Vehicles/CH_MRAP-ZFB-05/CH_MRAP-ZFB-05" Primary VehicleTransport
+procon.protected.weapons.add None "Gameplay/Vehicles/RU_MRAP_SPM3/RU_MRAP_SPM3" Primary VehicleTransport
+procon.protected.weapons.add None "Gameplay/Vehicles/US_MRAP-COUGAR/US_MRAP-COUGAR" Primary VehicleTransport
+procon.protected.weapons.add None "Gameplay/Vehicles/Train_01/Train_01" Primary VehicleTransport
+procon.protected.weapons.add None "VDV Buggy" Primary VehicleTransport
+procon.protected.weapons.add None "Gameplay/Vehicles/Venom/Venom" Primary VehicleTransport
+
+// Light armored vehicles
+procon.protected.weapons.add None "Gameplay/Vehicles/CH_AA_PGZ-95/CH_AA_PGZ-95" Primary VehicleLight
+procon.protected.weapons.add None "Gameplay/Vehicles/BTR-90/BTR90" Primary VehicleLight
+procon.protected.weapons.add None "Gameplay/Vehicles/CH_IFV_ZBD09/CH_IFV_ZBD09" Primary VehicleLight
+procon.protected.weapons.add None "Gameplay/Vehicles/HIMARS/HIMARS" Primary VehicleLight
+procon.protected.weapons.add None "Gameplay/Vehicles/LAV25/LAV_AD" Primary VehicleLight
+procon.protected.weapons.add None "Gameplay/Vehicles/LAV25/LAV25" Primary VehicleLight
+procon.protected.weapons.add None "Gameplay/Vehicles/Pantsir/Pantsir-S1" Primary VehicleLight
+procon.protected.weapons.add None "Gameplay/Vehicles/9K22_Tunguska_M/9K22_Tunguska_M" Primary VehicleLight
+
+// Heavy armored vehicles
+procon.protected.weapons.add None "Gameplay/Vehicles/M1A2/M1Abrams" Primary VehicleHeavy
+procon.protected.weapons.add None "T90" Primary VehicleHeavy
+procon.protected.weapons.add None "Gameplay/Vehicles/CH_MBT_Type99/CH_MBT_Type99" Primary VehicleHeavy
+
+// Air vehicles
+procon.protected.weapons.add None "Gameplay/Vehicles/A-10_THUNDERBOLT/A10_THUNDERBOLT" Primary VehicleAir
+procon.protected.weapons.add None "Gameplay/Vehicles/AC130/AC130_Gunship" Primary VehicleAir
+procon.protected.weapons.add None "Gameplay/Vehicles/AH1Z/AH1Z" Primary VehicleAir
+procon.protected.weapons.add None "Gameplay/Vehicles/AH6/AH6_Littlebird" Primary VehicleAir
+procon.protected.weapons.add None "XP1/Gameplay/Vehicles/B1Lancer/B1Lancer" Primary VehicleAir
+procon.protected.weapons.add None "Gameplay/Vehicles/F35/F35B" Primary VehicleAir
+procon.protected.weapons.add None "Gameplay/Vehicles/Ch_FJET_J-20/CH_FJET_J-20" Primary VehicleAir
+procon.protected.weapons.add None "XP1/Gameplay/Vehicles/H6K/H6K" Primary VehicleAir
+procon.protected.weapons.add None "Gameplay/Vehicles/Mi28/Mi28" Primary VehicleAir
+procon.protected.weapons.add None "Gameplay/Vehicles/SU-25TM/SU-25TM" Primary VehicleAir
+procon.protected.weapons.add None "Gameplay/Vehicles/RU_FJET_T-50_Pak_FA/RU_FJET_T-50_Pak_FA" Primary VehicleAir
+procon.protected.weapons.add None "Gameplay/Vehicles/UAV_GlobalHawk/UAV_GlobalHawk" Primary VehicleAir
+procon.protected.weapons.add None "Gameplay/Vehicles/CH_JET_Qiang-5-fantan/CH_JET_Q5_FANTAN" Primary VehicleAir
+procon.protected.weapons.add None "Z-10w" Primary VehicleAir
+procon.protected.weapons.add None "Gameplay/Vehicles/Z11W/Z-11w" Primary VehicleAir
+procon.protected.weapons.add None "Gameplay/Vehicles/Z11W/spec/Z-11w_CH" Primary VehicleAir
+
+// Water vehicles
+procon.protected.weapons.add None "Gameplay/Vehicles/US_FAC-CB90/US_FAC-CB90" Primary VehicleWater
+procon.protected.weapons.add None "Gameplay/Vehicles/CH_FAC_DV15/CH_FAC_DV15" Primary VehicleWater
+procon.protected.weapons.add None "RHIB" Primary VehicleWater
+
+// Stationary vehicles
+procon.protected.weapons.add None "Gameplay/Vehicles/CH_ATGM_HJ-8/CH_ATGM_HJ-8" Primary VehicleStationary
+procon.protected.weapons.add None "Gameplay/Vehicles/Centurion_C-RAM/Centurion_C-RAM" Primary VehicleStationary
+procon.protected.weapons.add None "Gameplay/Vehicles/Centurion_C-RAM/Centurion_C-RAM_MP_Naval" Primary VehicleStationary
+procon.protected.weapons.add None "Kornet" Primary VehicleStationary
+procon.protected.weapons.add None "Gameplay/Vehicles/CH_CIWS-LD-2000/CH_CIWS-LD-2000" Primary VehicleStationary
+procon.protected.weapons.add None "Gameplay/Vehicles/TOW2/TOW2" Primary VehicleStationary
 
 procon.protected.maps.clear
 procon.protected.maps.add "ConquestLarge0" "MP_Abandoned" "Conquest Large" "Zavod 311" 0
