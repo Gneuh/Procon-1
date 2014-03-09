@@ -642,23 +642,51 @@ namespace PRoCon.Core.Remote {
                     }
                 }
 
-                if (Parent.OptionsSettings.UsePluginOldStyleLoad == true) {
-                    ExecuteConnectionConfig(FileHostNamePort + ".cfg", 0, null, false);
+                string configDirectoryPath = Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Configs"), FileHostNamePort);
+                string oldConfigFilePath = Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Configs"), string.Format("{0}.cfg", FileHostNamePort));
+
+                if (File.Exists(oldConfigFilePath) == false && Directory.Exists(configDirectoryPath) == true) {
+                    string[] pluginConfigPaths = Directory.GetFiles(configDirectoryPath, "*.cfg");
+
+                    if (Parent.OptionsSettings.UsePluginOldStyleLoad == true) {
+                        foreach (string pluginConfigPath in pluginConfigPaths) {
+                            ExecuteConnectionConfig(pluginConfigPath, 0, null, false);
+                        }
+                    }
+
+                    BeginLoginSequence();
+
+                    if (Parent.OptionsSettings.UsePluginOldStyleLoad == false) {
+                        foreach (string pluginConfigPath in pluginConfigPaths) {
+                            ExecuteConnectionConfig(pluginConfigPath, 0, null, true);
+                        }
+                    }
+
+                    IsLoadingSavingConnectionConfig = false;
+                }
+                else {
+                    if (Parent.OptionsSettings.UsePluginOldStyleLoad == true) {
+                        ExecuteConnectionConfig(FileHostNamePort + ".cfg", 0, null, false);
+                    }
+
+                    BeginLoginSequence();
+
+                    if (Parent.OptionsSettings.UsePluginOldStyleLoad == false) {
+                        ExecuteConnectionConfig(FileHostNamePort + ".cfg", 0, null, true);
+                    }
+
+                    try {
+                        if (File.Exists(oldConfigFilePath) == true) {
+                            File.Delete(oldConfigFilePath);
+                        }
+                    }
+                    catch (Exception e) {
+                        FrostbiteConnection.LogError("RemoveOldConfig", String.Empty, e);
+                    }
+
+                    IsLoadingSavingConnectionConfig = false;
                 }
 
-                //this.m_blLoadingSavingConnectionConfig = false;
-
-                // this.ManuallyDisconnected = true;
-
-                // this.ConnectionError = false;
-
-                BeginLoginSequence();
-
-                if (Parent.OptionsSettings.UsePluginOldStyleLoad == false) {
-                    ExecuteConnectionConfig(FileHostNamePort + ".cfg", 0, null, true);
-                }
-
-                IsLoadingSavingConnectionConfig = false;
             }
         }
 
@@ -2922,17 +2950,24 @@ namespace PRoCon.Core.Remote {
             if (IsLoadingSavingConnectionConfig == false && Layer != null && Layer.AccountPrivileges != null && (PluginsManager != null || (PluginsManager == null && IsPRoConConnection == true && Parent.OptionsSettings.LayerHideLocalPlugins == true)) && MapGeometry != null && MapGeometry.MapZones != null) {
                 lock (ConfigSavingLocker) {
                     FileStream stmConnectionConfigFile = null;
+                    string configDirectoryPath = null;
 
                     try {
+                        configDirectoryPath = Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Configs"), FileHostNamePort);
+
                         if (Directory.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Configs")) == false) {
                             Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Configs"));
                         }
 
-                        string strSaveFile = Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Configs"), FileHostNamePort + ".cfg");
+                        if (Directory.Exists(configDirectoryPath) == false) {
+                            Directory.CreateDirectory(configDirectoryPath);
+                        }
+
+                        string strSaveFile = Path.Combine(configDirectoryPath, string.Format("{0}.cfg", FileHostNamePort));
 
                         stmConnectionConfigFile = new FileStream(strSaveFile + ".temp", FileMode.Create);
 
-                        if (stmConnectionConfigFile != null) {
+                        if (stmConnectionConfigFile.CanWrite == true) {
                             var stwConfig = new StreamWriter(stmConnectionConfigFile, Encoding.UTF8);
 
                             stwConfig.WriteLine("/////////////////////////////////////////////");
@@ -2956,38 +2991,6 @@ namespace PRoCon.Core.Remote {
                                 stwConfig.WriteLine("procon.protected.zones.add \"{0}\" \"{1}\" \"{2}\" {3} {4}", zone.UID, zone.LevelFileName, zone.Tags, zone.ZonePolygon.Length, String.Join(" ", Point3D.ToStringList(zone.ZonePolygon).ToArray()));
                             }
 
-                            if (PluginsManager != null) {
-                                foreach (string strClassName in new List<string>(PluginsManager.Plugins.LoadedClassNames)) {
-                                    stwConfig.WriteLine("procon.protected.plugins.enable \"{0}\" {1}", strClassName, PluginsManager.Plugins.EnabledClassNames.Contains(strClassName));
-
-                                    PluginDetails spdUpdatedDetails = PluginsManager.GetPluginDetails(strClassName);
-
-                                    foreach (CPluginVariable cpvVariable in spdUpdatedDetails.PluginVariables) {
-                                        string strEscapedNewlines = CPluginVariable.Decode(cpvVariable.Value);
-                                        strEscapedNewlines = strEscapedNewlines.Replace("\n", @"\n");
-                                        strEscapedNewlines = strEscapedNewlines.Replace("\r", @"\r");
-                                        strEscapedNewlines = strEscapedNewlines.Replace("\"", @"\""");
-
-                                        stwConfig.WriteLine("procon.protected.plugins.setVariable \"{0}\" \"{1}\" \"{2}\"", strClassName, cpvVariable.Name, strEscapedNewlines);
-                                    }
-                                }
-
-                                // Now resave all cached plugin settings (plugin settings of of plugins that failed to load)
-                                foreach (Plugin.Plugin plugin in PluginsManager.Plugins) {
-                                    if (plugin.IsLoaded == false) {
-                                        foreach (var CachedPluginVariable in plugin.CacheFailCompiledPluginVariables) {
-                                            stwConfig.WriteLine("procon.protected.plugins.setVariable \"{0}\" \"{1}\" \"{2}\"", plugin.ClassName, CachedPluginVariable.Key, CachedPluginVariable.Value);
-                                        }
-                                    }
-                                }
-                                /*
-                                foreach (KeyValuePair<string, Dictionary<string, string>> CachedPluginSettings in this.PluginsManager.CacheFailCompiledPluginVariables) {
-                                    foreach (KeyValuePair<string, string> CachedPluginVariable in CachedPluginSettings.Value) {
-                                        stwConfig.WriteLine("procon.protected.plugins.setVariable \"{0}\" \"{1}\" \"{2}\"", CachedPluginSettings.Key, CachedPluginVariable.Key, CachedPluginVariable.Value);
-                                    }
-                                }
-                                */
-                            }
                             stwConfig.Flush();
                             stwConfig.Close();
 
@@ -3002,6 +3005,58 @@ namespace PRoCon.Core.Remote {
                         if (stmConnectionConfigFile != null) {
                             stmConnectionConfigFile.Close();
                             stmConnectionConfigFile.Dispose();
+                        }
+                    }
+
+                    if (PluginsManager != null) {
+                        foreach (Plugin.Plugin plugin in PluginsManager.Plugins) {
+                            FileStream pluginConfigFileStream = null;
+                            string pluginConfigPath = Path.Combine(configDirectoryPath, string.Format("{0}.cfg", plugin.ClassName));
+
+                            try {
+                                pluginConfigFileStream = new FileStream(string.Format("{0}.temp", pluginConfigPath), FileMode.Create);
+
+                                if (pluginConfigFileStream.CanWrite == true) {
+                                    StreamWriter pluginConfigWriter = new StreamWriter(pluginConfigFileStream, Encoding.UTF8);
+
+                                    pluginConfigWriter.WriteLine("/////////////////////////////////////////////");
+                                    pluginConfigWriter.WriteLine("// This config will be overwritten by procon.");
+                                    pluginConfigWriter.WriteLine("/////////////////////////////////////////////");
+
+                                    pluginConfigWriter.WriteLine("procon.protected.plugins.enable \"{0}\" {1}", plugin.ClassName, plugin.IsEnabled);
+
+                                    if (plugin.IsLoaded == true) {
+                                        PluginDetails pluginDetails = PluginsManager.GetPluginDetails(plugin.ClassName);
+
+                                        foreach (CPluginVariable pluginVariable in pluginDetails.PluginVariables) {
+                                            string escapedNewlines = CPluginVariable.Decode(pluginVariable.Value).Replace("\n", @"\n").Replace("\r", @"\r").Replace("\"", @"\""");
+
+                                            pluginConfigWriter.WriteLine("procon.protected.plugins.setVariable \"{0}\" \"{1}\" \"{2}\"", plugin.ClassName, pluginVariable.Name, escapedNewlines);
+                                        }
+                                    }
+                                    else {
+                                        foreach (KeyValuePair<string, string> cachedPluginVariable in plugin.CacheFailCompiledPluginVariables) {
+                                            pluginConfigWriter.WriteLine("procon.protected.plugins.setVariable \"{0}\" \"{1}\" \"{2}\"", plugin.ClassName, cachedPluginVariable.Key, cachedPluginVariable.Value);
+                                        }
+                                    }
+
+                                    pluginConfigWriter.Flush();
+                                    pluginConfigWriter.Close();
+
+                                    File.Copy(string.Format("{0}.temp", pluginConfigPath), pluginConfigPath, true);
+                                    File.Delete(string.Format("{0}.temp", pluginConfigPath));
+                                }
+                            }
+                            catch (Exception e)
+                            {
+                                FrostbiteConnection.LogError("SaveConnectionConfig", plugin.ClassName, e);
+                            }
+                            finally {
+                                if (pluginConfigFileStream != null) {
+                                    pluginConfigFileStream.Close();
+                                    pluginConfigFileStream.Dispose();
+                                }
+                            }
                         }
                     }
                 }
