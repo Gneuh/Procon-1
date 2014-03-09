@@ -293,12 +293,12 @@ procon.protected.weapons.add Support "U_XM25_Flechette" Secondary Shotgun
 procon.protected.weapons.add Support "U_XM25_Smoke" Secondary Impact
 
 // Personal vehicles
-procon.protected.weapons.add None "DPV" Primary VehiclePersonal
 procon.protected.weapons.add None "XP1/Gameplay/Vehicles/KLR650/KLR650" Primary VehiclePersonal
 procon.protected.weapons.add None "Gameplay/Vehicles/QuadBike/QUADBIKE" Primary VehiclePersonal
 
 // Transport vehicles
 procon.protected.weapons.add None "Gameplay/Vehicles/AAV-7A1/AAV-7A1" Primary VehicleTransport
+procon.protected.weapons.add None "DPV" Primary VehicleTransport
 procon.protected.weapons.add None "Gameplay/Vehicles/CH_LTHE_Z-9/CH_LTHE_Z-9" Primary VehicleTransport
 procon.protected.weapons.add None "Gameplay/Vehicles/CH_FAV_LYT2021/CH_FAV_LYT2021" Primary VehicleTransport
 procon.protected.weapons.add None "Gameplay/Vehicles/GrowlerITV/GrowlerITV" Primary VehicleTransport
