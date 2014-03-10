@@ -21,21 +21,28 @@ Please refer to the [issues section](https://github.com/Myrcon/Procon-1/issues?l
 ## Changelog ##
 To check out older changelogs, please refer to our [full changelogs list](https://forum.myrcon.com/showthread.php?240-Full-Change-Log "Full changelog of Procon 1") on the Myrcon Community forums.
 
-### 1.4.1.6 to 1.4.2.0 ###
+### 1.4.2.0 to 1.4.2.1 ###
 #### Battlefield 4 ####
-- Fixed problem with team/squad mapping on BF4 maps (resulting in wrong moves/kicks etc.)
-- Added map definitions for *Second Assault* DLC
-- Additional changes to definitions for BF4
+- Added parsing of R27's *player.onDisconnect* event
+- Added weapon definitions and localisation for vehicle RCON codes
+- Added new weapon definitions from *Naval String' DLC
+- Fixed errors in categorisation of weapons
 
 #### Core ####
-- Improved event handling in Procon, allowing for better performance and debugging
-- General (crazy) improvements by the almighty phogue (see [here](https://github.com/Myrcon/Procon-1/issues/92))
+- Fixed *vars.teamFactionOverride* not being recognised by Procon layers
+- Plugin configs are now split into different files, preventing all information from being lost if once configuration fails to load/save
+- Fixed crash caused by invalid parsing of decimal numbers
+- Fixed crash caused by failing to load localisation properly
+- Fixed error causing a connection to get reconnected after pressing "disconnect"
 
 #### UI ####
-- Fixed "Move to" menu in player list showing entries multiple times for BF4
+- Added *OnPlayerDisconnected* messages to chat tab with checkbox to disable them
+- Added check for current round count not being able to go above the maximum round count
 
 #### Plugins ####
-- Slight startup improvement for the ingame admin plugin
+- Added option to enable compilation of plugins with debug information
+- Added plugin API for *OnPlayerDisconnected* event
+- Fixed InGameAdmin (f)move without destination on other games than BFBC2
 
 
 ## Credits & contributions ##
