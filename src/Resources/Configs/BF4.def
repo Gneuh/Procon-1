@@ -55,7 +55,7 @@ procon.protected.weapons.add Assault "U_AEK971_M26_Flechette" Secondary Shotgun
 procon.protected.weapons.add Assault "U_AEK971_M26_Frag" Secondary Shotgun
 procon.protected.weapons.add Assault "U_AEK971_M26_Slug" Secondary Shotgun
 procon.protected.weapons.add Assault "U_AEK971_M320_3GL" Secondary ProjectileExplosive
-procon.protected.weapons.add Assault "U_AEK971_M320_FLASH" Secondary Impact
+procon.protected.weapons.add Assault "U_AEK971_M320_FLASH" Secondary ProjectileExplosive
 procon.protected.weapons.add Assault "U_AEK971_M320_HE" Secondary ProjectileExplosive
 procon.protected.weapons.add Assault "U_AEK971_M320_LVG" Secondary ProjectileExplosive
 procon.protected.weapons.add Assault "U_AEK971_M320_SHG" Secondary Shotgun
@@ -66,7 +66,7 @@ procon.protected.weapons.add Assault "U_AK12_M26_Flechette" Secondary Shotgun
 procon.protected.weapons.add Assault "U_AK12_M26_Frag" Secondary Shotgun
 procon.protected.weapons.add Assault "U_AK12_M26_Slug" Secondary Shotgun
 procon.protected.weapons.add Assault "U_AK12_M320_3GL" Secondary ProjectileExplosive
-procon.protected.weapons.add Assault "U_AK12_M320_FLASH" Secondary Impact
+procon.protected.weapons.add Assault "U_AK12_M320_FLASH" Secondary ProjectileExplosive
 procon.protected.weapons.add Assault "U_AK12_M320_HE" Secondary ProjectileExplosive
 procon.protected.weapons.add Assault "U_AK12_M320_LVG" Secondary ProjectileExplosive
 procon.protected.weapons.add Assault "U_AK12_M320_SHG" Secondary Shotgun
@@ -78,7 +78,7 @@ procon.protected.weapons.add None "U_AMR2_CQB" Primary SniperRifle
 procon.protected.weapons.add None "U_AMR2_MED" Primary SniperRifle
 procon.protected.weapons.add Assault "U_AR160" Primary AssaultRifle
 procon.protected.weapons.add Assault "U_AR160_M320_3GL" Secondary ProjectileExplosive
-procon.protected.weapons.add Assault "U_AR160_M320_FLASH" Secondary Impact
+procon.protected.weapons.add Assault "U_AR160_M320_FLASH" Secondary ProjectileExplosive
 procon.protected.weapons.add Assault "U_AR160_M320_HE" Secondary ProjectileExplosive
 procon.protected.weapons.add Assault "U_AR160_M320_LVG" Secondary ProjectileExplosive
 procon.protected.weapons.add Assault "U_AR160_M320_SHG" Secondary Shotgun
@@ -98,7 +98,7 @@ procon.protected.weapons.add Assault "U_CZ805_M26_Flechette" Secondary Shotgun
 procon.protected.weapons.add Assault "U_CZ805_M26_Frag" Secondary Shotgun
 procon.protected.weapons.add Assault "U_CZ805_M26_Slug" Secondary Shotgun
 procon.protected.weapons.add Assault "U_CZ805_M320_3GL" Secondary ProjectileExplosive
-procon.protected.weapons.add Assault "U_CZ805_M320_FLASH" Secondary Impact
+procon.protected.weapons.add Assault "U_CZ805_M320_FLASH" Secondary ProjectileExplosive
 procon.protected.weapons.add Assault "U_CZ805_M320_HE" Secondary ProjectileExplosive
 procon.protected.weapons.add Assault "U_CZ805_M320_LVG" Secondary ProjectileExplosive
 procon.protected.weapons.add Assault "U_CZ805_M320_SHG" Secondary Shotgun
@@ -144,7 +144,7 @@ procon.protected.weapons.add Assault "U_M16A4_M26_Flechette" Secondary Shotgun
 procon.protected.weapons.add Assault "U_M16A4_M26_Frag" Secondary Shotgun
 procon.protected.weapons.add Assault "U_M16A4_M26_Slug" Secondary Shotgun
 procon.protected.weapons.add Assault "U_M16A4_M320_3GL" Secondary ProjectileExplosive
-procon.protected.weapons.add Assault "U_M16A4_M320_FLASH" Secondary Impact
+procon.protected.weapons.add Assault "U_M16A4_M320_FLASH" Secondary ProjectileExplosive
 procon.protected.weapons.add Assault "U_M16A4_M320_HE" Secondary ProjectileExplosive
 procon.protected.weapons.add Assault "U_M16A4_M320_LVG" Secondary ProjectileExplosive
 procon.protected.weapons.add Assault "U_M16A4_M320_SHG" Secondary Shotgun
@@ -159,7 +159,7 @@ procon.protected.weapons.add Assault "U_M26Mass_Flechette" Secondary Shotgun
 procon.protected.weapons.add Assault "U_M26Mass_Frag" Secondary Shotgun
 procon.protected.weapons.add Assault "U_M26Mass_Slug" Secondary Shotgun
 procon.protected.weapons.add Assault "U_M320_3GL" Secondary ProjectileExplosive
-procon.protected.weapons.add Assault "U_M320_FLASH" Secondary Impact
+procon.protected.weapons.add Assault "U_M320_FLASH" Secondary ProjectileExplosive
 procon.protected.weapons.add Assault "U_M320_HE" Secondary ProjectileExplosive
 procon.protected.weapons.add Assault "U_M320_LVG" Secondary ProjectileExplosive
 procon.protected.weapons.add Assault "U_M320_SHG" Secondary Shotgun
@@ -173,7 +173,7 @@ procon.protected.weapons.add Assault "U_M416_M26_Flechette" Secondary Shotgun
 procon.protected.weapons.add Assault "U_M416_M26_Frag" Secondary Shotgun
 procon.protected.weapons.add Assault "U_M416_M26_Slug" Secondary Shotgun
 procon.protected.weapons.add Assault "U_M416_M320_3GL" Secondary ProjectileExplosive
-procon.protected.weapons.add Assault "U_M416_M320_FLASH" Secondary Impact
+procon.protected.weapons.add Assault "U_M416_M320_FLASH" Secondary ProjectileExplosive
 procon.protected.weapons.add Assault "U_M416_M320_HE" Secondary ProjectileExplosive
 procon.protected.weapons.add Assault "U_M416_M320_LVG" Secondary ProjectileExplosive
 procon.protected.weapons.add Assault "U_M416_M320_SHG" Secondary Shotgun
@@ -213,7 +213,7 @@ procon.protected.weapons.add Assault "U_QBZ951_M26_Flechette" Secondary Shotgun
 procon.protected.weapons.add Assault "U_QBZ951_M26_Frag" Secondary Shotgun
 procon.protected.weapons.add Assault "U_QBZ951_M26_Slug" Secondary Shotgun
 procon.protected.weapons.add Assault "U_QBZ951_M320_3GL" Secondary ProjectileExplosive
-procon.protected.weapons.add Assault "U_QBZ951_M320_FLASH" Secondary Impact
+procon.protected.weapons.add Assault "U_QBZ951_M320_FLASH" Secondary ProjectileExplosive
 procon.protected.weapons.add Assault "U_QBZ951_M320_HE" Secondary ProjectileExplosive
 procon.protected.weapons.add Assault "U_QBZ951_M320_LVG" Secondary ProjectileExplosive
 procon.protected.weapons.add Assault "U_QBZ951_M320_SHG" Secondary Shotgun
@@ -232,7 +232,7 @@ procon.protected.weapons.add Assault "U_SAR21_M26_Flechette" Secondary Shotgun
 procon.protected.weapons.add Assault "U_SAR21_M26_Frag" Secondary Shotgun
 procon.protected.weapons.add Assault "U_SAR21_M26_Slug" Secondary Shotgun
 procon.protected.weapons.add Assault "U_SAR21_M320_3GL" Secondary ProjectileExplosive
-procon.protected.weapons.add Assault "U_SAR21_M320_FLASH" Secondary Impact
+procon.protected.weapons.add Assault "U_SAR21_M320_FLASH" Secondary ProjectileExplosive
 procon.protected.weapons.add Assault "U_SAR21_M320_HE" Secondary ProjectileExplosive
 procon.protected.weapons.add Assault "U_SAR21_M320_LVG" Secondary ProjectileExplosive
 procon.protected.weapons.add Assault "U_SAR21_M320_SHG" Secondary Shotgun
@@ -243,7 +243,7 @@ procon.protected.weapons.add Assault "U_SCAR-H_M26_Flechette" Secondary Shotgun
 procon.protected.weapons.add Assault "U_SCAR-H_M26_Frag" Secondary Shotgun
 procon.protected.weapons.add Assault "U_SCAR-H_M26_Slug" Secondary Shotgun
 procon.protected.weapons.add Assault "U_SCAR-H_M320_3GL" Secondary ProjectileExplosive
-procon.protected.weapons.add Assault "U_SCAR-H_M320_FLASH" Secondary Impact
+procon.protected.weapons.add Assault "U_SCAR-H_M320_FLASH" Secondary ProjectileExplosive
 procon.protected.weapons.add Assault "U_SCAR-H_M320_HE" Secondary ProjectileExplosive
 procon.protected.weapons.add Assault "U_SCAR-H_M320_LVG" Secondary ProjectileExplosive
 procon.protected.weapons.add Assault "U_SCAR-H_M320_SHG" Secondary Shotgun
@@ -267,7 +267,7 @@ procon.protected.weapons.add Assault "U_SteyrAug_M26_Flechette" Secondary Shotgu
 procon.protected.weapons.add Assault "U_SteyrAug_M26_Frag" Secondary Shotgun
 procon.protected.weapons.add Assault "U_SteyrAug_M26_Slug" Secondary Shotgun
 procon.protected.weapons.add Assault "U_SteyrAug_M320_3GL" Secondary ProjectileExplosive
-procon.protected.weapons.add Assault "U_SteyrAug_M320_FLASH" Secondary Impact
+procon.protected.weapons.add Assault "U_SteyrAug_M320_FLASH" Secondary ProjectileExplosive
 procon.protected.weapons.add Assault "U_SteyrAug_M320_HE" Secondary ProjectileExplosive
 procon.protected.weapons.add Assault "U_SteyrAug_M320_LVG" Secondary ProjectileExplosive
 procon.protected.weapons.add Assault "U_SteyrAug_M320_SHG" Secondary Shotgun
