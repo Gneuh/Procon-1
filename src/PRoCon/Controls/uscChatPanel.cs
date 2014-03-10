@@ -127,6 +127,9 @@ namespace PRoCon.Controls {
                 if (System.String.Compare(this.m_prcClient.GameType, "BF4", System.StringComparison.OrdinalIgnoreCase) != 0) {
                     this.chkDisplayComRoseMsg.Enabled = false;
                     this.chkDisplayComRoseMsg.Visible = false;
+
+                    this.chkDisplayPlayerDisconnected.Enabled = false;
+                    this.chkDisplayPlayerDisconnected.Visible = false;
                 }
             }
         }
