@@ -105,6 +105,12 @@ namespace PRoCon.Core.Remote {
         }
 
         /// <summary>
+        /// If the current shutdown was requested with this.Shutdown(), or if it's a result of
+        /// an error.
+        /// </summary>
+        public bool IsRequestedShutdown { get; set; }
+
+        /// <summary>
         /// Lock for processing new queue items
         /// </summary>
         protected readonly Object QueueUnqueuePacketLock = new Object();
@@ -377,7 +383,7 @@ namespace PRoCon.Core.Remote {
         }
 
         private void ReceiveCallback(IAsyncResult ar) {
-
+            
             if (this.NetworkStream != null) {
                 try {
                     int iBytesRead = this.NetworkStream.EndRead(ar);
@@ -591,6 +597,8 @@ namespace PRoCon.Core.Remote {
 
         public void AttemptConnection() {
             try {
+                // Clear this, everything from now on will throw an error.
+                this.IsRequestedShutdown = false;
 
                 lock (this.QueueUnqueuePacketLock) {
                     this.QueuedPackets.Clear();
@@ -617,21 +625,26 @@ namespace PRoCon.Core.Remote {
         public void Shutdown(Exception e) {
             this.ShutdownConnection();
 
-            if (this.ConnectionFailure != null) {
+            // If we're not currently shutdown from an external request
+            if (this.IsRequestedShutdown == false && this.ConnectionFailure != null) {
                 this.ConnectionFailure(this, e);
             }
-            
         }
 
         public void Shutdown(SocketException se) {
             this.ShutdownConnection();
 
-            if (this.SocketException != null) {
+            // If we're not currently shutdown from an external request
+            if (this.IsRequestedShutdown == false && this.SocketException != null) {
                 this.SocketException(this, se);
             }
         }
 
         public void Shutdown() {
+            // We've been asked to shutdown gracefully. We'll do so and supress any errors
+            // that occur during the shutdown.
+            this.IsRequestedShutdown = true;
+
             this.ShutdownConnection();
         }
 
