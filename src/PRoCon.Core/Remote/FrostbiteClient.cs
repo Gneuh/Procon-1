@@ -3043,10 +3043,10 @@ namespace PRoCon.Core.Remote {
             if (cpRequestPacket.Words.Count >= 1) {
                 if (TeamKillCountForKick != null) {
                     if (cpRecievedPacket.Words.Count == 2) {
-                        this.TeamKillCountForKick(this, (int) Convert.ToDecimal(cpRecievedPacket.Words[1]));
+                        this.TeamKillCountForKick(this, (int)Convert.ToDecimal(cpRecievedPacket.Words[1], CultureInfo.InvariantCulture));
                     }
                     else if (cpRequestPacket.Words.Count >= 2) {
-                        this.TeamKillCountForKick(this, (int) Convert.ToDecimal(cpRequestPacket.Words[1]));
+                        this.TeamKillCountForKick(this, (int)Convert.ToDecimal(cpRequestPacket.Words[1], CultureInfo.InvariantCulture));
                     }
                 }
             }
@@ -3056,9 +3056,9 @@ namespace PRoCon.Core.Remote {
             if (cpRequestPacket.Words.Count >= 1) {
                 if (TeamKillKickForBan != null) {
                     if (cpRecievedPacket.Words.Count == 2) {
-                        this.TeamKillKickForBan(this, (int)Convert.ToDecimal(cpRecievedPacket.Words[1]));
+                        this.TeamKillKickForBan(this, (int)Convert.ToDecimal(cpRecievedPacket.Words[1], CultureInfo.InvariantCulture));
                     } else if (cpRequestPacket.Words.Count >= 2) {
-                        this.TeamKillKickForBan(this, (int)Convert.ToDecimal(cpRequestPacket.Words[1]));
+                        this.TeamKillKickForBan(this, (int)Convert.ToDecimal(cpRequestPacket.Words[1], CultureInfo.InvariantCulture));
                     }
                 }
             }
@@ -3069,10 +3069,10 @@ namespace PRoCon.Core.Remote {
             if (cpRequestPacket.Words.Count >= 1) {
                 if (TeamKillValueForKick != null) {
                     if (cpRecievedPacket.Words.Count == 2) {
-                        this.TeamKillValueForKick(this, (int) Convert.ToDecimal(cpRecievedPacket.Words[1]));
+                        this.TeamKillValueForKick(this, (int)Convert.ToDecimal(cpRecievedPacket.Words[1], CultureInfo.InvariantCulture));
                     }
                     else if (cpRequestPacket.Words.Count >= 2) {
-                        this.TeamKillValueForKick(this, (int) Convert.ToDecimal(cpRequestPacket.Words[1]));
+                        this.TeamKillValueForKick(this, (int)Convert.ToDecimal(cpRequestPacket.Words[1], CultureInfo.InvariantCulture));
                     }
                 }
             }
@@ -3082,10 +3082,10 @@ namespace PRoCon.Core.Remote {
             if (cpRequestPacket.Words.Count >= 1) {
                 if (TeamKillValueIncrease != null) {
                     if (cpRecievedPacket.Words.Count == 2) {
-                        this.TeamKillValueIncrease(this, (int) Convert.ToDecimal(cpRecievedPacket.Words[1]));
+                        this.TeamKillValueIncrease(this, (int)Convert.ToDecimal(cpRecievedPacket.Words[1], CultureInfo.InvariantCulture));
                     }
                     else if (cpRequestPacket.Words.Count >= 2) {
-                        this.TeamKillValueIncrease(this, (int) Convert.ToDecimal(cpRequestPacket.Words[1]));
+                        this.TeamKillValueIncrease(this, (int)Convert.ToDecimal(cpRequestPacket.Words[1], CultureInfo.InvariantCulture));
                     }
                 }
             }
@@ -3095,10 +3095,10 @@ namespace PRoCon.Core.Remote {
             if (cpRequestPacket.Words.Count >= 1) {
                 if (TeamKillValueDecreasePerSecond != null) {
                     if (cpRecievedPacket.Words.Count == 2) {
-                        this.TeamKillValueDecreasePerSecond(this, (int) Convert.ToDecimal(cpRecievedPacket.Words[1]));
+                        this.TeamKillValueDecreasePerSecond(this, (int)Convert.ToDecimal(cpRecievedPacket.Words[1], CultureInfo.InvariantCulture));
                     }
                     else if (cpRequestPacket.Words.Count >= 2) {
-                        this.TeamKillValueDecreasePerSecond(this, (int) Convert.ToDecimal(cpRequestPacket.Words[1]));
+                        this.TeamKillValueDecreasePerSecond(this, (int)Convert.ToDecimal(cpRequestPacket.Words[1], CultureInfo.InvariantCulture));
                     }
                 }
             }
