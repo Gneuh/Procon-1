@@ -25,7 +25,7 @@ To check out older changelogs, please refer to our [full changelogs list](https:
 #### Battlefield 4 ####
 - Added parsing of R27's *player.onDisconnect* event
 - Added weapon definitions and localisation for vehicle RCON codes
-- Added new weapon definitions from *Naval String' DLC
+- Added new weapon definitions from *Naval Strike* DLC
 - Fixed errors in categorisation of weapons
 
 #### Core ####
