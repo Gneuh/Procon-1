@@ -346,12 +346,14 @@ procon.protected.weapons.add None "Gameplay/Vehicles/Z11W/spec/Z-11w_CH" Primary
 // Water vehicles
 procon.protected.weapons.add None "Gameplay/Vehicles/US_FAC-CB90/US_FAC-CB90" Primary VehicleWater
 procon.protected.weapons.add None "Gameplay/Vehicles/CH_FAC_DV15/CH_FAC_DV15" Primary VehicleWater
+procon.protected.weapons.add None "Gameplay/Vehicles/CH_FAC_DV15/CH_FAC_DV15_RU" Primary VehicleWater
 procon.protected.weapons.add None "RHIB" Primary VehicleWater
 
 // Stationary vehicles
 procon.protected.weapons.add None "Gameplay/Vehicles/CH_ATGM_HJ-8/CH_ATGM_HJ-8" Primary VehicleStationary
 procon.protected.weapons.add None "Gameplay/Vehicles/Centurion_C-RAM/Centurion_C-RAM" Primary VehicleStationary
 procon.protected.weapons.add None "Gameplay/Vehicles/Centurion_C-RAM/Centurion_C-RAM_MP_Naval" Primary VehicleStationary
+procon.protected.weapons.add None "Gameplay/Vehicles/GunShieldAndTripod/GunShieldTripod" Primary VehicleStationary
 procon.protected.weapons.add None "Kornet" Primary VehicleStationary
 procon.protected.weapons.add None "Gameplay/Vehicles/CH_CIWS-LD-2000/CH_CIWS-LD-2000" Primary VehicleStationary
 procon.protected.weapons.add None "Gameplay/Vehicles/TOW2/TOW2" Primary VehicleStationary
