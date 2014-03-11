@@ -305,11 +305,6 @@ namespace PRoCon.Controls {
 
                 this.btnChatSend_Click(this, null);
 
-                this.m_llChatHistory.AddFirst(this.txtChat.Text);
-                if (this.m_llChatHistory.Count > 20) {
-                    this.m_llChatHistory.RemoveLast();
-                }
-                this.m_llChatHistoryCurrentNode = null;
                 this.txtChat.Clear();
                 this.txtChat.Focus();
                 e.SuppressKeyPress = true;
@@ -357,7 +352,7 @@ namespace PRoCon.Controls {
 
             CPlayerInfo objSelected = (CPlayerInfo)this.cboPlayerList.SelectedItem;
 
-            if (objSelected != null) {
+            if (objSelected != null && this.txtChat.Text.Length > 0) {
 
                 if (this.cboDisplayList.SelectedIndex == 0) {
 
