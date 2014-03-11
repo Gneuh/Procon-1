@@ -677,9 +677,11 @@ namespace PRoCon.Core.Remote {
 
                     IsLoadingSavingConnectionConfig = false;
                     SaveConnectionConfig();
+
                     try
                     {
-                        if (Directory.Exists(configDirectoryPath) == true) {
+                        if (Directory.Exists(configDirectoryPath) == true && File.Exists(Path.Combine(configDirectoryPath, string.Format("{0}.cfg", FileHostNamePort))) == true)
+                        {
                             try
                             {
                                 if (File.Exists(oldConfigFilePath) == true) {
