@@ -675,16 +675,27 @@ namespace PRoCon.Core.Remote {
                         ExecuteConnectionConfig(FileHostNamePort + ".cfg", 0, null, true);
                     }
 
-                    try {
-                        if (File.Exists(oldConfigFilePath) == true) {
-                            File.Delete(oldConfigFilePath);
+                    IsLoadingSavingConnectionConfig = false;
+                    SaveConnectionConfig();
+                    try
+                    {
+                        if (Directory.Exists(configDirectoryPath) == true) {
+                            try
+                            {
+                                if (File.Exists(oldConfigFilePath) == true) {
+                                    File.Delete(oldConfigFilePath);
+                                }
+                            }
+                            catch (Exception e) {
+                                FrostbiteConnection.LogError("RemoveOldConfig", String.Empty, e);
+                            }
                         }
                     }
                     catch (Exception e) {
-                        FrostbiteConnection.LogError("RemoveOldConfig", String.Empty, e);
+                        FrostbiteConnection.LogError("MigrateConfig", "Error writing new config structure during migration", e);
                     }
 
-                    IsLoadingSavingConnectionConfig = false;
+                    //IsLoadingSavingConnectionConfig = false;
                 }
 
             }
