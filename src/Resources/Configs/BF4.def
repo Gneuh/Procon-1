@@ -1,6 +1,6 @@
 /////////////////////////////////////////////
 // This definitions file will be overwritten during an update.
-//  (2014-03-11.01)
+//  (2014-03-12.01)
 // This file contains the standard defintions required to run procon 
 // connected to a BF4 server
 /////////////////////////////////////////////
@@ -277,7 +277,7 @@ procon.protected.weapons.add Recon "U_SV98" Primary SniperRifle
 procon.protected.weapons.add None "U_SVD12" Primary DMR
 procon.protected.weapons.add None "U_SW40" Auxiliary Handgun
 procon.protected.weapons.add None "U_Taurus44" Auxiliary Handgun
-procon.protected.weapons.add None "U_Tomahawk" Primary VehicleLight
+procon.protected.weapons.add None "U_Tomahawk" Primary ProjectileExplosive
 procon.protected.weapons.add Support "U_Type88" Primary LMG
 procon.protected.weapons.add None "U_Type95B" Primary Carbine
 procon.protected.weapons.add Support "UCAV" Secondary Explosive
