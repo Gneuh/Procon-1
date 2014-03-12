@@ -696,8 +696,6 @@ namespace PRoCon.Core.Remote {
                     catch (Exception e) {
                         FrostbiteConnection.LogError("MigrateConfig", "Error writing new config structure during migration", e);
                     }
-
-                    //IsLoadingSavingConnectionConfig = false;
                 }
 
             }
