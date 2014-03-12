@@ -318,7 +318,6 @@ procon.protected.weapons.add None "Gameplay/Vehicles/CH_IFV_ZBD09/CH_IFV_ZBD09" 
 procon.protected.weapons.add None "Gameplay/Vehicles/HIMARS/HIMARS" Primary VehicleLight
 procon.protected.weapons.add None "Gameplay/Vehicles/LAV25/LAV_AD" Primary VehicleLight
 procon.protected.weapons.add None "Gameplay/Vehicles/LAV25/LAV25" Primary VehicleLight
-procon.protected.weapons.add None "Gameplay/Vehicles/Pantsir/Pantsir-S1" Primary VehicleLight
 procon.protected.weapons.add None "Gameplay/Vehicles/9K22_Tunguska_M/9K22_Tunguska_M" Primary VehicleLight
 
 // Heavy armored vehicles
@@ -357,6 +356,7 @@ procon.protected.weapons.add None "Gameplay/Vehicles/Centurion_C-RAM/Centurion_C
 procon.protected.weapons.add None "Gameplay/Vehicles/GunShieldAndTripod/GunShieldTripod" Primary VehicleStationary
 procon.protected.weapons.add None "Kornet" Primary VehicleStationary
 procon.protected.weapons.add None "Gameplay/Vehicles/CH_CIWS-LD-2000/CH_CIWS-LD-2000" Primary VehicleStationary
+procon.protected.weapons.add None "Gameplay/Vehicles/Pantsir/Pantsir-S1" Primary VehicleLight
 procon.protected.weapons.add None "Gameplay/Vehicles/TOW2/TOW2" Primary VehicleStationary
 
 procon.protected.maps.clear
