@@ -440,10 +440,9 @@ namespace PRoCon.Core.Consoles {
         private void m_prcClient_PlayerLeft(FrostbiteClient sender, string playerName, CPlayerInfo cpiPlayer)
         {
             if (LogJoinLeaving == true && LogPlayerDisconnected == false) {
-                if (cpiPlayer != null && cpiPlayer.ClanTag.Length != 0) {
+                if (cpiPlayer != null && cpiPlayer.ClanTag != null) {
                     Write(DateTime.UtcNow.ToUniversalTime().AddHours(Client.Game.UtcOffset).ToLocalTime(), String.Format("^1{0}", Client.Language.GetLocalized("uscChatPanel.chkDisplayOnJoinLeaveEvents.Left", string.Format("{0} {1}", cpiPlayer.ClanTag, cpiPlayer.SoldierName))));
-                }
-                else {
+                } else {
                     Write(DateTime.UtcNow.ToUniversalTime().AddHours(Client.Game.UtcOffset).ToLocalTime(), String.Format("^1{0}", Client.Language.GetLocalized("uscChatPanel.chkDisplayOnJoinLeaveEvents.Left", playerName)));
                 }
             }
@@ -461,11 +460,11 @@ namespace PRoCon.Core.Consoles {
 
                 bool isTk = kKillerVictimDetails.Killer.TeamID == kKillerVictimDetails.Victim.TeamID && kKillerVictimDetails.Killer.SoldierName != kKillerVictimDetails.Victim.SoldierName;
 
-                if (Client.PlayerList.Contains(kKillerVictimDetails.Killer) == true && Client.PlayerList[kKillerVictimDetails.Killer.SoldierName].ClanTag.Length != 0) {
+                if (Client.PlayerList.Contains(kKillerVictimDetails.Killer) == true && Client.PlayerList[kKillerVictimDetails.Killer.SoldierName].ClanTag != null) {
                     strKillerName = String.Format("{0} {1}", Client.PlayerList[kKillerVictimDetails.Killer.SoldierName].ClanTag, kKillerVictimDetails.Killer.SoldierName);
                 }
 
-                if (Client.PlayerList.Contains(kKillerVictimDetails.Victim) == true && Client.PlayerList[kKillerVictimDetails.Victim.SoldierName].ClanTag.Length != 0) {
+                if (Client.PlayerList.Contains(kKillerVictimDetails.Victim) == true && Client.PlayerList[kKillerVictimDetails.Victim.SoldierName].ClanTag != null) {
                     strVictimName = String.Format("{0} {1}", Client.PlayerList[kKillerVictimDetails.Victim.SoldierName].ClanTag, kKillerVictimDetails.Victim.SoldierName);
                 }
 
