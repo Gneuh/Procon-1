@@ -2809,9 +2809,18 @@ namespace PRoCon.Core.Remote {
                 // Add or update players.
                 foreach (CPlayerInfo cpiPlayer in lstPlayers) {
                     if (PlayerList.Contains(cpiPlayer.SoldierName) == true) {
+                        CPlayerInfo storedPlayer = PlayerList[PlayerList.IndexOf(PlayerList[cpiPlayer.SoldierName])];
+                        cpiPlayer.JoinTime = CurrentServerInfo.ServerUptime;
+                        if (storedPlayer.JoinTime == 0) { storedPlayer.JoinTime = CurrentServerInfo.ServerUptime; }
+                        if (storedPlayer.JoinTime <= CurrentServerInfo.ServerUptime) {
+                            cpiPlayer.SessionTime = CurrentServerInfo.ServerUptime - storedPlayer.JoinTime;
+                            cpiPlayer.JoinTime = storedPlayer.JoinTime;
+                        }
+                        
                         PlayerList[PlayerList.IndexOf(PlayerList[cpiPlayer.SoldierName])] = cpiPlayer;
                     }
                     else {
+                        cpiPlayer.JoinTime = CurrentServerInfo.ServerUptime;
                         PlayerList.Add(cpiPlayer);
                     }
                 }

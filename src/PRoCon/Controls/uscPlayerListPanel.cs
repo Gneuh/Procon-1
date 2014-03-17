@@ -340,6 +340,7 @@ namespace PRoCon.Controls {
             this.colScore1.Text = this.colScore2.Text = this.colScore3.Text = this.colScore4.Text = this.Language.GetLocalized("uscPlayerListPanel.lsvPlayers.colScore", null);
             this.colPing1.Text = this.colPing2.Text = this.colPing3.Text = this.colPing4.Text = this.Language.GetLocalized("uscPlayerListPanel.lsvPlayers.colPing", null);
             this.colRank1.Tag = this.colRank2.Text = this.colRank3.Text = this.colRank4.Text = this.Language.GetDefaultLocalized("Rank", "uscPlayerListPanel.lsvPlayers.colRank", null);
+            this.colTime1.Tag = this.colTime2.Text = this.colTime3.Text = this.colTime4.Text = this.Language.GetDefaultLocalized("PlayTime", "uscPlayerListPanel.lsvPlayers.colTime", null);
             this.colType1.Tag = this.colType2.Text = this.colType3.Text = this.colType4.Text = this.Language.GetDefaultLocalized("Type", "uscPlayerListPanel.lsvPlayers.colType", null);
 
             this.btnPlayerListSelectedCheese.Text = this.Language.GetLocalized("uscPlayerListPanel.btnPlayerListSelectedCheese", null);
@@ -465,6 +466,12 @@ namespace PRoCon.Controls {
             };
             newListPlayer.SubItems.Add(rank);
 
+            ListViewItem.ListViewSubItem time = new ListViewItem.ListViewSubItem {
+                Name = @"time",
+                Text = player.SessionTime > 60 ? String.Format("{0:0}", player.SessionTime / 60) : "0"
+            };
+            newListPlayer.SubItems.Add(time);
+
             ListViewItem.ListViewSubItem type = new ListViewItem.ListViewSubItem {
                 Name = @"type"
             };
@@ -553,6 +560,7 @@ namespace PRoCon.Controls {
                     tag.Player.Score = 0;
                     tag.Player.Ping = 0;
                     tag.Player.Rank = 0;
+                    tag.Player.SessionTime = 0;
                     tag.Player.Type = 0;
                     tag.Player.SquadID = 0;
                     tag.Player.Kdr = 0.0F;
@@ -564,6 +572,7 @@ namespace PRoCon.Controls {
                 this.Players[String.Format("procon.playerlist.totals{0}", teamId)].SubItems["score"].Text = @"0";
                 this.Players[String.Format("procon.playerlist.totals{0}", teamId)].SubItems["ping"].Text = String.Empty;
                 this.Players[String.Format("procon.playerlist.totals{0}", teamId)].SubItems["rank"].Text = String.Empty;
+                this.Players[String.Format("procon.playerlist.totals{0}", teamId)].SubItems["time"].Text = String.Empty;
                 this.Players[String.Format("procon.playerlist.totals{0}", teamId)].SubItems["type"].Text = String.Empty;
                 this.Players[String.Format("procon.playerlist.totals{0}", teamId)].SubItems["kdr"].Text = @"0.00";
 
@@ -573,6 +582,7 @@ namespace PRoCon.Controls {
                 this.Players[String.Format("procon.playerlist.averages{0}", teamId)].SubItems["score"].Text = @"0.00";
                 this.Players[String.Format("procon.playerlist.averages{0}", teamId)].SubItems["ping"].Text = @"0.00";
                 this.Players[String.Format("procon.playerlist.averages{0}", teamId)].SubItems["rank"].Text = @"-";
+                this.Players[String.Format("procon.playerlist.averages{0}", teamId)].SubItems["time"].Text = @"-";
                 this.Players[String.Format("procon.playerlist.averages{0}", teamId)].SubItems["type"].Text = @"-";
                 this.Players[String.Format("procon.playerlist.averages{0}", teamId)].SubItems["kdr"].Text = @"0.00";
             }
@@ -644,7 +654,8 @@ namespace PRoCon.Controls {
                 proconPlayerListAveragesListItem.SubItems["score"].Text = String.Format("{0:0.00}", (float)proconPlayerListTotalsObject.Player.Score / (float)proconPlayerListTotalsObject.Player.SquadID);
                 proconPlayerListAveragesListItem.SubItems["ping"].Text = String.Format("{0:0}", (int)proconPlayerListTotalsObject.Player.Ping / (float)proconPlayerListTotalsObject.Player.SquadID);
                 proconPlayerListAveragesListItem.SubItems["rank"].Text = String.Format("{0:0}", (int)proconPlayerListTotalsObject.Player.Rank / (float)proconPlayerListTotalsObject.Player.SquadID);
-                proconPlayerListAveragesListItem.SubItems["type"].Text = String.Format("{0:0}", (int)proconPlayerListTotalsObject.Player.Type / (float)proconPlayerListTotalsObject.Player.SquadID);
+                proconPlayerListAveragesListItem.SubItems["time"].Text = String.Empty;
+                proconPlayerListAveragesListItem.SubItems["type"].Text = String.Empty;
                 proconPlayerListAveragesListItem.SubItems["kdr"].Text = String.Format("{0:0.00}", proconPlayerListTotalsObject.Player.Kdr / (float)proconPlayerListTotalsObject.Player.SquadID);
 
                 int mostUsedKitCount = 0;
@@ -987,6 +998,10 @@ namespace PRoCon.Controls {
                             if (String.Compare(playerListItem.SubItems["rank"].Text, cpiPlayer.Rank.ToString()) != 0) {
                                 playerListItem.SubItems["rank"].Text = cpiPlayer.Rank.ToString();
                             }
+                            
+                            string strTime = cpiPlayer.SessionTime > 60 ? String.Format("{0:0}", cpiPlayer.SessionTime / 60) : "0";
+                            playerListItem.SubItems["time"].Text = strTime;
+                            
                             if (String.Compare(playerListItem.SubItems["type"].Text, cpiPlayer.Type.ToString()) != 0) {
                                 if (cpiPlayer.Type == 0) {
                                     //playerListItem.SubItems["type"].Text = this.m_clocLanguage.GetDefaultLocalized("Player", "uscPlayerListPanel.lsvPlayers.Type.Player", null);

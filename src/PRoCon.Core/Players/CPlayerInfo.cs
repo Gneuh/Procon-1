@@ -11,6 +11,9 @@
 
             this.TeamID = -1;
             this.SquadID = -1;
+
+            this.JoinTime = 0;
+            this.SessionTime = 0;
         }
 
         public CPlayerInfo(IList<string> lstParameters, IList<string> lstVariables) {
@@ -74,7 +77,18 @@
             this.TeamID = iTeamId;
             this.SquadID = iSquadId;
         }
-        
+
+        public CPlayerInfo(string strSoldierName, string strClanTag, int iTeamId, int iSquadId, int iJoinTime, int iSessionTime) {
+            this.SoldierName = strSoldierName;
+            this.ClanTag = strClanTag;
+
+            this.TeamID = iTeamId;
+            this.SquadID = iSquadId;
+
+            this.JoinTime = iJoinTime;
+            this.SessionTime = iSessionTime;
+        }
+
         public string ClanTag { get; set; }
 
         public string SoldierName { get; set; }
@@ -98,6 +112,10 @@
         public int Type { get; set; }
 
         public float Kdr { get; set; }
+
+        public int JoinTime { get; set; }
+
+        public int SessionTime { get; set; }
 
         //  Player list is needed in OnPlayerList, OnPlayerLeave and server.onRoundOverPlayers
         public static List<CPlayerInfo> GetPlayerList(List<string> lstWords) {

@@ -191,6 +191,10 @@
             this.colRank2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colRank3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colRank4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colTime1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colTime2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colTime3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colTime4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colType1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colType2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colType3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -315,6 +319,7 @@
             this.colKdr1,
             this.colPing1,
             this.colRank1,
+            this.colTime1,
             this.colType1});
             this.lsvTeamOnePlayers.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lsvTeamOnePlayers.Font = new System.Drawing.Font("Segoe UI", 9F);
@@ -434,6 +439,10 @@
             // 
             this.colRank1.Text = "Rank";
             // 
+            // colTime1
+            // 
+            this.colTime1.Text = "PlayTime";
+            // 
             // colType1
             // 
             this.colType1.Text = "Type";
@@ -453,6 +462,7 @@
             this.colKdr2,
             this.colPing2,
             this.colRank2,
+            this.colTime2,
             this.colType2});
             this.lsvTeamTwoPlayers.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lsvTeamTwoPlayers.Font = new System.Drawing.Font("Segoe UI", 9F);
@@ -572,6 +582,10 @@
             // 
             this.colRank2.Text = "Rank";
             // 
+            // colTime2
+            // 
+            this.colTime2.Text = "PlayTime";
+            // 
             // colType2
             // 
             this.colType2.Text = "Type";
@@ -609,6 +623,7 @@
             this.colKdr3,
             this.colPing3,
             this.colRank3,
+            this.colTime3,
             this.colType3});
             this.lsvTeamThreePlayers.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lsvTeamThreePlayers.Font = new System.Drawing.Font("Segoe UI", 9F);
@@ -727,6 +742,10 @@
             // colRank3
             // 
             this.colRank3.Text = "Rank";
+            // 
+            // colTime3
+            // 
+            this.colTime3.Text = "PlayTime";
             //
             // colType3
             this.colType3.Text = "Type";
@@ -746,6 +765,7 @@
             this.colKdr4,
             this.colPing4,
             this.colRank4,
+            this.colTime4,
             this.colType4});
             this.lsvTeamFourPlayers.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lsvTeamFourPlayers.Font = new System.Drawing.Font("Segoe UI", 9F);
@@ -864,6 +884,10 @@
             // colRank4
             // 
             this.colRank4.Text = "Rank";
+            // 
+            // colTime4
+            // 
+            this.colTime4.Text = "PlayTime";
             // 
             // colType4
             // 
@@ -1363,6 +1387,7 @@
         private System.Windows.Forms.ColumnHeader colKdr2;
         private System.Windows.Forms.ColumnHeader colPing2;
         private System.Windows.Forms.ColumnHeader colRank2;
+        private System.Windows.Forms.ColumnHeader colTime2;
         private System.Windows.Forms.ColumnHeader colType2;
         private PRoCon.Controls.ControlsEx.ListViewNF lsvTeamOnePlayers;
         private System.Windows.Forms.ColumnHeader colSlotID1;
@@ -1375,6 +1400,7 @@
         private System.Windows.Forms.ColumnHeader colKdr1;
         private System.Windows.Forms.ColumnHeader colPing1;
         private System.Windows.Forms.ColumnHeader colRank1;
+        private System.Windows.Forms.ColumnHeader colTime1;
         private System.Windows.Forms.ColumnHeader colType1;
         private System.Windows.Forms.Button btnSplitTeams;
         private System.Windows.Forms.SplitContainer spltTwoSplit;
@@ -1391,6 +1417,7 @@
         private System.Windows.Forms.ColumnHeader colKdr3;
         private System.Windows.Forms.ColumnHeader colPing3;
         private System.Windows.Forms.ColumnHeader colRank3;
+        private System.Windows.Forms.ColumnHeader colTime3;
         private System.Windows.Forms.ColumnHeader colType3;
         private PRoCon.Controls.ControlsEx.ListViewNF lsvTeamFourPlayers;
         private System.Windows.Forms.ColumnHeader colSlotID4;
@@ -1403,6 +1430,7 @@
         private System.Windows.Forms.ColumnHeader colKdr4;
         private System.Windows.Forms.ColumnHeader colPing4;
         private System.Windows.Forms.ColumnHeader colRank4;
+        private System.Windows.Forms.ColumnHeader colTime4;
         private System.Windows.Forms.ColumnHeader colType4;
         private System.Windows.Forms.Timer tmrKillDeathHighlight;
         private System.Windows.Forms.ColumnHeader colKit1;
