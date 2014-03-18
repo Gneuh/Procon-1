@@ -81,6 +81,8 @@ namespace PRoCon.Core.Remote {
         /// </summary>
         public TimeSpan PluginMaxRuntimeSpan = new TimeSpan(0, 0, 59);
 
+        private bool PlayTimesSynced = false;
+
         #region Event handlers
 
         public delegate void AuthenticationFailureHandler(PRoConClient sender, string strError);
@@ -1408,6 +1410,28 @@ namespace PRoCon.Core.Remote {
 
                         blCancelPacket = true;
                     }
+
+                        // syncPlayTimes coming in
+                    else if (cpBeforePacketDispatch.Words.Count >= 3 && String.Compare(cpRequestPacket.Words[0], "procon.player.syncPlayTimes", true) == 0) {
+                        int iJoinTime = 0;
+                        var vSoldier = new CPlayerInfo();
+                        var oPlayer = new CPlayerInfo();
+
+                        for (int i = 1; i < cpBeforePacketDispatch.Words.Count; i += 2) {
+                            vSoldier.SoldierName = cpBeforePacketDispatch.Words[i];
+                            if (int.TryParse(cpBeforePacketDispatch.Words[i + 1], out iJoinTime) == true) {
+                                vSoldier.JoinTime = iJoinTime;
+                            }
+                            if (PlayerList.Contains(vSoldier.SoldierName) == true) {
+                                oPlayer = PlayerList[vSoldier.SoldierName];
+                                oPlayer.JoinTime = iJoinTime;
+
+                                PlayerList[PlayerList.IndexOf(PlayerList[vSoldier.SoldierName])] = oPlayer;
+                            }
+                        } 
+                        blCancelPacket = false;
+                    }
+
                     else if (cpRequestPacket.Words.Count >= 1 && String.Compare(cpRequestPacket.Words[0], "procon.battlemap.listZones", true) == 0 && cpBeforePacketDispatch.Words.Count >= 2 && String.Compare(cpBeforePacketDispatch.Words[0], "OK", true) == 0) {
                         var zones = new List<MapZoneDrawing>();
 
@@ -1667,7 +1691,6 @@ namespace PRoCon.Core.Remote {
                             }
                         }
                     }
-
                     if (blCancelUpdateEvent == false) {
                         string strProconEventsUid = String.Empty;
 
@@ -2832,6 +2855,13 @@ namespace PRoCon.Core.Remote {
                         // They have left the server, remove them from the master stored list.
                         PlayerList.Remove(storedPlayer.SoldierName);
                     }
+                }
+
+                if (this.IsPRoConConnection == true && this.PlayTimesSynced == false) {
+                    SendRequest(new List<string>() {
+                        "procon.player.syncPlayTimes"
+                    });
+                    this.PlayTimesSynced = true;
                 }
             }
         }

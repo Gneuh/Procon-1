@@ -14,6 +14,7 @@ namespace PRoCon.Core.Remote.Layer {
     using Core.Accounts;
     using Core.Battlemap;
     using Core.Remote;
+    using Core.Players;
 
     public class LayerClient : ILayerClient {
 
@@ -163,7 +164,9 @@ namespace PRoCon.Core.Remote.Layer {
                     { "procon.exec", this.DispatchProconExecRequest },
 
                     { "procon.admin.say", this.DispatchProconAdminSayRequest },
-                    { "procon.admin.yell", this.DispatchProconAdminYellRequest },
+                    { "procon.admin.yell", this.DispatchProconAdminYellRequest }
+
+                    ,{ "procon.player.syncPlayTimes", this.DispatchProconPlayerSyncPlayTimesRequest }
                 };
 
                 this.RegisterEvents();
@@ -979,6 +982,28 @@ namespace PRoCon.Core.Remote.Layer {
                 else {
                     sender.SendResponse(packet, LayerClient.ResponseInvalidArguments);
                 }
+            }
+            else {
+                sender.SendResponse(packet, LayerClient.ResponseLoginRequired);
+            }
+        }
+
+        #endregion
+
+        #region procon.player.syncPlayTimes
+
+        private void DispatchProconPlayerSyncPlayTimesRequest(ILayerPacketDispatcher sender, Packet packet) {
+            if (this.IsLoggedIn == true) {
+                List<String> lstPlayerJoinTimes = new List<String> {
+                    LayerClient.ResponseOk
+                };
+                
+                foreach ( CPlayerInfo player in Client.PlayerList) {
+                    lstPlayerJoinTimes.Add(player.SoldierName);
+                    lstPlayerJoinTimes.Add(player.JoinTime.ToString());
+                }
+                
+                sender.SendResponse(packet, lstPlayerJoinTimes);
             }
             else {
                 sender.SendResponse(packet, LayerClient.ResponseLoginRequired);

@@ -1884,7 +1884,7 @@ namespace PRoCon.Controls {
                     this.moveToSquadToolStripMenuItem.DropDownItems.Clear();
 
                     foreach (CTeamName team in this.Client.TeamNameList) {
-                        if (this.Client.GameType == "BFBC2")
+                        if (this.Client.GameType == "BFBC2" || this.Client.GameType == "MoH")
                         {
                             if (String.Compare(team.MapFilename, this.Client.CurrentServerInfo.Map, true) == 0 && team.TeamID != uscPlayerListPanel.NeutralTeam)
                             {
