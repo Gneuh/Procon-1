@@ -339,9 +339,9 @@ namespace PRoCon.Controls {
             this.colKdr1.Text = this.colKdr2.Text = this.colKdr3.Text = this.colKdr4.Text = this.Language.GetLocalized("uscPlayerListPanel.lsvPlayers.colKdr", null);
             this.colScore1.Text = this.colScore2.Text = this.colScore3.Text = this.colScore4.Text = this.Language.GetLocalized("uscPlayerListPanel.lsvPlayers.colScore", null);
             this.colPing1.Text = this.colPing2.Text = this.colPing3.Text = this.colPing4.Text = this.Language.GetLocalized("uscPlayerListPanel.lsvPlayers.colPing", null);
-            this.colRank1.Tag = this.colRank2.Text = this.colRank3.Text = this.colRank4.Text = this.Language.GetDefaultLocalized("Rank", "uscPlayerListPanel.lsvPlayers.colRank", null);
-            this.colTime1.Tag = this.colTime2.Text = this.colTime3.Text = this.colTime4.Text = this.Language.GetDefaultLocalized("PlayTime", "uscPlayerListPanel.lsvPlayers.colTime", null);
-            this.colType1.Tag = this.colType2.Text = this.colType3.Text = this.colType4.Text = this.Language.GetDefaultLocalized("Type", "uscPlayerListPanel.lsvPlayers.colType", null);
+            this.colRank1.Text = this.colRank2.Text = this.colRank3.Text = this.colRank4.Text = this.Language.GetDefaultLocalized("Rank", "uscPlayerListPanel.lsvPlayers.colRank", null);
+            this.colTime1.Text = this.colTime2.Text = this.colTime3.Text = this.colTime4.Text = this.Language.GetDefaultLocalized("PlayTime", "uscPlayerListPanel.lsvPlayers.colTime", null);
+            this.colType1.Text = this.colType2.Text = this.colType3.Text = this.colType4.Text = this.Language.GetDefaultLocalized("Type", "uscPlayerListPanel.lsvPlayers.colType", null);
 
             this.btnPlayerListSelectedCheese.Text = this.Language.GetLocalized("uscPlayerListPanel.btnPlayerListSelectedCheese", null);
 
