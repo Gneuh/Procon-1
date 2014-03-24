@@ -44,9 +44,12 @@ namespace PRoConEvents {
         private string m_strPort;
         private string m_strPRoConVersion;
 
+        private string[] m_astrTimeDescription;
+
         enumBoolYesNo m_enAllowPlayersToGetServerCountry;
         enumBoolYesNo m_enAllowPlayersToGetOthersCountry;
         enumBoolYesNo m_enAllowPlayersToGuidOthers;
+        enumBoolYesNo m_enAllowPlayersToTimeOthers;
 
         private bool m_isPluginEnabled;
 
@@ -55,9 +58,12 @@ namespace PRoConEvents {
             this.m_enAllowPlayersToGetServerCountry = enumBoolYesNo.Yes;
             this.m_enAllowPlayersToGetOthersCountry = enumBoolYesNo.Yes;
             this.m_enAllowPlayersToGuidOthers = enumBoolYesNo.Yes;
+            this.m_enAllowPlayersToTimeOthers = enumBoolYesNo.Yes;
 
             base.PunkbusterPlayerInfoList = new Dictionary<string, CPunkbusterInfo>();
             base.FrostbitePlayerInfoList = new Dictionary<string, CPlayerInfo>();
+
+            this.m_astrTimeDescription = new string[] { "y ", "y ", "M ", "M ", "w ", "w ", "d ", "d ", "h ", "h ", "m ", "m ", "s ", "s " };
 
             this.m_isPluginEnabled = false;
         }
@@ -67,7 +73,7 @@ namespace PRoConEvents {
         }
 
         public string GetPluginVersion() {
-            return "3.0.0.0";
+            return "3.0.1.0";
         }
 
         public string GetPluginAuthor() {
@@ -91,6 +97,8 @@ namespace PRoConEvents {
     <blockquote><h4>@loc [playername]</h4>Privately tells the player what country another player is in</blockquote>
     <blockquote><h4>@help</h4>Privately lists available commands registered with procon</blockquote>
     <blockquote><h4>@help [command]</h4>Privately describes a command registered with procon</blockquote>
+    <blockquote><h4>@mytimes</h4>Privately tells the player how long they are already playing since joining</blockquote>
+    <blockquote><h4>@times [playername]</h4>Privately tells the player another players play time</blockquote>
     <blockquote><h4>@version</h4>Privately describes the server and rcon tool running</blockquote>
 
 <h2>Settings</h2>
@@ -98,6 +106,7 @@ namespace PRoConEvents {
         <blockquote><h4>Allow players to get server country</h4>Enabled or disables the @loc command</blockquote>
         <blockquote><h4>Allow players to get other players country</h4>Enabled or disables the @loc [playername] command</blockquote>
         <blockquote><h4>Allow players to get other players P/GUIDs</h4>Enabled or disables the @guid [playername] command</blockquote>
+        <blockquote><h4>Allow players to get other players play time</h4>Enabled or disables the @times [playername] command</blockquote>
 ";
         }
 
@@ -132,6 +141,7 @@ namespace PRoConEvents {
             lstReturn.Add(new CPluginVariable("Allow players to get server country", typeof(enumBoolYesNo), this.m_enAllowPlayersToGetServerCountry));
             lstReturn.Add(new CPluginVariable("Allow players to get other players country", typeof(enumBoolYesNo), this.m_enAllowPlayersToGetOthersCountry));
             lstReturn.Add(new CPluginVariable("Allow players to get other players P/GUIDs", typeof(enumBoolYesNo), this.m_enAllowPlayersToGuidOthers));
+            lstReturn.Add(new CPluginVariable("Allow players to get other players play time", typeof(enumBoolYesNo), this.m_enAllowPlayersToTimeOthers));
 
             return lstReturn;
         }
@@ -153,6 +163,9 @@ namespace PRoConEvents {
             }
             else if (strVariable.CompareTo("Allow players to get other players P/GUIDs") == 0 && Enum.IsDefined(typeof(enumBoolYesNo), strValue) == true) {
                 this.m_enAllowPlayersToGuidOthers = (enumBoolYesNo)Enum.Parse(typeof(enumBoolYesNo), strValue);
+            }
+            else if (strVariable.CompareTo("Allow players to get other players play time") == 0 && Enum.IsDefined(typeof(enumBoolYesNo), strValue) == true) {
+                this.m_enAllowPlayersToTimeOthers = (enumBoolYesNo)Enum.Parse(typeof(enumBoolYesNo), strValue);
             }
 
             this.RegisterAllCommands();
@@ -204,6 +217,10 @@ namespace PRoConEvents {
 
             this.UnregisterCommand(new MatchCommand("CBasicInGameInfo", "OnCommandHelp", this.Listify<string>("@", "!", "#"), "help", this.Listify<MatchArgumentFormat>(), new ExecutionRequirements(ExecutionScope.All), "Provides a list of commands available to the player"));
             this.UnregisterCommand(new MatchCommand("CBasicInGameInfo", "OnCommandHelpSpecific", this.Listify<string>("@", "!", "#"), "help", this.Listify<MatchArgumentFormat>(new MatchArgumentFormat("command", this.GetCommandStrings())), new ExecutionRequirements(ExecutionScope.All), "Provides help on a specific in game command"));
+
+            this.UnregisterCommand(new MatchCommand("CBasicInGameInfo", "OnCommandMyTimes", this.Listify<string>("@", "!", "#"), "myguid", this.Listify<MatchArgumentFormat>(), new ExecutionRequirements(ExecutionScope.All), "Provides a player with their play time"));
+            this.UnregisterCommand(new MatchCommand("CBasicInGameInfo", "OnCommandPlayerTimes", this.Listify<string>("@", "!", "#"), "myguid", this.Listify<MatchArgumentFormat>(new MatchArgumentFormat("full", this.Listify<string>("full"))), new ExecutionRequirements(ExecutionScope.All), "Provides a player with another players play time"));
+
         }
 
         private void SetupHelpCommands() {
@@ -243,6 +260,12 @@ namespace PRoConEvents {
 
                 this.RegisterCommand(new MatchCommand("CBasicInGameInfo", "OnCommandVersion", this.Listify<string>("@", "!", "#"), "version", this.Listify<MatchArgumentFormat>(), new ExecutionRequirements(ExecutionScope.All), "Describes the server and rcon tools running."));
 
+                this.RegisterCommand(new MatchCommand("CBasicInGameInfo", "OnCommandMyTimes", this.Listify<string>("@", "!", "#"), "mytimes", this.Listify<MatchArgumentFormat>(), new ExecutionRequirements(ExecutionScope.All), "Provides a player with their play time"));
+                if (this.m_enAllowPlayersToTimeOthers == enumBoolYesNo.Yes) {
+                    this.RegisterCommand(new MatchCommand("CBasicInGameInfo", "OnCommandPlayerTimes", this.Listify<string>("@", "!", "#"), "times", this.Listify<MatchArgumentFormat>(new MatchArgumentFormat("playername", new List<string>(base.FrostbitePlayerInfoList.Keys))), new ExecutionRequirements(ExecutionScope.All), "Provides a player with another players play time"));
+                } else {
+                    this.UnregisterCommand(new MatchCommand("CBasicInGameInfo", "OnCommandPlayerTimes", this.Listify<string>("@", "!", "#"), "times", this.Listify<MatchArgumentFormat>(new MatchArgumentFormat("playername", new List<string>(base.FrostbitePlayerInfoList.Keys))), new ExecutionRequirements(ExecutionScope.All), "Provides a player with another players play time"));
+                }
             }
         }
 
@@ -360,6 +383,26 @@ namespace PRoConEvents {
             this.ExecuteCommand("procon.protected.send", "admin.say", String.Format("IP: {0}, Location: {1}, Rcon: PRoCon {2}", this.m_strHostName, this.GetVariable<string>("SERVER_COUNTRY", ""), this.m_strPRoConVersion), "player", strSpeaker);
         }
 
+        public void OnCommandMyTimes(string strSpeaker, string strText, MatchCommand mtcCommand, CapturedCommand capCommand, CPlayerSubset subMatchedScope) {
+            if (base.FrostbitePlayerInfoList.ContainsKey(strSpeaker) == true && base.FrostbitePlayerInfoList[strSpeaker].SessionTime != 0) {
+                string strOutTime = this.SecondsToText((UInt32)base.FrostbitePlayerInfoList[strSpeaker].SessionTime, this.m_astrTimeDescription, true);
+                this.ExecuteCommand("procon.protected.send", "admin.say", "Your current playTime: " + strOutTime, "player", strSpeaker);
+            } else {
+                this.ExecuteCommand("procon.protected.send", "admin.say", "Sorry, you've just joined =(", "player", strSpeaker);
+            }
+        }
+        
+        public void OnCommandPlayerTimes(string strSpeaker, string strText, MatchCommand mtcCommand, CapturedCommand capCommand, CPlayerSubset subMatchedScope) {
+            if (this.m_enAllowPlayersToTimeOthers == enumBoolYesNo.Yes) {
+                if (base.FrostbitePlayerInfoList.ContainsKey(capCommand.MatchedArguments[0].Argument) == true && base.FrostbitePlayerInfoList[capCommand.MatchedArguments[0].Argument].SessionTime != 0) {
+                    string strOutTime = this.SecondsToText((UInt32)base.FrostbitePlayerInfoList[capCommand.MatchedArguments[0].Argument].SessionTime, this.m_astrTimeDescription, true);
+                    this.ExecuteCommand("procon.protected.send", "admin.say", base.FrostbitePlayerInfoList[capCommand.MatchedArguments[0].Argument].SoldierName + "'s playTime: " + strOutTime, "player", strSpeaker);
+                } else {
+                    this.ExecuteCommand("procon.protected.send", "admin.say", "Player not found / or just joined", "player", strSpeaker);
+                }
+            }
+        }
+        
         #endregion
     }
 }

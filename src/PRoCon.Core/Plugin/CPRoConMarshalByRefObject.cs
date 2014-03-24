@@ -655,5 +655,53 @@ namespace PRoCon.Core.Plugin {
 
             return cmReturn;
         }
+
+        protected string SecondsToText(UInt32 iSeconds, string[] a_strTimeDescriptions, bool blShowSecondsOver60)
+        {
+            string strReturn = String.Empty;
+
+            double dblSeconds = iSeconds;
+            double dblMinutes = (iSeconds / 60);
+            double dblHours = (dblMinutes / 60);
+            double dblDays = (dblHours / 24);
+            double dblWeeks = (dblDays / 7);
+            double dblMonths = (dblWeeks / 4);
+            double dblYears = (dblMonths / 12);
+
+            if ((Int32)dblYears > 0)
+            {
+                strReturn += String.Empty + ((Int32)dblYears) + (((Int32)dblYears) == 1 ? a_strTimeDescriptions[0] : a_strTimeDescriptions[1]);
+            }
+            if ((Int32)dblMonths % 12 > 0)
+            {
+                strReturn += String.Empty + ((Int32)dblMonths) % 12 + (((Int32)dblMonths % 12) == 1 ? a_strTimeDescriptions[2] : a_strTimeDescriptions[3]);
+            }
+            if ((Int32)dblWeeks % 4 > 0)
+            {
+                strReturn += String.Empty + ((Int32)dblWeeks) % 4 + (((Int32)dblWeeks % 4) == 1 ? a_strTimeDescriptions[4] : a_strTimeDescriptions[5]);
+            }
+            if ((Int32)dblDays % 7 > 0)
+            {
+                strReturn += String.Empty + ((Int32)dblDays) % 7 + (((Int32)dblDays % 7) == 1 ? a_strTimeDescriptions[6] : a_strTimeDescriptions[7]);
+            }
+            if ((Int32)dblHours % 24 > 0)
+            {
+                strReturn += String.Empty + ((Int32)dblHours) % 24 + (((Int32)dblHours % 24) == 1 ? a_strTimeDescriptions[8] : a_strTimeDescriptions[9]);
+            }
+            if ((Int32)dblMinutes % 60 > 0)
+            {
+                strReturn += String.Empty + ((Int32)dblMinutes) % 60 + (((Int32)dblMinutes % 60) == 1 ? a_strTimeDescriptions[10] : a_strTimeDescriptions[11]);
+            }
+
+            if ((iSeconds > 60 && blShowSecondsOver60 == true) || (iSeconds < 60 && blShowSecondsOver60 == false))
+            {
+                if ((Int32)dblSeconds % 60 > 0)
+                {
+                    strReturn += String.Empty + ((Int32)dblSeconds) % 60 + (((Int32)dblSeconds % 60) == 1 ? a_strTimeDescriptions[12] : a_strTimeDescriptions[13]);
+                }
+            }
+
+            return strReturn;
+        }
     }
 }
