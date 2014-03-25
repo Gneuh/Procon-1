@@ -35,7 +35,7 @@ To check out older changelogs, please refer to our [full changelogs list](https:
 - added PlayTime column for all games. Procon monitors the playtime (session time) since join / procon connect of a player
 - added sync of PlayTime for layer clients (procon.player.syncPlayTimes) to have layer clients show the same times the layer host has
 
-#### Default plugibs ####
+#### Default plugins ####
 - added @mytimes to have a player request his playtime & @times <playername> to have players request another players playtime to BasicInGameInfo as an usage example
 
 
