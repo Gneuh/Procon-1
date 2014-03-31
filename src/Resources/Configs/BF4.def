@@ -546,6 +546,62 @@ procon.protected.maps.add "CaptureTheFlag0" "XP0_Firestorm" "CTF" "Operation Fir
 procon.protected.maps.add "CaptureTheFlag0" "XP0_Metro" "CTF" "Operation Metro 2014" 0
 procon.protected.maps.add "CaptureTheFlag0" "XP0_Oman" "CTF" "Gulf of Oman 2014" 0
 
+// XP3 (Naval Strike)
+procon.protected.maps.add "ConquestLarge0" "XP2_001" "Conquest Large" "Lost Islands" 0
+procon.protected.maps.add "ConquestLarge0" "XP2_002" "Conquest Large" "Nansha Strike" 0
+procon.protected.maps.add "ConquestLarge0" "XP2_003" "Conquest Large" "Wavebreaker" 0
+procon.protected.maps.add "ConquestLarge0" "XP2_004" "Conquest Large" "Operation Mortar" 0
+
+procon.protected.maps.add "ConquestSmall0" "XP2_001" "Conquest Small" "Lost Islands" 0
+procon.protected.maps.add "ConquestSmall0" "XP2_002" "Conquest Small" "Nansha Strike" 0
+procon.protected.maps.add "ConquestSmall0" "XP2_003" "Conquest Small" "Wavebreaker" 0
+procon.protected.maps.add "ConquestSmall0" "XP2_004" "Conquest Small" "Operation Mortar" 0
+
+procon.protected.maps.add "Domination0" "XP2_001" "Domination" "Lost Islands" 0
+procon.protected.maps.add "Domination0" "XP2_002" "Domination" "Nansha Strike" 0
+procon.protected.maps.add "Domination0" "XP2_003" "Domination" "Wavebreaker" 0
+procon.protected.maps.add "Domination0" "XP2_004" "Domination" "Operation Mortar" 0
+
+procon.protected.maps.add "Elimination0" "XP2_001" "Defuse" "Lost Islands" 0
+procon.protected.maps.add "Elimination0" "XP2_002" "Defuse" "Nansha Strike" 0
+procon.protected.maps.add "Elimination0" "XP2_003" "Defuse" "Wavebreaker" 0
+procon.protected.maps.add "Elimination0" "XP2_004" "Defuse" "Operation Mortar" 0
+
+procon.protected.maps.add "Obliteration" "XP2_001" "Obliteration" "Lost Islands" 0
+procon.protected.maps.add "Obliteration" "XP2_002" "Obliteration" "Nansha Strike" 0
+procon.protected.maps.add "Obliteration" "XP2_003" "Obliteration" "Wavebreaker" 0
+procon.protected.maps.add "Obliteration" "XP2_004" "Obliteration" "Operation Mortar" 0
+
+procon.protected.maps.add "RushLarge0" "XP2_001" "Rush" "Lost Islands" 0
+procon.protected.maps.add "RushLarge0" "XP2_002" "Rush" "Nansha Strike" 0
+procon.protected.maps.add "RushLarge0" "XP2_003" "Rush" "Wavebreaker" 0
+procon.protected.maps.add "RushLarge0" "XP2_004" "Rush" "Operation Mortar" 0
+
+procon.protected.maps.add "SquadDeathMatch0" "XP2_001" "Squad Deathmatch" "Lost Islands" 0
+procon.protected.maps.add "SquadDeathMatch0" "XP2_002" "Squad Deathmatch" "Nansha Strike" 0
+procon.protected.maps.add "SquadDeathMatch0" "XP2_003" "Squad Deathmatch" "Wavebreaker" 0
+procon.protected.maps.add "SquadDeathMatch0" "XP2_004" "Squad Deathmatch" "Operation Mortar" 0
+
+procon.protected.maps.add "TeamDeathMatch0" "XP2_001" "Team Deathmatch" "Lost Islands" 0
+procon.protected.maps.add "TeamDeathMatch0" "XP2_002" "Team Deathmatch" "Nansha Strike" 0
+procon.protected.maps.add "TeamDeathMatch0" "XP2_003" "Team Deathmatch" "Wavebreaker" 0
+procon.protected.maps.add "TeamDeathMatch0" "XP2_004" "Team Deathmatch" "Operation Mortar" 0
+
+procon.protected.maps.add "CaptureTheFlag0" "XP2_001" "CTF" "Lost Islands" 0
+procon.protected.maps.add "CaptureTheFlag0" "XP2_002" "CTF" "Nansha Strike" 0
+procon.protected.maps.add "CaptureTheFlag0" "XP2_003" "CTF" "Wavebreaker" 0
+procon.protected.maps.add "CaptureTheFlag0" "XP2_004" "CTF" "Operation Mortar" 0
+
+procon.protected.maps.add "CarrierAssaultLarge0" "XP2_001" "Carrier Assault Large" "Lost Islands" 0
+procon.protected.maps.add "CarrierAssaultLarge0" "XP2_002" "Carrier Assault Large" "Nansha Strike" 0
+procon.protected.maps.add "CarrierAssaultLarge0" "XP2_003" "Carrier Assault Large" "Wavebreaker" 0
+procon.protected.maps.add "CarrierAssaultLarge0" "XP2_004" "Carrier Assault Large" "Operation Mortar" 0
+
+procon.protected.maps.add "CarrierAssaultSmall0" "XP2_001" "Carrier Assault Small" "Lost Islands" 0
+procon.protected.maps.add "CarrierAssaultSmall0" "XP2_002" "Carrier Assault Small" "Nansha Strike" 0
+procon.protected.maps.add "CarrierAssaultSmall0" "XP2_003" "Carrier Assault Small" "Wavebreaker" 0
+procon.protected.maps.add "CarrierAssaultSmall0" "XP2_004" "Carrier Assault Small" "Operation Mortar" 0
+
 procon.protected.teamnames.clear
 
 // Conquest Large
@@ -625,6 +681,23 @@ procon.protected.teamnames.add "XP0_Oman" 0 "global.conquest.neutral" "" "Conque
 procon.protected.teamnames.add "XP0_Oman" 1 "global.conquest.us" "us.png" "ConquestLarge0"
 procon.protected.teamnames.add "XP0_Oman" 2 "global.conquest.ru" "ru.png" "ConquestLarge0"
 
+// XP3 (Naval Strike)
+procon.protected.teamnames.add "XP2_001" 0 "global.conquest.neutral" "" "ConquestLarge0"
+procon.protected.teamnames.add "XP2_001" 1 "global.conquest.us" "us.png" "ConquestLarge0"
+procon.protected.teamnames.add "XP2_001" 2 "global.conquest.ru" "ru.png" "ConquestLarge0"
+
+procon.protected.teamnames.add "XP2_002" 0 "global.conquest.neutral" "" "ConquestLarge0"
+procon.protected.teamnames.add "XP2_002" 1 "global.conquest.us" "us.png" "ConquestLarge0"
+procon.protected.teamnames.add "XP2_002" 2 "global.conquest.ru" "ru.png" "ConquestLarge0"
+
+procon.protected.teamnames.add "XP2_003" 0 "global.conquest.neutral" "" "ConquestLarge0"
+procon.protected.teamnames.add "XP2_003" 1 "global.conquest.us" "us.png" "ConquestLarge0"
+procon.protected.teamnames.add "XP2_003" 2 "global.conquest.ru" "ru.png" "ConquestLarge0"
+
+procon.protected.teamnames.add "XP2_004" 0 "global.conquest.neutral" "" "ConquestLarge0"
+procon.protected.teamnames.add "XP2_004" 1 "global.conquest.us" "us.png" "ConquestLarge0"
+procon.protected.teamnames.add "XP2_004" 2 "global.conquest.ru" "ru.png" "ConquestLarge0"
+
 
 // Conquest Small
 ///////////////////////////////////////////////////////////////////////////////
@@ -702,6 +775,23 @@ procon.protected.teamnames.add "XP0_Metro" 2 "global.conquest.ru" "ru.png" "Conq
 procon.protected.teamnames.add "XP0_Oman" 0 "global.conquest.neutral" "" "ConquestSmall0"
 procon.protected.teamnames.add "XP0_Oman" 1 "global.conquest.us" "us.png" "ConquestSmall0"
 procon.protected.teamnames.add "XP0_Oman" 2 "global.conquest.ru" "ru.png" "ConquestSmall0"
+
+// XP3 (Naval Strike)
+procon.protected.teamnames.add "XP2_001" 0 "global.conquest.neutral" "" "ConquestSmall0"
+procon.protected.teamnames.add "XP2_001" 1 "global.conquest.us" "us.png" "ConquestSmall0"
+procon.protected.teamnames.add "XP2_001" 2 "global.conquest.ru" "ru.png" "ConquestSmall0"
+
+procon.protected.teamnames.add "XP2_002" 0 "global.conquest.neutral" "" "ConquestSmall0"
+procon.protected.teamnames.add "XP2_002" 1 "global.conquest.us" "us.png" "ConquestSmall0"
+procon.protected.teamnames.add "XP2_002" 2 "global.conquest.ru" "ru.png" "ConquestSmall0"
+
+procon.protected.teamnames.add "XP2_003" 0 "global.conquest.neutral" "" "ConquestSmall0"
+procon.protected.teamnames.add "XP2_003" 1 "global.conquest.us" "us.png" "ConquestSmall0"
+procon.protected.teamnames.add "XP2_003" 2 "global.conquest.ru" "ru.png" "ConquestSmall0"
+
+procon.protected.teamnames.add "XP2_004" 0 "global.conquest.neutral" "" "ConquestSmall0"
+procon.protected.teamnames.add "XP2_004" 1 "global.conquest.us" "us.png" "ConquestSmall0"
+procon.protected.teamnames.add "XP2_004" 2 "global.conquest.ru" "ru.png" "ConquestSmall0"
 
 
 // Domination
@@ -781,6 +871,23 @@ procon.protected.teamnames.add "XP0_Oman" 0 "global.conquest.neutral" "" "Domina
 procon.protected.teamnames.add "XP0_Oman" 1 "global.conquest.us" "us.png" "Domination0"
 procon.protected.teamnames.add "XP0_Oman" 2 "global.conquest.ru" "ru.png" "Domination0"
 
+// XP3 (Naval Strike)
+procon.protected.teamnames.add "XP2_001" 0 "global.conquest.neutral" "" "Domination0"
+procon.protected.teamnames.add "XP2_001" 1 "global.conquest.us" "us.png" "Domination0"
+procon.protected.teamnames.add "XP2_001" 2 "global.conquest.ru" "ru.png" "Domination0"
+
+procon.protected.teamnames.add "XP2_002" 0 "global.conquest.neutral" "" "Domination0"
+procon.protected.teamnames.add "XP2_002" 1 "global.conquest.us" "us.png" "Domination0"
+procon.protected.teamnames.add "XP2_002" 2 "global.conquest.ru" "ru.png" "Domination0"
+
+procon.protected.teamnames.add "XP2_003" 0 "global.conquest.neutral" "" "Domination0"
+procon.protected.teamnames.add "XP2_003" 1 "global.conquest.us" "us.png" "Domination0"
+procon.protected.teamnames.add "XP2_003" 2 "global.conquest.ru" "ru.png" "Domination0"
+
+procon.protected.teamnames.add "XP2_004" 0 "global.conquest.neutral" "" "Domination0"
+procon.protected.teamnames.add "XP2_004" 1 "global.conquest.us" "us.png" "Domination0"
+procon.protected.teamnames.add "XP2_004" 2 "global.conquest.ru" "ru.png" "Domination0"
+
 
 // Defuse
 ///////////////////////////////////////////////////////////////////////////////
@@ -858,6 +965,23 @@ procon.protected.teamnames.add "XP0_Metro" 2 "global.conquest.ru" "ru.png" "Elim
 procon.protected.teamnames.add "XP0_Oman" 0 "global.conquest.neutral" "" "Elimination0"
 procon.protected.teamnames.add "XP0_Oman" 1 "global.conquest.us" "us.png" "Elimination0"
 procon.protected.teamnames.add "XP0_Oman" 2 "global.conquest.ru" "ru.png" "Elimination0"
+
+// XP3 (Naval Strike)
+procon.protected.teamnames.add "XP2_001" 0 "global.conquest.neutral" "" "Elimination0"
+procon.protected.teamnames.add "XP2_001" 1 "global.conquest.us" "us.png" "Elimination0"
+procon.protected.teamnames.add "XP2_001" 2 "global.conquest.ru" "ru.png" "Elimination0"
+
+procon.protected.teamnames.add "XP2_002" 0 "global.conquest.neutral" "" "Elimination0"
+procon.protected.teamnames.add "XP2_002" 1 "global.conquest.us" "us.png" "Elimination0"
+procon.protected.teamnames.add "XP2_002" 2 "global.conquest.ru" "ru.png" "Elimination0"
+
+procon.protected.teamnames.add "XP2_003" 0 "global.conquest.neutral" "" "Elimination0"
+procon.protected.teamnames.add "XP2_003" 1 "global.conquest.us" "us.png" "Elimination0"
+procon.protected.teamnames.add "XP2_003" 2 "global.conquest.ru" "ru.png" "Elimination0"
+
+procon.protected.teamnames.add "XP2_004" 0 "global.conquest.neutral" "" "Elimination0"
+procon.protected.teamnames.add "XP2_004" 1 "global.conquest.us" "us.png" "Elimination0"
+procon.protected.teamnames.add "XP2_004" 2 "global.conquest.ru" "ru.png" "Elimination0"
 
 
 // Obliteration
@@ -937,6 +1061,23 @@ procon.protected.teamnames.add "XP0_Oman" 0 "global.conquest.neutral" "" "Oblite
 procon.protected.teamnames.add "XP0_Oman" 1 "global.conquest.us" "us.png" "Obliteration"
 procon.protected.teamnames.add "XP0_Oman" 2 "global.conquest.ru" "ru.png" "Obliteration"
 
+// XP3 (Naval Strike)
+procon.protected.teamnames.add "XP2_001" 0 "global.conquest.neutral" "" "Obliteration"
+procon.protected.teamnames.add "XP2_001" 1 "global.conquest.us" "us.png" "Obliteration"
+procon.protected.teamnames.add "XP2_001" 2 "global.conquest.ru" "ru.png" "Obliteration"
+
+procon.protected.teamnames.add "XP2_002" 0 "global.conquest.neutral" "" "Obliteration"
+procon.protected.teamnames.add "XP2_002" 1 "global.conquest.us" "us.png" "Obliteration"
+procon.protected.teamnames.add "XP2_002" 2 "global.conquest.ru" "ru.png" "Obliteration"
+
+procon.protected.teamnames.add "XP2_003" 0 "global.conquest.neutral" "" "Obliteration"
+procon.protected.teamnames.add "XP2_003" 1 "global.conquest.us" "us.png" "Obliteration"
+procon.protected.teamnames.add "XP2_003" 2 "global.conquest.ru" "ru.png" "Obliteration"
+
+procon.protected.teamnames.add "XP2_004" 0 "global.conquest.neutral" "" "Obliteration"
+procon.protected.teamnames.add "XP2_004" 1 "global.conquest.us" "us.png" "Obliteration"
+procon.protected.teamnames.add "XP2_004" 2 "global.conquest.ru" "ru.png" "Obliteration"
+
 
 // Rush
 ///////////////////////////////////////////////////////////////////////////////
@@ -1014,6 +1155,23 @@ procon.protected.teamnames.add "XP0_Metro" 2 "global.rush.defenders" "ru.png" "R
 procon.protected.teamnames.add "XP0_Oman" 0 "global.rush.neutral" "" "RushLarge0"
 procon.protected.teamnames.add "XP0_Oman" 1 "global.rush.attackers" "us.png" "RushLarge0"
 procon.protected.teamnames.add "XP0_Oman" 2 "global.rush.defenders" "ru.png" "RushLarge0"
+
+// XP3 (Naval Strike)
+procon.protected.teamnames.add "XP2_001" 0 "global.conquest.neutral" "" "RushLarge0"
+procon.protected.teamnames.add "XP2_001" 1 "global.conquest.us" "us.png" "RushLarge0"
+procon.protected.teamnames.add "XP2_001" 2 "global.conquest.ru" "ru.png" "RushLarge0"
+
+procon.protected.teamnames.add "XP2_002" 0 "global.conquest.neutral" "" "RushLarge0"
+procon.protected.teamnames.add "XP2_002" 1 "global.conquest.us" "us.png" "RushLarge0"
+procon.protected.teamnames.add "XP2_002" 2 "global.conquest.ru" "ru.png" "RushLarge0"
+
+procon.protected.teamnames.add "XP2_003" 0 "global.conquest.neutral" "" "RushLarge0"
+procon.protected.teamnames.add "XP2_003" 1 "global.conquest.us" "us.png" "RushLarge0"
+procon.protected.teamnames.add "XP2_003" 2 "global.conquest.ru" "ru.png" "RushLarge0"
+
+procon.protected.teamnames.add "XP2_004" 0 "global.conquest.neutral" "" "RushLarge0"
+procon.protected.teamnames.add "XP2_004" 1 "global.conquest.us" "us.png" "RushLarge0"
+procon.protected.teamnames.add "XP2_004" 2 "global.conquest.ru" "ru.png" "RushLarge0"
 
 
 // Squad Deathmatch
@@ -1129,6 +1287,31 @@ procon.protected.teamnames.add "XP0_Oman" 2 "global.Squad2" "ru.png" "SquadDeath
 procon.protected.teamnames.add "XP0_Oman" 3 "global.Squad3" "us.png" "SquadDeathMatch0"
 procon.protected.teamnames.add "XP0_Oman" 4 "global.Squad4" "ru.png" "SquadDeathMatch0"
 
+// XP3 (Naval Strike)
+procon.protected.teamnames.add "XP2_001" 0 "global.conquest.neutral" "" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP2_001" 1 "global.Squad1" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP2_001" 2 "global.Squad2" "ru.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP2_001" 3 "global.Squad3" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP2_001" 4 "global.Squad4" "ru.png" "SquadDeathMatch0"
+
+procon.protected.teamnames.add "XP2_002" 0 "global.conquest.neutral" "" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP2_002" 1 "global.Squad1" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP2_002" 2 "global.Squad2" "ru.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP2_002" 3 "global.Squad3" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP2_002" 4 "global.Squad4" "ru.png" "SquadDeathMatch0"
+
+procon.protected.teamnames.add "XP2_003" 0 "global.conquest.neutral" "" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP2_003" 1 "global.Squad1" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP2_003" 2 "global.Squad2" "ru.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP2_003" 3 "global.Squad3" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP2_003" 4 "global.Squad4" "ru.png" "SquadDeathMatch0"
+
+procon.protected.teamnames.add "XP2_004" 0 "global.conquest.neutral" "" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP2_004" 1 "global.Squad1" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP2_004" 2 "global.Squad2" "ru.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP2_004" 3 "global.Squad3" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP2_004" 4 "global.Squad4" "ru.png" "SquadDeathMatch0"
+
 
 // Team Deathmatch
 ///////////////////////////////////////////////////////////////////////////////
@@ -1207,6 +1390,23 @@ procon.protected.teamnames.add "XP0_Oman" 0 "global.tdm.neutral" "" "TeamDeathMa
 procon.protected.teamnames.add "XP0_Oman" 1 "global.tdm.us" "us.png" "TeamDeathMatch0"
 procon.protected.teamnames.add "XP0_Oman" 2 "global.tdm.ru" "ru.png" "TeamDeathMatch0"
 
+// XP3 (Naval Strike)
+procon.protected.teamnames.add "XP2_001" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP2_001" 1 "global.tdm.us" "us.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP2_001" 2 "global.tdm.ru" "ru.png" "TeamDeathMatch0"
+
+procon.protected.teamnames.add "XP2_002" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP2_002" 1 "global.tdm.us" "us.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP2_002" 2 "global.tdm.ru" "ru.png" "TeamDeathMatch0"
+
+procon.protected.teamnames.add "XP2_003" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP2_003" 1 "global.tdm.us" "us.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP2_003" 2 "global.tdm.ru" "ru.png" "TeamDeathMatch0"
+
+procon.protected.teamnames.add "XP2_004" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP2_004" 1 "global.tdm.us" "us.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP2_004" 2 "global.tdm.ru" "ru.png" "TeamDeathMatch0"
+
 
 // Air Superiority (XP1 - China Rising)
 ///////////////////////////////////////////////////////////////////////////////
@@ -1246,6 +1446,42 @@ procon.protected.teamnames.add "XP0_Metro" 2 "global.conquest.ru" "ru.png" "Capt
 procon.protected.teamnames.add "XP0_Oman" 0 "global.conquest.neutral" "" "CaptureTheFlag0"
 procon.protected.teamnames.add "XP0_Oman" 1 "global.conquest.us" "us.png" "CaptureTheFlag0"
 procon.protected.teamnames.add "XP0_Oman" 2 "global.conquest.ru" "ru.png" "CaptureTheFlag0"
+
+
+// Carrier Assault (XP3 - Naval Strike)
+///////////////////////////////////////////////////////////////////////////////
+
+procon.protected.teamnames.add "XP2_001" 0 "global.conquest.neutral" "" "CarrierAssaultLarge0"
+procon.protected.teamnames.add "XP2_001" 1 "global.conquest.us" "us.png" "CarrierAssaultLarge0"
+procon.protected.teamnames.add "XP2_001" 2 "global.conquest.ru" "ru.png" "CarrierAssaultLarge0"
+
+procon.protected.teamnames.add "XP2_002" 0 "global.conquest.neutral" "" "CarrierAssaultLarge0"
+procon.protected.teamnames.add "XP2_002" 1 "global.conquest.us" "us.png" "CarrierAssaultLarge0"
+procon.protected.teamnames.add "XP2_002" 2 "global.conquest.ru" "ru.png" "CarrierAssaultLarge0"
+
+procon.protected.teamnames.add "XP2_003" 0 "global.conquest.neutral" "" "CarrierAssaultLarge0"
+procon.protected.teamnames.add "XP2_003" 1 "global.conquest.us" "us.png" "CarrierAssaultLarge0"
+procon.protected.teamnames.add "XP2_003" 2 "global.conquest.ru" "ru.png" "CarrierAssaultLarge0"
+
+procon.protected.teamnames.add "XP2_004" 0 "global.conquest.neutral" "" "CarrierAssaultLarge0"
+procon.protected.teamnames.add "XP2_004" 1 "global.conquest.us" "us.png" "CarrierAssaultLarge0"
+procon.protected.teamnames.add "XP2_004" 2 "global.conquest.ru" "ru.png" "CarrierAssaultLarge0"
+
+procon.protected.teamnames.add "XP2_001" 0 "global.conquest.neutral" "" "CarrierAssaultSmall0"
+procon.protected.teamnames.add "XP2_001" 1 "global.conquest.us" "us.png" "CarrierAssaultSmall0"
+procon.protected.teamnames.add "XP2_001" 2 "global.conquest.ru" "ru.png" "CarrierAssaultSmall0"
+
+procon.protected.teamnames.add "XP2_002" 0 "global.conquest.neutral" "" "CarrierAssaultSmall0"
+procon.protected.teamnames.add "XP2_002" 1 "global.conquest.us" "us.png" "CarrierAssaultSmall0"
+procon.protected.teamnames.add "XP2_002" 2 "global.conquest.ru" "ru.png" "CarrierAssaultSmall0"
+
+procon.protected.teamnames.add "XP2_003" 0 "global.conquest.neutral" "" "CarrierAssaultSmall0"
+procon.protected.teamnames.add "XP2_003" 1 "global.conquest.us" "us.png" "CarrierAssaultSmall0"
+procon.protected.teamnames.add "XP2_003" 2 "global.conquest.ru" "ru.png" "CarrierAssaultSmall0"
+
+procon.protected.teamnames.add "XP2_004" 0 "global.conquest.neutral" "" "CarrierAssaultSmall0"
+procon.protected.teamnames.add "XP2_004" 1 "global.conquest.us" "us.png" "CarrierAssaultSmall0"
+procon.protected.teamnames.add "XP2_004" 2 "global.conquest.ru" "ru.png" "CarrierAssaultSmall0"
 
 
 ///////////////////////////////////////////////////////////////////////////////
