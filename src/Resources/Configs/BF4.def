@@ -1,6 +1,6 @@
 /////////////////////////////////////////////
 // This definitions file will be overwritten during an update.
-//  (2014-03-25.01)
+//  (2014-03-31.01)
 // This file contains the standard defintions required to run procon 
 // connected to a BF4 server
 /////////////////////////////////////////////
@@ -36,6 +36,7 @@ procon.protected.serverversions.add BF4 "111118" "R27"
 procon.protected.serverversions.add BF4 "112943" "R28"
 procon.protected.serverversions.add BF4 "114240" "R29"
 procon.protected.serverversions.add BF4 "115397" "R30"
+procon.protected.serverversions.add BF4 "117719" "R31"
 
 procon.protected.specialization.clear
 
@@ -79,6 +80,10 @@ procon.protected.weapons.add None "U_AMR2" Primary SniperRifle
 procon.protected.weapons.add None "U_AMR2_CQB" Primary SniperRifle
 procon.protected.weapons.add None "U_AMR2_MED" Primary SniperRifle
 procon.protected.weapons.add Assault "U_AR160" Primary AssaultRifle
+procon.protected.weapons.add Assault "U_AR160_M26_Buck" Secondary Shotgun
+procon.protected.weapons.add Assault "U_AR160_M26_Flechette" Secondary Shotgun
+procon.protected.weapons.add Assault "U_AR160_M26_Frag" Secondary Shotgun
+procon.protected.weapons.add Assault "U_AR160_M26_Slug" Secondary Shotgun
 procon.protected.weapons.add Assault "U_AR160_M320_3GL" Secondary ProjectileExplosive
 procon.protected.weapons.add Assault "U_AR160_M320_FLASH" Secondary ProjectileExplosive
 procon.protected.weapons.add Assault "U_AR160_M320_HE" Secondary ProjectileExplosive
