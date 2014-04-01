@@ -280,6 +280,8 @@ namespace PRoCon.Core.Remote {
 
         public override event PlayerSpawnedHandler PlayerSpawned;
 
+        public override event LevelLoadedHandler LevelLoaded;
+
         #region Maplist
 
         // public override event FrostbiteClient.MapListConfigFileHandler MapListConfigFile;
@@ -799,7 +801,20 @@ namespace PRoCon.Core.Remote {
             }
             //}
         }
+        
+        protected override void DispatchServerOnLevelLoadedRequest(FrostbiteConnection sender, Packet cpRequestPacket) {
+            if (cpRequestPacket.Words.Count >= 5) {
+                if (LevelLoaded != null) {
+                    int iRoundsPlayed = 0, iRoundsTotal = 0;
 
+                    if (int.TryParse(cpRequestPacket.Words[3], out iRoundsPlayed) == true && int.TryParse(cpRequestPacket.Words[4], out iRoundsTotal) == true) {
+                        this.LevelLoaded(this, cpRequestPacket.Words[1], cpRequestPacket.Words[2], iRoundsPlayed, iRoundsTotal);
+                        SendGetVarsTeamFactionOverridePacket();
+                    }
+                }
+            }
+        }
+        
         #region Map Functions
 
         protected override void DispatchAdminCurrentLevelResponse(FrostbiteConnection sender, Packet cpRecievedPacket, Packet cpRequestPacket) {
