@@ -85,6 +85,8 @@
             this.lnkSettingsTeam2FactionOverride = new System.Windows.Forms.LinkLabel();
             this.lblSettingsTeam2FactionOverride = new System.Windows.Forms.Label();
             this.cboSettingsTeam2FactionOverride = new System.Windows.Forms.ComboBox();
+            this.lblSettingsMpExperience = new System.Windows.Forms.Label();
+            this.txtSettingsMpExperience = new System.Windows.Forms.TextBox();
             this.pnlSettingsSetidleKickLimit.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numSettingsIdleBanRoundsLimit)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsNoIdleBanRoundsLimit)).BeginInit();
@@ -225,7 +227,7 @@
             // chkSettingsNoIdleKickLimit
             // 
             this.chkSettingsNoIdleKickLimit.AutoSize = true;
-            this.chkSettingsNoIdleKickLimit.Location = new System.Drawing.Point(351, 24);
+            this.chkSettingsNoIdleKickLimit.Location = new System.Drawing.Point(351, 80);
             this.chkSettingsNoIdleKickLimit.Name = "chkSettingsNoIdleKickLimit";
             this.chkSettingsNoIdleKickLimit.Size = new System.Drawing.Size(110, 19);
             this.chkSettingsNoIdleKickLimit.TabIndex = 224;
@@ -235,7 +237,7 @@
             // 
             // picSettingsIdleKickLimit
             // 
-            this.picSettingsIdleKickLimit.Location = new System.Drawing.Point(325, 24);
+            this.picSettingsIdleKickLimit.Location = new System.Drawing.Point(325, 80);
             this.picSettingsIdleKickLimit.Name = "picSettingsIdleKickLimit";
             this.picSettingsIdleKickLimit.Size = new System.Drawing.Size(16, 16);
             this.picSettingsIdleKickLimit.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -412,7 +414,7 @@
             // chkSettingsAggressiveJoin
             // 
             this.chkSettingsAggressiveJoin.AutoSize = true;
-            this.chkSettingsAggressiveJoin.Location = new System.Drawing.Point(351, 57);
+            this.chkSettingsAggressiveJoin.Location = new System.Drawing.Point(351, 113);
             this.chkSettingsAggressiveJoin.Name = "chkSettingsAggressiveJoin";
             this.chkSettingsAggressiveJoin.Size = new System.Drawing.Size(107, 19);
             this.chkSettingsAggressiveJoin.TabIndex = 292;
@@ -422,7 +424,7 @@
             // 
             // picSettingsAggressiveJoin
             // 
-            this.picSettingsAggressiveJoin.Location = new System.Drawing.Point(325, 57);
+            this.picSettingsAggressiveJoin.Location = new System.Drawing.Point(325, 113);
             this.picSettingsAggressiveJoin.Name = "picSettingsAggressiveJoin";
             this.picSettingsAggressiveJoin.Size = new System.Drawing.Size(16, 16);
             this.picSettingsAggressiveJoin.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -539,7 +541,7 @@
             // chkSettingsCommander
             // 
             this.chkSettingsCommander.AutoSize = true;
-            this.chkSettingsCommander.Location = new System.Drawing.Point(351, 94);
+            this.chkSettingsCommander.Location = new System.Drawing.Point(351, 150);
             this.chkSettingsCommander.Name = "chkSettingsCommander";
             this.chkSettingsCommander.Size = new System.Drawing.Size(93, 19);
             this.chkSettingsCommander.TabIndex = 302;
@@ -549,7 +551,7 @@
             // 
             // picSettingsCommander
             // 
-            this.picSettingsCommander.Location = new System.Drawing.Point(325, 94);
+            this.picSettingsCommander.Location = new System.Drawing.Point(325, 150);
             this.picSettingsCommander.Name = "picSettingsCommander";
             this.picSettingsCommander.Size = new System.Drawing.Size(16, 16);
             this.picSettingsCommander.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -647,7 +649,7 @@
             // 
             // picSettingsTeam1FactionOverride
             // 
-            this.picSettingsTeam1FactionOverride.Location = new System.Drawing.Point(346, 154);
+            this.picSettingsTeam1FactionOverride.Location = new System.Drawing.Point(346, 184);
             this.picSettingsTeam1FactionOverride.Name = "picSettingsTeam1FactionOverride";
             this.picSettingsTeam1FactionOverride.Size = new System.Drawing.Size(16, 16);
             this.picSettingsTeam1FactionOverride.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -660,7 +662,7 @@
             this.lnkSettingsTeam1FactionOverride.AutoSize = true;
             this.lnkSettingsTeam1FactionOverride.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
             this.lnkSettingsTeam1FactionOverride.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(220)))));
-            this.lnkSettingsTeam1FactionOverride.Location = new System.Drawing.Point(527, 178);
+            this.lnkSettingsTeam1FactionOverride.Location = new System.Drawing.Point(527, 208);
             this.lnkSettingsTeam1FactionOverride.Name = "lnkSettingsTeam1FactionOverride";
             this.lnkSettingsTeam1FactionOverride.Size = new System.Drawing.Size(38, 15);
             this.lnkSettingsTeam1FactionOverride.TabIndex = 291;
@@ -671,7 +673,7 @@
             // lblSettingsTeam1FactionOverride
             // 
             this.lblSettingsTeam1FactionOverride.AutoSize = true;
-            this.lblSettingsTeam1FactionOverride.Location = new System.Drawing.Point(370, 154);
+            this.lblSettingsTeam1FactionOverride.Location = new System.Drawing.Point(370, 184);
             this.lblSettingsTeam1FactionOverride.Name = "lblSettingsTeam1FactionOverride";
             this.lblSettingsTeam1FactionOverride.Size = new System.Drawing.Size(136, 15);
             this.lblSettingsTeam1FactionOverride.TabIndex = 290;
@@ -681,55 +683,14 @@
             // 
             this.cboSettingsTeam1FactionOverride.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboSettingsTeam1FactionOverride.FormattingEnabled = true;
-            this.cboSettingsTeam1FactionOverride.Location = new System.Drawing.Point(373, 175);
+            this.cboSettingsTeam1FactionOverride.Location = new System.Drawing.Point(373, 205);
             this.cboSettingsTeam1FactionOverride.Name = "cboSettingsTeam1FactionOverride";
             this.cboSettingsTeam1FactionOverride.Size = new System.Drawing.Size(150, 23);
             this.cboSettingsTeam1FactionOverride.TabIndex = 289;
             // 
-            // picSettingsTeam2FactionOverride
-            // 
-            this.picSettingsTeam2FactionOverride.Location = new System.Drawing.Point(581, 153);
-            this.picSettingsTeam2FactionOverride.Name = "picSettingsTeam2FactionOverride";
-            this.picSettingsTeam2FactionOverride.Size = new System.Drawing.Size(16, 16);
-            this.picSettingsTeam2FactionOverride.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.picSettingsTeam2FactionOverride.TabIndex = 315;
-            this.picSettingsTeam2FactionOverride.TabStop = false;
-            // 
-            // lnkSettingsTeam2FactionOverride
-            // 
-            this.lnkSettingsTeam2FactionOverride.ActiveLinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(220)))));
-            this.lnkSettingsTeam2FactionOverride.AutoSize = true;
-            this.lnkSettingsTeam2FactionOverride.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
-            this.lnkSettingsTeam2FactionOverride.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(220)))));
-            this.lnkSettingsTeam2FactionOverride.Location = new System.Drawing.Point(762, 177);
-            this.lnkSettingsTeam2FactionOverride.Name = "lnkSettingsTeam2FactionOverride";
-            this.lnkSettingsTeam2FactionOverride.Size = new System.Drawing.Size(38, 15);
-            this.lnkSettingsTeam2FactionOverride.TabIndex = 314;
-            this.lnkSettingsTeam2FactionOverride.TabStop = true;
-            this.lnkSettingsTeam2FactionOverride.Text = "Apply";
-            this.lnkSettingsTeam2FactionOverride.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkSettingsTeam2FactionOverride_LinkClicked);
-            // 
-            // lblSettingsTeam2FactionOverride
-            // 
-            this.lblSettingsTeam2FactionOverride.AutoSize = true;
-            this.lblSettingsTeam2FactionOverride.Location = new System.Drawing.Point(605, 153);
-            this.lblSettingsTeam2FactionOverride.Name = "lblSettingsTeam2FactionOverride";
-            this.lblSettingsTeam2FactionOverride.Size = new System.Drawing.Size(136, 15);
-            this.lblSettingsTeam2FactionOverride.TabIndex = 313;
-            this.lblSettingsTeam2FactionOverride.Text = "Team 2 Faction Override";
-            // 
-            // cboSettingsTeam2FactionOverride
-            // 
-            this.cboSettingsTeam2FactionOverride.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cboSettingsTeam2FactionOverride.FormattingEnabled = true;
-            this.cboSettingsTeam2FactionOverride.Location = new System.Drawing.Point(608, 174);
-            this.cboSettingsTeam2FactionOverride.Name = "cboSettingsTeam2FactionOverride";
-            this.cboSettingsTeam2FactionOverride.Size = new System.Drawing.Size(150, 23);
-            this.cboSettingsTeam2FactionOverride.TabIndex = 312;
-            // 
             // picSettingsTeam3FactionOverride
             // 
-            this.picSettingsTeam3FactionOverride.Location = new System.Drawing.Point(346, 211);
+            this.picSettingsTeam3FactionOverride.Location = new System.Drawing.Point(346, 241);
             this.picSettingsTeam3FactionOverride.Name = "picSettingsTeam3FactionOverride";
             this.picSettingsTeam3FactionOverride.Size = new System.Drawing.Size(16, 16);
             this.picSettingsTeam3FactionOverride.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -742,7 +703,7 @@
             this.lnkSettingsTeam3FactionOverride.AutoSize = true;
             this.lnkSettingsTeam3FactionOverride.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
             this.lnkSettingsTeam3FactionOverride.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(220)))));
-            this.lnkSettingsTeam3FactionOverride.Location = new System.Drawing.Point(527, 235);
+            this.lnkSettingsTeam3FactionOverride.Location = new System.Drawing.Point(527, 265);
             this.lnkSettingsTeam3FactionOverride.Name = "lnkSettingsTeam3FactionOverride";
             this.lnkSettingsTeam3FactionOverride.Size = new System.Drawing.Size(38, 15);
             this.lnkSettingsTeam3FactionOverride.TabIndex = 310;
@@ -753,7 +714,7 @@
             // lblSettingsTeam3FactionOverride
             // 
             this.lblSettingsTeam3FactionOverride.AutoSize = true;
-            this.lblSettingsTeam3FactionOverride.Location = new System.Drawing.Point(370, 211);
+            this.lblSettingsTeam3FactionOverride.Location = new System.Drawing.Point(370, 241);
             this.lblSettingsTeam3FactionOverride.Name = "lblSettingsTeam3FactionOverride";
             this.lblSettingsTeam3FactionOverride.Size = new System.Drawing.Size(136, 15);
             this.lblSettingsTeam3FactionOverride.TabIndex = 309;
@@ -763,14 +724,14 @@
             // 
             this.cboSettingsTeam3FactionOverride.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboSettingsTeam3FactionOverride.FormattingEnabled = true;
-            this.cboSettingsTeam3FactionOverride.Location = new System.Drawing.Point(373, 232);
+            this.cboSettingsTeam3FactionOverride.Location = new System.Drawing.Point(373, 262);
             this.cboSettingsTeam3FactionOverride.Name = "cboSettingsTeam3FactionOverride";
             this.cboSettingsTeam3FactionOverride.Size = new System.Drawing.Size(150, 23);
             this.cboSettingsTeam3FactionOverride.TabIndex = 308;
             // 
             // picSettingsTeam4FactionOverride
             // 
-            this.picSettingsTeam4FactionOverride.Location = new System.Drawing.Point(581, 210);
+            this.picSettingsTeam4FactionOverride.Location = new System.Drawing.Point(581, 240);
             this.picSettingsTeam4FactionOverride.Name = "picSettingsTeam4FactionOverride";
             this.picSettingsTeam4FactionOverride.Size = new System.Drawing.Size(16, 16);
             this.picSettingsTeam4FactionOverride.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -783,7 +744,7 @@
             this.lnkSettingsTeam4FactionOverride.AutoSize = true;
             this.lnkSettingsTeam4FactionOverride.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
             this.lnkSettingsTeam4FactionOverride.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(220)))));
-            this.lnkSettingsTeam4FactionOverride.Location = new System.Drawing.Point(762, 234);
+            this.lnkSettingsTeam4FactionOverride.Location = new System.Drawing.Point(762, 264);
             this.lnkSettingsTeam4FactionOverride.Name = "lnkSettingsTeam4FactionOverride";
             this.lnkSettingsTeam4FactionOverride.Size = new System.Drawing.Size(38, 15);
             this.lnkSettingsTeam4FactionOverride.TabIndex = 318;
@@ -794,7 +755,7 @@
             // lblSettingsTeam4FactionOverride
             // 
             this.lblSettingsTeam4FactionOverride.AutoSize = true;
-            this.lblSettingsTeam4FactionOverride.Location = new System.Drawing.Point(605, 210);
+            this.lblSettingsTeam4FactionOverride.Location = new System.Drawing.Point(605, 240);
             this.lblSettingsTeam4FactionOverride.Name = "lblSettingsTeam4FactionOverride";
             this.lblSettingsTeam4FactionOverride.Size = new System.Drawing.Size(136, 15);
             this.lblSettingsTeam4FactionOverride.TabIndex = 317;
@@ -804,15 +765,76 @@
             // 
             this.cboSettingsTeam4FactionOverride.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboSettingsTeam4FactionOverride.FormattingEnabled = true;
-            this.cboSettingsTeam4FactionOverride.Location = new System.Drawing.Point(608, 231);
+            this.cboSettingsTeam4FactionOverride.Location = new System.Drawing.Point(608, 261);
             this.cboSettingsTeam4FactionOverride.Name = "cboSettingsTeam4FactionOverride";
             this.cboSettingsTeam4FactionOverride.Size = new System.Drawing.Size(150, 23);
             this.cboSettingsTeam4FactionOverride.TabIndex = 316;
+            // 
+            // picSettingsTeam2FactionOverride
+            // 
+            this.picSettingsTeam2FactionOverride.Location = new System.Drawing.Point(581, 183);
+            this.picSettingsTeam2FactionOverride.Name = "picSettingsTeam2FactionOverride";
+            this.picSettingsTeam2FactionOverride.Size = new System.Drawing.Size(16, 16);
+            this.picSettingsTeam2FactionOverride.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.picSettingsTeam2FactionOverride.TabIndex = 315;
+            this.picSettingsTeam2FactionOverride.TabStop = false;
+            // 
+            // lnkSettingsTeam2FactionOverride
+            // 
+            this.lnkSettingsTeam2FactionOverride.ActiveLinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(220)))));
+            this.lnkSettingsTeam2FactionOverride.AutoSize = true;
+            this.lnkSettingsTeam2FactionOverride.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
+            this.lnkSettingsTeam2FactionOverride.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(220)))));
+            this.lnkSettingsTeam2FactionOverride.Location = new System.Drawing.Point(762, 207);
+            this.lnkSettingsTeam2FactionOverride.Name = "lnkSettingsTeam2FactionOverride";
+            this.lnkSettingsTeam2FactionOverride.Size = new System.Drawing.Size(38, 15);
+            this.lnkSettingsTeam2FactionOverride.TabIndex = 314;
+            this.lnkSettingsTeam2FactionOverride.TabStop = true;
+            this.lnkSettingsTeam2FactionOverride.Text = "Apply";
+            this.lnkSettingsTeam2FactionOverride.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkSettingsTeam2FactionOverride_LinkClicked);
+            // 
+            // lblSettingsTeam2FactionOverride
+            // 
+            this.lblSettingsTeam2FactionOverride.AutoSize = true;
+            this.lblSettingsTeam2FactionOverride.Location = new System.Drawing.Point(605, 183);
+            this.lblSettingsTeam2FactionOverride.Name = "lblSettingsTeam2FactionOverride";
+            this.lblSettingsTeam2FactionOverride.Size = new System.Drawing.Size(136, 15);
+            this.lblSettingsTeam2FactionOverride.TabIndex = 313;
+            this.lblSettingsTeam2FactionOverride.Text = "Team 2 Faction Override";
+            // 
+            // cboSettingsTeam2FactionOverride
+            // 
+            this.cboSettingsTeam2FactionOverride.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboSettingsTeam2FactionOverride.FormattingEnabled = true;
+            this.cboSettingsTeam2FactionOverride.Location = new System.Drawing.Point(608, 204);
+            this.cboSettingsTeam2FactionOverride.Name = "cboSettingsTeam2FactionOverride";
+            this.cboSettingsTeam2FactionOverride.Size = new System.Drawing.Size(150, 23);
+            this.cboSettingsTeam2FactionOverride.TabIndex = 312;
+            // 
+            // lblSettingsMpExperience
+            // 
+            this.lblSettingsMpExperience.AutoSize = true;
+            this.lblSettingsMpExperience.Location = new System.Drawing.Point(297, 0);
+            this.lblSettingsMpExperience.Name = "lblSettingsMpExperience";
+            this.lblSettingsMpExperience.Size = new System.Drawing.Size(84, 15);
+            this.lblSettingsMpExperience.TabIndex = 320;
+            this.lblSettingsMpExperience.Text = "MP Experience";
+            // 
+            // txtSettingsMpExperience
+            // 
+            this.txtSettingsMpExperience.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtSettingsMpExperience.Location = new System.Drawing.Point(301, 22);
+            this.txtSettingsMpExperience.Name = "txtSettingsMpExperience";
+            this.txtSettingsMpExperience.ReadOnly = true;
+            this.txtSettingsMpExperience.Size = new System.Drawing.Size(200, 23);
+            this.txtSettingsMpExperience.TabIndex = 321;
             // 
             // uscServerSettingsConfigurationBF4
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.lblSettingsMpExperience);
+            this.Controls.Add(this.txtSettingsMpExperience);
             this.Controls.Add(this.picSettingsTeam4FactionOverride);
             this.Controls.Add(this.lnkSettingsTeam4FactionOverride);
             this.Controls.Add(this.lblSettingsTeam4FactionOverride);
@@ -958,5 +980,7 @@
         private System.Windows.Forms.LinkLabel lnkSettingsTeam2FactionOverride;
         private System.Windows.Forms.Label lblSettingsTeam2FactionOverride;
         private System.Windows.Forms.ComboBox cboSettingsTeam2FactionOverride;
+        private System.Windows.Forms.Label lblSettingsMpExperience;
+        private System.Windows.Forms.TextBox txtSettingsMpExperience;
     }
 }

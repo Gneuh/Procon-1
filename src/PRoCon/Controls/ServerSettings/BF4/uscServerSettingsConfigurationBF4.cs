@@ -82,6 +82,7 @@ namespace PRoCon.Controls.ServerSettings.BF4 {
 
             this.chkSettingsPunkbuster.Text = this.Language.GetLocalized("uscServerSettingsPanel.chkSettingsPunkbuster");
             this.lblSettingsServerType.Text = this.Language.GetLocalized("uscServerSettingsPanel.lblSettingsServerType");
+            this.lblSettingsMpExperience.Text = this.Language.GetDefaultLocalized("MP Experience", "uscServerSettingsPanel.lblSettingsMpExperience");
             this.chkSettingsCommander.Text = this.Language.GetLocalized("uscServerSettingsPanel.chkSettingsCommander");
             this.chkSettingsAlwaysAllowSpectators.Text = this.Language.GetDefaultLocalized("Public spectators", "uscServerSettingsPanel.chkSettingsAlwaysAllowSpectators");
 
@@ -182,6 +183,8 @@ namespace PRoCon.Controls.ServerSettings.BF4 {
 
                 this.Client.Game.BF4preset += new FrostbiteClient.BF4presetHandler(Tab_BF4preset);
 
+                this.Client.Game.MpExperience += new FrostbiteClient.MpExperienceHandler(Game_MpExperience);
+
                 this.Client.Game.TeamFactionOverride += new FrostbiteClient.TeamFactionOverrideHandler(Game_TeamFactionOverride);
             });
         }
@@ -213,6 +216,17 @@ namespace PRoCon.Controls.ServerSettings.BF4 {
             this.InvokeIfRequired(() => {
                 // This value is read only.
                 this.txtSettingsServerType.Text = value;
+            });
+        }
+
+        #endregion
+
+        #region MpExperience
+
+        void Game_MpExperience(FrostbiteClient sender, string mpExperience) {
+            this.InvokeIfRequired(() =>
+            {
+                this.txtSettingsMpExperience.Text = mpExperience;
             });
         }
 

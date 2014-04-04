@@ -164,6 +164,8 @@ namespace PRoCon.Core.Remote {
 
             ResponseDelegates.Add("vars.teamFactionOverride", DispatchVarsTeamFactionOverrideResponse);
 
+            ResponseDelegates.Add("vars.mpExperience", DispatchVarMpExperienceResponse);
+
             #endregion
 
             #region player.* / squad.* commands
@@ -264,6 +266,7 @@ namespace PRoCon.Core.Remote {
             SendGetVarsTeamFactionOverridePacket();
 
             SendGetVarsPresetPacket();
+            SendGetVarsMpExperiencePacket();
         }
 
         #region Overridden Events
@@ -340,6 +343,7 @@ namespace PRoCon.Core.Remote {
 
         public override event UnlockModeHandler UnlockMode;
         public override event BF4presetHandler BF4preset;
+        public override event MpExperienceHandler MpExperience;
         public override event GunMasterWeaponsPresetHandler GunMasterWeaponsPreset;
 
         public override event LimitHandler SoldierHealth;
@@ -698,6 +702,12 @@ namespace PRoCon.Core.Remote {
         public virtual void SendGetSquadPrivatePacket(int teamId, int squadId) {
             if (IsLoggedIn == true) {
                 BuildSendPacket("squad.private", teamId.ToString(CultureInfo.InvariantCulture), squadId.ToString(CultureInfo.InvariantCulture));
+            }
+        }
+
+        public virtual void SendGetVarsMpExperiencePacket() {
+            if (IsLoggedIn == true) {
+                BuildSendPacket("vars.mpExperience");
             }
         }
 
@@ -1550,6 +1560,20 @@ namespace PRoCon.Core.Remote {
                     }
                     else if (cpRequestPacket.Words.Count == 3) {
                         this.TeamFactionOverride(this, Convert.ToInt32(cpRequestPacket.Words[1]), Convert.ToInt32(cpRequestPacket.Words[2]));
+                    }
+                }
+            }
+        }
+
+        #endregion
+
+        #region mpExperience
+
+        protected virtual void DispatchVarMpExperienceResponse(FrostbiteConnection sender, Packet cpRecievedPacket, Packet cpRequestPacket) {
+            if (cpRequestPacket.Words.Count >= 1) {
+                if (this.MpExperience != null) {
+                    if (cpRecievedPacket.Words.Count == 2) {
+                        this.MpExperience(this, cpRecievedPacket.Words[1]);
                     }
                 }
             }

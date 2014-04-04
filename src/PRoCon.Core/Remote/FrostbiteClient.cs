@@ -2068,6 +2068,8 @@ namespace PRoCon.Core.Remote {
 
         public delegate void BF4presetHandler(FrostbiteClient sender, string mode, bool isLocked);
 
+        public delegate void MpExperienceHandler(FrostbiteClient sender, string mpExperience);
+
         public delegate void UpperLowerLimitHandler(FrostbiteClient sender, int upperLimit, int lowerLimit);
 
         public delegate void VersionHandler(FrostbiteClient sender, string serverType, string serverVersion);
@@ -3868,6 +3870,7 @@ namespace PRoCon.Core.Remote {
         public virtual event LimitHandler RoundTimeLimit;
         public virtual event LimitHandler TicketBleedRate;
         public virtual event BF4presetHandler BF4preset;
+        public virtual event MpExperienceHandler MpExperience;
 
         public virtual event TeamFactionOverrideHandler TeamFactionOverride;
 
