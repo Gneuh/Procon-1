@@ -339,11 +339,11 @@ namespace PRoCon.Core.Consoles {
                 commoroseMessage = true;
             }
             else if (System.String.Compare(rawChat[1], "ID_CHAT_REQUEST_MEDIC", System.StringComparison.OrdinalIgnoreCase) == 0) {
-                rawChat[1] = Client.Language.GetDefaultLocalized("ID_CHAT_REQUEST_ORDER", "uscChatPanel.ID_CHAT_REQUEST_ORDER");
+                rawChat[1] = Client.Language.GetDefaultLocalized("ID_CHAT_REQUEST_MEDIC", "uscChatPanel.ID_CHAT_REQUEST_MEDIC");
                 commoroseMessage = true;
             }
             else if (System.String.Compare(rawChat[1], "ID_CHAT_REQUEST_ORDER", System.StringComparison.OrdinalIgnoreCase) == 0) {
-                rawChat[1] = Client.Language.GetDefaultLocalized("ID_CHAT_REQUEST_MEDIC", "uscChatPanel.ID_CHAT_REQUEST_MEDIC");
+                rawChat[1] = Client.Language.GetDefaultLocalized("ID_CHAT_REQUEST_ORDER", "uscChatPanel.ID_CHAT_REQUEST_ORDER");
                 commoroseMessage = true;
             }
             else if (System.String.Compare(rawChat[1], "ID_CHAT_REQUEST_REPAIRS", System.StringComparison.OrdinalIgnoreCase) == 0) {
