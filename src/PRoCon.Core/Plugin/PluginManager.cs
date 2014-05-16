@@ -1732,8 +1732,6 @@ namespace PRoCon.Core.Plugin {
         }
 
         private void m_prcClient_PlayerChat(FrostbiteClient sender, string playerName, string message, string targetPlayer) {
-            Console.WriteLine("PLAYER CHAT! " + playerName + " said '" + message + "' to " + targetPlayer);
-
             InvokeOnAllEnabled("OnPlayerChat", playerName, message, targetPlayer);
 
             CapturedCommand capCommand = null;
