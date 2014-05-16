@@ -3430,16 +3430,14 @@ namespace PRoCon.Core.Remote {
                         this.GlobalChat(this, cpRequestPacket.Words[1], cpRequestPacket.Words[2]);
                     }
                 }
-                else if (cpRequestPacket.Words.Count == 5) {
-                    if (String.Compare(cpRequestPacket.Words[3], "team", StringComparison.OrdinalIgnoreCase) == 0 && int.TryParse(cpRequestPacket.Words[4], out iTeamID) == true && TeamChat != null) {
-                        if (this.TeamChat != null) {
-                            this.TeamChat(this, cpRequestPacket.Words[1], cpRequestPacket.Words[2], iTeamID);
-                        }
+                else if (cpRequestPacket.Words.Count >= 5 && String.Compare(cpRequestPacket.Words[3], "team", StringComparison.OrdinalIgnoreCase) == 0 && int.TryParse(cpRequestPacket.Words[4], out iTeamID) == true && TeamChat != null) {
+                    if (this.TeamChat != null) {
+                        this.TeamChat(this, cpRequestPacket.Words[1], cpRequestPacket.Words[2], iTeamID);
                     }
-                    else if (String.Compare(cpRequestPacket.Words[3], "player", StringComparison.OrdinalIgnoreCase) == 0) {
-                        if (this.PlayerChat != null) {
-                            this.PlayerChat(this, cpRequestPacket.Words[1], cpRequestPacket.Words[2], cpRequestPacket.Words[4]);
-                        }
+                }
+                else if (cpRequestPacket.Words.Count >= 5 && String.Compare(cpRequestPacket.Words[3], "player", StringComparison.OrdinalIgnoreCase) == 0) {
+                    if (this.PlayerChat != null) {
+                        this.PlayerChat(this, cpRequestPacket.Words[1], cpRequestPacket.Words[2], cpRequestPacket.Words[4]);
                     }
                 }
                 else if (cpRequestPacket.Words.Count >= 6 && String.Compare(cpRequestPacket.Words[3], "squad", StringComparison.OrdinalIgnoreCase) == 0 && int.TryParse(cpRequestPacket.Words[4], out iTeamID) == true && int.TryParse(cpRequestPacket.Words[5], out iSquadID) == true) {
