@@ -403,7 +403,7 @@ namespace PRoCon.Core.Plugin {
         public virtual void OnGlobalChat(string speaker, string message) { }
         public virtual void OnTeamChat(string speaker, string message, int teamId) { }
         public virtual void OnSquadChat(string speaker, string message, int teamId, int squadId) { }
-		public virtual void OnPlayerChat(string speaker, string message, string targetPlayer) { }
+        public virtual void OnPlayerChat(string speaker, string message, string targetPlayer) { }
 
         #endregion
 

@@ -911,7 +911,7 @@ namespace PRoCon.Core.Plugin {
             ProconClient.Game.GlobalChat -= new FrostbiteClient.GlobalChatHandler(m_prcClient_GlobalChat);
             ProconClient.Game.TeamChat -= new FrostbiteClient.TeamChatHandler(m_prcClient_TeamChat);
             ProconClient.Game.SquadChat -= new FrostbiteClient.SquadChatHandler(m_prcClient_SquadChat);
-			ProconClient.Game.PlayerChat -= new FrostbiteClient.PlayerChatHandler(m_prcClient_PlayerChat);
+            ProconClient.Game.PlayerChat -= new FrostbiteClient.PlayerChatHandler(m_prcClient_PlayerChat);
 
             ProconClient.Game.ResponseError -= new FrostbiteClient.ResponseErrorHandler(m_prcClient_ResponseError);
             ProconClient.Game.Version -= new FrostbiteClient.VersionHandler(m_prcClient_Version);
@@ -1159,8 +1159,8 @@ namespace PRoCon.Core.Plugin {
             ProconClient.Game.GlobalChat += new FrostbiteClient.GlobalChatHandler(m_prcClient_GlobalChat);
             ProconClient.Game.TeamChat += new FrostbiteClient.TeamChatHandler(m_prcClient_TeamChat);
             ProconClient.Game.SquadChat += new FrostbiteClient.SquadChatHandler(m_prcClient_SquadChat);
-			ProconClient.Game.PlayerChat += new FrostbiteClient.PlayerChatHandler(m_prcClient_PlayerChat);
-			
+            ProconClient.Game.PlayerChat += new FrostbiteClient.PlayerChatHandler(m_prcClient_PlayerChat);
+            
             ProconClient.Game.ResponseError += new FrostbiteClient.ResponseErrorHandler(m_prcClient_ResponseError);
             ProconClient.Game.Version += new FrostbiteClient.VersionHandler(m_prcClient_Version);
             ProconClient.Game.Help += new FrostbiteClient.HelpHandler(m_prcClient_Help);
@@ -1731,20 +1731,20 @@ namespace PRoCon.Core.Plugin {
             }
         }
 
-		private void m_prcClient_PlayerChat(FrostbiteClient sender, string playerName, string message, string targetPlayer) {
-			Console.WriteLine("PLAYER CHAT! " + playerName + " said '" + message + "' to " + targetPlayer);
+        private void m_prcClient_PlayerChat(FrostbiteClient sender, string playerName, string message, string targetPlayer) {
+            Console.WriteLine("PLAYER CHAT! " + playerName + " said '" + message + "' to " + targetPlayer);
 
-			InvokeOnAllEnabled("OnPlayerChat", playerName, message, targetPlayer);
+            InvokeOnAllEnabled("OnPlayerChat", playerName, message, targetPlayer);
 
-			CapturedCommand capCommand = null;
-			MatchCommand mtcCommand = null;
+            CapturedCommand capCommand = null;
+            MatchCommand mtcCommand = null;
 
-			if (String.Compare(playerName, "server", StringComparison.OrdinalIgnoreCase) != 0 && CheckInGameCommands(playerName, message, out mtcCommand, out capCommand) == true)
-			{
-				DispatchMatchedCommand(playerName, message, mtcCommand, capCommand, new CPlayerSubset(CPlayerSubset.PlayerSubsetType.Player, targetPlayer));
-				//this.InvokeOnEnabled(mtcCommand.RegisteredClassname, "OnMatchRegisteredCommand", playerName, message, mtcCommand, capCommand, new CPlayerSubset(CPlayerSubset.PlayerSubsetType.Squad, teamId, squadId));
-			}
-		}
+            if (String.Compare(playerName, "server", StringComparison.OrdinalIgnoreCase) != 0 && CheckInGameCommands(playerName, message, out mtcCommand, out capCommand) == true)
+            {
+                DispatchMatchedCommand(playerName, message, mtcCommand, capCommand, new CPlayerSubset(CPlayerSubset.PlayerSubsetType.Player, targetPlayer));
+                //this.InvokeOnEnabled(mtcCommand.RegisteredClassname, "OnMatchRegisteredCommand", playerName, message, mtcCommand, capCommand, new CPlayerSubset(CPlayerSubset.PlayerSubsetType.Squad, teamId, squadId));
+            }
+        }
 
         private void m_prcClient_ResponseError(FrostbiteClient sender, Packet originalRequest, string errorMessage) {
             InvokeOnAllEnabled("OnResponseError", new List<string>(originalRequest.Words), errorMessage);

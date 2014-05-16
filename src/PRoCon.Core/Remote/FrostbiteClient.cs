@@ -1982,7 +1982,7 @@ namespace PRoCon.Core.Remote {
 
         public delegate void PlayerLeaveHandler(FrostbiteClient sender, string playerName, CPlayerInfo cpiPlayer);
 
-		public delegate void PlayerChatHandler(FrostbiteClient sender, string playerName, string message, string targetPlayer);
+        public delegate void PlayerChatHandler(FrostbiteClient sender, string playerName, string message, string targetPlayer);
 
         public delegate void PlayerDisconnectedHandler(FrostbiteClient sender, string playerName, string reason);
 
@@ -3431,16 +3431,16 @@ namespace PRoCon.Core.Remote {
                     }
                 }
                 else if (cpRequestPacket.Words.Count == 5) {
-					if (String.Compare(cpRequestPacket.Words[3], "team", StringComparison.OrdinalIgnoreCase) == 0 && int.TryParse(cpRequestPacket.Words[4], out iTeamID) == true && TeamChat != null) {
-						if (this.TeamChat != null) {
-							this.TeamChat(this, cpRequestPacket.Words[1], cpRequestPacket.Words[2], iTeamID);
-						}
+                    if (String.Compare(cpRequestPacket.Words[3], "team", StringComparison.OrdinalIgnoreCase) == 0 && int.TryParse(cpRequestPacket.Words[4], out iTeamID) == true && TeamChat != null) {
+                        if (this.TeamChat != null) {
+                            this.TeamChat(this, cpRequestPacket.Words[1], cpRequestPacket.Words[2], iTeamID);
+                        }
                     }
-					else if (String.Compare(cpRequestPacket.Words[3], "player", StringComparison.OrdinalIgnoreCase) == 0) {
-						if (this.PlayerChat != null) {
-							this.PlayerChat(this, cpRequestPacket.Words[1], cpRequestPacket.Words[2], cpRequestPacket.Words[4]);
-						}
-					}
+                    else if (String.Compare(cpRequestPacket.Words[3], "player", StringComparison.OrdinalIgnoreCase) == 0) {
+                        if (this.PlayerChat != null) {
+                            this.PlayerChat(this, cpRequestPacket.Words[1], cpRequestPacket.Words[2], cpRequestPacket.Words[4]);
+                        }
+                    }
                 }
                 else if (cpRequestPacket.Words.Count >= 6 && String.Compare(cpRequestPacket.Words[3], "squad", StringComparison.OrdinalIgnoreCase) == 0 && int.TryParse(cpRequestPacket.Words[4], out iTeamID) == true && int.TryParse(cpRequestPacket.Words[5], out iSquadID) == true) {
                     if (SquadChat != null) {
@@ -3619,7 +3619,7 @@ namespace PRoCon.Core.Remote {
         public virtual event GlobalChatHandler GlobalChat;
         public virtual event TeamChatHandler TeamChat;
         public virtual event SquadChatHandler SquadChat;
-		public virtual event PlayerChatHandler PlayerChat;
+        public virtual event PlayerChatHandler PlayerChat;
 
         #endregion
 
