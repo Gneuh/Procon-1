@@ -3430,7 +3430,7 @@ namespace PRoCon.Core.Remote {
                         this.GlobalChat(this, cpRequestPacket.Words[1], cpRequestPacket.Words[2]);
                     }
                 }
-                else if (cpRequestPacket.Words.Count >= 5 && String.Compare(cpRequestPacket.Words[3], "team", StringComparison.OrdinalIgnoreCase) == 0 && int.TryParse(cpRequestPacket.Words[4], out iTeamID) == true && TeamChat != null) {
+                else if (cpRequestPacket.Words.Count >= 5 && String.Compare(cpRequestPacket.Words[3], "team", StringComparison.OrdinalIgnoreCase) == 0 && int.TryParse(cpRequestPacket.Words[4], out iTeamID) == true) {
                     if (this.TeamChat != null) {
                         this.TeamChat(this, cpRequestPacket.Words[1], cpRequestPacket.Words[2], iTeamID);
                     }
