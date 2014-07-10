@@ -1,6 +1,6 @@
 /////////////////////////////////////////////
 // This definitions file will be overwritten during an update.
-//  (2014-05-06.01)
+//  (2014-07-10.01)
 // This file contains the standard defintions required to run procon 
 // connected to a BF4 server
 /////////////////////////////////////////////
@@ -40,6 +40,9 @@ procon.protected.serverversions.add BF4 "117719" "R31"
 procon.protected.serverversions.add BF4 "120511" "R32"
 procon.protected.serverversions.add BF4 "125871" "R33"
 procon.protected.serverversions.add BF4 "126936" "R34"
+procon.protected.serverversions.add BF4 "130790" "R35"
+procon.protected.serverversions.add BF4 "133337" "R36"
+procon.protected.serverversions.add BF4 "135082" "R37"
 
 procon.protected.specialization.clear
 
