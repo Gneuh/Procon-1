@@ -1,6 +1,6 @@
 /////////////////////////////////////////////
 // This definitions file will be overwritten during an update.
-//  (2014-07-10.01)
+//  (2014-07-14.01)
 // This file contains the standard defintions required to run procon 
 // connected to a BF4 server
 /////////////////////////////////////////////
@@ -641,7 +641,7 @@ procon.protected.maps.add "SquadDeathMatch0" "XP3_WtrFront" "Squad Deathmatch" "
 
 procon.protected.maps.add "TeamDeathMatch0" "XP3_MarketPl" "Team Deathmatch" "Pearl Market" 0
 procon.protected.maps.add "TeamDeathMatch0" "XP3_Prpganda" "Team Deathmatch" "Propaganda" 0
-procon.protected.maps.add "TeamDeathMatch0" "XP3_UrbanGrn" "Team Deathmatch" "Wavebreaker" 0
+procon.protected.maps.add "TeamDeathMatch0" "XP3_UrbanGrn" "Team Deathmatch" "Lumphini Garden" 0
 procon.protected.maps.add "TeamDeathMatch0" "XP3_WtrFront" "Team Deathmatch" "Sunken Dragon" 0
 
 procon.protected.teamnames.clear
