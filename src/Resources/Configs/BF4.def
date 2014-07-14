@@ -506,7 +506,7 @@ procon.protected.maps.add "AirSuperiority0" "XP1_002" "Air Superiority" "Altai R
 procon.protected.maps.add "AirSuperiority0" "XP1_003" "Air Superiority" "Guilin Peaks" 0
 procon.protected.maps.add "AirSuperiority0" "XP1_004" "Air Superiority" "Dragon Pass" 0
 
-// XP2 (Second Assault)
+// XP0 (Second Assault)
 procon.protected.maps.add "ConquestLarge0" "XP0_Caspian" "Conquest Large" "Caspian Border 2014" 0
 procon.protected.maps.add "ConquestLarge0" "XP0_Firestorm" "Conquest Large" "Operation Firestorm 2014" 0
 procon.protected.maps.add "ConquestLarge0" "XP0_Metro" "Conquest Large" "Operation Metro 2014" 0
@@ -552,7 +552,7 @@ procon.protected.maps.add "CaptureTheFlag0" "XP0_Firestorm" "CTF" "Operation Fir
 procon.protected.maps.add "CaptureTheFlag0" "XP0_Metro" "CTF" "Operation Metro 2014" 0
 procon.protected.maps.add "CaptureTheFlag0" "XP0_Oman" "CTF" "Gulf of Oman 2014" 0
 
-// XP3 (Naval Strike)
+// XP2 (Naval Strike)
 procon.protected.maps.add "ConquestLarge0" "XP2_001" "Conquest Large" "Lost Islands" 0
 procon.protected.maps.add "ConquestLarge0" "XP2_002" "Conquest Large" "Nansha Strike" 0
 procon.protected.maps.add "ConquestLarge0" "XP2_003" "Conquest Large" "Wavebreaker" 0
@@ -602,6 +602,17 @@ procon.protected.maps.add "CarrierAssaultSmall0" "XP2_001" "Carrier Assault Smal
 procon.protected.maps.add "CarrierAssaultSmall0" "XP2_002" "Carrier Assault Small" "Nansha Strike" 0
 procon.protected.maps.add "CarrierAssaultSmall0" "XP2_003" "Carrier Assault Small" "Wavebreaker" 0
 procon.protected.maps.add "CarrierAssaultSmall0" "XP2_004" "Carrier Assault Small" "Operation Mortar" 0
+
+// XP3 (Dragons Teeth)
+procon.protected.maps.add "ConquestLarge0" "XP3_MarketPl" "Conquest Large" "Pearl Market" 0
+procon.protected.maps.add "ConquestLarge0" "XP3_Prpganda" "Conquest Large" "Propaganda" 0
+procon.protected.maps.add "ConquestLarge0" "XP3_UrbanGrn" "Conquest Large" "Lumphini Garden" 0
+procon.protected.maps.add "ConquestLarge0" "XP3_WtrFront" "Conquest Large" "Sunken Dragon" 0
+
+procon.protected.maps.add "ConquestSmall0" "XP3_MarketPl" "Conquest Small" "Pearl Market" 0
+procon.protected.maps.add "ConquestSmall0" "XP3_Prpganda" "Conquest Small" "Propaganda" 0
+procon.protected.maps.add "ConquestSmall0" "XP3_UrbanGrn" "Conquest Small" "Lumphini Garden" 0
+procon.protected.maps.add "ConquestSmall0" "XP3_WtrFront" "Conquest Small" "Sunken Dragon" 0
 
 procon.protected.teamnames.clear
 
