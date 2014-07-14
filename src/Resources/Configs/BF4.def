@@ -644,6 +644,11 @@ procon.protected.maps.add "TeamDeathMatch0" "XP3_Prpganda" "Team Deathmatch" "Pr
 procon.protected.maps.add "TeamDeathMatch0" "XP3_UrbanGrn" "Team Deathmatch" "Lumphini Garden" 0
 procon.protected.maps.add "TeamDeathMatch0" "XP3_WtrFront" "Team Deathmatch" "Sunken Dragon" 0
 
+procon.protected.maps.add "CaptureTheFlag0" "XP3_MarketPl" "CTF" "Pearl Market" 0
+procon.protected.maps.add "CaptureTheFlag0" "XP3_Prpganda" "CTF" "Propaganda" 0
+procon.protected.maps.add "CaptureTheFlag0" "XP3_UrbanGrn" "CTF" "Lumphini Garden" 0
+procon.protected.maps.add "CaptureTheFlag0" "XP3_WtrFront" "CTF" "Sunken Dragon" 0
+
 procon.protected.teamnames.clear
 
 // Conquest Large
@@ -1600,7 +1605,7 @@ procon.protected.teamnames.add "XP1_004" 1 "global.conquest.us" "us.png" "AirSup
 procon.protected.teamnames.add "XP1_004" 2 "global.conquest.cn" "cn.png" "AirSuperiority0"
 
 
-// Carrier Assault (XP3 - Naval Strike)
+// Carrier Assault (XP2 - Naval Strike)
 ///////////////////////////////////////////////////////////////////////////////
 
 procon.protected.teamnames.add "XP2_001" 0 "global.conquest.neutral" "" "CarrierAssaultLarge0"
@@ -1634,6 +1639,44 @@ procon.protected.teamnames.add "XP2_003" 2 "global.conquest.cn" "cn.png" "Carrie
 procon.protected.teamnames.add "XP2_004" 0 "global.conquest.neutral" "" "CarrierAssaultSmall0"
 procon.protected.teamnames.add "XP2_004" 1 "global.conquest.us" "us.png" "CarrierAssaultSmall0"
 procon.protected.teamnames.add "XP2_004" 2 "global.conquest.cn" "cn.png" "CarrierAssaultSmall0"
+
+
+// Capture The Flag
+///////////////////////////////////////////////////////////////////////////////
+
+// XP0 (Second Assault)
+procon.protected.teamnames.add "XP0_Caspian" 0 "global.conquest.neutral" "" "CaptureTheFlag0"
+procon.protected.teamnames.add "XP0_Caspian" 1 "global.conquest.us" "us.png" "CaptureTheFlag0"
+procon.protected.teamnames.add "XP0_Caspian" 2 "global.conquest.ru" "ru.png" "CaptureTheFlag0"
+
+procon.protected.teamnames.add "XP0_Firestorm" 0 "global.conquest.neutral" "" "CaptureTheFlag0"
+procon.protected.teamnames.add "XP0_Firestorm" 1 "global.conquest.us" "us.png" "CaptureTheFlag0"
+procon.protected.teamnames.add "XP0_Firestorm" 2 "global.conquest.ru" "ru.png" "CaptureTheFlag0"
+
+procon.protected.teamnames.add "XP0_Metro" 0 "global.conquest.neutral" "" "CaptureTheFlag0"
+procon.protected.teamnames.add "XP0_Metro" 1 "global.conquest.us" "us.png" "CaptureTheFlag0"
+procon.protected.teamnames.add "XP0_Metro" 2 "global.conquest.ru" "ru.png" "CaptureTheFlag0"
+
+procon.protected.teamnames.add "XP0_Oman" 0 "global.conquest.neutral" "" "CaptureTheFlag0"
+procon.protected.teamnames.add "XP0_Oman" 1 "global.conquest.us" "us.png" "CaptureTheFlag0"
+procon.protected.teamnames.add "XP0_Oman" 2 "global.conquest.ru" "ru.png" "CaptureTheFlag0"
+
+// XP3 (Dragons Teeth)
+procon.protected.teamnames.add "XP3_MarketPl" 0 "global.conquest.neutral" "" "CaptureTheFlag0"
+procon.protected.teamnames.add "XP3_MarketPl" 1 "global.conquest.us" "us.png" "CaptureTheFlag0"
+procon.protected.teamnames.add "XP3_MarketPl" 2 "global.conquest.cn" "cn.png" "CaptureTheFlag0"
+
+procon.protected.teamnames.add "XP3_Prpganda" 0 "global.conquest.neutral" "" "CaptureTheFlag0"
+procon.protected.teamnames.add "XP3_Prpganda" 1 "global.conquest.us" "us.png" "CaptureTheFlag0"
+procon.protected.teamnames.add "XP3_Prpganda" 2 "global.conquest.cn" "cn.png" "CaptureTheFlag0"
+
+procon.protected.teamnames.add "XP3_UrbanGrn" 0 "global.conquest.neutral" "" "CaptureTheFlag0"
+procon.protected.teamnames.add "XP3_UrbanGrn" 1 "global.conquest.us" "us.png" "CaptureTheFlag0"
+procon.protected.teamnames.add "XP3_UrbanGrn" 2 "global.conquest.cn" "cn.png" "CaptureTheFlag0"
+
+procon.protected.teamnames.add "XP3_WtrFront" 0 "global.conquest.neutral" "" "CaptureTheFlag0"
+procon.protected.teamnames.add "XP3_WtrFront" 1 "global.conquest.us" "us.png" "CaptureTheFlag0"
+procon.protected.teamnames.add "XP3_WtrFront" 2 "global.conquest.cn" "cn.png" "CaptureTheFlag0"
 
 
 ///////////////////////////////////////////////////////////////////////////////
