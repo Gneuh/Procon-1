@@ -1426,7 +1426,7 @@ procon.protected.teamnames.add "XP0_Oman" 2 "global.Squad2" "ru.png" "SquadDeath
 procon.protected.teamnames.add "XP0_Oman" 3 "global.Squad3" "us.png" "SquadDeathMatch0"
 procon.protected.teamnames.add "XP0_Oman" 4 "global.Squad4" "ru.png" "SquadDeathMatch0"
 
-// XP1 (Naval Strike)
+// XP2 (Naval Strike)
 procon.protected.teamnames.add "XP2_001" 0 "global.conquest.neutral" "" "SquadDeathMatch0"
 procon.protected.teamnames.add "XP2_001" 1 "global.Squad1" "us.png" "SquadDeathMatch0"
 procon.protected.teamnames.add "XP2_001" 2 "global.Squad2" "ru.png" "SquadDeathMatch0"
@@ -1545,7 +1545,7 @@ procon.protected.teamnames.add "XP0_Oman" 0 "global.tdm.neutral" "" "TeamDeathMa
 procon.protected.teamnames.add "XP0_Oman" 1 "global.tdm.us" "us.png" "TeamDeathMatch0"
 procon.protected.teamnames.add "XP0_Oman" 2 "global.tdm.ru" "ru.png" "TeamDeathMatch0"
 
-// XP1 (Naval Strike)
+// XP2 (Naval Strike)
 procon.protected.teamnames.add "XP2_001" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
 procon.protected.teamnames.add "XP2_001" 1 "global.tdm.us" "us.png" "TeamDeathMatch0"
 procon.protected.teamnames.add "XP2_001" 2 "global.tdm.ru" "ru.png" "TeamDeathMatch0"
