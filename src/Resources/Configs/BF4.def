@@ -1,6 +1,6 @@
 /////////////////////////////////////////////
 // This definitions file will be overwritten during an update.
-//  (2014-07-14.01)
+//  (2014-07-15.01)
 // This file contains the standard defintions required to run procon 
 // connected to a BF4 server
 /////////////////////////////////////////////
@@ -606,48 +606,53 @@ procon.protected.maps.add "CarrierAssaultSmall0" "XP2_004" "Carrier Assault Smal
 // XP3 (Dragons Teeth)
 procon.protected.maps.add "ConquestLarge0" "XP3_MarketPl" "Conquest Large" "Pearl Market" 0
 procon.protected.maps.add "ConquestLarge0" "XP3_Prpganda" "Conquest Large" "Propaganda" 0
-procon.protected.maps.add "ConquestLarge0" "XP3_UrbanGrn" "Conquest Large" "Lumphini Garden" 0
+procon.protected.maps.add "ConquestLarge0" "XP3_UrbanGdn" "Conquest Large" "Lumphini Garden" 0
 procon.protected.maps.add "ConquestLarge0" "XP3_WtrFront" "Conquest Large" "Sunken Dragon" 0
 
 procon.protected.maps.add "ConquestSmall0" "XP3_MarketPl" "Conquest Small" "Pearl Market" 0
 procon.protected.maps.add "ConquestSmall0" "XP3_Prpganda" "Conquest Small" "Propaganda" 0
-procon.protected.maps.add "ConquestSmall0" "XP3_UrbanGrn" "Conquest Small" "Lumphini Garden" 0
+procon.protected.maps.add "ConquestSmall0" "XP3_UrbanGdn" "Conquest Small" "Lumphini Garden" 0
 procon.protected.maps.add "ConquestSmall0" "XP3_WtrFront" "Conquest Small" "Sunken Dragon" 0
 
 procon.protected.maps.add "Domination0" "XP3_MarketPl" "Domination" "Pearl Market" 0
 procon.protected.maps.add "Domination0" "XP3_Prpganda" "Domination" "Propaganda" 0
-procon.protected.maps.add "Domination0" "XP3_UrbanGrn" "Domination" "Lumphini Garden" 0
+procon.protected.maps.add "Domination0" "XP3_UrbanGdn" "Domination" "Lumphini Garden" 0
 procon.protected.maps.add "Domination0" "XP3_WtrFront" "Domination" "Sunken Dragon" 0
 
 procon.protected.maps.add "Elimination0" "XP3_MarketPl" "Defuse" "Pearl Market" 0
 procon.protected.maps.add "Elimination0" "XP3_Prpganda" "Defuse" "Propaganda" 0
-procon.protected.maps.add "Elimination0" "XP3_UrbanGrn" "Defuse" "Lumphini Garden" 0
+procon.protected.maps.add "Elimination0" "XP3_UrbanGdn" "Defuse" "Lumphini Garden" 0
 procon.protected.maps.add "Elimination0" "XP3_WtrFront" "Defuse" "Sunken Dragon" 0
 
 procon.protected.maps.add "Obliteration" "XP3_MarketPl" "Obliteration" "Pearl Market" 0
 procon.protected.maps.add "Obliteration" "XP3_Prpganda" "Obliteration" "Propaganda" 0
-procon.protected.maps.add "Obliteration" "XP3_UrbanGrn" "Obliteration" "Lumphini Garden" 0
+procon.protected.maps.add "Obliteration" "XP3_UrbanGdn" "Obliteration" "Lumphini Garden" 0
 procon.protected.maps.add "Obliteration" "XP3_WtrFront" "Obliteration" "Sunken Dragon" 0
 
 procon.protected.maps.add "RushLarge0" "XP3_MarketPl" "Rush" "Pearl Market" 0
 procon.protected.maps.add "RushLarge0" "XP3_Prpganda" "Rush" "Propaganda" 0
-procon.protected.maps.add "RushLarge0" "XP3_UrbanGrn" "Rush" "Lumphini Garden" 0
+procon.protected.maps.add "RushLarge0" "XP3_UrbanGdn" "Rush" "Lumphini Garden" 0
 procon.protected.maps.add "RushLarge0" "XP3_WtrFront" "Rush" "Sunken Dragon" 0
 
 procon.protected.maps.add "SquadDeathMatch0" "XP3_MarketPl" "Squad Deathmatch" "Pearl Market" 0
 procon.protected.maps.add "SquadDeathMatch0" "XP3_Prpganda" "Squad Deathmatch" "Propaganda" 0
-procon.protected.maps.add "SquadDeathMatch0" "XP3_UrbanGrn" "Squad Deathmatch" "Lumphini Garden" 0
+procon.protected.maps.add "SquadDeathMatch0" "XP3_UrbanGdn" "Squad Deathmatch" "Lumphini Garden" 0
 procon.protected.maps.add "SquadDeathMatch0" "XP3_WtrFront" "Squad Deathmatch" "Sunken Dragon" 0
 
 procon.protected.maps.add "TeamDeathMatch0" "XP3_MarketPl" "Team Deathmatch" "Pearl Market" 0
 procon.protected.maps.add "TeamDeathMatch0" "XP3_Prpganda" "Team Deathmatch" "Propaganda" 0
-procon.protected.maps.add "TeamDeathMatch0" "XP3_UrbanGrn" "Team Deathmatch" "Lumphini Garden" 0
+procon.protected.maps.add "TeamDeathMatch0" "XP3_UrbanGdn" "Team Deathmatch" "Lumphini Garden" 0
 procon.protected.maps.add "TeamDeathMatch0" "XP3_WtrFront" "Team Deathmatch" "Sunken Dragon" 0
 
 procon.protected.maps.add "CaptureTheFlag0" "XP3_MarketPl" "CTF" "Pearl Market" 0
 procon.protected.maps.add "CaptureTheFlag0" "XP3_Prpganda" "CTF" "Propaganda" 0
-procon.protected.maps.add "CaptureTheFlag0" "XP3_UrbanGrn" "CTF" "Lumphini Garden" 0
+procon.protected.maps.add "CaptureTheFlag0" "XP3_UrbanGdn" "CTF" "Lumphini Garden" 0
 procon.protected.maps.add "CaptureTheFlag0" "XP3_WtrFront" "CTF" "Sunken Dragon" 0
+
+procon.protected.maps.add "Chainlink0" "XP3_MarketPl" "Chain Link" "Pearl Market" 0
+procon.protected.maps.add "Chainlink0" "XP3_Prpganda" "Chain Link" "Propaganda" 0
+procon.protected.maps.add "Chainlink0" "XP3_UrbanGdn" "Chain Link" "Lumphini Garden" 0
+procon.protected.maps.add "Chainlink0" "XP3_WtrFront" "Chain Link" "Sunken Dragon" 0
 
 procon.protected.teamnames.clear
 
@@ -754,9 +759,9 @@ procon.protected.teamnames.add "XP3_Prpganda" 0 "global.conquest.neutral" "" "Co
 procon.protected.teamnames.add "XP3_Prpganda" 1 "global.conquest.us" "us.png" "ConquestLarge0"
 procon.protected.teamnames.add "XP3_Prpganda" 2 "global.conquest.cn" "cn.png" "ConquestLarge0"
 
-procon.protected.teamnames.add "XP3_UrbanGrn" 0 "global.conquest.neutral" "" "ConquestLarge0"
-procon.protected.teamnames.add "XP3_UrbanGrn" 1 "global.conquest.us" "us.png" "ConquestLarge0"
-procon.protected.teamnames.add "XP3_UrbanGrn" 2 "global.conquest.cn" "cn.png" "ConquestLarge0"
+procon.protected.teamnames.add "XP3_UrbanGdn" 0 "global.conquest.neutral" "" "ConquestLarge0"
+procon.protected.teamnames.add "XP3_UrbanGdn" 1 "global.conquest.us" "us.png" "ConquestLarge0"
+procon.protected.teamnames.add "XP3_UrbanGdn" 2 "global.conquest.cn" "cn.png" "ConquestLarge0"
 
 procon.protected.teamnames.add "XP3_WtrFront" 0 "global.conquest.neutral" "" "ConquestLarge0"
 procon.protected.teamnames.add "XP3_WtrFront" 1 "global.conquest.us" "us.png" "ConquestLarge0"
@@ -866,9 +871,9 @@ procon.protected.teamnames.add "XP3_Prpganda" 0 "global.conquest.neutral" "" "Co
 procon.protected.teamnames.add "XP3_Prpganda" 1 "global.conquest.us" "us.png" "ConquestSmall0"
 procon.protected.teamnames.add "XP3_Prpganda" 2 "global.conquest.cn" "cn.png" "ConquestSmall0"
 
-procon.protected.teamnames.add "XP3_UrbanGrn" 0 "global.conquest.neutral" "" "ConquestSmall0"
-procon.protected.teamnames.add "XP3_UrbanGrn" 1 "global.conquest.us" "us.png" "ConquestSmall0"
-procon.protected.teamnames.add "XP3_UrbanGrn" 2 "global.conquest.cn" "cn.png" "ConquestSmall0"
+procon.protected.teamnames.add "XP3_UrbanGdn" 0 "global.conquest.neutral" "" "ConquestSmall0"
+procon.protected.teamnames.add "XP3_UrbanGdn" 1 "global.conquest.us" "us.png" "ConquestSmall0"
+procon.protected.teamnames.add "XP3_UrbanGdn" 2 "global.conquest.cn" "cn.png" "ConquestSmall0"
 
 procon.protected.teamnames.add "XP3_WtrFront" 0 "global.conquest.neutral" "" "ConquestSmall0"
 procon.protected.teamnames.add "XP3_WtrFront" 1 "global.conquest.us" "us.png" "ConquestSmall0"
@@ -977,9 +982,9 @@ procon.protected.teamnames.add "XP3_Prpganda" 0 "global.conquest.neutral" "" "Do
 procon.protected.teamnames.add "XP3_Prpganda" 1 "global.conquest.us" "us.png" "Domination0"
 procon.protected.teamnames.add "XP3_Prpganda" 2 "global.conquest.cn" "cn.png" "Domination0"
 
-procon.protected.teamnames.add "XP3_UrbanGrn" 0 "global.conquest.neutral" "" "Domination0"
-procon.protected.teamnames.add "XP3_UrbanGrn" 1 "global.conquest.us" "us.png" "Domination0"
-procon.protected.teamnames.add "XP3_UrbanGrn" 2 "global.conquest.cn" "cn.png" "Domination0"
+procon.protected.teamnames.add "XP3_UrbanGdn" 0 "global.conquest.neutral" "" "Domination0"
+procon.protected.teamnames.add "XP3_UrbanGdn" 1 "global.conquest.us" "us.png" "Domination0"
+procon.protected.teamnames.add "XP3_UrbanGdn" 2 "global.conquest.cn" "cn.png" "Domination0"
 
 procon.protected.teamnames.add "XP3_WtrFront" 0 "global.conquest.neutral" "" "Domination0"
 procon.protected.teamnames.add "XP3_WtrFront" 1 "global.conquest.us" "us.png" "Domination0"
@@ -1088,9 +1093,9 @@ procon.protected.teamnames.add "XP3_Prpganda" 0 "global.conquest.neutral" "" "El
 procon.protected.teamnames.add "XP3_Prpganda" 1 "global.conquest.us" "us.png" "Elimination0"
 procon.protected.teamnames.add "XP3_Prpganda" 2 "global.conquest.cn" "cn.png" "Elimination0"
 
-procon.protected.teamnames.add "XP3_UrbanGrn" 0 "global.conquest.neutral" "" "Elimination0"
-procon.protected.teamnames.add "XP3_UrbanGrn" 1 "global.conquest.us" "us.png" "Elimination0"
-procon.protected.teamnames.add "XP3_UrbanGrn" 2 "global.conquest.cn" "cn.png" "Elimination0"
+procon.protected.teamnames.add "XP3_UrbanGdn" 0 "global.conquest.neutral" "" "Elimination0"
+procon.protected.teamnames.add "XP3_UrbanGdn" 1 "global.conquest.us" "us.png" "Elimination0"
+procon.protected.teamnames.add "XP3_UrbanGdn" 2 "global.conquest.cn" "cn.png" "Elimination0"
 
 procon.protected.teamnames.add "XP3_WtrFront" 0 "global.conquest.neutral" "" "Elimination0"
 procon.protected.teamnames.add "XP3_WtrFront" 1 "global.conquest.us" "us.png" "Elimination0"
@@ -1199,9 +1204,9 @@ procon.protected.teamnames.add "XP3_Prpganda" 0 "global.conquest.neutral" "" "Ob
 procon.protected.teamnames.add "XP3_Prpganda" 1 "global.conquest.us" "us.png" "Obliteration"
 procon.protected.teamnames.add "XP3_Prpganda" 2 "global.conquest.cn" "cn.png" "Obliteration"
 
-procon.protected.teamnames.add "XP3_UrbanGrn" 0 "global.conquest.neutral" "" "Obliteration"
-procon.protected.teamnames.add "XP3_UrbanGrn" 1 "global.conquest.us" "us.png" "Obliteration"
-procon.protected.teamnames.add "XP3_UrbanGrn" 2 "global.conquest.cn" "cn.png" "Obliteration"
+procon.protected.teamnames.add "XP3_UrbanGdn" 0 "global.conquest.neutral" "" "Obliteration"
+procon.protected.teamnames.add "XP3_UrbanGdn" 1 "global.conquest.us" "us.png" "Obliteration"
+procon.protected.teamnames.add "XP3_UrbanGdn" 2 "global.conquest.cn" "cn.png" "Obliteration"
 
 procon.protected.teamnames.add "XP3_WtrFront" 0 "global.conquest.neutral" "" "Obliteration"
 procon.protected.teamnames.add "XP3_WtrFront" 1 "global.conquest.us" "us.png" "Obliteration"
@@ -1310,9 +1315,9 @@ procon.protected.teamnames.add "XP3_Prpganda" 0 "global.conquest.neutral" "" "Ru
 procon.protected.teamnames.add "XP3_Prpganda" 1 "global.conquest.us" "us.png" "RushLarge0"
 procon.protected.teamnames.add "XP3_Prpganda" 2 "global.conquest.cn" "cn.png" "RushLarge0"
 
-procon.protected.teamnames.add "XP3_UrbanGrn" 0 "global.conquest.neutral" "" "RushLarge0"
-procon.protected.teamnames.add "XP3_UrbanGrn" 1 "global.conquest.us" "us.png" "RushLarge0"
-procon.protected.teamnames.add "XP3_UrbanGrn" 2 "global.conquest.cn" "cn.png" "RushLarge0"
+procon.protected.teamnames.add "XP3_UrbanGdn" 0 "global.conquest.neutral" "" "RushLarge0"
+procon.protected.teamnames.add "XP3_UrbanGdn" 1 "global.conquest.us" "us.png" "RushLarge0"
+procon.protected.teamnames.add "XP3_UrbanGdn" 2 "global.conquest.cn" "cn.png" "RushLarge0"
 
 procon.protected.teamnames.add "XP3_WtrFront" 0 "global.conquest.neutral" "" "RushLarge0"
 procon.protected.teamnames.add "XP3_WtrFront" 1 "global.conquest.us" "us.png" "RushLarge0"
@@ -1465,9 +1470,9 @@ procon.protected.teamnames.add "XP3_Prpganda" 0 "global.conquest.neutral" "" "Sq
 procon.protected.teamnames.add "XP3_Prpganda" 1 "global.conquest.us" "us.png" "SquadDeathMatch0"
 procon.protected.teamnames.add "XP3_Prpganda" 2 "global.conquest.cn" "cn.png" "SquadDeathMatch0"
 
-procon.protected.teamnames.add "XP3_UrbanGrn" 0 "global.conquest.neutral" "" "SquadDeathMatch0"
-procon.protected.teamnames.add "XP3_UrbanGrn" 1 "global.conquest.us" "us.png" "SquadDeathMatch0"
-procon.protected.teamnames.add "XP3_UrbanGrn" 2 "global.conquest.cn" "cn.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP3_UrbanGdn" 0 "global.conquest.neutral" "" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP3_UrbanGdn" 1 "global.conquest.us" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP3_UrbanGdn" 2 "global.conquest.cn" "cn.png" "SquadDeathMatch0"
 
 procon.protected.teamnames.add "XP3_WtrFront" 0 "global.conquest.neutral" "" "SquadDeathMatch0"
 procon.protected.teamnames.add "XP3_WtrFront" 1 "global.conquest.us" "us.png" "SquadDeathMatch0"
@@ -1576,9 +1581,9 @@ procon.protected.teamnames.add "XP3_Prpganda" 0 "global.conquest.neutral" "" "Te
 procon.protected.teamnames.add "XP3_Prpganda" 1 "global.conquest.us" "us.png" "TeamDeathMatch0"
 procon.protected.teamnames.add "XP3_Prpganda" 2 "global.conquest.cn" "cn.png" "TeamDeathMatch0"
 
-procon.protected.teamnames.add "XP3_UrbanGrn" 0 "global.conquest.neutral" "" "TeamDeathMatch0"
-procon.protected.teamnames.add "XP3_UrbanGrn" 1 "global.conquest.us" "us.png" "TeamDeathMatch0"
-procon.protected.teamnames.add "XP3_UrbanGrn" 2 "global.conquest.cn" "cn.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP3_UrbanGdn" 0 "global.conquest.neutral" "" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP3_UrbanGdn" 1 "global.conquest.us" "us.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP3_UrbanGdn" 2 "global.conquest.cn" "cn.png" "TeamDeathMatch0"
 
 procon.protected.teamnames.add "XP3_WtrFront" 0 "global.conquest.neutral" "" "TeamDeathMatch0"
 procon.protected.teamnames.add "XP3_WtrFront" 1 "global.conquest.us" "us.png" "TeamDeathMatch0"
@@ -1670,13 +1675,34 @@ procon.protected.teamnames.add "XP3_Prpganda" 0 "global.conquest.neutral" "" "Ca
 procon.protected.teamnames.add "XP3_Prpganda" 1 "global.conquest.us" "us.png" "CaptureTheFlag0"
 procon.protected.teamnames.add "XP3_Prpganda" 2 "global.conquest.cn" "cn.png" "CaptureTheFlag0"
 
-procon.protected.teamnames.add "XP3_UrbanGrn" 0 "global.conquest.neutral" "" "CaptureTheFlag0"
-procon.protected.teamnames.add "XP3_UrbanGrn" 1 "global.conquest.us" "us.png" "CaptureTheFlag0"
-procon.protected.teamnames.add "XP3_UrbanGrn" 2 "global.conquest.cn" "cn.png" "CaptureTheFlag0"
+procon.protected.teamnames.add "XP3_UrbanGdn" 0 "global.conquest.neutral" "" "CaptureTheFlag0"
+procon.protected.teamnames.add "XP3_UrbanGdn" 1 "global.conquest.us" "us.png" "CaptureTheFlag0"
+procon.protected.teamnames.add "XP3_UrbanGdn" 2 "global.conquest.cn" "cn.png" "CaptureTheFlag0"
 
 procon.protected.teamnames.add "XP3_WtrFront" 0 "global.conquest.neutral" "" "CaptureTheFlag0"
 procon.protected.teamnames.add "XP3_WtrFront" 1 "global.conquest.us" "us.png" "CaptureTheFlag0"
 procon.protected.teamnames.add "XP3_WtrFront" 2 "global.conquest.cn" "cn.png" "CaptureTheFlag0"
+
+
+// Chain Link
+///////////////////////////////////////////////////////////////////////////////
+
+// XP3 (Dragons Teeth)
+procon.protected.teamnames.add "XP3_MarketPl" 0 "global.conquest.neutral" "" "Chainlink0"
+procon.protected.teamnames.add "XP3_MarketPl" 1 "global.conquest.us" "us.png" "Chainlink0"
+procon.protected.teamnames.add "XP3_MarketPl" 2 "global.conquest.cn" "cn.png" "Chainlink0"
+
+procon.protected.teamnames.add "XP3_Prpganda" 0 "global.conquest.neutral" "" "Chainlink0"
+procon.protected.teamnames.add "XP3_Prpganda" 1 "global.conquest.us" "us.png" "Chainlink0"
+procon.protected.teamnames.add "XP3_Prpganda" 2 "global.conquest.cn" "cn.png" "Chainlink0"
+
+procon.protected.teamnames.add "XP3_UrbanGdn" 0 "global.conquest.neutral" "" "Chainlink0"
+procon.protected.teamnames.add "XP3_UrbanGdn" 1 "global.conquest.us" "us.png" "Chainlink0"
+procon.protected.teamnames.add "XP3_UrbanGdn" 2 "global.conquest.cn" "cn.png" "Chainlink0"
+
+procon.protected.teamnames.add "XP3_WtrFront" 0 "global.conquest.neutral" "" "Chainlink0"
+procon.protected.teamnames.add "XP3_WtrFront" 1 "global.conquest.us" "us.png" "Chainlink0"
+procon.protected.teamnames.add "XP3_WtrFront" 2 "global.conquest.cn" "cn.png" "Chainlink0"
 
 
 ///////////////////////////////////////////////////////////////////////////////
