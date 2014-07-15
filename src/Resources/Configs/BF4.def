@@ -649,10 +649,10 @@ procon.protected.maps.add "CaptureTheFlag0" "XP3_Prpganda" "CTF" "Propaganda" 0
 procon.protected.maps.add "CaptureTheFlag0" "XP3_UrbanGdn" "CTF" "Lumphini Garden" 0
 procon.protected.maps.add "CaptureTheFlag0" "XP3_WtrFront" "CTF" "Sunken Dragon" 0
 
-procon.protected.maps.add "Chainlink" "XP3_MarketPl" "Chainlink" "Pearl Market" 0
-procon.protected.maps.add "Chainlink" "XP3_Prpganda" "Chainlink" "Propaganda" 0
-procon.protected.maps.add "Chainlink" "XP3_UrbanGdn" "Chainlink" "Lumphini Garden" 0
-procon.protected.maps.add "Chainlink" "XP3_WtrFront" "Chainlink" "Sunken Dragon" 0
+procon.protected.maps.add "Chainlink0" "XP3_MarketPl" "Chain Link" "Pearl Market" 0
+procon.protected.maps.add "Chainlink0" "XP3_Prpganda" "Chain Link" "Propaganda" 0
+procon.protected.maps.add "Chainlink0" "XP3_UrbanGdn" "Chain Link" "Lumphini Garden" 0
+procon.protected.maps.add "Chainlink0" "XP3_WtrFront" "Chain Link" "Sunken Dragon" 0
 
 procon.protected.teamnames.clear
 
@@ -1688,21 +1688,21 @@ procon.protected.teamnames.add "XP3_WtrFront" 2 "global.conquest.cn" "cn.png" "C
 ///////////////////////////////////////////////////////////////////////////////
 
 // XP3 (Dragons Teeth)
-procon.protected.teamnames.add "XP3_MarketPl" 0 "global.conquest.neutral" "" "Chainlink"
-procon.protected.teamnames.add "XP3_MarketPl" 1 "global.conquest.us" "us.png" "Chainlink"
-procon.protected.teamnames.add "XP3_MarketPl" 2 "global.conquest.cn" "cn.png" "Chainlink"
+procon.protected.teamnames.add "XP3_MarketPl" 0 "global.conquest.neutral" "" "Chainlink0"
+procon.protected.teamnames.add "XP3_MarketPl" 1 "global.conquest.us" "us.png" "Chainlink0"
+procon.protected.teamnames.add "XP3_MarketPl" 2 "global.conquest.cn" "cn.png" "Chainlink0"
 
-procon.protected.teamnames.add "XP3_Prpganda" 0 "global.conquest.neutral" "" "Chainlink"
-procon.protected.teamnames.add "XP3_Prpganda" 1 "global.conquest.us" "us.png" "Chainlink"
-procon.protected.teamnames.add "XP3_Prpganda" 2 "global.conquest.cn" "cn.png" "Chainlink"
+procon.protected.teamnames.add "XP3_Prpganda" 0 "global.conquest.neutral" "" "Chainlink0"
+procon.protected.teamnames.add "XP3_Prpganda" 1 "global.conquest.us" "us.png" "Chainlink0"
+procon.protected.teamnames.add "XP3_Prpganda" 2 "global.conquest.cn" "cn.png" "Chainlink0"
 
-procon.protected.teamnames.add "XP3_UrbanGdn" 0 "global.conquest.neutral" "" "Chainlink"
-procon.protected.teamnames.add "XP3_UrbanGdn" 1 "global.conquest.us" "us.png" "Chainlink"
-procon.protected.teamnames.add "XP3_UrbanGdn" 2 "global.conquest.cn" "cn.png" "Chainlink"
+procon.protected.teamnames.add "XP3_UrbanGdn" 0 "global.conquest.neutral" "" "Chainlink0"
+procon.protected.teamnames.add "XP3_UrbanGdn" 1 "global.conquest.us" "us.png" "Chainlink0"
+procon.protected.teamnames.add "XP3_UrbanGdn" 2 "global.conquest.cn" "cn.png" "Chainlink0"
 
-procon.protected.teamnames.add "XP3_WtrFront" 0 "global.conquest.neutral" "" "Chainlink"
-procon.protected.teamnames.add "XP3_WtrFront" 1 "global.conquest.us" "us.png" "Chainlink"
-procon.protected.teamnames.add "XP3_WtrFront" 2 "global.conquest.cn" "cn.png" "Chainlink"
+procon.protected.teamnames.add "XP3_WtrFront" 0 "global.conquest.neutral" "" "Chainlink0"
+procon.protected.teamnames.add "XP3_WtrFront" 1 "global.conquest.us" "us.png" "Chainlink0"
+procon.protected.teamnames.add "XP3_WtrFront" 2 "global.conquest.cn" "cn.png" "Chainlink0"
 
 
 ///////////////////////////////////////////////////////////////////////////////
