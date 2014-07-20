@@ -1,6 +1,6 @@
 /////////////////////////////////////////////
 // This definitions file will be overwritten during an update.
-//  (2014-07-15.01)
+//  (2014-07-20.01)
 // This file contains the standard defintions required to run procon 
 // connected to a BF4 server
 /////////////////////////////////////////////
@@ -43,6 +43,7 @@ procon.protected.serverversions.add BF4 "126936" "R34"
 procon.protected.serverversions.add BF4 "130790" "R35"
 procon.protected.serverversions.add BF4 "133337" "R36"
 procon.protected.serverversions.add BF4 "135082" "R37"
+procon.protected.serverversions.add BF4 "136921" "R38"
 
 procon.protected.specialization.clear
 
@@ -99,12 +100,15 @@ procon.protected.weapons.add Assault "U_AR160_M320_SMK" Secondary Impact
 procon.protected.weapons.add Demolition "U_ASVAL" Primary SMG
 procon.protected.weapons.add Demolition "U_AT4" Secondary ProjectileExplosive
 procon.protected.weapons.add Support "U_AWS" Primary LMG
+procon.protected.weapons.add Support "U_BallisticShield" Secondary Impact
+procon.protected.weapons.add Assault "U_Bulldog" Primary AssaultRifle
 procon.protected.weapons.add Recon "U_C4" Secondary Explosive
 procon.protected.weapons.add Support "U_C4_Support" Secondary Explosive
 procon.protected.weapons.add Demolition "U_CBJ-MS" Primary SMG
 procon.protected.weapons.add Support "U_Claymore" Secondary Explosive
 procon.protected.weapons.add Recon "U_Claymore_Recon" Secondary Explosive
 procon.protected.weapons.add Recon "U_CS-LR4" Primary SniperRifle
+procon.protected.weapons.add Recon "U_CS5" Primary SniperRifle
 procon.protected.weapons.add Assault "U_CZ805" Primary AssaultRifle
 procon.protected.weapons.add Assault "U_CZ805_M26_Buck" Secondary Shotgun
 procon.protected.weapons.add Assault "U_CZ805_M26_Flechette" Secondary Shotgun
@@ -119,6 +123,7 @@ procon.protected.weapons.add Assault "U_CZ805_M320_SMK" Secondary Impact
 procon.protected.weapons.add None "U_CZ75" Auxiliary Handgun
 procon.protected.weapons.add None "U_DAO12" Primary Shotgun
 procon.protected.weapons.add None "U_DBV12" Primary Shotgun
+procon.protected.weapons.add None "U_DesertEagle" Auxiliary Handgun
 procon.protected.weapons.add Assault "U_Defib" Secondary Melee
 procon.protected.weapons.add Demolition "EODBot" Secondary Impact
 procon.protected.weapons.add Assault "U_F2000" Primary AssaultRifle
@@ -210,6 +215,7 @@ procon.protected.weapons.add Demolition "U_MP7" Primary SMG
 procon.protected.weapons.add None "U_MP412Rex" Auxiliary Handgun
 procon.protected.weapons.add None "U_MP443" Auxiliary Handgun
 procon.protected.weapons.add None "U_MTAR21" Primary Carbine
+procon.protected.weapons.add Demolition "U_MPX" Primary SMG
 procon.protected.weapons.add Demolition "U_MX4" Primary SMG
 procon.protected.weapons.add Demolition "U_NLAW" Secondary ProjectileExplosive
 procon.protected.weapons.add None "U_P226" Auxiliary Handgun
@@ -232,6 +238,7 @@ procon.protected.weapons.add Assault "U_QBZ951_M320_LVG" Secondary ProjectileExp
 procon.protected.weapons.add Assault "U_QBZ951_M320_SHG" Secondary Shotgun
 procon.protected.weapons.add Assault "U_QBZ951_M320_SMK" Secondary Impact
 procon.protected.weapons.add None "U_QSZ92" Auxiliary Handgun
+procon.protected.weapons.add None "XP3/Gameplay/Vehicles/RAWR/RAWR" Secondary Explosive
 procon.protected.weapons.add Demolition "U_Repairtool" Secondary Melee
 procon.protected.weapons.add None "U_RFB" Primary DMR
 procon.protected.weapons.add Demolition "U_RPG7" Secondary ProjectileExplosive
@@ -272,6 +279,7 @@ procon.protected.weapons.add Demolition "U_SMAW" Secondary ProjectileExplosive
 procon.protected.weapons.add None "U_SPAS12" Primary Shotgun
 procon.protected.weapons.add Demolition "U_SR2" Primary SMG
 procon.protected.weapons.add Demolition "U_SRAW" Secondary ProjectileExplosive
+procon.protected.weapons.add Recon "U_SR338" Primary SniperRifle
 procon.protected.weapons.add Recon "U_SRS" Primary SniperRifle
 procon.protected.weapons.add Demolition "U_Starstreak" Secondary ProjectileExplosive
 procon.protected.weapons.add Assault "U_SteyrAug" Primary AssaultRifle
@@ -297,6 +305,7 @@ procon.protected.weapons.add Support "XP1/Gameplay/Gadgets/UCAV/UCAV_Launcher" S
 procon.protected.weapons.add Support "U_Ultimax" Primary LMG
 procon.protected.weapons.add Demolition "U_UMP9" Primary SMG
 procon.protected.weapons.add Demolition "U_UMP45" Primary SMG
+procon.protected.weapons.add None "U_Unica6" Auxiliary Handgun
 procon.protected.weapons.add None "U_USAS-12" Primary Shotgun
 procon.protected.weapons.add None "U_USAS-12_Nightvision" Primary Shotgun
 procon.protected.weapons.add None "U_UTAS" Primary Shotgun
