@@ -685,7 +685,7 @@ procon.protected.maps.add "Domination0" "XP4_Wlkrftry" "Domination" "Hangar 21" 
 procon.protected.maps.add "Elimination0" "XP4_Arctic" "Defuse" "Operation Whiteout" 0
 procon.protected.maps.add "Elimination0" "XP4_SubBase" "Defuse" "Hammerhead" 0
 procon.protected.maps.add "Elimination0" "XP4_Titan" "Defuse" "Giants Of Karelia" 0
-procon.protected.maps.add "Elimination0" "XXP4_Wlkrftry" "Defuse" "Hangar 21" 0
+procon.protected.maps.add "Elimination0" "XP4_Wlkrftry" "Defuse" "Hangar 21" 0
 
 procon.protected.maps.add "Obliteration" "XP4_Arctic" "Obliteration" "Operation Whiteout" 0
 procon.protected.maps.add "Obliteration" "XP4_SubBase" "Obliteration" "Hammerhead" 0
