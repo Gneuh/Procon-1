@@ -667,45 +667,45 @@ procon.protected.maps.add "Chainlink0" "XP3_UrbanGdn" "Chain Link" "Lumphini Gar
 procon.protected.maps.add "Chainlink0" "XP3_WtrFront" "Chain Link" "Sunken Dragon" 0
 
 // XP4 (Final Stand)
-procon.protected.maps.add "ConquestLarge0" "XP4_Arctic" "Conquest Large" "Arctic Research" 0
-procon.protected.maps.add "ConquestLarge0" "XP4_SubBase" "Conquest Large" "Sub Base" 0
-procon.protected.maps.add "ConquestLarge0" "XP4_Titan" "Conquest Large" "Titan" 0
-procon.protected.maps.add "ConquestLarge0" "XP4_WalkerFactory" "Conquest Large" "Walker Factory" 0
+procon.protected.maps.add "ConquestLarge0" "XP4_Arctic" "Conquest Large" "Operation Whiteout" 0
+procon.protected.maps.add "ConquestLarge0" "XP4_SubBase" "Conquest Large" "Hammerhead" 0
+procon.protected.maps.add "ConquestLarge0" "XP4_Titan" "Conquest Large" "Giants Of Karelia" 0
+procon.protected.maps.add "ConquestLarge0" "XP4_Wlkrftry" "Conquest Large" "Hangar 21" 0
 
-procon.protected.maps.add "ConquestSmall0" "XP4_Arctic" "Conquest Small" "Arctic Research" 0
-procon.protected.maps.add "ConquestSmall0" "XP4_SubBase" "Conquest Small" "Sub Base" 0
-procon.protected.maps.add "ConquestSmall0" "XP4_Titan" "Conquest Small" "Titan" 0
-procon.protected.maps.add "ConquestSmall0" "XP4_WalkerFactory" "Conquest Small" "Walker Factory" 0
+procon.protected.maps.add "ConquestSmall0" "XP4_Arctic" "Conquest Small" "Operation Whiteout" 0
+procon.protected.maps.add "ConquestSmall0" "XP4_SubBase" "Conquest Small" "Hammerhead" 0
+procon.protected.maps.add "ConquestSmall0" "XP4_Titan" "Conquest Small" "Giants Of Karelia" 0
+procon.protected.maps.add "ConquestSmall0" "XP4_Wlkrftry" "Conquest Small" "Hangar 21" 0
 
-procon.protected.maps.add "Domination0" "XP4_Arctic" "Domination" "Arctic Research" 0
-procon.protected.maps.add "Domination0" "XP4_SubBase" "Domination" "Sub Base" 0
-procon.protected.maps.add "Domination0" "XP4_Titan" "Domination" "Titan" 0
-procon.protected.maps.add "Domination0" "XP4_WalkerFactory" "Domination" "Walker Factory" 0
+procon.protected.maps.add "Domination0" "XP4_Arctic" "Domination" "Operation Whiteout" 0
+procon.protected.maps.add "Domination0" "XP4_SubBase" "Domination" "Hammerhead" 0
+procon.protected.maps.add "Domination0" "XP4_Titan" "Domination" "Giants Of Karelia" 0
+procon.protected.maps.add "Domination0" "XP4_Wlkrftry" "Domination" "Hangar 21" 0
 
-procon.protected.maps.add "Elimination0" "XP4_Arctic" "Defuse" "Arctic Research" 0
-procon.protected.maps.add "Elimination0" "XP4_SubBase" "Defuse" "Sub Base" 0
-procon.protected.maps.add "Elimination0" "XP4_Titan" "Defuse" "Titan" 0
-procon.protected.maps.add "Elimination0" "XXP4_WalkerFactory" "Defuse" "Walker Factory" 0
+procon.protected.maps.add "Elimination0" "XP4_Arctic" "Defuse" "Operation Whiteout" 0
+procon.protected.maps.add "Elimination0" "XP4_SubBase" "Defuse" "Hammerhead" 0
+procon.protected.maps.add "Elimination0" "XP4_Titan" "Defuse" "Giants Of Karelia" 0
+procon.protected.maps.add "Elimination0" "XP4_Wlkrftry" "Defuse" "Hangar 21" 0
 
-procon.protected.maps.add "Obliteration" "XP4_Arctic" "Obliteration" "Arctic Research" 0
-procon.protected.maps.add "Obliteration" "XP4_SubBase" "Obliteration" "Sub Base" 0
-procon.protected.maps.add "Obliteration" "XP4_Titan" "Obliteration" "Titan" 0
-procon.protected.maps.add "Obliteration" "XP4_WalkerFactory" "Obliteration" "Walker Factory" 0
+procon.protected.maps.add "Obliteration" "XP4_Arctic" "Obliteration" "Operation Whiteout" 0
+procon.protected.maps.add "Obliteration" "XP4_SubBase" "Obliteration" "Hammerhead" 0
+procon.protected.maps.add "Obliteration" "XP4_Titan" "Obliteration" "Giants Of Karelia" 0
+procon.protected.maps.add "Obliteration" "XP4_Wlkrftry" "Obliteration" "Hangar 21" 0
 
-procon.protected.maps.add "RushLarge0" "XP4_Arctic" "Rush" "Arctic Research" 0
-procon.protected.maps.add "RushLarge0" "XP4_SubBase" "Rush" "Sub Base" 0
-procon.protected.maps.add "RushLarge0" "XP4_Titan" "Rush" "Titan" 0
-procon.protected.maps.add "RushLarge0" "XP4_WalkerFactory" "Rush" "Walker Factory" 0
+procon.protected.maps.add "RushLarge0" "XP4_Arctic" "Rush" "Operation Whiteout" 0
+procon.protected.maps.add "RushLarge0" "XP4_SubBase" "Rush" "Hammerhead" 0
+procon.protected.maps.add "RushLarge0" "XP4_Titan" "Rush" "Giants Of Karelia" 0
+procon.protected.maps.add "RushLarge0" "XP4_Wlkrftry" "Rush" "Hangar 21" 0
 
-procon.protected.maps.add "SquadDeathMatch0" "XP4_Arctic" "Squad Deathmatch" "Arctic Research" 0
-procon.protected.maps.add "SquadDeathMatch0" "XP4_SubBase" "Squad Deathmatch" "Sub Base" 0
-procon.protected.maps.add "SquadDeathMatch0" "XP4_Titan" "Squad Deathmatch" "Titan" 0
-procon.protected.maps.add "SquadDeathMatch0" "XP4_WalkerFactory" "Squad Deathmatch" "Walker Factory" 0
+procon.protected.maps.add "SquadDeathMatch0" "XP4_Arctic" "Squad Deathmatch" "Operation Whiteout" 0
+procon.protected.maps.add "SquadDeathMatch0" "XP4_SubBase" "Squad Deathmatch" "Hammerhead" 0
+procon.protected.maps.add "SquadDeathMatch0" "XP4_Titan" "Squad Deathmatch" "Giants Of Karelia" 0
+procon.protected.maps.add "SquadDeathMatch0" "XP4_Wlkrftry" "Squad Deathmatch" "Hangar 21" 0
 
-procon.protected.maps.add "TeamDeathMatch0" "XP4_Arctic" "Team Deathmatch" "Arctic Research" 0
-procon.protected.maps.add "TeamDeathMatch0" "XP4_SubBase" "Team Deathmatch" "Sub Base" 0
-procon.protected.maps.add "TeamDeathMatch0" "XP4_Titan" "Team Deathmatch" "Titan" 0
-procon.protected.maps.add "TeamDeathMatch0" "XP4_WalkerFactory" "Team Deathmatch" "Walker Factory" 0
+procon.protected.maps.add "TeamDeathMatch0" "XP4_Arctic" "Team Deathmatch" "Operation Whiteout" 0
+procon.protected.maps.add "TeamDeathMatch0" "XP4_SubBase" "Team Deathmatch" "Hammerhead" 0
+procon.protected.maps.add "TeamDeathMatch0" "XP4_Titan" "Team Deathmatch" "Giants Of Karelia" 0
+procon.protected.maps.add "TeamDeathMatch0" "XP4_Wlkrftry" "Team Deathmatch" "Hangar 21" 0
 
 procon.protected.teamnames.clear
 
@@ -833,9 +833,9 @@ procon.protected.teamnames.add "XP4_Titan" 0 "global.conquest.neutral" "" "Conqu
 procon.protected.teamnames.add "XP4_Titan" 1 "global.conquest.us" "us.png" "ConquestLarge0"
 procon.protected.teamnames.add "XP4_Titan" 2 "global.conquest.ru" "ru.png" "ConquestLarge0"
 
-procon.protected.teamnames.add "XP4_WalkerFactory" 0 "global.conquest.neutral" "" "ConquestLarge0"
-procon.protected.teamnames.add "XP4_WalkerFactory" 1 "global.conquest.us" "us.png" "ConquestLarge0"
-procon.protected.teamnames.add "XP4_WalkerFactory" 2 "global.conquest.ru" "ru.png" "ConquestLarge0"
+procon.protected.teamnames.add "XP4_Wlkrftry" 0 "global.conquest.neutral" "" "ConquestLarge0"
+procon.protected.teamnames.add "XP4_Wlkrftry" 1 "global.conquest.us" "us.png" "ConquestLarge0"
+procon.protected.teamnames.add "XP4_Wlkrftry" 2 "global.conquest.ru" "ru.png" "ConquestLarge0"
 
 // Conquest Small
 ///////////////////////////////////////////////////////////////////////////////
@@ -961,9 +961,9 @@ procon.protected.teamnames.add "XP4_Titan" 0 "global.conquest.neutral" "" "Conqu
 procon.protected.teamnames.add "XP4_Titan" 1 "global.conquest.us" "us.png" "ConquestSmall0"
 procon.protected.teamnames.add "XP4_Titan" 2 "global.conquest.ru" "ru.png" "ConquestSmall0"
 
-procon.protected.teamnames.add "XP4_WalkerFactory" 0 "global.conquest.neutral" "" "ConquestSmall0"
-procon.protected.teamnames.add "XP4_WalkerFactory" 1 "global.conquest.us" "us.png" "ConquestSmall0"
-procon.protected.teamnames.add "XP4_WalkerFactory" 2 "global.conquest.ru" "ru.png" "ConquestSmall0"
+procon.protected.teamnames.add "XP4_Wlkrftry" 0 "global.conquest.neutral" "" "ConquestSmall0"
+procon.protected.teamnames.add "XP4_Wlkrftry" 1 "global.conquest.us" "us.png" "ConquestSmall0"
+procon.protected.teamnames.add "XP4_Wlkrftry" 2 "global.conquest.ru" "ru.png" "ConquestSmall0"
 
 // Domination
 ///////////////////////////////////////////////////////////////////////////////
@@ -1089,9 +1089,9 @@ procon.protected.teamnames.add "XP4_Titan" 0 "global.conquest.neutral" "" "Domin
 procon.protected.teamnames.add "XP4_Titan" 1 "global.conquest.us" "us.png" "Domination0"
 procon.protected.teamnames.add "XP4_Titan" 2 "global.conquest.ru" "ru.png" "Domination0"
 
-procon.protected.teamnames.add "XP4_WalkerFactory" 0 "global.conquest.neutral" "" "Domination0"
-procon.protected.teamnames.add "XP4_WalkerFactory" 1 "global.conquest.us" "us.png" "Domination0"
-procon.protected.teamnames.add "XP4_WalkerFactory" 2 "global.conquest.ru" "ru.png" "Domination0"
+procon.protected.teamnames.add "XP4_Wlkrftry" 0 "global.conquest.neutral" "" "Domination0"
+procon.protected.teamnames.add "XP4_Wlkrftry" 1 "global.conquest.us" "us.png" "Domination0"
+procon.protected.teamnames.add "XP4_Wlkrftry" 2 "global.conquest.ru" "ru.png" "Domination0"
 
 // Defuse
 ///////////////////////////////////////////////////////////////////////////////
@@ -1217,9 +1217,9 @@ procon.protected.teamnames.add "XP4_Titan" 0 "global.conquest.neutral" "" "Elimi
 procon.protected.teamnames.add "XP4_Titan" 1 "global.conquest.us" "us.png" "Elimination0"
 procon.protected.teamnames.add "XP4_Titan" 2 "global.conquest.ru" "ru.png" "Elimination0"
 
-procon.protected.teamnames.add "XP4_WalkerFactory" 0 "global.conquest.neutral" "" "Elimination0"
-procon.protected.teamnames.add "XP4_WalkerFactory" 1 "global.conquest.us" "us.png" "Elimination0"
-procon.protected.teamnames.add "XP4_WalkerFactory" 2 "global.conquest.ru" "ru.png" "Elimination0"
+procon.protected.teamnames.add "XP4_Wlkrftry" 0 "global.conquest.neutral" "" "Elimination0"
+procon.protected.teamnames.add "XP4_Wlkrftry" 1 "global.conquest.us" "us.png" "Elimination0"
+procon.protected.teamnames.add "XP4_Wlkrftry" 2 "global.conquest.ru" "ru.png" "Elimination0"
 
 // Obliteration
 ///////////////////////////////////////////////////////////////////////////////
@@ -1345,9 +1345,9 @@ procon.protected.teamnames.add "XP4_Titan" 0 "global.conquest.neutral" "" "Oblit
 procon.protected.teamnames.add "XP4_Titan" 1 "global.conquest.us" "us.png" "Obliteration"
 procon.protected.teamnames.add "XP4_Titan" 2 "global.conquest.ru" "ru.png" "Obliteration"
 
-procon.protected.teamnames.add "XP4_WalkerFactory" 0 "global.conquest.neutral" "" "Obliteration"
-procon.protected.teamnames.add "XP4_WalkerFactory" 1 "global.conquest.us" "us.png" "Obliteration"
-procon.protected.teamnames.add "XP4_WalkerFactory" 2 "global.conquest.ru" "ru.png" "Obliteration"
+procon.protected.teamnames.add "XP4_Wlkrftry" 0 "global.conquest.neutral" "" "Obliteration"
+procon.protected.teamnames.add "XP4_Wlkrftry" 1 "global.conquest.us" "us.png" "Obliteration"
+procon.protected.teamnames.add "XP4_Wlkrftry" 2 "global.conquest.ru" "ru.png" "Obliteration"
 
 // Rush
 ///////////////////////////////////////////////////////////////////////////////
@@ -1473,9 +1473,9 @@ procon.protected.teamnames.add "XP4_Titan" 0 "global.rush.neutral" "" "RushLarge
 procon.protected.teamnames.add "XP4_Titan" 1 "global.rush.attackers" "us.png" "RushLarge0"
 procon.protected.teamnames.add "XP4_Titan" 2 "global.rush.defenders" "ru.png" "RushLarge0"
 
-procon.protected.teamnames.add "XP4_WalkerFactory" 0 "global.rush.neutral" "" "RushLarge0"
-procon.protected.teamnames.add "XP4_WalkerFactory" 1 "global.rush.attackers" "us.png" "RushLarge0"
-procon.protected.teamnames.add "XP4_WalkerFactory" 2 "global.rush.defenders" "ru.png" "RushLarge0"
+procon.protected.teamnames.add "XP4_Wlkrftry" 0 "global.rush.neutral" "" "RushLarge0"
+procon.protected.teamnames.add "XP4_Wlkrftry" 1 "global.rush.attackers" "us.png" "RushLarge0"
+procon.protected.teamnames.add "XP4_Wlkrftry" 2 "global.rush.defenders" "ru.png" "RushLarge0"
 
 // Squad Deathmatch
 ///////////////////////////////////////////////////////////////////////////////
@@ -1659,11 +1659,11 @@ procon.protected.teamnames.add "XP4_Titan" 2 "global.Squad2" "ru.png" "SquadDeat
 procon.protected.teamnames.add "XP4_Titan" 3 "global.Squad3" "us.png" "SquadDeathMatch0"
 procon.protected.teamnames.add "XP4_Titan" 4 "global.Squad4" "ru.png" "SquadDeathMatch0"
 
-procon.protected.teamnames.add "XP4_WalkerFactory" 0 "global.conquest.neutral" "" "SquadDeathMatch0"
-procon.protected.teamnames.add "XP4_WalkerFactory" 1 "global.Squad1" "us.png" "SquadDeathMatch0"
-procon.protected.teamnames.add "XP4_WalkerFactory" 2 "global.Squad2" "ru.png" "SquadDeathMatch0"
-procon.protected.teamnames.add "XP4_WalkerFactory" 3 "global.Squad3" "us.png" "SquadDeathMatch0"
-procon.protected.teamnames.add "XP4_WalkerFactory" 4 "global.Squad4" "ru.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP4_Wlkrftry" 0 "global.conquest.neutral" "" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP4_Wlkrftry" 1 "global.Squad1" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP4_Wlkrftry" 2 "global.Squad2" "ru.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP4_Wlkrftry" 3 "global.Squad3" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP4_Wlkrftry" 4 "global.Squad4" "ru.png" "SquadDeathMatch0"
 
 // Team Deathmatch
 ///////////////////////////////////////////////////////////////////////////////
@@ -1789,9 +1789,9 @@ procon.protected.teamnames.add "XP4_Titan" 0 "global.tdm.neutral" "" "TeamDeathM
 procon.protected.teamnames.add "XP4_Titan" 1 "global.tdm.us" "us.png" "TeamDeathMatch0"
 procon.protected.teamnames.add "XP4_Titan" 2 "global.tdm.ru" "ru.png" "TeamDeathMatch0"
 
-procon.protected.teamnames.add "XP4_WalkerFactory" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
-procon.protected.teamnames.add "XP4_WalkerFactory" 1 "global.tdm.us" "us.png" "TeamDeathMatch0"
-procon.protected.teamnames.add "XP4_WalkerFactory" 2 "global.tdm.ru" "ru.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP4_Wlkrftry" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP4_Wlkrftry" 1 "global.tdm.us" "us.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP4_Wlkrftry" 2 "global.tdm.ru" "ru.png" "TeamDeathMatch0"
 
 // Air Superiority (XP1 - China Rising)
 ///////////////////////////////////////////////////////////////////////////////
