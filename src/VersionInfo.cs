@@ -2,9 +2,9 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyCompany("Myrcon Pty. Ltd.")]
+[assembly: AssemblyCompany("Myrcon")]
 [assembly: AssemblyProduct("Procon Frostbite")]
-[assembly: AssemblyCopyright("Copyright © Myrcon Pty. Ltd. 2014")]
+[assembly: AssemblyCopyright("Copyright © Myrcon 2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
