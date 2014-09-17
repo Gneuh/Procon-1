@@ -707,6 +707,11 @@ procon.protected.maps.add "TeamDeathMatch0" "XP4_SubBase" "Team Deathmatch" "Ham
 procon.protected.maps.add "TeamDeathMatch0" "XP4_Titan" "Team Deathmatch" "Giants Of Karelia" 0
 procon.protected.maps.add "TeamDeathMatch0" "XP4_Wlkrftry" "Team Deathmatch" "Hangar 21" 0
 
+procon.protected.maps.add "CaptureTheFlag0" "XP4_Arctic" "CTF" "Operation Whiteout" 0
+procon.protected.maps.add "CaptureTheFlag0" "XP4_SubBase" "CTF" "Hammerhead" 0
+procon.protected.maps.add "CaptureTheFlag0" "XP4_Titan" "CTF" "Giants Of Karelia" 0
+procon.protected.maps.add "CaptureTheFlag0" "XP4_Wlkrftry" "CTF" "Hangar 21" 0
+
 procon.protected.teamnames.clear
 
 // Conquest Large
@@ -1885,6 +1890,23 @@ procon.protected.teamnames.add "XP3_UrbanGdn" 2 "global.conquest.cn" "cn.png" "C
 procon.protected.teamnames.add "XP3_WtrFront" 0 "global.conquest.neutral" "" "CaptureTheFlag0"
 procon.protected.teamnames.add "XP3_WtrFront" 1 "global.conquest.us" "us.png" "CaptureTheFlag0"
 procon.protected.teamnames.add "XP3_WtrFront" 2 "global.conquest.cn" "cn.png" "CaptureTheFlag0"
+
+// XP4 (Final Stand)
+procon.protected.teamnames.add "XP4_Arctic" 0 "global.conquest.neutral" "" "CaptureTheFlag0"
+procon.protected.teamnames.add "XP4_Arctic" 1 "global.conquest.us" "us.png" "CaptureTheFlag0"
+procon.protected.teamnames.add "XP4_Arctic" 2 "global.conquest.ru" "ru.png" "CaptureTheFlag0"
+
+procon.protected.teamnames.add "XP4_SubBase" 0 "global.conquest.neutral" "" "CaptureTheFlag0"
+procon.protected.teamnames.add "XP4_SubBase" 1 "global.conquest.us" "us.png" "CaptureTheFlag0"
+procon.protected.teamnames.add "XP4_SubBase" 2 "global.conquest.ru" "ru.png" "CaptureTheFlag0"
+
+procon.protected.teamnames.add "XP4_Titan" 0 "global.conquest.neutral" "" "CaptureTheFlag0"
+procon.protected.teamnames.add "XP4_Titan" 1 "global.conquest.us" "us.png" "CaptureTheFlag0"
+procon.protected.teamnames.add "XP4_Titan" 2 "global.conquest.ru" "ru.png" "CaptureTheFlag0"
+
+procon.protected.teamnames.add "XP4_Wlkrftry" 0 "global.conquest.neutral" "" "CaptureTheFlag0"
+procon.protected.teamnames.add "XP4_Wlkrftry" 1 "global.conquest.us" "us.png" "CaptureTheFlag0"
+procon.protected.teamnames.add "XP4_Wlkrftry" 2 "global.conquest.ru" "ru.png" "CaptureTheFlag0"
 
 
 // Chain Link
