@@ -135,6 +135,7 @@ namespace PRoCon.Controls.ServerSettings.BF4 {
             
             ArrayList BF4preset = new ArrayList();
             BF4preset.Add(new UnlockMode(this.Language.GetDefaultLocalized("Normal", "uscServerSettingsPanel.cboSettingsBF4preset.Normal"), BF4presetType.NORMAL.ToString()));
+            BF4preset.Add(new UnlockMode(this.Language.GetDefaultLocalized("Classic", "uscServerSettingsPanel.cboSettingsBF4preset.Classic"), BF4presetType.CLASSIC.ToString()));
             BF4preset.Add(new UnlockMode(this.Language.GetDefaultLocalized("Hardcore", "uscServerSettingsPanel.cboSettingsBF4preset.Hardcore"), BF4presetType.HARDCORE.ToString()));
             BF4preset.Add(new UnlockMode(this.Language.GetDefaultLocalized("Infantry", "uscServerSettingsPanel.cboSettingsBF4preset.Infantry"), BF4presetType.INFANTRY.ToString()));
             BF4preset.Add(new UnlockMode(this.Language.GetDefaultLocalized("Custom", "uscServerSettingsPanel.cboSettingsBF4preset.Custom"), BF4presetType.CUSTOM.ToString()));

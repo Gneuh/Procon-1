@@ -25,6 +25,7 @@ namespace PRoCon.Core.BF4preset
     public enum BF4presetType
     {
         NORMAL,
+        CLASSIC,
         HARDCORE,
         INFANTRY,
         CUSTOM
