@@ -1,6 +1,4 @@
 # Procon 1 #
-**Release Build Status**: [![Packages Build Status](http://teamcity.myrcon.com/app/rest/builds/buildType:(id:Myrcon_Procon1_Release)/statusIcon)](http://teamcity.myrcon.com/viewType.html?buildTypeId=Myrcon_Procon1_Release)  
-
 Procon 1 is developed by [Myrcon](https://myrcon.com "Official homepage of Myrcon").
 
 ## About Procon ##
