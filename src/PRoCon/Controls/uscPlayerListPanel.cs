@@ -93,6 +93,18 @@ namespace PRoCon.Controls {
         /// If the team placeholders have been created/drawn
         /// </summary>
         protected bool PlaceHoldersDrawn { get; set; }
+        
+        /// <summary>
+        /// A list of procon developer uids or major plugin developers. This may need to be
+        /// moved to a download from myrcon.com in the future so we can add other plugin developers
+        /// without releasing a new build of Procon. This could work similar to how the VIP protector 
+        /// plugin I wrote a while ago.
+        /// </summary>
+        protected readonly List<String> DeveloperUids = new List<String>() {
+            "ea_63a9f96745b22dfb509c558fc8b5c50f", // Phogue
+            "ea_34d60f842ae2b2fbc83952e2ee10736f", // MorpheusX(AUT)
+            "ea_697a7db61962854d19756e45dd871951" // Ike
+        };
 
         public uscPlayerListPanel() {
             InitializeComponent();
@@ -1016,6 +1028,10 @@ namespace PRoCon.Controls {
                                 else if (cpiPlayer.Type == 3) {
                                     playerListItem.SubItems["type"].Text = this.Language.GetDefaultLocalized("Commander (Tablet)", "uscPlayerListPanel.lsvPlayers.Type.CommanderTablet", null);
                                 }
+                            }
+
+                            if (String.IsNullOrEmpty(cpiPlayer.GUID) == false && this.DeveloperUids.Contains(cpiPlayer.GUID.ToLowerInvariant())) {
+                                playerListItem.ForeColor = Color.CornflowerBlue;
                             }
 
                             AdditionalPlayerInfo sapiAdditional;
