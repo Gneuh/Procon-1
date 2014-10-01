@@ -1044,12 +1044,15 @@ namespace PRoCon.Controls {
                             if (String.IsNullOrEmpty(cpiPlayer.GUID) == false) {
                                 if (this.DeveloperUids.Contains(cpiPlayer.GUID.ToLowerInvariant())) {
                                     playerListItem.ForeColor = Color.CornflowerBlue;
+                                    playerListItem.SubItems["type"].Text = this.Language.GetDefaultLocalized("Procon Developer", "uscPlayerListPanel.lsvPlayers.Type.Developer", null);
                                 }
                                 else if (this.StaffUids.Contains(cpiPlayer.GUID.ToLowerInvariant())) {
                                     playerListItem.ForeColor = Color.DeepSkyBlue;
+                                    playerListItem.SubItems["type"].Text = this.Language.GetDefaultLocalized("Myrcon Staff", "uscPlayerListPanel.lsvPlayers.Type.Staff", null);
                                 }
                                 else if (this.PluginDeveloperUids.Contains(cpiPlayer.GUID.ToLowerInvariant())) {
                                     playerListItem.ForeColor = Color.LightSkyBlue;
+                                    playerListItem.SubItems["type"].Text = this.Language.GetDefaultLocalized("Plugin Developer", "uscPlayerListPanel.lsvPlayers.Type.PluginDeveloper", null);
                                 }
                             }
 
@@ -2303,23 +2306,19 @@ namespace PRoCon.Controls {
                                 XmlNode developerType = developerTypes.Item(0);
 
                                 if (developerType != null && developerType.InnerText.Length > 0) {
-                                    switch (developerType.InnerText)
-                                    {
+                                    switch (developerType.InnerText) {
                                         case "developer":
-                                            if (developerUid != null && developerUid.InnerText.Length > 0 && this.DeveloperUids.Contains(developerUid.InnerText) == false)
-                                            {
+                                            if (developerUid != null && developerUid.InnerText.Length > 0 && this.DeveloperUids.Contains(developerUid.InnerText) == false) {
                                                 this.DeveloperUids.Add(developerUid.InnerText);
                                             }
                                             break;
                                         case "staff":
-                                            if (developerUid != null && developerUid.InnerText.Length > 0 && this.StaffUids.Contains(developerUid.InnerText) == false)
-                                            {
+                                            if (developerUid != null && developerUid.InnerText.Length > 0 && this.StaffUids.Contains(developerUid.InnerText) == false) {
                                                 this.StaffUids.Add(developerUid.InnerText);
                                             }
                                             break;
                                         case "plugindeveloper":
-                                            if (developerUid != null && developerUid.InnerText.Length > 0 && this.PluginDeveloperUids.Contains(developerUid.InnerText) == false)
-                                            {
+                                            if (developerUid != null && developerUid.InnerText.Length > 0 && this.PluginDeveloperUids.Contains(developerUid.InnerText) == false) {
                                                 this.PluginDeveloperUids.Add(developerUid.InnerText);
                                             }
                                             break;
