@@ -106,6 +106,21 @@ namespace PRoCon.Core.Plugin {
                         this.FrostbitePlayerInfoList.Add(player.SoldierName, player);
                     }
                 }
+
+                foreach (var fpi_player in this.FrostbitePlayerInfoList.Keys) {
+                    bool blFoundPlayer = false;
+
+                    foreach (CPlayerInfo iPlayer in players) {
+                        if (String.Compare(iPlayer.SoldierName, this.FrostbitePlayerInfoList[fpi_player].SoldierName) == 0) {
+                            blFoundPlayer = true;
+                            break;
+                        }
+                    }
+
+                    if (blFoundPlayer == false) {
+                        this.FrostbitePlayerInfoList.Remove(fpi_player);
+                    }
+                }
             }
         }
 
