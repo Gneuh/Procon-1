@@ -119,6 +119,7 @@ namespace PRoCon.Core.Plugin {
 
                     if (blFoundPlayer == false) {
                         this.FrostbitePlayerInfoList.Remove(fpi_player);
+                        this.PunkbusterPlayerInfoList.Remove(fpi_player);
                     }
                 }
             }
