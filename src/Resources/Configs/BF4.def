@@ -1,6 +1,6 @@
 /////////////////////////////////////////////
 // This definitions file will be overwritten during an update.
-//  (2014-10-14.01)
+//  (2014-10-17.01)
 // This file contains the standard defintions required to run procon 
 // connected to a BF4 server
 /////////////////////////////////////////////
@@ -671,48 +671,48 @@ procon.protected.maps.add "Chainlink0" "XP3_WtrFront" "Chain Link" "Sunken Drago
 // XP4 (Final Stand)
 procon.protected.maps.add "ConquestLarge0" "XP4_Arctic" "Conquest Large" "Operation Whiteout" 0
 procon.protected.maps.add "ConquestLarge0" "XP4_SubBase" "Conquest Large" "Hammerhead" 0
-procon.protected.maps.add "ConquestLarge0" "XP4_Titan" "Conquest Large" "Giants Of Karelia" 0
-procon.protected.maps.add "ConquestLarge0" "XP4_Wlkrftry" "Conquest Large" "Hangar 21" 0
+procon.protected.maps.add "ConquestLarge0" "XP4_Titan" "Conquest Large" "Hangar 21" 0
+procon.protected.maps.add "ConquestLarge0" "XP4_Wlkrftry" "Conquest Large" "Giants Of Karelia" 0
 
 procon.protected.maps.add "ConquestSmall0" "XP4_Arctic" "Conquest Small" "Operation Whiteout" 0
 procon.protected.maps.add "ConquestSmall0" "XP4_SubBase" "Conquest Small" "Hammerhead" 0
-procon.protected.maps.add "ConquestSmall0" "XP4_Titan" "Conquest Small" "Giants Of Karelia" 0
-procon.protected.maps.add "ConquestSmall0" "XP4_Wlkrftry" "Conquest Small" "Hangar 21" 0
+procon.protected.maps.add "ConquestSmall0" "XP4_Titan" "Conquest Small" "Hangar 21" 0
+procon.protected.maps.add "ConquestSmall0" "XP4_Wlkrftry" "Conquest Small" "Giants Of Karelia" 0
 
 procon.protected.maps.add "Domination0" "XP4_Arctic" "Domination" "Operation Whiteout" 0
 procon.protected.maps.add "Domination0" "XP4_SubBase" "Domination" "Hammerhead" 0
-procon.protected.maps.add "Domination0" "XP4_Titan" "Domination" "Giants Of Karelia" 0
-procon.protected.maps.add "Domination0" "XP4_Wlkrftry" "Domination" "Hangar 21" 0
+procon.protected.maps.add "Domination0" "XP4_Titan" "Domination" "Hangar 21" 0
+procon.protected.maps.add "Domination0" "XP4_Wlkrftry" "Domination" "Giants Of Karelia" 0
 
 procon.protected.maps.add "Elimination0" "XP4_Arctic" "Defuse" "Operation Whiteout" 0
 procon.protected.maps.add "Elimination0" "XP4_SubBase" "Defuse" "Hammerhead" 0
-procon.protected.maps.add "Elimination0" "XP4_Titan" "Defuse" "Giants Of Karelia" 0
-procon.protected.maps.add "Elimination0" "XP4_Wlkrftry" "Defuse" "Hangar 21" 0
+procon.protected.maps.add "Elimination0" "XP4_Titan" "Defuse" "Hangar 21" 0
+procon.protected.maps.add "Elimination0" "XP4_Wlkrftry" "Defuse" "Giants Of Karelia" 0
 
 procon.protected.maps.add "Obliteration" "XP4_Arctic" "Obliteration" "Operation Whiteout" 0
 procon.protected.maps.add "Obliteration" "XP4_SubBase" "Obliteration" "Hammerhead" 0
-procon.protected.maps.add "Obliteration" "XP4_Titan" "Obliteration" "Giants Of Karelia" 0
-procon.protected.maps.add "Obliteration" "XP4_Wlkrftry" "Obliteration" "Hangar 21" 0
+procon.protected.maps.add "Obliteration" "XP4_Titan" "Obliteration" "Hangar 21" 0
+procon.protected.maps.add "Obliteration" "XP4_Wlkrftry" "Obliteration" "Giants Of Karelia" 0
 
 procon.protected.maps.add "RushLarge0" "XP4_Arctic" "Rush" "Operation Whiteout" 0
 procon.protected.maps.add "RushLarge0" "XP4_SubBase" "Rush" "Hammerhead" 0
-procon.protected.maps.add "RushLarge0" "XP4_Titan" "Rush" "Giants Of Karelia" 0
-procon.protected.maps.add "RushLarge0" "XP4_Wlkrftry" "Rush" "Hangar 21" 0
+procon.protected.maps.add "RushLarge0" "XP4_Titan" "Rush" "Hangar 21" 0
+procon.protected.maps.add "RushLarge0" "XP4_Wlkrftry" "Rush" "Giants Of Karelia" 0
 
 procon.protected.maps.add "SquadDeathMatch0" "XP4_Arctic" "Squad Deathmatch" "Operation Whiteout" 0
 procon.protected.maps.add "SquadDeathMatch0" "XP4_SubBase" "Squad Deathmatch" "Hammerhead" 0
-procon.protected.maps.add "SquadDeathMatch0" "XP4_Titan" "Squad Deathmatch" "Giants Of Karelia" 0
-procon.protected.maps.add "SquadDeathMatch0" "XP4_Wlkrftry" "Squad Deathmatch" "Hangar 21" 0
+procon.protected.maps.add "SquadDeathMatch0" "XP4_Titan" "Squad Deathmatch" "Hangar 21" 0
+procon.protected.maps.add "SquadDeathMatch0" "XP4_Wlkrftry" "Squad Deathmatch" "Giants Of Karelia" 0
 
 procon.protected.maps.add "TeamDeathMatch0" "XP4_Arctic" "Team Deathmatch" "Operation Whiteout" 0
 procon.protected.maps.add "TeamDeathMatch0" "XP4_SubBase" "Team Deathmatch" "Hammerhead" 0
-procon.protected.maps.add "TeamDeathMatch0" "XP4_Titan" "Team Deathmatch" "Giants Of Karelia" 0
-procon.protected.maps.add "TeamDeathMatch0" "XP4_Wlkrftry" "Team Deathmatch" "Hangar 21" 0
+procon.protected.maps.add "TeamDeathMatch0" "XP4_Titan" "Team Deathmatch" "Hangar 21" 0
+procon.protected.maps.add "TeamDeathMatch0" "XP4_Wlkrftry" "Team Deathmatch" "Giants Of Karelia" 0
 
 procon.protected.maps.add "CaptureTheFlag0" "XP4_Arctic" "CTF" "Operation Whiteout" 0
 procon.protected.maps.add "CaptureTheFlag0" "XP4_SubBase" "CTF" "Hammerhead" 0
-procon.protected.maps.add "CaptureTheFlag0" "XP4_Titan" "CTF" "Giants Of Karelia" 0
-procon.protected.maps.add "CaptureTheFlag0" "XP4_Wlkrftry" "CTF" "Hangar 21" 0
+procon.protected.maps.add "CaptureTheFlag0" "XP4_Titan" "CTF" "Hangar 21" 0
+procon.protected.maps.add "CaptureTheFlag0" "XP4_Wlkrftry" "CTF" "Giants Of Karelia" 0
 
 procon.protected.teamnames.clear
 
