@@ -672,47 +672,47 @@ procon.protected.maps.add "Chainlink0" "XP3_WtrFront" "Chain Link" "Sunken Drago
 procon.protected.maps.add "ConquestLarge0" "XP4_Arctic" "Conquest Large" "Operation Whiteout" 0
 procon.protected.maps.add "ConquestLarge0" "XP4_SubBase" "Conquest Large" "Hammerhead" 0
 procon.protected.maps.add "ConquestLarge0" "XP4_Titan" "Conquest Large" "Hangar 21" 0
-procon.protected.maps.add "ConquestLarge0" "XP4_Wlkrftry" "Conquest Large" "Giants Of Karelia" 0
+procon.protected.maps.add "ConquestLarge0" "XP4_WlkrFtry" "Conquest Large" "Giants Of Karelia" 0
 
 procon.protected.maps.add "ConquestSmall0" "XP4_Arctic" "Conquest Small" "Operation Whiteout" 0
 procon.protected.maps.add "ConquestSmall0" "XP4_SubBase" "Conquest Small" "Hammerhead" 0
 procon.protected.maps.add "ConquestSmall0" "XP4_Titan" "Conquest Small" "Hangar 21" 0
-procon.protected.maps.add "ConquestSmall0" "XP4_Wlkrftry" "Conquest Small" "Giants Of Karelia" 0
+procon.protected.maps.add "ConquestSmall0" "XP4_WlkrFtry" "Conquest Small" "Giants Of Karelia" 0
 
 procon.protected.maps.add "Domination0" "XP4_Arctic" "Domination" "Operation Whiteout" 0
 procon.protected.maps.add "Domination0" "XP4_SubBase" "Domination" "Hammerhead" 0
 procon.protected.maps.add "Domination0" "XP4_Titan" "Domination" "Hangar 21" 0
-procon.protected.maps.add "Domination0" "XP4_Wlkrftry" "Domination" "Giants Of Karelia" 0
+procon.protected.maps.add "Domination0" "XP4_WlkrFtry" "Domination" "Giants Of Karelia" 0
 
 procon.protected.maps.add "Elimination0" "XP4_Arctic" "Defuse" "Operation Whiteout" 0
 procon.protected.maps.add "Elimination0" "XP4_SubBase" "Defuse" "Hammerhead" 0
 procon.protected.maps.add "Elimination0" "XP4_Titan" "Defuse" "Hangar 21" 0
-procon.protected.maps.add "Elimination0" "XP4_Wlkrftry" "Defuse" "Giants Of Karelia" 0
+procon.protected.maps.add "Elimination0" "XP4_WlkrFtry" "Defuse" "Giants Of Karelia" 0
 
 procon.protected.maps.add "Obliteration" "XP4_Arctic" "Obliteration" "Operation Whiteout" 0
 procon.protected.maps.add "Obliteration" "XP4_SubBase" "Obliteration" "Hammerhead" 0
 procon.protected.maps.add "Obliteration" "XP4_Titan" "Obliteration" "Hangar 21" 0
-procon.protected.maps.add "Obliteration" "XP4_Wlkrftry" "Obliteration" "Giants Of Karelia" 0
+procon.protected.maps.add "Obliteration" "XP4_WlkrFtry" "Obliteration" "Giants Of Karelia" 0
 
 procon.protected.maps.add "RushLarge0" "XP4_Arctic" "Rush" "Operation Whiteout" 0
 procon.protected.maps.add "RushLarge0" "XP4_SubBase" "Rush" "Hammerhead" 0
 procon.protected.maps.add "RushLarge0" "XP4_Titan" "Rush" "Hangar 21" 0
-procon.protected.maps.add "RushLarge0" "XP4_Wlkrftry" "Rush" "Giants Of Karelia" 0
+procon.protected.maps.add "RushLarge0" "XP4_WlkrFtry" "Rush" "Giants Of Karelia" 0
 
 procon.protected.maps.add "SquadDeathMatch0" "XP4_Arctic" "Squad Deathmatch" "Operation Whiteout" 0
 procon.protected.maps.add "SquadDeathMatch0" "XP4_SubBase" "Squad Deathmatch" "Hammerhead" 0
 procon.protected.maps.add "SquadDeathMatch0" "XP4_Titan" "Squad Deathmatch" "Hangar 21" 0
-procon.protected.maps.add "SquadDeathMatch0" "XP4_Wlkrftry" "Squad Deathmatch" "Giants Of Karelia" 0
+procon.protected.maps.add "SquadDeathMatch0" "XP4_WlkrFtry" "Squad Deathmatch" "Giants Of Karelia" 0
 
 procon.protected.maps.add "TeamDeathMatch0" "XP4_Arctic" "Team Deathmatch" "Operation Whiteout" 0
 procon.protected.maps.add "TeamDeathMatch0" "XP4_SubBase" "Team Deathmatch" "Hammerhead" 0
 procon.protected.maps.add "TeamDeathMatch0" "XP4_Titan" "Team Deathmatch" "Hangar 21" 0
-procon.protected.maps.add "TeamDeathMatch0" "XP4_Wlkrftry" "Team Deathmatch" "Giants Of Karelia" 0
+procon.protected.maps.add "TeamDeathMatch0" "XP4_WlkrFtry" "Team Deathmatch" "Giants Of Karelia" 0
 
 procon.protected.maps.add "CaptureTheFlag0" "XP4_Arctic" "CTF" "Operation Whiteout" 0
 procon.protected.maps.add "CaptureTheFlag0" "XP4_SubBase" "CTF" "Hammerhead" 0
 procon.protected.maps.add "CaptureTheFlag0" "XP4_Titan" "CTF" "Hangar 21" 0
-procon.protected.maps.add "CaptureTheFlag0" "XP4_Wlkrftry" "CTF" "Giants Of Karelia" 0
+procon.protected.maps.add "CaptureTheFlag0" "XP4_WlkrFtry" "CTF" "Giants Of Karelia" 0
 
 procon.protected.teamnames.clear
 
@@ -840,9 +840,9 @@ procon.protected.teamnames.add "XP4_Titan" 0 "global.conquest.neutral" "" "Conqu
 procon.protected.teamnames.add "XP4_Titan" 1 "global.conquest.us" "us.png" "ConquestLarge0"
 procon.protected.teamnames.add "XP4_Titan" 2 "global.conquest.ru" "ru.png" "ConquestLarge0"
 
-procon.protected.teamnames.add "XP4_Wlkrftry" 0 "global.conquest.neutral" "" "ConquestLarge0"
-procon.protected.teamnames.add "XP4_Wlkrftry" 1 "global.conquest.us" "us.png" "ConquestLarge0"
-procon.protected.teamnames.add "XP4_Wlkrftry" 2 "global.conquest.ru" "ru.png" "ConquestLarge0"
+procon.protected.teamnames.add "XP4_WlkrFtry" 0 "global.conquest.neutral" "" "ConquestLarge0"
+procon.protected.teamnames.add "XP4_WlkrFtry" 1 "global.conquest.us" "us.png" "ConquestLarge0"
+procon.protected.teamnames.add "XP4_WlkrFtry" 2 "global.conquest.ru" "ru.png" "ConquestLarge0"
 
 // Conquest Small
 ///////////////////////////////////////////////////////////////////////////////
@@ -968,9 +968,9 @@ procon.protected.teamnames.add "XP4_Titan" 0 "global.conquest.neutral" "" "Conqu
 procon.protected.teamnames.add "XP4_Titan" 1 "global.conquest.us" "us.png" "ConquestSmall0"
 procon.protected.teamnames.add "XP4_Titan" 2 "global.conquest.ru" "ru.png" "ConquestSmall0"
 
-procon.protected.teamnames.add "XP4_Wlkrftry" 0 "global.conquest.neutral" "" "ConquestSmall0"
-procon.protected.teamnames.add "XP4_Wlkrftry" 1 "global.conquest.us" "us.png" "ConquestSmall0"
-procon.protected.teamnames.add "XP4_Wlkrftry" 2 "global.conquest.ru" "ru.png" "ConquestSmall0"
+procon.protected.teamnames.add "XP4_WlkrFtry" 0 "global.conquest.neutral" "" "ConquestSmall0"
+procon.protected.teamnames.add "XP4_WlkrFtry" 1 "global.conquest.us" "us.png" "ConquestSmall0"
+procon.protected.teamnames.add "XP4_WlkrFtry" 2 "global.conquest.ru" "ru.png" "ConquestSmall0"
 
 // Domination
 ///////////////////////////////////////////////////////////////////////////////
@@ -1096,9 +1096,9 @@ procon.protected.teamnames.add "XP4_Titan" 0 "global.conquest.neutral" "" "Domin
 procon.protected.teamnames.add "XP4_Titan" 1 "global.conquest.us" "us.png" "Domination0"
 procon.protected.teamnames.add "XP4_Titan" 2 "global.conquest.ru" "ru.png" "Domination0"
 
-procon.protected.teamnames.add "XP4_Wlkrftry" 0 "global.conquest.neutral" "" "Domination0"
-procon.protected.teamnames.add "XP4_Wlkrftry" 1 "global.conquest.us" "us.png" "Domination0"
-procon.protected.teamnames.add "XP4_Wlkrftry" 2 "global.conquest.ru" "ru.png" "Domination0"
+procon.protected.teamnames.add "XP4_WlkrFtry" 0 "global.conquest.neutral" "" "Domination0"
+procon.protected.teamnames.add "XP4_WlkrFtry" 1 "global.conquest.us" "us.png" "Domination0"
+procon.protected.teamnames.add "XP4_WlkrFtry" 2 "global.conquest.ru" "ru.png" "Domination0"
 
 // Defuse
 ///////////////////////////////////////////////////////////////////////////////
@@ -1224,9 +1224,9 @@ procon.protected.teamnames.add "XP4_Titan" 0 "global.conquest.neutral" "" "Elimi
 procon.protected.teamnames.add "XP4_Titan" 1 "global.conquest.us" "us.png" "Elimination0"
 procon.protected.teamnames.add "XP4_Titan" 2 "global.conquest.ru" "ru.png" "Elimination0"
 
-procon.protected.teamnames.add "XP4_Wlkrftry" 0 "global.conquest.neutral" "" "Elimination0"
-procon.protected.teamnames.add "XP4_Wlkrftry" 1 "global.conquest.us" "us.png" "Elimination0"
-procon.protected.teamnames.add "XP4_Wlkrftry" 2 "global.conquest.ru" "ru.png" "Elimination0"
+procon.protected.teamnames.add "XP4_WlkrFtry" 0 "global.conquest.neutral" "" "Elimination0"
+procon.protected.teamnames.add "XP4_WlkrFtry" 1 "global.conquest.us" "us.png" "Elimination0"
+procon.protected.teamnames.add "XP4_WlkrFtry" 2 "global.conquest.ru" "ru.png" "Elimination0"
 
 // Obliteration
 ///////////////////////////////////////////////////////////////////////////////
@@ -1352,9 +1352,9 @@ procon.protected.teamnames.add "XP4_Titan" 0 "global.conquest.neutral" "" "Oblit
 procon.protected.teamnames.add "XP4_Titan" 1 "global.conquest.us" "us.png" "Obliteration"
 procon.protected.teamnames.add "XP4_Titan" 2 "global.conquest.ru" "ru.png" "Obliteration"
 
-procon.protected.teamnames.add "XP4_Wlkrftry" 0 "global.conquest.neutral" "" "Obliteration"
-procon.protected.teamnames.add "XP4_Wlkrftry" 1 "global.conquest.us" "us.png" "Obliteration"
-procon.protected.teamnames.add "XP4_Wlkrftry" 2 "global.conquest.ru" "ru.png" "Obliteration"
+procon.protected.teamnames.add "XP4_WlkrFtry" 0 "global.conquest.neutral" "" "Obliteration"
+procon.protected.teamnames.add "XP4_WlkrFtry" 1 "global.conquest.us" "us.png" "Obliteration"
+procon.protected.teamnames.add "XP4_WlkrFtry" 2 "global.conquest.ru" "ru.png" "Obliteration"
 
 // Rush
 ///////////////////////////////////////////////////////////////////////////////
@@ -1480,9 +1480,9 @@ procon.protected.teamnames.add "XP4_Titan" 0 "global.rush.neutral" "" "RushLarge
 procon.protected.teamnames.add "XP4_Titan" 1 "global.rush.attackers" "us.png" "RushLarge0"
 procon.protected.teamnames.add "XP4_Titan" 2 "global.rush.defenders" "ru.png" "RushLarge0"
 
-procon.protected.teamnames.add "XP4_Wlkrftry" 0 "global.rush.neutral" "" "RushLarge0"
-procon.protected.teamnames.add "XP4_Wlkrftry" 1 "global.rush.attackers" "us.png" "RushLarge0"
-procon.protected.teamnames.add "XP4_Wlkrftry" 2 "global.rush.defenders" "ru.png" "RushLarge0"
+procon.protected.teamnames.add "XP4_WlkrFtry" 0 "global.rush.neutral" "" "RushLarge0"
+procon.protected.teamnames.add "XP4_WlkrFtry" 1 "global.rush.attackers" "us.png" "RushLarge0"
+procon.protected.teamnames.add "XP4_WlkrFtry" 2 "global.rush.defenders" "ru.png" "RushLarge0"
 
 // Squad Deathmatch
 ///////////////////////////////////////////////////////////////////////////////
@@ -1666,11 +1666,11 @@ procon.protected.teamnames.add "XP4_Titan" 2 "global.Squad2" "ru.png" "SquadDeat
 procon.protected.teamnames.add "XP4_Titan" 3 "global.Squad3" "us.png" "SquadDeathMatch0"
 procon.protected.teamnames.add "XP4_Titan" 4 "global.Squad4" "ru.png" "SquadDeathMatch0"
 
-procon.protected.teamnames.add "XP4_Wlkrftry" 0 "global.conquest.neutral" "" "SquadDeathMatch0"
-procon.protected.teamnames.add "XP4_Wlkrftry" 1 "global.Squad1" "us.png" "SquadDeathMatch0"
-procon.protected.teamnames.add "XP4_Wlkrftry" 2 "global.Squad2" "ru.png" "SquadDeathMatch0"
-procon.protected.teamnames.add "XP4_Wlkrftry" 3 "global.Squad3" "us.png" "SquadDeathMatch0"
-procon.protected.teamnames.add "XP4_Wlkrftry" 4 "global.Squad4" "ru.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP4_WlkrFtry" 0 "global.conquest.neutral" "" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP4_WlkrFtry" 1 "global.Squad1" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP4_WlkrFtry" 2 "global.Squad2" "ru.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP4_WlkrFtry" 3 "global.Squad3" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP4_WlkrFtry" 4 "global.Squad4" "ru.png" "SquadDeathMatch0"
 
 // Team Deathmatch
 ///////////////////////////////////////////////////////////////////////////////
@@ -1796,9 +1796,9 @@ procon.protected.teamnames.add "XP4_Titan" 0 "global.tdm.neutral" "" "TeamDeathM
 procon.protected.teamnames.add "XP4_Titan" 1 "global.tdm.us" "us.png" "TeamDeathMatch0"
 procon.protected.teamnames.add "XP4_Titan" 2 "global.tdm.ru" "ru.png" "TeamDeathMatch0"
 
-procon.protected.teamnames.add "XP4_Wlkrftry" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
-procon.protected.teamnames.add "XP4_Wlkrftry" 1 "global.tdm.us" "us.png" "TeamDeathMatch0"
-procon.protected.teamnames.add "XP4_Wlkrftry" 2 "global.tdm.ru" "ru.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP4_WlkrFtry" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP4_WlkrFtry" 1 "global.tdm.us" "us.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP4_WlkrFtry" 2 "global.tdm.ru" "ru.png" "TeamDeathMatch0"
 
 // Air Superiority (XP1 - China Rising)
 ///////////////////////////////////////////////////////////////////////////////
@@ -1906,9 +1906,9 @@ procon.protected.teamnames.add "XP4_Titan" 0 "global.conquest.neutral" "" "Captu
 procon.protected.teamnames.add "XP4_Titan" 1 "global.conquest.us" "us.png" "CaptureTheFlag0"
 procon.protected.teamnames.add "XP4_Titan" 2 "global.conquest.ru" "ru.png" "CaptureTheFlag0"
 
-procon.protected.teamnames.add "XP4_Wlkrftry" 0 "global.conquest.neutral" "" "CaptureTheFlag0"
-procon.protected.teamnames.add "XP4_Wlkrftry" 1 "global.conquest.us" "us.png" "CaptureTheFlag0"
-procon.protected.teamnames.add "XP4_Wlkrftry" 2 "global.conquest.ru" "ru.png" "CaptureTheFlag0"
+procon.protected.teamnames.add "XP4_WlkrFtry" 0 "global.conquest.neutral" "" "CaptureTheFlag0"
+procon.protected.teamnames.add "XP4_WlkrFtry" 1 "global.conquest.us" "us.png" "CaptureTheFlag0"
+procon.protected.teamnames.add "XP4_WlkrFtry" 2 "global.conquest.ru" "ru.png" "CaptureTheFlag0"
 
 
 // Chain Link
