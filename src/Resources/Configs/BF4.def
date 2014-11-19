@@ -225,6 +225,7 @@ procon.protected.weapons.add Assault "U_Medkit" Auxiliary Nonlethal
 procon.protected.weapons.add Support "U_MG4" Primary LMG
 procon.protected.weapons.add None "U_MGL" Primary ProjectileExplosive
 procon.protected.weapons.add None "U_MK11" Primary DMR
+procon.protected.weapons.add None "XP4/Gameplay/Gadgets/MKV/MKV" Secondary Impact
 procon.protected.weapons.add Demolition "U_MP7" Primary SMG
 procon.protected.weapons.add None "U_MP412Rex" Auxiliary Handgun
 procon.protected.weapons.add None "U_MP443" Auxiliary Handgun
