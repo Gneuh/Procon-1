@@ -978,6 +978,7 @@ global.Weapons.gameplay/vehicles/ch_ciws-ld-2000/ch_ciws-ld-2000=LD-2000 Anti Ai
 global.Weapons.gameplay/vehicles/centurion_c-ram/centurion_c-ram=Centurion C-RAM Anti Air
 global.Weapons.gameplay/vehicles/centurion_c-ram/centurion_c-ram_mp_naval=Centurion C-RAM Anti Air
 global.Weapons.gameplay/vehicles/gunshieldandtripod/gunshieldandtripod=Stationary gun with shield
+global.Weapons.xp4/gameplay/vehicles/metalstorm/xp4_metalstorm=Schipunov 42
 global.Weapons.kornet=9M133 Kornet Launcher
 global.Weapons.xp2/gameplay/vehicles/oldcannon/oldcannon=Old Cannon
 global.Weapons.gameplay/vehicles/pantsir/pantsir-s1=Pantsir-S1 Anti Air
