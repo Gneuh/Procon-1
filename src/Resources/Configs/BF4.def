@@ -403,6 +403,7 @@ procon.protected.weapons.add None "Gameplay/Vehicles/CH_ATGM_HJ-8/CH_ATGM_HJ-8" 
 procon.protected.weapons.add None "Gameplay/Vehicles/CH_CIWS-LD-2000/CH_CIWS-LD-2000" Primary VehicleStationary
 procon.protected.weapons.add None "Gameplay/Vehicles/GunShieldAndTripod/GunShieldTripod" Primary VehicleStationary
 procon.protected.weapons.add None "Kornet" Primary VehicleStationary
+procon.protected.weapons.add None "XP4/Gameplay/Vehicles/MetalStorm/XP4_MetalStorm" Primary VehicleStationary
 procon.protected.weapons.add None "XP2/Gameplay/Vehicles/OldCannon/OldCannon" Primary VehicleLight
 procon.protected.weapons.add None "Gameplay/Vehicles/Pantsir/Pantsir-S1" Primary VehicleLight
 procon.protected.weapons.add None "Gameplay/Vehicles/TOW2/TOW2" Primary VehicleStationary
