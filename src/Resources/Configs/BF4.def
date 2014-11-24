@@ -133,6 +133,7 @@ procon.protected.weapons.add None "U_DAO12" Primary Shotgun
 procon.protected.weapons.add None "U_DBV12" Primary Shotgun
 procon.protected.weapons.add None "U_DesertEagle" Auxiliary Handgun
 procon.protected.weapons.add Assault "U_Defib" Secondary Melee
+procon.protected.weapons.add None "dlshtr" Primary None
 procon.protected.weapons.add Demolition "EODBot" Secondary Impact
 procon.protected.weapons.add Demolition "Weapons/Gadgets/EODBot/EODBot_PDA" Auxiliary Nonlethal
 procon.protected.weapons.add Assault "U_F2000" Primary AssaultRifle
