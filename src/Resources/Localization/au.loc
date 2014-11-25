@@ -893,6 +893,7 @@ global.Weapons.u_steyraug_m320_he=M320 HE under AUG A3
 global.Weapons.u_steyraug_m320_lvg=M320 LVG under AUG A3
 global.Weapons.u_steyraug_m320_shg=M320 Dart under AUG A3
 global.Weapons.u_steyraug_m320_smk=M320 SMK under AUG A3
+global.Weapons.u_suav=SUAV
 global.Weapons.u_sv98=SV-98
 global.Weapons.u_svd12=SVD-12
 global.Weapons.u_sw40=SW40
