@@ -106,7 +106,7 @@ procon.protected.weapons.add Assault "U_AR160_M320_LVG" Secondary ProjectileExpl
 procon.protected.weapons.add Assault "U_AR160_M320_SHG" Secondary Shotgun
 procon.protected.weapons.add Assault "U_AR160_M320_SMK" Secondary Impact
 procon.protected.weapons.add Demolition "U_ASVAL" Primary SMG
-procon.protected.weapons.add Demolition "U_AT4" Secondary ProjectileExplosive
+procon.protected.weapons.add None "U_AT4" Secondary ProjectileExplosive
 procon.protected.weapons.add Support "U_AWS" Primary LMG
 procon.protected.weapons.add Support "U_BallisticShield" Secondary Impact
 procon.protected.weapons.add Assault "U_Bulldog" Primary AssaultRifle
@@ -301,7 +301,7 @@ procon.protected.weapons.add Demolition "U_SR2" Primary SMG
 procon.protected.weapons.add Demolition "U_SRAW" Secondary ProjectileExplosive
 procon.protected.weapons.add Recon "U_SR338" Primary SniperRifle
 procon.protected.weapons.add Recon "U_SRS" Primary SniperRifle
-procon.protected.weapons.add Demolition "U_Starstreak" Secondary ProjectileExplosive
+procon.protected.weapons.add None "U_Starstreak" Secondary ProjectileExplosive
 procon.protected.weapons.add Assault "U_SteyrAug" Primary AssaultRifle
 procon.protected.weapons.add Assault "U_SteyrAug_M26_Buck" Secondary Shotgun
 procon.protected.weapons.add Assault "U_SteyrAug_M26_Flechette" Secondary Shotgun
