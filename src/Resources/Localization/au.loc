@@ -1,5 +1,5 @@
 ﻿///////////////////////////////////
-// File information displayed in Options window. (20141125-01)
+// File information displayed in Options window. (20141211-01)
 ///////////////////////////////////
 file.Language=English (Australian)
 file.flag=au
@@ -689,7 +689,7 @@ global.Weapons.u_ar160_m320_lvg=M320 LVG under ARX 160
 global.Weapons.u_ar160_m320_shg=M320 Dart under ARX 160
 global.Weapons.u_ar160_m320_smk=M320 SMK under ARX 160
 global.Weapons.u_asval=AS VAL
-global.Weapons.u_at4=AT-4
+global.Weapons.u_at4=M136 CS
 global.Weapons.u_aws=AWS
 global.Weapons.u_ballisticshield=Ballistic Shield
 global.Weapons.u_bulldog=Bulldog
@@ -881,7 +881,7 @@ global.Weapons.u_sr2=SR-2
 global.Weapons.u_sraw=FGM-172 SRAW
 global.Weapons.u_sr338=SR338
 global.Weapons.u_srs=338-Recon
-global.Weapons.u_starstreak=Starstreak AA Missile
+global.Weapons.u_starstreak=Starstreak HVM-II
 global.Weapons.u_steyraug=AUG A3
 global.Weapons.u_steyraug_m26_buck=M26 Mass under AUG A3
 global.Weapons.u_steyraug_m26_flechette=M26 Mass Dart under AUG A3
