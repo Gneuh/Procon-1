@@ -1,6 +1,6 @@
 /////////////////////////////////////////////
 // This definitions file will be overwritten during an update.
-//  (2014-12-15.01)
+//  (2015-03-03.01)
 // This file contains the standard defintions required to run procon 
 // connected to a BF4 server
 /////////////////////////////////////////////
@@ -52,6 +52,7 @@ procon.protected.serverversions.add BF4 "150767" "R43"
 procon.protected.serverversions.add BF4 "154100" "R44"
 procon.protected.serverversions.add BF4 "154793" "R45"
 procon.protected.serverversions.add BF4 "155011" "R46"
+procon.protected.serverversions.add BF4 "157186" "R48"
 
 procon.protected.specialization.clear
 
@@ -741,6 +742,15 @@ procon.protected.maps.add "CaptureTheFlag0" "XP4_Arctic" "CTF" "Operation Whiteo
 procon.protected.maps.add "CaptureTheFlag0" "XP4_SubBase" "CTF" "Hammerhead" 0
 procon.protected.maps.add "CaptureTheFlag0" "XP4_Titan" "CTF" "Hangar 21" 0
 procon.protected.maps.add "CaptureTheFlag0" "XP4_WlkrFtry" "CTF" "Giants Of Karelia" 0
+
+// R48
+procon.protected.maps.add "SquadObliteration0" "MP_Abandoned" "Squad Obliteration" "Zavod 311" 0
+procon.protected.maps.add "SquadObliteration0" "MP_Journey" "Squad Obliteration" "Golmud Railway" 0
+procon.protected.maps.add "SquadObliteration0" "MP_Naval" "Squad Obliteration" "Paracel Storm" 0
+procon.protected.maps.add "SquadObliteration0" "MP_Prison" "Squad Obliteration" "Operation Locker" 0
+procon.protected.maps.add "SquadObliteration0" "MP_Resort" "Squad Obliteration" "Hainan Resort" 0
+procon.protected.maps.add "SquadObliteration0" "MP_Siege" "Squad Obliteration" "Siege of Shanghai" 0
+procon.protected.maps.add "SquadObliteration0" "MP_Tremors" "Squad Obliteration" "Dawnbreaker" 0
 
 procon.protected.teamnames.clear
 
@@ -1959,6 +1969,38 @@ procon.protected.teamnames.add "XP3_WtrFront" 0 "global.conquest.neutral" "" "Ch
 procon.protected.teamnames.add "XP3_WtrFront" 1 "global.conquest.us" "us.png" "Chainlink0"
 procon.protected.teamnames.add "XP3_WtrFront" 2 "global.conquest.cn" "cn.png" "Chainlink0"
 
+
+// Squad Obliteration
+///////////////////////////////////////////////////////////////////////////////
+
+// R48
+procon.protected.teamnames.add "MP_Abandoned" 0 "global.conquest.neutral" "" "SquadObliteration0"
+procon.protected.teamnames.add "MP_Abandoned" 1 "global.conquest.us" "us.png" "SquadObliteration0"
+procon.protected.teamnames.add "MP_Abandoned" 2 "global.conquest.cn" "cn.png" "SquadObliteration0"
+
+procon.protected.teamnames.add "MP_Journey" 0 "global.conquest.neutral" "" "SquadObliteration0"
+procon.protected.teamnames.add "MP_Journey" 1 "global.conquest.us" "us.png" "SquadObliteration0"
+procon.protected.teamnames.add "MP_Journey" 2 "global.conquest.cn" "cn.png" "SquadObliteration0"
+
+procon.protected.teamnames.add "MP_Naval" 0 "global.conquest.neutral" "" "SquadObliteration0"
+procon.protected.teamnames.add "MP_Naval" 1 "global.conquest.us" "us.png" "SquadObliteration0"
+procon.protected.teamnames.add "MP_Naval" 2 "global.conquest.cn" "cn.png" "SquadObliteration0"
+
+procon.protected.teamnames.add "MP_Prison" 0 "global.conquest.neutral" "" "SquadObliteration0"
+procon.protected.teamnames.add "MP_Prison" 1 "global.conquest.us" "us.png" "SquadObliteration0"
+procon.protected.teamnames.add "MP_Prison" 2 "global.conquest.cn" "cn.png" "SquadObliteration0"
+
+procon.protected.teamnames.add "MP_Resort" 0 "global.conquest.neutral" "" "SquadObliteration0"
+procon.protected.teamnames.add "MP_Resort" 1 "global.conquest.us" "us.png" "SquadObliteration0"
+procon.protected.teamnames.add "MP_Resort" 2 "global.conquest.cn" "cn.png" "SquadObliteration0"
+
+procon.protected.teamnames.add "MP_Siege" 0 "global.conquest.neutral" "" "SquadObliteration0"
+procon.protected.teamnames.add "MP_Siege" 1 "global.conquest.us" "us.png" "SquadObliteration0"
+procon.protected.teamnames.add "MP_Siege" 2 "global.conquest.cn" "cn.png" "SquadObliteration0"
+
+procon.protected.teamnames.add "MP_Tremors" 0 "global.conquest.neutral" "" "SquadObliteration0"
+procon.protected.teamnames.add "MP_Tremors" 1 "global.conquest.us" "us.png" "SquadObliteration0"
+procon.protected.teamnames.add "MP_Tremors" 2 "global.conquest.cn" "cn.png" "SquadObliteration0"
 
 ///////////////////////////////////////////////////////////////////////////////
 procon.protected.tasks.clear
