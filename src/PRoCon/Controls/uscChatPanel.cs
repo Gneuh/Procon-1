@@ -169,7 +169,7 @@ namespace PRoCon.Controls {
                     this.lblDisplayFor.Visible = false;
                     this.cboDisplayChatTime.Visible = false;
                 }
-                if (sender.Game is BF4Client || sender.Game is BF3Client || sender.Game is MOHWClient) {
+                if (sender.Game is BFHLClient || sender.Game is BF4Client || sender.Game is BF3Client || sender.Game is MOHWClient) {
                     this.m_iCanLongMsg = 1;
                     this.m_iChat_MaxLength = 128;
                 }
@@ -383,7 +383,8 @@ namespace PRoCon.Controls {
                 }
                 else if (this.cboDisplayList.SelectedIndex == 1) {
                     this.m_iYellDuration = (int)cboDisplayChatTime.SelectedItem;
-                    if (this.m_prcClient.Game is BF4Client || this.m_prcClient.Game is BF3Client || this.m_prcClient.Game is MOHWClient) {
+                    if (this.m_prcClient.Game is BFHLClient || this.m_prcClient.Game is BF4Client || this.m_prcClient.Game is BF3Client || this.m_prcClient.Game is MOHWClient)
+                    {
                         this.m_iYellDuration = (int)cboDisplayChatTime.SelectedItem / 1000;
                     }
 

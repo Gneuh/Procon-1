@@ -169,7 +169,7 @@ namespace PRoCon.Controls {
                             if (this._proconApplication != null && this._proconApplication.CurrentLanguage != null) {
                                 CMap tmpMap = client.GetFriendlyMapByFilenamePlayList(client.CurrentServerInfo.Map, client.CurrentServerInfo.GameMode);
                                 int iTmpCurRounds = client.CurrentServerInfo.CurrentRound;
-                                if ((client.GameType == "BF3" || client.GameType == "MOHW" || client.GameType == "BF4") && (client.CurrentServerInfo.CurrentRound != client.CurrentServerInfo.TotalRounds)) {
+                                if ((client.GameType == "BF3" || client.GameType == "MOHW" || client.GameType == "BF4" || client.GameType == "BFHL") && (client.CurrentServerInfo.CurrentRound != client.CurrentServerInfo.TotalRounds)) {
                                     iTmpCurRounds++;
                                 }
 

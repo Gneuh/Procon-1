@@ -730,6 +730,10 @@ namespace PRoCon.Core.Remote {
                             Game = new BF3Client(sender);
                             _connection = null;
                         }
+                        else if (String.Compare(packetBeforeDispatch.Words[1], "BFHL", StringComparison.OrdinalIgnoreCase) == 0) {
+                            Game = new BFHLClient(sender);
+                            _connection = null;
+                        }
                         else if (String.Compare(packetBeforeDispatch.Words[1], "BF4", StringComparison.OrdinalIgnoreCase) == 0) {
                             Game = new BF4Client(sender);
                             _connection = null;
@@ -2625,7 +2629,7 @@ namespace PRoCon.Core.Remote {
         }
 
         private void PRoConClient_ReservedSlotsList(FrostbiteClient sender, List<string> soldierNames) {
-            if (sender is BF4Client || sender is BF3Client || sender is MOHWClient) {
+            if (sender is BFHLClient || sender is BF4Client || sender is BF3Client || sender is MOHWClient) {
                 ReservedSlotList.Clear();
             }
 
@@ -2657,7 +2661,7 @@ namespace PRoCon.Core.Remote {
         }
 
         private void PRoConClient_SpectatorListList(FrostbiteClient sender, List<string> soldierNames) {
-            if (sender is BF4Client) {
+            if (sender is BFHLClient || sender is BF4Client) {
                 SpectatorList.Clear();
             }
 
@@ -2896,7 +2900,7 @@ namespace PRoCon.Core.Remote {
 
         protected void OnPlayerLimit(FrostbiteClient sender, int iPlayerLimit) {
             // Quick 'hack' because BF3 does not have these and it's generating confusion on the forums.
-            if (!(Game is BF4Client) && !(Game is BF3Client) && !(Game is MOHWClient)) {
+            if (!(Game is BFHLClient) && !(Game is BF4Client) && !(Game is BF3Client) && !(Game is MOHWClient)) {
                 SendRequest(new List<string>() {
                     "vars.currentPlayerLimit"
                 });

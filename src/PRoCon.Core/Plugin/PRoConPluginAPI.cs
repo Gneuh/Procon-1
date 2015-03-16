@@ -315,6 +315,12 @@ namespace PRoCon.Core.Plugin {
 
         #endregion
 
+        #region Battlefield: Hardline
+
+        public virtual void OnRoundStartReadyPlayersNeeded(int limit) { }
+
+        #endregion
+
         #endregion
 
         #region Team Kill

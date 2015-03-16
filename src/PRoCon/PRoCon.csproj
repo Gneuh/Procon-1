@@ -213,6 +213,36 @@
     <Compile Include="Controls\ServerSettings\BF4\uscServerSettingsGameplayBF4.Designer.cs">
       <DependentUpon>uscServerSettingsGameplayBF4.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ServerSettings\BFHL\uscServerSettingsConfigGeneratorBFHL.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ServerSettings\BFHL\uscServerSettingsConfigGeneratorBFHL.Designer.cs">
+      <DependentUpon>uscServerSettingsConfigGeneratorBFHL.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ServerSettings\BFHL\uscServerSettingsConfigurationBFHL.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ServerSettings\BFHL\uscServerSettingsConfigurationBFHL.Designer.cs">
+      <DependentUpon>uscServerSettingsConfigurationBFHL.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ServerSettings\BFHL\uscServerSettingsDetailsBFHL.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ServerSettings\BFHL\uscServerSettingsDetailsBFHL.Designer.cs">
+      <DependentUpon>uscServerSettingsDetailsBFHL.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ServerSettings\BFHL\uscServerSettingsGameplayBFHL.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ServerSettings\BFHL\uscServerSettingsGameplayBFHL.Designer.cs">
+      <DependentUpon>uscServerSettingsGameplayBFHL.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ServerSettings\BFHL\uscServerSettingsTeamKillsBFHL.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ServerSettings\BFHL\uscServerSettingsTeamKillsBFHL.Designer.cs">
+      <DependentUpon>uscServerSettingsTeamKillsBFHL.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ServerSettings\MOHW\uscServerSettingsConfigGeneratorMOHW.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -474,6 +504,19 @@
     <EmbeddedResource Include="Controls\ServerSettings\BF4\uscServerSettingsGameplayBF4.resx">
       <DependentUpon>uscServerSettingsGameplayBF4.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\ServerSettings\BFHL\uscServerSettingsConfigurationBFHL.resx">
+      <DependentUpon>uscServerSettingsConfigurationBFHL.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\ServerSettings\BFHL\uscServerSettingsDetailsBFHL.resx">
+      <DependentUpon>uscServerSettingsDetailsBFHL.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\ServerSettings\BFHL\uscServerSettingsGameplayBFHL.resx">
+      <DependentUpon>uscServerSettingsGameplayBFHL.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\ServerSettings\BFHL\uscServerSettingsTeamKillsBFHL.resx">
+      <DependentUpon>uscServerSettingsTeamKillsBFHL.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\ServerSettings\MOHW\uscServerSettingsConfigurationMOHW.resx">
       <DependentUpon>uscServerSettingsConfigurationMOHW.cs</DependentUpon>

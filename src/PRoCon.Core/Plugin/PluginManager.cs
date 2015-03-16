@@ -1138,6 +1138,12 @@ namespace PRoCon.Core.Plugin {
             #endregion
 
             #endregion
+
+            #region Battlefield: Hardline
+
+            ProconClient.Game.RoundStartReadyPlayersNeeded -= Game_RoundStartReadyPlayersNeeded;
+
+            #endregion
         }
 
         private void AssignEventHandler() {
@@ -1386,6 +1392,12 @@ namespace PRoCon.Core.Plugin {
             ProconClient.Game.TeamFactionOverride += new FrostbiteClient.TeamFactionOverrideHandler(Game_TeamFactionOverride);
 
             #endregion
+
+            #region Battlefield: Hardline
+
+            ProconClient.Game.RoundStartReadyPlayersNeeded += Game_RoundStartReadyPlayersNeeded;
+
+            #endregion
         }
 
         #endregion
@@ -1471,6 +1483,14 @@ namespace PRoCon.Core.Plugin {
         }
 
 
+        #endregion
+
+        #region Battlefield: Hardline
+        
+        void Game_RoundStartReadyPlayersNeeded(FrostbiteClient sender, int limit) {
+            InvokeOnAllEnabled("OnRoundStartReadyPlayersNeeded", limit);
+        }
+        
         #endregion
 
         #region Layer Accounts

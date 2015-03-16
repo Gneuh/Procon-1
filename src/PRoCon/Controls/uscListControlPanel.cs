@@ -299,11 +299,11 @@ namespace PRoCon.Controls {
                     this.OnSpectatorSlotsList(this.m_prcClient.Game, new List<string>(this.m_prcClient.SpectatorList));
                 }
 
-                if (sender.Game is BF4Client || sender.Game is BF3Client || sender.Game is MOHWClient) {
+                if (sender.Game is BFHLClient || sender.Game is BF4Client || sender.Game is BF3Client || sender.Game is MOHWClient) {
                     this.tbcLists.TabPages.Remove(this.tabTextChatModeration);
                 }
 
-                if (!(sender.Game is BF4Client)) {
+                if (!(sender.Game is BFHLClient) && !(sender.Game is BF4Client)) {
                     this.tbcLists.TabPages.Remove(this.tabSpectatorSlots);
                 }
             });

@@ -239,7 +239,7 @@ namespace PRoCon.Controls {
                     this.m_prcConnection_ServerInfo(this.m_prcConnection.Game, this.m_prcConnection.CurrentServerInfo);
                 }
 
-                if (this.m_prcConnection.GameType == "BF3" || this.m_prcConnection.GameType == "BF4" || this.m_prcConnection.GameType == "MOHW") {
+                if (this.m_prcConnection.GameType == "BF3" || this.m_prcConnection.GameType == "BF4" || this.m_prcConnection.GameType == "BFHL" || this.m_prcConnection.GameType == "MOHW") {
                     this.tbcClientTabs.TabPages.Remove(this.tabMapView);
                 }
 
@@ -466,7 +466,7 @@ namespace PRoCon.Controls {
 
             this.toolTipMapControls.SetToolTip(this.lblCurrentMapName, csiServerInfo.Map);
 
-            if ((this.Client.Game is BF4Client || this.Client.Game is BF3Client || this.Client.Game is MOHWClient) && (csiServerInfo.CurrentRound != csiServerInfo.TotalRounds)) {
+            if ((this.Client.Game is BFHLClient || this.Client.Game is BF4Client || this.Client.Game is BF3Client || this.Client.Game is MOHWClient) && (csiServerInfo.CurrentRound != csiServerInfo.TotalRounds)) {
                 this.lblCurrentRound.Text = this.m_clocLanguage.GetLocalized("uscServerConnection.lblCurrentRound", (csiServerInfo.CurrentRound + 1).ToString(), csiServerInfo.TotalRounds.ToString());
             }
             else {
@@ -539,7 +539,7 @@ namespace PRoCon.Controls {
                     + Environment.NewLine
                 );
             }
-            if (this.Client.Game is BF4Client) {
+            if (this.Client.Game is BFHLClient || this.Client.Game is BF4Client) {
                 this.toolTipPlasma.SetToolTip(this.lblPlasmaStatus,
                     this.m_clocLanguage.GetLocalized("uscServerConnection.lblPlasmaStatus.AcceptingPlayers.ToolTip")
                         + Environment.NewLine + Environment.NewLine +

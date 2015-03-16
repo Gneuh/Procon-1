@@ -1,5 +1,5 @@
 ﻿///////////////////////////////////
-// File information displayed in Options window. (20141211-01)
+// File information displayed in Options window. (20140316-01)
 ///////////////////////////////////
 file.Language=English (Australian)
 file.flag=au
@@ -38,6 +38,30 @@ global.Months.Short=M
 global.Years.Singular=Year
 global.Years.Plural=Years
 global.Years.Short=y
+
+// BFHL Teams
+//////////////
+
+global.conquest.cop=Cops
+global.conquest.crim=Criminals
+global.tdm.cop=Cops
+global.tdm.crim=Criminals
+
+global.hostage.neutral=Neutral
+global.hostage.cop=Cops
+global.hostage.crim=Criminals
+
+global.hit.neutral=Neutral
+global.hit.cop=Cops
+global.hit.crim=Criminals
+
+global.heist.neutral=Neutral
+global.heist.cop=Cops
+global.heist.crim=Criminals
+
+global.bm.neutral=Neutral
+global.bm.cop=Cops
+global.bm.crim=Criminals
 
 // BFBC2 Squads
 ///////////////

@@ -457,6 +457,8 @@
             this.iglFlags.Images.SetKeyName(248, "flag_death.png");
             this.iglFlags.Images.SetKeyName(249, "bq.png");
             this.iglFlags.Images.SetKeyName(250, "ss.png");
+            this.iglFlags.Images.SetKeyName(251, "cop.png");
+            this.iglFlags.Images.SetKeyName(252, "crim.png");
             // 
             // ntfIcon
             // 
@@ -557,6 +559,7 @@
             this.iglGameIcons.Images.SetKeyName(4, "bf3.png");
             this.iglGameIcons.Images.SetKeyName(5, "mohw.png");
             this.iglGameIcons.Images.SetKeyName(6, "bf4.png");
+            this.iglGameIcons.Images.SetKeyName(7, "bfhl.png");
             // 
             // tlsConnections
             // 

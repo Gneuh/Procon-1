@@ -1,0 +1,456 @@
+/////////////////////////////////////////////
+// This definitions file will be overwritten during an update.
+//  (2014-08-14.01)
+// This file contains the standard defintions required to run procon 
+// connected to a BFHL server
+/////////////////////////////////////////////
+
+procon.protected.serverversions.clear BFHL
+procon.protected.serverversions.add BFHL "362312" "Test-08/14"
+
+procon.protected.specialization.clear
+
+procon.protected.weapons.clear
+procon.protected.weapons.add None "DamageArea" Primary Suicide
+procon.protected.weapons.add None "Death" Primary None
+procon.protected.weapons.add None "Melee" Secondary Melee
+procon.protected.weapons.add None "RoadKill" Primary None
+procon.protected.weapons.add None "SoldierCollision" Primary Suicide
+procon.protected.weapons.add None "Suicide" Primary Suicide
+procon.protected.weapons.add None "VehicleUpsideDown" Primary Suicide
+
+// Personal vehicles
+
+
+// Transport vehicles
+
+
+// Light armored vehicles
+
+
+// Heavy armored vehicles
+
+
+// Air vehicles
+
+
+// Water vehicles
+
+
+// Stationary vehicles
+
+
+procon.protected.maps.clear
+procon.protected.maps.add "TurfwarLarge0" "MP_Downtown" "Conquest Large" "High Tension" 0
+procon.protected.maps.add "TurfwarLarge0" "MP_Bloodout" "Conquest Large" "Bloodout" 0
+procon.protected.maps.add "TurfwarLarge0" "MP_Eastside" "Conquest Large" "Eastside" 0
+procon.protected.maps.add "TurfwarLarge0" "MP_Desert05" "Conquest Large" "Desert" 0
+procon.protected.maps.add "TurfwarLarge0" "MP_Bank" "Conquest Large" "Bank" 0
+procon.protected.maps.add "TurfwarLarge0" "MP_Growhouse" "Conquest Large" "Growhouse" 0
+procon.protected.maps.add "TurfwarLarge0" "MP_OffShore" "Conquest Large" "Offshore" 0
+procon.protected.maps.add "TurfwarLarge0" "MP_Hills" "Conquest Large" "Hollywood Hills" 0
+procon.protected.maps.add "TurfwarLarge0" "MP_Glades" "Conquest Large" "Gator Hunt" 0
+
+procon.protected.maps.add "TurfWarSmall0" "MP_Downtown" "Conquest Small" "High Tension" 0
+procon.protected.maps.add "TurfWarSmall0" "MP_Bloodout" "Conquest Small" "Bloodout" 0
+procon.protected.maps.add "TurfWarSmall0" "MP_Eastside" "Conquest Small" "Eastside" 0
+procon.protected.maps.add "TurfWarSmall0" "MP_Desert05" "Conquest Small" "Desert" 0
+procon.protected.maps.add "TurfWarSmall0" "MP_Bank" "Conquest Small" "Bank" 0
+procon.protected.maps.add "TurfWarSmall0" "MP_Growhouse" "Conquest Small" "Growhouse" 0
+procon.protected.maps.add "TurfWarSmall0" "MP_OffShore" "Conquest Small" "Offshore" 0
+procon.protected.maps.add "TurfWarSmall0" "MP_Hills" "Conquest Small" "Hollywood Hills" 0
+procon.protected.maps.add "TurfWarSmall0" "MP_Glades" "Conquest Small" "Gator Hunt" 0
+
+procon.protected.maps.add "Hostage0" "MP_Downtown" "Rescue" "High Tension" 0
+procon.protected.maps.add "Hostage0" "MP_Bloodout" "Rescue" "Bloodout" 0
+procon.protected.maps.add "Hostage0" "MP_Eastside" "Rescue" "Eastside" 0
+procon.protected.maps.add "Hostage0" "MP_Desert05" "Rescue" "Desert" 0
+procon.protected.maps.add "Hostage0" "MP_Bank" "Rescue" "Bank" 0
+procon.protected.maps.add "Hostage0" "MP_Growhouse" "Rescue" "Growhouse" 0
+procon.protected.maps.add "Hostage0" "MP_OffShore" "Rescue" "Offshore" 0
+procon.protected.maps.add "Hostage0" "MP_Hills" "Rescue" "Hollywood Hills" 0
+procon.protected.maps.add "Hostage0" "MP_Glades" "Rescue" "Gator Hunt" 0
+
+procon.protected.maps.add "Hit0" "MP_Downtown" "Crosshair" "High Tension" 0
+procon.protected.maps.add "Hit0" "MP_Bloodout" "Crosshair" "Bloodout" 0
+procon.protected.maps.add "Hit0" "MP_Eastside" "Crosshair" "Eastside" 0
+procon.protected.maps.add "Hit0" "MP_Desert05" "Crosshair" "Desert" 0
+procon.protected.maps.add "Hit0" "MP_Bank" "Crosshair" "Bank" 0
+procon.protected.maps.add "Hit0" "MP_Growhouse" "Crosshair" "Growhouse" 0
+procon.protected.maps.add "Hit0" "MP_OffShore" "Crosshair" "Offshore" 0
+procon.protected.maps.add "Hit0" "MP_Hills" "Crosshair" "Hollywood Hills" 0
+procon.protected.maps.add "Hit0" "MP_Glades" "Crosshair" "Gator Hunt" 0
+
+procon.protected.maps.add "Heist0" "MP_Downtown" "Heist" "High Tension" 0
+procon.protected.maps.add "Heist0" "MP_Bloodout" "Heist" "Bloodout" 0
+procon.protected.maps.add "Heist0" "MP_Eastside" "Heist" "Eastside" 0
+procon.protected.maps.add "Heist0" "MP_Desert05" "Heist" "Desert" 0
+procon.protected.maps.add "Heist0" "MP_Bank" "Heist" "Bank" 0
+procon.protected.maps.add "Heist0" "MP_Growhouse" "Heist" "Growhouse" 0
+procon.protected.maps.add "Heist0" "MP_OffShore" "Heist" "Offshore" 0
+procon.protected.maps.add "Heist0" "MP_Hills" "Heist" "Hollywood Hills" 0
+procon.protected.maps.add "Heist0" "MP_Glades" "Heist" "Gator Hunt" 0
+
+procon.protected.maps.add "TeamDeathMatch0" "MP_Downtown" "Team Deathmatch" "High Tension" 0
+procon.protected.maps.add "TeamDeathMatch0" "MP_Bloodout" "Team Deathmatch" "Bloodout" 0
+procon.protected.maps.add "TeamDeathMatch0" "MP_Eastside" "Team Deathmatch" "Eastside" 0
+procon.protected.maps.add "TeamDeathMatch0" "MP_Desert05" "Team Deathmatch" "Desert" 0
+procon.protected.maps.add "TeamDeathMatch0" "MP_Bank" "Team Deathmatch" "Bank" 0
+procon.protected.maps.add "TeamDeathMatch0" "MP_Growhouse" "Team Deathmatch" "Growhouse" 0
+procon.protected.maps.add "TeamDeathMatch0" "MP_OffShore" "Team Deathmatch" "Offshore" 0
+procon.protected.maps.add "TeamDeathMatch0" "MP_Hills" "Team Deathmatch" "Hollywood Hills" 0
+procon.protected.maps.add "TeamDeathMatch0" "MP_Glades" "Team Deathmatch" "Gator Hunt" 0
+
+procon.protected.maps.add "Hotwire0" "MP_Downtown" "Team Deathmatch Large" "High Tension" 0
+procon.protected.maps.add "Hotwire0" "MP_Bloodout" "Team Deathmatch Large" "Bloodout" 0
+procon.protected.maps.add "Hotwire0" "MP_Eastside" "Team Deathmatch Large" "Eastside" 0
+procon.protected.maps.add "Hotwire0" "MP_Desert05" "Team Deathmatch Large" "Desert" 0
+procon.protected.maps.add "Hotwire0" "MP_Bank" "Team Deathmatch Large" "Bank" 0
+procon.protected.maps.add "Hotwire0" "MP_Growhouse" "Team Deathmatch Large" "Growhouse" 0
+procon.protected.maps.add "Hotwire0" "MP_OffShore" "Team Deathmatch Large" "Offshore" 0
+procon.protected.maps.add "Hotwire0" "MP_Hills" "Team Deathmatch Large" "Hollywood Hills" 0
+procon.protected.maps.add "Hotwire0" "MP_Glades" "Team Deathmatch Large" "Gator Hunt" 0
+
+procon.protected.maps.add "BloodMoney0" "MP_Downtown" "Blood Money" "High Tension" 0
+procon.protected.maps.add "BloodMoney0" "MP_Bloodout" "Blood Money" "Bloodout" 0
+procon.protected.maps.add "BloodMoney0" "MP_Eastside" "Blood Money" "Eastside" 0
+procon.protected.maps.add "BloodMoney0" "MP_Desert05" "Blood Money" "Desert" 0
+procon.protected.maps.add "BloodMoney0" "MP_Bank" "Blood Money" "Bank" 0
+procon.protected.maps.add "BloodMoney0" "MP_Growhouse" "Blood Money" "Growhouse" 0
+procon.protected.maps.add "BloodMoney0" "MP_OffShore" "Blood Money" "Offshore" 0
+procon.protected.maps.add "BloodMoney0" "MP_Hills" "Blood Money" "Hollywood Hills" 0
+procon.protected.maps.add "BloodMoney0" "MP_Glades" "Blood Money" "Gator Hunt" 0
+
+// Conquest Large
+///////////////////////////////////////////////////////////////////////////////
+
+procon.protected.teamnames.add "MP_Downtown" 0 "global.conquest.neutral" "" "TurfwarLarge0"
+procon.protected.teamnames.add "MP_Downtown" 1 "global.conquest.cop" "cop.png" "TurfwarLarge0"
+procon.protected.teamnames.add "MP_Downtown" 2 "global.conquest.crim" "crim.png" "TurfwarLarge0"
+
+procon.protected.teamnames.add "MP_Bloodout" 0 "global.conquest.neutral" "" "TurfwarLarge0"
+procon.protected.teamnames.add "MP_Bloodout" 1 "global.conquest.cop" "cop.png" "TurfwarLarge0"
+procon.protected.teamnames.add "MP_Bloodout" 2 "global.conquest.crim" "crim.png" "TurfwarLarge0"
+
+procon.protected.teamnames.add "MP_Eastside" 0 "global.conquest.neutral" "" "TurfwarLarge0"
+procon.protected.teamnames.add "MP_Eastside" 1 "global.conquest.cop" "cop.png" "TurfwarLarge0"
+procon.protected.teamnames.add "MP_Eastside" 2 "global.conquest.crim" "crim.png" "TurfwarLarge0"
+
+procon.protected.teamnames.add "MP_Desert05" 0 "global.conquest.neutral" "" "TurfwarLarge0"
+procon.protected.teamnames.add "MP_Desert05" 1 "global.conquest.cop" "cop.png" "TurfwarLarge0"
+procon.protected.teamnames.add "MP_Desert05" 2 "global.conquest.crim" "crim.png" "TurfwarLarge0"
+
+procon.protected.teamnames.add "MP_Bank" 0 "global.conquest.neutral" "" "TurfwarLarge0"
+procon.protected.teamnames.add "MP_Bank" 1 "global.conquest.cop" "cop.png" "TurfwarLarge0"
+procon.protected.teamnames.add "MP_Bank" 2 "global.conquest.crim" "crim.png" "TurfwarLarge0"
+
+procon.protected.teamnames.add "MP_Growhouse" 0 "global.conquest.neutral" "" "TurfwarLarge0"
+procon.protected.teamnames.add "MP_Growhouse" 1 "global.conquest.cop" "cop.png" "TurfwarLarge0"
+procon.protected.teamnames.add "MP_Growhouse" 2 "global.conquest.crim" "crim.png" "TurfwarLarge0"
+
+procon.protected.teamnames.add "MP_OffShore" 0 "global.conquest.neutral" "" "TurfwarLarge0"
+procon.protected.teamnames.add "MP_OffShore" 1 "global.conquest.cop" "cop.png" "TurfwarLarge0"
+procon.protected.teamnames.add "MP_OffShore" 2 "global.conquest.crim" "crim.png" "TurfwarLarge0"
+
+procon.protected.teamnames.add "MP_Hills" 0 "global.conquest.neutral" "" "TurfwarLarge0"
+procon.protected.teamnames.add "MP_Hills" 1 "global.conquest.cop" "cop.png" "TurfwarLarge0"
+procon.protected.teamnames.add "MP_Hills" 2 "global.conquest.crim" "crim.png" "TurfwarLarge0"
+
+procon.protected.teamnames.add "MP_Glades" 0 "global.conquest.neutral" "" "TurfwarLarge0"
+procon.protected.teamnames.add "MP_Glades" 1 "global.conquest.cop" "cop.png" "TurfwarLarge0"
+procon.protected.teamnames.add "MP_Glades" 2 "global.conquest.crim" "crim.png" "TurfwarLarge0"
+
+// Conquest Small
+///////////////////////////////////////////////////////////////////////////////
+
+procon.protected.teamnames.add "MP_Downtown" 0 "global.conquest.neutral" "" "TurfWarSmall0"
+procon.protected.teamnames.add "MP_Downtown" 1 "global.conquest.cop" "cop.png" "TurfWarSmall0"
+procon.protected.teamnames.add "MP_Downtown" 2 "global.conquest.crim" "crim.png" "TurfWarSmall0"
+
+procon.protected.teamnames.add "MP_Bloodout" 0 "global.conquest.neutral" "" "TurfWarSmall0"
+procon.protected.teamnames.add "MP_Bloodout" 1 "global.conquest.cop" "cop.png" "TurfWarSmall0"
+procon.protected.teamnames.add "MP_Bloodout" 2 "global.conquest.crim" "crim.png" "TurfWarSmall0"
+
+procon.protected.teamnames.add "MP_Eastside" 0 "global.conquest.neutral" "" "TurfWarSmall0"
+procon.protected.teamnames.add "MP_Eastside" 1 "global.conquest.cop" "cop.png" "TurfWarSmall0"
+procon.protected.teamnames.add "MP_Eastside" 2 "global.conquest.crim" "crim.png" "TurfWarSmall0"
+
+procon.protected.teamnames.add "MP_Desert05" 0 "global.conquest.neutral" "" "TurfWarSmall0"
+procon.protected.teamnames.add "MP_Desert05" 1 "global.conquest.cop" "cop.png" "TurfWarSmall0"
+procon.protected.teamnames.add "MP_Desert05" 2 "global.conquest.crim" "crim.png" "TurfWarSmall0"
+
+procon.protected.teamnames.add "MP_Bank" 0 "global.conquest.neutral" "" "TurfWarSmall0"
+procon.protected.teamnames.add "MP_Bank" 1 "global.conquest.cop" "cop.png" "TurfWarSmall0"
+procon.protected.teamnames.add "MP_Bank" 2 "global.conquest.crim" "crim.png" "TurfWarSmall0"
+
+procon.protected.teamnames.add "MP_Growhouse" 0 "global.conquest.neutral" "" "TurfWarSmall0"
+procon.protected.teamnames.add "MP_Growhouse" 1 "global.conquest.cop" "cop.png" "TurfWarSmall0"
+procon.protected.teamnames.add "MP_Growhouse" 2 "global.conquest.crim" "crim.png" "TurfWarSmall0"
+
+procon.protected.teamnames.add "MP_OffShore" 0 "global.conquest.neutral" "" "TurfWarSmall0"
+procon.protected.teamnames.add "MP_OffShore" 1 "global.conquest.cop" "cop.png" "TurfWarSmall0"
+procon.protected.teamnames.add "MP_OffShore" 2 "global.conquest.crim" "crim.png" "TurfWarSmall0"
+
+procon.protected.teamnames.add "MP_Hills" 0 "global.conquest.neutral" "" "TurfWarSmall0"
+procon.protected.teamnames.add "MP_Hills" 1 "global.conquest.cop" "cop.png" "TurfWarSmall0"
+procon.protected.teamnames.add "MP_Hills" 2 "global.conquest.crim" "crim.png" "TurfWarSmall0"
+
+procon.protected.teamnames.add "MP_Glades" 0 "global.conquest.neutral" "" "TurfWarSmall0"
+procon.protected.teamnames.add "MP_Glades" 1 "global.conquest.cop" "cop.png" "TurfWarSmall0"
+procon.protected.teamnames.add "MP_Glades" 2 "global.conquest.crim" "crim.png" "TurfWarSmall0"
+
+// Rescue
+///////////////////////////////////////////////////////////////////////////////
+
+procon.protected.teamnames.add "MP_Downtown" 0 "global.hostage.neutral" "" "Hostage0"
+procon.protected.teamnames.add "MP_Downtown" 1 "global.hostage.cop" "cop.png" "Hostage0"
+procon.protected.teamnames.add "MP_Downtown" 2 "global.hostage.crim" "crim.png" "Hostage0"
+
+procon.protected.teamnames.add "MP_Bloodout" 0 "global.hostage.neutral" "" "Hostage0"
+procon.protected.teamnames.add "MP_Bloodout" 1 "global.hostage.cop" "cop.png" "Hostage0"
+procon.protected.teamnames.add "MP_Bloodout" 2 "global.hostage.crim" "crim.png" "Hostage0"
+
+procon.protected.teamnames.add "MP_Eastside" 0 "global.hostage.neutral" "" "Hostage0"
+procon.protected.teamnames.add "MP_Eastside" 1 "global.hostage.cop" "cop.png" "Hostage0"
+procon.protected.teamnames.add "MP_Eastside" 2 "global.hostage.crim" "crim.png" "Hostage0"
+
+procon.protected.teamnames.add "MP_Desert05" 0 "global.hostage.neutral" "" "Hostage0"
+procon.protected.teamnames.add "MP_Desert05" 1 "global.hostage.cop" "cop.png" "Hostage0"
+procon.protected.teamnames.add "MP_Desert05" 2 "global.hostage.crim" "crim.png" "Hostage0"
+
+procon.protected.teamnames.add "MP_Bank" 0 "global.hostage.neutral" "" "Hostage0"
+procon.protected.teamnames.add "MP_Bank" 1 "global.hostage.cop" "cop.png" "Hostage0"
+procon.protected.teamnames.add "MP_Bank" 2 "global.hostage.crim" "crim.png" "Hostage0"
+
+procon.protected.teamnames.add "MP_Growhouse" 0 "global.hostage.neutral" "" "Hostage0"
+procon.protected.teamnames.add "MP_Growhouse" 1 "global.hostage.cop" "cop.png" "Hostage0"
+procon.protected.teamnames.add "MP_Growhouse" 2 "global.hostage.crim" "crim.png" "Hostage0"
+
+procon.protected.teamnames.add "MP_OffShore" 0 "global.hostage.neutral" "" "Hostage0"
+procon.protected.teamnames.add "MP_OffShore" 1 "global.hostage.cop" "cop.png" "Hostage0"
+procon.protected.teamnames.add "MP_OffShore" 2 "global.hostage.crim" "crim.png" "Hostage0"
+
+procon.protected.teamnames.add "MP_Hills" 0 "global.hostage.neutral" "" "Hostage0"
+procon.protected.teamnames.add "MP_Hills" 1 "global.hostage.cop" "cop.png" "Hostage0"
+procon.protected.teamnames.add "MP_Hills" 2 "global.hostage.crim" "crim.png" "Hostage0"
+
+procon.protected.teamnames.add "MP_Glades" 0 "global.hostage.neutral" "" "Hostage0"
+procon.protected.teamnames.add "MP_Glades" 1 "global.hostage.cop" "cop.png" "Hostage0"
+procon.protected.teamnames.add "MP_Glades" 2 "global.hostage.crim" "crim.png" "Hostage0"
+
+// Crosshair
+///////////////////////////////////////////////////////////////////////////////
+
+procon.protected.teamnames.add "MP_Downtown" 0 "global.hit.neutral" "" "Hit0"
+procon.protected.teamnames.add "MP_Downtown" 1 "global.hit.cop" "cop.png" "Hit0"
+procon.protected.teamnames.add "MP_Downtown" 2 "global.hit.crim" "crim.png" "Hit0"
+
+procon.protected.teamnames.add "MP_Bloodout" 0 "global.hit.neutral" "" "Hit0"
+procon.protected.teamnames.add "MP_Bloodout" 1 "global.hit.cop" "cop.png" "Hit0"
+procon.protected.teamnames.add "MP_Bloodout" 2 "global.hit.crim" "crim.png" "Hit0"
+
+procon.protected.teamnames.add "MP_Eastside" 0 "global.hit.neutral" "" "Hit0"
+procon.protected.teamnames.add "MP_Eastside" 1 "global.hit.cop" "cop.png" "Hit0"
+procon.protected.teamnames.add "MP_Eastside" 2 "global.hit.crim" "crim.png" "Hit0"
+
+procon.protected.teamnames.add "MP_Desert05" 0 "global.hit.neutral" "" "Hit0"
+procon.protected.teamnames.add "MP_Desert05" 1 "global.hit.cop" "cop.png" "Hit0"
+procon.protected.teamnames.add "MP_Desert05" 2 "global.hit.crim" "crim.png" "Hit0"
+
+procon.protected.teamnames.add "MP_Bank" 0 "global.hit.neutral" "" "Hit0"
+procon.protected.teamnames.add "MP_Bank" 1 "global.hit.cop" "cop.png" "Hit0"
+procon.protected.teamnames.add "MP_Bank" 2 "global.hit.crim" "crim.png" "Hit0"
+
+procon.protected.teamnames.add "MP_Growhouse" 0 "global.hit.neutral" "" "Hit0"
+procon.protected.teamnames.add "MP_Growhouse" 1 "global.hit.cop" "cop.png" "Hit0"
+procon.protected.teamnames.add "MP_Growhouse" 2 "global.hit.crim" "crim.png" "Hit0"
+
+procon.protected.teamnames.add "MP_OffShore" 0 "global.hit.neutral" "" "Hit0"
+procon.protected.teamnames.add "MP_OffShore" 1 "global.hit.cop" "cop.png" "Hit0"
+procon.protected.teamnames.add "MP_OffShore" 2 "global.hit.crim" "crim.png" "Hit0"
+
+procon.protected.teamnames.add "MP_Hills" 0 "global.hit.neutral" "" "Hit0"
+procon.protected.teamnames.add "MP_Hills" 1 "global.hit.cop" "cop.png" "Hit0"
+procon.protected.teamnames.add "MP_Hills" 2 "global.hit.crim" "crim.png" "Hit0"
+
+procon.protected.teamnames.add "MP_Glades" 0 "global.hit.neutral" "" "Hit0"
+procon.protected.teamnames.add "MP_Glades" 1 "global.hit.cop" "cop.png" "Hit0"
+procon.protected.teamnames.add "MP_Glades" 2 "global.hit.crim" "crim.png" "Hit0"
+
+// Heist
+///////////////////////////////////////////////////////////////////////////////
+
+procon.protected.teamnames.add "MP_Downtown" 0 "global.heist.neutral" "" "Heist0"
+procon.protected.teamnames.add "MP_Downtown" 1 "global.heist.cop" "cop.png" "Heist0"
+procon.protected.teamnames.add "MP_Downtown" 2 "global.heist.crim" "crim.png" "Heist0"
+
+procon.protected.teamnames.add "MP_Bloodout" 0 "global.heist.neutral" "" "Heist0"
+procon.protected.teamnames.add "MP_Bloodout" 1 "global.heist.cop" "cop.png" "Heist0"
+procon.protected.teamnames.add "MP_Bloodout" 2 "global.heist.crim" "crim.png" "Heist0"
+
+procon.protected.teamnames.add "MP_Eastside" 0 "global.heist.neutral" "" "Heist0"
+procon.protected.teamnames.add "MP_Eastside" 1 "global.heist.cop" "cop.png" "Heist0"
+procon.protected.teamnames.add "MP_Eastside" 2 "global.heist.crim" "crim.png" "Heist0"
+
+procon.protected.teamnames.add "MP_Desert05" 0 "global.heist.neutral" "" "Heist0"
+procon.protected.teamnames.add "MP_Desert05" 1 "global.heist.cop" "cop.png" "Heist0"
+procon.protected.teamnames.add "MP_Desert05" 2 "global.heist.crim" "crim.png" "Heist0"
+
+procon.protected.teamnames.add "MP_Bank" 0 "global.heist.neutral" "" "Heist0"
+procon.protected.teamnames.add "MP_Bank" 1 "global.heist.cop" "cop.png" "Heist0"
+procon.protected.teamnames.add "MP_Bank" 2 "global.heist.crim" "crim.png" "Heist0"
+
+procon.protected.teamnames.add "MP_Growhouse" 0 "global.heist.neutral" "" "Heist0"
+procon.protected.teamnames.add "MP_Growhouse" 1 "global.heist.cop" "cop.png" "Heist0"
+procon.protected.teamnames.add "MP_Growhouse" 2 "global.heist.crim" "crim.png" "Heist0"
+
+procon.protected.teamnames.add "MP_OffShore" 0 "global.heist.neutral" "" "Heist0"
+procon.protected.teamnames.add "MP_OffShore" 1 "global.heist.cop" "cop.png" "Heist0"
+procon.protected.teamnames.add "MP_OffShore" 2 "global.heist.crim" "crim.png" "Heist0"
+
+procon.protected.teamnames.add "MP_Hills" 0 "global.heist.neutral" "" "Heist0"
+procon.protected.teamnames.add "MP_Hills" 1 "global.heist.cop" "cop.png" "Heist0"
+procon.protected.teamnames.add "MP_Hills" 2 "global.heist.crim" "crim.png" "Heist0"
+
+procon.protected.teamnames.add "MP_Glades" 0 "global.heist.neutral" "" "Heist0"
+procon.protected.teamnames.add "MP_Glades" 1 "global.heist.cop" "cop.png" "Heist0"
+procon.protected.teamnames.add "MP_Glades" 2 "global.heist.crim" "crim.png" "Heist0"
+
+// Team Deathmatch
+///////////////////////////////////////////////////////////////////////////////
+
+procon.protected.teamnames.add "MP_Downtown" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
+procon.protected.teamnames.add "MP_Downtown" 1 "global.tdm.cop" "cop.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "MP_Downtown" 2 "global.tdm.crim" "crim.png" "TeamDeathMatch0"
+
+procon.protected.teamnames.add "MP_Bloodout" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
+procon.protected.teamnames.add "MP_Bloodout" 1 "global.tdm.cop" "cop.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "MP_Bloodout" 2 "global.tdm.crim" "crim.png" "TeamDeathMatch0"
+
+procon.protected.teamnames.add "MP_Eastside" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
+procon.protected.teamnames.add "MP_Eastside" 1 "global.tdm.cop" "cop.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "MP_Eastside" 2 "global.tdm.crim" "crim.png" "TeamDeathMatch0"
+
+procon.protected.teamnames.add "MP_Desert05" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
+procon.protected.teamnames.add "MP_Desert05" 1 "global.tdm.cop" "cop.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "MP_Desert05" 2 "global.tdm.crim" "crim.png" "TeamDeathMatch0"
+
+procon.protected.teamnames.add "MP_Bank" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
+procon.protected.teamnames.add "MP_Bank" 1 "global.tdm.cop" "cop.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "MP_Bank" 2 "global.tdm.crim" "crim.png" "TeamDeathMatch0"
+
+procon.protected.teamnames.add "MP_Growhouse" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
+procon.protected.teamnames.add "MP_Growhouse" 1 "global.tdm.cop" "cop.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "MP_Growhouse" 2 "global.tdm.crim" "crim.png" "TeamDeathMatch0"
+
+procon.protected.teamnames.add "MP_OffShore" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
+procon.protected.teamnames.add "MP_OffShore" 1 "global.tdm.cop" "cop.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "MP_OffShore" 2 "global.tdm.crim" "crim.png" "TeamDeathMatch0"
+
+procon.protected.teamnames.add "MP_Hills" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
+procon.protected.teamnames.add "MP_Hills" 1 "global.tdm.cop" "cop.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "MP_Hills" 2 "global.tdm.crim" "crim.png" "TeamDeathMatch0"
+
+procon.protected.teamnames.add "MP_Glades" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
+procon.protected.teamnames.add "MP_Glades" 1 "global.tdm.cop" "cop.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "MP_Glades" 2 "global.tdm.crim" "crim.png" "TeamDeathMatch0"
+
+// Team Deathmatch Large
+///////////////////////////////////////////////////////////////////////////////
+
+procon.protected.teamnames.add "MP_Downtown" 0 "global.tdm.neutral" "" "Hotwire0"
+procon.protected.teamnames.add "MP_Downtown" 1 "global.tdm.cop" "cop.png" "Hotwire0"
+procon.protected.teamnames.add "MP_Downtown" 2 "global.tdm.crim" "crim.png" "Hotwire0"
+
+procon.protected.teamnames.add "MP_Bloodout" 0 "global.tdm.neutral" "" "Hotwire0"
+procon.protected.teamnames.add "MP_Bloodout" 1 "global.tdm.cop" "cop.png" "Hotwire0"
+procon.protected.teamnames.add "MP_Bloodout" 2 "global.tdm.crim" "crim.png" "Hotwire0"
+
+procon.protected.teamnames.add "MP_Eastside" 0 "global.tdm.neutral" "" "Hotwire0"
+procon.protected.teamnames.add "MP_Eastside" 1 "global.tdm.cop" "cop.png" "Hotwire0"
+procon.protected.teamnames.add "MP_Eastside" 2 "global.tdm.crim" "crim.png" "Hotwire0"
+
+procon.protected.teamnames.add "MP_Desert05" 0 "global.tdm.neutral" "" "Hotwire0"
+procon.protected.teamnames.add "MP_Desert05" 1 "global.tdm.cop" "cop.png" "Hotwire0"
+procon.protected.teamnames.add "MP_Desert05" 2 "global.tdm.crim" "crim.png" "Hotwire0"
+
+procon.protected.teamnames.add "MP_Bank" 0 "global.tdm.neutral" "" "Hotwire0"
+procon.protected.teamnames.add "MP_Bank" 1 "global.tdm.cop" "cop.png" "Hotwire0"
+procon.protected.teamnames.add "MP_Bank" 2 "global.tdm.crim" "crim.png" "Hotwire0"
+
+procon.protected.teamnames.add "MP_Growhouse" 0 "global.tdm.neutral" "" "Hotwire0"
+procon.protected.teamnames.add "MP_Growhouse" 1 "global.tdm.cop" "cop.png" "Hotwire0"
+procon.protected.teamnames.add "MP_Growhouse" 2 "global.tdm.crim" "crim.png" "Hotwire0"
+
+procon.protected.teamnames.add "MP_OffShore" 0 "global.tdm.neutral" "" "Hotwire0"
+procon.protected.teamnames.add "MP_OffShore" 1 "global.tdm.cop" "cop.png" "Hotwire0"
+procon.protected.teamnames.add "MP_OffShore" 2 "global.tdm.crim" "crim.png" "Hotwire0"
+
+procon.protected.teamnames.add "MP_Hills" 0 "global.tdm.neutral" "" "Hotwire0"
+procon.protected.teamnames.add "MP_Hills" 1 "global.tdm.cop" "cop.png" "Hotwire0"
+procon.protected.teamnames.add "MP_Hills" 2 "global.tdm.crim" "crim.png" "Hotwire0"
+
+procon.protected.teamnames.add "MP_Glades" 0 "global.tdm.neutral" "" "Hotwire0"
+procon.protected.teamnames.add "MP_Glades" 1 "global.tdm.cop" "cop.png" "Hotwire0"
+procon.protected.teamnames.add "MP_Glades" 2 "global.tdm.crim" "crim.png" "Hotwire0"
+
+// Blood Money
+///////////////////////////////////////////////////////////////////////////////
+
+procon.protected.teamnames.add "MP_Downtown" 0 "global.bm.neutral" "" "BloodMoney0"
+procon.protected.teamnames.add "MP_Downtown" 1 "global.bm.cop" "cop.png" "BloodMoney0"
+procon.protected.teamnames.add "MP_Downtown" 2 "global.bm.crim" "crim.png" "BloodMoney0"
+
+procon.protected.teamnames.add "MP_Bloodout" 0 "global.bm.neutral" "" "BloodMoney0"
+procon.protected.teamnames.add "MP_Bloodout" 1 "global.bm.cop" "cop.png" "BloodMoney0"
+procon.protected.teamnames.add "MP_Bloodout" 2 "global.bm.crim" "crim.png" "BloodMoney0"
+
+procon.protected.teamnames.add "MP_Eastside" 0 "global.bm.neutral" "" "BloodMoney0"
+procon.protected.teamnames.add "MP_Eastside" 1 "global.bm.cop" "cop.png" "BloodMoney0"
+procon.protected.teamnames.add "MP_Eastside" 2 "global.bm.crim" "crim.png" "BloodMoney0"
+
+procon.protected.teamnames.add "MP_Desert05" 0 "global.bm.neutral" "" "BloodMoney0"
+procon.protected.teamnames.add "MP_Desert05" 1 "global.bm.cop" "cop.png" "BloodMoney0"
+procon.protected.teamnames.add "MP_Desert05" 2 "global.bm.crim" "crim.png" "BloodMoney0"
+
+procon.protected.teamnames.add "MP_Bank" 0 "global.bm.neutral" "" "BloodMoney0"
+procon.protected.teamnames.add "MP_Bank" 1 "global.bm.cop" "cop.png" "BloodMoney0"
+procon.protected.teamnames.add "MP_Bank" 2 "global.bm.crim" "crim.png" "BloodMoney0"
+
+procon.protected.teamnames.add "MP_Growhouse" 0 "global.bm.neutral" "" "BloodMoney0"
+procon.protected.teamnames.add "MP_Growhouse" 1 "global.bm.cop" "cop.png" "BloodMoney0"
+procon.protected.teamnames.add "MP_Growhouse" 2 "global.bm.crim" "crim.png" "BloodMoney0"
+
+procon.protected.teamnames.add "MP_OffShore" 0 "global.bm.neutral" "" "BloodMoney0"
+procon.protected.teamnames.add "MP_OffShore" 1 "global.bm.cop" "cop.png" "BloodMoney0"
+procon.protected.teamnames.add "MP_OffShore" 2 "global.bm.crim" "crim.png" "BloodMoney0"
+
+procon.protected.teamnames.add "MP_Hills" 0 "global.bm.neutral" "" "BloodMoney0"
+procon.protected.teamnames.add "MP_Hills" 1 "global.bm.cop" "cop.png" "BloodMoney0"
+procon.protected.teamnames.add "MP_Hills" 2 "global.bm.crim" "crim.png" "BloodMoney0"
+
+procon.protected.teamnames.add "MP_Glades" 0 "global.bm.neutral" "" "BloodMoney0"
+procon.protected.teamnames.add "MP_Glades" 1 "global.bm.cop" "cop.png" "BloodMoney0"
+procon.protected.teamnames.add "MP_Glades" 2 "global.bm.crim" "crim.png" "BloodMoney0"
+
+///////////////////////////////////////////////////////////////////////////////
+procon.protected.tasks.clear
+procon.protected.tasks.add "procon" 0 30 -1 procon.protected.send serverInfo
+procon.protected.tasks.add "procon" 0 30 -1 procon.protected.send admin.listPlayers all
+procon.protected.tasks.add "procon" 0 60 -1 procon.protected.send mapList.getMapIndices
+procon.protected.tasks.add "procon" 0 90 -1 procon.protected.send punkBuster.pb_sv_command pb_sv_plist
+
+procon.protected.vars.set TEMP_BAN_CEILING 3600
+procon.protected.vars.set MAX_CONSOLE_LINES 100
+procon.protected.vars.set MAX_PLUGINCONSOLE_LINES 100
+procon.protected.vars.set MAX_CHAT_LINES 100
+procon.protected.vars.set MAX_PUNKBUSTERCONSOLE_LINES 200
+procon.protected.vars.set TEXT_COLOUR_1 "Maroon"
+procon.protected.vars.set TEXT_COLOUR_2 "MediumSeaGreen"
+procon.protected.vars.set TEXT_COLOUR_3 "DarkOrange"
+procon.protected.vars.set TEXT_COLOUR_4 "RoyalBlue"
+procon.protected.vars.set TEXT_COLOUR_5 "CornflowerBlue"
+procon.protected.vars.set TEXT_COLOUR_6 "DarkViolet"
+procon.protected.vars.set TEXT_COLOUR_7 "DeepPink"
+procon.protected.vars.set TEXT_COLOUR_8 "Red"
+procon.protected.vars.set TEXT_COLOUR_9 "Gray"

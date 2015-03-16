@@ -20,14 +20,15 @@
 
 using System;
 using System.Windows.Forms;
-using PRoCon.Controls.ServerSettings.BF4;
 using PRoCon.Core;
 using PRoCon.Core.Remote;
 using PRoCon.Controls.ServerSettings;
 using PRoCon.Controls.ServerSettings.BFBC2;
 using PRoCon.Controls.ServerSettings.MOH;
-using PRoCon.Controls.ServerSettings.BF3;
 using PRoCon.Controls.ServerSettings.MOHW;
+using PRoCon.Controls.ServerSettings.BF3;
+using PRoCon.Controls.ServerSettings.BF4;
+using PRoCon.Controls.ServerSettings.BFHL;
 using PRoCon.Forms;
 
 namespace PRoCon.Controls {
@@ -86,6 +87,9 @@ namespace PRoCon.Controls {
                 if (sender.Game is BF3Client) {
                     this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsDetailsBF3());
                 }
+                else if (sender.Game is BFHLClient) {
+                    this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsDetailsBFHL());
+                }
                 else if (sender.Game is BF4Client) {
                     this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsDetailsBF4());
                 }
@@ -98,6 +102,9 @@ namespace PRoCon.Controls {
 
                 if (sender.Game is BF3Client) {
                     this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsConfigurationBF3());
+                }
+                else if (sender.Game is BFHLClient) {
+                    this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsConfigurationBFHL());
                 }
                 else if (sender.Game is BF4Client) {
                     this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsConfigurationBF4());
@@ -118,6 +125,9 @@ namespace PRoCon.Controls {
                 else if (sender.Game is BF3Client) {
                     this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsGameplayBF3());
                 }
+                else if (sender.Game is BFHLClient) {
+                    this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsGameplayBFHL());
+                }
                 else if (sender.Game is BF4Client) {
                     this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsGameplayBF4());
                 }
@@ -130,7 +140,10 @@ namespace PRoCon.Controls {
                     this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsLevelVariables());
                 }
 
-                if (sender.Game is BF4Client) {
+                if (sender.Game is BFHLClient) {
+                    this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsTeamKillsBFHL());
+                }
+                else if (sender.Game is BF4Client) {
                     this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsTeamKillsBF4());
                 }
                 else {
@@ -145,6 +158,9 @@ namespace PRoCon.Controls {
                 }
                 else if (sender.Game is BF3Client) {
                     this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsConfigGeneratorBF3());
+                }
+                else if (sender.Game is BFHLClient) {
+                    this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsConfigGeneratorBFHL());
                 }
                 else if (sender.Game is BF4Client) {
                     this.cboSelectedSettingsPanel.Items.Add(new uscServerSettingsConfigGeneratorBF4());

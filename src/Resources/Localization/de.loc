@@ -1,5 +1,5 @@
 ///////////////////////////////////
-// File information displayed in Options window. (20141211-01)
+// File information displayed in Options window. (20140316-01)
 ///////////////////////////////////
 file.Language=Deutsch (German)
 file.flag=de
@@ -38,6 +38,30 @@ global.Months.Short=m
 global.Years.Singular=Jahr
 global.Years.Plural=Jahre
 global.Years.Short=j
+
+// BFHL Teams
+//////////////
+
+global.conquest.cop=Polizisten
+global.conquest.crim=Verbrecher
+global.tdm.cop=Polizisten
+global.tdm.crim=Verbrecher
+
+global.hostage.neutral=Neutral
+global.hostage.cop=Polizisten
+global.hostage.crim=Verbrecher
+
+global.hit.neutral=Neutral
+global.hit.cop=Polizisten
+global.hit.crim=Verbrecher
+
+global.heist.neutral=Neutral
+global.heist.cop=Polizisten
+global.heist.crim=Verbrecher
+
+global.bm.neutral=Neutral
+global.bm.cop=Polizisten
+global.bm.crim=Verbrecher
 
 // BFBC2 Squads
 ///////////////

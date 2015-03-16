@@ -1847,6 +1847,16 @@ namespace PRoCon.Core.Remote {
 
         #endregion
 
+        #region Battlefield: Hardline
+
+        public virtual void SendGetVarsRoundStartReadyPlayersNeeded() {
+            if (IsLoggedIn == true) {
+                BuildSendPacket("vars.roundStartReadyPlayersNeeded");
+            }
+        }
+
+        #endregion
+
         #endregion
 
         #endregion
@@ -3879,6 +3889,7 @@ namespace PRoCon.Core.Remote {
         public virtual event LimitHandler TicketBleedRate;
         public virtual event BF4presetHandler BF4preset;
         public virtual event MpExperienceHandler MpExperience;
+        public virtual event LimitHandler RoundStartReadyPlayersNeeded;
 
         public virtual event TeamFactionOverrideHandler TeamFactionOverride;
 

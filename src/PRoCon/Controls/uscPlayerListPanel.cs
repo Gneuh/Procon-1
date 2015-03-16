@@ -2258,7 +2258,7 @@ namespace PRoCon.Controls {
                     else if (this.Client.Game is BFBC2Client) {
                         this.Client.SendRequest(new List<string>() { "admin.endRound", this.cboEndRound.SelectedIndex.ToString(CultureInfo.InvariantCulture) });
                     }
-                    else if (this.Client.Game is BF3Client || this.Client.Game is BF4Client) {
+                    else if (this.Client.Game is BF3Client || this.Client.Game is BF4Client || this.Client.Game is BFHLClient) {
                         this.Client.SendRequest(new List<string>() { "mapList.endRound", this.cboEndRound.SelectedIndex.ToString(CultureInfo.InvariantCulture) });
                     }
                     else if (this.Client.Game is MOHWClient) {

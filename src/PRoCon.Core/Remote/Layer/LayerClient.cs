@@ -125,6 +125,9 @@ namespace PRoCon.Core.Remote.Layer {
                 else if (client.Game is BF3Client) {
                     this.PacketDispatcher = new Bf3PacketDispatcher(connection);
                 }
+                else if (client.Game is BFHLClient) {
+                    this.PacketDispatcher = new BfhlPacketDispatcher(connection);
+                }
                 else if (client.Game is BF4Client) {
                     this.PacketDispatcher = new Bf4PacketDispatcher(connection);
                 }
