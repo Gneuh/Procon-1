@@ -2,7 +2,7 @@
 Procon 1 is developed by [Myrcon](https://myrcon.com "Official homepage of Myrcon").
 
 ## About Procon ##
-Procon is a free remote control (RCON) tool for gameservers, currently supporting Battlefield: Bad Company 2, Battlefield 3, Medal of Honor: Warfighter and Battlefield 4. It is developed by [Myrcon](https://myrcon.com "Official homepage of Myrcon") and also available as open source software on [GitHub](https://github.com/Myrcon/Procon-1 "Procon 1 on GitHub").
+Procon is a free remote control (RCON) tool for gameservers, currently supporting Battlefield: Bad Company 2, Battlefield 3, Medal of Honor: Warfighter, Battlefield 4 and Battlefield Hardline. It is developed by [Myrcon](https://myrcon.com "Official homepage of Myrcon") and also available as open source software on [GitHub](https://github.com/Myrcon/Procon-1 "Procon 1 on GitHub").
 
 In addition to providing basic features to control your gameserver, users can extend Procon's functionality using plugins, which can control Procon's behavior and add additional possibilities for gameserver admins. Furthermore, Procon provides a layer system, which allows running plugins and managing admin accounts in a central location instead of distributing it to every admin connected to the gameserver.
 
