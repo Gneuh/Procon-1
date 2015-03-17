@@ -1046,6 +1046,7 @@ global.Weapons.u_sw38snub=.38 SNUB
 global.Weapons.u_tripmine=Laser Tripmine
 
 // BF-HL Vehicles
+global.Weapons.havana/vehicles/cat_cr/cat_cr=UNKNOWN
 global.Weapons.havana/vehicles/coupe_cr/coupe_cr_hw0=Coupe
 global.Weapons.havana/vehicles/sedan_le/sedan_le=Sedan
 global.Weapons.havana/vehicles/transport_heli_cr/transport_heli_cr=Transport Helicopter
