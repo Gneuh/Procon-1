@@ -101,12 +101,12 @@ procon.protected.maps.add "TeamDeathMatch0" "MP_OffShore" "Team Deathmatch" "Rip
 procon.protected.maps.add "TeamDeathMatch0" "MP_Hills" "Team Deathmatch" "Hollywood Heights" 0
 procon.protected.maps.add "TeamDeathMatch0" "MP_Glades" "Team Deathmatch" "Everglades" 0
 
-procon.protected.maps.add "Hotwire0" "MP_Downtown" "Team Deathmatch Large" "Downtown" 0
-procon.protected.maps.add "Hotwire0" "MP_Eastside" "Team Deathmatch Large" "Derailed" 0
-procon.protected.maps.add "Hotwire0" "MP_Desert05" "Team Deathmatch Large" "Dust Bowl" 0
-procon.protected.maps.add "Hotwire0" "MP_OffShore" "Team Deathmatch Large" "Riptide" 0
-procon.protected.maps.add "Hotwire0" "MP_Hills" "Team Deathmatch Large" "Hollywood Heights" 0
-procon.protected.maps.add "Hotwire0" "MP_Glades" "Team Deathmatch Large" "Everglades" 0
+procon.protected.maps.add "Hotwire0" "MP_Downtown" "Hotwire" "Downtown" 0
+procon.protected.maps.add "Hotwire0" "MP_Eastside" "Hotwire" "Derailed" 0
+procon.protected.maps.add "Hotwire0" "MP_Desert05" "Hotwire" "Dust Bowl" 0
+procon.protected.maps.add "Hotwire0" "MP_OffShore" "Hotwire" "Riptide" 0
+procon.protected.maps.add "Hotwire0" "MP_Hills" "Hotwire" "Hollywood Heights" 0
+procon.protected.maps.add "Hotwire0" "MP_Glades" "Hotwire" "Everglades" 0
 
 procon.protected.maps.add "BloodMoney0" "MP_Downtown" "Blood Money" "Downtown" 0
 procon.protected.maps.add "BloodMoney0" "MP_Bloodout" "Blood Money" "The Block" 0
@@ -351,29 +351,29 @@ procon.protected.teamnames.add "MP_Glades" 2 "global.tdm.crim" "crim.png" "TeamD
 // Hotwire
 ///////////////////////////////////////////////////////////////////////////////
 
-procon.protected.teamnames.add "MP_Downtown" 0 "global.tdm.neutral" "" "Hotwire0"
-procon.protected.teamnames.add "MP_Downtown" 1 "global.tdm.cop" "cop.png" "Hotwire0"
-procon.protected.teamnames.add "MP_Downtown" 2 "global.tdm.crim" "crim.png" "Hotwire0"
+procon.protected.teamnames.add "MP_Downtown" 0 "global.hotwire.neutral" "" "Hotwire0"
+procon.protected.teamnames.add "MP_Downtown" 1 "global.hotwire.cop" "cop.png" "Hotwire0"
+procon.protected.teamnames.add "MP_Downtown" 2 "global.hotwire.crim" "crim.png" "Hotwire0"
 
-procon.protected.teamnames.add "MP_Eastside" 0 "global.tdm.neutral" "" "Hotwire0"
-procon.protected.teamnames.add "MP_Eastside" 1 "global.tdm.cop" "cop.png" "Hotwire0"
-procon.protected.teamnames.add "MP_Eastside" 2 "global.tdm.crim" "crim.png" "Hotwire0"
+procon.protected.teamnames.add "MP_Eastside" 0 "global.hotwire.neutral" "" "Hotwire0"
+procon.protected.teamnames.add "MP_Eastside" 1 "global.hotwire.cop" "cop.png" "Hotwire0"
+procon.protected.teamnames.add "MP_Eastside" 2 "global.hotwire.crim" "crim.png" "Hotwire0"
 
-procon.protected.teamnames.add "MP_Desert05" 0 "global.tdm.neutral" "" "Hotwire0"
-procon.protected.teamnames.add "MP_Desert05" 1 "global.tdm.cop" "cop.png" "Hotwire0"
-procon.protected.teamnames.add "MP_Desert05" 2 "global.tdm.crim" "crim.png" "Hotwire0"
+procon.protected.teamnames.add "MP_Desert05" 0 "global.hotwire.neutral" "" "Hotwire0"
+procon.protected.teamnames.add "MP_Desert05" 1 "global.hotwire.cop" "cop.png" "Hotwire0"
+procon.protected.teamnames.add "MP_Desert05" 2 "global.hotwire.crim" "crim.png" "Hotwire0"
 
-procon.protected.teamnames.add "MP_OffShore" 0 "global.tdm.neutral" "" "Hotwire0"
-procon.protected.teamnames.add "MP_OffShore" 1 "global.tdm.cop" "cop.png" "Hotwire0"
-procon.protected.teamnames.add "MP_OffShore" 2 "global.tdm.crim" "crim.png" "Hotwire0"
+procon.protected.teamnames.add "MP_OffShore" 0 "global.hotwire.neutral" "" "Hotwire0"
+procon.protected.teamnames.add "MP_OffShore" 1 "global.hotwire.cop" "cop.png" "Hotwire0"
+procon.protected.teamnames.add "MP_OffShore" 2 "global.hotwire.crim" "crim.png" "Hotwire0"
 
-procon.protected.teamnames.add "MP_Hills" 0 "global.tdm.neutral" "" "Hotwire0"
-procon.protected.teamnames.add "MP_Hills" 1 "global.tdm.cop" "cop.png" "Hotwire0"
-procon.protected.teamnames.add "MP_Hills" 2 "global.tdm.crim" "crim.png" "Hotwire0"
+procon.protected.teamnames.add "MP_Hills" 0 "global.hotwire.neutral" "" "Hotwire0"
+procon.protected.teamnames.add "MP_Hills" 1 "global.hotwire.cop" "cop.png" "Hotwire0"
+procon.protected.teamnames.add "MP_Hills" 2 "global.hotwire.crim" "crim.png" "Hotwire0"
 
-procon.protected.teamnames.add "MP_Glades" 0 "global.tdm.neutral" "" "Hotwire0"
-procon.protected.teamnames.add "MP_Glades" 1 "global.tdm.cop" "cop.png" "Hotwire0"
-procon.protected.teamnames.add "MP_Glades" 2 "global.tdm.crim" "crim.png" "Hotwire0"
+procon.protected.teamnames.add "MP_Glades" 0 "global.hotwire.neutral" "" "Hotwire0"
+procon.protected.teamnames.add "MP_Glades" 1 "global.hotwire.cop" "cop.png" "Hotwire0"
+procon.protected.teamnames.add "MP_Glades" 2 "global.hotwire.crim" "crim.png" "Hotwire0"
 
 // Blood Money
 ///////////////////////////////////////////////////////////////////////////////
