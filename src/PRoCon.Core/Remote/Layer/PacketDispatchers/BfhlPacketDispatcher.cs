@@ -92,7 +92,7 @@
             this.RequestDelegates.Add("vars.maxSpectators", this.DispatchVarsRequest);
             
             this.RequestDelegates.Add("vars.hitIndicatorsEnabled", this.DispatchVarsRequest);
-            this.RequestDelegates.Add("vars.commander", this.DispatchVarsRequest);
+            this.RequestDelegates.Add("vars.hacker", this.DispatchVarsRequest);
             this.RequestDelegates.Add("vars.serverType", this.DispatchVarsRequest);
             this.RequestDelegates.Add("vars.forceReloadWholeMags", this.DispatchVarsRequest);
             this.RequestDelegates.Add("vars.alwaysAllowSpectators", this.DispatchVarsRequest);
