@@ -26,6 +26,7 @@ procon.protected.weapons.add Enforcer "U_BallisticShield" Secondary Impact
 procon.protected.weapons.add None "U_BaseballBat" Secondary Impact
 procon.protected.weapons.add Enforcer "U_BreachingCharge" Secondary Explosive
 procon.protected.weapons.add Operator "U_Car556" Primary Carbine
+procon.protected.weapons.add None "U_CS_Gas" Auxiliary Explosive
 procon.protected.weapons.add Operator "U_CZ75" Auxiliary Handgun
 procon.protected.weapons.add Operator "U_G17" Auxiliary Handgun
 procon.protected.weapons.add Professional "U_G18C" Auxiliary Handgun
