@@ -48,7 +48,9 @@ procon.protected.weapons.add Operator "U_LE_MedicBag" Auxiliary Nonlethal
 procon.protected.weapons.add Operator "U_MG36" Primary Carbine
 procon.protected.weapons.add Mechanic "U_Molotov" Secondary ProjectileExplosive
 procon.protected.weapons.add Mechanic "U_MP5K" Primary SMG
+procon.protected.weapons.add Mechanic "U_MPX" Primary SMG
 procon.protected.weapons.add Operator "U_P226" Auxiliary Handgun
+procon.protected.weapons.add Mechanic "U_P90" Primary SMG
 procon.protected.weapons.add None "U_PoliceBaton" Secondary Melee
 procon.protected.weapons.add Professional "U_R700LTR" Primary SniperRifle
 procon.protected.weapons.add Enforcer "U_Rem870P" Primary Shotgun
@@ -63,6 +65,7 @@ procon.protected.weapons.add Enforcer "U_Spas12" Primary Shotgun
 procon.protected.weapons.add Enforcer "U_Stakeout37" Primary Shotgun
 procon.protected.weapons.add Mechanic "U_SW38Snub" Auxiliary Handgun
 procon.protected.weapons.add None "U_TaserGun" Auxiliary Handgun
+procon.protected.weapons.add Mechanic "U_Taurus44" Auxiliary Handgun
 procon.protected.weapons.add Professional "U_TripMine" Secondary Explosive
 procon.protected.weapons.add Mechanic "U_UMP45" Primary SMG
 
@@ -71,6 +74,7 @@ procon.protected.weapons.add None "havana/Vehicles/OFFROAD_MOTORCYCLE_CR/OFFROAD
 
 // Transport vehicles
 procon.protected.weapons.add None "havana/Vehicles/COUPE_CR/COUPE_CR_HW0" Primary VehicleTransport
+procon.protected.weapons.add None "havana/Vehicles/COUPE_LE/COUPE_LE" Primary VehicleTransport
 procon.protected.weapons.add None "havana/Vehicles/FUEL_TANKER/FUEL_TANKER_HW" Primary VehicleTransport
 procon.protected.weapons.add None "havana/Vehicles/MSP_CR/MSP_CR" Primary VehicleTransport
 procon.protected.weapons.add None "havana/Vehicles/havana/Vehicles/SEDAN_LE/SEDAN_LE" Primary VehicleTransport
