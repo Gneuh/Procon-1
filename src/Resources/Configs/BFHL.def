@@ -45,20 +45,32 @@ procon.protected.weapons.add Enforcer "U_Spas12" Primary Shotgun
 procon.protected.weapons.add Enforcer "U_Stakeout37" Primary Shotgun
 procon.protected.weapons.add Professional "U_TripMine" Secondary Explosive
 
-// Personal vehicles
 
+// Personal vehicles
+procon.protected.weapons.add None "havana/Vehicles/OFFROAD_MOTORCYCLE_CR/OFFROAD_MOTORCYCLE_CR" Primary VehiclePersonal
 
 // Transport vehicles
-
+procon.protected.weapons.add None "havana/Vehicles/AIRBOAT/AirBoat_test2" Primary VehicleTransport
+procon.protected.weapons.add None "havana/Vehicles/COUPE_CR/COUPE_CR_HW0" Primary VehicleTransport
+procon.protected.weapons.add None "havana/Vehicles/FUEL_TANKER/FUEL_TANKER_HW" Primary VehicleTransport
+procon.protected.weapons.add None "havana/Vehicles/MSP_CR/MSP_CR" Primary VehicleTransport
+procon.protected.weapons.add None "havana/Vehicles/havana/Vehicles/SEDAN_LE/SEDAN_LE" Primary VehicleTransport
+procon.protected.weapons.add None "havana/Vehicles/SUV_CR/SUV_CR" Primary VehicleTransport
+procon.protected.weapons.add None "havana/Vehicles/SUV_LE/SUV_LE" Primary VehicleTransport
+procon.protected.weapons.add None "havana/Vehicles/UTILITY_VAN/UTILITY_VAN" Primary VehicleTransport
 
 // Light armored vehicles
-
+procon.protected.weapons.add None "havana/Vehicles/CAT_CR/CAT_CR" Primary VehicleLight
+procon.protected.weapons.add None "havana/Vehicles/CAT_LE/CAT_LE" Primary VehicleLight
+procon.protected.weapons.add None "Havana/Vehicles/GUNBOAT_CR/GUNBOAT_CR" Primary VehicleLight
 
 // Heavy armored vehicles
 
-
 // Air vehicles
-
+procon.protected.weapons.add None "havana/Vehicles/ATTACK_HELI_CR/ATTACK_HELI_CR" Primary VehicleAir
+procon.protected.weapons.add None "havana/Vehicles/ATTACK_HELI_LE/ATTACK_HELI_LE" Primary VehicleAir
+procon.protected.weapons.add None "havana/Vehicles/TRANSPORT_HELI_CR/TRANSPORT_HELI_CR" Primary VehicleAir
+procon.protected.weapons.add None "havana/Vehicles/TRANSPORT_HELI_LE/TRANSPORT_HELI_LE" Primary VehicleAir
 
 // Water vehicles
 
