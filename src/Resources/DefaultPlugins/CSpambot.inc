@@ -69,7 +69,7 @@ namespace PRoConEvents {
         }
 
         public string GetPluginVersion() {
-            return "2.0.0.4";
+            return "2.0.1.0";
         }
 
         public string GetPluginAuthor() {
@@ -91,7 +91,7 @@ namespace PRoConEvents {
             this.m_strGameMod = lstPluginEnv[2];
             this.m_strServerVersion = lstPluginEnv[3];
 
-            if (this.m_strServerGameType == "bf3" || this.m_strServerGameType == "bf4") {
+            if (this.m_strServerGameType == "bf3" || this.m_strServerGameType == "bf4" || this.m_strServerGameType == "bfhl") {
                 this.m_iYellDivider = 1000;
             }
             if (this.m_strServerGameType == "mohw") {

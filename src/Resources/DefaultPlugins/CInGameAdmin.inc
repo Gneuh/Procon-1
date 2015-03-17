@@ -128,7 +128,7 @@ namespace PRoConEvents {
 		}
 
 		public string GetPluginVersion() {
-			return "3.3.0.9";
+			return "3.3.1.0";
 		}
 
 		public string GetPluginAuthor() {
@@ -382,7 +382,7 @@ namespace PRoConEvents {
             this.m_strGameMod = lstPluginEnv[2];
             this.m_strServerVersion = lstPluginEnv[3];
 
-            if (String.Compare(this.m_strServerGameType, "bf3", true) == 0 || String.Compare(this.m_strServerGameType, "bf4", true) == 0) {
+            if (String.Compare(this.m_strServerGameType, "bf3", true) == 0 || String.Compare(this.m_strServerGameType, "bf4", true) == 0 || String.Compare(this.m_strServerGameType, "bfhl", true) == 0) {
                 this.m_iYellDivider = 1000;
                 this.m_strShowMessageLength = (this.m_iShowMessageLength / this.m_iYellDivider).ToString();
             }
