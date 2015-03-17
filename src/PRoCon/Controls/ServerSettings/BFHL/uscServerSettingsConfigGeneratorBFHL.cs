@@ -274,7 +274,7 @@ namespace PRoCon.Controls.ServerSettings.BFHL {
         }
 
         void Game_IsCommander(FrostbiteClient sender, bool isEnabled) {
-            this.AppendSetting("vars.commander", isEnabled.ToString());
+            this.AppendSetting("vars.hacker", isEnabled.ToString());
         }
 
         void Game_AlwaysAllowSpectators(FrostbiteClient sender, bool isEnabled) {

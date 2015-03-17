@@ -60,7 +60,7 @@ namespace PRoCon.Controls.ServerSettings.BFHL{
 
             this.AsyncSettingControls.Add("fairFight.isActive", new AsyncStyleSetting(this.picSettingsFairFight, this.chkSettingsFairFight, new Control[] { this.chkSettingsFairFight }, true));
 
-            this.AsyncSettingControls.Add("vars.commander", new AsyncStyleSetting(this.picSettingsCommander, this.chkSettingsCommander, new Control[] { this.chkSettingsCommander }, false));
+            this.AsyncSettingControls.Add("vars.hacker", new AsyncStyleSetting(this.picSettingsCommander, this.chkSettingsCommander, new Control[] { this.chkSettingsCommander }, false));
             this.AsyncSettingControls.Add("vars.alwaysAllowSpectators", new AsyncStyleSetting(this.picSettingsAlwaysAllowSpectators, this.chkSettingsAlwaysAllowSpectators, new Control[] { this.chkSettingsAlwaysAllowSpectators }, true));
             
             this.AsyncSettingControls.Add("reservedslotslist.aggressivejoin", new AsyncStyleSetting(this.picSettingsAggressiveJoin, this.chkSettingsAggressiveJoin, new Control[] { this.chkSettingsAggressiveJoin }, true));
@@ -487,12 +487,12 @@ namespace PRoCon.Controls.ServerSettings.BFHL{
         #region Commander
 
         private void Game_IsCommander(FrostbiteClient sender, bool isEnabled) {
-            this.OnSettingResponse("vars.commander", isEnabled, true);
+            this.OnSettingResponse("vars.hacker", isEnabled, true);
         }
         private void chkSettingsCommander_CheckedChanged(object sender, EventArgs e) {
             if (this.Client != null && this.Client.Game != null) {
-                if (this.IgnoreEvents == false && this.AsyncSettingControls["vars.commander"].IgnoreEvent == false) {
-                    this.WaitForSettingResponse("vars.commander", this.chkSettingsCommander.Checked);
+                if (this.IgnoreEvents == false && this.AsyncSettingControls["vars.hacker"].IgnoreEvent == false) {
+                    this.WaitForSettingResponse("vars.hacker", this.chkSettingsCommander.Checked);
                     
                     this.Client.Game.SendSetVarsCommander(this.chkSettingsCommander.Checked);
                 }

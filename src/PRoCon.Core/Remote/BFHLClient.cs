@@ -42,6 +42,18 @@ namespace PRoCon.Core.Remote {
             }
         }
 
+        public override void SendSetVarsCommander(bool enabled) {
+            if (IsLoggedIn == true) {
+                BuildSendPacket("vars.hacker", Packet.Bltos(enabled));
+            }
+        }
+
+        public override void SendGetVarsCommander() {
+            if (IsLoggedIn == true) {
+                BuildSendPacket("vars.hacker");
+            }
+        }
+
         #endregion
     }
 }
