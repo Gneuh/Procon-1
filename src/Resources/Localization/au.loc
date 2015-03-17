@@ -1070,6 +1070,7 @@ global.Weapons.havana/vehicles/offroad_motorcycle_cr/offroad_motorcycle_cr=Offro
 
 // Transport vehicles
 global.Weapons.havana/vehicles/coupe_cr/coupe_cr_hw0=Coupe
+global.Weapons.havana/vehicles/coupe_le/coupe_le=Coupe
 global.Weapons.havana/vehicles/fuel_tanker/fuel_tanker_hw=Fuel Tanker
 global.Weapons.havana/vehicles/msp_cr/msp_cr=Mobile Spawn Point
 global.Weapons.havana/vehicles/msp_le/msp_le=Mobile Spawn Point
