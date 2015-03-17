@@ -7,6 +7,11 @@ namespace PRoCon.Core.Remote {
     public class BFHLClient : BF4Client {
         public BFHLClient(FrostbiteConnection connection) : base(connection) {
             ResponseDelegates.Add("vars.roundStartReadyPlayersNeeded", DispatchVarsRoundStartReadyPlayersNeeded);
+            // need to review vars.requireReadyPlayersToStart / vars.roundStartReadyPlayersPercent
+            // vars.TeamSwitchCooldown
+            // vars.teamSwitchingAllowed
+            // vars.roundsToWin
+            // undocumented vars.killFeed
             ResponseDelegates.Add("vars.hacker", DispatchVarsCommander);
         }
 
