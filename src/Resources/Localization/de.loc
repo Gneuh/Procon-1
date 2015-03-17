@@ -1,5 +1,5 @@
 ///////////////////////////////////
-// File information displayed in Options window. (20150317-01)
+// File information displayed in Options window. (20150317-02)
 ///////////////////////////////////
 file.Language=Deutsch (German)
 file.flag=de
@@ -1933,6 +1933,9 @@ uscServerSettingsPanel.lnkSettingsTeamFactionOverride=Anwenden
 uscServerSettingsPanel.TeamFactions.US=US Army
 uscServerSettingsPanel.TeamFactions.RU=RU Army
 uscServerSettingsPanel.TeamFactions.CN=Chinese Army
+
+uscServerSettingsPanel.TeamFactions.US=Polizei
+uscServerSettingsPanel.TeamFactions.RU=Verbrecher
 
 ///////////////////////////////////
 // Panel Plugins

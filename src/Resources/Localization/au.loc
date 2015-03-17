@@ -1,5 +1,5 @@
 ﻿///////////////////////////////////
-// File information displayed in Options window. (20150317-01)
+// File information displayed in Options window. (20150317-012
 ///////////////////////////////////
 file.Language=English (Australian)
 file.flag=au
@@ -1932,6 +1932,9 @@ uscServerSettingsPanel.lnkSettingsTeamFactionOverride=Apply
 uscServerSettingsPanel.TeamFactions.US=US Army
 uscServerSettingsPanel.TeamFactions.RU=Russian Army
 uscServerSettingsPanel.TeamFactions.CN=Chinese Army
+
+uscServerSettingsPanel.TeamFactions.US=Cops
+uscServerSettingsPanel.TeamFactions.RU=Criminals
 
 ///////////////////////////////////
 // Plugins Panel

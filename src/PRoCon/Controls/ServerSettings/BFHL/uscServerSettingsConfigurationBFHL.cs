@@ -115,30 +115,26 @@ namespace PRoCon.Controls.ServerSettings.BFHL{
             this.lblSettingsTeam3FactionOverride.Text = this.Language.GetDefaultLocalized("Team 3 Faction Override", "uscServerSettingsPanel.lblSettingsTeam3FactionOverride");
             this.lblSettingsTeam4FactionOverride.Text = this.Language.GetDefaultLocalized("Team 4 Faction Override", "uscServerSettingsPanel.lblSettingsTeam4FactionOverride");
             this.lnkSettingsTeam1FactionOverride.Text = this.lnkSettingsTeam2FactionOverride.Text = this.lnkSettingsTeam3FactionOverride.Text = this.lnkSettingsTeam4FactionOverride.Text = this.Language.GetDefaultLocalized("Apply", "uscServerSettingsPanel.lnkSettingsTeamFactionOverride");
-            // 0 = US, 1 = RU, 2 = CN
+            // 0 = COPS, 1 = CRIM
 
             this.cboSettingsTeam1FactionOverride.Items.Clear();
-            this.cboSettingsTeam1FactionOverride.Items.Add(this.Language.GetDefaultLocalized("US Army", "uscServerSettingsPanel.TeamFactions.US"));
-            this.cboSettingsTeam1FactionOverride.Items.Add(this.Language.GetDefaultLocalized("Russian Army", "uscServerSettingsPanel.TeamFactions.RU"));
-            this.cboSettingsTeam1FactionOverride.Items.Add(this.Language.GetDefaultLocalized("Chinese Army", "uscServerSettingsPanel.TeamFactions.CN"));
+            this.cboSettingsTeam1FactionOverride.Items.Add(this.Language.GetDefaultLocalized("Cops", "uscServerSettingsPanel.TeamFactions.COPS"));
+            this.cboSettingsTeam1FactionOverride.Items.Add(this.Language.GetDefaultLocalized("Criminals", "uscServerSettingsPanel.TeamFactions.CRIM"));
             this.cboSettingsTeam1FactionOverride.SelectedIndex = 0;
 
             this.cboSettingsTeam2FactionOverride.Items.Clear();
-            this.cboSettingsTeam2FactionOverride.Items.Add(this.Language.GetDefaultLocalized("US Army", "uscServerSettingsPanel.TeamFactions.US"));
-            this.cboSettingsTeam2FactionOverride.Items.Add(this.Language.GetDefaultLocalized("Russian Army", "uscServerSettingsPanel.TeamFactions.RU"));
-            this.cboSettingsTeam2FactionOverride.Items.Add(this.Language.GetDefaultLocalized("Chinese Army", "uscServerSettingsPanel.TeamFactions.CN"));
+            this.cboSettingsTeam2FactionOverride.Items.Add(this.Language.GetDefaultLocalized("Cops", "uscServerSettingsPanel.TeamFactions.COPS"));
+            this.cboSettingsTeam2FactionOverride.Items.Add(this.Language.GetDefaultLocalized("Criminals", "uscServerSettingsPanel.TeamFactions.CRIM"));
             this.cboSettingsTeam2FactionOverride.SelectedIndex = 0;
 
             this.cboSettingsTeam3FactionOverride.Items.Clear();
-            this.cboSettingsTeam3FactionOverride.Items.Add(this.Language.GetDefaultLocalized("US Army", "uscServerSettingsPanel.TeamFactions.US"));
-            this.cboSettingsTeam3FactionOverride.Items.Add(this.Language.GetDefaultLocalized("Russian Army", "uscServerSettingsPanel.TeamFactions.RU"));
-            this.cboSettingsTeam3FactionOverride.Items.Add(this.Language.GetDefaultLocalized("Chinese Army", "uscServerSettingsPanel.TeamFactions.CN"));
+            this.cboSettingsTeam3FactionOverride.Items.Add(this.Language.GetDefaultLocalized("Cops", "uscServerSettingsPanel.TeamFactions.COPS"));
+            this.cboSettingsTeam3FactionOverride.Items.Add(this.Language.GetDefaultLocalized("Criminals", "uscServerSettingsPanel.TeamFactions.CRIM"));
             this.cboSettingsTeam3FactionOverride.SelectedIndex = 0;
 
             this.cboSettingsTeam4FactionOverride.Items.Clear();
-            this.cboSettingsTeam4FactionOverride.Items.Add(this.Language.GetDefaultLocalized("US Army", "uscServerSettingsPanel.TeamFactions.US"));
-            this.cboSettingsTeam4FactionOverride.Items.Add(this.Language.GetDefaultLocalized("Russian Army", "uscServerSettingsPanel.TeamFactions.RU"));
-            this.cboSettingsTeam4FactionOverride.Items.Add(this.Language.GetDefaultLocalized("Chinese Army", "uscServerSettingsPanel.TeamFactions.CN"));
+            this.cboSettingsTeam4FactionOverride.Items.Add(this.Language.GetDefaultLocalized("Cops", "uscServerSettingsPanel.TeamFactions.COPS"));
+            this.cboSettingsTeam4FactionOverride.Items.Add(this.Language.GetDefaultLocalized("Criminals", "uscServerSettingsPanel.TeamFactions.CRIM"));
             this.cboSettingsTeam4FactionOverride.SelectedIndex = 0;
 
         }
