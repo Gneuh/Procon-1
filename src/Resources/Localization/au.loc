@@ -41,9 +41,11 @@ global.Years.Short=y
 
 // BFHL Teams
 //////////////
-
+global.conquest.neutral=Neutral
 global.conquest.cop=Cops
 global.conquest.crim=Criminals
+
+global.tdm.neutral=Neutral
 global.tdm.cop=Cops
 global.tdm.crim=Criminals
 
@@ -58,6 +60,10 @@ global.hit.crim=Criminals
 global.heist.neutral=Neutral
 global.heist.cop=Cops
 global.heist.crim=Criminals
+
+global.hotwire.neutral=Neutral
+global.hotwire.cop=Cops
+global.hotwire.crim=Criminals
 
 global.bm.neutral=Neutral
 global.bm.cop=Cops
