@@ -161,7 +161,6 @@ procon.protected.maps.add "Hotwire0" "MP_Downtown" "Hotwire" "Downtown" 0
 procon.protected.maps.add "Hotwire0" "MP_Eastside" "Hotwire" "Derailed" 0
 procon.protected.maps.add "Hotwire0" "MP_Desert05" "Hotwire" "Dust Bowl" 0
 procon.protected.maps.add "Hotwire0" "MP_OffShore" "Hotwire" "Riptide" 0
-procon.protected.maps.add "Hotwire0" "MP_Hills" "Hotwire" "Hollywood Heights" 0
 procon.protected.maps.add "Hotwire0" "MP_Glades" "Hotwire" "Everglades" 0
 
 procon.protected.maps.add "BloodMoney0" "MP_Downtown" "Blood Money" "Downtown" 0
