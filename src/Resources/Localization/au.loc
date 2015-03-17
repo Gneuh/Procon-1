@@ -1062,6 +1062,7 @@ global.Weapons.u_sw38snub=.38 SNUB
 global.Weapons.u_tasergun=T62 Cew Taser Gun
 global.Weapons.u_taurus44=Taurus .44
 global.Weapons.u_tripmine=Laser Tripmine
+global.Weapons.u_ump45=UMP45
 
 // BF-HL Vehicles
 // Personal vehicles
