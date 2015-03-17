@@ -1026,6 +1026,7 @@ global.Weapons.u_breachingcharge=Breaching Charge
 global.Weapons.u_car556=CAR-556
 global.Weapons.u_cs_gas=Gas Grenade
 global.Weapons.u_g18c=G18C
+global.Weapons.u_hcar=HCAR
 global.Weapons.u_incendiarydevice=Incendiary Device
 global.Weapons.u_inf9=???
 global.Weapons.u_k10=K10
@@ -1050,13 +1051,22 @@ global.Weapons.u_tripmine=Laser Tripmine
 
 // BF-HL Vehicles
 global.Weapons.havana/vehicles/airboat/airboat_test2=Airboat
-global.Weapons.havana/vehicles/cat_cr/cat_cr=???
-global.Weapons.havana/vehicles/cat_le/cat_le=???
+global.Weapons.havana/vehicles/cat_cr/cat_cr=Counter Attack Truck
+global.Weapons.havana/vehicles/cat_le/cat_le=Counter Attack Truck
 global.Weapons.havana/vehicles/coupe_cr/coupe_cr_hw0=Coupe
+global.Weapons.havana/vehicles/fuel_tanker/fuel_tanker_hw=Fuel Tanker
+global.Weapons.havana/vehicles/gunboat_cr/gunboat_cr=Gun Boat
+global.Weapons.havana/vehicles/gunboat_le/gunboat_le=Gun Boat
+global.Weapons.havana/vehicles/msp_cr/msp_cr=Mobile Spawn Point
+global.Weapons.havana/vehicles/msp_le/msp_le=Mobile Spawn Point
+global.Weapons.havana/vehicles/offroad_motorcycle_cr/offroad_motorcycle_cr=Offroad Motorcycle
+global.Weapons.havana/vehicles/offroad_motorcycle_le/offroad_motorcycle_le=Offroad Motorcycle
 global.Weapons.havana/vehicles/sedan_cr/sedan_cr=Sedan
 global.Weapons.havana/vehicles/sedan_le/sedan_le=Sedan
 global.Weapons.havana/vehicles/transport_heli_cr/transport_heli_cr=Transport Helicopter
 global.Weapons.havana/vehicles/transport_heli_le/transport_heli_le=Transport Helicopter
+global.Weapons.havana/vehicles/suv_le/suv_cr=SUV
+global.Weapons.havana/vehicles/suv_le/suv_le=SUV
 global.Weapons.havana/vehicles/utility_van/utility_van=Utility Van
 
 
