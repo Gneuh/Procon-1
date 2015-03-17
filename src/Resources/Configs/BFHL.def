@@ -19,7 +19,12 @@ procon.protected.weapons.add None "RoadKill" Primary None
 procon.protected.weapons.add None "SoldierCollision" Primary Suicide
 procon.protected.weapons.add None "Suicide" Primary Suicide
 procon.protected.weapons.add None "VehicleUpsideDown" Primary Suicide
-
+procon.protected.weapons.add Operator "U_ACWR" Primary Carbine
+procon.protected.weapons.add Operator "U_AKS74u" Primary Carbine
+procon.protected.weapons.add Operator "U_Car556" Primary Carbine
+procon.protected.weapons.add Operator "U_MG36" Primary Carbine
+procon.protected.weapons.add Operator "U_RO933" Primary Carbine
+procon.protected.weapons.add Operator "U_SG533LB" Primary Carbine
 // Personal vehicles
 
 
