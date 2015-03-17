@@ -1,5 +1,5 @@
 ///////////////////////////////////
-// File information displayed in Options window. (20140316-01)
+// File information displayed in Options window. (20150317-01)
 ///////////////////////////////////
 file.Language=Deutsch (German)
 file.flag=de
@@ -42,8 +42,11 @@ global.Years.Short=j
 // BFHL Teams
 //////////////
 
+global.conquest.neutral=Neutral
 global.conquest.cop=Polizisten
 global.conquest.crim=Verbrecher
+
+global.tdm.neutral=Neutral
 global.tdm.cop=Polizisten
 global.tdm.crim=Verbrecher
 
@@ -58,6 +61,10 @@ global.hit.crim=Verbrecher
 global.heist.neutral=Neutral
 global.heist.cop=Polizisten
 global.heist.crim=Verbrecher
+
+global.hotwire.neutral=Neutral
+global.hotwire.cop=Polizisten
+global.hotwire.crim=Verbrecher
 
 global.bm.neutral=Neutral
 global.bm.cop=Polizisten
