@@ -426,10 +426,6 @@ procon.protected.teamnames.add "MP_OffShore" 0 "global.hotwire.neutral" "" "Hotw
 procon.protected.teamnames.add "MP_OffShore" 1 "global.hotwire.cop" "cop.png" "Hotwire0"
 procon.protected.teamnames.add "MP_OffShore" 2 "global.hotwire.crim" "crim.png" "Hotwire0"
 
-procon.protected.teamnames.add "MP_Hills" 0 "global.hotwire.neutral" "" "Hotwire0"
-procon.protected.teamnames.add "MP_Hills" 1 "global.hotwire.cop" "cop.png" "Hotwire0"
-procon.protected.teamnames.add "MP_Hills" 2 "global.hotwire.crim" "crim.png" "Hotwire0"
-
 procon.protected.teamnames.add "MP_Glades" 0 "global.hotwire.neutral" "" "Hotwire0"
 procon.protected.teamnames.add "MP_Glades" 1 "global.hotwire.cop" "cop.png" "Hotwire0"
 procon.protected.teamnames.add "MP_Glades" 2 "global.hotwire.crim" "crim.png" "Hotwire0"
