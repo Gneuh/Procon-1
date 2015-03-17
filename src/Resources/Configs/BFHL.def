@@ -20,11 +20,21 @@ procon.protected.weapons.add None "SoldierCollision" Primary Suicide
 procon.protected.weapons.add None "Suicide" Primary Suicide
 procon.protected.weapons.add None "VehicleUpsideDown" Primary Suicide
 procon.protected.weapons.add Operator "U_ACWR" Primary Carbine
+procon.protected.weapons.add Operator "U_AKM" Primary AssaultRifle
 procon.protected.weapons.add Operator "U_AKS74u" Primary Carbine
 procon.protected.weapons.add Operator "U_Car556" Primary Carbine
+procon.protected.weapons.add Operator "U_CZ75" Auxiliary Handgun
+procon.protected.weapons.add Professional "U_G18C" Auxiliary Handgun
+procon.protected.weapons.add Operator "U_G36C" Primary Carbine
+procon.protected.weapons.add Operator "U_L85A2" Primary AssaultRifle
+procon.protected.weapons.add Operator "U_M16A4" Primary AssaultRifle
+procon.protected.weapons.add Operator "U_M416" Primary AssaultRifle
+procon.protected.weapons.add Professional "U_M93R" Auxiliary Handgun
 procon.protected.weapons.add Operator "U_MG36" Primary Carbine
+procon.protected.weapons.add Operator "U_P226" Auxiliary Handgun
 procon.protected.weapons.add Operator "U_RO933" Primary Carbine
 procon.protected.weapons.add Operator "U_SG533LB" Primary Carbine
+
 // Personal vehicles
 
 
