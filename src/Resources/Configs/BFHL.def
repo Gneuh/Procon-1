@@ -32,12 +32,14 @@ procon.protected.weapons.add Operator "U_G17" Auxiliary Handgun
 procon.protected.weapons.add Professional "U_G18C" Auxiliary Handgun
 procon.protected.weapons.add Operator "U_G36C" Primary Carbine
 procon.protected.weapons.add Enforcer "U_HCAR" Primary AssaultRifle
+procon.protected.weapons.add Mechanic "U_HK51" Primary AssaultRifle
 procon.protected.weapons.add None "U_IncendiaryDevice" Auxiliary Explosive
 procon.protected.weapons.add Mechanic "U_K10" Primary SMG
 procon.protected.weapons.add None "U_Knife" Secondary Melee
 procon.protected.weapons.add Operator "U_L85A2" Primary AssaultRifle
 procon.protected.weapons.add Professional "U_L96A1" Primary SniperRifle
 procon.protected.weapons.add Operator "U_M16A4" Primary AssaultRifle
+procon.protected.weapons.add None "U_M240" Primary LMG
 procon.protected.weapons.add Mechanic "U_M320_HE" Secondary ProjectileExplosive
 procon.protected.weapons.add Operator "U_M416" Primary AssaultRifle
 procon.protected.weapons.add None "U_M67" Auxiliary Explosive
@@ -56,6 +58,7 @@ procon.protected.weapons.add Professional "U_R700LTR" Primary SniperRifle
 procon.protected.weapons.add Enforcer "U_Rem870P" Primary Shotgun
 procon.protected.weapons.add Operator "U_RO933" Primary Carbine
 procon.protected.weapons.add None "U_RPG7" Secondary ProjectileExplosive
+procon.protected.weapons.add Mechanic "U_RS357" Auxiliary Handgun
 procon.protected.weapons.add Enforcer "U_SCARH" Primary AssaultRifle
 procon.protected.weapons.add Professional "U_Scout" Primary SniperRifle
 procon.protected.weapons.add Operator "U_SG533LB" Primary Carbine
