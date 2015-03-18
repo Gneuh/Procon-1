@@ -110,6 +110,7 @@ procon.protected.weapons.add None "U_ZipLineGun" Secondary Impact
 
 // Personal vehicles
 procon.protected.weapons.add None "havana/Vehicles/OFFROAD_MOTORCYCLE_CR/OFFROAD_MOTORCYCLE_CR" Primary VehiclePersonal
+procon.protected.weapons.add None "havana/Vehicles/STREET_MOTORCYCLE_CR/STREET_MOTORCYCLE_CR" Primary VehiclePersonal
 procon.protected.weapons.add None "havana/Vehicles/STREET_MOTORCYCLE_CR/STREET_MOTORCYCLE_CR_HW" Primary VehiclePersonal
 procon.protected.weapons.add None "havana/Vehicles/STREET_MOTORCYCLE_LE/STREET_MOTORCYCLE_LE" Primary VehiclePersonal
 
