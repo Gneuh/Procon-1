@@ -1,5 +1,5 @@
 ///////////////////////////////////
-// File information displayed in Options window. (20150318-04)
+// File information displayed in Options window. (20150318-05)
 ///////////////////////////////////
 file.Language=Deutsch (German)
 file.flag=de
@@ -1105,6 +1105,7 @@ global.Weapons.u_ziplinegun=Zip Line
 // BF-HL Vehicles
 // Personal vehicles
 global.Weapons.havana/vehicles/offroad_motorcycle_cr/offroad_motorcycle_cr=Offroad Motorcycle
+global.weapons.havana/vehicles/street_motorcycle_cr/street_motorcycle_cr=Street Motorcycle
 global.weapons.havana/vehicles/street_motorcycle_cr/street_motorcycle_cr_hw=Street Motorcycle
 global.Weapons.havana/vehicles/street_motorcycle_le/street_motorcycle_le=Street Motorcycle
 
@@ -1116,7 +1117,7 @@ global.Weapons.havana/vehicles/msp_cr/msp_cr=Mobile Spawn Point
 global.Weapons.havana/vehicles/msp_le/msp_le=Mobile Spawn Point
 global.Weapons.havana/vehicles/sedan_cr/sedan_cr_hw=Sedan
 global.Weapons.havana/vehicles/sedan_le/sedan_le=Sedan
-global.Weapons.havana/vehicles/suv_le/suv_cr=SUV
+global.Weapons.havana/vehicles/suv_cr/suv_cr=SUV
 global.Weapons.havana/vehicles/suv_le/suv_le=SUV
 global.Weapons.havana/vehicles/utility_van/utility_van=Utility Van
 
