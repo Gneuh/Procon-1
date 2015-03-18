@@ -1017,6 +1017,105 @@ global.Weapons.xp2/gameplay/vehicles/oldcannon/oldcannon=Old Cannon
 global.Weapons.gameplay/vehicles/pantsir/pantsir-s1=Pantsir-S1 Anti Air
 global.Weapons.gameplay/vehicles/tow2/tow2=M220 TOW Launcher
 
+// BF-HL Weapons diff
+global.Weapons.u_acwr=ACWR
+global.Weapons.u_akm=AKM
+global.Weapons.u_aks74u=AKS-74U
+global.Weapons.u_baseballbat=Baseball Bat
+global.Weapons.u_breachingcharge=Breaching Charge
+global.Weapons.u_breachinghammer=Breaching Hammer
+global.Weapons.u_car556=CAR-556
+global.Weapons.u_collapsingbaton=Collapsing Baton
+global.Weapons.u_defib=Defibrillator
+global.Weapons.u_cs_gas=Gas Grenade
+global.Weapons.u_fim92=Stinger
+global.Weapons.u_g18c=G18C
+global.Weapons.u_hcar=HCAR
+global.Weapons.u_hk45c=HK54C
+global.Weapons.u_hk51=HK51
+global.Weapons.u_imi50baldeagle=Bald Eagle
+global.Weapons.u_incendiarydevice=Incendiary Device
+global.Weapons.u_jury410=.410 JURY
+global.Weapons.u_k10=K10
+global.Weapons.u_knife=Knife
+global.Weapons.u_knifeboot=Knife Boot
+global.Weapons.u_knifebowie=Knife Bowie
+global.Weapons.u_knifescout=Knife Scout
+global.Weapons.u_knifetrench=Knife Trench
+global.Weapons.u_l85a2=L85A2
+global.Weapons.u_l96a1=L96A1
+global.Weapons.u_m16a4=M16A3
+global.Weapons.u_m1911=M1911A1
+global.Weapons.u_m240=M240
+global.Weapons.u_m320_he=M320 Grenade Launcher
+global.Weapons.u_mac_10=MAC-10
+global.Weapons.u_m416=M416
+global.Weapons.u_m45=M45
+global.Weapons.u_m67=M67 Grenade
+global.Weapons.u_m79_he=M79 Grenade Launcher
+global.Weapons.u_m9=M9
+global.Weapons.u_m93r=M93R
+global.Weapons.u_le_medicbag=Medic Bag
+global.Weapons.u_mg36=MG36
+global.Weapons.u_molotov=Molotov
+global.Weapons.u_mp5k=MP5K
+global.Weapons.u_mpx=MPX
+global.Weapons.u_p90=P90
+global.Weapons.u_policebaton=Police Baton
+global.Weapons.u_r700ltr=R700 LTR
+global.Weapons.u_rem870p=Remington 870P Magnum
+global.Weapons.u_repairtool=Repair Tool
+global.Weapons.u_ro933=RO993
+global.Weapons.u_rpg7=RPG7
+global.Weapons.u_rs357=.357 RS
+global.Weapons.u_sa58=SA-58 OSW
+global.Weapons.u_scarh=SCAR-H
+global.Weapons.u_scout=Scout
+global.Weapons.u_socom16=SOCOM16
+global.Weapons.u_sg533lb=SG553
+global.Weapons.u_stakeout37=37 STAKEOUT
+global.Weapons.u_sw38snub=.38 SNUB
+global.Weapons.u_tasergun=T62 Cew Taser Gun
+global.Weapons.u_taurus44=Taurus .44
+global.Weapons.u_tripmine=Laser Tripmine
+global.Weapons.u_ump45=UMP45
+global.Weapons.u_ziplinegun=Zip Line
+
+
+// BF-HL Vehicles
+// Personal vehicles
+global.Weapons.havana/vehicles/offroad_motorcycle_cr/offroad_motorcycle_cr=Offroad Motorcycle
+
+// Transport vehicles
+global.Weapons.havana/vehicles/coupe_cr/coupe_cr_hw0=Coupe
+global.Weapons.havana/vehicles/coupe_le/coupe_le=Coupe
+global.Weapons.havana/vehicles/fuel_tanker/fuel_tanker_hw=Fuel Tanker
+global.Weapons.havana/vehicles/msp_cr/msp_cr=Mobile Spawn Point
+global.Weapons.havana/vehicles/msp_le/msp_le=Mobile Spawn Point
+global.Weapons.havana/vehicles/sedan_cr/sedan_cr_hw=Sedan
+global.Weapons.havana/vehicles/sedan_le/sedan_le=Sedan
+global.Weapons.havana/vehicles/suv_le/suv_cr=SUV
+global.Weapons.havana/vehicles/suv_le/suv_le=SUV
+global.Weapons.havana/vehicles/utility_van/utility_van=Utility Van
+
+// Light armored vehicles
+global.Weapons.havana/vehicles/cat_cr/cat_cr=Counter Attack Truck
+global.Weapons.havana/vehicles/cat_le/cat_le=Counter Attack Truck
+
+// Heavy armored vehicles
+
+// Air vehicles
+global.Weapons.havana/vehicles/attack_heli_cr/attack_heli_cr=Attack Helicopter
+global.Weapons.havana/vehicles/attack_heli_le/attack_heli_le=Attack Helicopter
+global.Weapons.havana/vehicles/transport_heli_cr/transport_heli_cr=Transport Helicopter
+global.Weapons.havana/vehicles/transport_heli_le/transport_heli_le=Transport Helicopter
+
+// Water vehicles
+global.Weapons.havana/vehicles/airboat/airboat_test2=Airboat
+global.Weapons.havana/vehicles/gunboat_cr/gunboat_cr=Gun Boat
+global.Weapons.havana/vehicles/gunboat_le/gunboat_le=Gun Boat
+
+
 
 ///////////////////////////////////
 // Main window
