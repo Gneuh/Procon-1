@@ -1,5 +1,5 @@
 ﻿///////////////////////////////////
-// File information displayed in Options window. (20150317-012
+// File information displayed in Options window. (20150318-02)
 ///////////////////////////////////
 file.Language=English (Australian)
 file.flag=au
@@ -41,6 +41,7 @@ global.Years.Short=y
 
 // BFHL Teams
 //////////////
+
 global.conquest.neutral=Neutral
 global.conquest.cop=Cops
 global.conquest.crim=Criminals
@@ -1114,7 +1115,6 @@ global.Weapons.havana/vehicles/transport_heli_le/transport_heli_le=Transport Hel
 global.Weapons.havana/vehicles/airboat/airboat_test2=Airboat
 global.Weapons.havana/vehicles/gunboat_cr/gunboat_cr=Gun Boat
 global.Weapons.havana/vehicles/gunboat_le/gunboat_le=Gun Boat
-
 
 
 ///////////////////////////////////
