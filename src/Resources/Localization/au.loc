@@ -1117,6 +1117,7 @@ global.Weapons.havana/vehicles/fuel_tanker/fuel_tanker=Fuel Tanker
 global.Weapons.havana/vehicles/fuel_tanker/fuel_tanker_hw=Fuel Tanker
 global.Weapons.havana/vehicles/msp_cr/msp_cr=Mobile Spawn Point
 global.Weapons.havana/vehicles/msp_le/msp_le=Mobile Spawn Point
+global.Weapons.havana/vehicles/sedan_cr/sedan_cr=Sedan
 global.Weapons.havana/vehicles/sedan_cr/sedan_cr_hw=Sedan
 global.Weapons.havana/vehicles/sedan_le/sedan_le=Sedan
 global.Weapons.havana/vehicles/suv_cr/suv_cr=SUV
