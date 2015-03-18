@@ -19,11 +19,13 @@ procon.protected.weapons.add None "RoadKill" Primary None
 procon.protected.weapons.add None "SoldierCollision" Primary Suicide
 procon.protected.weapons.add None "Suicide" Primary Suicide
 procon.protected.weapons.add None "VehicleUpsideDown" Primary Suicide
+procon.protected.weapons.add None "U_ACB-90" Secondary Melee
 procon.protected.weapons.add Operator "U_ACWR" Primary Carbine
 procon.protected.weapons.add Operator "U_AKM" Primary AssaultRifle
 procon.protected.weapons.add Operator "U_AKS74u" Primary Carbine
 procon.protected.weapons.add Enforcer "U_BallisticShield" Secondary Impact
 procon.protected.weapons.add None "U_BaseballBat" Secondary Impact
+procon.protected.weapons.add None "U_BlackJack" Secondary Melee
 procon.protected.weapons.add Enforcer "U_BreachingCharge" Secondary Explosive
 procon.protected.weapons.add None "U_BreachingHammer" Secondary Melee
 procon.protected.weapons.add Operator "U_Car556" Primary Carbine
@@ -31,7 +33,8 @@ procon.protected.weapons.add None "U_CollapsingBaton" Secondary Melee
 procon.protected.weapons.add Operator "U_Defib" Secondary Melee
 procon.protected.weapons.add None "U_CS_Gas" Auxiliary Explosive
 procon.protected.weapons.add Operator "U_CZ75" Auxiliary Handgun
-procon.protected.weapons.add None "U_FIM92" Secondary ProjectileExplosive
+procon.protected.weapons.add Operator "U_FIM92" Auxiliary Handgun
+procon.protected.weapons.add None "U_Flashbang" Auxiliary Explosive
 procon.protected.weapons.add Operator "U_G17" Auxiliary Handgun
 procon.protected.weapons.add Professional "U_G18C" Auxiliary Handgun
 procon.protected.weapons.add Operator "U_G36C" Primary Carbine
@@ -40,12 +43,19 @@ procon.protected.weapons.add Enforcer "U_HK45C" Auxiliary Handgun
 procon.protected.weapons.add Mechanic "U_HK51" Primary AssaultRifle
 procon.protected.weapons.add Enforcer "U_IMI50BaldEagle" Auxiliary Handgun
 procon.protected.weapons.add None "U_IncendiaryDevice" Auxiliary Explosive
+procon.protected.weapons.add Professional "U_INF9" Auxiliary Handgun
+procon.protected.weapons.add Mechanic "U_ISC9" Primary SMG
 procon.protected.weapons.add Mechanic "U_Jury410" Auxiliary Handgun
 procon.protected.weapons.add Mechanic "U_K10" Primary SMG
 procon.protected.weapons.add None "U_Knife" Secondary Melee
 procon.protected.weapons.add None "U_KnifeBoot" Secondary Melee
 procon.protected.weapons.add None "U_KnifeBowie" Secondary Melee
+procon.protected.weapons.add None "U_KnifeCarbon" Secondary Melee
+procon.protected.weapons.add None "U_KnifeSeal" Secondary Melee
 procon.protected.weapons.add None "U_KnifeScout" Secondary Melee
+procon.protected.weapons.add None "U_KnifeSurvival" Secondary Melee
+procon.protected.weapons.add None "U_KnifeTrench" Secondary Melee
+procon.protected.weapons.add None "U_KnifeTrench" Secondary Melee
 procon.protected.weapons.add None "U_KnifeTrench" Secondary Melee
 procon.protected.weapons.add Operator "U_L85A2" Primary AssaultRifle
 procon.protected.weapons.add Professional "U_L96A1" Primary SniperRifle
@@ -59,6 +69,7 @@ procon.protected.weapons.add Mechanic "U_M79_HE" Secondary ProjectileExplosive
 procon.protected.weapons.add None "U_M9" Auxiliary Handgun
 procon.protected.weapons.add Professional "U_M93R" Auxiliary Handgun
 procon.protected.weapons.add Professional "U_Mac_10" Auxiliary Handgun
+procon.protected.weapons.add None "U_Machete" Secondary Melee
 procon.protected.weapons.add Operator "U_CR_MedicBag" Auxiliary Nonlethal
 procon.protected.weapons.add Operator "U_LE_MedicBag" Auxiliary Nonlethal
 procon.protected.weapons.add Operator "U_MG36" Primary Carbine
@@ -68,20 +79,28 @@ procon.protected.weapons.add Mechanic "U_MPX" Primary SMG
 procon.protected.weapons.add Operator "U_P226" Auxiliary Handgun
 procon.protected.weapons.add Mechanic "U_P90" Primary SMG
 procon.protected.weapons.add None "U_PoliceBaton" Secondary Melee
+procon.protected.weapons.add None "U_PrisonShank" Secondary Melee
+procon.protected.weapons.add Professional "U_PTI91" Primary SniperRifle
 procon.protected.weapons.add Professional "U_R700LTR" Primary SniperRifle
 procon.protected.weapons.add Enforcer "U_Rem870P" Primary Shotgun
 procon.protected.weapons.add Mechanic "U_Repairtool" Secondary Melee
+procon.protected.weapons.add Mechanic "U_CR_Revive" Secondary Melee
 procon.protected.weapons.add Operator "U_RO933" Primary Carbine
 procon.protected.weapons.add None "U_RPG7" Secondary ProjectileExplosive
 procon.protected.weapons.add Mechanic "U_RS357" Auxiliary Handgun
+procon.protected.weapons.add Enforcer "U_SA58" Primary Shotgun
+procon.protected.weapons.add Mechanic "U_SabotageTool" Secondary Explosive
 procon.protected.weapons.add Enforcer "U_SCARH" Primary AssaultRifle
 procon.protected.weapons.add Professional "U_Scout" Primary SniperRifle
+procon.protected.weapons.add Enforcer "U_SCR308" Primary Shotgun
 procon.protected.weapons.add Operator "U_SG533LB" Primary Carbine
-procon.protected.weapons.add Enforcer "U_SA58" Primary Shotgun
+procon.protected.weapons.add None "U_SledgeHammer" Secondary Melee
 procon.protected.weapons.add None "u_smaw" Secondary ProjectileExplosive
 procon.protected.weapons.add Professional "U_SOCOM16" Primary SniperRifle
 procon.protected.weapons.add Enforcer "U_Spas12" Primary Shotgun
+procon.protected.weapons.add Professional "U_SR25ECC" Primary SniperRifle
 procon.protected.weapons.add Enforcer "U_Stakeout37" Primary Shotgun
+procon.protected.weapons.add Enforcer "U_SW40P" Auxiliary Handgun
 procon.protected.weapons.add Mechanic "U_SW38Snub" Auxiliary Handgun
 procon.protected.weapons.add None "U_TaserGun" Auxiliary Handgun
 procon.protected.weapons.add Mechanic "U_Taurus44" Auxiliary Handgun
@@ -91,6 +110,8 @@ procon.protected.weapons.add None "U_ZipLineGun" Secondary Impact
 
 // Personal vehicles
 procon.protected.weapons.add None "havana/Vehicles/OFFROAD_MOTORCYCLE_CR/OFFROAD_MOTORCYCLE_CR" Primary VehiclePersonal
+procon.protected.weapons.add None "havana/Vehicles/STREET_MOTORCYCLE_CR/STREET_MOTORCYCLE_CR_HW" Primary VehiclePersonal
+procon.protected.weapons.add None "havana/Vehicles/STREET_MOTORCYCLE_LE/STREET_MOTORCYCLE_LE" Primary VehiclePersonal
 
 // Transport vehicles
 procon.protected.weapons.add None "havana/Vehicles/COUPE_CR/COUPE_CR_HW0" Primary VehicleTransport
