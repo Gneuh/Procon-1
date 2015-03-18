@@ -1110,8 +1110,10 @@ global.weapons.havana/vehicles/street_motorcycle_cr/street_motorcycle_cr_hw=Stre
 global.Weapons.havana/vehicles/street_motorcycle_le/street_motorcycle_le=Street Motorcycle
 
 // Transport vehicles
+global.Weapons.havana/vehicles/coupe_cr/coupe_cr=Coupe
 global.Weapons.havana/vehicles/coupe_cr/coupe_cr_hw0=Coupe
 global.Weapons.havana/vehicles/coupe_le/coupe_le=Coupe
+global.Weapons.havana/vehicles/fuel_tanker/fuel_tanker=Fuel Tanker
 global.Weapons.havana/vehicles/fuel_tanker/fuel_tanker_hw=Fuel Tanker
 global.Weapons.havana/vehicles/msp_cr/msp_cr=Mobile Spawn Point
 global.Weapons.havana/vehicles/msp_le/msp_le=Mobile Spawn Point
