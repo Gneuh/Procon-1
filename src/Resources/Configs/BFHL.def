@@ -115,8 +115,10 @@ procon.protected.weapons.add None "havana/Vehicles/STREET_MOTORCYCLE_CR/STREET_M
 procon.protected.weapons.add None "havana/Vehicles/STREET_MOTORCYCLE_LE/STREET_MOTORCYCLE_LE" Primary VehiclePersonal
 
 // Transport vehicles
+procon.protected.weapons.add None "havana/Vehicles/COUPE_CR/COUPE_CR" Primary VehicleTransport
 procon.protected.weapons.add None "havana/Vehicles/COUPE_CR/COUPE_CR_HW0" Primary VehicleTransport
 procon.protected.weapons.add None "havana/Vehicles/COUPE_LE/COUPE_LE" Primary VehicleTransport
+procon.protected.weapons.add None "havana/Vehicles/FUEL_TANKER/FUEL_TANKER" Primary VehicleTransport
 procon.protected.weapons.add None "havana/Vehicles/FUEL_TANKER/FUEL_TANKER_HW" Primary VehicleTransport
 procon.protected.weapons.add None "havana/Vehicles/MSP_CR/MSP_CR" Primary VehicleTransport
 procon.protected.weapons.add None "havana/Vehicles/SEDAN_CR/SEDAN_CR_HW" Primary VehicleTransport
