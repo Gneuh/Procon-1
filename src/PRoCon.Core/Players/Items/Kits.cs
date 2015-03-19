@@ -30,5 +30,9 @@ namespace PRoCon.Core.Players.Items {
         Demolition,
         Support,
         Recon,
+        Enforcer,
+        Mechanic,
+        Operator,
+        Professional,
     }
 }
