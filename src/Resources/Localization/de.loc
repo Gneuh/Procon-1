@@ -1,5 +1,5 @@
 ///////////////////////////////////
-// File information displayed in Options window. (20150318-05)
+// File information displayed in Options window. (20150320-02)
 ///////////////////////////////////
 file.Language=Deutsch (German)
 file.flag=de
@@ -1110,12 +1110,15 @@ global.weapons.havana/vehicles/street_motorcycle_cr/street_motorcycle_cr_hw=Stre
 global.Weapons.havana/vehicles/street_motorcycle_le/street_motorcycle_le=Street Motorcycle
 
 // Transport vehicles
+global.Weapons.havana/vehicles/coupe_cr/coupe_cr=Coupe
 global.Weapons.havana/vehicles/coupe_cr/coupe_cr_hw0=Coupe
 global.Weapons.havana/vehicles/coupe_le/coupe_le=Coupe
+global.Weapons.havana/vehicles/fuel_tanker/fuel_tanker=Tankwagen
 global.Weapons.havana/vehicles/fuel_tanker/fuel_tanker_hw=Tankwagen
 global.Weapons.havana/vehicles/msp_cr/msp_cr=Mobile Spawn Point
 global.Weapons.havana/vehicles/msp_le/msp_le=Mobile Spawn Point
 global.Weapons.havana/vehicles/sedan_cr/sedan_cr_hw=Sedan
+global.Weapons.havana/vehicles/sedan_cr/sedan_cr=Sedan
 global.Weapons.havana/vehicles/sedan_le/sedan_le=Sedan
 global.Weapons.havana/vehicles/suv_cr/suv_cr=SUV
 global.Weapons.havana/vehicles/suv_le/suv_le=SUV
