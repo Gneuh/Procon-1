@@ -1,5 +1,5 @@
 ﻿///////////////////////////////////
-// File information displayed in Options window. (20150321-01)
+// File information displayed in Options window. (20150322-01)
 ///////////////////////////////////
 file.Language=English (Australian)
 file.flag=au
@@ -1084,7 +1084,6 @@ global.Weapons.u_p90=P90
 global.Weapons.u_policebaton=Police Baton
 global.Weapons.u_prisonshank=Shank
 global.Weapons.u_pti91=PTR-91
-global.Weapons.u_sr25ecc=SR-25 ECC
 global.Weapons.u_r700ltr=R700 LTR
 global.Weapons.u_r700blackout=R700 Blackout
 global.Weapons.u_rem870p=Remington 870P Magnum
@@ -1102,8 +1101,10 @@ global.Weapons.u_scr308=Saiga 308
 global.Weapons.u_sg533lb=SG553
 global.Weapons.u_sledgehammer=Sledge Hammer
 global.Weapons.u_smaw=SMAW
+global.Weapons.u_sp_smaw=SMAW
 global.Weapons.u_socom16=SOCOM16
 global.Weapons.u_spas12=Spas-12
+global.Weapons.u_sr25ecc=SR-25 ECC
 global.Weapons.u_stakeout37=37 STAKEOUT
 global.Weapons.u_sw40p=.40 PRO
 global.Weapons.u_sw38snub=.38 SNUB
