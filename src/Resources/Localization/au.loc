@@ -1,5 +1,5 @@
 ﻿///////////////////////////////////
-// File information displayed in Options window. (20150322-01)
+// File information displayed in Options window. (20150323-01)
 ///////////////////////////////////
 file.Language=English (Australian)
 file.flag=au
@@ -1085,7 +1085,7 @@ global.Weapons.u_policebaton=Police Baton
 global.Weapons.u_prisonshank=Shank
 global.Weapons.u_pti91=PTR-91
 global.Weapons.u_r700ltr=R700 LTR
-global.Weapons.u_r700blackout=R700 Blackout
+global.Weapons.u_r700blackout=.300 Knockout
 global.Weapons.u_rem870p=Remington 870P Magnum
 global.Weapons.u_repairtool=Repair Tool
 global.Weapons.u_cr_revive=Revive Syringe
