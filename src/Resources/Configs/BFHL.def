@@ -1,6 +1,6 @@
 /////////////////////////////////////////////
 // This definitions file will be overwritten during an update.
-//  (2015-03-22.01)
+//  (2015-03-25.01)
 // This file contains the standard defintions required to run procon 
 // connected to a BFHL server
 /////////////////////////////////////////////
@@ -58,6 +58,7 @@ procon.protected.weapons.add None "U_KnifeBoot_Gold" Secondary Melee
 procon.protected.weapons.add None "U_KnifeBowie" Secondary Melee
 procon.protected.weapons.add None "U_KnifeCarbon" Secondary Melee
 procon.protected.weapons.add None "U_KnifeSeal" Secondary Melee
+procon.protected.weapons.add None "U_KnifeSeal_Gold" Secondary Melee
 procon.protected.weapons.add None "U_KnifeScout" Secondary Melee
 procon.protected.weapons.add None "U_KnifeSurvival" Secondary Melee
 procon.protected.weapons.add None "U_KnifeTrench" Secondary Melee
@@ -97,6 +98,7 @@ procon.protected.weapons.add Demolition "U_Repairtool" Secondary Melee
 procon.protected.weapons.add Demolition "U_CR_Revive" Secondary Melee
 procon.protected.weapons.add Assault "U_RO933" Primary Carbine
 procon.protected.weapons.add None "U_RPG7" Secondary ProjectileExplosive
+procon.protected.weapons.add None "U_SP_RPG7" Secondary ProjectileExplosive
 procon.protected.weapons.add Demolition "U_RS357" Auxiliary Handgun
 procon.protected.weapons.add Support "U_SA58" Primary Shotgun
 procon.protected.weapons.add Demolition "U_SabotageTool" Secondary Explosive
@@ -154,7 +156,7 @@ procon.protected.weapons.add None "havana/Vehicles/ATTACK_HELI_CR/ATTACK_HELI_CR
 procon.protected.weapons.add None "havana/Vehicles/ATTACK_HELI_LE/ATTACK_HELI_LE" Primary VehicleAir
 procon.protected.weapons.add None "havana/Vehicles/TRANSPORT_HELI_CR/TRANSPORT_HELI_CR" Primary VehicleAir
 procon.protected.weapons.add None "havana/Vehicles/TRANSPORT_HELI_LE/TRANSPORT_HELI_LE" Primary VehicleAir
-
+procon.protected.weapons.add None "havana/gameplay/GameModes/Heist/Helicopter_HeistPickup_Vehicle" Primary VehicleAir
 // Water vehicles
 procon.protected.weapons.add None "havana/Vehicles/AIRBOAT/AirBoat_test2" Primary VehicleTransport
 procon.protected.weapons.add None "Havana/Vehicles/GUNBOAT_CR/GUNBOAT_CR" Primary VehicleLight
