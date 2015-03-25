@@ -1,5 +1,5 @@
 ///////////////////////////////////
-// File information displayed in Options window. (20150323-02)
+// File information displayed in Options window. (20150325-01)
 ///////////////////////////////////
 file.Language=Deutsch (German)
 file.flag=de
@@ -1053,8 +1053,9 @@ global.Weapons.u_knifeboot=Boot Knife
 global.Weapons.u_knifeboot_gold=Gold Boot Knife
 global.Weapons.u_knifebowie=Bowie Knife
 global.Weapons.u_knifecarbon=Carbon Fiber Knife
-global.Weapons.u_knifeseal=Gold Seal Knife
-global.Weapons.u_knifescout=Gold Scout Knife
+global.Weapons.u_knifeseal=Seal Knife
+global.Weapons.u_knifeseal_gold=Gold Seal Knife
+global.Weapons.u_knifescout=Scout Knife
 global.Weapons.u_knifescout_gold=Gold Scout Knife
 global.Weapons.u_knifesurvival=Survival Knife
 global.Weapons.u_knifetrench=Trench Knife
@@ -1091,6 +1092,7 @@ global.Weapons.u_repairtool=Repair Tool
 global.Weapons.u_cr_revive=Adrenalinspritze
 global.Weapons.u_ro933=RO993
 global.Weapons.u_rpg7=RPG7
+global.Weapons.u_sp_rpg7=RPG7
 global.Weapons.u_rs357=.357 RS
 global.Weapons.u_sa58=SA-58 OSW
 global.Weapons.u_sabotagetool=Sabotage Tool
@@ -1151,6 +1153,7 @@ global.Weapons.havana/vehicles/attack_heli_cr/attack_heli_cr=Attack Helicopter
 global.Weapons.havana/vehicles/attack_heli_le/attack_heli_le=Attack Helicopter
 global.Weapons.havana/vehicles/transport_heli_cr/transport_heli_cr=Transport Helicopter
 global.Weapons.havana/vehicles/transport_heli_le/transport_heli_le=Transport Helicopter
+global.Weapons.havana/gameplay/gamemodes/heist/helicopter_heistpickup_vehicle=Heist Pickup Helicopter
 
 // Water vehicles
 global.Weapons.havana/vehicles/airboat/airboat_test2=Airboat
