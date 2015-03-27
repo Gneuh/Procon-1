@@ -20,22 +20,22 @@ Please refer to the [issues section](https://github.com/Myrcon/Procon-1/issues?l
 ## Changelog ##
 To check out older changelogs, please refer to our [full changelogs list](https://forum.myrcon.com/showthread.php?240-Full-Change-Log "Full changelog of Procon 1") on the Myrcon Community forums.
 
-### 1.4.2.2 to 1.4.2.3 ###
+### 1.4.2.4 to 1.5.1.1 ###
 #### Battlefield 4 ####
 - Updates and changes to BF4.def
-- on chat tab if show disconnects is selected no player left is shown to reduce status spam
-- removed placeholder whitespace in case a player has no clantag transmitted by the server via RCON
+
+#### Battlefield Hardline ####
+- first compatible release
+- Updates and changes to BFHL.def / au.loc / de.loc
 
 #### Core ####
-- added plugin wide usable function SecondsToText(UInt32 iSeconds, string[] a_strTimeDescriptions, bool blShowSecondsOver60) to CPRoConMarshalByRefObject.cs
-  which converts seconds to d h m s. In case blShowSecondsOver60 is false seconds are only shown if smaller than 60.
+- Added BFHL compatibility
 
 #### UI ####
-- added PlayTime column for all games. Procon monitors the playtime (session time) since join / procon connect of a player
-- added sync of PlayTime for layer clients (procon.player.syncPlayTimes) to have layer clients show the same times the layer host has
+- Added BFHL compatibility
 
 #### Default plugins ####
-- added @mytimes to have a player request his playtime & @times <playername> to have players request another players playtime to BasicInGameInfo as an usage example
+- BFHL compatibility
 
 
 ## Credits & contributions ##
