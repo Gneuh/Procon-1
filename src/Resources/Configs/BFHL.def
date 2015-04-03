@@ -165,14 +165,14 @@ procon.protected.weapons.add None "Havana/Vehicles/GUNBOAT_CR/GUNBOAT_CR" Primar
 
 
 procon.protected.maps.clear
-procon.protected.maps.add "TurfwarLarge0" "MP_Downtown" "Conquest Large" "Downtown" 0
-procon.protected.maps.add "TurfwarLarge0" "MP_Bloodout" "Conquest Large" "The Block" 0
-procon.protected.maps.add "TurfwarLarge0" "MP_Eastside" "Conquest Large" "Derailed" 0
-procon.protected.maps.add "TurfwarLarge0" "MP_Desert05" "Conquest Large" "Dust Bowl" 0
-procon.protected.maps.add "TurfwarLarge0" "MP_Bank" "Conquest Large" "Bank Job" 0
-procon.protected.maps.add "TurfwarLarge0" "MP_OffShore" "Conquest Large" "Riptide" 0
-procon.protected.maps.add "TurfwarLarge0" "MP_Hills" "Conquest Large" "Hollywood Heights" 0
-procon.protected.maps.add "TurfwarLarge0" "MP_Glades" "Conquest Large" "Everglades" 0
+procon.protected.maps.add "TurfWarLarge0" "MP_Downtown" "Conquest Large" "Downtown" 0
+procon.protected.maps.add "TurfWarLarge0" "MP_Bloodout" "Conquest Large" "The Block" 0
+procon.protected.maps.add "TurfWarLarge0" "MP_Eastside" "Conquest Large" "Derailed" 0
+procon.protected.maps.add "TurfWarLarge0" "MP_Desert05" "Conquest Large" "Dust Bowl" 0
+procon.protected.maps.add "TurfWarLarge0" "MP_Bank" "Conquest Large" "Bank Job" 0
+procon.protected.maps.add "TurfWarLarge0" "MP_OffShore" "Conquest Large" "Riptide" 0
+procon.protected.maps.add "TurfWarLarge0" "MP_Hills" "Conquest Large" "Hollywood Heights" 0
+procon.protected.maps.add "TurfWarLarge0" "MP_Glades" "Conquest Large" "Everglades" 0
 
 procon.protected.maps.add "TurfWarSmall0" "MP_Downtown" "Conquest Small" "Downtown" 0
 procon.protected.maps.add "TurfWarSmall0" "MP_Bloodout" "Conquest Small" "The Block" 0
