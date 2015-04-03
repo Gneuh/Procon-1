@@ -243,37 +243,37 @@ procon.protected.maps.add "BloodMoney0" "MP_Glades" "Blood Money" "Everglades" 0
 // Conquest Large
 ///////////////////////////////////////////////////////////////////////////////
 
-procon.protected.teamnames.add "MP_Downtown" 0 "global.conquest.neutral" "" "TurfwarLarge0"
-procon.protected.teamnames.add "MP_Downtown" 1 "global.conquest.cop" "cop.png" "TurfwarLarge0"
-procon.protected.teamnames.add "MP_Downtown" 2 "global.conquest.crim" "crim.png" "TurfwarLarge0"
+procon.protected.teamnames.add "MP_Downtown" 0 "global.conquest.neutral" "" "TurfWarLarge0"
+procon.protected.teamnames.add "MP_Downtown" 1 "global.conquest.cop" "cop.png" "TurfWarLarge0"
+procon.protected.teamnames.add "MP_Downtown" 2 "global.conquest.crim" "crim.png" "TurfWarLarge0"
 
-procon.protected.teamnames.add "MP_Bloodout" 0 "global.conquest.neutral" "" "TurfwarLarge0"
-procon.protected.teamnames.add "MP_Bloodout" 1 "global.conquest.cop" "cop.png" "TurfwarLarge0"
-procon.protected.teamnames.add "MP_Bloodout" 2 "global.conquest.crim" "crim.png" "TurfwarLarge0"
+procon.protected.teamnames.add "MP_Bloodout" 0 "global.conquest.neutral" "" "TurfWarLarge0"
+procon.protected.teamnames.add "MP_Bloodout" 1 "global.conquest.cop" "cop.png" "TurfWarLarge0"
+procon.protected.teamnames.add "MP_Bloodout" 2 "global.conquest.crim" "crim.png" "TurfWarLarge0"
 
-procon.protected.teamnames.add "MP_Eastside" 0 "global.conquest.neutral" "" "TurfwarLarge0"
-procon.protected.teamnames.add "MP_Eastside" 1 "global.conquest.cop" "cop.png" "TurfwarLarge0"
-procon.protected.teamnames.add "MP_Eastside" 2 "global.conquest.crim" "crim.png" "TurfwarLarge0"
+procon.protected.teamnames.add "MP_Eastside" 0 "global.conquest.neutral" "" "TurfWarLarge0"
+procon.protected.teamnames.add "MP_Eastside" 1 "global.conquest.cop" "cop.png" "TurfWarLarge0"
+procon.protected.teamnames.add "MP_Eastside" 2 "global.conquest.crim" "crim.png" "TurfWarLarge0"
 
 procon.protected.teamnames.add "MP_Desert05" 0 "global.conquest.neutral" "" "TurfwarLarge0"
-procon.protected.teamnames.add "MP_Desert05" 1 "global.conquest.cop" "cop.png" "TurfwarLarge0"
-procon.protected.teamnames.add "MP_Desert05" 2 "global.conquest.crim" "crim.png" "TurfwarLarge0"
+procon.protected.teamnames.add "MP_Desert05" 1 "global.conquest.cop" "cop.png" "TurfWarLarge0"
+procon.protected.teamnames.add "MP_Desert05" 2 "global.conquest.crim" "crim.png" "TurfWarLarge0"
 
-procon.protected.teamnames.add "MP_Bank" 0 "global.conquest.neutral" "" "TurfwarLarge0"
-procon.protected.teamnames.add "MP_Bank" 1 "global.conquest.cop" "cop.png" "TurfwarLarge0"
-procon.protected.teamnames.add "MP_Bank" 2 "global.conquest.crim" "crim.png" "TurfwarLarge0"
+procon.protected.teamnames.add "MP_Bank" 0 "global.conquest.neutral" "" "TurfWarLarge0"
+procon.protected.teamnames.add "MP_Bank" 1 "global.conquest.cop" "cop.png" "TurfWarLarge0"
+procon.protected.teamnames.add "MP_Bank" 2 "global.conquest.crim" "crim.png" "TurfWarLarge0"
 
-procon.protected.teamnames.add "MP_OffShore" 0 "global.conquest.neutral" "" "TurfwarLarge0"
-procon.protected.teamnames.add "MP_OffShore" 1 "global.conquest.cop" "cop.png" "TurfwarLarge0"
-procon.protected.teamnames.add "MP_OffShore" 2 "global.conquest.crim" "crim.png" "TurfwarLarge0"
+procon.protected.teamnames.add "MP_OffShore" 0 "global.conquest.neutral" "" "TurfWarLarge0"
+procon.protected.teamnames.add "MP_OffShore" 1 "global.conquest.cop" "cop.png" "TurfWarLarge0"
+procon.protected.teamnames.add "MP_OffShore" 2 "global.conquest.crim" "crim.png" "TurfWarLarge0"
 
-procon.protected.teamnames.add "MP_Hills" 0 "global.conquest.neutral" "" "TurfwarLarge0"
-procon.protected.teamnames.add "MP_Hills" 1 "global.conquest.cop" "cop.png" "TurfwarLarge0"
-procon.protected.teamnames.add "MP_Hills" 2 "global.conquest.crim" "crim.png" "TurfwarLarge0"
+procon.protected.teamnames.add "MP_Hills" 0 "global.conquest.neutral" "" "TurfWarLarge0"
+procon.protected.teamnames.add "MP_Hills" 1 "global.conquest.cop" "cop.png" "TurfWarLarge0"
+procon.protected.teamnames.add "MP_Hills" 2 "global.conquest.crim" "crim.png" "TurfWarLarge0"
 
-procon.protected.teamnames.add "MP_Glades" 0 "global.conquest.neutral" "" "TurfwarLarge0"
-procon.protected.teamnames.add "MP_Glades" 1 "global.conquest.cop" "cop.png" "TurfwarLarge0"
-procon.protected.teamnames.add "MP_Glades" 2 "global.conquest.crim" "crim.png" "TurfwarLarge0"
+procon.protected.teamnames.add "MP_Glades" 0 "global.conquest.neutral" "" "TurfWarLarge0"
+procon.protected.teamnames.add "MP_Glades" 1 "global.conquest.cop" "cop.png" "TurfWarLarge0"
+procon.protected.teamnames.add "MP_Glades" 2 "global.conquest.crim" "crim.png" ""
 
 // Conquest Small
 ///////////////////////////////////////////////////////////////////////////////
