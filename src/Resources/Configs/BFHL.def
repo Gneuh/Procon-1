@@ -273,7 +273,7 @@ procon.protected.teamnames.add "MP_Hills" 2 "global.conquest.crim" "crim.png" "T
 
 procon.protected.teamnames.add "MP_Glades" 0 "global.conquest.neutral" "" "TurfWarLarge0"
 procon.protected.teamnames.add "MP_Glades" 1 "global.conquest.cop" "cop.png" "TurfWarLarge0"
-procon.protected.teamnames.add "MP_Glades" 2 "global.conquest.crim" "crim.png" ""
+procon.protected.teamnames.add "MP_Glades" 2 "global.conquest.crim" "crim.png" "TurfWarLarge0"
 
 // Conquest Small
 ///////////////////////////////////////////////////////////////////////////////
