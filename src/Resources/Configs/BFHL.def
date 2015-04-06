@@ -73,6 +73,7 @@ procon.protected.weapons.add Support "U_M1911" Auxiliary Handgun
 procon.protected.weapons.add None "U_M240" Primary LMG
 procon.protected.weapons.add Demolition "U_M320_HE" Secondary ProjectileExplosive
 procon.protected.weapons.add Assault "U_M416" Primary AssaultRifle
+procon.protected.weapons.add Demolition "U_M45" Primary SMG
 procon.protected.weapons.add None "U_M67" Auxiliary Explosive
 procon.protected.weapons.add Demolition "U_M79_HE" Secondary ProjectileExplosive
 procon.protected.weapons.add None "U_M9" Auxiliary Handgun
@@ -85,7 +86,6 @@ procon.protected.weapons.add Assault "U_MG36" Primary Carbine
 procon.protected.weapons.add None "U_Molotov" Auxiliary Explosive
 procon.protected.weapons.add Demolition "U_MP5K" Primary SMG
 procon.protected.weapons.add Demolition "U_MPX" Primary SMG
-procon.protected.weapons.add Demolition "U_M45" Primary SMG
 procon.protected.weapons.add None "U_NightStick" Secondary Melee
 procon.protected.weapons.add Assault "U_P226" Auxiliary Handgun
 procon.protected.weapons.add Demolition "U_P90" Primary SMG
