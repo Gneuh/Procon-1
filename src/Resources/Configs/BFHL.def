@@ -255,7 +255,7 @@ procon.protected.teamnames.add "MP_Eastside" 0 "global.conquest.neutral" "" "Tur
 procon.protected.teamnames.add "MP_Eastside" 1 "global.conquest.cop" "cop.png" "TurfWarLarge0"
 procon.protected.teamnames.add "MP_Eastside" 2 "global.conquest.crim" "crim.png" "TurfWarLarge0"
 
-procon.protected.teamnames.add "MP_Desert05" 0 "global.conquest.neutral" "" "TurfwarLarge0"
+procon.protected.teamnames.add "MP_Desert05" 0 "global.conquest.neutral" "" "TurfWarLarge0"
 procon.protected.teamnames.add "MP_Desert05" 1 "global.conquest.cop" "cop.png" "TurfWarLarge0"
 procon.protected.teamnames.add "MP_Desert05" 2 "global.conquest.crim" "crim.png" "TurfWarLarge0"
 
