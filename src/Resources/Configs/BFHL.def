@@ -1,6 +1,6 @@
 /////////////////////////////////////////////
 // This definitions file will be overwritten during an update.
-//  (2015-04-29.01)
+//  (2015-04-29.02)
 // This file contains the standard defintions required to run procon 
 // connected to a BFHL server
 /////////////////////////////////////////////
@@ -265,6 +265,10 @@ procon.protected.teamnames.add "MP_Desert05" 2 "global.conquest.crim" "crim.png"
 procon.protected.teamnames.add "MP_Bank" 0 "global.conquest.neutral" "" "TurfWarLarge0"
 procon.protected.teamnames.add "MP_Bank" 1 "global.conquest.cop" "cop.png" "TurfWarLarge0"
 procon.protected.teamnames.add "MP_Bank" 2 "global.conquest.crim" "crim.png" "TurfWarLarge0"
+
+procon.protected.teamnames.add "MP_Growhouse" 0 "global.conquest.neutral" "" "TurfWarLarge0"
+procon.protected.teamnames.add "MP_Growhouse" 1 "global.conquest.cop" "cop.png" "TurfWarLarge0"
+procon.protected.teamnames.add "MP_Growhouse" 2 "global.conquest.crim" "crim.png" "TurfWarLarge0"
 
 procon.protected.teamnames.add "MP_OffShore" 0 "global.conquest.neutral" "" "TurfWarLarge0"
 procon.protected.teamnames.add "MP_OffShore" 1 "global.conquest.cop" "cop.png" "TurfWarLarge0"
