@@ -1,6 +1,6 @@
 /////////////////////////////////////////////
 // This definitions file will be overwritten during an update.
-//  (2015-03-25.01)
+//  (2015-05-26.01)
 // This file contains the standard defintions required to run procon 
 // connected to a BF4 server
 /////////////////////////////////////////////
@@ -54,6 +54,7 @@ procon.protected.serverversions.add BF4 "154793" "R45"
 procon.protected.serverversions.add BF4 "155011" "R46"
 procon.protected.serverversions.add BF4 "157186" "R48"
 procon.protected.serverversions.add BF4 "158113" "R49"
+procon.protected.serverversions.add BF4 "162016" "R49.GM"
 
 procon.protected.specialization.clear
 
@@ -339,6 +340,21 @@ procon.protected.weapons.add None "U_V40" Auxiliary Explosive
 procon.protected.weapons.add Support "U_XM25" Secondary ProjectileExplosive
 procon.protected.weapons.add Support "U_XM25_Flechette" Secondary Shotgun
 procon.protected.weapons.add Support "U_XM25_Smoke" Secondary Impact
+procon.protected.weapons.add Assault "U_AN94" Primary AssaultRifle
+procon.protected.weapons.add Assault "U_AN94_M26_Buck" Secondary Shotgun
+procon.protected.weapons.add Assault "U_AN94_M26_Flechette" Secondary Shotgun
+procon.protected.weapons.add Assault "U_AN94_M26_Frag" Secondary Shotgun
+procon.protected.weapons.add Assault "U_AN94_M26_Slug" Secondary Shotgun
+procon.protected.weapons.add Assault "U_AN94_M320_3GL" Secondary ProjectileExplosive
+procon.protected.weapons.add Assault "U_AN94_M320_FLASH" Secondary ProjectileExplosive
+procon.protected.weapons.add Assault "U_AN94_M320_HE" Secondary ProjectileExplosive
+procon.protected.weapons.add Assault "U_AN94_M320_LVG" Secondary ProjectileExplosive
+procon.protected.weapons.add Assault "U_AN94_M320_SHG" Secondary Shotgun
+procon.protected.weapons.add Assault "U_AN94_M320_SMK" Secondary Impact
+procon.protected.weapons.add Assault "U_L86A1" Primary LMG
+procon.protected.weapons.add Assault "U_Groza-1" Primary Carbine
+procon.protected.weapons.add Assault "U_Groza-4" Primary PDW
+procon.protected.weapons.add Assault "U_SaddlegunSnp" Secondary Handgun
 
 // Personal vehicles
 procon.protected.weapons.add None "XP1/Gameplay/Vehicles/KLR650/KLR650" Primary VehiclePersonal
@@ -752,6 +768,18 @@ procon.protected.maps.add "SquadObliteration0" "MP_Prison" "Squad Obliteration" 
 procon.protected.maps.add "SquadObliteration0" "MP_Resort" "Squad Obliteration" "Hainan Resort" 0
 procon.protected.maps.add "SquadObliteration0" "MP_Siege" "Squad Obliteration" "Siege of Shanghai" 0
 procon.protected.maps.add "SquadObliteration0" "MP_Tremors" "Squad Obliteration" "Dawnbreaker" 0
+
+// R48.GM Gun Master
+procon.protected.maps.add "GunMaster0" "MP_Abandoned" "Gun Master" "Zavod 311" 0
+procon.protected.maps.add "GunMaster0" "MP_Damage" "Gun Master" "Lancang Dam" 0
+procon.protected.maps.add "GunMaster0" "MP_Flooded" "Gun Master" "Flood Zone" 0
+procon.protected.maps.add "GunMaster0" "MP_Journey" "Gun Master" "Golmud Railway" 0
+procon.protected.maps.add "GunMaster0" "MP_Naval" "Gun Master" "Paracel Storm" 0
+procon.protected.maps.add "GunMaster0" "MP_Prison" "Gun Master" "Operation Locker" 0
+procon.protected.maps.add "GunMaster0" "MP_Resort" "Gun Master" "Hainan Resort" 0
+procon.protected.maps.add "GunMaster0" "MP_Siege" "Gun Master" "Siege of Shanghai" 0
+procon.protected.maps.add "GunMaster0" "MP_TheDish" "Gun Master" "Rogue Transmission" 0
+procon.protected.maps.add "GunMaster0" "MP_Tremors" "Gun Master" "Dawnbreaker" 0
 
 procon.protected.teamnames.clear
 
@@ -2002,6 +2030,50 @@ procon.protected.teamnames.add "MP_Siege" 2 "global.conquest.cn" "cn.png" "Squad
 procon.protected.teamnames.add "MP_Tremors" 0 "global.conquest.neutral" "" "SquadObliteration0"
 procon.protected.teamnames.add "MP_Tremors" 1 "global.conquest.us" "us.png" "SquadObliteration0"
 procon.protected.teamnames.add "MP_Tremors" 2 "global.conquest.cn" "cn.png" "SquadObliteration0"
+
+
+// Gun Master
+///////////////////////////////////////////////////////////////////////////////
+
+procon.protected.teamnames.add "MP_Abandoned" 0 "global.conquest.neutral" "" "GunMaster0"
+procon.protected.teamnames.add "MP_Abandoned" 1 "global.conquest.ru" "ru.png" "GunMaster0"
+procon.protected.teamnames.add "MP_Abandoned" 2 "global.conquest.us" "us.png" "GunMaster0"
+
+procon.protected.teamnames.add "MP_Damage" 0 "global.conquest.neutral" "" "GunMaster0"
+procon.protected.teamnames.add "MP_Damage" 1 "global.conquest.ru" "ru.png" "GunMaster0"
+procon.protected.teamnames.add "MP_Damage" 2 "global.conquest.cn" "cn.png" "GunMaster0"
+
+procon.protected.teamnames.add "MP_Flooded" 0 "global.conquest.neutral" "" "GunMaster0"
+procon.protected.teamnames.add "MP_Flooded" 1 "global.conquest.us" "us.png" "GunMaster0"
+procon.protected.teamnames.add "MP_Flooded" 2 "global.conquest.cn" "cn.png" "GunMaster0"
+
+procon.protected.teamnames.add "MP_Journey" 0 "global.conquest.neutral" "" "GunMaster0"
+procon.protected.teamnames.add "MP_Journey" 1 "global.conquest.ru" "ru.png" "GunMaster0"
+procon.protected.teamnames.add "MP_Journey" 2 "global.conquest.cn" "cn.png" "GunMaster0"
+
+procon.protected.teamnames.add "MP_Naval" 0 "global.conquest.neutral" "" "GunMaster0"
+procon.protected.teamnames.add "MP_Naval" 1 "global.conquest.us" "us.png" "GunMaster0"
+procon.protected.teamnames.add "MP_Naval" 2 "global.conquest.cn" "cn.png" "GunMaster0"
+
+procon.protected.teamnames.add "MP_Prison" 0 "global.conquest.neutral" "" "GunMaster0"
+procon.protected.teamnames.add "MP_Prison" 1 "global.conquest.us" "us.png" "GunMaster0"
+procon.protected.teamnames.add "MP_Prison" 2 "global.conquest.ru" "ru.png" "GunMaster0"
+
+procon.protected.teamnames.add "MP_Resort" 0 "global.conquest.neutral" "" "GunMaster0"
+procon.protected.teamnames.add "MP_Resort" 1 "global.conquest.us" "us.png" "GunMaster0"
+procon.protected.teamnames.add "MP_Resort" 2 "global.conquest.cn" "cn.png" "GunMaster0"
+
+procon.protected.teamnames.add "MP_Siege" 0 "global.conquest.neutral" "" "GunMaster0"
+procon.protected.teamnames.add "MP_Siege" 1 "global.conquest.us" "us.png" "GunMaster0"
+procon.protected.teamnames.add "MP_Siege" 2 "global.conquest.cn" "cn.png" "GunMaster0"
+
+procon.protected.teamnames.add "MP_TheDish" 0 "global.conquest.neutral" "" "GunMaster0"
+procon.protected.teamnames.add "MP_TheDish" 1 "global.conquest.ru" "ru.png" "GunMaster0"
+procon.protected.teamnames.add "MP_TheDish" 2 "global.conquest.cn" "cn.png" "GunMaster0"
+
+procon.protected.teamnames.add "MP_Tremors" 0 "global.conquest.neutral" "" "GunMaster0"
+procon.protected.teamnames.add "MP_Tremors" 1 "global.conquest.us" "us.png" "GunMaster0"
+procon.protected.teamnames.add "MP_Tremors" 2 "global.conquest.cn" "cn.png" "GunMaster0"
 
 ///////////////////////////////////////////////////////////////////////////////
 procon.protected.tasks.clear
