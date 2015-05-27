@@ -1,5 +1,5 @@
 ﻿///////////////////////////////////
-// File information displayed in Options window. (20150325-01)
+// File information displayed in Options window. (20150327-01)
 ///////////////////////////////////
 file.Language=English (Australian)
 file.flag=au
@@ -708,6 +708,17 @@ global.Weapons.u_ammobag=Ammobag
 global.Weapons.u_amr2=AMR2-2
 global.Weapons.u_amr2_cqb=AMR-2 CQB
 global.Weapons.u_amr2_med=AMR-2 MID
+global.Weapons.u_an94=AN-94 Abakan Assault Rifle
+global.Weapons.u_an94_m26_buck=M26 Mass under AN-94
+global.Weapons.u_an94_m26_flechette=M26 Mass Dart under AN-94
+global.Weapons.u_an94_m26_frag=M26 Mass Frag under AN-94
+global.Weapons.u_an94_m26_slug=M26 Mass Slug under AN-94
+global.Weapons.u_an94_m320_3gl_v1=M320 3GL under AN-94
+global.Weapons.u_an94_m320_flash_v1=M320 FB under AN-94
+global.Weapons.u_an94_m320_he_v1=M320 HE under AN-94
+global.Weapons.u_an94_m320_lvg_v1=M320 LVG under AN-94
+global.Weapons.u_an94_m320_shg_v1=M320 Dart under AN-94
+global.Weapons.u_an94_m320_smk_v1=M320 SMK under AN-94
 global.Weapons.u_ar160=AR-160
 global.Weapons.u_ar160_m26_buck=M26 Buckshot under ARX 160
 global.Weapons.u_ar160_m26_flechette=M26 Flechette under ARX 160
@@ -766,6 +777,8 @@ global.Weapons.u_galilace53=ACE 53 SV
 global.Weapons.u_glock18=G18
 global.Weapons.u_gol=GOL Magnum
 global.Weapons.u_grenade_rgo=RGO Impact
+global.Weapons.u_groza-1=Groza-1
+global.Weapons.u_groza-4=Groza-4
 global.Weapons.u_handflare=Handflare
 global.Weapons.u_hawk=Hawk 12G
 global.Weapons.u_hk45c=Compact 45
@@ -778,6 +791,7 @@ global.Weapons.u_l85a2_m320_he_v2=M320 HE under L85A2
 global.Weapons.u_l85a2_m320_lvg_v2=M320 LVG under L85A2
 global.Weapons.u_l85a2_m320_shg_v2=M320 Dart under L85A2
 global.Weapons.u_l85a2_m320_smk_v2=M320 SMK under L85A2
+global.Weapons.u_l86a1=L86A2 Light Machine Gun
 global.Weapons.u_l96a1=L96A1
 global.Weapons.u_lsat=LSAT
 global.Weapons.u_knife=Knife
