@@ -1,5 +1,5 @@
 ﻿///////////////////////////////////
-// File information displayed in Options window. (20150327-01)
+// File information displayed in Options window. (20150327-02)
 ///////////////////////////////////
 file.Language=English (Australian)
 file.flag=au
@@ -890,6 +890,7 @@ global.Weapons.u_rpg7=RPG-7V2
 global.Weapons.u_rpk12=RPK-12
 global.Weapons.u_rpk-74=RPK-74
 global.Weapons.u_sa18igla=SA-18 IGLA
+global.Weapons.u_saddlegunsnp=Mare's Leg Saddle Gun Sniper
 global.Weapons.u_saiga_20k=Saiga 12K
 global.Weapons.u_sar21=SAR-21
 global.Weapons.u_sar21_m26_buck=M26 Mass under SAR-21
