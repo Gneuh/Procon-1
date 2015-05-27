@@ -769,7 +769,7 @@ procon.protected.maps.add "SquadObliteration0" "MP_Resort" "Squad Obliteration" 
 procon.protected.maps.add "SquadObliteration0" "MP_Siege" "Squad Obliteration" "Siege of Shanghai" 0
 procon.protected.maps.add "SquadObliteration0" "MP_Tremors" "Squad Obliteration" "Dawnbreaker" 0
 
-// R48.GM Gun Master
+// R50 Gun Master
 procon.protected.maps.add "GunMaster0" "MP_Abandoned" "Gun Master" "Zavod 311" 0
 procon.protected.maps.add "GunMaster0" "MP_Damage" "Gun Master" "Lancang Dam" 0
 procon.protected.maps.add "GunMaster0" "MP_Flooded" "Gun Master" "Flood Zone" 0
