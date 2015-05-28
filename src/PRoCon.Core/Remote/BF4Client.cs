@@ -229,6 +229,7 @@ namespace PRoCon.Core.Remote {
             SendGetVarsOnlySquadLeaderSpawnPacket();
 
             SendGetVarsUnlockModePacket();
+            SendGetVarsGunMasterWeaponsPresetPacket();
 
             SendGetVarsSoldierHealthPacket();
 

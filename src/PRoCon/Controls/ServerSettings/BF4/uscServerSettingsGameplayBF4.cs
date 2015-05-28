@@ -36,7 +36,7 @@ namespace PRoCon.Controls.ServerSettings.BF4 {
             this.AsyncSettingControls.Add("vars.onlysquadleaderspawn", new AsyncStyleSetting(this.picSettingsOnlySquadLeaderSpawn, this.chkSettingsOnlySquadLeaderSpawn, new Control[] { this.chkSettingsOnlySquadLeaderSpawn }, false));
             
             this.AsyncSettingControls.Add("vars.unlockmode", new AsyncStyleSetting(this.picSettingsUnlockMode, this.cboSettingsUnlockMode, new Control[] { this.cboSettingsUnlockMode }, true));
-            // not used in BF4 //this.AsyncSettingControls.Add("vars.gunMasterWeaponsPreset", new AsyncStyleSetting(this.picSettingsGunMasterWeaponsPreset, this.cboSettingsGunMasterWeaponsPreset, new Control[] { this.cboSettingsGunMasterWeaponsPreset }, true));
+            this.AsyncSettingControls.Add("vars.gunMasterWeaponsPreset", new AsyncStyleSetting(this.picSettingsGunMasterWeaponsPreset, this.cboSettingsGunMasterWeaponsPreset, new Control[] { this.cboSettingsGunMasterWeaponsPreset }, true));
             this.AsyncSettingControls.Add("vars.preset", new AsyncStyleSetting(this.picSettingsBF4preset, this.cboSettingsBF4preset, new Control[] { this.cboSettingsBF4preset }, true));
 
             this.AsyncSettingControls.Add("vars.vehiclespawnallowed", new AsyncStyleSetting(this.picSettingsVehicleSpawnAllowed, this.chkSettingsVehicleSpawnAllowed, new Control[] { this.chkSettingsVehicleSpawnAllowed }, false));
@@ -149,15 +149,11 @@ namespace PRoCon.Controls.ServerSettings.BF4 {
             this.lnkSettingsGunMasterWeaponsPreset.Text = this.Language.GetDefaultLocalized(this.lnkSettingsGunMasterWeaponsPreset.Text, "uscServerSettingsPanel.lnkSettingsGunMasterWeaponsPreset");
 
             ArrayList GunMasterWeaponsPresets = new ArrayList();
-            GunMasterWeaponsPresets.Add(new GunMasterWeaponsPreset(this.Language.GetDefaultLocalized("Standard", "uscServerSettingsPanel.cboSettingsGunMasterWeaponsPreset.Standard"), ((int)GunMasterWeaponsPresetType.standard).ToString()));
-            GunMasterWeaponsPresets.Add(new GunMasterWeaponsPreset(this.Language.GetDefaultLocalized("Standard reversed", "uscServerSettingsPanel.cboSettingsGunMasterWeaponsPreset.Reversed"), ((int)GunMasterWeaponsPresetType.reversed).ToString()));
-            GunMasterWeaponsPresets.Add(new GunMasterWeaponsPreset(this.Language.GetDefaultLocalized("Leight Weight", "uscServerSettingsPanel.cboSettingsGunMasterWeaponsPreset.LightWeight"), ((int)GunMasterWeaponsPresetType.light_weigth).ToString()));
-            GunMasterWeaponsPresets.Add(new GunMasterWeaponsPreset(this.Language.GetDefaultLocalized("Heavy Gear", "uscServerSettingsPanel.cboSettingsGunMasterWeaponsPreset.HeavyGear"), ((int)GunMasterWeaponsPresetType.heavy_gear).ToString()));
-            GunMasterWeaponsPresets.Add(new GunMasterWeaponsPreset(this.Language.GetDefaultLocalized("Pistol run", "uscServerSettingsPanel.cboSettingsGunMasterWeaponsPreset.PistolRun"), ((int)GunMasterWeaponsPresetType.pistol_run).ToString()));
-            GunMasterWeaponsPresets.Add(new GunMasterWeaponsPreset(this.Language.GetDefaultLocalized("Snipers Heaven", "uscServerSettingsPanel.cboSettingsGunMasterWeaponsPreset.SnipersHeaven"), ((int)GunMasterWeaponsPresetType.snipers_heaven).ToString()));
-            GunMasterWeaponsPresets.Add(new GunMasterWeaponsPreset(this.Language.GetDefaultLocalized("US arms race", "uscServerSettingsPanel.cboSettingsGunMasterWeaponsPreset.UsArmsRace"), ((int)GunMasterWeaponsPresetType.us_arms_race).ToString()));
-            GunMasterWeaponsPresets.Add(new GunMasterWeaponsPreset(this.Language.GetDefaultLocalized("RU arms race", "uscServerSettingsPanel.cboSettingsGunMasterWeaponsPreset.RuArmsRace"), ((int)GunMasterWeaponsPresetType.ru_arms_race).ToString()));
-            GunMasterWeaponsPresets.Add(new GunMasterWeaponsPreset(this.Language.GetDefaultLocalized("EU arms race", "uscServerSettingsPanel.cboSettingsGunMasterWeaponsPreset.EuArmsRace"), ((int)GunMasterWeaponsPresetType.eu_arms_race).ToString()));
+            GunMasterWeaponsPresets.Add(new GunMasterWeaponsPreset(this.Language.GetDefaultLocalized("Standard", "uscServerSettingsPanel.cboSettingsGunMasterWeaponsPreset.Standard"), ((int)BF4GunMasterWeaponsPresetType.standard).ToString()));
+            GunMasterWeaponsPresets.Add(new GunMasterWeaponsPreset(this.Language.GetDefaultLocalized("Classic", "uscServerSettingsPanel.cboSettingsGunMasterWeaponsPreset.Classic"), ((int)BF4GunMasterWeaponsPresetType.classic).ToString()));
+            GunMasterWeaponsPresets.Add(new GunMasterWeaponsPreset(this.Language.GetDefaultLocalized("Pistols", "uscServerSettingsPanel.cboSettingsGunMasterWeaponsPreset.Secondary"), ((int)BF4GunMasterWeaponsPresetType.pistols).ToString()));
+            GunMasterWeaponsPresets.Add(new GunMasterWeaponsPreset(this.Language.GetDefaultLocalized("DLC Weapons", "uscServerSettingsPanel.cboSettingsGunMasterWeaponsPreset.DLC"), ((int)BF4GunMasterWeaponsPresetType.dlc).ToString()));
+            GunMasterWeaponsPresets.Add(new GunMasterWeaponsPreset(this.Language.GetDefaultLocalized("Troll", "uscServerSettingsPanel.cboSettingsGunMasterWeaponsPreset.Troll"), ((int)BF4GunMasterWeaponsPresetType.troll).ToString()));
 
             this.cboSettingsGunMasterWeaponsPreset.DataSource = GunMasterWeaponsPresets;
             this.cboSettingsGunMasterWeaponsPreset.DisplayMember = "LongName";
@@ -204,7 +200,7 @@ namespace PRoCon.Controls.ServerSettings.BF4 {
 
                 this.Client.Game.UnlockMode += new FrostbiteClient.UnlockModeHandler(Game_UnlockMode);
                 this.Client.Game.BF4preset += new FrostbiteClient.BF4presetHandler(Game_BF4preset);
-                // not used in BF4 //this.Client.Game.GunMasterWeaponsPreset += new FrostbiteClient.GunMasterWeaponsPresetHandler(Game_GunMasterWeaponsPreset);
+                this.Client.Game.GunMasterWeaponsPreset += new FrostbiteClient.GunMasterWeaponsPresetHandler(Game_GunMasterWeaponsPreset);
 
                 this.Client.Game.VehicleSpawnAllowed += new FrostbiteClient.IsEnabledHandler(Game_VehicleSpawnAllowed);
                 this.Client.Game.VehicleSpawnDelay += new FrostbiteClient.LimitHandler(Game_VehicleSpawnDelay);
