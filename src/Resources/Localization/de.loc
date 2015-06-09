@@ -1,5 +1,5 @@
 ///////////////////////////////////
-// File information displayed in Options window. (20150327-01)
+// File information displayed in Options window. (20150609-01)
 ///////////////////////////////////
 file.Language=Deutsch (German)
 file.flag=de
@@ -2049,6 +2049,10 @@ uscServerSettingsPanel.cboSettingsGunMasterWeaponsPreset.SnipersHeaven=Snipers H
 uscServerSettingsPanel.cboSettingsGunMasterWeaponsPreset.UsArmsRace=US arms race
 uscServerSettingsPanel.cboSettingsGunMasterWeaponsPreset.RuArmsRace=RU arms race
 uscServerSettingsPanel.cboSettingsGunMasterWeaponsPreset.EuArmsRace=EU arms race
+uscServerSettingsPanel.cboSettingsGunMasterWeaponsPreset.Classic=Klassisch
+uscServerSettingsPanel.cboSettingsGunMasterWeaponsPreset.Secondary=Pistolen
+uscServerSettingsPanel.cboSettingsGunMasterWeaponsPreset.DLC=DLC Waffen
+uscServerSettingsPanel.cboSettingsGunMasterWeaponsPreset.Troll=Troll
 
 // BF4 Gameplay panel
 uscServerSettingsPanel.chkSettingsIsHitIndicators=Trefferanzeigen
