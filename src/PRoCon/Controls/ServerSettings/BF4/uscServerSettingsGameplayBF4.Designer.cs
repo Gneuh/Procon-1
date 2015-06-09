@@ -1059,7 +1059,6 @@
             this.picSettingsGunMasterWeaponsPreset.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.picSettingsGunMasterWeaponsPreset.TabIndex = 302;
             this.picSettingsGunMasterWeaponsPreset.TabStop = false;
-            this.picSettingsGunMasterWeaponsPreset.Visible = false;
             // 
             // lnkSettingsGunMasterWeaponsPreset
             // 
@@ -1073,7 +1072,6 @@
             this.lnkSettingsGunMasterWeaponsPreset.TabIndex = 301;
             this.lnkSettingsGunMasterWeaponsPreset.TabStop = true;
             this.lnkSettingsGunMasterWeaponsPreset.Text = "Apply";
-            this.lnkSettingsGunMasterWeaponsPreset.Visible = false;
             this.lnkSettingsGunMasterWeaponsPreset.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkSettingsGunMasterWeaponsPreset_LinkClicked);
             // 
             // lblSettingsGunMasterWeaponsPreset
@@ -1084,7 +1082,6 @@
             this.lblSettingsGunMasterWeaponsPreset.Size = new System.Drawing.Size(157, 15);
             this.lblSettingsGunMasterWeaponsPreset.TabIndex = 300;
             this.lblSettingsGunMasterWeaponsPreset.Text = "GunMaster Weapons presets";
-            this.lblSettingsGunMasterWeaponsPreset.Visible = false;
             // 
             // cboSettingsGunMasterWeaponsPreset
             // 
@@ -1094,7 +1091,6 @@
             this.cboSettingsGunMasterWeaponsPreset.Name = "cboSettingsGunMasterWeaponsPreset";
             this.cboSettingsGunMasterWeaponsPreset.Size = new System.Drawing.Size(166, 23);
             this.cboSettingsGunMasterWeaponsPreset.TabIndex = 299;
-            this.cboSettingsGunMasterWeaponsPreset.Visible = false;
             // 
             // lnkSettingsRoundTimeLimit
             // 

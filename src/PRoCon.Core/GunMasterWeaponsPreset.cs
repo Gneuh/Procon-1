@@ -35,6 +35,15 @@ namespace PRoCon.Core.GunMasterWeaponsPreset
         eu_arms_race,
     }
 
+    public enum BF4GunMasterWeaponsPresetType
+    {
+        standard,
+        classic,
+        pistols,
+        dlc,
+        troll,
+    }
+
     public class GunMasterWeaponsPreset
     {
         private string myShortName;

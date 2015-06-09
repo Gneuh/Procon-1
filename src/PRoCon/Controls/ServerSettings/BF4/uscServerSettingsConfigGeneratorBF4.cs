@@ -69,7 +69,7 @@ namespace PRoCon.Controls.ServerSettings.BF4 {
                 this.Client.Game.OnlySquadLeaderSpawn += new FrostbiteClient.IsEnabledHandler(Game_OnlySquadLeaderSpawn);
                 this.Client.Game.UnlockMode += new FrostbiteClient.UnlockModeHandler(Game_UnlockMode);
                 this.Client.Game.BF4preset += new FrostbiteClient.BF4presetHandler(Game_BF4preset);
-                // not used in BF4 //this.Client.Game.GunMasterWeaponsPreset += new FrostbiteClient.GunMasterWeaponsPresetHandler(Game_GunMasterWeaponsPreset);
+                this.Client.Game.GunMasterWeaponsPreset += new FrostbiteClient.GunMasterWeaponsPresetHandler(Game_GunMasterWeaponsPreset);
                 this.Client.Game.SoldierHealth += new FrostbiteClient.LimitHandler(Game_SoldierHealth);
                 this.Client.Game.Hud += new FrostbiteClient.IsEnabledHandler(Game_Hud);
                 this.Client.Game.PlayerManDownTime += new FrostbiteClient.LimitHandler(Game_PlayerManDownTime);
@@ -142,11 +142,10 @@ namespace PRoCon.Controls.ServerSettings.BF4 {
             this.AppendSetting("vars.preset", mode, isLocked.ToString());
         }
 
-        /* not used in BF-4
         void Game_GunMasterWeaponsPreset(FrostbiteClient sender, int preset)
         {
             this.AppendSetting("vars.gunMasterWeaponsPreset", preset.ToString());
-        } */
+        }
 
         void Game_OnlySquadLeaderSpawn(FrostbiteClient sender, bool isEnabled)
         {
