@@ -1,6 +1,6 @@
 /////////////////////////////////////////////
 // This definitions file will be overwritten during an update.
-//  (2015-06-16.01)
+//  (2015-06-16.02)
 // This file contains the standard defintions required to run procon 
 // connected to a BFHL server
 /////////////////////////////////////////////
@@ -250,10 +250,10 @@ procon.protected.maps.add "TurfWarLarge0" "XP1_Nights" "Conquest Large" "Code Bl
 procon.protected.maps.add "TurfWarLarge0" "XP1_Projects" "Conquest Large" "The Beat" 0
 procon.protected.maps.add "TurfWarLarge0" "XP1_Sawmill" "Conquest Large" "Backwoods" 0
 
-procon.protected.maps.add "TurfWarSmall0" "XP1_MallCops" "Conquest Large" "Black Friday" 0
-procon.protected.maps.add "TurfWarSmall0" "XP1_Nights" "Conquest Large" "Code Blue" 0
-procon.protected.maps.add "TurfWarSmall0" "XP1_Projects" "Conquest Large" "The Beat" 0
-procon.protected.maps.add "TurfWarSmall0" "XP1_Sawmill" "Conquest Large" "Backwoods" 0
+procon.protected.maps.add "TurfWarSmall0" "XP1_MallCops" "Conquest Small" "Black Friday" 0
+procon.protected.maps.add "TurfWarSmall0" "XP1_Nights" "Conquest Small" "Code Blue" 0
+procon.protected.maps.add "TurfWarSmall0" "XP1_Projects" "Conquest Small" "The Beat" 0
+procon.protected.maps.add "TurfWarSmall0" "XP1_Sawmill" "Conquest Small" "Backwoods" 0
 
 procon.protected.maps.add "Hostage0" "XP1_MallCops" "Rescue" "Black Friday" 0
 procon.protected.maps.add "Hostage0" "XP1_Nights" "Rescue" "Code Blue" 0
