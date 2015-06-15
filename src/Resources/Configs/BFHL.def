@@ -275,7 +275,7 @@ procon.protected.maps.add "TeamDeathMatch0" "XP1_Nights" "Team Deathmatch" "Code
 procon.protected.maps.add "TeamDeathMatch0" "XP1_Projects" "Team Deathmatch" "The Beat" 0
 procon.protected.maps.add "TeamDeathMatch0" "XP1_Sawmill" "Team Deathmatch" "Backwoods" 0
 
-procon.protected.maps.add "Hotwire0" "XP1_Sawmill" "Hotwire" "Backwood" 0
+procon.protected.maps.add "Hotwire0" "XP1_Sawmill" "Hotwire" "Backwoods" 0
 
 procon.protected.maps.add "BloodMoney0" "XP1_MallCops" "Blood Money" "Black Friday" 0
 procon.protected.maps.add "BloodMoney0" "XP1_Nights" "Blood Money" "Code Blue" 0
