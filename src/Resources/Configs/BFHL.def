@@ -1,6 +1,6 @@
 /////////////////////////////////////////////
 // This definitions file will be overwritten during an update.
-//  (2015-06-16.02)
+//  (2015-06-16.04)
 // This file contains the standard defintions required to run procon 
 // connected to a BFHL server
 /////////////////////////////////////////////
@@ -706,6 +706,27 @@ procon.protected.teamnames.add "XP1_Projects" 2 "global.bm.crim" "crim.png" "Blo
 procon.protected.teamnames.add "XP1_Sawmill" 0 "global.bm.neutral" "" "BloodMoney0"
 procon.protected.teamnames.add "XP1_Sawmill" 1 "global.bdm.cop" "cop.png" "BloodMoney0"
 procon.protected.teamnames.add "XP1_Sawmill" 2 "global.bm.crim" "crim.png" "BloodMoney0"
+
+// Bounty Hunter
+///////////////////////////////////////////////////////////////////////////////
+
+// XP1 (Criminal Activity)
+procon.protected.teamnames.add "XP1_MallCops" 0 "global.cashgrab.neutral" "" "CashGrab0"
+procon.protected.teamnames.add "XP1_MallCops" 1 "global.cashgrab.cop" "cop.png" "CashGrab0"
+procon.protected.teamnames.add "XP1_MallCops" 2 "global.cashgrab.crim" "crim.png" "CashGrab0"
+
+procon.protected.teamnames.add "XP1_Nights" 0 "global.casgrabh.neutral" "" "CashGrab0"
+procon.protected.teamnames.add "XP1_Nights" 1 "global.cashgrab.cop" "cop.png" "CashGrab0"
+procon.protected.teamnames.add "XP1_Nights" 2 "global.cashgrab.crim" "crim.png" "CashGrab0"
+
+procon.protected.teamnames.add "XP1_Projects" 0 "global.cashgrab.neutral" "" "CashGrab0"
+procon.protected.teamnames.add "XP1_Projects" 1 "global.cashgrab.cop" "cop.png" "CashGrab0"
+procon.protected.teamnames.add "XP1_Projects" 2 "global.cashgrab.crim" "crim.png" "CashGrab0"
+
+procon.protected.teamnames.add "XP1_Sawmill" 0 "global.cashgrab.neutral" "" "CashGrab0"
+procon.protected.teamnames.add "XP1_Sawmill" 1 "global.cashgrab.cop" "cop.png" "CashGrab0"
+procon.protected.teamnames.add "XP1_Sawmill" 2 "global.cashgrab.crim" "crim.png" "CashGrab0"
+
 
 ///////////////////////////////////////////////////////////////////////////////
 procon.protected.tasks.clear
