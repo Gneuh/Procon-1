@@ -704,7 +704,7 @@ procon.protected.teamnames.add "XP1_Projects" 1 "global.bm.cop" "cop.png" "Blood
 procon.protected.teamnames.add "XP1_Projects" 2 "global.bm.crim" "crim.png" "BloodMoney0"
 
 procon.protected.teamnames.add "XP1_Sawmill" 0 "global.bm.neutral" "" "BloodMoney0"
-procon.protected.teamnames.add "XP1_Sawmill" 1 "global.bdm.cop" "cop.png" "BloodMoney0"
+procon.protected.teamnames.add "XP1_Sawmill" 1 "global.bd.cop" "cop.png" "BloodMoney0"
 procon.protected.teamnames.add "XP1_Sawmill" 2 "global.bm.crim" "crim.png" "BloodMoney0"
 
 // Bounty Hunter
@@ -715,7 +715,7 @@ procon.protected.teamnames.add "XP1_MallCops" 0 "global.cashgrab.neutral" "" "Ca
 procon.protected.teamnames.add "XP1_MallCops" 1 "global.cashgrab.cop" "cop.png" "CashGrab0"
 procon.protected.teamnames.add "XP1_MallCops" 2 "global.cashgrab.crim" "crim.png" "CashGrab0"
 
-procon.protected.teamnames.add "XP1_Nights" 0 "global.casgrabh.neutral" "" "CashGrab0"
+procon.protected.teamnames.add "XP1_Nights" 0 "global.cashgrab.neutral" "" "CashGrab0"
 procon.protected.teamnames.add "XP1_Nights" 1 "global.cashgrab.cop" "cop.png" "CashGrab0"
 procon.protected.teamnames.add "XP1_Nights" 2 "global.cashgrab.crim" "crim.png" "CashGrab0"
 
