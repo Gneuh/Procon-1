@@ -1,6 +1,6 @@
 /////////////////////////////////////////////
 // This definitions file will be overwritten during an update.
-//  (2015-06-16.04)
+//  (2015-06-17.01)
 // This file contains the standard defintions required to run procon 
 // connected to a BFHL server
 /////////////////////////////////////////////
@@ -10,6 +10,7 @@ procon.protected.serverversions.add BFHL "362312" "Test-08/14"
 procon.protected.serverversions.add BFHL "525698" "R2"
 procon.protected.serverversions.add BFHL "532516" "R3"
 procon.protected.serverversions.add BFHL "537093" "R4"
+procon.protected.serverversions.add BFHL "547660" "R5"
 
 procon.protected.specialization.clear
 
