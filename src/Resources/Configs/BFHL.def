@@ -39,6 +39,7 @@ procon.protected.weapons.add None "U_CS_Gas" Auxiliary Explosive
 procon.protected.weapons.add Assault "U_CZ75" Auxiliary Handgun
 procon.protected.weapons.add None "U_FIM92" Secondary ProjectileExplosive
 procon.protected.weapons.add Demolition "U_FMG9" Primary SMG
+procon.protected.weapons.add Support "U_FNFAL" Primary AssaultRifle
 procon.protected.weapons.add None "U_Flashbang" Auxiliary Explosive
 procon.protected.weapons.add Assault "U_G17" Auxiliary Handgun
 procon.protected.weapons.add Recon "U_G18C" Auxiliary Handgun
@@ -67,6 +68,7 @@ procon.protected.weapons.add None "U_KnifeSurvival" Secondary Melee
 procon.protected.weapons.add None "U_KnifeTrench" Secondary Melee
 procon.protected.weapons.add None "U_KnifeTrench" Secondary Melee
 procon.protected.weapons.add None "U_KnifeTrench" Secondary Melee
+procon.protected.weapons.add Support "U_KSG12" Primary Shotgun
 procon.protected.weapons.add Assault "U_L85A2" Primary AssaultRifle
 procon.protected.weapons.add Recon "U_L96A1" Primary SniperRifle
 procon.protected.weapons.add None "U_LeadPipe" Secondary Melee
@@ -89,6 +91,7 @@ procon.protected.weapons.add Assault "U_MG36" Primary Carbine
 procon.protected.weapons.add None "U_Molotov" Auxiliary Explosive
 procon.protected.weapons.add Demolition "U_MP5K" Primary SMG
 procon.protected.weapons.add Demolition "U_MPX" Primary SMG
+procon.protected.weapons.add None "U_NailGun" Secondary Handgun
 procon.protected.weapons.add None "U_NightStick" Secondary Melee
 procon.protected.weapons.add Assault "U_P226" Auxiliary Handgun
 procon.protected.weapons.add Demolition "U_P90" Primary SMG
@@ -110,7 +113,8 @@ procon.protected.weapons.add Support "U_SBS12Short" Primary Shotgun
 procon.protected.weapons.add Support "U_SCARH" Primary AssaultRifle
 procon.protected.weapons.add Recon "U_Scout" Primary SniperRifle
 procon.protected.weapons.add Recon "U_SCR308" Primary SniperRifle
-procon.protected.weapons.add Assault "U_SG533LB" Primary Carbine
+procon.protected.weapons.add Support "U_FNFAL" Primary AssaultRifle
+procon.protected.weapons.add Support "U_SG510" Primary AssaultRifle
 procon.protected.weapons.add None "U_SledgeHammer" Secondary Melee
 procon.protected.weapons.add None "u_smaw" Secondary ProjectileExplosive
 procon.protected.weapons.add None "u_sp_smaw" Secondary ProjectileExplosive
@@ -122,6 +126,7 @@ procon.protected.weapons.add Support "U_SW40P" Auxiliary Handgun
 procon.protected.weapons.add Demolition "U_SW38Snub" Auxiliary Handgun
 procon.protected.weapons.add None "U_TaserGun" Auxiliary Handgun
 procon.protected.weapons.add Demolition "U_Taurus44" Auxiliary Handgun
+procon.protected.weapons.add None "U_TommyGun" Primary SMG
 procon.protected.weapons.add None "U_TracerDartGun" Auxiliary Handgun
 procon.protected.weapons.add Recon "U_TripMine" Secondary Explosive
 procon.protected.weapons.add Demolition "U_UMP45" Primary SMG
