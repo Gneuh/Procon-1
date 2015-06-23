@@ -1,5 +1,5 @@
 ﻿///////////////////////////////////
-// File information displayed in Options window. (20150621-01)
+// File information displayed in Options window. (20150623-01)
 ///////////////////////////////////
 file.Language=English (Australian)
 file.flag=au
@@ -1134,7 +1134,7 @@ global.Weapons.u_stakeout37=37 STAKEOUT
 global.Weapons.u_sw40p=.40 PRO
 global.Weapons.u_sw38snub=.38 SNUB
 global.Weapons.u_tasergun=T62 Cew Taser Gun
-global.Weapons.u_taurus44=44 Magnum
+global.Weapons.u_taurus44=Taurus .44 Magnum
 global.Weapons.u_tommygun=M1A1 Tommygun
 global.Weapons.u_tracerdartgun=Tracer Dart
 global.Weapons.u_tripmine=Laser Tripmine
