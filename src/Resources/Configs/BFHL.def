@@ -153,6 +153,9 @@ procon.protected.weapons.add None "havana/Vehicles/SUV_CR/SUV_CR" Primary Vehicl
 procon.protected.weapons.add None "havana/Vehicles/SUV_LE/SUV_LE" Primary VehicleTransport
 procon.protected.weapons.add None "havana/Vehicles/UTILITY_VAN/UTILITY_VAN" Primary VehicleTransport
 procon.protected.weapons.add None "havana/Vehicles/UTILITY_VAN/UTILITY_VAN_HW" Primary VehicleTransport
+procon.protected.weapons.add None "havanaxp1/Vehicles/PICKUP_TRUCK/PICKUP_TRUCK" Primary VehicleTransport
+procon.protected.weapons.add None "havanaxp1/Vehicles/PICKUP_TRUCK/PICKUP_TRUCK_HW" Primary VehicleTransport
+procon.protected.weapons.add None "havanaxp1/Vehicles/LOWRIDER_CR/LOWRIDER_CR" Primary VehicleTransport
 
 // Light armored vehicles
 procon.protected.weapons.add None "havana/Vehicles/CAT_CR/CAT_CR" Primary VehicleLight
