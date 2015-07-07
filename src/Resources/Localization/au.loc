@@ -1,5 +1,5 @@
 ﻿///////////////////////////////////
-// File information displayed in Options window. (20150624-02)
+// File information displayed in Options window. (20150708-01)
 ///////////////////////////////////
 file.Language=English (Australian)
 file.flag=au
@@ -1167,7 +1167,6 @@ global.Weapons.havana/vehicles/suv_le/suv_le=SUV
 global.Weapons.havana/vehicles/utility_van/utility_van=Utility Van
 global.Weapons.havana/vehicles/utility_van/utility_van_hw=Utility Van
 global.Weapons.havana/vehicles/lowrider_cr/lowrider_cr=Lowrider
-global.Weapons.havana/vehicles/pickup_truck/pickup_truck_hw=Pickup Truck
 global.Weapons.havana/vehicles/pickup_truck/pickup_truck_hw=Pickup Truck
 
 // Light armored vehicles

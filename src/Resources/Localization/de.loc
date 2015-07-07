@@ -1,5 +1,5 @@
 ///////////////////////////////////
-// File information displayed in Options window. (20150623-01)
+// File information displayed in Options window. (20150708-01)
 ///////////////////////////////////
 file.Language=Deutsch (German)
 file.flag=de
@@ -1055,6 +1055,7 @@ global.Weapons.u_fim92=Stinger
 global.Weapons.u_flashbang=Blendgranate
 global.Weapons.u_fmg9=FMG9
 global.Weapons.u_fnfal=FAL
+global.Weapons.u_g17=G17
 global.Weapons.u_g18c=G18C
 global.Weapons.u_galil_ar=ARM
 global.Weapons.u_golfclub=Golf Club
@@ -1165,6 +1166,8 @@ global.Weapons.havana/vehicles/suv_cr/suv_cr=SUV
 global.Weapons.havana/vehicles/suv_le/suv_le=SUV
 global.Weapons.havana/vehicles/utility_van/utility_van=Utility Van
 global.Weapons.havana/vehicles/utility_van/utility_van_hw=Utility Van
+global.Weapons.havana/vehicles/lowrider_cr/lowrider_cr=Lowrider
+global.Weapons.havana/vehicles/pickup_truck/pickup_truck_hw=Pickup Truck
 
 // Light armored vehicles
 global.Weapons.havana/vehicles/cat_cr/cat_cr=Counter Attack Truck
