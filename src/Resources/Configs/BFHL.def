@@ -1,6 +1,6 @@
 /////////////////////////////////////////////
 // This definitions file will be overwritten during an update.
-//  (2015-06-25.01)
+//  (2015-07-20.01)
 // This file contains the standard defintions required to run procon 
 // connected to a BFHL server
 /////////////////////////////////////////////
@@ -65,8 +65,6 @@ procon.protected.weapons.add None "U_KnifeSeal" Secondary Melee
 procon.protected.weapons.add None "U_KnifeSeal_Gold" Secondary Melee
 procon.protected.weapons.add None "U_KnifeScout" Secondary Melee
 procon.protected.weapons.add None "U_KnifeSurvival" Secondary Melee
-procon.protected.weapons.add None "U_KnifeTrench" Secondary Melee
-procon.protected.weapons.add None "U_KnifeTrench" Secondary Melee
 procon.protected.weapons.add None "U_KnifeTrench" Secondary Melee
 procon.protected.weapons.add Support "U_KSG12" Primary Shotgun
 procon.protected.weapons.add Assault "U_L85A2" Primary AssaultRifle
