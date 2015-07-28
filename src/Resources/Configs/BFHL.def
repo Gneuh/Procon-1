@@ -11,6 +11,7 @@ procon.protected.serverversions.add BFHL "525698" "R2"
 procon.protected.serverversions.add BFHL "532516" "R3"
 procon.protected.serverversions.add BFHL "537093" "R4"
 procon.protected.serverversions.add BFHL "547660" "R5"
+procon.protected.serverversions.add BFHL "551014" "R6"
 
 procon.protected.specialization.clear
 
