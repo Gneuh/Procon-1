@@ -790,7 +790,7 @@ procon.protected.maps.add "Obliteration" "XP5_Night_01" "Obliteration" "Zavod:Gr
 procon.protected.maps.add "RushLarge0" "XP5_Night_01" "Rush" "Zavod:Graveyard Shift" 0
 procon.protected.maps.add "TeamDeathMatch0" "XP5_Night_01" "Team Deathmatch" "Zavod:Graveyard Shift" 0
 procon.protected.maps.add "GunMaster0" "XP5_Night_01" "Gun Master" "Zavod:Graveyard Shift" 0
-procon.protected.maps.add "GunMaster1" "XP5_Night_01" "Gun Master" "Zavod:Graveyard Shift" 0
+procon.protected.maps.add "GunMaster1" "XP5_Night_01" "Gun Master" "Zavod:Graveyard Shift v2" 0
 
 procon.protected.teamnames.clear
 
