@@ -1,6 +1,6 @@
 /////////////////////////////////////////////
 // This definitions file will be overwritten during an update.
-//  (2015-05-27.01)
+//  (2015-09-01.01)
 // This file contains the standard defintions required to run procon 
 // connected to a BF4 server
 /////////////////////////////////////////////
@@ -55,6 +55,7 @@ procon.protected.serverversions.add BF4 "155011" "R46"
 procon.protected.serverversions.add BF4 "157186" "R48"
 procon.protected.serverversions.add BF4 "158113" "R49"
 procon.protected.serverversions.add BF4 "162016" "R50"
+procon.protected.serverversions.add BF4 "165241" "R51"
 
 procon.protected.specialization.clear
 
@@ -781,6 +782,15 @@ procon.protected.maps.add "GunMaster0" "MP_Siege" "Gun Master" "Siege of Shangha
 procon.protected.maps.add "GunMaster0" "MP_TheDish" "Gun Master" "Rogue Transmission" 0
 procon.protected.maps.add "GunMaster0" "MP_Tremors" "Gun Master" "Dawnbreaker" 0
 
+// R51 - XP5
+procon.protected.maps.add "ConquestLarge0" "XP5_Night_01" "Conquest Large" "Zavod:Graveyard Shift" 0
+procon.protected.maps.add "ConquestSmall0" "XP5_Night_01" "Conquest Small" "Zavod:Graveyard Shift" 0
+procon.protected.maps.add "Domination0" "XP5_Night_01" "Domination" "Zavod:Graveyard Shift" 0
+procon.protected.maps.add "Obliteration" "XP5_Night_01" "Obliteration" "Zavod:Graveyard Shift" 0
+procon.protected.maps.add "RushLarge0" "XP5_Night_01" "Rush" "Zavod:Graveyard Shift" 0
+procon.protected.maps.add "TeamDeathMatch0" "XP5_Night_01" "Team Deathmatch" "Zavod:Graveyard Shift" 0
+procon.protected.maps.add "GunMaster0" "XP5_Night_01" "Gun Master" "Zavod:Graveyard Shift" 0
+
 procon.protected.teamnames.clear
 
 // Conquest Large
@@ -911,6 +921,12 @@ procon.protected.teamnames.add "XP4_WlkrFtry" 0 "global.conquest.neutral" "" "Co
 procon.protected.teamnames.add "XP4_WlkrFtry" 1 "global.conquest.us" "us.png" "ConquestLarge0"
 procon.protected.teamnames.add "XP4_WlkrFtry" 2 "global.conquest.ru" "ru.png" "ConquestLarge0"
 
+// XP5 (Night Maps)
+procon.protected.teamnames.add "XP5_Night_01" 0 "global.conquest.neutral" "" "ConquestLarge0"
+procon.protected.teamnames.add "XP5_Night_01" 1 "global.conquest.ru" "ru.png" "ConquestLarge0"
+procon.protected.teamnames.add "XP5_Night_01" 2 "global.conquest.us" "us.png" "ConquestLarge0"
+
+
 // Conquest Small
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -1039,6 +1055,11 @@ procon.protected.teamnames.add "XP4_WlkrFtry" 0 "global.conquest.neutral" "" "Co
 procon.protected.teamnames.add "XP4_WlkrFtry" 1 "global.conquest.us" "us.png" "ConquestSmall0"
 procon.protected.teamnames.add "XP4_WlkrFtry" 2 "global.conquest.ru" "ru.png" "ConquestSmall0"
 
+// XP5 (Night Maps)
+procon.protected.teamnames.add "XP5_Night_01" 0 "global.conquest.neutral" "" "ConquestSmall0"
+procon.protected.teamnames.add "XP5_Night_01" 1 "global.conquest.ru" "ru.png" "ConquestSmall0"
+procon.protected.teamnames.add "XP5_Night_01" 2 "global.conquest.us" "us.png" "ConquestSmall0"
+
 // Domination
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -1166,6 +1187,12 @@ procon.protected.teamnames.add "XP4_Titan" 2 "global.conquest.ru" "ru.png" "Domi
 procon.protected.teamnames.add "XP4_WlkrFtry" 0 "global.conquest.neutral" "" "Domination0"
 procon.protected.teamnames.add "XP4_WlkrFtry" 1 "global.conquest.us" "us.png" "Domination0"
 procon.protected.teamnames.add "XP4_WlkrFtry" 2 "global.conquest.ru" "ru.png" "Domination0"
+
+// XP5 (Night Maps)
+procon.protected.teamnames.add "XP5_Night_01" 0 "global.conquest.neutral" "" "Domination0"
+procon.protected.teamnames.add "XP5_Night_01" 1 "global.conquest.us" "us.png" "Domination0"
+procon.protected.teamnames.add "XP5_Night_01" 2 "global.conquest.ru" "ru.png" "Domination0"
+
 
 // Defuse
 ///////////////////////////////////////////////////////////////////////////////
@@ -1423,6 +1450,11 @@ procon.protected.teamnames.add "XP4_WlkrFtry" 0 "global.conquest.neutral" "" "Ob
 procon.protected.teamnames.add "XP4_WlkrFtry" 1 "global.conquest.us" "us.png" "Obliteration"
 procon.protected.teamnames.add "XP4_WlkrFtry" 2 "global.conquest.ru" "ru.png" "Obliteration"
 
+// XP5 (Night Maps)
+procon.protected.teamnames.add "XP5_Night_01" 0 "global.conquest.neutral" "" "Obliteration"
+procon.protected.teamnames.add "XP5_Night_01" 1 "global.conquest.us" "us.png" "Obliteration"
+procon.protected.teamnames.add "XP5_Night_01" 2 "global.conquest.ru" "ru.png" "Obliteration"
+
 // Rush
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -1550,6 +1582,11 @@ procon.protected.teamnames.add "XP4_Titan" 2 "global.rush.defenders" "ru.png" "R
 procon.protected.teamnames.add "XP4_WlkrFtry" 0 "global.rush.neutral" "" "RushLarge0"
 procon.protected.teamnames.add "XP4_WlkrFtry" 1 "global.rush.attackers" "us.png" "RushLarge0"
 procon.protected.teamnames.add "XP4_WlkrFtry" 2 "global.rush.defenders" "ru.png" "RushLarge0"
+
+// XP5 (Night Maps)
+procon.protected.teamnames.add "XP5_Night_01" 0 "global.rush.neutral" "" "RushLarge0"
+procon.protected.teamnames.add "XP5_Night_01" 1 "global.rush.attackers" "us.png" "RushLarge0"
+procon.protected.teamnames.add "XP5_Night_01" 2 "global.rush.defenders" "ru.png" "RushLarge0"
 
 // Squad Deathmatch
 ///////////////////////////////////////////////////////////////////////////////
@@ -1867,6 +1904,12 @@ procon.protected.teamnames.add "XP4_WlkrFtry" 0 "global.tdm.neutral" "" "TeamDea
 procon.protected.teamnames.add "XP4_WlkrFtry" 1 "global.tdm.us" "us.png" "TeamDeathMatch0"
 procon.protected.teamnames.add "XP4_WlkrFtry" 2 "global.tdm.ru" "ru.png" "TeamDeathMatch0"
 
+// XP5 (Night Maps)
+procon.protected.teamnames.add "XP5_Night_01" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP5_Night_01" 1 "global.tdm.us" "us.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP5_Night_01" 2 "global.tdm.ru" "ru.png" "TeamDeathMatch0"
+
+
 // Air Superiority (XP1 - China Rising)
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -2074,6 +2117,12 @@ procon.protected.teamnames.add "MP_TheDish" 2 "global.conquest.cn" "cn.png" "Gun
 procon.protected.teamnames.add "MP_Tremors" 0 "global.conquest.neutral" "" "GunMaster0"
 procon.protected.teamnames.add "MP_Tremors" 1 "global.conquest.us" "us.png" "GunMaster0"
 procon.protected.teamnames.add "MP_Tremors" 2 "global.conquest.cn" "cn.png" "GunMaster0"
+
+// XP5 (Night Maps)
+procon.protected.teamnames.add "XP5_Night_01" 0 "global.conquest.neutral" "" "GunMaster0"
+procon.protected.teamnames.add "XP5_Night_01" 1 "global.conquest.us" "us.png" "GunMaster0"
+procon.protected.teamnames.add "XP5_Night_01" 2 "global.conquest.ru" "ru.png" "GunMaster0"
+
 
 ///////////////////////////////////////////////////////////////////////////////
 procon.protected.tasks.clear
