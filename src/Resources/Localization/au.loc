@@ -989,16 +989,21 @@ global.Weapons.gameplay/vehicles/us_mrap-cougar/us_mrap-cougar=Cougar MRAP
 global.Weapons.gameplay/vehicles/train_01/train_01=Train
 global.Weapons.vdv buggy=VDV Buggy
 global.Weapons.gameplay/vehicles/venom/venom=UH-1Y Venom Transport Helicopter
+global.Weapons.gameplay/vehicles/venom/spec/venom_night=UH-1Y Venom Transport Helicopter
 // Light armored vehicles
 global.Weapons.gameplay/vehicles/ch_aa_pgz-95/ch_aa_pgz-95=PGZ95 Anti Air
 global.Weapons.gameplay/vehicles/btr-90/btr90=BTR-90 APC
+global.Weapons.gameplay/vehicles/btr-90/spec//btr90_night=BTR-90 APC
 global.Weapons.gameplay/vehicles/ch_ifv_zbd09/ch_ifv_zbd09=ZBD-09 APC
 global.Weapons.gameplay/vehicles/himars/himars=M142 HIMARS Artillery
+global.Weapons.gameplay/vehicles/himars/spec/himars_night=M142 HIMARS Artillery
 global.Weapons.gameplay/vehicles/lav25/lav_ad=LAV-25 Anti Air
 global.Weapons.gameplay/vehicles/lav25/lav25=LAV-25 APC
+global.Weapons.gameplay/vehicles/lav25/spec/lav25_night=LAV-25 APC
 global.Weapons.gameplay/vehicles/9k22_tunguska_m/9k22_tunguska_m=9K22 Tunguska Anti Air
 // Heavy armored vehicles
 global.Weapons.gameplay/vehicles/m1a2/m1abrams=M1 Abrams MBT
+global.Weapons.gameplay/vehicles/m1a2/spec/m1abrams_night=M1 Abrams MBT
 global.Weapons.t90=T90 MBT
 global.Weapons.gameplay/vehicles/ch_mbt_type99/ch_mbt_type99=Type 99 MBT
 global.Weapons.xp4/gameplay/vehicles/hovertank/xp4_hovertank=HT-95 Levkov Hover Tank
