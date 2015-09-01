@@ -1,6 +1,6 @@
 /////////////////////////////////////////////
 // This definitions file will be overwritten during an update.
-//  (2015-09-01.01)
+//  (2015-09-01.02)
 // This file contains the standard defintions required to run procon 
 // connected to a BF4 server
 /////////////////////////////////////////////
@@ -790,6 +790,7 @@ procon.protected.maps.add "Obliteration" "XP5_Night_01" "Obliteration" "Zavod:Gr
 procon.protected.maps.add "RushLarge0" "XP5_Night_01" "Rush" "Zavod:Graveyard Shift" 0
 procon.protected.maps.add "TeamDeathMatch0" "XP5_Night_01" "Team Deathmatch" "Zavod:Graveyard Shift" 0
 procon.protected.maps.add "GunMaster0" "XP5_Night_01" "Gun Master" "Zavod:Graveyard Shift" 0
+procon.protected.maps.add "GunMaster1" "XP5_Night_01" "Gun Master" "Zavod:Graveyard Shift" 0
 
 procon.protected.teamnames.clear
 
@@ -2122,6 +2123,10 @@ procon.protected.teamnames.add "MP_Tremors" 2 "global.conquest.cn" "cn.png" "Gun
 procon.protected.teamnames.add "XP5_Night_01" 0 "global.conquest.neutral" "" "GunMaster0"
 procon.protected.teamnames.add "XP5_Night_01" 1 "global.conquest.us" "us.png" "GunMaster0"
 procon.protected.teamnames.add "XP5_Night_01" 2 "global.conquest.ru" "ru.png" "GunMaster0"
+
+procon.protected.teamnames.add "XP5_Night_01" 0 "global.conquest.neutral" "" "GunMaster1"
+procon.protected.teamnames.add "XP5_Night_01" 1 "global.conquest.us" "us.png" "GunMaster1"
+procon.protected.teamnames.add "XP5_Night_01" 2 "global.conquest.ru" "ru.png" "GunMaster1"
 
 
 ///////////////////////////////////////////////////////////////////////////////
