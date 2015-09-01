@@ -1,6 +1,6 @@
 /////////////////////////////////////////////
 // This definitions file will be overwritten during an update.
-//  (2015-09-01.03)
+//  (2015-09-01.04)
 // This file contains the standard defintions required to run procon 
 // connected to a BF4 server
 /////////////////////////////////////////////
@@ -379,18 +379,23 @@ procon.protected.weapons.add None "Gameplay/Vehicles/US_MRAP-COUGAR/US_MRAP-COUG
 procon.protected.weapons.add None "Gameplay/Vehicles/Train_01/Train_01" Primary VehicleTransport
 procon.protected.weapons.add None "VDV Buggy" Primary VehicleTransport
 procon.protected.weapons.add None "Gameplay/Vehicles/Venom/Venom" Primary VehicleTransport
+procon.protected.weapons.add None "Gameplay/Vehicles/Venom/spec/Venom_Night" Primary VehicleTransport
 
 // Light armored vehicles
 procon.protected.weapons.add None "Gameplay/Vehicles/CH_AA_PGZ-95/CH_AA_PGZ-95" Primary VehicleLight
 procon.protected.weapons.add None "Gameplay/Vehicles/BTR-90/BTR90" Primary VehicleLight
+procon.protected.weapons.add None "Gameplay/Vehicles/BTR-90/spec/BTR90_Night" Primary VehicleLight
 procon.protected.weapons.add None "Gameplay/Vehicles/CH_IFV_ZBD09/CH_IFV_ZBD09" Primary VehicleLight
 procon.protected.weapons.add None "Gameplay/Vehicles/HIMARS/HIMARS" Primary VehicleLight
+procon.protected.weapons.add None "Gameplay/Vehicles/HIMARS/spec/HIMARS_Night" Primary VehicleLight
 procon.protected.weapons.add None "Gameplay/Vehicles/LAV25/LAV_AD" Primary VehicleLight
 procon.protected.weapons.add None "Gameplay/Vehicles/LAV25/LAV25" Primary VehicleLight
+procon.protected.weapons.add None "Gameplay/Vehicles/LAV25/spec/LAV25_Night" Primary VehicleLight
 procon.protected.weapons.add None "Gameplay/Vehicles/9K22_Tunguska_M/9K22_Tunguska_M" Primary VehicleLight
 
 // Heavy armored vehicles
 procon.protected.weapons.add None "Gameplay/Vehicles/M1A2/M1Abrams" Primary VehicleHeavy
+procon.protected.weapons.add None "Gameplay/Vehicles/M1A2/spec/M1Abrams_Night" Primary VehicleHeavy
 procon.protected.weapons.add None "T90" Primary VehicleHeavy
 procon.protected.weapons.add None "Gameplay/Vehicles/CH_MBT_Type99/CH_MBT_Type99" Primary VehicleHeavy
 procon.protected.weapons.add None "XP4/Gameplay/Vehicles/HoverTank/XP4_HoverTank" Primary VehicleHeavy
