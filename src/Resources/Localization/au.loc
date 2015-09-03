@@ -1,5 +1,5 @@
 ﻿///////////////////////////////////
-// File information displayed in Options window. (20150901-01)
+// File information displayed in Options window. (20150903-01)
 ///////////////////////////////////
 file.Language=English (Australian)
 file.flag=au
@@ -985,6 +985,7 @@ global.Weapons.gameplay/vehicles/growleritv/growleritv=Growler ITV
 global.Weapons.ka-60=Kamov Ka-60 Transport Helicopter
 global.Weapons.gameplay/vehicles/ch_mrap-zfb-05/ch_mrap-zfb-05=ZFB05 MRAP
 global.Weapons.gameplay/vehicles/ru_mrap_spm3/ru_mrap_spm3=SPM-3 MRAP
+global.Weapons.gameplay/vehicles/ru_mrap_spm3/spec/ru_mrap_spm3_night=SPM-3 MRAP
 global.Weapons.gameplay/vehicles/us_mrap-cougar/us_mrap-cougar=Cougar MRAP
 global.Weapons.gameplay/vehicles/train_01/train_01=Train
 global.Weapons.vdv buggy=VDV Buggy
@@ -1036,6 +1037,7 @@ global.Weapons.gameplay/vehicles/ch_ciws-ld-2000/ch_ciws-ld-2000=LD-2000 Anti Ai
 global.Weapons.gameplay/vehicles/centurion_c-ram/centurion_c-ram=Centurion C-RAM Anti Air
 global.Weapons.gameplay/vehicles/centurion_c-ram/centurion_c-ram_mp_naval=Centurion C-RAM Anti Air
 global.Weapons.gameplay/vehicles/gunshieldandtripod/gunshieldtripod=Stationary gun with shield
+global.Weapons.gameplay/vehicles/gunshieldandtripod/gunshieldtripod_night=Stationary gun with shield
 global.Weapons.xp4/gameplay/vehicles/metalstorm/xp4_metalstorm=Schipunov 42
 global.Weapons.kornet=9M133 Kornet Launcher
 global.Weapons.xp2/gameplay/vehicles/oldcannon/oldcannon=Old Cannon
