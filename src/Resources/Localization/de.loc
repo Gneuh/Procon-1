@@ -994,7 +994,7 @@ global.Weapons.gameplay/vehicles/venom/spec/venom_night=UH-1Y Venom Transport He
 // Light armored vehicles
 global.Weapons.gameplay/vehicles/ch_aa_pgz-95/ch_aa_pgz-95=PGZ95 Luftabwehr
 global.Weapons.gameplay/vehicles/btr-90/btr90=BTR-90 APC
-global.Weapons.gameplay/vehicles/btr-90/spec//btr90_night=BTR-90 APC
+global.Weapons.gameplay/vehicles/btr-90/spec/btr90_night=BTR-90 APC
 global.Weapons.gameplay/vehicles/ch_ifv_zbd09/ch_ifv_zbd09=ZBD-09 APC
 global.Weapons.gameplay/vehicles/himars/himars=M142 HIMARS Artillerie
 global.Weapons.gameplay/vehicles/himars/spec/himars_night=M142 HIMARS Artillerie
