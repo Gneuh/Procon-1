@@ -1,5 +1,5 @@
 ///////////////////////////////////
-// File information displayed in Options window. (20150916-01)
+// File information displayed in Options window. (20150916-02)
 ///////////////////////////////////
 file.Language=Deutsch (German)
 file.flag=de
@@ -1098,6 +1098,7 @@ global.Weapons.u_m16a4=M16A3
 global.Weapons.u_m18=M18 Rauchgranate
 global.Weapons.u_m1911=M1911A1
 global.Weapons.u_m240=M240
+global.Weapons.u_m320_csg=M320 Gas Grenate
 global.Weapons.u_m320_he=M320 Granatwerfer
 global.Weapons.u_mac_10=MAC-10
 global.Weapons.u_machete=Machete
@@ -1105,6 +1106,7 @@ global.Weapons.u_m2=M1
 global.Weapons.u_m416=M416
 global.Weapons.u_m45=M45
 global.Weapons.u_m67=M67 Granate
+global.Weapons.u_m79_csg=M79 Gas Grenate
 global.Weapons.u_m79_he=M79 Granatwerfer
 global.Weapons.u_m82=M82 .416
 global.Weapons.u_m9=92FS
@@ -1186,6 +1188,11 @@ global.Weapons.havana/vehicles/utility_van/utility_van=Utility Van
 global.Weapons.havana/vehicles/utility_van/utility_van_hw=Utility Van
 global.Weapons.havana/vehicles/lowrider_cr/lowrider_cr=Lowrider
 global.Weapons.havana/vehicles/pickup_truck/pickup_truck_hw=Pickup Truck
+global.Weapons.havanaxp1/vehicles/pickup_truck/pickup_truck=pickup truck
+global.Weapons.havanaxp1/vehicles/pickup_truck/pickup_truck_hw=pickup truck
+global.Weapons.havanaxp1/vehicles/lowrider_cr/lowrider_cr=lowrider
+global.Weapons.havanaxp2/vehicles/pickup_truck_cr/pickup_truck_cr=pickup truck
+global.Weapons.havanaxp2/vehicles/pickup_truck/pickup_truck_hw=pickup truck
 
 // Light armored vehicles
 global.Weapons.havana/vehicles/cat_cr/cat_cr=Counter Attack Truck
@@ -1199,6 +1206,8 @@ global.Weapons.havana/vehicles/attack_heli_le/attack_heli_le=Attack Helicopter
 global.Weapons.havana/vehicles/transport_heli_cr/transport_heli_cr=Transport Helicopter
 global.Weapons.havana/vehicles/transport_heli_le/transport_heli_le=Transport Helicopter
 global.Weapons.havana/gameplay/gamemodes/heist/helicopter_heistpickup_vehicle=Heist Pickup Helicopter
+global.Weapons.havanaxp2/vehicles/scout_heli_cr/scout_heli_cr=Scout Helicopter
+global.Weapons.havanaxp2/vehicles/scout_heli_le/scout_heli_le=Scout Helicopter
 
 // Water vehicles
 global.Weapons.havana/vehicles/airboat/airboat_test2=Airboat
