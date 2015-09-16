@@ -80,10 +80,12 @@ procon.protected.weapons.add None "U_M18" Auxiliary Explosive
 procon.protected.weapons.add Support "U_M1911" Auxiliary Handgun
 procon.protected.weapons.add None "U_M2" Primary Carbine
 procon.protected.weapons.add None "U_M240" Primary LMG
+procon.protected.weapons.add None "U_M320_CSG" Secondary ProjectileExplosive
 procon.protected.weapons.add Demolition "U_M320_HE" Secondary ProjectileExplosive
 procon.protected.weapons.add Assault "U_M416" Primary AssaultRifle
 procon.protected.weapons.add Demolition "U_M45" Primary SMG
 procon.protected.weapons.add None "U_M67" Auxiliary Explosive
+procon.protected.weapons.add None "U_M79_CSG" Secondary ProjectileExplosive
 procon.protected.weapons.add Demolition "U_M79_HE" Secondary ProjectileExplosive
 procon.protected.weapons.add Recon "U_M82" Primary SniperRifle
 procon.protected.weapons.add None "U_M9" Auxiliary Handgun
@@ -166,6 +168,8 @@ procon.protected.weapons.add None "havana/Vehicles/UTILITY_VAN/UTILITY_VAN_HW" P
 procon.protected.weapons.add None "havanaxp1/Vehicles/PICKUP_TRUCK/PICKUP_TRUCK" Primary VehicleTransport
 procon.protected.weapons.add None "havanaxp1/Vehicles/PICKUP_TRUCK/PICKUP_TRUCK_HW" Primary VehicleTransport
 procon.protected.weapons.add None "havanaxp1/Vehicles/LOWRIDER_CR/LOWRIDER_CR" Primary VehicleTransport
+procon.protected.weapons.add None "havanaxp2/Vehicles/PICKUP_TRUCK_CR/PICKUP_TRUCK_CR" Primary VehicleTransport
+procon.protected.weapons.add None "havanaxp2/Vehicles/PICKUP_TRUCK/PICKUP_TRUCK_HW" Primary VehicleTransport
 
 // Light armored vehicles
 procon.protected.weapons.add None "havana/Vehicles/CAT_CR/CAT_CR" Primary VehicleLight
@@ -178,7 +182,9 @@ procon.protected.weapons.add None "havana/Vehicles/ATTACK_HELI_CR/ATTACK_HELI_CR
 procon.protected.weapons.add None "havana/Vehicles/ATTACK_HELI_LE/ATTACK_HELI_LE" Primary VehicleAir
 procon.protected.weapons.add None "havana/Vehicles/TRANSPORT_HELI_CR/TRANSPORT_HELI_CR" Primary VehicleAir
 procon.protected.weapons.add None "havana/Vehicles/TRANSPORT_HELI_LE/TRANSPORT_HELI_LE" Primary VehicleAir
-procon.protected.weapons.add None "havana/gameplay/GameModes/Heist/Helicopter_HeistPickup_Vehicle" Primary VehicleAir
+procon.protected.weapons.add None "havanaxp2/Vehicles/SCOUT_HELI_CR/SCOUT_HELI_CR" Primary VehicleAir
+procon.protected.weapons.add None "havanaxp2/Vehicles/SCOUT_HELI_LE/SCOUT_HELI_LE" Primary VehicleAir
+
 // Water vehicles
 procon.protected.weapons.add None "havana/Vehicles/AIRBOAT/AirBoat_test2" Primary VehicleTransport
 procon.protected.weapons.add None "Havana/Vehicles/GUNBOAT_CR/GUNBOAT_CR" Primary VehicleLight
