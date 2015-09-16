@@ -1188,11 +1188,11 @@ global.Weapons.havana/vehicles/utility_van/utility_van=Utility Van
 global.Weapons.havana/vehicles/utility_van/utility_van_hw=Utility Van
 global.Weapons.havana/vehicles/lowrider_cr/lowrider_cr=Lowrider
 global.Weapons.havana/vehicles/pickup_truck/pickup_truck_hw=Pickup Truck
-global.weapons.havanaxp1/vehicles/pickup_truck/pickup_truck=pickup truck
-global.weapons.havanaxp1/vehicles/pickup_truck/pickup_truck_hw=pickup truck
-global.weapons.havanaxp1/vehicles/lowrider_cr/lowrider_cr=lowrider
-global.weapons.havanaxp2/vehicles/pickup_truck_cr/pickup_truck_cr=pickup truck
-global.weapons.havanaxp2/vehicles/pickup_truck/pickup_truck_hw=pickup truck
+global.Weapons.havanaxp1/vehicles/pickup_truck/pickup_truck=pickup truck
+global.Weapons.havanaxp1/vehicles/pickup_truck/pickup_truck_hw=pickup truck
+global.Weapons.havanaxp1/vehicles/lowrider_cr/lowrider_cr=lowrider
+global.Weapons.havanaxp2/vehicles/pickup_truck_cr/pickup_truck_cr=pickup truck
+global.Weapons.havanaxp2/vehicles/pickup_truck/pickup_truck_hw=pickup truck
 
 // Light armored vehicles
 global.Weapons.havana/vehicles/cat_cr/cat_cr=Counter Attack Truck
@@ -1206,8 +1206,8 @@ global.Weapons.havana/vehicles/attack_heli_le/attack_heli_le=Attack Helicopter
 global.Weapons.havana/vehicles/transport_heli_cr/transport_heli_cr=Transport Helicopter
 global.Weapons.havana/vehicles/transport_heli_le/transport_heli_le=Transport Helicopter
 global.Weapons.havana/gameplay/gamemodes/heist/helicopter_heistpickup_vehicle=Heist Pickup Helicopter
-global.weapons.havanaxp2/vehicles/scout_heli_cr/scout_heli_cr=Scout Helicopter
-global.weapons.havanaxp2/vehicles/scout_heli_le/scout_heli_le=Scout Helicopter
+global.Weapons.havanaxp2/vehicles/scout_heli_cr/scout_heli_cr=Scout Helicopter
+global.Weapons.havanaxp2/vehicles/scout_heli_le/scout_heli_le=Scout Helicopter
 
 // Water vehicles
 global.Weapons.havana/vehicles/airboat/airboat_test2=Airboat
