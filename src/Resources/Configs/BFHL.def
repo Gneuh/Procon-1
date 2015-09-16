@@ -39,7 +39,7 @@ procon.protected.weapons.add None "U_Crowbar" Secondary Melee
 procon.protected.weapons.add Assault "U_Defib" Secondary Melee
 procon.protected.weapons.add None "U_CS_Gas" Auxiliary Explosive
 procon.protected.weapons.add Assault "U_CZ75" Auxiliary Handgun
-procon.protected.weapons.add Support "U_F2000" Primary AssaultRifle
+procon.protected.weapons.add Assault "U_F2000" Primary AssaultRifle
 procon.protected.weapons.add Assault "U_FAMAS" Primary AssaultRifle
 procon.protected.weapons.add None "U_FIM92" Secondary ProjectileExplosive
 procon.protected.weapons.add Demolition "U_FMG9" Primary SMG
