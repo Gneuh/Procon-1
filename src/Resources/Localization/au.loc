@@ -1156,7 +1156,7 @@ global.Weapons.u_taurus44=Taurus .44 Magnum
 global.Weapons.u_tommygun=M1A1 Tommygun
 global.Weapons.u_tracerdartgun=Tracer Dart
 global.Weapons.u_tripmine=Laser Tripmine
-global.Weapons.u_u_throwingknife=Throwing Knife
+global.Weapons.u_throwingknife=Throwing Knife
 global.Weapons.u_ump45=UMP45
 global.Weapons.u_ziplinegun=Zip Line
 
