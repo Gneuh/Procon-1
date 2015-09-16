@@ -1,6 +1,6 @@
 /////////////////////////////////////////////
 // This definitions file will be overwritten during an update.
-//  (2015-09-16.01)
+//  (2015-09-16.02)
 // This file contains the standard defintions required to run procon 
 // connected to a BFHL server
 /////////////////////////////////////////////
@@ -78,7 +78,7 @@ procon.protected.weapons.add None "U_LeadPipe" Secondary Melee
 procon.protected.weapons.add Assault "U_M16A4" Primary AssaultRifle
 procon.protected.weapons.add None "U_M18" Auxiliary Explosive
 procon.protected.weapons.add Support "U_M1911" Auxiliary Handgun
-procon.protected.weapons.add Assault "U_M2" Primary Carbine
+procon.protected.weapons.add None "U_M2" Primary Carbine
 procon.protected.weapons.add None "U_M240" Primary LMG
 procon.protected.weapons.add Demolition "U_M320_HE" Secondary ProjectileExplosive
 procon.protected.weapons.add Assault "U_M416" Primary AssaultRifle
@@ -113,16 +113,16 @@ procon.protected.weapons.add Demolition "U_CR_Revive" Secondary Melee
 procon.protected.weapons.add Assault "U_RO933" Primary Carbine
 procon.protected.weapons.add None "U_RPG7" Secondary ProjectileExplosive
 procon.protected.weapons.add None "U_SP_RPG7" Secondary ProjectileExplosive
-procon.protected.weapons.add Support "U_RPK" Primary AssaultRifle
+procon.protected.weapons.add Assault "U_RPK" Primary AssaultRifle
 procon.protected.weapons.add Demolition "U_RS357" Auxiliary Handgun
 procon.protected.weapons.add Support "U_SA58" Primary AssaultRifle
 procon.protected.weapons.add Demolition "U_SabotageTool" Secondary Explosive
+procon.protected.weapons.add Support "U_SAIGA12" Primary Shotgun
 procon.protected.weapons.add Support "U_SBS12Short" Primary Shotgun
 procon.protected.weapons.add Support "U_SCARH" Primary AssaultRifle
 procon.protected.weapons.add Demolition "U_SCORPION" Primary SMG
 procon.protected.weapons.add Recon "U_Scout" Primary SniperRifle
 procon.protected.weapons.add Recon "U_SCR308" Primary SniperRifle
-procon.protected.weapons.add Support "U_SAIGA12" Primary Shotgun
 procon.protected.weapons.add Support "U_SG510" Primary AssaultRifle
 procon.protected.weapons.add None "U_SledgeHammer" Secondary Melee
 procon.protected.weapons.add None "u_smaw" Secondary ProjectileExplosive
