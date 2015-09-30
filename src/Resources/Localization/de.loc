@@ -974,6 +974,7 @@ global.Weapons.xp2/gameplay/vehicles/patrolhovercraft/patrolhovercraft=Hovercraf
 global.Weapons.xp4/gameplay/vehicles/podlauncher/launcher_pod_platform=Pod Launcher
 global.Weapons.gameplay/vehicles/pwc_jetski/pwc_jetski=Jet Ski
 global.Weapons.gameplay/vehicles/quadbike/quadbike=Quad bike
+global.Weapons.gameplay/vehicles/quadbike/spec/quadbike_night=Quad bike
 global.Weapons.xp0/gameplay/vehicles/skidLoader/skidloader=SkidLoader
 global.Weapons.xp4/gameplay/vehicles/snowmobile/snowmobile=SkidLoader
 // Transport vehicles
@@ -987,6 +988,7 @@ global.Weapons.gameplay/vehicles/ch_mrap-zfb-05/ch_mrap-zfb-05=ZFB05 MRAP
 global.Weapons.gameplay/vehicles/ru_mrap_spm3/ru_mrap_spm3=SPM-3 MRAP
 global.Weapons.gameplay/vehicles/ru_mrap_spm3/spec/ru_mrap_spm3_night=SPM-3 MRAP
 global.Weapons.gameplay/vehicles/us_mrap-cougar/us_mrap-cougar=Cougar MRAP
+global.Weapons.gameplay/vehicles/us_mrap-cougar/spec/us_mrap-cougar_night=Cougar MRAP
 global.Weapons.gameplay/vehicles/train_01/train_01=Zug
 global.Weapons.vdv buggy=VDV Buggy
 global.Weapons.gameplay/vehicles/venom/venom=UH-1Y Venom Transport Helikopter
