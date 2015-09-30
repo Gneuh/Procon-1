@@ -1,6 +1,6 @@
 /////////////////////////////////////////////
 // This definitions file will be overwritten during an update.
-//  (2015-09-14.01)
+//  (2015-10-01.01)
 // This file contains the standard defintions required to run procon 
 // connected to a BF4 server
 /////////////////////////////////////////////
@@ -364,6 +364,7 @@ procon.protected.weapons.add None "XP2/Gameplay/Vehicles/PatrolHovercraft/Patrol
 procon.protected.weapons.add None "XP4/Gameplay/Vehicles/PodLauncher/Launcher_Pod_Platform" Primary VehiclePersonal
 procon.protected.weapons.add None "Gameplay/Vehicles/PWC_JetSki/PWC_JetSki" Primary VehiclePersonal
 procon.protected.weapons.add None "Gameplay/Vehicles/QuadBike/QUADBIKE" Primary VehiclePersonal
+procon.protected.weapons.add None "Gameplay/Vehicles/QuadBike/spec/QUADBIKE_Night" Primary VehiclePersonal
 procon.protected.weapons.add None "XP0/Gameplay/Vehicles/SkidLoader/SkidLoader" Primary VehiclePersonal
 procon.protected.weapons.add None "XP4/Gameplay/Vehicles/Snowmobile/Snowmobile" Primary VehiclePersonal
 
@@ -378,6 +379,7 @@ procon.protected.weapons.add None "Gameplay/Vehicles/CH_MRAP-ZFB-05/CH_MRAP-ZFB-
 procon.protected.weapons.add None "Gameplay/Vehicles/RU_MRAP_SPM3/RU_MRAP_SPM3" Primary VehicleTransport
 procon.protected.weapons.add None "Gameplay/Vehicles/RU_MRAP_SPM3/spec/RU_MRAP_SPM3_Night" Primary VehicleTransport
 procon.protected.weapons.add None "Gameplay/Vehicles/US_MRAP-COUGAR/US_MRAP-COUGAR" Primary VehicleTransport
+procon.protected.weapons.add None "Gameplay/Vehicles/US_MRAP-COUGAR/spec/US_MRAP-COUGAR_Night" Primary VehicleTransport
 procon.protected.weapons.add None "Gameplay/Vehicles/Train_01/Train_01" Primary VehicleTransport
 procon.protected.weapons.add None "VDV Buggy" Primary VehicleTransport
 procon.protected.weapons.add None "Gameplay/Vehicles/Venom/Venom" Primary VehicleTransport
