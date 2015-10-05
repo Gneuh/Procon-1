@@ -1,5 +1,5 @@
 ﻿///////////////////////////////////
-// File information displayed in Options window. (20151001-01)
+// File information displayed in Options window. (20151005-01)
 ///////////////////////////////////
 file.Language=English (Australian)
 file.flag=au
@@ -1040,6 +1040,7 @@ global.Weapons.gameplay/vehicles/centurion_c-ram/centurion_c-ram=Centurion C-RAM
 global.Weapons.gameplay/vehicles/centurion_c-ram/centurion_c-ram_mp_naval=Centurion C-RAM Anti Air
 global.Weapons.gameplay/vehicles/gunshieldandtripod/gunshieldtripod=Stationary gun with shield
 global.Weapons.gameplay/vehicles/gunshieldandtripod/gunshieldtripod_night=Stationary gun with shield
+global.Weapons.gameplay/vehicles/gunshieldandtripod/spec/gunshieldtripod_noshield=Stationary gun without shield
 global.Weapons.xp4/gameplay/vehicles/metalstorm/xp4_metalstorm=Schipunov 42
 global.Weapons.kornet=9M133 Kornet Launcher
 global.Weapons.xp2/gameplay/vehicles/oldcannon/oldcannon=Old Cannon
