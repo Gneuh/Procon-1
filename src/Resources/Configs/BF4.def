@@ -1,6 +1,6 @@
 /////////////////////////////////////////////
 // This definitions file will be overwritten during an update.
-//  (2015-10-27.08)
+//  (2015-10-27.09)
 // This file contains the standard defintions required to run procon 
 // connected to a BF4 server
 /////////////////////////////////////////////
@@ -1636,9 +1636,9 @@ procon.protected.teamnames.add "XP5_Night_01" 1 "global.rush.attackers" "us.png"
 procon.protected.teamnames.add "XP5_Night_01" 2 "global.rush.defenders" "ru.png" "RushLarge0"
 
 // XP6 (Community Map)
-procon.protected.teamnames.add "XP6_CMP" 0 "global.conquest.neutral" "" "RushLarge0"
-procon.protected.teamnames.add "XP6_CMP" 1 "global.conquest.us" "us.png" "RushLarge0"
-procon.protected.teamnames.add "XP6_CMP" 2 "global.conquest.ru" "ru.png" "RushLarge0"
+procon.protected.teamnames.add "XP6_CMP" 0 "global.rush.neutral" "" "RushLarge0"
+procon.protected.teamnames.add "XP6_CMP" 1 "global.rush.us" "us.png" "RushLarge0"
+procon.protected.teamnames.add "XP6_CMP" 2 "global.rush.ru" "ru.png" "RushLarge0"
 
 // Squad Deathmatch
 ///////////////////////////////////////////////////////////////////////////////
