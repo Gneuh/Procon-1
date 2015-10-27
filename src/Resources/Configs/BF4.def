@@ -1,6 +1,6 @@
 /////////////////////////////////////////////
 // This definitions file will be overwritten during an update.
-//  (2015-10-27.04)
+//  (2015-10-27.05)
 // This file contains the standard defintions required to run procon 
 // connected to a BF4 server
 /////////////////////////////////////////////
@@ -809,13 +809,16 @@ procon.protected.maps.add "GunMaster1" "XP5_Night_01" "Gun Master" "Zavod:Gravey
 procon.protected.maps.add "ConquestLarge0" "XP6_CMP" "Conquest Large" "Operation Outbreak" 0
 procon.protected.maps.add "ConquestSmall0" "XP6_CMP" "Conquest Small" "Operation Outbreak" 0
 procon.protected.maps.add "Domination0" "XP6_CMP" "Domination" "Operation Outbreak" 0
-procon.protected.maps.add "Elimination0" "XP6_CMP" "Defuse" "Operation Outbreak" 0
 procon.protected.maps.add "Obliteration" "XP6_CMP" "Obliteration" "Operation Outbreak" 0
 procon.protected.maps.add "RushLarge0" "XP6_CMP" "Rush" "Operation Outbreak" 0
 procon.protected.maps.add "SquadDeathMatch0" "XP6_CMP" "Squad Deathmatch" "Operation Outbreak" 0
+procon.protected.maps.add "SquadDeathMatch1" "XP6_CMP" "Squad Deathmatch" "Operation Outbreak v2" 0
 procon.protected.maps.add "TeamDeathMatch0" "XP6_CMP" "Team Deathmatch" "Operation Outbreak" 0
+procon.protected.maps.add "TeamDeathMatch1" "XP6_CMP" "Team Deathmatch" "Operation Outbreak v2" 0
 procon.protected.maps.add "CaptureTheFlag0" "XP6_CMP" "CTF" "Operation Outbreak" 0
 procon.protected.maps.add "Chainlink0" "XP6_CMP" "Chain Link" "Operation Outbreak" 0
+procon.protected.maps.add "GunMaster0" "XP6_CMP" "Gun Master" "Operation Outbreak" 0
+procon.protected.maps.add "GunMaster1" "XP6_CMP" "Gun Master" "Operation Outbreak v2" 0
 
 procon.protected.teamnames.clear
 
@@ -1361,11 +1364,6 @@ procon.protected.teamnames.add "XP4_WlkrFtry" 0 "global.conquest.neutral" "" "El
 procon.protected.teamnames.add "XP4_WlkrFtry" 1 "global.conquest.us" "us.png" "Elimination0"
 procon.protected.teamnames.add "XP4_WlkrFtry" 2 "global.conquest.ru" "ru.png" "Elimination0"
 
-// XP6 (Community Map)
-procon.protected.teamnames.add "XP6_CMP" 0 "global.conquest.neutral" "" "Elimination0"
-procon.protected.teamnames.add "XP6_CMP" 1 "global.conquest.us" "us.png" "Elimination0"
-procon.protected.teamnames.add "XP6_CMP" 2 "global.conquest.ru" "ru.png" "Elimination0"
-
 // Obliteration
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -1831,9 +1829,15 @@ procon.protected.teamnames.add "XP4_WlkrFtry" 3 "global.Squad3" "us.png" "SquadD
 procon.protected.teamnames.add "XP4_WlkrFtry" 4 "global.Squad4" "ru.png" "SquadDeathMatch0"
 
 // XP6 (Community Map)
-procon.protected.teamnames.add "XP6_CMP" 0 "global.conquest.neutral" "" "SquadDeathMatch0"
-procon.protected.teamnames.add "XP6_CMP" 1 "global.conquest.us" "us.png" "SquadDeathMatch0"
-procon.protected.teamnames.add "XP6_CMP" 2 "global.conquest.ru" "ru.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP6_CMP" 1 "global.Squad1" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP6_CMP" 2 "global.Squad2" "ru.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP6_CMP" 3 "global.Squad3" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP6_CMP" 4 "global.Squad4" "ru.png" "SquadDeathMatch0"
+
+procon.protected.teamnames.add "XP6_CMP" 1 "global.Squad1" "us.png" "SquadDeathMatch1"
+procon.protected.teamnames.add "XP6_CMP" 2 "global.Squad2" "ru.png" "SquadDeathMatch1"
+procon.protected.teamnames.add "XP6_CMP" 3 "global.Squad3" "us.png" "SquadDeathMatch1"
+procon.protected.teamnames.add "XP6_CMP" 4 "global.Squad4" "ru.png" "SquadDeathMatch1"
 
 // Team Deathmatch
 ///////////////////////////////////////////////////////////////////////////////
@@ -1969,9 +1973,13 @@ procon.protected.teamnames.add "XP5_Night_01" 1 "global.tdm.us" "us.png" "TeamDe
 procon.protected.teamnames.add "XP5_Night_01" 2 "global.tdm.ru" "ru.png" "TeamDeathMatch0"
 
 // XP6 (Community Map)
-procon.protected.teamnames.add "XP6_CMP" 0 "global.conquest.neutral" "" "TeamDeathMatch0"
-procon.protected.teamnames.add "XP6_CMP" 1 "global.conquest.us" "us.png" "TeamDeathMatch0"
-procon.protected.teamnames.add "XP6_CMP 2 "global.conquest.ru" "ru.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP6_CMP" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP6_CMP" 1 "global.tdm.us" "us.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP6_CMP 2 "global.tdm.ru" "ru.png" "TeamDeathMatch0"
+
+procon.protected.teamnames.add "XP6_CMP" 0 "global.tdm.neutral" "" "TeamDeathMatch1"
+procon.protected.teamnames.add "XP6_CMP" 1 "global.tdm.us" "us.png" "TeamDeathMatch1"
+procon.protected.teamnames.add "XP6_CMP 2 "global.tdm.ru" "ru.png" "TeamDeathMatch1"
 
 
 // Air Superiority (XP1 - China Rising)
@@ -2207,6 +2215,10 @@ procon.protected.teamnames.add "XP5_Night_01" 2 "global.conquest.ru" "ru.png" "G
 procon.protected.teamnames.add "XP6_CMP" 0 "global.conquest.neutral" "" "GunMaster0"
 procon.protected.teamnames.add "XP6_CMP" 1 "global.conquest.us" "us.png" "GunMaster0"
 procon.protected.teamnames.add "XP6_CMP" 2 "global.conquest.ru" "ru.png" "GunMaster0"
+
+procon.protected.teamnames.add "XP6_CMP" 0 "global.conquest.neutral" "" "GunMaster1"
+procon.protected.teamnames.add "XP6_CMP" 1 "global.conquest.us" "us.png" "GunMaster1"
+procon.protected.teamnames.add "XP6_CMP" 2 "global.conquest.ru" "ru.png" "GunMaster1"
 
 ///////////////////////////////////////////////////////////////////////////////
 procon.protected.tasks.clear
