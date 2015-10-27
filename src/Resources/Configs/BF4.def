@@ -1,6 +1,6 @@
 /////////////////////////////////////////////
 // This definitions file will be overwritten during an update.
-//  (2015-10-27.01)
+//  (2015-10-27.02)
 // This file contains the standard defintions required to run procon 
 // connected to a BF4 server
 /////////////////////////////////////////////
@@ -807,7 +807,7 @@ procon.protected.maps.add "GunMaster1" "XP5_Night_01" "Gun Master" "Zavod:Gravey
 
 // XP6 - Community Map
 procon.protected.maps.add "ConquestLarge0" "MP_CMP" "Conquest Large" "Operation Outbreak" 0
-procon.protected.maps.add "ConquestSmall0" "MP_CMP" "Conquest Large" "Operation Outbreak" 0
+procon.protected.maps.add "ConquestSmall0" "MP_CMP" "Conquest Small" "Operation Outbreak" 0
 procon.protected.maps.add "Domination0" "MP_CMP" "Domination" "Operation Outbreak" 0
 procon.protected.maps.add "Elimination0" "MP_CMP" "Defuse" "Operation Outbreak" 0
 procon.protected.maps.add "Obliteration" "MP_CMP" "Obliteration" "Operation Outbreak" 0
