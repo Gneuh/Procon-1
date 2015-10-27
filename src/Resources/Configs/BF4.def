@@ -1,6 +1,6 @@
 /////////////////////////////////////////////
 // This definitions file will be overwritten during an update.
-//  (2015-10-27.05)
+//  (2015-10-27.06)
 // This file contains the standard defintions required to run procon 
 // connected to a BF4 server
 /////////////////////////////////////////////
@@ -2154,10 +2154,6 @@ procon.protected.teamnames.add "MP_Tremors" 0 "global.conquest.neutral" "" "Squa
 procon.protected.teamnames.add "MP_Tremors" 1 "global.conquest.us" "us.png" "SquadObliteration0"
 procon.protected.teamnames.add "MP_Tremors" 2 "global.conquest.cn" "cn.png" "SquadObliteration0"
 
-// XP6 (Community Map)
-procon.protected.teamnames.add "XP6_CMP" 0 "global.conquest.neutral" "" "SquadObliteration0"
-procon.protected.teamnames.add "XP6_CMP" 1 "global.conquest.us" "us.png" "SquadObliteration0"
-procon.protected.teamnames.add "XP6_CMP" 2 "global.conquest.ru" "ru.png" "SquadObliteration0"
 
 // Gun Master
 ///////////////////////////////////////////////////////////////////////////////
