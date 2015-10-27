@@ -1,6 +1,6 @@
 /////////////////////////////////////////////
 // This definitions file will be overwritten during an update.
-//  (2015-10-27.07)
+//  (2015-10-27.08)
 // This file contains the standard defintions required to run procon 
 // connected to a BF4 server
 /////////////////////////////////////////////
@@ -1975,7 +1975,7 @@ procon.protected.teamnames.add "XP5_Night_01" 2 "global.tdm.ru" "ru.png" "TeamDe
 // XP6 (Community Map)
 procon.protected.teamnames.add "XP6_CMP" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
 procon.protected.teamnames.add "XP6_CMP" 1 "global.tdm.us" "us.png" "TeamDeathMatch0"
-procon.protected.teamnames.add "XP6_CMP 2 "global.tdm.ru" "ru.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP6_CMP" 2 "global.tdm.ru" "ru.png" "TeamDeathMatch0"
 
 procon.protected.teamnames.add "XP6_CMP" 0 "global.tdm.neutral" "" "TeamDeathMatch1"
 procon.protected.teamnames.add "XP6_CMP" 1 "global.tdm.us" "us.png" "TeamDeathMatch1"
