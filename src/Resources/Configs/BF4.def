@@ -1,6 +1,6 @@
 /////////////////////////////////////////////
 // This definitions file will be overwritten during an update.
-//  (2015-10-27.06)
+//  (2015-10-27.07)
 // This file contains the standard defintions required to run procon 
 // connected to a BF4 server
 /////////////////////////////////////////////
@@ -1979,7 +1979,7 @@ procon.protected.teamnames.add "XP6_CMP 2 "global.tdm.ru" "ru.png" "TeamDeathMat
 
 procon.protected.teamnames.add "XP6_CMP" 0 "global.tdm.neutral" "" "TeamDeathMatch1"
 procon.protected.teamnames.add "XP6_CMP" 1 "global.tdm.us" "us.png" "TeamDeathMatch1"
-procon.protected.teamnames.add "XP6_CMP 2 "global.tdm.ru" "ru.png" "TeamDeathMatch1"
+procon.protected.teamnames.add "XP6_CMP" 2 "global.tdm.ru" "ru.png" "TeamDeathMatch1"
 
 
 // Air Superiority (XP1 - China Rising)
