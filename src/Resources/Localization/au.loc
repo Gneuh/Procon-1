@@ -1,5 +1,5 @@
 ﻿///////////////////////////////////
-// File information displayed in Options window. (20151005-01)
+// File information displayed in Options window. (20151028-01)
 ///////////////////////////////////
 file.Language=English (Australian)
 file.flag=au
@@ -845,6 +845,7 @@ global.Weapons.u_m416_m320_shg=M320 Dart under M416
 global.Weapons.u_m416_m320_smk=M320 SMK under M416
 global.Weapons.u_m4a1=M4
 global.Weapons.u_m60e4=M60-E4
+global.Weapons.u_m60ult=M60-ULT
 global.Weapons.u_m67=M67 Frag
 global.Weapons.u_m82a3=M82A3
 global.Weapons.u_m82a3_cqb=M82A3 CQB
@@ -993,6 +994,7 @@ global.Weapons.gameplay/vehicles/train_01/train_01=Train
 global.Weapons.vdv buggy=VDV Buggy
 global.Weapons.gameplay/vehicles/venom/venom=UH-1Y Venom Transport Helicopter
 global.Weapons.gameplay/vehicles/venom/spec/venom_night=UH-1Y Venom Transport Helicopter
+global.Weapons.gameplay/vehicles/venom/spec/venom_cmp=UH-1Y Venom Transport Helicopter
 // Light armored vehicles
 global.Weapons.gameplay/vehicles/ch_aa_pgz-95/ch_aa_pgz-95=PGZ95 Anti Air
 global.Weapons.gameplay/vehicles/btr-90/btr90=BTR-90 APC
