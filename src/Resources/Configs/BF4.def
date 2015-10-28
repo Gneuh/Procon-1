@@ -1,6 +1,6 @@
 /////////////////////////////////////////////
 // This definitions file will be overwritten during an update.
-//  (2015-10-27.09)
+//  (2015-10-28.01)
 // This file contains the standard defintions required to run procon 
 // connected to a BF4 server
 /////////////////////////////////////////////
@@ -221,6 +221,7 @@ procon.protected.weapons.add Assault "U_M416_M320_SHG" Secondary Shotgun
 procon.protected.weapons.add Assault "U_M416_M320_SMK" Secondary Impact
 procon.protected.weapons.add None "U_M4A1" Primary Carbine
 procon.protected.weapons.add Support "U_M60E4" Primary LMG
+procon.protected.weapons.add None "U_M60ULT" Primary LMG
 procon.protected.weapons.add None "U_M67" Auxiliary Explosive
 procon.protected.weapons.add None "U_M82A3" Primary SniperRifle
 procon.protected.weapons.add None "U_M82A3_CQB" Primary SniperRifle
@@ -386,6 +387,7 @@ procon.protected.weapons.add None "Gameplay/Vehicles/Train_01/Train_01" Primary 
 procon.protected.weapons.add None "VDV Buggy" Primary VehicleTransport
 procon.protected.weapons.add None "Gameplay/Vehicles/Venom/Venom" Primary VehicleTransport
 procon.protected.weapons.add None "Gameplay/Vehicles/Venom/spec/Venom_Night" Primary VehicleTransport
+procon.protected.weapons.add None "Gameplay/Vehicles/Venom/spec/Venom_CMP" Primary VehicleTransport
 
 // Light armored vehicles
 procon.protected.weapons.add None "Gameplay/Vehicles/CH_AA_PGZ-95/CH_AA_PGZ-95" Primary VehicleLight
