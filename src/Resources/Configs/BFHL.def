@@ -1,6 +1,6 @@
 /////////////////////////////////////////////
 // This definitions file will be overwritten during an update.
-//  (2015-11-04.01)
+//  (2015-11-04.02)
 // This file contains the standard defintions required to run procon 
 // connected to a BFHL server
 /////////////////////////////////////////////
@@ -76,6 +76,7 @@ procon.protected.weapons.add Support "U_KSG12" Primary Shotgun
 procon.protected.weapons.add Assault "U_L85A2" Primary AssaultRifle
 procon.protected.weapons.add Recon "U_L96A1" Primary SniperRifle
 procon.protected.weapons.add None "U_LeadPipe" Secondary Melee
+procon.protected.weapons.add None "U_M110K5" Primary AssaultRifle
 procon.protected.weapons.add Assault "U_M16A4" Primary AssaultRifle
 procon.protected.weapons.add None "U_M18" Auxiliary Explosive
 procon.protected.weapons.add Support "U_M1911" Auxiliary Handgun
@@ -114,6 +115,7 @@ procon.protected.weapons.add Support "U_Rem870P" Primary Shotgun
 procon.protected.weapons.add Demolition "U_Repairtool" Secondary Melee
 procon.protected.weapons.add Demolition "U_CR_Revive" Secondary Melee
 procon.protected.weapons.add Assault "U_RO933" Primary Carbine
+procon.protected.weapons.add None "U_RO933_BLK" Primary Carbine
 procon.protected.weapons.add None "U_RPG7" Secondary ProjectileExplosive
 procon.protected.weapons.add None "U_SP_RPG7" Secondary ProjectileExplosive
 procon.protected.weapons.add Assault "U_RPK" Primary AssaultRifle
