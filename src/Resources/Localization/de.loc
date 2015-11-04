@@ -1,5 +1,5 @@
 ///////////////////////////////////
-// File information displayed in Options window. (20151028-01)
+// File information displayed in Options window. (20151104-01)
 ///////////////////////////////////
 file.Language=Deutsch (German)
 file.flag=de
@@ -73,6 +73,10 @@ global.bm.crim=Verbrecher
 global.cashgrab.neutral=Neutral
 global.cashgrab.cop=Polizisten
 global.cashgrab.crim=Verbrecher
+
+global.sqheist.neutral=Neutral
+global.sqheist.cop=Cops
+global.sqheist.crim=Criminals
 
 // BFBC2 Squads
 ///////////////
@@ -1099,6 +1103,7 @@ global.Weapons.u_ksg12=KSG12
 global.Weapons.u_l85a2=L85A2
 global.Weapons.u_l96a1=AWM
 global.Weapons.u_leadpipe=Bleirohr
+global.Weapons.u_m110K5=M110K5
 global.Weapons.u_m16a4=M16A3
 global.Weapons.u_m18=M18 Rauchgranate
 global.Weapons.u_m1911=M1911A1
@@ -1135,6 +1140,7 @@ global.Weapons.u_rem870p=Remington 870P Magnum
 global.Weapons.u_repairtool=Repair Tool
 global.Weapons.u_cr_revive=Adrenalinspritze
 global.Weapons.u_ro933=RO993
+global.Weapons.u_ro933_blk=RO933 .300 BLK
 global.Weapons.u_rpg7=RPG7
 global.Weapons.u_sp_rpg7=RPG7
 global.Weapons.u_rpk=RPK
