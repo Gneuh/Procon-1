@@ -1,6 +1,6 @@
 /////////////////////////////////////////////
 // This definitions file will be overwritten during an update.
-//  (2015-11-03.01)
+//  (2015-11-04.01)
 // This file contains the standard defintions required to run procon 
 // connected to a BFHL server
 /////////////////////////////////////////////
@@ -380,7 +380,6 @@ procon.protected.maps.add "Heist0" "xp25_sawmill" "Heist" "Night Woods" 0
 procon.protected.maps.add "TeamDeathMatch0" "xp25_sawmilll" "Team Deathmatch" "Night Woods" 0
 procon.protected.maps.add "Hotwire0" "xp25_sawmill" "Hotwire" "Night Woods" 0
 procon.protected.maps.add "BloodMoney0" "xp25_sawmill" "Blood Money" "Night Woods" 0
-procon.protected.maps.add "CashGrab0" "xp25_sawmill" "Bounty Hunter" "Night Woods" 0
 
 
 // Conquest Large
@@ -456,6 +455,15 @@ procon.protected.teamnames.add "xp2_precinct7" 0 "global.conquest.neutral" "" "T
 procon.protected.teamnames.add "xp2_precinct7" 1 "global.conquest.cop" "cop.png" "TurfWarLarge0"
 procon.protected.teamnames.add "xp2_precinct7" 2 "global.conquest.crim" "crim.png" "TurfWarLarge0"
 
+// XP 2.5 (Blackout)
+procon.protected.teamnames.add "xp25_bank" 0 "global.conquest.neutral" "" "TurfWarLarge0"
+procon.protected.teamnames.add "xp25_bank" 1 "global.conquest.cop" "cop.png" "TurfWarLarge0"
+procon.protected.teamnames.add "xp25_bank" 2 "global.conquest.crim" "crim.png" "TurfWarLarge0"
+
+procon.protected.teamnames.add "xp25_sawmill" 0 "global.conquest.neutral" "" "TurfWarLarge0"
+procon.protected.teamnames.add "xp25_sawmill" 1 "global.conquest.cop" "cop.png" "TurfWarLarge0"
+procon.protected.teamnames.add "xp25_sawmill" 2 "global.conquest.crim" "crim.png" "TurfWarLarge0"
+
 // Conquest Small
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -528,6 +536,15 @@ procon.protected.teamnames.add "xp2_museum02" 2 "global.conquest.crim" "crim.png
 procon.protected.teamnames.add "xp2_precinct7" 0 "global.conquest.neutral" "" "TurfWarSmall0"
 procon.protected.teamnames.add "xp2_precinct7" 1 "global.conquest.cop" "cop.png" "TurfWarSmall0"
 procon.protected.teamnames.add "xp2_precinct7" 2 "global.conquest.crim" "crim.png" "TurfWarSmall0"
+
+// XP 2.5 (Blackout)
+procon.protected.teamnames.add "xp25_bank" 0 "global.conquest.neutral" "" "TurfWarSmall0"
+procon.protected.teamnames.add "xp25_bank" 1 "global.conquest.cop" "cop.png" "TurfWarSmall0"
+procon.protected.teamnames.add "xp25_bank" 2 "global.conquest.crim" "crim.png" "TurfWarSmall0"
+
+procon.protected.teamnames.add "xp25_sawmill" 0 "global.conquest.neutral" "" "TurfWarSmall0"
+procon.protected.teamnames.add "xp25_sawmill" 1 "global.conquest.cop" "cop.png" "TurfWarSmall0"
+procon.protected.teamnames.add "xp25_sawmill" 2 "global.conquest.crim" "crim.png" "TurfWarSmall0"
 
 // Rescue
 ///////////////////////////////////////////////////////////////////////////////
@@ -602,6 +619,15 @@ procon.protected.teamnames.add "xp2_precinct7" 0 "global.hostage.neutral" "" "Ho
 procon.protected.teamnames.add "xp2_precinct7" 1 "global.hostage.cop" "cop.png" "Hostage0"
 procon.protected.teamnames.add "xp2_precinct7" 2 "global.hostage.crim" "crim.png" "Hostage0"
 
+// XP 2.5 (Blackout)
+procon.protected.teamnames.add "xp25_bank" 0 "global.hostage.neutral" "" "Hostage0"
+procon.protected.teamnames.add "xp25_bank" 1 "global.hostage.cop" "cop.png" "Hostage0"
+procon.protected.teamnames.add "xp25_bank" 2 "global.hostage.crim" "crim.png" "Hostage0"
+
+procon.protected.teamnames.add "xp25_sawmill" 0 "global.hostage.neutral" "" "Hostage0"
+procon.protected.teamnames.add "xp25_sawmill" 1 "global.hostage.cop" "cop.png" "Hostage0"
+procon.protected.teamnames.add "xp25_sawmill" 2 "global.hostage.crim" "crim.png" "Hostage0"
+
 // Crosshair
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -674,6 +700,15 @@ procon.protected.teamnames.add "xp2_museum02" 2 "global.hit.crim" "crim.png" "Hi
 procon.protected.teamnames.add "xp2_precinct7" 0 "global.hit.neutral" "" "Hit0"
 procon.protected.teamnames.add "xp2_precinct7" 1 "global.hit.cop" "cop.png" "Hit0"
 procon.protected.teamnames.add "xp2_precinct7" 2 "global.hit.crim" "crim.png" "Hit0"
+
+// XP 2.5 (Blackout)
+procon.protected.teamnames.add "xp25_bank" 0 "global.hit.neutral" "" "Hit0"
+procon.protected.teamnames.add "xp25_bank" 1 "global.hit.cop" "cop.png" "Hit0"
+procon.protected.teamnames.add "xp25_bank" 2 "global.hit.crim" "crim.png" "Hit0"
+
+procon.protected.teamnames.add "xp25_sawmill" 0 "global.hit.neutral" "" "Hit0"
+procon.protected.teamnames.add "xp25_sawmill" 1 "global.hit.cop" "cop.png" "Hit0"
+procon.protected.teamnames.add "xp25_sawmill" 2 "global.hit.crim" "crim.png" "Hit0"
 
 // Heist
 ///////////////////////////////////////////////////////////////////////////////
@@ -748,6 +783,16 @@ procon.protected.teamnames.add "xp2_precinct7" 0 "global.heist.neutral" "" "Heis
 procon.protected.teamnames.add "xp2_precinct7" 1 "global.heist.cop" "cop.png" "Heist0"
 procon.protected.teamnames.add "xp2_precinct7" 2 "global.heist.crim" "crim.png" "Heist0"
 
+// XP 2.5 (Blackout)
+procon.protected.teamnames.add "xp25_bank" 0 "global.heist.neutral" "" "Heist0"
+procon.protected.teamnames.add "xp25_bank" 1 "global.heist.cop" "cop.png" "Heist0"
+procon.protected.teamnames.add "xp25_bank" 2 "global.heist.crim" "crim.png" "Heist0"
+
+procon.protected.teamnames.add "xp25_sawmill" 0 "global.heist.neutral" "" "Heist0"
+procon.protected.teamnames.add "xp25_sawmill" 1 "global.heist.cop" "cop.png" "Heist0"
+procon.protected.teamnames.add "xp25_sawmill" 2 "global.heist.crim" "crim.png" "Heist0"
+
+
 // Team Deathmatch
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -821,6 +866,15 @@ procon.protected.teamnames.add "xp2_precinct7" 0 "global.tdm.neutral" "" "TeamDe
 procon.protected.teamnames.add "xp2_precinct7" 1 "global.tdm.cop" "cop.png" "TeamDeathMatch0"
 procon.protected.teamnames.add "xp2_precinct7" 2 "global.tdm.crim" "crim.png" "TeamDeathMatch0
 
+// XP 2.5 (Blackout)
+procon.protected.teamnames.add "xp25_bank" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
+procon.protected.teamnames.add "xp25_bank" 1 "global.tdm.cop" "cop.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "xp25_bank" 2 "global.tdm.crim" "crim.png" "TeamDeathMatch0"
+
+procon.protected.teamnames.add "xp25_sawmill" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
+procon.protected.teamnames.add "xp25_sawmill" 1 "global.tdm.cop" "cop.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "xp25_sawmill" 2 "global.tdm.crim" "crim.png" "TeamDeathMatch0
+
 // Hotwire
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -861,6 +915,12 @@ procon.protected.teamnames.add "xp2_coastal" 2 "global.hotwire.crim" "crim.png" 
 procon.protected.teamnames.add "xp2_precinct7" 0 "global.hotwire.neutral" "" "Hotwire0"
 procon.protected.teamnames.add "xp2_precinct7" 1 "global.hotwire.cop" "cop.png" "Hotwire0"
 procon.protected.teamnames.add "xp2_precinct7" 2 "global.hotwire.crim" "crim.png" "Hotwire0"
+
+// XP 2.5 (Blackout)
+procon.protected.teamnames.add "xp25_sawmill" 0 "global.hotwire.neutral" "" "Hotwire0"
+procon.protected.teamnames.add "xp25_sawmill" 1 "global.hotwire.cop" "cop.png" "Hotwire0"
+procon.protected.teamnames.add "xp25_sawmill" 2 "global.hotwire.crim" "crim.png" "Hotwire0"
+
 
 // Blood Money
 ///////////////////////////////////////////////////////////////////////////////
@@ -934,6 +994,16 @@ procon.protected.teamnames.add "xp2_museum02" 2 "global.bm.crim" "crim.png" "Blo
 procon.protected.teamnames.add "xp2_precinct7" 0 "global.bm.neutral" "" "BloodMoney0"
 procon.protected.teamnames.add "xp2_precinct7" 1 "global.bm.cop" "cop.png" "BloodMoney0"
 procon.protected.teamnames.add "xp2_precinct7" 2 "global.bm.crim" "crim.png" "BloodMoney0"
+
+// XP 2.5 (Blackout)
+procon.protected.teamnames.add "xp25_bank" 0 "global.bm.neutral" "" "BloodMoney0"
+procon.protected.teamnames.add "xp25_bank" 1 "global.bm.cop" "cop.png" "BloodMoney0"
+procon.protected.teamnames.add "xp25_bank" 2 "global.bm.crim" "crim.png" "BloodMoney0"
+
+procon.protected.teamnames.add "xp25_sawmill" 0 "global.bm.neutral" "" "BloodMoney0"
+procon.protected.teamnames.add "xp25_sawmill" 1 "global.bm.cop" "cop.png" "BloodMoney0"
+procon.protected.teamnames.add "xp25_sawmill" 2 "global.bm.crim" "crim.png" "BloodMoney0"
+
 
 // Bounty Hunter
 ///////////////////////////////////////////////////////////////////////////////
