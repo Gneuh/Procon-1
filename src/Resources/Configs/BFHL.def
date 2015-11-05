@@ -1,6 +1,6 @@
 /////////////////////////////////////////////
 // This definitions file will be overwritten during an update.
-//  (2015-11-04.02)
+//  (2015-11-05.01)
 // This file contains the standard defintions required to run procon 
 // connected to a BFHL server
 /////////////////////////////////////////////
@@ -379,7 +379,7 @@ procon.protected.maps.add "TurfWarSmall0" "xp25_sawmill" "Conquest Small" "Night
 procon.protected.maps.add "Hostage0" "xp25_sawmill" "Rescue" "Night Woods" 0
 procon.protected.maps.add "Hit0" "xp25_sawmill" "Crosshair" "Night Woods" 0
 procon.protected.maps.add "Heist0" "xp25_sawmill" "Heist" "Night Woods" 0
-procon.protected.maps.add "TeamDeathMatch0" "xp25_sawmilll" "Team Deathmatch" "Night Woods" 0
+procon.protected.maps.add "TeamDeathMatch0" "xp25_sawmill" "Team Deathmatch" "Night Woods" 0
 procon.protected.maps.add "Hotwire0" "xp25_sawmill" "Hotwire" "Night Woods" 0
 procon.protected.maps.add "BloodMoney0" "xp25_sawmill" "Blood Money" "Night Woods" 0
 
