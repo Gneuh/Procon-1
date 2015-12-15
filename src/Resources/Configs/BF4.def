@@ -1,6 +1,6 @@
 /////////////////////////////////////////////
 // This definitions file will be overwritten during an update.
-//  (2015-11-01.02)
+//  (2015-12-15.02)
 // This file contains the standard defintions required to run procon 
 // connected to a BF4 server
 /////////////////////////////////////////////
@@ -58,7 +58,7 @@ procon.protected.serverversions.add BF4 "162016" "R50"
 procon.protected.serverversions.add BF4 "165241" "R51"
 procon.protected.serverversions.add BF4 "166185" "R52"
 procon.protected.serverversions.add BF4 "171730" "R53"
-
+procon.protected.serverversions.add BF4 "176744" "R55"
 
 procon.protected.specialization.clear
 
@@ -822,6 +822,17 @@ procon.protected.maps.add "Chainlink0" "XP6_CMP" "Chain Link" "Operation Outbrea
 procon.protected.maps.add "GunMaster0" "XP6_CMP" "Gun Master" "Operation Outbreak" 0
 procon.protected.maps.add "GunMaster1" "XP6_CMP" "Gun Master" "Operation Outbreak v2" 0
 
+//XP7 - Legacy Operations
+procon.protected.maps.add "ConquestLarge0" "XP7_Valley" "Conquest Large" "Dragon Valley 2015" 0
+procon.protected.maps.add "ConquestSmall0" "XP7_Valley" "Conquest Small" "Dragon Valley 2015" 0
+procon.protected.maps.add "Domination0" "XP7_Valley" "Domination" "Dragon Valley 2015" 0
+procon.protected.maps.add "Obliteration" "XP7_Valley" "Obliteration" "Dragon Valley 2015" 0
+procon.protected.maps.add "RushLarge0" "XP7_Valley" "Rush" "Dragon Valley 2015" 0
+procon.protected.maps.add "SquadDeathMatch0" "XP7_Valley" "Squad Deathmatch" "Dragon Valley 2015" 0
+procon.protected.maps.add "TeamDeathMatch0" "XP7_Valley" "Team Deathmatch" "Dragon Valley 2015" 0
+procon.protected.maps.add "GunMaster0" "XP7_Valley" "Gun Master" "Dragon Valley 2015" 0
+procon.protected.maps.add "AirSuperiority0" "XP7_Valley" "Air Superiority" "Dragon Valley 2015" 0
+
 procon.protected.teamnames.clear
 
 // Conquest Large
@@ -962,6 +973,11 @@ procon.protected.teamnames.add "XP6_CMP" 0 "global.conquest.neutral" "" "Conques
 procon.protected.teamnames.add "XP6_CMP" 1 "global.conquest.us" "us.png" "ConquestLarge0"
 procon.protected.teamnames.add "XP6_CMP" 2 "global.conquest.cn" "cn.png" "ConquestLarge0"
 
+// XP7 (Legacy Operations)
+procon.protected.teamnames.add "XP7_Valley" 0 "global.conquest.neutral" "" "ConquestLarge0"
+procon.protected.teamnames.add "XP7_Valley" 1 "global.conquest.us" "us.png" "ConquestLarge0"
+procon.protected.teamnames.add "XP7_Valley" 2 "global.conquest.cn" "cn.png" "ConquestLarge0"
+
 // Conquest Small
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -1100,6 +1116,11 @@ procon.protected.teamnames.add "XP6_CMP" 0 "global.conquest.neutral" "" "Conques
 procon.protected.teamnames.add "XP6_CMP" 1 "global.conquest.us" "us.png" "ConquestSmall0"
 procon.protected.teamnames.add "XP6_CMP" 2 "global.conquest.cn" "cn.png" "ConquestSmall0"
 
+// XP7 (Legacy Operations)
+procon.protected.teamnames.add "XP7_Valley" 0 "global.conquest.neutral" "" "ConquestSmall0"
+procon.protected.teamnames.add "XP7_Valley" 1 "global.conquest.us" "us.png" "ConquestSmall0"
+procon.protected.teamnames.add "XP7_Valley" 2 "global.conquest.cn" "cn.png" "ConquestSmall0"
+
 // Domination
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -1237,6 +1258,11 @@ procon.protected.teamnames.add "XP5_Night_01" 2 "global.conquest.ru" "ru.png" "D
 procon.protected.teamnames.add "XP6_CMP" 0 "global.conquest.neutral" "" "Domination0"
 procon.protected.teamnames.add "XP6_CMP" 1 "global.conquest.us" "us.png" "Domination0"
 procon.protected.teamnames.add "XP6_CMP" 2 "global.conquest.cn" "cn.png" "Domination0"
+
+// XP7 (Legacy Operations)
+procon.protected.teamnames.add "XP7_Valley" 0 "global.conquest.neutral" "" "Domination0"
+procon.protected.teamnames.add "XP7_Valley" 1 "global.conquest.us" "us.png" "Domination0"
+procon.protected.teamnames.add "XP7_Valley" 2 "global.conquest.cn" "cn.png" "Domination0"
 
 // Defuse
 ///////////////////////////////////////////////////////////////////////////////
@@ -1504,6 +1530,11 @@ procon.protected.teamnames.add "XP6_CMP" 0 "global.conquest.neutral" "" "Obliter
 procon.protected.teamnames.add "XP6_CMP" 1 "global.conquest.us" "us.png" "Obliteration"
 procon.protected.teamnames.add "XP6_CMP" 2 "global.conquest.cn" "cn.png" "Obliteration"
 
+// XP7 (Legacy Operations)
+procon.protected.teamnames.add "XP7_Valley" 0 "global.conquest.neutral" "" "Obliteration"
+procon.protected.teamnames.add "XP7_Valley" 1 "global.conquest.us" "us.png" "Obliteration"
+procon.protected.teamnames.add "XP7_Valley" 2 "global.conquest.cn" "cn.png" "Obliteration"
+
 // Rush
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -1641,6 +1672,11 @@ procon.protected.teamnames.add "XP5_Night_01" 2 "global.rush.defenders" "ru.png"
 procon.protected.teamnames.add "XP6_CMP" 0 "global.rush.neutral" "" "RushLarge0"
 procon.protected.teamnames.add "XP6_CMP" 1 "global.rush.attackers" "us.png" "RushLarge0"
 procon.protected.teamnames.add "XP6_CMP" 2 "global.rush.defenders" "cn.png" "RushLarge0"
+
+// XP7 (Legacy Operations)
+procon.protected.teamnames.add "XP7_Valley" 0 "global.rush.neutral" "" "RushLarge0"
+procon.protected.teamnames.add "XP7_Valley" 1 "global.rush.attackers" "us.png" "RushLarge0"
+procon.protected.teamnames.add "XP7_Valley" 2 "global.rush.defenders" "cn.png" "RushLarge0"
 
 // Squad Deathmatch
 ///////////////////////////////////////////////////////////////////////////////
@@ -1841,6 +1877,12 @@ procon.protected.teamnames.add "XP6_CMP" 2 "global.Squad2" "cn.png" "SquadDeathM
 procon.protected.teamnames.add "XP6_CMP" 3 "global.Squad3" "us.png" "SquadDeathMatch1"
 procon.protected.teamnames.add "XP6_CMP" 4 "global.Squad4" "cn.png" "SquadDeathMatch1"
 
+// XP7 (Legacy Operations)
+procon.protected.teamnames.add "XP7_Valley" 1 "global.Squad1" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP7_Valley" 2 "global.Squad2" "cn.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP7_Valley" 3 "global.Squad3" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP7_Valley" 4 "global.Squad4" "cn.png" "SquadDeathMatch0"
+
 // Team Deathmatch
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -1983,6 +2025,10 @@ procon.protected.teamnames.add "XP6_CMP" 0 "global.tdm.neutral" "" "TeamDeathMat
 procon.protected.teamnames.add "XP6_CMP" 1 "global.tdm.us" "us.png" "TeamDeathMatch1"
 procon.protected.teamnames.add "XP6_CMP" 2 "global.tdm.cn" "cn.png" "TeamDeathMatch1"
 
+// XP7 (Legacy Operations)
+procon.protected.teamnames.add "XP7_Valley" 0 "global.tdm.neutral" "" "TeamDeathMatch1"
+procon.protected.teamnames.add "XP7_Valley" 1 "global.tdm.us" "us.png" "TeamDeathMatch1"
+procon.protected.teamnames.add "XP7_Valley" 2 "global.tdm.cn" "cn.png" "TeamDeathMatch1"
 
 // Air Superiority (XP1 - China Rising)
 ///////////////////////////////////////////////////////////////////////////////
@@ -2002,6 +2048,11 @@ procon.protected.teamnames.add "XP1_003" 2 "global.conquest.cn" "cn.png" "AirSup
 procon.protected.teamnames.add "XP1_004" 0 "global.conquest.neutral" "" "AirSuperiority0"
 procon.protected.teamnames.add "XP1_004" 1 "global.conquest.us" "us.png" "AirSuperiority0"
 procon.protected.teamnames.add "XP1_004" 2 "global.conquest.cn" "cn.png" "AirSuperiority0"
+
+// XP7 (Legacy Operations)
+procon.protected.teamnames.add "XP7_Valley" 0 "global.conquest.neutral" "" "AirSuperiority0"
+procon.protected.teamnames.add "XP7_Valley" 1 "global.conquest.us" "us.png" "AirSuperiority0"
+procon.protected.teamnames.add "XP7_Valley" 2 "global.conquest.cn" "cn.png" "AirSuperiority0"
 
 
 // Carrier Assault (XP2 - Naval Strike)
@@ -2217,6 +2268,11 @@ procon.protected.teamnames.add "XP6_CMP" 2 "global.conquest.cn" "cn.png" "GunMas
 procon.protected.teamnames.add "XP6_CMP" 0 "global.conquest.neutral" "" "GunMaster1"
 procon.protected.teamnames.add "XP6_CMP" 1 "global.conquest.us" "us.png" "GunMaster1"
 procon.protected.teamnames.add "XP6_CMP" 2 "global.conquest.cn" "cn.png" "GunMaster1"
+
+// XP7 (Legacy Operations)
+procon.protected.teamnames.add "XP7_Valley" 0 "global.conquest.neutral" "" "GunMaster0"
+procon.protected.teamnames.add "XP7_Valley" 1 "global.conquest.us" "us.png" "GunMaster0"
+procon.protected.teamnames.add "XP7_Valley" 2 "global.conquest.cn" "cn.png" "GunMaster0"
 
 ///////////////////////////////////////////////////////////////////////////////
 procon.protected.tasks.clear
