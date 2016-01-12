@@ -1,6 +1,6 @@
 /////////////////////////////////////////////
 // This definitions file will be overwritten during an update.
-//  (2016-01-12.01)
+//  (2016-01-12.02)
 // This file contains the standard defintions required to run procon 
 // connected to a BFHL server
 /////////////////////////////////////////////
@@ -434,10 +434,10 @@ procon.protected.maps.add "SquadHeist0" "xp3_cistern02" "Squad Heist" "Diversion
 procon.protected.maps.add "SquadHeist0" "xp3_highway" "Squad Heist" "Pacific Highway" 0
 procon.protected.maps.add "SquadHeist0" "xp3_traindodge" "Squad Heist" "Train Dodge" 0
 
-procon.protected.maps.add "CaptureTheFlag0" "xp3_border" "CTF" "Double Cross" 0
-procon.protected.maps.add "CaptureTheFlag0" "xp3_cistern02" "CTF" "Diversion" 0
-procon.protected.maps.add "CaptureTheFlag0" "xp3_highway" "CTF" "Pacific Highway" 0
-procon.protected.maps.add "CaptureTheFlag0" "xp3_traindodge" "CTF" "Train Dodge" 0
+procon.protected.maps.add "CaptureTheFlag0" "xp3_border" "Capture The Bag" "Double Cross" 0
+procon.protected.maps.add "CaptureTheFlag0" "xp3_cistern02" "Capture The Bag" "Diversion" 0
+procon.protected.maps.add "CaptureTheFlag0" "xp3_highway" "Capture The Bag" "Pacific Highway" 0
+procon.protected.maps.add "CaptureTheFlag0" "xp3_traindodge" "Capture The Bag" "Train Dodge" 0
 
 // Conquest Large
 ///////////////////////////////////////////////////////////////////////////////
@@ -1282,7 +1282,7 @@ procon.protected.teamnames.add "xp3_traindodge" 0 "global.sqheist.neutral" "" "S
 procon.protected.teamnames.add "xp3_traindodge" 1 "global.sqheist.cop" "cop.png" "SquadHeist0"
 procon.protected.teamnames.add "xp3_traindodge" 2 "global.sqheist.crim" "crim.png" "SquadHeist0"
 
-// Capture the Flag
+// Capture the Bag
 ///////////////////////////////////////////////////////////////////////////////
 // XP3 (Getaway)
 procon.protected.teamnames.add "xp3_border" 0 "global.conquest.neutral" "" "CaptureTheFlag0"
