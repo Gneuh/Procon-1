@@ -1,6 +1,6 @@
 /////////////////////////////////////////////
 // This definitions file will be overwritten during an update.
-//  (2015-11-05.01)
+//  (2016-01-12.01)
 // This file contains the standard defintions required to run procon 
 // connected to a BFHL server
 /////////////////////////////////////////////
@@ -14,6 +14,7 @@ procon.protected.serverversions.add BFHL "547660" "R5"
 procon.protected.serverversions.add BFHL "551014" "R6"
 procon.protected.serverversions.add BFHL "568513" "R8"
 procon.protected.serverversions.add BFHL "578901" "R9"
+procon.protected.serverversions.add BFHL "599759" "R10"
 
 procon.protected.specialization.clear
 
@@ -383,6 +384,60 @@ procon.protected.maps.add "TeamDeathMatch0" "xp25_sawmill" "Team Deathmatch" "Ni
 procon.protected.maps.add "Hotwire0" "xp25_sawmill" "Hotwire" "Night Woods" 0
 procon.protected.maps.add "BloodMoney0" "xp25_sawmill" "Blood Money" "Night Woods" 0
 
+// XP3 (Getaway)
+procon.protected.maps.add "TurfWarLarge0" "xp3_border" "Conquest Large" "Double Cross" 0
+procon.protected.maps.add "TurfWarLarge0" "xp3_cistern02" "Conquest Large" "Diversion" 0
+procon.protected.maps.add "TurfWarLarge0" "xp3_highway" "Conquest Large" "Pacific Highway" 0
+procon.protected.maps.add "TurfWarLarge0" "xp3_traindodge" "Conquest Large" "Train Dodge" 0
+
+procon.protected.maps.add "TurfWarSmall0" "xp3_border" "Conquest Small" "Double Cross" 0
+procon.protected.maps.add "TurfWarSmall0" "xp3_cistern02" "Conquest Small" "Diversion" 0
+procon.protected.maps.add "TurfWarSmall0" "xp3_highway" "Conquest Small" "Pacific Highway" 0
+procon.protected.maps.add "TurfWarSmall0" "xp3_traindodge" "Conquest Small" "Train Dodge" 0
+
+procon.protected.maps.add "Hostage0" "xp3_border" "Rescue" "Double Cross" 0
+procon.protected.maps.add "Hostage0" "xp3_cistern02" "Rescue" "Diversion" 0
+procon.protected.maps.add "Hostage0" "xp3_highway" "Rescue" "Pacific Highway" 0
+procon.protected.maps.add "Hostage0" "xp3_traindodge" "Rescue" "Train Dodge" 0
+
+procon.protected.maps.add "Hit0" "xp3_border" "Crosshair" "Double Cross" 0
+procon.protected.maps.add "Hit0" "xp3_cistern02" "Crosshair" "Diversion" 0
+procon.protected.maps.add "Hit0" "xp3_highway" "Crosshair" "Pacific Highway" 0
+procon.protected.maps.add "Hit0" "xp3_traindodge" "Crosshair" "Train Dodge" 0
+
+procon.protected.maps.add "Heist0" "xp3_border" "Conquest Small" "Double Cross" 0
+procon.protected.maps.add "Heist0" "xp3_cistern02" "Conquest Small" "Diversion" 0
+procon.protected.maps.add "Heist0" "xp3_highway" "Conquest Small" "Pacific Highway" 0
+procon.protected.maps.add "Heist0" "xp3_traindodge" "Conquest Small" "Train Dodge" 0
+
+procon.protected.maps.add "TeamDeathMatch0" "xp3_border" "Team Deathmatch" "Double Cross" 0
+procon.protected.maps.add "TeamDeathMatch0" "xp3_cistern02" "Team Deathmatch" "Diversion" 0
+procon.protected.maps.add "TeamDeathMatch0" "xp3_highway" "Team Deathmatch" "Pacific Highway" 0
+procon.protected.maps.add "TeamDeathMatch0" "xp3_traindodge" "Team Deathmatch" "Train Dodge" 0
+
+procon.protected.maps.add "Hotwire0" "xp3_border" "Hotwire" "Double Cross" 0
+procon.protected.maps.add "Hotwire0" "xp3_highway" "Hotwire" "Pacific Highway" 0
+procon.protected.maps.add "Hotwire0" "xp3_traindodge" "Hotwire" "Train Dodge" 0
+
+procon.protected.maps.add "BloodMoney0" "xp3_border" "Blood Money" "Double Cross" 0
+procon.protected.maps.add "BloodMoney0" "xp3_cistern02" "Blood Money" "Diversion" 0
+procon.protected.maps.add "BloodMoney0" "xp3_highway" "Blood Money" "Pacific Highway" 0
+procon.protected.maps.add "BloodMoney0" "xp3_traindodge" "Blood Money" "Train Dodge" 0
+
+procon.protected.maps.add "CashGrab0" "xp3_border" "Bounty Hunter" "Double Cross" 0
+procon.protected.maps.add "CashGrab0" "xp3_cistern02" "Bounty Hunter" "Diversion" 0
+procon.protected.maps.add "CashGrab0" "xp3_highway" "Bounty Hunter" "Pacific Highway" 0
+procon.protected.maps.add "CashGrab0" "xp3_traindodge" "Bounty Hunter" "Train Dodge" 0
+
+procon.protected.maps.add "SquadHeist0" "xp3_border" "Squad Heist" "Double Cross" 0
+procon.protected.maps.add "SquadHeist0" "xp3_cistern02" "Squad Heist" "Diversion" 0
+procon.protected.maps.add "SquadHeist0" "xp3_highway" "Squad Heist" "Pacific Highway" 0
+procon.protected.maps.add "SquadHeist0" "xp3_traindodge" "Squad Heist" "Train Dodge" 0
+
+procon.protected.maps.add "CaptureTheFlag0" "xp3_border" "CTF" "Double Cross" 0
+procon.protected.maps.add "CaptureTheFlag0" "xp3_cistern02" "CTF" "Diversion" 0
+procon.protected.maps.add "CaptureTheFlag0" "xp3_highway" "CTF" "Pacific Highway" 0
+procon.protected.maps.add "CaptureTheFlag0" "xp3_traindodge" "CTF" "Train Dodge" 0
 
 // Conquest Large
 ///////////////////////////////////////////////////////////////////////////////
@@ -466,6 +521,23 @@ procon.protected.teamnames.add "xp25_sawmill" 0 "global.conquest.neutral" "" "Tu
 procon.protected.teamnames.add "xp25_sawmill" 1 "global.conquest.cop" "cop.png" "TurfWarLarge0"
 procon.protected.teamnames.add "xp25_sawmill" 2 "global.conquest.crim" "crim.png" "TurfWarLarge0"
 
+// XP3 (Getaway)
+procon.protected.teamnames.add "xp3_border" 0 "global.conquest.neutral" "" "TurfWarLarge0"
+procon.protected.teamnames.add "xp3_border" 1 "global.conquest.cop" "cop.png" "TurfWarLarge0"
+procon.protected.teamnames.add "xp3_border" 2 "global.conquest.crim" "crim.png" "TurfWarLarge0"
+
+procon.protected.teamnames.add "xp3_cistern02" 0 "global.conquest.neutral" "" "TurfWarLarge0"
+procon.protected.teamnames.add "xp3_cistern02" 1 "global.conquest.cop" "cop.png" "TurfWarLarge0"
+procon.protected.teamnames.add "xp3_cistern02" 2 "global.conquest.crim" "crim.png" "TurfWarLarge0"
+
+procon.protected.teamnames.add "xp3_highway" 0 "global.conquest.neutral" "" "TurfWarLarge0"
+procon.protected.teamnames.add "xp3_highway" 1 "global.conquest.cop" "cop.png" "TurfWarLarge0"
+procon.protected.teamnames.add "xp3_highway" 2 "global.conquest.crim" "crim.png" "TurfWarLarge0"
+
+procon.protected.teamnames.add "xp3_traindodge" 0 "global.conquest.neutral" "" "TurfWarLarge0"
+procon.protected.teamnames.add "xp3_traindodge" 1 "global.conquest.cop" "cop.png" "TurfWarLarge0"
+procon.protected.teamnames.add "xp3_traindodge" 2 "global.conquest.crim" "crim.png" "TurfWarLarge0"
+
 // Conquest Small
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -547,6 +619,23 @@ procon.protected.teamnames.add "xp25_bank" 2 "global.conquest.crim" "crim.png" "
 procon.protected.teamnames.add "xp25_sawmill" 0 "global.conquest.neutral" "" "TurfWarSmall0"
 procon.protected.teamnames.add "xp25_sawmill" 1 "global.conquest.cop" "cop.png" "TurfWarSmall0"
 procon.protected.teamnames.add "xp25_sawmill" 2 "global.conquest.crim" "crim.png" "TurfWarSmall0"
+
+// XP3 (Getaway)
+procon.protected.teamnames.add "xp3_border" 0 "global.conquest.neutral" "" "TurfWarSmall0"
+procon.protected.teamnames.add "xp3_border" 1 "global.conquest.cop" "cop.png" "TurfWarSmall0"
+procon.protected.teamnames.add "xp3_border" 2 "global.conquest.crim" "crim.png" "TurfWarSmall0"
+
+procon.protected.teamnames.add "xp3_cistern02" 0 "global.conquest.neutral" "" "TurfWarSmall0"
+procon.protected.teamnames.add "xp3_cistern02" 1 "global.conquest.cop" "cop.png" "TurfWarSmall0"
+procon.protected.teamnames.add "xp3_cistern02" 2 "global.conquest.crim" "crim.png" "TurfWarSmall0"
+
+procon.protected.teamnames.add "xp3_highway" 0 "global.conquest.neutral" "" "TurfWarSmall0"
+procon.protected.teamnames.add "xp3_highway" 1 "global.conquest.cop" "cop.png" "TurfWarSmall0"
+procon.protected.teamnames.add "xp3_highway" 2 "global.conquest.crim" "crim.png" "TurfWarSmall0"
+
+procon.protected.teamnames.add "xp3_traindodge" 0 "global.conquest.neutral" "" "TurfWarSmall0"
+procon.protected.teamnames.add "xp3_traindodge" 1 "global.conquest.cop" "cop.png" "TurfWarSmall0"
+procon.protected.teamnames.add "xp3_traindodge" 2 "global.conquest.crim" "crim.png" "TurfWarSmall0"
 
 // Rescue
 ///////////////////////////////////////////////////////////////////////////////
@@ -630,6 +719,23 @@ procon.protected.teamnames.add "xp25_sawmill" 0 "global.hostage.neutral" "" "Hos
 procon.protected.teamnames.add "xp25_sawmill" 1 "global.hostage.cop" "cop.png" "Hostage0"
 procon.protected.teamnames.add "xp25_sawmill" 2 "global.hostage.crim" "crim.png" "Hostage0"
 
+// XP3 (Getaway)
+procon.protected.teamnames.add "xp3_border" 0 "global.hostage.neutral" "" "Hostage0"
+procon.protected.teamnames.add "xp3_border" 1 "global.hostage.cop" "cop.png" "Hostage0"
+procon.protected.teamnames.add "xp3_border" 2 "global.hostage.crim" "crim.png" "Hostage0"
+
+procon.protected.teamnames.add "xp3_cistern02" 0 "global.hostage.neutral" "" "Hostage0"
+procon.protected.teamnames.add "xp3_cistern02" 1 "global.hostage.cop" "cop.png" "Hostage0"
+procon.protected.teamnames.add "xp3_cistern02" 2 "global.hostage.crim" "crim.png" "Hostage0"
+
+procon.protected.teamnames.add "xp3_highway" 0 "global.hostage.neutral" "" "Hostage0"
+procon.protected.teamnames.add "xp3_highway" 1 "global.hostage.cop" "cop.png" "Hostage0"
+procon.protected.teamnames.add "xp3_highway" 2 "global.hostage.crim" "crim.png" "Hostage0"
+
+procon.protected.teamnames.add "xp3_traindodge" 0 "global.hostage.neutral" "" "Hostage0"
+procon.protected.teamnames.add "xp3_traindodge" 1 "global.hostage.cop" "cop.png" "Hostage0"
+procon.protected.teamnames.add "xp3_traindodge" 2 "global.hostage.crim" "crim.png" "Hostage0"
+
 // Crosshair
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -711,6 +817,23 @@ procon.protected.teamnames.add "xp25_bank" 2 "global.hit.crim" "crim.png" "Hit0"
 procon.protected.teamnames.add "xp25_sawmill" 0 "global.hit.neutral" "" "Hit0"
 procon.protected.teamnames.add "xp25_sawmill" 1 "global.hit.cop" "cop.png" "Hit0"
 procon.protected.teamnames.add "xp25_sawmill" 2 "global.hit.crim" "crim.png" "Hit0"
+
+// XP3 (Getaway)
+procon.protected.teamnames.add "xp3_border" 0 "global.hit.neutral" "" "Hit0"
+procon.protected.teamnames.add "xp3_border" 1 "global.hit.cop" "cop.png" "Hit0"
+procon.protected.teamnames.add "xp3_border" 2 "global.hit.crim" "crim.png" "Hit0"
+
+procon.protected.teamnames.add "xp3_cistern02" 0 "global.hit.neutral" "" "Hit0"
+procon.protected.teamnames.add "xp3_cistern02" 1 "global.hit.cop" "cop.png" "Hit0"
+procon.protected.teamnames.add "xp3_cistern02" 2 "global.hit.crim" "crim.png" "Hit0"
+
+procon.protected.teamnames.add "xp3_highway" 0 "global.hit.neutral" "" "Hit0"
+procon.protected.teamnames.add "xp3_highway" 1 "global.hit.cop" "cop.png" "Hit0"
+procon.protected.teamnames.add "xp3_highway" 2 "global.hit.crim" "crim.png" "Hit0"
+
+procon.protected.teamnames.add "xp3_traindodge" 0 "global.hit.neutral" "" "Hit0"
+procon.protected.teamnames.add "xp3_traindodge" 1 "global.hit.cop" "cop.png" "Hit0"
+procon.protected.teamnames.add "xp3_traindodge" 2 "global.hit.crim" "crim.png" "Hit0"
 
 // Heist
 ///////////////////////////////////////////////////////////////////////////////
@@ -794,6 +917,22 @@ procon.protected.teamnames.add "xp25_sawmill" 0 "global.heist.neutral" "" "Heist
 procon.protected.teamnames.add "xp25_sawmill" 1 "global.heist.cop" "cop.png" "Heist0"
 procon.protected.teamnames.add "xp25_sawmill" 2 "global.heist.crim" "crim.png" "Heist0"
 
+// XP3 (Getaway)
+procon.protected.teamnames.add "xp3_border" 0 "global.heist.neutral" "" "Heist0"
+procon.protected.teamnames.add "xp3_border" 1 "global.heist.cop" "cop.png" "Heist0"
+procon.protected.teamnames.add "xp3_border" 2 "global.heist.crim" "crim.png" "Heist0"
+
+procon.protected.teamnames.add "xp3_cistern02" 0 "global.heist.neutral" "" "Heist0"
+procon.protected.teamnames.add "xp3_cistern02" 1 "global.heist.cop" "cop.png" "Heist0"
+procon.protected.teamnames.add "xp3_cistern02" 2 "global.heist.crim" "crim.png" "Heist0"
+
+procon.protected.teamnames.add "xp3_highway" 0 "global.heist.neutral" "" "Heist0"
+procon.protected.teamnames.add "xp3_highway" 1 "global.heist.cop" "cop.png" "Heist0"
+procon.protected.teamnames.add "xp3_highway" 2 "global.heist.crim" "crim.png" "Heist0"
+
+procon.protected.teamnames.add "xp3_traindodge" 0 "global.heist.neutral" "" "Heist0"
+procon.protected.teamnames.add "xp3_traindodge" 1 "global.heist.cop" "cop.png" "Heist0"
+procon.protected.teamnames.add "xp3_traindodge" 2 "global.heist.crim" "crim.png" "Heist0"
 
 // Team Deathmatch
 ///////////////////////////////////////////////////////////////////////////////
@@ -877,6 +1016,23 @@ procon.protected.teamnames.add "xp25_sawmill" 0 "global.tdm.neutral" "" "TeamDea
 procon.protected.teamnames.add "xp25_sawmill" 1 "global.tdm.cop" "cop.png" "TeamDeathMatch0"
 procon.protected.teamnames.add "xp25_sawmill" 2 "global.tdm.crim" "crim.png" "TeamDeathMatch0
 
+// XP3 (Getaway)
+procon.protected.teamnames.add "xp3_border" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
+procon.protected.teamnames.add "xp3_border" 1 "global.tdm.cop" "cop.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "xp3_border" 2 "global.tdm.crim" "crim.png" "TeamDeathMatch0"
+
+procon.protected.teamnames.add "xp3_cistern02" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
+procon.protected.teamnames.add "xp3_cistern02" 1 "global.tdm.cop" "cop.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "xp3_cistern02" 2 "global.tdm.crim" "crim.png" "TeamDeathMatch0"
+
+procon.protected.teamnames.add "xp3_highway" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
+procon.protected.teamnames.add "xp3_highway" 1 "global.tdm.cop" "cop.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "xp3_highway" 2 "global.tdm.crim" "crim.png" "TeamDeathMatch0"
+
+procon.protected.teamnames.add "xp3_traindodge" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
+procon.protected.teamnames.add "xp3_traindodge" 1 "global.tdm.cop" "cop.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "xp3_traindodge" 2 "global.tdm.crim" "crim.png" "TeamDeathMatch0"
+
 // Hotwire
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -923,6 +1079,18 @@ procon.protected.teamnames.add "xp25_sawmill" 0 "global.hotwire.neutral" "" "Hot
 procon.protected.teamnames.add "xp25_sawmill" 1 "global.hotwire.cop" "cop.png" "Hotwire0"
 procon.protected.teamnames.add "xp25_sawmill" 2 "global.hotwire.crim" "crim.png" "Hotwire0"
 
+// XP3 (Getaway)
+procon.protected.teamnames.add "xp3_border" 0 "global.hotwire.neutral" "" "Hotwire0"
+procon.protected.teamnames.add "xp3_border" 1 "global.hotwire.cop" "cop.png" "Hotwire0"
+procon.protected.teamnames.add "xp3_border" 2 "global.hotwire.crim" "crim.png" "Hotwire0"
+
+procon.protected.teamnames.add "xp3_highway" 0 "global.hotwire.neutral" "" "Hotwire0"
+procon.protected.teamnames.add "xp3_highway" 1 "global.hotwire.cop" "cop.png" "Hotwire0"
+procon.protected.teamnames.add "xp3_highway" 2 "global.hotwire.crim" "crim.png" "Hotwire0"
+
+procon.protected.teamnames.add "xp3_traindodge" 0 "global.hotwire.neutral" "" "Hotwire0"
+procon.protected.teamnames.add "xp3_traindodge" 1 "global.hotwire.cop" "cop.png" "Hotwire0"
+procon.protected.teamnames.add "xp3_traindodge" 2 "global.hotwire.crim" "crim.png" "Hotwire0"
 
 // Blood Money
 ///////////////////////////////////////////////////////////////////////////////
@@ -1006,6 +1174,22 @@ procon.protected.teamnames.add "xp25_sawmill" 0 "global.bm.neutral" "" "BloodMon
 procon.protected.teamnames.add "xp25_sawmill" 1 "global.bm.cop" "cop.png" "BloodMoney0"
 procon.protected.teamnames.add "xp25_sawmill" 2 "global.bm.crim" "crim.png" "BloodMoney0"
 
+// XP3 (Getaway)
+procon.protected.teamnames.add "xp3_border" 0 "global.bm.neutral" "" "BloodMoney0"
+procon.protected.teamnames.add "xp3_border" 1 "global.bm.cop" "cop.png" "BloodMoney0"
+procon.protected.teamnames.add "xp3_border" 2 "global.bm.crim" "crim.png" "BloodMoney0"
+
+procon.protected.teamnames.add "xp3_cistern02" 0 "global.bm.neutral" "" "BloodMoney0"
+procon.protected.teamnames.add "xp3_cistern02" 1 "global.bm.cop" "cop.png" "BloodMoney0"
+procon.protected.teamnames.add "xp3_cistern02" 2 "global.bm.crim" "crim.png" "BloodMoney0"
+
+procon.protected.teamnames.add "xp3_highway" 0 "global.bm.neutral" "" "BloodMoney0"
+procon.protected.teamnames.add "xp3_highway" 1 "global.bm.cop" "cop.png" "BloodMoney0"
+procon.protected.teamnames.add "xp3_highway" 2 "global.bm.crim" "crim.png" "BloodMoney0"
+
+procon.protected.teamnames.add "xp3_traindodge" 0 "global.bm.neutral" "" "BloodMoney0"
+procon.protected.teamnames.add "xp3_traindodge" 1 "global.bm.cop" "cop.png" "BloodMoney0"
+procon.protected.teamnames.add "xp3_traindodge" 2 "global.bm.crim" "crim.png" "BloodMoney0"
 
 // Bounty Hunter
 ///////////////////////////////////////////////////////////////////////////////
@@ -1044,6 +1228,23 @@ procon.protected.teamnames.add "xp2_precinct7" 0 "global.cashgrab.neutral" "" "C
 procon.protected.teamnames.add "xp2_precinct7" 1 "global.cashgrab.cop" "cop.png" "CashGrab0"
 procon.protected.teamnames.add "xp2_precinct7" 2 "global.cashgrab.crim" "crim.png" "CashGrab0"
 
+// XP3 (Getaway)
+procon.protected.teamnames.add "xp3_border" 0 "global.cashgrab.neutral" "" "CashGrab0"
+procon.protected.teamnames.add "xp3_border" 1 "global.cashgrab.cop" "cop.png" "CashGrab0"
+procon.protected.teamnames.add "xp3_border" 2 "global.cashgrab.crim" "crim.png" "CashGrab0"
+
+procon.protected.teamnames.add "xp3_cistern02" 0 "global.cashgrab.neutral" "" "CashGrab0"
+procon.protected.teamnames.add "xp3_cistern02" 1 "global.cashgrab.cop" "cop.png" "CashGrab0"
+procon.protected.teamnames.add "xp3_cistern02" 2 "global.cashgrab.crim" "crim.png" CashGrab0"
+
+procon.protected.teamnames.add "xp3_highway" 0 "global.cashgrab.neutral" "" "CashGrab0"
+procon.protected.teamnames.add "xp3_highway" 1 "global.cashgrab.cop" "cop.png" "CashGrab0"
+procon.protected.teamnames.add "xp3_highway" 2 "global.cashgrab.crim" "crim.png" "CashGrab0"
+
+procon.protected.teamnames.add "xp3_traindodge" 0 "global.cashgrab.neutral" "" "CashGrab0"
+procon.protected.teamnames.add "xp3_traindodge" 1 "global.cashgrab.cop" "cop.png" "CashGrab0"
+procon.protected.teamnames.add "xp3_traindodge" 2 "global.cashgrab.crim" "crim.png" "CashGrab0"
+
 // Squad Heist
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -1063,6 +1264,44 @@ procon.protected.teamnames.add "xp2_museum02" 2 "global.sqheist.crim" "crim.png"
 procon.protected.teamnames.add "xp2_precinct7" 0 "global.sqheist.neutral" "" "SquadHeist0"
 procon.protected.teamnames.add "xp2_precinct7" 1 "global.sqheist.cop" "cop.png" "SquadHeist0"
 procon.protected.teamnames.add "xp2_precinct7" 2 "global.sqheist.crim" "crim.png" "SquadHeist0"
+
+// XP3 (Getaway)
+procon.protected.teamnames.add "xp3_border" 0 "global.sqheist.neutral" "" "SquadHeist0"
+procon.protected.teamnames.add "xp3_border" 1 "global.sqheist.cop" "cop.png" "SquadHeist0"
+procon.protected.teamnames.add "xp3_border" 2 "global.sqheist.crim" "crim.png" "SquadHeist0"
+
+procon.protected.teamnames.add "xp3_cistern02" 0 "global.sqheist.neutral" "" "SquadHeist0"
+procon.protected.teamnames.add "xp3_cistern02" 1 "global.sqheist.cop" "cop.png" "SquadHeist0"
+procon.protected.teamnames.add "xp3_cistern02" 2 "global.sqheist.crim" "crim.png" SquadHeist0"
+
+procon.protected.teamnames.add "xp3_highway" 0 "global.sqheist.neutral" "" "SquadHeist0"
+procon.protected.teamnames.add "xp3_highway" 1 "global.sqheist.cop" "cop.png" "SquadHeist0"
+procon.protected.teamnames.add "xp3_highway" 2 "global.sqheist.crim" "crim.png" "SquadHeist0"
+
+procon.protected.teamnames.add "xp3_traindodge" 0 "global.sqheist.neutral" "" "SquadHeist0"
+procon.protected.teamnames.add "xp3_traindodge" 1 "global.sqheist.cop" "cop.png" "SquadHeist0"
+procon.protected.teamnames.add "xp3_traindodge" 2 "global.sqheist.crim" "crim.png" "SquadHeist0"
+
+// Capture the Flag
+///////////////////////////////////////////////////////////////////////////////
+// XP3 (Getaway)
+procon.protected.teamnames.add "xp3_border" 0 "global.conquest.neutral" "" "CaptureTheFlag0"
+procon.protected.teamnames.add "xp3_border" 1 "global.conquest.cop" "cop.png" "CaptureTheFlag0"
+procon.protected.teamnames.add "xp3_border" 2 "global.conquest.crim" "crim.png" "CaptureTheFlag0"
+
+procon.protected.teamnames.add "xp3_cistern02" 0 "global.conquest.neutral" "" "CaptureTheFlag0"
+procon.protected.teamnames.add "xp3_cistern02" 1 "global.conquest.cop" "cop.png" "CaptureTheFlag0"
+procon.protected.teamnames.add "xp3_cistern02" 2 "global.conquest.crim" "crim.png" CaptureTheFlag0"
+
+procon.protected.teamnames.add "xp3_highway" 0 "global.conquest.neutral" "" "CaptureTheFlag0"
+procon.protected.teamnames.add "xp3_highway" 1 "global.conquest.cop" "cop.png" "CaptureTheFlag0"
+procon.protected.teamnames.add "xp3_highway" 2 "global.conquest.crim" "crim.png" "CaptureTheFlag0"
+
+procon.protected.teamnames.add "xp3_traindodge" 0 "global.conquest.neutral" "" "CaptureTheFlag0"
+procon.protected.teamnames.add "xp3_traindodge" 1 "global.conquest.cop" "cop.png" "CaptureTheFlag0"
+procon.protected.teamnames.add "xp3_traindodge" 2 "global.conquest.crim" "crim.png" "CaptureTheFlag0"
+
+
 
 ///////////////////////////////////////////////////////////////////////////////
 procon.protected.tasks.clear
