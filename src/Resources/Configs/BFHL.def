@@ -1,6 +1,6 @@
 /////////////////////////////////////////////
 // This definitions file will be overwritten during an update.
-//  (2016-01-12.02)
+//  (2016-01-13.01)
 // This file contains the standard defintions required to run procon 
 // connected to a BFHL server
 /////////////////////////////////////////////
@@ -405,10 +405,10 @@ procon.protected.maps.add "Hit0" "xp3_cistern02" "Crosshair" "Diversion" 0
 procon.protected.maps.add "Hit0" "xp3_highway" "Crosshair" "Pacific Highway" 0
 procon.protected.maps.add "Hit0" "xp3_traindodge" "Crosshair" "Train Dodge" 0
 
-procon.protected.maps.add "Heist0" "xp3_border" "Conquest Small" "Double Cross" 0
-procon.protected.maps.add "Heist0" "xp3_cistern02" "Conquest Small" "Diversion" 0
-procon.protected.maps.add "Heist0" "xp3_highway" "Conquest Small" "Pacific Highway" 0
-procon.protected.maps.add "Heist0" "xp3_traindodge" "Conquest Small" "Train Dodge" 0
+procon.protected.maps.add "Heist0" "xp3_border" "Heist" "Double Cross" 0
+procon.protected.maps.add "Heist0" "xp3_cistern02" "Heist" "Diversion" 0
+procon.protected.maps.add "Heist0" "xp3_highway" "Heist" "Pacific Highway" 0
+procon.protected.maps.add "Heist0" "xp3_traindodge" "Heist" "Train Dodge" 0
 
 procon.protected.maps.add "TeamDeathMatch0" "xp3_border" "Team Deathmatch" "Double Cross" 0
 procon.protected.maps.add "TeamDeathMatch0" "xp3_cistern02" "Team Deathmatch" "Diversion" 0
