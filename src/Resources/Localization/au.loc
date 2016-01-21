@@ -1,5 +1,5 @@
 ﻿///////////////////////////////////
-// File information displayed in Options window. (20160121-01)
+// File information displayed in Options window. (20160121-02)
 ///////////////////////////////////
 file.Language=English (Australian)
 file.flag=au
@@ -1173,6 +1173,7 @@ global.Weapons.u_sp_smaw=SMAW
 global.Weapons.u_socom16=SOCOM16
 global.Weapons.u_spas12=Spas-12
 global.Weapons.u_sr25ecc=SR-25 ECC
+global.Weapons.u_srs=388-RECON
 global.Weapons.u_stakeout37=37 STAKEOUT
 global.Weapons.u_sw40p=.40 PRO
 global.Weapons.u_sw38snub=.38 SNUB
