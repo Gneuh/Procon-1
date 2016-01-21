@@ -1,6 +1,6 @@
 /////////////////////////////////////////////
 // This definitions file will be overwritten during an update.
-//  (2016-01-21.01)
+//  (2016-01-21.02)
 // This file contains the standard defintions required to run procon 
 // connected to a BFHL server
 /////////////////////////////////////////////
@@ -148,6 +148,7 @@ procon.protected.weapons.add None "u_sp_smaw" Secondary ProjectileExplosive
 procon.protected.weapons.add Recon "U_SOCOM16" Primary SniperRifle
 procon.protected.weapons.add Support "U_Spas12" Primary Shotgun
 procon.protected.weapons.add Recon "U_SR25ECC" Primary SniperRifle
+procon.protected.weapons.add Recon "U_SRS" Primary SniperRifle
 procon.protected.weapons.add Support "U_Stakeout37" Primary Shotgun
 procon.protected.weapons.add Support "U_SW40P" Auxiliary Handgun
 procon.protected.weapons.add Demolition "U_SW38Snub" Auxiliary Handgun
