@@ -1,5 +1,5 @@
 ﻿///////////////////////////////////
-// File information displayed in Options window. (20151122-01)
+// File information displayed in Options window. (20160121-01)
 ///////////////////////////////////
 file.Language=English (Australian)
 file.flag=au
@@ -1058,6 +1058,8 @@ global.Weapons.u_acb-90=ACB-90 Knife
 global.Weapons.u_acwr=ACWR
 global.Weapons.u_akm=AKM
 global.Weapons.u_aks74u=AKS-74U
+global.Weapons.u_augpara=AUG PARA
+global.Weapons.u_aws=AWS
 global.Weapons.u_baseballbat=Baseball Bat
 global.Weapons.u_blackjack=Blackjack
 global.Weapons.u_breachingcharge=Breaching Charge
@@ -1070,11 +1072,14 @@ global.Weapons.u_cs_gas=Gas Grenade
 global.Weapons.u_f2000=F2000
 global.Weapons.u_famas=Famas
 global.Weapons.u_fim92=Stinger
+global.Weapons.u_fireaxe=Fire Axe
+global.Weapons.u_gold_fireaxe=Gold Fire Axe
 global.Weapons.u_flashbang=Flashbang
 global.Weapons.u_fmg9=FMG9
 global.Weapons.u_fnfal=FAL
 global.Weapons.u_fn57=FN57
 global.Weapons.u_g17=G17
+global.Weapons.u_g17race=G17 RACE Pistol
 global.Weapons.u_g18c=G18C
 global.Weapons.u_galil_ar=ARM
 global.Weapons.u_golfclub=Golf Club
@@ -1104,6 +1109,8 @@ global.Weapons.u_l85a2=L85A2
 global.Weapons.u_l96a1=AWM
 global.Weapons.u_leadpipe=Lead Pipe
 global.Weapons.u_m110K5=M110K5
+global.Weapons.u_m12mod1=RO933 M1
+global.Weapons.u_m12s=M12S
 global.Weapons.u_m16a4=M16A3
 global.Weapons.u_m18=M18 Smoke Grenade
 global.Weapons.u_m1911=M1911A1
@@ -1113,6 +1120,7 @@ global.Weapons.u_m320_he=M320 Grenade Launcher
 global.Weapons.u_mac_10=MAC-10
 global.Weapons.u_machete=Machete
 global.Weapons.u_m2=M1
+global.Weapons.u_m39ebr=M39 EMR
 global.Weapons.u_m416=M416
 global.Weapons.u_m45=M45
 global.Weapons.u_m67=M67 Grenade
@@ -1125,7 +1133,9 @@ global.Weapons.u_mdr=MDC
 global.Weapons.u_le_medicbag=Medic Bag
 global.Weapons.u_mg36=MG36
 global.Weapons.u_molotov=Molotov
+global.Weapons.u_mp5navy=M5 Navy
 global.Weapons.u_mp5k=MP5K
+global.Weapons.u_mp5sd=MP5SD
 global.Weapons.u_mp7=MP7
 global.Weapons.u_mpx=MPX
 global.Weapons.u_nailgun=Nail Gun
@@ -1138,6 +1148,7 @@ global.Weapons.u_r700ltr=R700 LTR
 global.Weapons.u_r700blackout=.300 Knockout
 global.Weapons.u_rem870p=Remington 870P Magnum
 global.Weapons.u_repairtool=Repair Tool
+global.Weapons.u_rfjammer=Rf Jammer
 global.Weapons.u_cr_revive=Revive Syringe
 global.Weapons.u_ro933_blk=RO933 .300 BLK
 global.Weapons.u_ro933=RO993
@@ -1148,6 +1159,7 @@ global.Weapons.u_rs357=.357 RS
 global.Weapons.u_sa58=SA-58 OSW
 global.Weapons.u_sabotagetool=Sabotage Tool
 global.Weapons.u_saiga12=Saiga 12
+global.Weapons.u_sar21=SAR-21
 global.Weapons.u_sbs12short=Double-Barrel Shotgun
 global.Weapons.u_scarh=SCAR-H
 global.Weapons.u_scorpion=SCORPION
@@ -1171,6 +1183,8 @@ global.Weapons.u_tracerdartgun=Tracer Dart
 global.Weapons.u_tripmine=Laser Tripmine
 global.Weapons.u_throwingknife=Throwing Knife
 global.Weapons.u_ump45=UMP45
+global.Weapons.u_ump9=UMP-9
+global.Weapons.u_winchester1887=1887
 global.Weapons.u_ziplinegun=Zip Line
 
 
@@ -1204,6 +1218,14 @@ global.Weapons.havanaxp1/vehicles/pickup_truck/pickup_truck_hw=pickup truck
 global.Weapons.havanaxp1/vehicles/lowrider_cr/lowrider_cr=lowrider
 global.Weapons.havanaxp2/vehicles/pickup_truck_cr/pickup_truck_cr=pickup truck
 global.Weapons.havanaxp2/vehicles/pickup_truck/pickup_truck_hw=pickup truck
+global.Weapons.havanaxp2/vehicles/pickup_truck/pickup_truck_hw=pickup truck
+global.Weapons.havanaxp3/vehicles/exotic/exotic=Luxury Coupe
+global.Weapons.havanaxp3/vehicles/exotic/exotic_hw=Luxury Coupe
+global.Weapons.havanaxp3/vehicles/exotic/exotic_le=Luxury Coupe
+global.Weapons.havanaxp3/vehicles/limo/limo=Limo
+global.Weapons.havanaxp3/vehicles/tuner_cr/tuner_cr=Import Tuner
+global.Weapons.havanaxp3/vehicles/tuner_cr/tuner_cr_hw=Import Tuner
+global.Weapons.havanaxp3/vehicles/tuner_le/tuner_le=Import Tuner
 
 // Light armored vehicles
 global.Weapons.havana/vehicles/cat_cr/cat_cr=Counter Attack Truck
