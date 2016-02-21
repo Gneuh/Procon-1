@@ -1,5 +1,5 @@
 ﻿///////////////////////////////////
-// File information displayed in Options window. (20160121-02)
+// File information displayed in Options window. (20160221-01)
 ///////////////////////////////////
 file.Language=English (Australian)
 file.flag=au
@@ -924,7 +924,7 @@ global.Weapons.u_scar-h_m320_lvg=M320 LVG under SCAR-H
 global.Weapons.u_scar-h_m320_shg=M320 Dart under SCAR-H
 global.Weapons.u_scar-h_m320_smk=M320 SMK under SCAR-H
 global.Weapons.u_scar-hsv=SCAR-H SV
-global.Weapons.u_scorpion=Skorpion Evo 3 A1
+global.Weapons.u_scorpion=CZ-3A1
 global.Weapons.u_scout=Scout
 global.Weapons.u_serbushorty=Shorty 12G
 global.Weapons.u_sg553lb=SG553
