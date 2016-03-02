@@ -1,6 +1,6 @@
 /////////////////////////////////////////////
 // This definitions file will be overwritten during an update.
-//  (2016-03-02.01)
+//  (2016-03-02.02)
 // This file contains the standard defintions required to run procon 
 // connected to a BFHL server
 /////////////////////////////////////////////
@@ -392,7 +392,7 @@ procon.protected.maps.add "SquadHeist0" "xp2_precinct7" "Squad Heist" "Precinct 
 
 //XP 2.5 (Blackout)
 procon.protected.maps.add "TurfWarLarge0" "xp25_bank" "Conquest Large" "Night Job" 0
-procon.protected.maps.add "TurfSmall0" "xp25_bank" "Conquest Small" "Night Job" 0
+procon.protected.maps.add "TurfWarSmall0" "xp25_bank" "Conquest Small" "Night Job" 0
 procon.protected.maps.add "Hostage0" "xp25_bank" "Rescue" "Night Job" 0
 procon.protected.maps.add "Hit0" "xp25_bank" "Crosshair" "Night Job" 0
 procon.protected.maps.add "Heist0" "xp25_bank" "Heist" "Night Job" 0
