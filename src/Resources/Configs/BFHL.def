@@ -1,6 +1,6 @@
 /////////////////////////////////////////////
 // This definitions file will be overwritten during an update.
-//  (2016-02-13.01)
+//  (2016-03-02.01)
 // This file contains the standard defintions required to run procon 
 // connected to a BFHL server
 /////////////////////////////////////////////
@@ -15,6 +15,8 @@ procon.protected.serverversions.add BFHL "551014" "R6"
 procon.protected.serverversions.add BFHL "568513" "R8"
 procon.protected.serverversions.add BFHL "578901" "R9"
 procon.protected.serverversions.add BFHL "599759" "R10"
+procon.protected.serverversions.add BFHL "612545" "R13.1"
+
 
 procon.protected.specialization.clear
 
@@ -461,6 +463,60 @@ procon.protected.maps.add "CaptureTheFlag0" "xp3_cistern02" "Capture The Bag" "D
 procon.protected.maps.add "CaptureTheFlag0" "xp3_highway" "Capture The Bag" "Pacific Highway" 0
 procon.protected.maps.add "CaptureTheFlag0" "xp3_traindodge" "Capture The Bag" "Train Dodge" 0
 
+// XP4 (Betrayal)
+procon.protected.maps.add "TurfWarLarge0" "xp4_alcatraz" "Conquest Large" "Alcatraz" 0
+procon.protected.maps.add "TurfWarLarge0" "xp4_cemetery" "Conquest Large" "Cemetry" 0
+procon.protected.maps.add "TurfWarLarge0" "xp4_chinatown" "Conquest Large" "Chinatown" 0
+procon.protected.maps.add "TurfWarLarge0" "xp4_snowcrash" "Conquest Large" "Thin Ice" 0
+
+procon.protected.maps.add "TurfWarSmall0" "xp4_alcatraz" "Conquest Large" "Alcatraz" 0
+procon.protected.maps.add "TurfWarSmall0" "xp4_cemetery" "Conquest Large" "Cemetry" 0
+procon.protected.maps.add "TurfWarSmall0" "xp4_chinatown" "Conquest Large" "Chinatown" 0
+procon.protected.maps.add "TurfWarSmall0" "xp4_snowcrash" "Conquest Large" "Thin Ice" 0
+
+procon.protected.maps.add "Hostage0" "xp4_alcatraz" "Rescue" "Alcatraz" 0
+procon.protected.maps.add "Hostage0" "xp4_cemetery" "Rescue" "Cemetry" 0
+procon.protected.maps.add "Hostage0" "xp4_chinatown" "Rescue" "Chinatown" 0
+procon.protected.maps.add "Hostage0" "xp4_snowcrash" "Rescue" "Thin Ice" 0
+
+procon.protected.maps.add "Hit0" "xp4_alcatraz" "Crosshair" "Alcatraz" 0
+procon.protected.maps.add "Hit0" "xp4_cemetery" "Crosshair" "Cemetry" 0
+procon.protected.maps.add "Hit0" "xp4_chinatown" "Crosshair" "Chinatown" 0
+procon.protected.maps.add "Hit0" "xp4_snowcrash" "Crosshair" "Thin Ice" 0
+
+procon.protected.maps.add "Heist0" "xp4_alcatraz" "Heist" "Alcatraz" 0
+procon.protected.maps.add "Heist0" "xp4_cemetery" "Heist" "Cemetry" 0
+procon.protected.maps.add "Heist0" "xp4_chinatown" "Heist" "Chinatown" 0
+procon.protected.maps.add "Heist0" "xp4_snowcrash" "Heist" "Thin Ice" 0
+
+procon.protected.maps.add "TeamDeathMatch0" "xp4_alcatraz" "Team Deathmatch" "Alcatraz" 0
+procon.protected.maps.add "TeamDeathMatch0" "xp4_cemetery" "Team Deathmatch" "Cemetry" 0
+procon.protected.maps.add "TeamDeathMatch0" "xp4_chinatown" "Team Deathmatch" "Chinatown" 0
+procon.protected.maps.add "TeamDeathMatch0" "xp4_snowcrash" "Team Deathmatch" "Thin Ice" 0
+
+procon.protected.maps.add "Hotwire0" "xp4_cemetery" "Hotwire" "Cemetry" 0
+procon.protected.maps.add "Hotwire0" "xp4_snowcrash" "Hotwire" "Thin Ice" 0
+
+procon.protected.maps.add "Bloodmoney0" "xp4_alcatraz" "Blood Money" "Alcatraz" 0
+procon.protected.maps.add "Bloodmoney0" "xp4_cemetery" "Blood Money" "Cemetry" 0
+procon.protected.maps.add "Bloodmoney0" "xp4_chinatown" "Blood Money" "Chinatown" 0
+procon.protected.maps.add "Bloodmoney0" "xp4_snowcrash" "Blood Money" "Thin Ice" 0
+
+procon.protected.maps.add "CashGrab0" "xp4_alcatraz" "Bounty Hunter" "Alcatraz" 0
+procon.protected.maps.add "CashGrab0" "xp4_cemetery" "Bounty Hunter" "Cemetry" 0
+procon.protected.maps.add "CashGrab0" "xp4_chinatown" "Bounty Hunter" "Chinatown" 0
+procon.protected.maps.add "CashGrab0" "xp4_snowcrash" "Bounty Hunter" "Thin Ice" 0
+
+procon.protected.maps.add "SquadHeist0" "xp4_alcatraz" "Squad Heist" "Alcatraz" 0
+procon.protected.maps.add "SquadHeist0" "xp4_cemetery" "Squad Heist" "Cemetry" 0
+procon.protected.maps.add "SquadHeist0" "xp4_chinatown" "Squad Heist" "Chinatown" 0
+procon.protected.maps.add "SquadHeist0" "xp4_snowcrash" "Squad Heist" "Thin Ice" 0
+
+procon.protected.maps.add "CaptureTheFlag0" "xp4_alcatraz" "Capture The Bag" "Alcatraz" 0
+procon.protected.maps.add "CaptureTheFlag0" "xp4_cemetery" "Capture The Bag" "Cemetry" 0
+procon.protected.maps.add "CaptureTheFlag0" "xp4_chinatown" "Capture The Bag" "Chinatown" 0
+procon.protected.maps.add "CaptureTheFlag0" "xp4_snowcrash" "Capture The Bag" "Thin Ice" 0
+
 // Conquest Large
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -559,6 +615,24 @@ procon.protected.teamnames.add "xp3_highway" 2 "global.conquest.crim" "crim.png"
 procon.protected.teamnames.add "xp3_traindodge" 0 "global.conquest.neutral" "" "TurfWarLarge0"
 procon.protected.teamnames.add "xp3_traindodge" 1 "global.conquest.cop" "cop.png" "TurfWarLarge0"
 procon.protected.teamnames.add "xp3_traindodge" 2 "global.conquest.crim" "crim.png" "TurfWarLarge0"
+
+// XP4 (Betrayal)
+procon.protected.teamnames.add "xp4_alcatraz" 0 "global.conquest.neutral" "" "TurfWarLarge0"
+procon.protected.teamnames.add "xp4_alcatraz" 1 "global.conquest.cop" "cop.png" "TurfWarLarge0"
+procon.protected.teamnames.add "xp4_alcatraz" 2 "global.conquest.crim" "crim.png" "TurfWarLarge0"
+
+procon.protected.teamnames.add "xp4_cemetery" 0 "global.conquest.neutral" "" "TurfWarLarge0"
+procon.protected.teamnames.add "xp4_cemetery" 1 "global.conquest.cop" "cop.png" "TurfWarLarge0"
+procon.protected.teamnames.add "xp4_cemetery" 2 "global.conquest.crim" "crim.png" "TurfWarLarge0"
+
+procon.protected.teamnames.add "xp4_chinatown" 0 "global.conquest.neutral" "" "TurfWarLarge0"
+procon.protected.teamnames.add "xp4_chinatown" 1 "global.conquest.cop" "cop.png" "TurfWarLarge0"
+procon.protected.teamnames.add "xp4_chinatown" 2 "global.conquest.crim" "crim.png" "TurfWarLarge0"
+
+procon.protected.teamnames.add "xp4_snowcrash" 0 "global.conquest.neutral" "" "TurfWarLarge0"
+procon.protected.teamnames.add "xp4_snowcrash" 1 "global.conquest.cop" "cop.png" "TurfWarLarge0"
+procon.protected.teamnames.add "xp4_snowcrash" 2 "global.conquest.crim" "crim.png" "TurfWarLarge0"
+
 
 // Conquest Small
 ///////////////////////////////////////////////////////////////////////////////
@@ -659,6 +733,23 @@ procon.protected.teamnames.add "xp3_traindodge" 0 "global.conquest.neutral" "" "
 procon.protected.teamnames.add "xp3_traindodge" 1 "global.conquest.cop" "cop.png" "TurfWarSmall0"
 procon.protected.teamnames.add "xp3_traindodge" 2 "global.conquest.crim" "crim.png" "TurfWarSmall0"
 
+// XP4 (Betrayal)
+procon.protected.teamnames.add "xp4_alcatraz" 0 "global.conquest.neutral" "" "TurfWarSmall0"
+procon.protected.teamnames.add "xp4_alcatraz" 1 "global.conquest.cop" "cop.png" "TurfWarSmall0"
+procon.protected.teamnames.add "xp4_alcatraz" 2 "global.conquest.crim" "crim.png" "TurfWarSmall0"
+
+procon.protected.teamnames.add "xp4_cemetery" 0 "global.conquest.neutral" "" "TurfWarSmall0"
+procon.protected.teamnames.add "xp4_cemetery" 1 "global.conquest.cop" "cop.png" "TurfWarSmall0"
+procon.protected.teamnames.add "xp4_cemetery" 2 "global.conquest.crim" "crim.png" "TurfWarSmall0"
+
+procon.protected.teamnames.add "xp4_chinatown" 0 "global.conquest.neutral" "" "TurfWarSmall0"
+procon.protected.teamnames.add "xp4_chinatown" 1 "global.conquest.cop" "cop.png" "TurfWarSmall0"
+procon.protected.teamnames.add "xp4_chinatown" 2 "global.conquest.crim" "crim.png" "TurfWarSmall0"
+
+procon.protected.teamnames.add "xp4_snowcrash" 0 "global.conquest.neutral" "" "TurfWarSmall0"
+procon.protected.teamnames.add "xp4_snowcrash" 1 "global.conquest.cop" "cop.png" "TurfWarSmall0"
+procon.protected.teamnames.add "xp4_snowcrash" 2 "global.conquest.crim" "crim.png" "TurfWarSmall0"
+
 // Rescue
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -757,6 +848,23 @@ procon.protected.teamnames.add "xp3_highway" 2 "global.hostage.crim" "crim.png" 
 procon.protected.teamnames.add "xp3_traindodge" 0 "global.hostage.neutral" "" "Hostage0"
 procon.protected.teamnames.add "xp3_traindodge" 1 "global.hostage.cop" "cop.png" "Hostage0"
 procon.protected.teamnames.add "xp3_traindodge" 2 "global.hostage.crim" "crim.png" "Hostage0"
+
+// XP4 (Betrayal)
+procon.protected.teamnames.add "xp4_alcatraz" 0 "global.hostage.neutral" "" "Hostage0"
+procon.protected.teamnames.add "xp4_alcatraz" 1 "global.hostage.cop" "cop.png" "Hostage0"
+procon.protected.teamnames.add "xp4_alcatraz" 2 "global.hostage.crim" "crim.png" "Hostage0"
+
+procon.protected.teamnames.add "xp4_cemetery" 0 "global.hostage.neutral" "" "Hostage0"
+procon.protected.teamnames.add "xp4_cemetery" 1 "global.hostage.cop" "cop.png" "Hostage0"
+procon.protected.teamnames.add "xp4_cemetery" 2 "global.hostage.crim" "crim.png" "Hostage0"
+
+procon.protected.teamnames.add "xp4_chinatown" 0 "global.hostage.neutral" "" "Hostage0"
+procon.protected.teamnames.add "xp4_chinatown" 1 "global.hostage.cop" "cop.png" "Hostage0"
+procon.protected.teamnames.add "xp4_chinatown" 2 "global.hostage.crim" "crim.png" "Hostage0"
+
+procon.protected.teamnames.add "xp4_snowcrash" 0 "global.hostage.neutral" "" "Hostage0"
+procon.protected.teamnames.add "xp4_snowcrash" 1 "global.hostage.cop" "cop.png" "Hostage0"
+procon.protected.teamnames.add "xp4_snowcrash" 2 "global.hostage.crim" "crim.png" "Hostage0"
 
 // Crosshair
 ///////////////////////////////////////////////////////////////////////////////
@@ -857,6 +965,23 @@ procon.protected.teamnames.add "xp3_traindodge" 0 "global.hit.neutral" "" "Hit0"
 procon.protected.teamnames.add "xp3_traindodge" 1 "global.hit.cop" "cop.png" "Hit0"
 procon.protected.teamnames.add "xp3_traindodge" 2 "global.hit.crim" "crim.png" "Hit0"
 
+// XP4 (Betrayal)
+procon.protected.teamnames.add "xp4_alcatraz" 0 "global.hit.neutral" "" "Hit0"
+procon.protected.teamnames.add "xp4_alcatraz" 1 "global.hit.cop" "cop.png" "Hit0"
+procon.protected.teamnames.add "xp4_alcatraz" 2 "global.hit.crim" "crim.png" "Hit0"
+
+procon.protected.teamnames.add "xp4_cemetery" 0 "global.hit.neutral" "" "Hit0"
+procon.protected.teamnames.add "xp4_cemetery" 1 "global.hit.cop" "cop.png" "Hit0"
+procon.protected.teamnames.add "xp4_cemetery" 2 "global.hit.crim" "crim.png" "Hit0"
+
+procon.protected.teamnames.add "xp4_chinatown" 0 "global.hit.neutral" "" "Hit0"
+procon.protected.teamnames.add "xp4_chinatown" 1 "global.hit.cop" "cop.png" "Hit0"
+procon.protected.teamnames.add "xp4_chinatown" 2 "global.hit.crim" "crim.png" "Hit0"
+
+procon.protected.teamnames.add "xp4_snowcrash" 0 "global.hit.neutral" "" "Hit0"
+procon.protected.teamnames.add "xp4_snowcrash" 1 "global.hit.cop" "cop.png" "Hit0"
+procon.protected.teamnames.add "xp4_snowcrash" 2 "global.hit.crim" "crim.png" "Hit0"
+
 // Heist
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -955,6 +1080,23 @@ procon.protected.teamnames.add "xp3_highway" 2 "global.heist.crim" "crim.png" "H
 procon.protected.teamnames.add "xp3_traindodge" 0 "global.heist.neutral" "" "Heist0"
 procon.protected.teamnames.add "xp3_traindodge" 1 "global.heist.cop" "cop.png" "Heist0"
 procon.protected.teamnames.add "xp3_traindodge" 2 "global.heist.crim" "crim.png" "Heist0"
+
+// XP4 (Betrayal)
+procon.protected.teamnames.add "xp4_alcatraz" 0 "global.heist.neutral" "" "Heist0"
+procon.protected.teamnames.add "xp4_alcatraz" 1 "global.heist.cop" "cop.png" "Heist0"
+procon.protected.teamnames.add "xp4_alcatraz" 2 "global.heist.crim" "crim.png" "Heist0"
+
+procon.protected.teamnames.add "xp4_cemetery" 0 "global.heist.neutral" "" "Heist0"
+procon.protected.teamnames.add "xp4_cemetery" 1 "global.heist.cop" "cop.png" "Heist0"
+procon.protected.teamnames.add "xp4_cemetery" 2 "global.heist.crim" "crim.png" "Heist0"
+
+procon.protected.teamnames.add "xp4_chinatown" 0 "global.heist.neutral" "" "Heist0"
+procon.protected.teamnames.add "xp4_chinatown" 1 "global.heist.cop" "cop.png" "Heist0"
+procon.protected.teamnames.add "xp4_chinatown" 2 "global.heist.crim" "crim.png" "Heist0"
+
+procon.protected.teamnames.add "xp4_snowcrash" 0 "global.heist.neutral" "" "Heist0"
+procon.protected.teamnames.add "xp4_snowcrash" 1 "global.heist.cop" "cop.png" "Heist0"
+procon.protected.teamnames.add "xp4_snowcrash" 2 "global.heist.crim" "crim.png" "Heist0"
 
 // Team Deathmatch
 ///////////////////////////////////////////////////////////////////////////////
@@ -1055,6 +1197,23 @@ procon.protected.teamnames.add "xp3_traindodge" 0 "global.tdm.neutral" "" "TeamD
 procon.protected.teamnames.add "xp3_traindodge" 1 "global.tdm.cop" "cop.png" "TeamDeathMatch0"
 procon.protected.teamnames.add "xp3_traindodge" 2 "global.tdm.crim" "crim.png" "TeamDeathMatch0"
 
+// XP4 (Betrayal)
+procon.protected.teamnames.add "xp4_alcatraz" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
+procon.protected.teamnames.add "xp4_alcatraz" 1 "global.tdm.cop" "cop.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "xp4_alcatraz" 2 "global.tdm.crim" "crim.png" "TeamDeathMatch0"
+
+procon.protected.teamnames.add "xp4_cemetery" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
+procon.protected.teamnames.add "xp4_cemetery" 1 "global.tdm.cop" "cop.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "xp4_cemetery" 2 "global.tdm.crim" "crim.png" "TeamDeathMatch0"
+
+procon.protected.teamnames.add "xp4_chinatown" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
+procon.protected.teamnames.add "xp4_chinatown" 1 "global.tdm.cop" "cop.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "xp4_chinatown" 2 "global.tdm.crim" "crim.png" "TeamDeathMatch0"
+
+procon.protected.teamnames.add "xp4_snowcrash" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
+procon.protected.teamnames.add "xp4_snowcrash" 1 "global.tdm.cop" "cop.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "xp4_snowcrash" 2 "global.tdm.crim" "crim.png" "TeamDeathMatch0"
+
 // Hotwire
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -1113,6 +1272,15 @@ procon.protected.teamnames.add "xp3_highway" 2 "global.hotwire.crim" "crim.png" 
 procon.protected.teamnames.add "xp3_traindodge" 0 "global.hotwire.neutral" "" "Hotwire0"
 procon.protected.teamnames.add "xp3_traindodge" 1 "global.hotwire.cop" "cop.png" "Hotwire0"
 procon.protected.teamnames.add "xp3_traindodge" 2 "global.hotwire.crim" "crim.png" "Hotwire0"
+
+// XP4 (Betrayal)
+procon.protected.teamnames.add "xp4_cemetery" 0 "global.hotwire.neutral" "" "Hotwire0"
+procon.protected.teamnames.add "xp4_cemetery" 1 "global.hotwire.cop" "cop.png" "Hotwire0"
+procon.protected.teamnames.add "xp4_cemetery" 2 "global.hotwire.crim" "crim.png" "Hotwire0"
+
+procon.protected.teamnames.add "xp4_snowcrash" 0 "global.hotwire.neutral" "" "Hotwire0"
+procon.protected.teamnames.add "xp4_snowcrash" 1 "global.hotwire.cop" "cop.png" "Hotwire0"
+procon.protected.teamnames.add "xp4_snowcrash" 2 "global.hotwire.crim" "crim.png" "Hotwire0"
 
 // Blood Money
 ///////////////////////////////////////////////////////////////////////////////
@@ -1213,6 +1381,23 @@ procon.protected.teamnames.add "xp3_traindodge" 0 "global.bm.neutral" "" "BloodM
 procon.protected.teamnames.add "xp3_traindodge" 1 "global.bm.cop" "cop.png" "BloodMoney0"
 procon.protected.teamnames.add "xp3_traindodge" 2 "global.bm.crim" "crim.png" "BloodMoney0"
 
+// XP4 (Betrayal)
+procon.protected.teamnames.add "xp4_alcatraz" 0 "global.bm.neutral" "" "BloodMoney0"
+procon.protected.teamnames.add "xp4_alcatraz" 1 "global.bm.cop" "cop.png" "BloodMoney0"
+procon.protected.teamnames.add "xp4_alcatraz" 2 "global.bm.crim" "crim.png" "BloodMoney0"
+
+procon.protected.teamnames.add "xp4_cemetery" 0 "global.bm.neutral" "" "BloodMoney0"
+procon.protected.teamnames.add "xp4_cemetery" 1 "global.bm.cop" "cop.png" "BloodMoney0"
+procon.protected.teamnames.add "xp4_cemetery" 2 "global.bm.crim" "crim.png" "BloodMoney0"
+
+procon.protected.teamnames.add "xp4_chinatown" 0 "global.bm.neutral" "" "BloodMoney0"
+procon.protected.teamnames.add "xp4_chinatown" 1 "global.bm.cop" "cop.png" "BloodMoney0"
+procon.protected.teamnames.add "xp4_chinatown" 2 "global.bm.crim" "crim.png" "BloodMoney0"
+
+procon.protected.teamnames.add "xp4_snowcrash" 0 "global.bm.neutral" "" "BloodMoney0"
+procon.protected.teamnames.add "xp4_snowcrash" 1 "global.bm.cop" "cop.png" "BloodMoney0"
+procon.protected.teamnames.add "xp4_snowcrash" 2 "global.bm.crim" "crim.png" "BloodMoney0"
+
 // Bounty Hunter
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -1267,6 +1452,23 @@ procon.protected.teamnames.add "xp3_traindodge" 0 "global.cashgrab.neutral" "" "
 procon.protected.teamnames.add "xp3_traindodge" 1 "global.cashgrab.cop" "cop.png" "CashGrab0"
 procon.protected.teamnames.add "xp3_traindodge" 2 "global.cashgrab.crim" "crim.png" "CashGrab0"
 
+// XP4 (Betrayal)
+procon.protected.teamnames.add "xp4_alcatraz" 0 "global.cashgrab.neutral" "" "CashGrab0"
+procon.protected.teamnames.add "xp4_alcatraz" 1 "global.cashgrab.cop" "cop.png" "CashGrab0"
+procon.protected.teamnames.add "xp4_alcatraz" 2 "global.cashgrab.crim" "crim.png" "CashGrab0"
+
+procon.protected.teamnames.add "xp4_cemetery" 0 "global.cashgrab.neutral" "" "CashGrab0"
+procon.protected.teamnames.add "xp4_cemetery" 1 "global.cashgrab.cop" "cop.png" "CashGrab0"
+procon.protected.teamnames.add "xp4_cemetery" 2 "global.cashgrab.crim" "crim.png" CashGrab0"
+
+procon.protected.teamnames.add "xp4_chinatown" 0 "global.cashgrab.neutral" "" "CashGrab0"
+procon.protected.teamnames.add "xp4_chinatown" 1 "global.cashgrab.cop" "cop.png" "CashGrab0"
+procon.protected.teamnames.add "xp4_chinatown" 2 "global.cashgrab.crim" "crim.png" "CashGrab0"
+
+procon.protected.teamnames.add "xp4_snowcrash" 0 "global.cashgrab.neutral" "" "CashGrab0"
+procon.protected.teamnames.add "xp4_snowcrash" 1 "global.cashgrab.cop" "cop.png" "CashGrab0"
+procon.protected.teamnames.add "xp4_snowcrash" 2 "global.cashgrab.crim" "crim.png" "CashGrab0"
+
 // Squad Heist
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -1304,6 +1506,23 @@ procon.protected.teamnames.add "xp3_traindodge" 0 "global.sqheist.neutral" "" "S
 procon.protected.teamnames.add "xp3_traindodge" 1 "global.sqheist.cop" "cop.png" "SquadHeist0"
 procon.protected.teamnames.add "xp3_traindodge" 2 "global.sqheist.crim" "crim.png" "SquadHeist0"
 
+// XP4 (Betrayal)
+procon.protected.teamnames.add "xp4_alcatraz" 0 "global.sqheist.neutral" "" "SquadHeist0"
+procon.protected.teamnames.add "xp4_alcatraz" 1 "global.sqheist.cop" "cop.png" "SquadHeist0"
+procon.protected.teamnames.add "xp4_alcatraz" 2 "global.sqheist.crim" "crim.png" "SquadHeist0"
+
+procon.protected.teamnames.add "xp4_cemetery" 0 "global.sqheist.neutral" "" "SquadHeist0"
+procon.protected.teamnames.add "xp4_cemetery" 1 "global.sqheist.cop" "cop.png" "SquadHeist0"
+procon.protected.teamnames.add "xp4_cemetery" 2 "global.sqheist.crim" "crim.png" SquadHeist0"
+
+procon.protected.teamnames.add "xp4_chinatown" 0 "global.sqheist.neutral" "" "SquadHeist0"
+procon.protected.teamnames.add "xp4_chinatown" 1 "global.sqheist.cop" "cop.png" "SquadHeist0"
+procon.protected.teamnames.add "xp4_chinatown" 2 "global.sqheist.crim" "crim.png" "SquadHeist0"
+
+procon.protected.teamnames.add "xp4_snowcrash" 0 "global.sqheist.neutral" "" "SquadHeist0"
+procon.protected.teamnames.add "xp4_snowcrash" 1 "global.sqheist.cop" "cop.png" "SquadHeist0"
+procon.protected.teamnames.add "xp4_snowcrash" 2 "global.sqheist.crim" "crim.png" "SquadHeist0"
+
 // Capture the Bag
 ///////////////////////////////////////////////////////////////////////////////
 // XP3 (Getaway)
@@ -1323,6 +1542,22 @@ procon.protected.teamnames.add "xp3_traindodge" 0 "global.conquest.neutral" "" "
 procon.protected.teamnames.add "xp3_traindodge" 1 "global.conquest.cop" "cop.png" "CaptureTheFlag0"
 procon.protected.teamnames.add "xp3_traindodge" 2 "global.conquest.crim" "crim.png" "CaptureTheFlag0"
 
+// XP4 (Betrayal)
+procon.protected.teamnames.add "xp4_alcatraz" 0 "global.conquest.neutral" "" "CaptureTheFlag0"
+procon.protected.teamnames.add "xp4_alcatraz" 1 "global.conquest.cop" "cop.png" "CaptureTheFlag0"
+procon.protected.teamnames.add "xp4_alcatraz" 2 "global.conquest.crim" "crim.png" "CaptureTheFlag0"
+
+procon.protected.teamnames.add "xp4_cemetery" 0 "global.conquest.neutral" "" "CaptureTheFlag0"
+procon.protected.teamnames.add "xp4_cemetery" 1 "global.conquest.cop" "cop.png" "CaptureTheFlag0"
+procon.protected.teamnames.add "xp4_cemetery" 2 "global.conquest.crim" "crim.png" CaptureTheFlag0"
+
+procon.protected.teamnames.add "xp4_chinatown" 0 "global.conquest.neutral" "" "CaptureTheFlag0"
+procon.protected.teamnames.add "xp4_chinatown" 1 "global.conquest.cop" "cop.png" "CaptureTheFlag0"
+procon.protected.teamnames.add "xp4_chinatown" 2 "global.conquest.crim" "crim.png" "CaptureTheFlag0"
+
+procon.protected.teamnames.add "xp4_snowcrash" 0 "global.conquest.neutral" "" "CaptureTheFlag0"
+procon.protected.teamnames.add "xp4_snowcrash" 1 "global.conquest.cop" "cop.png" "CaptureTheFlag0"
+procon.protected.teamnames.add "xp4_snowcrash" 2 "global.conquest.crim" "crim.png" "CaptureTheFlag0"
 
 
 ///////////////////////////////////////////////////////////////////////////////
