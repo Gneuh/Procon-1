@@ -309,7 +309,7 @@ procon.protected.weapons.add Recon "Gameplay/Gadgets/SOFLAM/SOFLAM_Projectile" A
 procon.protected.weapons.add None "U_SPAS12" Primary Shotgun
 procon.protected.weapons.add Demolition "U_SR2" Primary SMG
 procon.protected.weapons.add Demolition "U_SRAW" Secondary ProjectileExplosive
-procon.protected.weapons.add Recon "U_SR338" Primary SniperRifle
+procon.protected.weapons.add Recon "U_SR338" Primary DMR
 procon.protected.weapons.add Recon "U_SRS" Primary SniperRifle
 procon.protected.weapons.add None "U_Starstreak" Secondary ProjectileExplosive
 procon.protected.weapons.add Assault "U_SteyrAug" Primary AssaultRifle
@@ -359,7 +359,7 @@ procon.protected.weapons.add Assault "U_AN94_M320_SHG_v1" Secondary Shotgun
 procon.protected.weapons.add Assault "U_AN94_M320_SMK_v1" Secondary Impact
 procon.protected.weapons.add Support "U_L86A1" Primary LMG
 procon.protected.weapons.add None "U_Groza-1" Primary Carbine
-procon.protected.weapons.add Demolition "U_Groza-4" Primary PDW
+procon.protected.weapons.add Demolition "U_Groza-4" Primary SMG
 procon.protected.weapons.add None "U_SaddlegunSnp" Secondary Handgun
 
 // Personal vehicles
