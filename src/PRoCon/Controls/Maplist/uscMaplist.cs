@@ -658,7 +658,7 @@ namespace PRoCon.Controls.Maplist {
                 {
                     int mapIndex = lviSelected.Index;
 
-                    if (mapIndex != null && lviSelected != null)
+                    if (lviSelected != null)
                     {
                         this.setNextMapToolStripMenuItem.Tag = mapIndex;
 
