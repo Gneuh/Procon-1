@@ -20,6 +20,12 @@ Please refer to the [issues section](https://github.com/Myrcon/Procon-1/issues?l
 ## Changelog ##
 To check out older changelogs, please refer to our [full changelogs list](https://forum.myrcon.com/showthread.php?240-Full-Change-Log "Full changelog of Procon 1") on the Myrcon Community forums.
 
+### 1.5.1.1 to 1.5.2.0 ###
+#### Core ####
+- Added [UTF-8 support](https://github.com/I-MrFixIt-I/Procon-1/commit/0caaeadb06e04afedff9e02a42b2f893eb07beeb)
+- Updated GeoIP database (20171006) used for displaying a user's country
+
+
 ### 1.4.2.4 to 1.5.1.1 ###
 #### Battlefield 4 ####
 - Updates and changes to BF4.def
