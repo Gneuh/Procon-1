@@ -181,12 +181,16 @@ namespace PRoCon.Core.Remote {
                     strWord = strWord.Substring(0, UInt16.MaxValue - 1);
                 }
 
-                byte[] appendEncodedWords = new byte[encodedWords.Length + strWord.Length + 5];
+                // Convert the word into a null terminated utf-8 string
+                byte[] byteWord = Encoding.UTF8.GetBytes(strWord + Convert.ToChar(0x00));
+
+                byte[] appendEncodedWords = new byte[encodedWords.Length + byteWord.Length + 4];
 
                 encodedWords.CopyTo(appendEncodedWords, 0);
 
-                BitConverter.GetBytes(strWord.Length).CopyTo(appendEncodedWords, encodedWords.Length);
-                Encoding.GetEncoding(1252).GetBytes(strWord + Convert.ToChar(0x00)).CopyTo(appendEncodedWords, encodedWords.Length + 4);
+                // append the actual word size (ignoring the null terminated character) and word
+                BitConverter.GetBytes(byteWord.Length - 1).CopyTo(appendEncodedWords, encodedWords.Length);
+                byteWord.CopyTo(appendEncodedWords, encodedWords.Length + 4);
 
                 encodedWords = appendEncodedWords;
             }
@@ -223,7 +227,7 @@ namespace PRoCon.Core.Remote {
             for (UInt32 ui32WordCount = 0; ui32WordCount < ui32Words; ui32WordCount++) {
                 UInt32 ui32WordLength = BitConverter.ToUInt32(rawPacket, Packet.PacketHeaderSize + iWordOffset);
 
-                this.Words.Add(Encoding.GetEncoding(1252).GetString(rawPacket, Packet.PacketHeaderSize + iWordOffset + 4, (int)ui32WordLength));
+                this.Words.Add(Encoding.UTF8.GetString(rawPacket, Packet.PacketHeaderSize + iWordOffset + 4, (int)ui32WordLength));
 
                 iWordOffset += Convert.ToInt32(ui32WordLength) + 5; // WordLength + WordSize + NullByte
             }
