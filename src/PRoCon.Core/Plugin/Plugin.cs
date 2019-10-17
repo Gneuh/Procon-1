@@ -20,7 +20,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace PRoCon.Core.Plugin {
     public class Plugin {
@@ -47,6 +46,7 @@ namespace PRoCon.Core.Plugin {
         public Plugin(string className, IPRoConPluginInterface type) {
             this.ClassName = className;
             this.Type = type;
+            this.Type.ClassName = this.ClassName;
             this.IsLoaded = true;
             this.IsEnabled = false;
 
@@ -58,6 +58,10 @@ namespace PRoCon.Core.Plugin {
             if (this.RegisteredEvents != null && (this.RegisteredEvents.Count == 0 || this.RegisteredEvents.Contains(methodName) == true)) {
                 this.Type.Invoke(methodName, parameters);
             }
+        }
+
+        public bool CanConditionallyInvoke(String methodName) {
+            return this.RegisteredEvents != null && (this.RegisteredEvents.Count == 0 || this.RegisteredEvents.Contains(methodName) == true);
         }
     }
 }

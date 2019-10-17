@@ -1,23 +1,4 @@
-﻿// Copyright 2010 Geoffrey 'Phogue' Green
-// 
-// http://www.phogue.net
-//  
-// This file is part of PRoCon Frostbite.
-// 
-// PRoCon Frostbite is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-// 
-// PRoCon Frostbite is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-// 
-// You should have received a copy of the GNU General Public License
-// along with PRoCon Frostbite.  If not, see <http://www.gnu.org/licenses/>.
-
-namespace PRoCon.Core {
+﻿namespace PRoCon.Core {
     using System;
     using System.Collections.Generic;
 
@@ -92,6 +73,11 @@ namespace PRoCon.Core {
             }
         }
 
+        /// <summary>
+        /// The place in the list offset this item was recorded at. e.g banList.list 100 => [{ 100 ..  }, { 101 ..  }, { 102 ..  }] etc.
+        /// </summary>
+        public int? Offset { get; set; }
+
         public string SoldierName { get; private set; }
 
         public string Guid { get; private set; }
@@ -104,7 +90,7 @@ namespace PRoCon.Core {
 
         public TimeoutSubset BanLength { get; private set; }
 
-        public static List<CBanInfo> GetVanillaBanlist(List<string> lstWords) {
+        public static List<CBanInfo> GetVanillaBanlist(List<string> lstWords, int offset) {
 
             List<CBanInfo> lstBans = new List<CBanInfo>();
             int iBans = 0;
@@ -112,7 +98,9 @@ namespace PRoCon.Core {
             if (lstWords.Count >= 1 && int.TryParse(lstWords[0], out iBans) == true) {
                 lstWords.RemoveAt(0);
                 for (int i = 0; i < iBans; i++) {
-                    lstBans.Add(new CBanInfo(lstWords.GetRange(i * 5, 5)));
+                    lstBans.Add(new CBanInfo(lstWords.GetRange(i * 5, 5)) {
+                        Offset = offset + i
+                    });
                 }
             }
             else {
@@ -120,7 +108,9 @@ namespace PRoCon.Core {
                     List<string> words = lstWords.GetRange(i * 6, 6);
                     words.RemoveAt(4);
 
-                    lstBans.Add(new CBanInfo(words));
+                    lstBans.Add(new CBanInfo(words) {
+                        Offset = offset + i
+                    });
                 }
             }
 

@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>PRoCon</RootNamespace>
     <AssemblyName>PRoCon</AssemblyName>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetZone>Internet</TargetZone>
     <GenerateManifests>false</GenerateManifests>
@@ -75,6 +75,11 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\ziplib\Ionic.Zip.Reduced.dll</HintPath>
     </Reference>
+    <Reference Include="MySql.Data, Version=6.6.4.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\mysql\connector\6.4.4\MySql.Data.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Design" />
     <Reference Include="System.DirectoryServices" />
@@ -86,6 +91,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\VersionInfo.cs">
+      <Link>Properties\VersionInfo.cs</Link>
+    </Compile>
+    <Compile Include="ControlHelpers.cs" />
     <Compile Include="Controls\Battlemap\BattlemapRoundChange.cs" />
     <Compile Include="Controls\Battlemap\BattlemapViewTools.cs" />
     <Compile Include="Controls\Battlemap\KillDisplayDetails.cs" />
@@ -103,6 +112,7 @@
     <Compile Include="Controls\Battlemap\MapZoneDisplay\MapZoneControl.cs" />
     <Compile Include="Controls\Battlemap\MapZoneDisplay\MapZonePointControl.cs" />
     <Compile Include="Controls\Battlemap\TeamNamesDisplay\TeamNamesDisplayLegend.cs" />
+    <Compile Include="Controls\Containers\AdditionalPlayerInfo.cs" />
     <Compile Include="Controls\ControlsEx\CodRichTextBox.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -119,10 +129,18 @@
     <Compile Include="Controls\ControlsEx\ListViewNF.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Controls\ControlsEx\Pagination.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ControlsEx\Pagination.Designer.cs">
+      <DependentUpon>Pagination.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ControlsEx\PlayerListColumnSorter.cs" />
     <Compile Include="Controls\ControlsEx\ToolStripNF.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Controls\Data\ISource.cs" />
+    <Compile Include="Controls\Data\BansSource.cs" />
     <Compile Include="Controls\Maplist\uscMaplist.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -153,6 +171,12 @@
     <Compile Include="Controls\ServerSettings\BF3\uscServerSettingsGameplayBF3.Designer.cs">
       <DependentUpon>uscServerSettingsGameplayBF3.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ServerSettings\BF4\uscServerSettingsTeamKillsBF4.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ServerSettings\BF4\uscServerSettingsTeamKillsBF4.Designer.cs">
+      <DependentUpon>uscServerSettingsTeamKillsBF4.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ServerSettings\BFBC2\uscServerSettingsConfigGeneratorBFBC2.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -164,6 +188,78 @@
     </Compile>
     <Compile Include="Controls\ServerSettings\BFBC2\uscServerSettingsGameplayBFBC2.Designer.cs">
       <DependentUpon>uscServerSettingsGameplayBFBC2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ServerSettings\BF4\uscServerSettingsConfigGeneratorBF4.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ServerSettings\BF4\uscServerSettingsConfigGeneratorBF4.Designer.cs">
+      <DependentUpon>uscServerSettingsConfigGeneratorBF4.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ServerSettings\BF4\uscServerSettingsConfigurationBF4.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ServerSettings\BF4\uscServerSettingsConfigurationBF4.Designer.cs">
+      <DependentUpon>uscServerSettingsConfigurationBF4.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ServerSettings\BF4\uscServerSettingsDetailsBF4.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ServerSettings\BF4\uscServerSettingsDetailsBF4.Designer.cs">
+      <DependentUpon>uscServerSettingsDetailsBF4.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ServerSettings\BF4\uscServerSettingsGameplayBF4.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ServerSettings\BF4\uscServerSettingsGameplayBF4.Designer.cs">
+      <DependentUpon>uscServerSettingsGameplayBF4.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ServerSettings\BFHL\uscServerSettingsConfigGeneratorBFHL.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ServerSettings\BFHL\uscServerSettingsConfigGeneratorBFHL.Designer.cs">
+      <DependentUpon>uscServerSettingsConfigGeneratorBFHL.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ServerSettings\BFHL\uscServerSettingsConfigurationBFHL.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ServerSettings\BFHL\uscServerSettingsConfigurationBFHL.Designer.cs">
+      <DependentUpon>uscServerSettingsConfigurationBFHL.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ServerSettings\BFHL\uscServerSettingsDetailsBFHL.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ServerSettings\BFHL\uscServerSettingsDetailsBFHL.Designer.cs">
+      <DependentUpon>uscServerSettingsDetailsBFHL.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ServerSettings\BFHL\uscServerSettingsGameplayBFHL.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ServerSettings\BFHL\uscServerSettingsGameplayBFHL.Designer.cs">
+      <DependentUpon>uscServerSettingsGameplayBFHL.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ServerSettings\BFHL\uscServerSettingsTeamKillsBFHL.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ServerSettings\BFHL\uscServerSettingsTeamKillsBFHL.Designer.cs">
+      <DependentUpon>uscServerSettingsTeamKillsBFHL.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ServerSettings\MOHW\uscServerSettingsConfigGeneratorMOHW.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ServerSettings\MOHW\uscServerSettingsConfigGeneratorMOHW.Designer.cs">
+      <DependentUpon>uscServerSettingsConfigGeneratorMOHW.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ServerSettings\MOHW\uscServerSettingsConfigurationMOHW.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ServerSettings\MOHW\uscServerSettingsConfigurationMOHW.Designer.cs">
+      <DependentUpon>uscServerSettingsConfigurationMOHW.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ServerSettings\MOHW\uscServerSettingsGameplayMOHW.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ServerSettings\MOHW\uscServerSettingsGameplayMOHW.Designer.cs">
+      <DependentUpon>uscServerSettingsGameplayMOHW.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\ServerSettings\MOH\uscServerSettingsConfigGeneratorMoH.cs">
       <SubType>UserControl</SubType>
@@ -375,6 +471,9 @@
       <DependentUpon>BattlemapView.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Controls\ControlsEx\Pagination.resx">
+      <DependentUpon>Pagination.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\Maplist\uscMaplist.resx">
       <DependentUpon>uscMaplist.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -389,8 +488,41 @@
       <DependentUpon>uscServerSettingsGameplayBF3.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Controls\ServerSettings\BF4\uscServerSettingsTeamKillsBF4.resx">
+      <DependentUpon>uscServerSettingsTeamKillsBF4.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\ServerSettings\BFBC2\uscServerSettingsGameplayBFBC2.resx">
       <DependentUpon>uscServerSettingsGameplayBFBC2.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\ServerSettings\BF4\uscServerSettingsConfigurationBF4.resx">
+      <DependentUpon>uscServerSettingsConfigurationBF4.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\ServerSettings\BF4\uscServerSettingsDetailsBF4.resx">
+      <DependentUpon>uscServerSettingsDetailsBF4.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\ServerSettings\BF4\uscServerSettingsGameplayBF4.resx">
+      <DependentUpon>uscServerSettingsGameplayBF4.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\ServerSettings\BFHL\uscServerSettingsConfigurationBFHL.resx">
+      <DependentUpon>uscServerSettingsConfigurationBFHL.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\ServerSettings\BFHL\uscServerSettingsDetailsBFHL.resx">
+      <DependentUpon>uscServerSettingsDetailsBFHL.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\ServerSettings\BFHL\uscServerSettingsGameplayBFHL.resx">
+      <DependentUpon>uscServerSettingsGameplayBFHL.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\ServerSettings\BFHL\uscServerSettingsTeamKillsBFHL.resx">
+      <DependentUpon>uscServerSettingsTeamKillsBFHL.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\ServerSettings\MOHW\uscServerSettingsConfigurationMOHW.resx">
+      <DependentUpon>uscServerSettingsConfigurationMOHW.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\ServerSettings\MOHW\uscServerSettingsGameplayMOHW.resx">
+      <DependentUpon>uscServerSettingsGameplayMOHW.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\ServerSettings\MOH\uscServerSettingsGameplayMoH.resx">
@@ -587,12 +719,27 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>mkdir "$(SolutionDir)..\builds\$(ConfigurationName)"
+    <PostBuildEvent Condition=" '$(OS)' == 'Unix' ">mkdir -p "$(SolutionDir)..\builds\$(ConfigurationName)"
+cp -a "$(SolutionDir)Resources\Media" "$(SolutionDir)..\builds\$(ConfigurationName)\Media"
+cp -a "$(SolutionDir)Resources\Configs" "$(SolutionDir)..\builds\$(ConfigurationName)\Configs"
+cp -a "$(SolutionDir)Resources\Localization" "$(SolutionDir)..\builds\$(ConfigurationName)\Localization"
+cp -a "$(SolutionDir)Resources\DefaultPlugins" "$(SolutionDir)..\builds\$(ConfigurationName)\Plugins"
+cp -a "$(SolutionDir)Resources\GeoIP\GeoIP.dat" "$(SolutionDir)..\builds\$(ConfigurationName)"
+mkdir -p "$(SolutionDir)..\builds\$(ConfigurationName)\docs_licenses"
+cp -a "$(SolutionDir)..\doc\procon.doc" "$(SolutionDir)..\builds\$(ConfigurationName)\docs_licenses"
+cp -a "$(SolutionDir)..\doc\myrcon.pdf" "$(SolutionDir)..\builds\$(ConfigurationName)\docs_licenses"
+cp -a "$(SolutionDir)..\doc\LICENSES.txt" "$(SolutionDir)..\builds\$(ConfigurationName)\docs_licenses"
+</PostBuildEvent>
+    <PostBuildEvent Condition=" '$(OS)' != 'Unix' ">mkdir "$(SolutionDir)..\builds\$(ConfigurationName)"
 xcopy "$(SolutionDir)Resources\Media" "$(SolutionDir)..\builds\$(ConfigurationName)\Media" /Y /E /I
 xcopy "$(SolutionDir)Resources\Configs" "$(SolutionDir)..\builds\$(ConfigurationName)\Configs" /Y /E /I
 xcopy "$(SolutionDir)Resources\Localization" "$(SolutionDir)..\builds\$(ConfigurationName)\Localization" /Y /E /I
 xcopy "$(SolutionDir)Resources\DefaultPlugins" "$(SolutionDir)..\builds\$(ConfigurationName)\Plugins" /Y /E /I
 xcopy "$(SolutionDir)Resources\GeoIP\GeoIP.dat" "$(SolutionDir)..\builds\$(ConfigurationName)" /Y
-xcopy "$(SolutionDir)..\doc\procon.doc" "$(SolutionDir)..\builds\$(ConfigurationName)" /Y</PostBuildEvent>
+mkdir "$(SolutionDir)..\builds\$(ConfigurationName)\docs_licenses"
+xcopy "$(SolutionDir)..\doc\procon.doc" "$(SolutionDir)..\builds\$(ConfigurationName)\docs_licenses" /Y
+xcopy "$(SolutionDir)..\doc\myrcon.pdf" "$(SolutionDir)..\builds\$(ConfigurationName)\docs_licenses" /Y
+xcopy "$(SolutionDir)..\doc\LICENSES.txt" "$(SolutionDir)..\builds\$(ConfigurationName)\docs_licenses" /Y
+</PostBuildEvent>
   </PropertyGroup>
 </Project>

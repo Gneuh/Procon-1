@@ -34,12 +34,17 @@ namespace PRoCon.Core.Players.Items {
         SMG,
         SniperRifle,
         Shotgun,
+        Suicide,
         Explosive,
         ProjectileExplosive,
         VehicleWater,
         VehicleAir,
         VehicleStationary,
+        VehiclePersonal,
+        VehicleTransport,
         VehicleLight,
         VehicleHeavy,
+        DMR,
+        Carbine
     }
 }

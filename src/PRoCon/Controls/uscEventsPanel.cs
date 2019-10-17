@@ -20,16 +20,14 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Windows.Forms;
+using PRoCon.Controls.ControlsEx;
+using PRoCon.Core;
+using PRoCon.Core.Events;
+using PRoCon.Core.Remote;
+using PRoCon.Forms;
 
-namespace PRoCon {
-    using Core;
-    using Core.Events;
-    using Core.Remote;
-    using PRoCon.Forms;
-    using PRoCon.Controls.ControlsEx;
-
+namespace PRoCon.Controls {
     public partial class uscEventsPanel : UserControl {
 
         private frmMain m_frmMain;
@@ -54,13 +52,16 @@ namespace PRoCon {
         }
 
         private void m_prcClient_GameTypeDiscovered(PRoConClient sender) {
-            this.m_prcClient.EventsLogging.CapturedEvents.ItemAdded += new NotificationList<CapturableEvents>.ItemModifiedHandler(CapturedEvents_ItemAdded);
-            this.m_prcClient.EventsLogging.CapturedEvents.ItemRemoved += new NotificationList<CapturableEvents>.ItemModifiedHandler(CapturedEvents_ItemRemoved);
+            this.InvokeIfRequired(() => {
+                this.m_prcClient.EventsLogging.CapturedEvents.ItemAdded += new NotificationList<CapturableEvents>.ItemModifiedHandler(CapturedEvents_ItemAdded);
+                this.m_prcClient.EventsLogging.CapturedEvents.ItemRemoved += new NotificationList<CapturableEvents>.ItemModifiedHandler(CapturedEvents_ItemRemoved);
 
-            this.m_prcClient.EventsLogging.MaximumDisplayedEventsChange += new EventCaptures.MaximumDisplayedEventsChangeHandler(LoggedEvents_MaximumDisplayedEventsChange);
-            this.m_prcClient.EventsLogging.OptionsVisibleChange += new EventCaptures.OptionsVisibleChangeHandler(LoggedEvents_OptionsHiddenChange);
+                this.m_prcClient.EventsLogging.MaximumDisplayedEventsChange += new EventCaptures.MaximumDisplayedEventsChangeHandler(LoggedEvents_MaximumDisplayedEventsChange);
+                this.m_prcClient.EventsLogging.OptionsVisibleChange += new EventCaptures.OptionsVisibleChangeHandler(LoggedEvents_OptionsHiddenChange);
+                this.m_prcClient.EventsLogging.ScrollingEnabledChange += new EventCaptures.ScrollingEnabledChangeHandler(LoggedEvents_ScrollingEnabledChange);
 
-            this.m_prcClient.EventsLogging.LoggedEvent += new EventCaptures.LoggedEventHandler(LoggedEvents_LoggedEvent);
+                this.m_prcClient.EventsLogging.LoggedEvent += new EventCaptures.LoggedEventHandler(LoggedEvents_LoggedEvent);
+            });
         }
 
         public void SetLocalization(CLocalization clocLanguage) {
@@ -81,6 +82,7 @@ namespace PRoCon {
                 this.lblCapturingEvents.Text = this.m_clocLanguage.GetLocalized("uscEvents.gpbCaptures.lblCapturingEvents", null);
                 this.lnkAddCapture.Text = this.m_clocLanguage.GetLocalized("uscEvents.gpbCaptures.lnkAddCapture", null);
                 this.btncleareventbox.Text = this.m_clocLanguage.GetLocalized("uscEvents.gpbCaptures.btncleareventbox", null);
+                this.chkEventsEnableScrolling.Text = this.m_clocLanguage.GetLocalized("uscEvents.gpbCaptures.chkEventsEnableScrolling", null);
             }
         }
 
@@ -112,6 +114,7 @@ namespace PRoCon {
                 // it just fires the events again, saves messy coding elsewhere.
                 this.m_prcClient.EventsLogging.OptionsVisible = this.m_prcClient.EventsLogging.OptionsVisible;
                 this.m_prcClient.EventsLogging.MaximumDisplayedEvents = this.m_prcClient.EventsLogging.MaximumDisplayedEvents;
+                this.m_prcClient.EventsLogging.ScrollingEnabled = this.m_prcClient.EventsLogging.ScrollingEnabled;
 
                 this.lsvCapturedEvents.Items.Clear();
 
@@ -165,23 +168,23 @@ namespace PRoCon {
 
             ListViewItem lviNewEvent = new ListViewItem();
 
-            if (ceEvent.eType == EventType.Game) {
+            if (ceEvent.EventType == EventType.Game) {
                 lviNewEvent.ImageKey = "bfbc2server.png";
                 lviNewEvent.Text = "Game";
             }
-            else if (ceEvent.eType == EventType.Plugins) {
+            else if (ceEvent.EventType == EventType.Plugins) {
                 lviNewEvent.ImageKey = "plugin.png";
                 lviNewEvent.Text = "Plugins";
             }
-            else if (ceEvent.eType == EventType.Connection) {
+            else if (ceEvent.EventType == EventType.Connection) {
                 lviNewEvent.ImageKey = "connect.png";
                 lviNewEvent.Text = "Connection";
             }
-            else if (ceEvent.eType == EventType.Playerlist) {
+            else if (ceEvent.EventType == EventType.Playerlist) {
                 lviNewEvent.ImageKey = "mouse.png";
                 lviNewEvent.Text = "Playerlist";
             }
-            else if (ceEvent.eType == EventType.Layer) {
+            else if (ceEvent.EventType == EventType.Layer) {
                 lviNewEvent.ImageKey = "layer.png";
                 lviNewEvent.Text = "Layer";
             }
@@ -226,7 +229,10 @@ namespace PRoCon {
             }
 
             this.lsvEvents.Sort();
-            newEventItem.EnsureVisible();
+
+            if (this.m_prcClient.EventsLogging.ScrollingEnabled == true) {
+                newEventItem.EnsureVisible();
+            }
 
             foreach (ColumnHeader ch in this.lsvEvents.Columns) {
                 ch.Width = -2;
@@ -234,54 +240,67 @@ namespace PRoCon {
         }
 
         private void LoggedEvents_LoggedEvent(CapturedEvent ceEvent) {
-            this.lsvEvents.BeginUpdate();
+            this.InvokeIfRequired(() => {
+                this.lsvEvents.BeginUpdate();
 
-            this.CleanUpLoggedEvents(this.AddLoggedEvent(ceEvent));
+                this.CleanUpLoggedEvents(this.AddLoggedEvent(ceEvent));
 
-            this.lsvEvents.EndUpdate();
+                this.lsvEvents.EndUpdate();
+            });
         }
 
         private void CapturedEvents_ItemAdded(int iIndex, CapturableEvents item) {
-            ListViewItem lviNewCapture = new ListViewItem(item.ToString());
-            lviNewCapture.Name = item.ToString();
-            this.lsvCapturedEvents.Items.Add(lviNewCapture);
+            this.InvokeIfRequired(() => {
+                ListViewItem lviNewCapture = new ListViewItem(item.ToString());
+                lviNewCapture.Name = item.ToString();
+                this.lsvCapturedEvents.Items.Add(lviNewCapture);
+            });
         }
 
         private void CapturedEvents_ItemRemoved(int iIndex, CapturableEvents item) {
-            if (this.lsvCapturedEvents.Items.ContainsKey(item.ToString()) == true) {
-                this.lsvCapturedEvents.Items.Remove(this.lsvCapturedEvents.Items[item.ToString()]);
-            }
+            this.InvokeIfRequired(() => {
+                if (this.lsvCapturedEvents.Items.ContainsKey(item.ToString()) == true) {
+                    this.lsvCapturedEvents.Items.Remove(this.lsvCapturedEvents.Items[item.ToString()]);
+                }
+            });
         }
 
         private void LoggedEvents_OptionsHiddenChange(bool isVisible) {
+            this.InvokeIfRequired(() => {
+                if (this.m_frmMain != null) {
 
-            if (this.m_frmMain != null) {
-
-                if (isVisible == true) {
-                    this.lnkShowHide.Text = this.lnkShowHide.Text = this.m_clocLanguage.GetLocalized("uscEvents.lnkShowHide.Hide", null);
-                    this.picOpenCloseCaptures.Image = this.m_frmMain.iglIcons.Images["arrow_right.png"];
-                    spltEvents.Panel2Collapsed = false;
+                    if (isVisible == true) {
+                        this.lnkShowHide.Text = this.lnkShowHide.Text = this.m_clocLanguage.GetLocalized("uscEvents.lnkShowHide.Hide", null);
+                        this.picOpenCloseCaptures.Image = this.m_frmMain.iglIcons.Images["arrow_right.png"];
+                        spltEvents.Panel2Collapsed = false;
+                    }
+                    else {
+                        this.lnkShowHide.Text = this.lnkShowHide.Text = this.m_clocLanguage.GetLocalized("uscEvents.lnkShowHide.Show", null);
+                        this.picOpenCloseCaptures.Image = this.m_frmMain.iglIcons.Images["arrow_left.png"];
+                        spltEvents.Panel2Collapsed = true;
+                    }
                 }
-                else {
-                    this.lnkShowHide.Text = this.lnkShowHide.Text = this.m_clocLanguage.GetLocalized("uscEvents.lnkShowHide.Show", null);
-                    this.picOpenCloseCaptures.Image = this.m_frmMain.iglIcons.Images["arrow_left.png"];
-                    spltEvents.Panel2Collapsed = true;
-                }
-            }
+            });
         }
 
         private void LoggedEvents_MaximumDisplayedEventsChange(int maximumDisplayedEvents) {
-            if (maximumDisplayedEvents >= this.numMaximumEvents.Minimum && maximumDisplayedEvents <= this.numMaximumEvents.Maximum) {
-                this.numMaximumEvents.Value = (decimal)maximumDisplayedEvents;
+            this.InvokeIfRequired(() => {
+                if (maximumDisplayedEvents >= this.numMaximumEvents.Minimum && maximumDisplayedEvents <= this.numMaximumEvents.Maximum) {
+                    this.numMaximumEvents.Value = (decimal) maximumDisplayedEvents;
 
-                this.lsvEvents.BeginUpdate();
+                    this.lsvEvents.BeginUpdate();
 
-                while (this.m_queListItems.Count > this.numMaximumEvents.Value) {
-                    this.lsvEvents.Items.Remove(this.m_queListItems.Dequeue());
+                    while (this.m_queListItems.Count > this.numMaximumEvents.Value) {
+                        this.lsvEvents.Items.Remove(this.m_queListItems.Dequeue());
+                    }
+
+                    this.lsvEvents.EndUpdate();
                 }
+            });
+        }
 
-                this.lsvEvents.EndUpdate();
-            }
+        private void LoggedEvents_ScrollingEnabledChange(bool isEnabled) {
+            this.InvokeIfRequired(() => { this.chkEventsEnableScrolling.Checked = isEnabled; });
         }
 
         private void picOpenCloseCaptures_Click(object sender, EventArgs e) {
@@ -385,6 +404,10 @@ namespace PRoCon {
             }
 
             this.lsvEvents.EndUpdate();
+        }
+
+        private void chkEventsEnableScrolling_CheckedChanged(object sender, EventArgs e) {
+            this.m_prcClient.EventsLogging.ScrollingEnabled = this.chkEventsEnableScrolling.Checked;
         }
     }
 }

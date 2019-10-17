@@ -1,84 +1,111 @@
-/*  Copyright 2010 Geoffrey 'Phogue' Green
-
-    http://www.phogue.net
- 
-    This file is part of PRoCon Frostbite.
-
-    PRoCon Frostbite is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    PRoCon Frostbite is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with PRoCon Frostbite.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 using System;
-using System.Collections.Generic;
-using System.Text;
-
-//using PRoCon.Plugin;
 using System.CodeDom.Compiler;
-using System.Reflection;
-using Microsoft.CSharp;
+using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
-using System.Text.RegularExpressions;
-
+using System.Linq;
+using System.Reflection;
 using System.Security;
 using System.Security.Permissions;
-using System.Runtime.InteropServices;
-
-using System.Threading;
 using System.Security.Policy;
-
-//using System.Windows.Forms;
+using System.Text.RegularExpressions;
+using System.Threading;
+using Microsoft.CSharp;
+using PRoCon.Core.Accounts;
+using PRoCon.Core.Battlemap;
+using PRoCon.Core.Maps;
+using PRoCon.Core.Players;
+using PRoCon.Core.Plugin.Commands;
+using PRoCon.Core.Remote;
+using PRoCon.Core.Remote.Layer;
+using PRoCon.Core.TextChatModeration;
+using PRoCon.Core.Utils;
 
 namespace PRoCon.Core.Plugin {
-    using Core;
-    using Core.Players;
-    //using Core.Plugin;
-    using Core.Accounts;
-    using Core.Maps;
-    using Core.Plugin.Commands;
-    using Core.Remote;
-    using Core.Remote.Layer;
-
     public class PluginManager {
-        
-        public static string PLUGINS_DIRECTORY_NAME = "Plugins";
+        public static string PluginsDirectoryName = "Plugins";
 
         #region Private member attributes
 
-        private readonly object m_objMatchedInGameCommandsLocker = new object();
+        protected readonly object MatchedInGameCommandsLocker = new object();
 
-        private AppDomain m_appDomainSandbox;
-        private CPRoConPluginCallbacks m_cpPluginCallbacks;
+        protected AppDomain AppDomainSandbox;
 
-        private PRoConClient m_client;
+        protected CPRoConPluginCallbacks PluginCallbacks;
 
-        //private Dictionary<string, IPRoConPluginInterface> m_dicLoadedPlugins;
-        //private Dictionary<string, IPRoConPluginInterface> m_dicEnabledPlugins;
+        protected CPRoConPluginLoaderFactory PluginFactory;
 
-        //public Dictionary<string, Dictionary<string, string>> CacheFailCompiledPluginVariables { get; private set; }
+        protected PRoConClient ProconClient;
+
+        /// <summary>
+        ///     Queue of plugin invocations.
+        ///     I doubt this will ever actually have more than one invocation on it
+        ///     unless we make plugin calls asynchronous in the future.
+        ///     This however could break existing plugins that require all calls
+        ///     to be synchronous.
+        /// </summary>
+        protected List<PluginInvocation> Invocations { get; set; }
+
+        /// <summary>
+        ///     Thread to handle the looping of the timeout checker.
+        ///     This thread will check if any invocations have taken longer than five seconds.
+        ///     If they have it will destroy the AppDomain, rebuilding it but not loading
+        ///     the faulty plugin.
+        /// </summary>
+        protected Timer InvocationTimeoutTimer { get; set; }
+
+        /// <summary>
+        /// Bool specifying if a check is currently occuring for plugin invocation timeouts. We
+        /// ignore the check instead of blocking.
+        /// </summary>
+        protected bool InvocationTimeoutCheckRunning { get; set; }
+
+        /// <summary>
+        /// The maximum time span a single invocation can run
+        /// </summary>
+        protected TimeSpan InvocationMaxRuntime { get; set; }
+
+        /// <summary>
+        ///     A list of plugin class names that have previously been deemed as
+        ///     broken and should be ignored during compile/load time.
+        ///     If a plugin is the cause of the manager going into a panic this
+        ///     will serve for the manager to ignore the plugin when/if the manager
+        ///     is reloaded because of the panic.
+        /// </summary>
+        public List<String> IgnoredPluginClassNames { get; protected set; }
+
+        /// <summary>
+        /// The cache file, storing all the details of compiled plugins.
+        /// </summary>
+        public PluginCache PluginCache { get; set; }
 
         #endregion
 
         #region Events and Delegates
 
+        public delegate void PluginEmptyParameterHandler(string strClassName);
+
+        public delegate void PluginEventHandler();
+
         public delegate void PluginOutputHandler(string strOutput);
+
+        public delegate void PluginVariableAlteredHandler(PluginDetails spdNewDetails);
+
+        /// <summary>
+        ///     The plugin manager has gone into panic, the plugins should be
+        ///     reloaded as the AppDomain has been compromised.
+        ///     Panics can occur when a plugin invocation times out, possibly leaning
+        ///     towards a runaway call within the AppDomain that would be chewing
+        ///     a lot of resources.
+        /// </summary>
+        public event PluginEventHandler PluginPanic;
+
         public event PluginOutputHandler PluginOutput;
 
-        public delegate void PluginEmptyParameterHandler(string strClassName);
         public event PluginEmptyParameterHandler PluginLoaded;
         public event PluginEmptyParameterHandler PluginEnabled;
         public event PluginEmptyParameterHandler PluginDisabled;
 
-        public delegate void PluginVariableAlteredHandler(PluginDetails spdNewDetails);
         public event PluginVariableAlteredHandler PluginVariableAltered;
 
         #endregion
@@ -87,202 +114,216 @@ namespace PRoCon.Core.Plugin {
 
         public PluginDictionary Plugins { get; private set; }
 
-        //public List<string> EnabledClassNames {
-        //    get {
-        //        return this.m_plugins.EnabledClassNames;
-        //    }
-        //}
-        
-        //public List<string> LoadedClassNames { get; private set; }
-
         // TO DO: Move to seperate command control class with events captured by PluginManager.
         public Dictionary<string, MatchCommand> MatchedInGameCommands { get; private set; }
         private ConfirmationDictionary CommandsNeedingConfirmation { get; set; }
 
         public string PluginBaseDirectory {
-            get {
-                return Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, PluginManager.PLUGINS_DIRECTORY_NAME), this.m_client.GameType);
-            }
+            get { return Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, PluginsDirectoryName), ProconClient.GameType); }
+        }
+
+        public string PluginDebugTempDirectory {
+            get { return Path.Combine(this.PluginBaseDirectory, "Temp"); }
         }
 
         #endregion
 
         public PluginManager(PRoConClient cpcClient) {
-
-            m_appDomainSandbox = null;
-            this.Plugins = new PluginDictionary();
+            AppDomainSandbox = null;
+            Plugins = new PluginDictionary();
             //this.m_dicLoadedPlugins = new Dictionary<string, IPRoConPluginInterface>();
             //this.m_dicEnabledPlugins = new Dictionary<string, IPRoConPluginInterface>();
 
             //this.CacheFailCompiledPluginVariables = new Dictionary<string, Dictionary<string, string>>();
 
-
-            this.m_client = cpcClient;
+            ProconClient = cpcClient;
             //this.LoadedClassNames = new List<string>();
-            this.MatchedInGameCommands = new Dictionary<string, MatchCommand>();
-            this.CommandsNeedingConfirmation = new ConfirmationDictionary();
+            MatchedInGameCommands = new Dictionary<string, MatchCommand>();
+            CommandsNeedingConfirmation = new ConfirmationDictionary();
 
-            this.AssignEventHandler();
+            // Handle plugin invocation timeouts.
+            Invocations = new List<PluginInvocation>();
+            IgnoredPluginClassNames = new List<String>();
+
+            this.InvocationMaxRuntime = ProconClient.PluginMaxRuntimeSpan;
+
+            if (this.InvocationMaxRuntime.TotalMilliseconds < 10) {
+                this.InvocationMaxRuntime = PluginInvocation.MaximumRuntime;
+            }
+
+            // Default maximum runtime = 5 seconds, divided by 20
+            // check every 250 milliseconds.
+            this.InvocationTimeoutTimer = new Timer(state => this.InvocationTimeoutCheck(), null, (int)(this.InvocationMaxRuntime.TotalMilliseconds / 20.0), (int)(this.InvocationMaxRuntime.TotalMilliseconds / 20.0));
+
+            AssignEventHandler();
+        }
+
+        private void InvocationTimeoutCheck() {
+            if (this.InvocationTimeoutCheckRunning == false) {
+                this.InvocationTimeoutCheckRunning = true;
+
+                PluginInvocation invocation = Invocations.FirstOrDefault(); // .OrderBy(x => x.Runtime())
+
+                if (invocation != null) {
+                    if (invocation.Runtime() >= this.InvocationMaxRuntime) {
+                        WritePluginConsole("^1^bPlugin manager entering panic..");
+
+                        // Prevent the plugin from being loaded again during this instance
+                        // of the plugin manager.
+                        IgnoredPluginClassNames.Add(invocation.Plugin.ClassName);
+
+                        String faultText = invocation.FormatInvocationFault("Call exceeded maximum execution time of {0}", this.InvocationMaxRuntime);
+
+                        // Log the error so we might alert a plugin developer that
+                        // a call to their plugin has caused the plugin manager to go
+                        // into a panic.
+                        File.AppendAllText("PLUGIN_DEBUG.txt", faultText);
+
+                        WritePluginConsole("^1^bPlugin invocation timeout: ");
+                        WritePluginConsole("^1" + faultText);
+
+                        if (PluginPanic != null) {
+                            PluginPanic();
+                        }
+                    }
+
+                    this.InvocationTimeoutCheckRunning = false;
+                }
+            }
+        }
+
+        /// <summary>
+        ///     Adds an invocation to our list.
+        ///     It's titled Enqueue for this may change in the future if this class
+        ///     is modified to handle asynchronous calls to plugins it will have to handle
+        ///     in a sort-of queue like fashion.
+        /// </summary>
+        /// <param name="plugin">The plugin being invoked</param>
+        /// <param name="methodName">The method name within the plugin that is being invoked</param>
+        /// <param name="parameters">The parameters being passed to the method within the plugin being invoked.</param>
+        protected void EnqueueInvocation(Plugin plugin, String methodName, Object[] parameters) {
+            lock (this) {
+                Invocations.Add(new PluginInvocation() {
+                    Plugin = plugin,
+                    MethodName = methodName,
+                    Parameters = parameters
+                });
+            }
+        }
+
+        /// <summary>
+        ///     Removes all occurences of the invocation
+        ///     It's titled Dequeue for this may change in the future if this class
+        ///     is modified to handle asynchronous calls to plugins it will have to handle
+        ///     in a sort-of queue like fashion.
+        /// </summary>
+        /// <param name="plugin">The plugin that was invoked</param>
+        /// <param name="methodName">The method name within the plugin that was invoked</param>
+        /// <param name="parameters">The parameters being passed to the method within the plugin that was invoked.</param>
+        protected void DequeueInvocation(Plugin plugin, String methodName, Object[] parameters) {
+            lock (this) {
+                Invocations.RemoveAll(x => x.Plugin == plugin && x.MethodName == methodName);
+            }
         }
 
         // TO DO: Move to seperate command control class with events captured by PluginManager.
         public void RegisterCommand(MatchCommand mtcCommand) {
-
-            lock (this.m_objMatchedInGameCommandsLocker) {
-
+            lock (MatchedInGameCommandsLocker) {
                 if (mtcCommand.RegisteredClassname.Length > 0 && mtcCommand.RegisteredMethodName.Length > 0 && mtcCommand.Command.Length > 0) {
-
-                    if (this.MatchedInGameCommands.ContainsKey(mtcCommand.ToString()) == true) {
-
-                        if (String.Compare(this.MatchedInGameCommands[mtcCommand.ToString()].RegisteredClassname, mtcCommand.RegisteredClassname) != 0) {
-                            this.WritePluginConsole("^1^bIdentical command registration on class {0} overwriting class {1} command {2}", mtcCommand.RegisteredClassname, this.MatchedInGameCommands[mtcCommand.ToString()].RegisteredClassname, this.MatchedInGameCommands[mtcCommand.ToString()].ToString());
+                    if (MatchedInGameCommands.ContainsKey(mtcCommand.ToString()) == true) {
+                        if (String.CompareOrdinal(MatchedInGameCommands[mtcCommand.ToString()].RegisteredClassname, mtcCommand.RegisteredClassname) != 0) {
+                            WritePluginConsole("^1^bIdentical command registration on class {0} overwriting class {1} command {2}", mtcCommand.RegisteredClassname, MatchedInGameCommands[mtcCommand.ToString()].RegisteredClassname, MatchedInGameCommands[mtcCommand.ToString()].ToString());
                         }
 
-                        this.MatchedInGameCommands[mtcCommand.ToString()] = mtcCommand;
+                        MatchedInGameCommands[mtcCommand.ToString()] = mtcCommand;
                     }
                     else {
-                        this.MatchedInGameCommands.Add(mtcCommand.ToString(), mtcCommand);
+                        MatchedInGameCommands.Add(mtcCommand.ToString(), mtcCommand);
 
-                        this.InvokeOnAllEnabled("OnRegisteredCommand", mtcCommand);
+                        InvokeOnAllEnabled("OnRegisteredCommand", mtcCommand);
                     }
                 }
             }
         }
 
         public void UnregisterCommand(MatchCommand mtcCommand) {
-            lock (this.m_objMatchedInGameCommandsLocker) {
-                if (this.MatchedInGameCommands.ContainsKey(mtcCommand.ToString()) == true) {
-                    this.MatchedInGameCommands.Remove(mtcCommand.ToString());
-
-                    this.InvokeOnAllEnabled("OnUnregisteredCommand", mtcCommand);
+            lock (MatchedInGameCommandsLocker) {
+                if (MatchedInGameCommands.ContainsKey(mtcCommand.ToString()) == true) {
+                    MatchedInGameCommands.Remove(mtcCommand.ToString());
+                    InvokeOnAllEnabled("OnUnregisteredCommand", mtcCommand);
                 }
             }
         }
 
         public List<MatchCommand> GetRegisteredCommands() {
-            return new List<MatchCommand>(this.MatchedInGameCommands.Values);
+            return new List<MatchCommand>(MatchedInGameCommands.Values);
         }
 
-        private void WritePluginConsole(string strFormat, params object[] a_objArguments) {
-            if (this.PluginOutput != null) {
-                FrostbiteConnection.RaiseEvent(this.PluginOutput.GetInvocationList(), String.Format(strFormat, a_objArguments));
+        private void WritePluginConsole(string strFormat, params object[] arguments) {
+            if (PluginOutput != null) {
+                this.PluginOutput(String.Format(strFormat, arguments));
             }
         }
 
         public void EnablePlugin(string className) {
-
-            if (this.Plugins.IsLoaded(className) == true && this.Plugins.IsEnabled(className) == false) {
-
-                this.Plugins[className].IsEnabled = true;
+            if (Plugins.IsLoaded(className) == true && Plugins.IsEnabled(className) == false) {
+                Plugins[className].IsEnabled = true;
 
                 try {
-                    this.Plugins[className].Type.Invoke("OnPluginEnable");
+                    Plugins[className].Type.Invoke("OnPluginEnable");
 
-                    if (this.PluginEnabled != null) {
-                        FrostbiteConnection.RaiseEvent(this.PluginEnabled.GetInvocationList(), className);
+                    if (PluginEnabled != null) {
+                        this.PluginEnabled(className);
                     }
                 }
                 catch (Exception e) {
-                    this.WritePluginConsole("{0}.EnablePlugin(): {1}", className, e.Message);
+                    WritePluginConsole("{0}.EnablePlugin(): {1}", className, e.Message);
                 }
             }
-
-            /*
-
-            // If it's loaded
-            if (this.m_dicLoadedPlugins.ContainsKey(strClassName) == true && this.m_dicEnabledPlugins.ContainsKey(strClassName) == false) {
-                // Move to enabled
-                this.m_dicEnabledPlugins.Add(strClassName, this.m_dicLoadedPlugins[strClassName]);
-
-                try {
-                    if (this.m_dicEnabledPlugins.ContainsKey(strClassName) == true) {
-                        this.m_dicEnabledPlugins[strClassName].Invoke("OnPluginEnable");
-
-                        if (this.PluginEnabled != null) {
-                            FrostbiteConnection.RaiseEvent(this.PluginEnabled.GetInvocationList(), strClassName);
-                        }
-                    }
-                }
-                catch (Exception e) {
-                    if (this.PluginOutput != null) {
-
-                    }
-
-                    this.WritePluginConsole("{0}.EnablePlugin(): {1}", strClassName, e.Message);
-                }
-            }
-             * */
         }
 
         public void DisablePlugin(string className) {
-
-            if (this.Plugins.IsLoaded(className) == true && this.Plugins.IsEnabled(className) == true) {
-
-                this.Plugins[className].IsEnabled = false;
+            if (Plugins.IsLoaded(className) == true && Plugins.IsEnabled(className) == true) {
+                Plugins[className].IsEnabled = false;
 
                 try {
-                    this.Plugins[className].Type.Invoke("OnPluginDisable");
+                    Plugins[className].Type.Invoke("OnPluginDisable");
 
-                    if (this.PluginDisabled != null) {
-                        FrostbiteConnection.RaiseEvent(this.PluginDisabled.GetInvocationList(), className);
+                    if (PluginDisabled != null) {
+                        this.PluginDisabled(className);
                     }
                 }
                 catch (Exception e) {
-                    this.WritePluginConsole("{0}.DisablePlugin(): {1}", className, e.Message);
+                    WritePluginConsole("{0}.DisablePlugin(): {1}", className, e.Message);
                 }
             }
-
-            /*
-            if (this.m_dicEnabledPlugins.ContainsKey(strClassName) == true) {
-
-                try {
-                    if (this.m_dicEnabledPlugins.ContainsKey(strClassName) == true) {
-                        this.m_dicEnabledPlugins[strClassName].Invoke("OnPluginDisable");
-                    }
-                }
-                catch (Exception e) {
-                    this.WritePluginConsole("{0}.DisablePlugin(): {1}", strClassName, e.Message);
-                }
-
-                this.m_dicEnabledPlugins.Remove(strClassName);
-                
-                if (this.PluginDisabled != null) {
-                    FrostbiteConnection.RaiseEvent(this.PluginDisabled.GetInvocationList(), strClassName);
-                }
-            } */
         }
 
         public PluginDetails GetPluginDetails(string strClassName) {
-            PluginDetails spdReturnDetails = new PluginDetails();
-
-            spdReturnDetails.ClassName = strClassName;
-            spdReturnDetails.Name = this.InvokeOnLoaded_String(strClassName, "GetPluginName");
-            spdReturnDetails.Author = this.InvokeOnLoaded_String(strClassName, "GetPluginAuthor");
-            spdReturnDetails.Version = this.InvokeOnLoaded_String(strClassName, "GetPluginVersion");
-            spdReturnDetails.Website = this.InvokeOnLoaded_String(strClassName, "GetPluginWebsite");
-            spdReturnDetails.Description = this.InvokeOnLoaded_String(strClassName, "GetPluginDescription");
-
-            spdReturnDetails.DisplayPluginVariables = this.InvokeOnLoaded_CPluginVariables(strClassName, "GetDisplayPluginVariables");
-            spdReturnDetails.PluginVariables = this.InvokeOnLoaded_CPluginVariables(strClassName, "GetPluginVariables");
-
-            return spdReturnDetails;
+            return new PluginDetails {
+                ClassName = strClassName,
+                Name = InvokeOnLoaded_String(strClassName, "GetPluginName"),
+                Author = InvokeOnLoaded_String(strClassName, "GetPluginAuthor"),
+                Version = InvokeOnLoaded_String(strClassName, "GetPluginVersion"),
+                Website = InvokeOnLoaded_String(strClassName, "GetPluginWebsite"),
+                Description = InvokeOnLoaded_String(strClassName, "GetPluginDescription"),
+                DisplayPluginVariables = InvokeOnLoaded_CPluginVariables(strClassName, "GetDisplayPluginVariables"),
+                PluginVariables = InvokeOnLoaded_CPluginVariables(strClassName, "GetPluginVariables")
+            };
         }
 
-        public void SetPluginVariable(string strClassName, string strVariable, string strValue) {
-            
+        public void SetPluginVariable(string strClassName, string strVariable, string strValue, bool notification = true) {
             // FailCompiledPlugins
 
-            if (this.Plugins.Contains(strClassName) == true && this.Plugins[strClassName].IsLoaded == true) {
+            if (Plugins.Contains(strClassName) == true && Plugins[strClassName].IsLoaded == true) {
+                InvokeOnLoaded(strClassName, "SetPluginVariable", new object[] {strVariable, strValue});
 
-                this.InvokeOnLoaded(strClassName, "SetPluginVariable", new object[] { strVariable, strValue });
-
-                if (this.PluginVariableAltered != null) {
-                    FrostbiteConnection.RaiseEvent(this.PluginVariableAltered.GetInvocationList(), this.GetPluginDetails(strClassName));
+                if (PluginVariableAltered != null && notification == true) {
+                    this.PluginVariableAltered(GetPluginDetails(strClassName));
                 }
             }
-            else if (this.Plugins.IsLoaded(strClassName) == false) {
-
-                this.Plugins.SetCachedPluginVariable(strClassName, strVariable, strValue);
+            else if (Plugins.IsLoaded(strClassName) == false) {
+                Plugins.SetCachedPluginVariable(strClassName, strVariable, strValue);
 
                 /*
                 if (this.CacheFailCompiledPluginVariables[strClassName].ContainsKey(strVariable) == true) {
@@ -295,48 +336,85 @@ namespace PRoCon.Core.Plugin {
             }
         }
 
-        public void InvokeOnLoaded(string strClassName, string strMethod, params object[] a_objParameters) {
-            try {
-                if (this.Plugins.Contains(strClassName) == true && this.Plugins[strClassName].IsLoaded == true) {
-                    this.Plugins[strClassName].Type.Invoke(strMethod, a_objParameters);
+        public PluginDetails GetPluginDetailsCon(string strClassName) {
+            return new PluginDetails {
+                ClassName = strClassName,
+                Name = InvokeOnLoaded_String(strClassName, "GetPluginName"),
+                Author = InvokeOnLoaded_String(strClassName, "GetPluginAuthor"),
+                Version = InvokeOnLoaded_String(strClassName, "GetPluginVersion"),
+                Website = InvokeOnLoaded_String(strClassName, "GetPluginWebsite"),
+                Description = InvokeOnLoaded_String(strClassName, "GetPluginDescription"),
+                PluginVariables = InvokeOnLoaded_CPluginVariables(strClassName, "GetPluginVariables")
+            };
+        }
+
+        public void SetPluginVariableCon(string strClassName, string strVariable, string strValue, bool notification = true) {
+            // FailCompiledPlugins
+
+            if (Plugins.Contains(strClassName) == true && Plugins[strClassName].IsLoaded == true) {
+                InvokeOnLoaded(strClassName, "SetPluginVariable", new object[] {strVariable, strValue});
+
+                if (PluginVariableAltered != null && notification == true) {
+                    this.PluginVariableAltered(GetPluginDetailsCon(strClassName));
                 }
             }
-            catch (Exception e) {
-                this.WritePluginConsole("{0}.{1}(): {2}", strClassName, strMethod, e.Message);
+            else if (Plugins.IsLoaded(strClassName) == false) {
+                Plugins.SetCachedPluginVariable(strClassName, strVariable, strValue);
             }
         }
 
-        public string InvokeOnLoaded_String(string strClassName, string strMethod, params object[] a_objParameters) {
-
-            string strReturn = String.Empty;
-
+        public void InvokeOnLoaded(string strClassName, string strMethod, params object[] parameters) {
             try {
-                if (this.Plugins.Contains(strClassName) == true && this.Plugins[strClassName].IsLoaded == true) {
-                    strReturn = (string)this.Plugins[strClassName].Type.Invoke(strMethod, a_objParameters);
+                if (Plugins.Contains(strClassName) == true && Plugins[strClassName].IsLoaded == true) {
+                    EnqueueInvocation(Plugins[strClassName], strMethod, parameters);
+
+                    Plugins[strClassName].Type.Invoke(strMethod, parameters);
+
+                    DequeueInvocation(Plugins[strClassName], strMethod, parameters);
                 }
             }
             catch (Exception e) {
-                this.WritePluginConsole("{0}.{1}(): {2}", strClassName, strMethod, e.Message);
+                WritePluginConsole("{0}.{1}(): {2}", strClassName, strMethod, e.Message);
+            }
+        }
+
+        public string InvokeOnLoaded_String(string strClassName, string strMethod, params object[] parameters) {
+            string strReturn = String.Empty;
+
+            try {
+                if (Plugins.Contains(strClassName) == true && Plugins[strClassName].IsLoaded == true) {
+                    EnqueueInvocation(Plugins[strClassName], strMethod, parameters);
+
+                    strReturn = (string) Plugins[strClassName].Type.Invoke(strMethod, parameters);
+
+                    DequeueInvocation(Plugins[strClassName], strMethod, parameters);
+                }
+            }
+            catch (Exception e) {
+                WritePluginConsole("{0}.{1}(): {2}", strClassName, strMethod, e.Message);
             }
 
             return strReturn;
         }
 
         public List<CPluginVariable> GetPluginVariables(string strClassName) {
-            return this.InvokeOnLoaded_CPluginVariables(strClassName, "GetPluginVariables");
+            return InvokeOnLoaded_CPluginVariables(strClassName, "GetPluginVariables");
         }
 
-        private List<CPluginVariable> InvokeOnLoaded_CPluginVariables(string strClassName, string strMethod, params object[] a_objParameters) {
-
+        private List<CPluginVariable> InvokeOnLoaded_CPluginVariables(string strClassName, string strMethod, params object[] parameters) {
             List<CPluginVariable> lstReturn = null;
 
             try {
-                if (this.Plugins.Contains(strClassName) == true && this.Plugins[strClassName].IsLoaded == true) {
-                    lstReturn = (List<CPluginVariable>)this.Plugins[strClassName].Type.Invoke(strMethod, a_objParameters);
+                if (Plugins.Contains(strClassName) == true && Plugins[strClassName].IsLoaded == true) {
+                    EnqueueInvocation(Plugins[strClassName], strMethod, parameters);
+
+                    lstReturn = (List<CPluginVariable>) Plugins[strClassName].Type.Invoke(strMethod, parameters);
+
+                    DequeueInvocation(Plugins[strClassName], strMethod, parameters);
                 }
             }
             catch (Exception e) {
-                this.WritePluginConsole("{0}.{1}(): {2}", strClassName, strMethod, e.Message);
+                WritePluginConsole("{0}.{1}(): {2}", strClassName, strMethod, e.Message);
             }
 
             // If a problem occured return an empty list.
@@ -347,123 +425,159 @@ namespace PRoCon.Core.Plugin {
             return lstReturn;
         }
 
-        public object InvokeOnEnabled(string strClassName, string strMethod, params object[] a_objParameters) {
-
+        public object InvokeOnEnabled(string strClassName, string strMethod, params object[] parameters) {
             object returnObject = null;
 
             try {
-                if (this.Plugins.Contains(strClassName) == true && this.Plugins[strClassName].IsEnabled == true) {
-                    returnObject = this.Plugins[strClassName].Type.Invoke(strMethod, a_objParameters);
+                if (Plugins.Contains(strClassName) == true && Plugins[strClassName].IsEnabled == true) {
+                    EnqueueInvocation(Plugins[strClassName], strMethod, parameters);
+
+                    returnObject = Plugins[strClassName].Type.Invoke(strMethod, parameters);
+
+                    DequeueInvocation(Plugins[strClassName], strMethod, parameters);
                 }
             }
             catch (Exception e) {
-                this.WritePluginConsole("{0}.{1}(): {2}", strClassName, strMethod, e.Message);
+                WritePluginConsole("{0}.{1}(): {2}", strClassName, strMethod, e.Message);
             }
 
             return returnObject;
         }
 
-        public void InvokeOnAllLoaded(string strMethod, params object[] a_objParameters) {
-
-            foreach (Plugin plugin in this.Plugins) {
+        public void InvokeOnAllLoaded(string strMethod, params object[] parameters) {
+            foreach (Plugin plugin in Plugins) {
                 if (plugin.IsLoaded == true) {
                     try {
-                        plugin.ConditionalInvoke(strMethod, a_objParameters);
+                        EnqueueInvocation(plugin, strMethod, parameters);
+
+                        plugin.ConditionalInvoke(strMethod, parameters);
+
+                        DequeueInvocation(plugin, strMethod, parameters);
                     }
                     catch (Exception e) {
-                        this.WritePluginConsole("{0}.{1}(): {2}", plugin.ClassName, strMethod, e.Message);
+                        WritePluginConsole("{0}.{1}(): {2}", plugin.ClassName, strMethod, e.Message);
                     }
                 }
             }
         }
 
-        public void InvokeOnAllEnabled(string strMethod, params object[] a_objParameters) {
+        public void InvokeOnAllEnabled(string methodName, params object[] parameters) {
+            List<String> types = Plugins.Where(plugin => plugin.IsEnabled && plugin.CanConditionallyInvoke(methodName)).Select(plugin => plugin.ClassName).ToList();
 
-            foreach (Plugin plugin in this.Plugins) {
-                if (plugin.IsEnabled == true) {
-                    try {
-                        plugin.ConditionalInvoke(strMethod, a_objParameters);
-                    }
-                    catch (Exception e) {
-                        this.WritePluginConsole("{0}.{1}(): {2}", plugin.ClassName, strMethod, e.Message);
-                    }
-                }
+            if (types.Count > 0) {
+                PluginFactory.ConditionallyInvokeOn(types, methodName, parameters);
             }
         }
 
         private void PreparePluginsDirectory() {
-            
             try {
-                if (Directory.Exists(this.PluginBaseDirectory) == false) {
-                    Directory.CreateDirectory(this.PluginBaseDirectory);
+                if (Directory.Exists(PluginBaseDirectory) == false) {
+                    Directory.CreateDirectory(PluginBaseDirectory);
                 }
-                
-                File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "PRoCon.Core.dll"), Path.Combine(this.PluginBaseDirectory, "PRoCon.Core.dll"), true);
-                File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "PRoCon.Core.pdb"), Path.Combine(this.PluginBaseDirectory, "PRoCon.Core.pdb"), true);
+
+                File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "PRoCon.Core.dll"), Path.Combine(PluginBaseDirectory, "PRoCon.Core.dll"), true);
+                File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "MySql.Data.dll"), Path.Combine(PluginBaseDirectory, "MySql.Data.dll"), true);
+                File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "PRoCon.Core.pdb"), Path.Combine(PluginBaseDirectory, "PRoCon.Core.pdb"), true);
+
+                // Clean up temp directory
+                if (Directory.Exists(PluginDebugTempDirectory) == true) {
+                    foreach (string file in Directory.GetFiles(PluginDebugTempDirectory)) {
+                        File.Delete(file);
+                    }
+                }
+
+                // Remove PDB files from plugin directory
+                foreach (string file in Directory.GetFiles(PluginBaseDirectory, "*.pdb")) {
+                    File.Delete(file);
+                }
             }
-            catch (Exception e) { }
+            catch {
+            }
         }
 
         private void MoveLegacyPlugins() {
-
             try {
+                string legacyPluginDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, PluginsDirectoryName);
+                string legacyPluginDestinationDirectory = Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, PluginsDirectoryName), "BFBC2");
 
-                string legacyPluginDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, PluginManager.PLUGINS_DIRECTORY_NAME);
-                string legacyPluginDestinationDirectory = Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, PluginManager.PLUGINS_DIRECTORY_NAME), "BFBC2");
+                var legacyPluginsDirectoryInfo = new DirectoryInfo(legacyPluginDirectory);
+                FileInfo[] legacyPluginsInfo = legacyPluginsDirectoryInfo.GetFiles("*.cs");
 
-                DirectoryInfo legacyPluginsDirectoryInfo = new DirectoryInfo(legacyPluginDirectory);
-                FileInfo[] a_legacyPluginsInfo = legacyPluginsDirectoryInfo.GetFiles("*.cs");
-
-                foreach (FileInfo legacyPlugin in a_legacyPluginsInfo) {
-
+                foreach (FileInfo legacyPlugin in legacyPluginsInfo) {
                     try {
                         File.Move(legacyPlugin.FullName, Path.Combine(legacyPluginDestinationDirectory, legacyPlugin.Name));
                     }
                     catch (Exception e) {
-                        this.WritePluginConsole("^1PluginManager.MoveLegacyPlugins(): Move: \"{0}\"; Keeping /Plugins/BFBC2/ version.  Warning: {1};", legacyPlugin.Name, e.Message);
+                        WritePluginConsole("^1PluginManager.MoveLegacyPlugins(): Move: \"{0}\"; Keeping /Plugins/BFBC2/ version.  Warning: {1};", legacyPlugin.Name, e.Message);
                     }
                 }
             }
             catch (Exception e) {
-                this.WritePluginConsole("^1PluginManager.MoveLegacyPlugins(): Error: {0};", e.Message);
+                WritePluginConsole("^1PluginManager.MoveLegacyPlugins(): Error: {0};", e.Message);
             }
         }
 
         private CompilerParameters GenerateCompilerParameters() {
-
-            CompilerParameters parameters = new CompilerParameters();
+            var parameters = new CompilerParameters();
 
             parameters.ReferencedAssemblies.Add("System.dll");
+            parameters.ReferencedAssemblies.Add("System.Core.dll");
             parameters.ReferencedAssemblies.Add("System.Data.dll");
             parameters.ReferencedAssemblies.Add("System.Windows.Forms.dll");
             parameters.ReferencedAssemblies.Add("System.Xml.dll");
+            parameters.ReferencedAssemblies.Add("MySql.Data.dll");
             parameters.ReferencedAssemblies.Add("PRoCon.Core.dll");
             parameters.GenerateInMemory = false;
-            parameters.IncludeDebugInformation = false;
+            parameters.IncludeDebugInformation = this.ProconClient.Parent.OptionsSettings.EnablePluginDebugging;
+
+            if (this.ProconClient.Parent.OptionsSettings.EnablePluginDebugging == true)
+            {
+                Directory.CreateDirectory(PluginDebugTempDirectory); // checks also if folder exists, in that case does nothing
+                
+                if (!Directory.Exists(PluginDebugTempDirectory))
+                {
+                    WritePluginConsole("^1PluginManager.CompilePlugin(): failed to create temp directory");
+                    // TODO: Disable debugging when directory creation fails?
+                    //parameters.IncludeDebugInformation = false;
+                }
+            }
+            else
+            {
+                try
+                {
+                    if (Directory.Exists(PluginDebugTempDirectory))
+                    {
+                        Directory.Delete(PluginDebugTempDirectory, true);
+                    }
+                }
+                catch (Exception e)
+                {
+                    WritePluginConsole("^1PluginManager.CompilePlugin(): delete directory error: {0};", e.Message);
+                }
+            }
+
             parameters.OutputAssembly = "Default.dll";
 
             return parameters;
         }
 
         private void PrintPluginResults(FileInfo pluginFile, CompilerResults pluginResults) {
-
             // Produce compiler errors (if any)
-            if (pluginResults.Errors.HasErrors == true && pluginResults.Errors[0].ErrorNumber.CompareTo("CS0016") != 0) {
-                this.WritePluginConsole("Compiling {0}... ^1Errors^0 or ^3Warnings", pluginFile.Name);
+            if (pluginResults.Errors.HasErrors == true && String.Compare(pluginResults.Errors[0].ErrorNumber, "CS0016", StringComparison.Ordinal) != 0) {
+                WritePluginConsole("Compiling {0}... ^1Errors^0 or ^3Warnings", pluginFile.Name);
 
                 foreach (CompilerError errComp in pluginResults.Errors) {
-                    if (errComp.ErrorNumber.CompareTo("CS0016") != 0 && errComp.IsWarning == false) {
-                        this.WritePluginConsole("\t^1{0} (Line: {1}, C: {2}) {3}: {4}", pluginFile.Name, errComp.Line, errComp.Column, errComp.ErrorNumber, errComp.ErrorText);
+                    if (String.Compare(errComp.ErrorNumber, "CS0016", StringComparison.Ordinal) != 0 && errComp.IsWarning == false) {
+                        WritePluginConsole("\t^1{0} (Line: {1}, C: {2}) {3}: {4}", pluginFile.Name, errComp.Line, errComp.Column, errComp.ErrorNumber, errComp.ErrorText);
                     }
                 }
             }
             else {
-                this.WritePluginConsole("Compiling {0}... ^2Done", pluginFile.Name);
+                WritePluginConsole("Compiling {0}... ^2Done", pluginFile.Name);
             }
         }
 
         private string PrecompileDirectives(string source) {
-
             MatchCollection matches;
             int replacementDepth = 0;
 
@@ -472,12 +586,12 @@ namespace PRoCon.Core.Plugin {
 
                 foreach (Match match in matches) {
                     try {
-                        string fileContents = File.ReadAllText(Path.Combine(this.PluginBaseDirectory, match.Groups["file"].Value.Replace("%GameType%", this.m_client.GameType)));
+                        string fileContents = File.ReadAllText(Path.Combine(PluginBaseDirectory, match.Groups["file"].Value.Replace("%GameType%", ProconClient.GameType)));
 
                         source = source.Replace(match.Value, fileContents);
                     }
                     catch (Exception e) {
-                        this.WritePluginConsole("^PluginManager.PrecompileDirectives(): #include File Error: {0};", e.Message);
+                        WritePluginConsole("^PluginManager.PrecompileDirectives(): #include File Error: {0};", e.Message);
                     }
                 }
 
@@ -485,70 +599,100 @@ namespace PRoCon.Core.Plugin {
             } while (matches.Count > 0 && replacementDepth <= 5);
 
             if (replacementDepth > 5) {
-                this.WritePluginConsole("^PluginManager.PrecompileDirectives(): #include Recursion Error: Invalid depth of {0}", replacementDepth);
+                WritePluginConsole("^PluginManager.PrecompileDirectives(): #include Recursion Error: Invalid depth of {0}", replacementDepth);
             }
 
 
             return source;
         }
 
-        private void CompilePlugin(FileInfo pluginFile, string pluginClassName, CodeDomProvider pluginsCodeDomProvider, CompilerParameters parameters) {
+        /// <summary>
+        /// Opens a source file, gets the contents and processes it for any legacy using directives and procon's
+        /// crappy pre-compile directives.
+        /// </summary>
+        /// <param name="pluginFile"></param>
+        /// <returns></returns>
+        protected String BuildPluginSource(FileInfo pluginFile) {
+            String fullPluginSource = File.ReadAllText(pluginFile.FullName);
 
-            try {
-                string outputAssembly = Path.Combine(this.PluginBaseDirectory, pluginClassName + ".dll");
+            fullPluginSource = PrecompileDirectives(fullPluginSource);
 
-                if (File.Exists(outputAssembly) == false) {
+            fullPluginSource = fullPluginSource.Replace("using PRoCon.Plugin;", "using PRoCon.Core.Plugin;");
 
-                    string fullPluginSource = File.ReadAllText(pluginFile.FullName);
-
-                    parameters.OutputAssembly = outputAssembly;
-
-                    fullPluginSource = this.PrecompileDirectives(fullPluginSource);
-
-                    fullPluginSource = fullPluginSource.Replace("using PRoCon.Plugin;", "using PRoCon.Core.Plugin;");
-
-                    if (fullPluginSource.Contains("using PRoCon.Core;") == false) {
-                        fullPluginSource = fullPluginSource.Insert(fullPluginSource.IndexOf("using PRoCon.Core.Plugin;"), "\r\nusing PRoCon.Core;\r\n");
-                    }
-
-                    if (fullPluginSource.Contains("using PRoCon.Core.Players;") == false) {
-                        fullPluginSource = fullPluginSource.Insert(fullPluginSource.IndexOf("using PRoCon.Core.Plugin;"), "\r\nusing PRoCon.Core.Players;\r\n");
-                    }
-
-                    this.PrintPluginResults(pluginFile, pluginsCodeDomProvider.CompileAssemblyFromSource(parameters, fullPluginSource));
-                }
-                else {
-                    this.WritePluginConsole("Compiling {0}... Skipping", pluginFile.Name);
-                }
+            if (fullPluginSource.Contains("using PRoCon.Core;") == false) {
+                fullPluginSource = fullPluginSource.Insert(fullPluginSource.IndexOf("using PRoCon.Core.Plugin;", StringComparison.Ordinal), "\r\nusing PRoCon.Core;\r\n");
             }
-            catch (Exception) { }
+
+            if (fullPluginSource.Contains("using PRoCon.Core.Players;") == false) {
+                fullPluginSource = fullPluginSource.Insert(fullPluginSource.IndexOf("using PRoCon.Core.Plugin;", StringComparison.Ordinal), "\r\nusing PRoCon.Core.Players;\r\n");
+            }
+
+            return fullPluginSource;
         }
 
-        private void LoadPlugin(string pluginClassName, CPRoConPluginLoaderFactory pluginFactory) {
+        private void CompilePlugin(FileInfo pluginFile, string pluginClassName, CodeDomProvider pluginsCodeDomProvider, CompilerParameters parameters) {
 
-            string outputAssembly = Path.Combine(this.PluginBaseDirectory, pluginClassName + ".dll");
+            // 1. Grab the full source of this plugin
+            String fullPluginSource = this.BuildPluginSource(pluginFile);
+
+            // 2. Compute the hash of this plugin source.
+            String pluginSourceHash = MD5.String(fullPluginSource);
+
+            // 2. See if we require this plugin to be recompiled.
+            bool requiresRecompiling = this.PluginCache.IsModified(pluginClassName, pluginSourceHash);
+
+            String outputAssembly = Path.Combine(PluginBaseDirectory, pluginClassName + ".dll");
+
+            // 2.1: check if plugin debugging is enabled, always force compilation if true
+            if (requiresRecompiling == true || File.Exists(outputAssembly) == false || this.ProconClient.Parent.OptionsSettings.EnablePluginDebugging == true)
+            {
+                // 3. If a compiled plugin exists already, remove it now.
+                if (File.Exists(outputAssembly) == true) {
+                    try {
+                        File.Delete(outputAssembly);
+                    }
+                    catch {
+                        WritePluginConsole("Error removing file {0}... Skipping", outputAssembly);
+                    }
+                }
+
+                try {
+                    parameters.OutputAssembly = outputAssembly;
+                    if (this.ProconClient.Parent.OptionsSettings.EnablePluginDebugging == true) {
+                        parameters.TempFiles = new TempFileCollection(PluginDebugTempDirectory, true);
+                    }
+
+                    // 4. Now compile the plugin
+                    this.PrintPluginResults(pluginFile, pluginsCodeDomProvider.CompileAssemblyFromSource(parameters, fullPluginSource));
+
+                    // 5. Add/Update the storage cache for this plugin.
+                    this.PluginCache.Cache(new PluginCacheEntry() {
+                        ClassName = pluginClassName,
+                        Hash = pluginSourceHash,
+                        SourcePath = pluginFile.FullName,
+                        DestinationPath = outputAssembly
+                    });
+                }
+                catch (Exception e) {
+                    WritePluginConsole("Error compiling {0}: {1}", pluginClassName, e.Message);
+                }
+            }
+            else {
+                WritePluginConsole("Compiling {0}... ^2Using Cache", pluginFile.Name);
+            }
+        }
+
+        private void LoadPlugin(string pluginClassName, CPRoConPluginLoaderFactory pluginFactory, bool blSandboxDisabled) {
+            bool blSandboxEnabled = (blSandboxDisabled == true) ? false : true;
+            string outputAssembly = Path.Combine(PluginBaseDirectory, pluginClassName + ".dll");
 
             if (File.Exists(outputAssembly) == true) {
-
-                IPRoConPluginInterface loRemote = (IPRoConPluginInterface)pluginFactory.Create(outputAssembly, "PRoConEvents." + pluginClassName, null);
+                IPRoConPluginInterface pluginRemoteInterface = pluginFactory.Create(outputAssembly, "PRoConEvents." + pluginClassName, null);
 
                 // Indirectely invoke registercallbacks since the delegates cannot go in the interface.
-                loRemote.Invoke("RegisterCallbacks", new object[] { new CPRoConMarshalByRefObject.ExecuteCommandHandler(this.m_cpPluginCallbacks.ExecuteCommand_Callback),
-                                                                            new CPRoConMarshalByRefObject.GetAccountPrivilegesHandler(this.m_cpPluginCallbacks.GetAccountPrivileges_Callback),
-                                                                            new CPRoConMarshalByRefObject.GetVariableHandler(this.m_cpPluginCallbacks.GetVariable_Callback),
-                                                                            new CPRoConMarshalByRefObject.GetVariableHandler(this.m_cpPluginCallbacks.GetSvVariable_Callback),
-                                                                            new CPRoConMarshalByRefObject.GetMapDefinesHandler(this.m_cpPluginCallbacks.GetMapDefines_Callback),
-                                                                            new CPRoConMarshalByRefObject.TryGetLocalizedHandler(this.m_cpPluginCallbacks.TryGetLocalized_Callback),
-                                                                            new CPRoConMarshalByRefObject.RegisterCommandHandler(this.m_cpPluginCallbacks.RegisterCommand_Callback),
-                                                                            new CPRoConMarshalByRefObject.UnregisterCommandHandler(this.m_cpPluginCallbacks.UnregisterCommand_Callback),
-                                                                            new CPRoConMarshalByRefObject.GetRegisteredCommandsHandler(this.m_cpPluginCallbacks.GetRegisteredCommands_Callback),
-                                                                            new CPRoConMarshalByRefObject.GetWeaponDefinesHandler(this.m_cpPluginCallbacks.GetWeaponDefines_Callback),
-                                                                            new CPRoConMarshalByRefObject.GetSpecializationDefinesHandler(this.m_cpPluginCallbacks.GetSpecializationDefines_Callback),
-                                                                            new CPRoConMarshalByRefObject.GetLoggedInAccountUsernamesHandler(this.m_cpPluginCallbacks.GetLoggedInAccountUsernames_Callback),
-                                                                            new CPRoConMarshalByRefObject.RegisterEventsHandler(this.m_cpPluginCallbacks.RegisterEvents_Callback)
-                                                                          });
+                pluginRemoteInterface.Invoke("RegisterCallbacks", new object[] {new CPRoConMarshalByRefObject.ExecuteCommandHandler(PluginCallbacks.ExecuteCommand_Callback), new CPRoConMarshalByRefObject.GetAccountPrivilegesHandler(PluginCallbacks.GetAccountPrivileges_Callback), new CPRoConMarshalByRefObject.GetVariableHandler(PluginCallbacks.GetVariable_Callback), new CPRoConMarshalByRefObject.GetVariableHandler(PluginCallbacks.GetSvVariable_Callback), new CPRoConMarshalByRefObject.GetMapDefinesHandler(PluginCallbacks.GetMapDefines_Callback), new CPRoConMarshalByRefObject.TryGetLocalizedHandler(PluginCallbacks.TryGetLocalized_Callback), new CPRoConMarshalByRefObject.RegisterCommandHandler(PluginCallbacks.RegisterCommand_Callback), new CPRoConMarshalByRefObject.UnregisterCommandHandler(PluginCallbacks.UnregisterCommand_Callback), new CPRoConMarshalByRefObject.GetRegisteredCommandsHandler(PluginCallbacks.GetRegisteredCommands_Callback), new CPRoConMarshalByRefObject.GetWeaponDefinesHandler(PluginCallbacks.GetWeaponDefines_Callback), new CPRoConMarshalByRefObject.GetSpecializationDefinesHandler(PluginCallbacks.GetSpecializationDefines_Callback), new CPRoConMarshalByRefObject.GetLoggedInAccountUsernamesHandler(PluginCallbacks.GetLoggedInAccountUsernames_Callback), new CPRoConMarshalByRefObject.RegisterEventsHandler(PluginCallbacks.RegisterEvents_Callback)});
 
-                this.Plugins.AddLoadedPlugin(pluginClassName, loRemote);
+                Plugins.AddLoadedPlugin(pluginClassName, pluginRemoteInterface);
 
                 /*
                 if (this.m_dicLoadedPlugins.ContainsKey(pluginClassName) == false) {
@@ -560,12 +704,22 @@ namespace PRoCon.Core.Plugin {
 
                 this.LoadedClassNames.Add(pluginClassName);
                 */
-                this.WritePluginConsole("Loading {0}... ^2Loaded", pluginClassName);
 
-                this.InvokeOnLoaded(pluginClassName, "OnPluginLoaded", this.m_client.HostName, this.m_client.Port.ToString(), Assembly.GetExecutingAssembly().GetName().Version.ToString());
+                var pluginEnvironment = new List<string>() {
+                    Assembly.GetExecutingAssembly().GetName().Version.ToString(),
+                    ProconClient.GameType,
+                    ProconClient.CurrentServerInfo.GameMod.ToString(),
+                    blSandboxEnabled.ToString()
+                };
 
-                if (this.PluginLoaded != null) {
-                    FrostbiteConnection.RaiseEvent(this.PluginLoaded.GetInvocationList(), pluginClassName);
+                InvokeOnLoaded(pluginClassName, "OnPluginLoadingEnv", pluginEnvironment);
+
+                WritePluginConsole("Loading {0}... ^2Loaded", pluginClassName);
+
+                InvokeOnLoaded(pluginClassName, "OnPluginLoaded", ProconClient.HostName, ProconClient.Port.ToString(CultureInfo.InvariantCulture), Assembly.GetExecutingAssembly().GetName().Version.ToString());
+
+                if (PluginLoaded != null) {
+                    this.PluginLoaded(pluginClassName);
                 }
             }
             //else {
@@ -574,124 +728,164 @@ namespace PRoCon.Core.Plugin {
         }
 
         public void RegisterPluginEvents(string className, List<string> events) {
-            
-            if (this.Plugins.IsLoaded(className) == true) {
-                this.Plugins[className].RegisteredEvents = events;
+            if (Plugins.IsLoaded(className) == true) {
+                Plugins[className].RegisteredEvents = events;
             }
         }
 
-        public void CompilePlugins(PermissionSet pluginSandboxPermissions) {
+        /// <summary>
+        /// Builds the strong name of a loaded assembly
+        /// </summary>
+        /// <param name="assembly">The assembly to fetch the strong name of</param>
+        /// <returns></returns>
+        protected static StrongName GetStrongName(Assembly assembly) {
+            AssemblyName name = assembly.GetName();
 
+            return new StrongName(new StrongNamePublicKeyBlob(name.GetPublicKey()), name.Name, name.Version);
+        }
+
+        public void CompilePlugins(PermissionSet pluginSandboxPermissions, List<String> ignoredPluginClassNames = null) {
             try {
-                this.WritePluginConsole("Preparing plugins directory..");
-                this.PreparePluginsDirectory();
-                this.CleanPlugins();
 
-                this.WritePluginConsole("Moving legacy plugins..");
-                this.MoveLegacyPlugins();
+                if (File.Exists(Path.Combine(this.PluginBaseDirectory, "PluginCache.xml")) == true) {
+                    WritePluginConsole("Loading plugin cache..");
 
-                this.WritePluginConsole("Creating compiler..");
-                CodeDomProvider pluginsCodeDomProvider = CodeDomProvider.CreateProvider("CSharp");
+                    try {
+                        this.PluginCache = PluginCache.Load(Path.Combine(this.PluginBaseDirectory, "PluginCache.xml"));
+                    }
+                    catch (Exception e) {
+                        WritePluginConsole("Error loading plugin cache: {0}", e.Message);
+                    }
+                }
 
-                this.WritePluginConsole("Configuring compiler..");
+                // Recover from exceptions or logic errors if the document parsed correctly, but didn't deserialize correctly.
+                if (this.PluginCache == null) {
+                    this.PluginCache = new PluginCache();
+                }
+
+                // Make sure we ignore any plugins passed in. These won't even be loaded again.
+                if (ignoredPluginClassNames != null) {
+                    IgnoredPluginClassNames = ignoredPluginClassNames;
+                }
+
+                // Clear out all invocations if this is a reload.
+                Invocations.Clear();
+
+                WritePluginConsole("Preparing plugins directory..");
+                PreparePluginsDirectory();
+
+                WritePluginConsole("Moving legacy plugins..");
+                MoveLegacyPlugins();
+
+                WritePluginConsole("Creating compiler..");
+                // CodeDomProvider pluginsCodeDomProvider = CodeDomProvider.CreateProvider("CSharp");
+                var providerOptions = new Dictionary<String, String>();
+                providerOptions.Add("CompilerVersion", "v3.5");
+                CodeDomProvider pluginsCodeDomProvider = new CSharpCodeProvider(providerOptions);
+
+                WritePluginConsole("Configuring compiler..");
                 CompilerParameters parameters = GenerateCompilerParameters();
                 // AppDomainSetup domainSetup = new AppDomainSetup() { ApplicationBase = this.PluginBaseDirectory };
                 // Start of XpKillers mono workaround
 
                 AppDomainSetup domainSetup = null;
                 Type t = Type.GetType("Mono.Runtime");
-                if (t != null)
-                {
+                if (t != null) {
                     //Console.WriteLine("You are running with the Mono VM");
-                    this.WritePluginConsole("Running with Mono VM..");
+                    WritePluginConsole("Running with Mono VM..");
                     //AppDomain.CurrentDomain.BaseDirectory
-                    domainSetup = new AppDomainSetup() { ApplicationBase = AppDomain.CurrentDomain.BaseDirectory };
-                    domainSetup.PrivateBinPath = this.PluginBaseDirectory;
+                    domainSetup = new AppDomainSetup() {
+                        ApplicationBase = AppDomain.CurrentDomain.BaseDirectory
+                    };
+                    domainSetup.PrivateBinPath = PluginBaseDirectory;
                 }
-                else
-                {
+                else {
                     // Console.WriteLine("You are running something else (native .Net)");
-                    this.WritePluginConsole("Running with native .Net..");
-                    domainSetup = new AppDomainSetup() { ApplicationBase = this.PluginBaseDirectory };
+                    WritePluginConsole("Running with native .Net..");
+                    domainSetup = new AppDomainSetup() {
+                        ApplicationBase = PluginBaseDirectory
+                    };
                 }
                 // Workaround end
 
-                this.WritePluginConsole("Building sandbox..");
-                Evidence hostEvidence = new Evidence();
+                WritePluginConsole("Building sandbox..");
+                var hostEvidence = new Evidence();
                 hostEvidence.AddHost(new Zone(SecurityZone.MyComputer));
 
-                this.m_appDomainSandbox = AppDomain.CreateDomain(this.m_client.HostName + this.m_client.Port + "Engine", hostEvidence, domainSetup, pluginSandboxPermissions);
+                AppDomainSandbox = AppDomain.CreateDomain(ProconClient.HostName + ProconClient.Port + "Engine", hostEvidence, domainSetup, pluginSandboxPermissions, PluginManager.GetStrongName(AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(assembly => assembly.GetName().Name == "MySql.Data")));
 
-                this.WritePluginConsole("Configuring sandbox..");
+                WritePluginConsole("Configuring sandbox..");
                 // create the factory class in the secondary app-domain
-                CPRoConPluginLoaderFactory pluginFactory = (CPRoConPluginLoaderFactory)this.m_appDomainSandbox.CreateInstance("PRoCon.Core", "PRoCon.Core.Plugin.CPRoConPluginLoaderFactory").Unwrap();
-                this.m_cpPluginCallbacks = new CPRoConPluginCallbacks(this.m_client.ExecuteCommand, this.m_client.GetAccountPrivileges, this.m_client.GetVariable, this.m_client.GetSvVariable, this.m_client.GetMapDefines, this.m_client.TryGetLocalized, this.RegisterCommand, this.UnregisterCommand, this.GetRegisteredCommands, this.m_client.GetWeaponDefines, this.m_client.GetSpecializationDefines, this.m_client.Layer.GetLoggedInAccounts, this.RegisterPluginEvents);
+                PluginFactory = (CPRoConPluginLoaderFactory) AppDomainSandbox.CreateInstance("PRoCon.Core", "PRoCon.Core.Plugin.CPRoConPluginLoaderFactory").Unwrap();
+                PluginCallbacks = new CPRoConPluginCallbacks(ProconClient.ExecuteCommand, ProconClient.GetAccountPrivileges, ProconClient.GetVariable, ProconClient.GetSvVariable, ProconClient.GetMapDefines, ProconClient.TryGetLocalized, RegisterCommand, UnregisterCommand, GetRegisteredCommands, ProconClient.GetWeaponDefines, ProconClient.GetSpecializationDefines, ProconClient.Layer.GetLoggedInAccountUsernames, RegisterPluginEvents);
 
-                this.WritePluginConsole("Compiling and loading plugins..");
+                WritePluginConsole("Compiling and loading plugins..");
 
-
-                DirectoryInfo pluginsDirectoryInfo = new DirectoryInfo(this.PluginBaseDirectory);
-                FileInfo[] a_pluginsFileInfo = pluginsDirectoryInfo.GetFiles("*.cs");
-
-                foreach (FileInfo pluginFile in a_pluginsFileInfo) {
-
-                    string className = Regex.Replace(pluginFile.Name, "\\.cs$", "");
-
-                    this.CompilePlugin(pluginFile, className, pluginsCodeDomProvider, parameters);
-
-                    this.LoadPlugin(className, pluginFactory);
+                if (this.ProconClient.Parent.OptionsSettings.EnablePluginDebugging == true) {
+                    WritePluginConsole("^b^1*** PLUGIN DEBUGGING ENABLED ***^0^n");
+                    WritePluginConsole("^b^1If you're not actively testing or debugging a plugin, please disable this setting in Procon's options!^0^n");
                 }
+
+                var pluginsDirectoryInfo = new DirectoryInfo(PluginBaseDirectory);
+                string className = string.Empty;
+
+                foreach (FileInfo pluginFile in pluginsDirectoryInfo.GetFiles("*.cs")) {
+                    try
+                    {
+                        className = Regex.Replace(pluginFile.Name, "\\.cs$", "");
+
+                        if (IgnoredPluginClassNames.Contains(className) == false)
+                        {
+                            CompilePlugin(pluginFile, className, pluginsCodeDomProvider, parameters);
+
+                            LoadPlugin(className, PluginFactory, pluginSandboxPermissions.IsUnrestricted());
+                        }
+                        else
+                        {
+                            WritePluginConsole("Compiling {0}... ^1^bIgnored", className);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        WritePluginConsole("Compiling {0}... ^1^bException", className);
+                        WritePluginConsole(e.ToString());
+                    }
+                }
+
+                this.PluginCache.Save(Path.Combine(this.PluginBaseDirectory, "PluginCache.xml"));
 
                 pluginsCodeDomProvider.Dispose();
             }
             catch (Exception e) {
-                this.WritePluginConsole(e.Message);
+                WritePluginConsole(e.Message);
             }
         }
 
         ~PluginManager() {
-            this.m_appDomainSandbox = null;
+            AppDomainSandbox = null;
             //this.m_dicEnabledPlugins = null;
             //this.m_dicLoadedPlugins = null;
             //this.LoadedClassNames = null;
-            this.m_client = null;
-        }
+            ProconClient = null;
 
-        private void CleanPlugins() {
-
-            DirectoryInfo pluginsDirectoryInfo = new DirectoryInfo(this.PluginBaseDirectory);
-            FileInfo[] a_pluginsFileInfo = pluginsDirectoryInfo.GetFiles("*.cs");
-
-            foreach (FileInfo pluginFile in a_pluginsFileInfo) {
-
-                string compiledPluginFileName = Path.Combine(this.PluginBaseDirectory, Regex.Replace(pluginFile.Name, "\\.cs$", "") + ".dll");
-
-                if (File.Exists(compiledPluginFileName) == true) {
-                    try {
-                        File.Delete(compiledPluginFileName);
-                    }
-                    catch (Exception) { }
-                }
-            }
-
+            this.InvocationTimeoutTimer.Dispose();
         }
 
         public void Unload() {
+            UnassignEventHandler();
 
-            this.UnassignEventHandler();
+            this.InvocationTimeoutTimer.Dispose();
 
             try {
-                if (this.m_appDomainSandbox != null) {
-                    AppDomain.Unload(this.m_appDomainSandbox);
+                if (AppDomainSandbox != null) {
+                    AppDomain.Unload(AppDomainSandbox);
                 }
             }
             catch (Exception e) {
-                if (this.m_client != null) {
-                    this.WritePluginConsole("^1{0}", e.Message);
+                if (ProconClient != null) {
+                    WritePluginConsole("^1{0}", e.Message);
                 }
             }
-
-            this.CleanPlugins();
 
             GC.Collect();
         }
@@ -699,341 +893,509 @@ namespace PRoCon.Core.Plugin {
         #region Event Assignments
 
         private void UnassignEventHandler() {
+            ProconClient.Login -= new PRoConClient.EmptyParamterHandler(m_prcClient_CommandLogin);
+            ProconClient.Logout -= new PRoConClient.EmptyParamterHandler(m_prcClient_CommandLogout);
+            ProconClient.Game.Quit -= new FrostbiteClient.EmptyParamterHandler(m_prcClient_CommandQuit);
 
-            this.m_client.Login -= new PRoConClient.EmptyParamterHandler(m_prcClient_CommandLogin);
-            this.m_client.Logout -= new PRoConClient.EmptyParamterHandler(m_prcClient_CommandLogout);
-            this.m_client.Game.Quit -= new FrostbiteClient.EmptyParamterHandler(m_prcClient_CommandQuit);
+            ProconClient.ConnectionClosed -= new PRoConClient.EmptyParamterHandler(m_prcClient_ConnectionClosed);
 
-            this.m_client.ConnectionClosed -= new PRoConClient.EmptyParamterHandler(m_prcClient_ConnectionClosed);
+            ProconClient.Game.PlayerJoin -= new FrostbiteClient.PlayerEventHandler(m_prcClient_PlayerJoin);
+            ProconClient.Game.PlayerLeft -= new FrostbiteClient.PlayerLeaveHandler(m_prcClient_PlayerLeft);
+            ProconClient.Game.PlayerDisconnected -= new FrostbiteClient.PlayerDisconnectedHandler(m_prcClient_PlayerDisconnected);
+            ProconClient.Game.PlayerAuthenticated -= new FrostbiteClient.PlayerAuthenticatedHandler(m_prcClient_PlayerAuthenticated);
+            ProconClient.Game.PlayerKicked -= new FrostbiteClient.PlayerKickedHandler(m_prcClient_PlayerKicked);
+            ProconClient.Game.PlayerChangedTeam -= new FrostbiteClient.PlayerTeamChangeHandler(m_prcClient_PlayerChangedTeam);
+            ProconClient.Game.PlayerChangedSquad -= new FrostbiteClient.PlayerTeamChangeHandler(m_prcClient_PlayerChangedSquad);
+            ProconClient.PlayerKilled -= new PRoConClient.PlayerKilledHandler(m_prcClient_PlayerKilled);
 
-            this.m_client.Game.PlayerJoin -= new FrostbiteClient.PlayerEventHandler(m_prcClient_PlayerJoin);
-            this.m_client.Game.PlayerLeft -= new FrostbiteClient.PlayerLeaveHandler(m_prcClient_PlayerLeft);
-            this.m_client.Game.PlayerAuthenticated -= new FrostbiteClient.PlayerAuthenticatedHandler(m_prcClient_PlayerAuthenticated);
-            this.m_client.Game.PlayerKicked -= new FrostbiteClient.PlayerKickedHandler(m_prcClient_PlayerKicked);
-            this.m_client.Game.PlayerChangedTeam -= new FrostbiteClient.PlayerTeamChangeHandler(m_prcClient_PlayerChangedTeam);
-            this.m_client.Game.PlayerChangedSquad -= new FrostbiteClient.PlayerTeamChangeHandler(m_prcClient_PlayerChangedSquad);
-            this.m_client.PlayerKilled -= new PRoConClient.PlayerKilledHandler(m_prcClient_PlayerKilled);
+            ProconClient.Game.GlobalChat -= new FrostbiteClient.GlobalChatHandler(m_prcClient_GlobalChat);
+            ProconClient.Game.TeamChat -= new FrostbiteClient.TeamChatHandler(m_prcClient_TeamChat);
+            ProconClient.Game.SquadChat -= new FrostbiteClient.SquadChatHandler(m_prcClient_SquadChat);
+            ProconClient.Game.PlayerChat -= new FrostbiteClient.PlayerChatHandler(m_prcClient_PlayerChat);
 
-            this.m_client.Game.GlobalChat -= new FrostbiteClient.GlobalChatHandler(m_prcClient_GlobalChat);
-            this.m_client.Game.TeamChat -= new FrostbiteClient.TeamChatHandler(m_prcClient_TeamChat);
-            this.m_client.Game.SquadChat -= new FrostbiteClient.SquadChatHandler(m_prcClient_SquadChat);
+            ProconClient.Game.ResponseError -= new FrostbiteClient.ResponseErrorHandler(m_prcClient_ResponseError);
+            ProconClient.Game.Version -= new FrostbiteClient.VersionHandler(m_prcClient_Version);
+            ProconClient.Game.Help -= new FrostbiteClient.HelpHandler(m_prcClient_Help);
 
-            this.m_client.Game.ResponseError -= new FrostbiteClient.ResponseErrorHandler(m_prcClient_ResponseError);
-            this.m_client.Game.Version -= new FrostbiteClient.VersionHandler(m_prcClient_Version);
-            this.m_client.Game.Help -= new FrostbiteClient.HelpHandler(m_prcClient_Help);
+            ProconClient.Game.RunScript -= new FrostbiteClient.RunScriptHandler(m_prcClient_RunScript);
+            ProconClient.Game.RunScriptError -= new FrostbiteClient.RunScriptErrorHandler(m_prcClient_RunScriptError);
 
-            this.m_client.Game.RunScript -= new FrostbiteClient.RunScriptHandler(m_prcClient_RunScript);
-            this.m_client.Game.RunScriptError -= new FrostbiteClient.RunScriptErrorHandler(m_prcClient_RunScriptError);
+            ProconClient.Game.PunkbusterMessage -= new FrostbiteClient.PunkbusterMessageHandler(m_prcClient_PunkbusterMessage);
+            ProconClient.Game.LoadingLevel -= new FrostbiteClient.LoadingLevelHandler(m_prcClient_LoadingLevel);
+            ProconClient.Game.LevelStarted -= new FrostbiteClient.EmptyParamterHandler(m_prcClient_LevelStarted);
+            ProconClient.Game.LevelLoaded -= new FrostbiteClient.LevelLoadedHandler(m_prcClient_LevelLoaded);
 
-            this.m_client.Game.PunkbusterMessage -= new FrostbiteClient.PunkbusterMessageHandler(m_prcClient_PunkbusterMessage);
-            this.m_client.Game.LoadingLevel -= new FrostbiteClient.LoadingLevelHandler(m_prcClient_LoadingLevel);
-            this.m_client.Game.LevelStarted -= new FrostbiteClient.EmptyParamterHandler(m_prcClient_LevelStarted);
-            this.m_client.Game.LevelLoaded -= new FrostbiteClient.LevelLoadedHandler(m_prcClient_LevelLoaded);
+            ProconClient.Game.ServerInfo -= new FrostbiteClient.ServerInfoHandler(m_prcClient_ServerInfo);
+            ProconClient.Game.Yelling -= new FrostbiteClient.YellingHandler(m_prcClient_Yelling);
+            ProconClient.Game.Saying -= new FrostbiteClient.SayingHandler(m_prcClient_Saying);
 
-            this.m_client.Game.ServerInfo -= new FrostbiteClient.ServerInfoHandler(m_prcClient_ServerInfo);
-            this.m_client.Game.Yelling -= new FrostbiteClient.YellingHandler(m_prcClient_Yelling);
-            this.m_client.Game.Saying -= new FrostbiteClient.SayingHandler(m_prcClient_Saying);
+            ProconClient.Game.RunNextRound -= new FrostbiteClient.EmptyParamterHandler(m_prcClient_RunNextLevel);
+            ProconClient.Game.CurrentLevel -= new FrostbiteClient.CurrentLevelHandler(m_prcClient_CurrentLevel);
+            ProconClient.Game.RestartRound -= new FrostbiteClient.EmptyParamterHandler(m_prcClient_RestartLevel);
+            ProconClient.Game.SupportedMaps -= new FrostbiteClient.SupportedMapsHandler(m_prcClient_SupportedMaps);
 
-            this.m_client.Game.RunNextRound -= new FrostbiteClient.EmptyParamterHandler(m_prcClient_RunNextLevel);
-            this.m_client.Game.CurrentLevel -= new FrostbiteClient.CurrentLevelHandler(m_prcClient_CurrentLevel);
-            this.m_client.Game.RestartRound -= new FrostbiteClient.EmptyParamterHandler(m_prcClient_RestartLevel);
-            this.m_client.Game.SupportedMaps -= new FrostbiteClient.SupportedMapsHandler(m_prcClient_SupportedMaps);
+            ProconClient.Game.PlaylistSet -= new FrostbiteClient.PlaylistSetHandler(m_prcClient_PlaylistSet);
+            ProconClient.Game.ListPlaylists -= new FrostbiteClient.ListPlaylistsHandler(m_prcClient_ListPlaylists);
 
-            this.m_client.Game.PlaylistSet -= new FrostbiteClient.PlaylistSetHandler(m_prcClient_PlaylistSet);
-            this.m_client.Game.ListPlaylists -= new FrostbiteClient.ListPlaylistsHandler(m_prcClient_ListPlaylists);
+            ProconClient.Game.ListPlayers -= new FrostbiteClient.ListPlayersHandler(m_prcClient_ListPlayers);
 
-            this.m_client.Game.ListPlayers -= new FrostbiteClient.ListPlayersHandler(m_prcClient_ListPlayers);
+            ProconClient.Game.BanListLoad -= new FrostbiteClient.EmptyParamterHandler(m_prcClient_BanListLoad);
+            ProconClient.Game.BanListSave -= new FrostbiteClient.EmptyParamterHandler(m_prcClient_BanListSave);
+            ProconClient.Game.BanListAdd -= new FrostbiteClient.BanListAddHandler(m_prcClient_BanListAdd);
+            ProconClient.Game.BanListRemove -= new FrostbiteClient.BanListRemoveHandler(m_prcClient_BanListRemove);
+            ProconClient.Game.BanListClear -= new FrostbiteClient.EmptyParamterHandler(m_prcClient_BanListClear);
+            ProconClient.FullBanListList -= new PRoConClient.FullBanListListHandler(m_prcClient_BanListList);
 
-            this.m_client.Game.BanListLoad -= new FrostbiteClient.EmptyParamterHandler(m_prcClient_BanListLoad);
-            this.m_client.Game.BanListSave -= new FrostbiteClient.EmptyParamterHandler(m_prcClient_BanListSave);
-            this.m_client.Game.BanListAdd -= new FrostbiteClient.BanListAddHandler(m_prcClient_BanListAdd);
-            this.m_client.Game.BanListRemove -= new FrostbiteClient.BanListRemoveHandler(m_prcClient_BanListRemove);
-            this.m_client.Game.BanListClear -= new FrostbiteClient.EmptyParamterHandler(m_prcClient_BanListClear);
-            this.m_client.FullBanListList -= new PRoConClient.FullBanListListHandler(m_prcClient_BanListList);
+            ProconClient.Game.ReservedSlotsConfigFile -= new FrostbiteClient.ReserverdSlotsConfigFileHandler(m_prcClient_ReservedSlotsConfigFile);
+            ProconClient.Game.ReservedSlotsLoad -= new FrostbiteClient.EmptyParamterHandler(m_prcClient_ReservedSlotsLoad);
+            ProconClient.Game.ReservedSlotsSave -= new FrostbiteClient.EmptyParamterHandler(m_prcClient_ReservedSlotsSave);
+            ProconClient.Game.ReservedSlotsPlayerAdded -= new FrostbiteClient.ReservedSlotsPlayerHandler(m_prcClient_ReservedSlotsPlayerAdded);
+            ProconClient.Game.ReservedSlotsPlayerRemoved -= new FrostbiteClient.ReservedSlotsPlayerHandler(m_prcClient_ReservedSlotsPlayerRemoved);
+            ProconClient.Game.ReservedSlotsCleared -= new FrostbiteClient.EmptyParamterHandler(m_prcClient_ReservedSlotsCleared);
+            ProconClient.Game.ReservedSlotsList -= new FrostbiteClient.ReservedSlotsListHandler(m_prcClient_ReservedSlotsList);
 
-            this.m_client.Game.ReservedSlotsConfigFile -= new FrostbiteClient.ReserverdSlotsConfigFileHandler(m_prcClient_ReservedSlotsConfigFile);
-            this.m_client.Game.ReservedSlotsLoad -= new FrostbiteClient.EmptyParamterHandler(m_prcClient_ReservedSlotsLoad);
-            this.m_client.Game.ReservedSlotsSave -= new FrostbiteClient.EmptyParamterHandler(m_prcClient_ReservedSlotsSave);
-            this.m_client.Game.ReservedSlotsPlayerAdded -= new FrostbiteClient.ReservedSlotsPlayerHandler(m_prcClient_ReservedSlotsPlayerAdded);
-            this.m_client.Game.ReservedSlotsPlayerRemoved -= new FrostbiteClient.ReservedSlotsPlayerHandler(m_prcClient_ReservedSlotsPlayerRemoved);
-            this.m_client.Game.ReservedSlotsCleared -= new FrostbiteClient.EmptyParamterHandler(m_prcClient_ReservedSlotsCleared);
-            this.m_client.Game.ReservedSlotsList -= new FrostbiteClient.ReservedSlotsListHandler(m_prcClient_ReservedSlotsList);
+            ProconClient.Game.MapListConfigFile -= new FrostbiteClient.MapListConfigFileHandler(m_prcClient_MapListConfigFile);
+            ProconClient.Game.MapListLoad -= new FrostbiteClient.EmptyParamterHandler(m_prcClient_MapListLoad);
+            ProconClient.Game.MapListSave -= new FrostbiteClient.EmptyParamterHandler(m_prcClient_MapListSave);
+            ProconClient.Game.MapListMapAppended -= new FrostbiteClient.MapListAppendedHandler(m_prcClient_MapListMapAppended);
+            ProconClient.Game.MapListNextLevelIndex -= new FrostbiteClient.MapListLevelIndexHandler(m_prcClient_MapListNextLevelIndex);
+            ProconClient.Game.MapListGetMapIndices -= new FrostbiteClient.MapListGetMapIndicesHandler(m_prcClient_MapListGetMapIndices);
+            ProconClient.Game.MapListGetRounds -= new FrostbiteClient.MapListGetRoundsHandler(m_prcClient_MapListGetRounds);
+            ProconClient.Game.MapListMapRemoved -= new FrostbiteClient.MapListLevelIndexHandler(m_prcClient_MapListMapRemoved);
+            ProconClient.Game.MapListMapInserted -= new FrostbiteClient.MapListMapInsertedHandler(m_prcClient_MapListMapInserted);
+            ProconClient.Game.MapListCleared -= new FrostbiteClient.EmptyParamterHandler(m_prcClient_MapListCleared);
+            ProconClient.Game.MapListListed -= new FrostbiteClient.MapListListedHandler(m_prcClient_MapListListed);
 
-            this.m_client.Game.MapListConfigFile -= new FrostbiteClient.MapListConfigFileHandler(m_prcClient_MapListConfigFile);
-            this.m_client.Game.MapListLoad -= new FrostbiteClient.EmptyParamterHandler(m_prcClient_MapListLoad);
-            this.m_client.Game.MapListSave -= new FrostbiteClient.EmptyParamterHandler(m_prcClient_MapListSave);
-            this.m_client.Game.MapListMapAppended -= new FrostbiteClient.MapListAppendedHandler(m_prcClient_MapListMapAppended);
-            this.m_client.Game.MapListNextLevelIndex -= new FrostbiteClient.MapListLevelIndexHandler(m_prcClient_MapListNextLevelIndex);
-            this.m_client.Game.MapListGetMapIndices -= new FrostbiteClient.MapListGetMapIndicesHandler(m_prcClient_MapListGetMapIndices);
-            this.m_client.Game.MapListGetRounds -= new FrostbiteClient.MapListGetRoundsHandler(m_prcClient_MapListGetRounds);
-            this.m_client.Game.MapListMapRemoved -= new FrostbiteClient.MapListLevelIndexHandler(m_prcClient_MapListMapRemoved);
-            this.m_client.Game.MapListMapInserted -= new FrostbiteClient.MapListMapInsertedHandler(m_prcClient_MapListMapInserted);
-            this.m_client.Game.MapListCleared -= new FrostbiteClient.EmptyParamterHandler(m_prcClient_MapListCleared);
-            this.m_client.Game.MapListListed -= new FrostbiteClient.MapListListedHandler(m_prcClient_MapListListed);
+            ProconClient.Game.TextChatModerationListAddPlayer -= new FrostbiteClient.TextChatModerationListAddPlayerHandler(Game_TextChatModerationListAddPlayer);
+            ProconClient.Game.TextChatModerationListRemovePlayer -= new FrostbiteClient.TextChatModerationListRemovePlayerHandler(Game_TextChatModerationListRemovePlayer);
+            ProconClient.Game.TextChatModerationListClear -= new FrostbiteClient.EmptyParamterHandler(Game_TextChatModerationListClear);
+            ProconClient.Game.TextChatModerationListSave -= new FrostbiteClient.EmptyParamterHandler(Game_TextChatModerationListSave);
+            ProconClient.Game.TextChatModerationListLoad -= new FrostbiteClient.EmptyParamterHandler(Game_TextChatModerationListLoad);
+            ProconClient.FullTextChatModerationListList -= new PRoConClient.FullTextChatModerationListListHandler(m_client_FullTextChatModerationListList);
 
-            this.m_client.Game.TextChatModerationListAddPlayer -= new FrostbiteClient.TextChatModerationListAddPlayerHandler(Game_TextChatModerationListAddPlayer);
-            this.m_client.Game.TextChatModerationListRemovePlayer -= new FrostbiteClient.TextChatModerationListRemovePlayerHandler(Game_TextChatModerationListRemovePlayer);
-            this.m_client.Game.TextChatModerationListClear -= new FrostbiteClient.EmptyParamterHandler(Game_TextChatModerationListClear);
-            this.m_client.Game.TextChatModerationListSave -= new FrostbiteClient.EmptyParamterHandler(Game_TextChatModerationListSave);
-            this.m_client.Game.TextChatModerationListLoad -= new FrostbiteClient.EmptyParamterHandler(Game_TextChatModerationListLoad);
-            this.m_client.FullTextChatModerationListList -= new PRoConClient.FullTextChatModerationListListHandler(m_client_FullTextChatModerationListList);
-
-            this.m_client.Game.GamePassword -= new FrostbiteClient.PasswordHandler(m_prcClient_GamePassword);
-            this.m_client.Game.Punkbuster -= new FrostbiteClient.IsEnabledHandler(m_prcClient_Punkbuster);
-            this.m_client.Game.Hardcore -= new FrostbiteClient.IsEnabledHandler(m_prcClient_Hardcore);
-            this.m_client.Game.Ranked -= new FrostbiteClient.IsEnabledHandler(m_prcClient_Ranked);
-            this.m_client.Game.RankLimit -= new FrostbiteClient.LimitHandler(m_prcClient_RankLimit);
-            this.m_client.Game.TeamBalance -= new FrostbiteClient.IsEnabledHandler(m_prcClient_TeamBalance);
-            this.m_client.Game.FriendlyFire -= new FrostbiteClient.IsEnabledHandler(m_prcClient_FriendlyFire);
-            this.m_client.Game.MaxPlayerLimit -= new FrostbiteClient.LimitHandler(m_prcClient_MaxPlayerLimit);
-            this.m_client.Game.CurrentPlayerLimit -= new FrostbiteClient.LimitHandler(m_prcClient_CurrentPlayerLimit);
-            this.m_client.Game.PlayerLimit -= new FrostbiteClient.LimitHandler(m_prcClient_PlayerLimit);
-            this.m_client.Game.BannerUrl -= new FrostbiteClient.BannerUrlHandler(m_prcClient_BannerUrl);
-            this.m_client.Game.ServerDescription -= new FrostbiteClient.ServerDescriptionHandler(m_prcClient_ServerDescription);
-            this.m_client.Game.ServerMessage -= new FrostbiteClient.ServerMessageHandler(m_prcClient_ServerMessage);
-            this.m_client.Game.KillCam -= new FrostbiteClient.IsEnabledHandler(m_prcClient_KillCam);
-            this.m_client.Game.MiniMap -= new FrostbiteClient.IsEnabledHandler(m_prcClient_MiniMap);
-            this.m_client.Game.CrossHair -= new FrostbiteClient.IsEnabledHandler(m_prcClient_CrossHair);
-            this.m_client.Game.ThreeDSpotting -= new FrostbiteClient.IsEnabledHandler(m_prcClient_ThreeDSpotting);
-            this.m_client.Game.MiniMapSpotting -= new FrostbiteClient.IsEnabledHandler(m_prcClient_MiniMapSpotting);
-            this.m_client.Game.ThirdPersonVehicleCameras -= new FrostbiteClient.IsEnabledHandler(m_prcClient_ThirdPersonVehicleCameras);
+            ProconClient.Game.GamePassword -= new FrostbiteClient.PasswordHandler(m_prcClient_GamePassword);
+            ProconClient.Game.Punkbuster -= new FrostbiteClient.IsEnabledHandler(m_prcClient_Punkbuster);
+            ProconClient.Game.Hardcore -= new FrostbiteClient.IsEnabledHandler(m_prcClient_Hardcore);
+            ProconClient.Game.Ranked -= new FrostbiteClient.IsEnabledHandler(m_prcClient_Ranked);
+            ProconClient.Game.RankLimit -= new FrostbiteClient.LimitHandler(m_prcClient_RankLimit);
+            ProconClient.Game.TeamBalance -= new FrostbiteClient.IsEnabledHandler(m_prcClient_TeamBalance);
+            ProconClient.Game.FriendlyFire -= new FrostbiteClient.IsEnabledHandler(m_prcClient_FriendlyFire);
+            ProconClient.Game.MaxPlayerLimit -= new FrostbiteClient.LimitHandler(m_prcClient_MaxPlayerLimit);
+            ProconClient.Game.CurrentPlayerLimit -= new FrostbiteClient.LimitHandler(m_prcClient_CurrentPlayerLimit);
+            ProconClient.Game.PlayerLimit -= new FrostbiteClient.LimitHandler(m_prcClient_PlayerLimit);
+            ProconClient.Game.BannerUrl -= new FrostbiteClient.BannerUrlHandler(m_prcClient_BannerUrl);
+            ProconClient.Game.ServerDescription -= new FrostbiteClient.ServerDescriptionHandler(m_prcClient_ServerDescription);
+            ProconClient.Game.ServerMessage -= new FrostbiteClient.ServerMessageHandler(m_prcClient_ServerMessage);
+            ProconClient.Game.KillCam -= new FrostbiteClient.IsEnabledHandler(m_prcClient_KillCam);
+            ProconClient.Game.MiniMap -= new FrostbiteClient.IsEnabledHandler(m_prcClient_MiniMap);
+            ProconClient.Game.CrossHair -= new FrostbiteClient.IsEnabledHandler(m_prcClient_CrossHair);
+            ProconClient.Game.ThreeDSpotting -= new FrostbiteClient.IsEnabledHandler(m_prcClient_ThreeDSpotting);
+            ProconClient.Game.MiniMapSpotting -= new FrostbiteClient.IsEnabledHandler(m_prcClient_MiniMapSpotting);
+            ProconClient.Game.ThirdPersonVehicleCameras -= new FrostbiteClient.IsEnabledHandler(m_prcClient_ThirdPersonVehicleCameras);
 
             // BF3
-            this.m_client.Game.RoundRestartPlayerCount -= new FrostbiteClient.LimitHandler(m_prcClient_RoundRestartPlayerCount);
-            this.m_client.Game.RoundStartPlayerCount -= new FrostbiteClient.LimitHandler(m_prcClient_RoundStartPlayerCount);
-            this.m_client.Game.GameModeCounter -= new FrostbiteClient.LimitHandler(m_prcClient_GameModeCounter);
+            ProconClient.Game.RoundRestartPlayerCount -= new FrostbiteClient.LimitHandler(m_prcClient_RoundRestartPlayerCount);
+            ProconClient.Game.RoundStartPlayerCount -= new FrostbiteClient.LimitHandler(m_prcClient_RoundStartPlayerCount);
+            ProconClient.Game.GameModeCounter -= new FrostbiteClient.LimitHandler(m_prcClient_GameModeCounter);
+            ProconClient.Game.CtfRoundTimeModifier -= new FrostbiteClient.LimitHandler(m_prcClient_CtfRoundTimeModifier);
+            ProconClient.Game.RoundTimeLimit -= new FrostbiteClient.LimitHandler(m_prcClient_RoundTimeLimit);
+            ProconClient.Game.TicketBleedRate -= new FrostbiteClient.LimitHandler(m_prcClient_TicketBleedRate);
 
-            this.m_client.Game.TextChatModerationMode -= new FrostbiteClient.TextChatModerationModeHandler(Game_TextChatModerationMode);
-            this.m_client.Game.TextChatSpamCoolDownTime -= new FrostbiteClient.LimitHandler(Game_TextChatSpamCoolDownTime);
-            this.m_client.Game.TextChatSpamDetectionTime -= new FrostbiteClient.LimitHandler(Game_TextChatSpamDetectionTime);
-            this.m_client.Game.TextChatSpamTriggerCount -= new FrostbiteClient.LimitHandler(Game_TextChatSpamTriggerCount);
+            ProconClient.Game.TextChatModerationMode -= new FrostbiteClient.TextChatModerationModeHandler(Game_TextChatModerationMode);
+            ProconClient.Game.TextChatSpamCoolDownTime -= new FrostbiteClient.LimitHandler(Game_TextChatSpamCoolDownTime);
+            ProconClient.Game.TextChatSpamDetectionTime -= new FrostbiteClient.LimitHandler(Game_TextChatSpamDetectionTime);
+            ProconClient.Game.TextChatSpamTriggerCount -= new FrostbiteClient.LimitHandler(Game_TextChatSpamTriggerCount);
 
-            this.m_client.Game.UnlockMode -= new FrostbiteClient.UnlockModeHandler(m_prcClient_UnlockMode);
+            ProconClient.Game.UnlockMode -= new FrostbiteClient.UnlockModeHandler(m_prcClient_UnlockMode);
+            ProconClient.Game.BF4preset -= new FrostbiteClient.BF4presetHandler(m_prcClient_BF4preset);
+            ProconClient.Game.GunMasterWeaponsPreset -= new FrostbiteClient.GunMasterWeaponsPresetHandler(Game_GunMasterWeaponsPreset);
 
-            this.m_client.Game.ReservedSlotsListAggressiveJoin -= new FrostbiteClient.IsEnabledHandler(Game_ReservedSlotsListAggressiveJoin);
-            this.m_client.Game.RoundLockdownCountdown -= new FrostbiteClient.LimitHandler(Game_RoundLockdownCountdown);
-            this.m_client.Game.RoundWarmupTimeout -= new FrostbiteClient.LimitHandler(Game_RoundWarmupTimeout);
+            ProconClient.Game.ReservedSlotsListAggressiveJoin -= new FrostbiteClient.IsEnabledHandler(Game_ReservedSlotsListAggressiveJoin);
+            ProconClient.Game.RoundLockdownCountdown -= new FrostbiteClient.LimitHandler(Game_RoundLockdownCountdown);
+            ProconClient.Game.RoundWarmupTimeout -= new FrostbiteClient.LimitHandler(Game_RoundWarmupTimeout);
+
+            ProconClient.Game.PremiumStatus -= new FrostbiteClient.IsEnabledHandler(Game_PremiumStatus);
+            
+            ProconClient.Game.VehicleSpawnAllowed -= new FrostbiteClient.IsEnabledHandler(Game_VehicleSpawnAllowed);
+            ProconClient.Game.VehicleSpawnDelay -= new FrostbiteClient.LimitHandler(Game_VehicleSpawnDelay);
+            ProconClient.Game.BulletDamage -= new FrostbiteClient.LimitHandler(Game_BulletDamage);
+            ProconClient.Game.OnlySquadLeaderSpawn -= new FrostbiteClient.IsEnabledHandler(Game_OnlySquadLeaderSpawn);
+            ProconClient.Game.SoldierHealth -= new FrostbiteClient.LimitHandler(Game_SoldierHealth);
+            ProconClient.Game.PlayerManDownTime -= new FrostbiteClient.LimitHandler(Game_PlayerManDownTime);
+            ProconClient.Game.PlayerRespawnTime -= new FrostbiteClient.LimitHandler(Game_PlayerRespawnTime);
+            ProconClient.Game.Hud -= new FrostbiteClient.IsEnabledHandler(Game_Hud);
+            ProconClient.Game.NameTag -= new FrostbiteClient.IsEnabledHandler(Game_NameTag);
+
+            ProconClient.Game.PlayerIdleState -= new FrostbiteClient.PlayerIdleStateHandler(Game_PlayerIdleState);
+            ProconClient.Game.PlayerIsAlive -= new FrostbiteClient.PlayerIsAliveHandler(Game_PlayerIsAlive);
+            ProconClient.Game.PlayerPingedByAdmin -= new FrostbiteClient.PlayerPingedByAdminHandler(Game_PlayerPingedByAdmin);
+
+            ProconClient.Game.SquadLeader -= new FrostbiteClient.SquadLeaderHandler(Game_SquadLeader);
+            ProconClient.Game.SquadListActive -= new FrostbiteClient.SquadListActiveHandler(Game_SquadListActive);
+            ProconClient.Game.SquadListPlayers -= new FrostbiteClient.SquadListPlayersHandler(Game_SquadListPlayers);
+            ProconClient.Game.SquadIsPrivate -= new FrostbiteClient.SquadIsPrivateHandler(Game_SquadIsPrivate);
+
+            ProconClient.Game.TeamFactionOverride -= new FrostbiteClient.TeamFactionOverrideHandler(Game_TeamFactionOverride);
+
+            #region MoHW
+
+            ProconClient.Game.AllUnlocksUnlocked -= new FrostbiteClient.IsEnabledHandler(Game_AllUnlocksUnlocked);
+            ProconClient.Game.BuddyOutline -= new FrostbiteClient.IsEnabledHandler(Game_BuddyOutline);
+            ProconClient.Game.HudBuddyInfo -= new FrostbiteClient.IsEnabledHandler(Game_HudBuddyInfo);
+            ProconClient.Game.HudClassAbility -= new FrostbiteClient.IsEnabledHandler(Game_HudClassAbility);
+            ProconClient.Game.HudCrosshair -= new FrostbiteClient.IsEnabledHandler(Game_HudCrosshair);
+            ProconClient.Game.HudEnemyTag -= new FrostbiteClient.IsEnabledHandler(Game_HudEnemyTag);
+            ProconClient.Game.HudExplosiveIcons -= new FrostbiteClient.IsEnabledHandler(Game_HudExplosiveIcons);
+            ProconClient.Game.HudGameMode -= new FrostbiteClient.IsEnabledHandler(Game_HudGameMode);
+            ProconClient.Game.HudHealthAmmo -= new FrostbiteClient.IsEnabledHandler(Game_HudHealthAmmo);
+            ProconClient.Game.HudMinimap -= new FrostbiteClient.IsEnabledHandler(Game_HudMinimap);
+            ProconClient.Game.HudObiturary -= new FrostbiteClient.IsEnabledHandler(Game_HudObiturary);
+            ProconClient.Game.HudPointsTracker -= new FrostbiteClient.IsEnabledHandler(Game_HudPointsTracker);
+            ProconClient.Game.HudUnlocks -= new FrostbiteClient.IsEnabledHandler(Game_HudUnlocks);
+            ProconClient.Game.Playlist -= new FrostbiteClient.PlaylistSetHandler(Game_Playlist);
+
+            #endregion
 
             // R13
-            this.m_client.Game.ServerName -= new FrostbiteClient.ServerNameHandler(m_prcClient_ServerName);
-            this.m_client.Game.TeamKillCountForKick -= new FrostbiteClient.LimitHandler(m_prcClient_TeamKillCountForKick);
-            this.m_client.Game.TeamKillValueIncrease -= new FrostbiteClient.LimitHandler(m_prcClient_TeamKillValueIncrease);
-            this.m_client.Game.TeamKillValueDecreasePerSecond -= new FrostbiteClient.LimitHandler(m_prcClient_TeamKillValueDecreasePerSecond);
-            this.m_client.Game.TeamKillValueForKick -= new FrostbiteClient.LimitHandler(m_prcClient_TeamKillValueForKick);
-            this.m_client.Game.IdleTimeout -= new FrostbiteClient.LimitHandler(m_prcClient_IdleTimeout);
-            this.m_client.Game.IdleBanRounds -= new FrostbiteClient.LimitHandler(m_prcClient_IdleBanRounds);
-            this.m_client.Game.ProfanityFilter -= new FrostbiteClient.IsEnabledHandler(m_prcClient_ProfanityFilter);
+            ProconClient.Game.ServerName -= new FrostbiteClient.ServerNameHandler(m_prcClient_ServerName);
+            ProconClient.Game.TeamKillCountForKick -= new FrostbiteClient.LimitHandler(m_prcClient_TeamKillCountForKick);
+            ProconClient.Game.TeamKillKickForBan -= new FrostbiteClient.LimitHandler(m_prcClient_TeamKillKickForBan);
+            ProconClient.Game.TeamKillValueIncrease -= new FrostbiteClient.LimitHandler(m_prcClient_TeamKillValueIncrease);
+            ProconClient.Game.TeamKillValueDecreasePerSecond -= new FrostbiteClient.LimitHandler(m_prcClient_TeamKillValueDecreasePerSecond);
+            ProconClient.Game.TeamKillValueForKick -= new FrostbiteClient.LimitHandler(m_prcClient_TeamKillValueForKick);
+            ProconClient.Game.IdleTimeout -= new FrostbiteClient.LimitHandler(m_prcClient_IdleTimeout);
+            ProconClient.Game.IdleBanRounds -= new FrostbiteClient.LimitHandler(m_prcClient_IdleBanRounds);
+            ProconClient.Game.ProfanityFilter -= new FrostbiteClient.IsEnabledHandler(m_prcClient_ProfanityFilter);
 
-            this.m_client.PlayerSpawned -= new PRoConClient.PlayerSpawnedHandler(m_prcClient_PlayerSpawned);
-            this.m_client.Game.RoundOver -= new FrostbiteClient.RoundOverHandler(m_prcClient_RoundOver);
-            this.m_client.Game.RoundOverPlayers -= new FrostbiteClient.RoundOverPlayersHandler(m_prcClient_RoundOverPlayers);
-            this.m_client.Game.RoundOverTeamScores -= new FrostbiteClient.RoundOverTeamScoresHandler(m_prcClient_RoundOverTeamScores);
-            this.m_client.Game.EndRound -= new FrostbiteClient.EndRoundHandler(m_prcClient_EndRound);
+            ProconClient.PlayerSpawned -= new PRoConClient.PlayerSpawnedHandler(m_prcClient_PlayerSpawned);
+            ProconClient.Game.RoundOver -= new FrostbiteClient.RoundOverHandler(m_prcClient_RoundOver);
+            ProconClient.Game.RoundOverPlayers -= new FrostbiteClient.RoundOverPlayersHandler(m_prcClient_RoundOverPlayers);
+            ProconClient.Game.RoundOverTeamScores -= new FrostbiteClient.RoundOverTeamScoresHandler(m_prcClient_RoundOverTeamScores);
+            ProconClient.Game.EndRound -= new FrostbiteClient.EndRoundHandler(m_prcClient_EndRound);
 
-            this.m_client.Game.LevelVariablesGet -= new FrostbiteClient.LevelVariableGetHandler(m_prcClient_LevelVariablesGet);
-            this.m_client.Game.LevelVariablesSet -= new FrostbiteClient.LevelVariableHandler(m_prcClient_LevelVariablesSet);
-            this.m_client.Game.LevelVariablesClear -= new FrostbiteClient.LevelVariableHandler(m_prcClient_LevelVariablesClear);
-            this.m_client.Game.LevelVariablesEvaluate -= new FrostbiteClient.LevelVariableGetHandler(m_prcClient_LevelVariablesEvaluate);
-            this.m_client.Game.LevelVariablesList -= new FrostbiteClient.LevelVariableListHandler(m_prcClient_LevelVariablesList);
+            ProconClient.Game.LevelVariablesGet -= new FrostbiteClient.LevelVariableGetHandler(m_prcClient_LevelVariablesGet);
+            ProconClient.Game.LevelVariablesSet -= new FrostbiteClient.LevelVariableHandler(m_prcClient_LevelVariablesSet);
+            ProconClient.Game.LevelVariablesClear -= new FrostbiteClient.LevelVariableHandler(m_prcClient_LevelVariablesClear);
+            ProconClient.Game.LevelVariablesEvaluate -= new FrostbiteClient.LevelVariableGetHandler(m_prcClient_LevelVariablesEvaluate);
+            ProconClient.Game.LevelVariablesList -= new FrostbiteClient.LevelVariableListHandler(m_prcClient_LevelVariablesList);
 
-            this.m_client.ReceiveProconVariable -= new PRoConClient.ReceiveProconVariableHandler(m_prcClient_ReceiveProconVariable);
+            ProconClient.ReceiveProconVariable -= new PRoConClient.ReceiveProconVariableHandler(m_prcClient_ReceiveProconVariable);
 
-            this.m_client.PunkbusterBeginPlayerInfo -= new PRoConClient.EmptyParamterHandler(m_client_PunkbusterBeginPlayerInfo);
-            this.m_client.PunkbusterEndPlayerInfo -= new PRoConClient.EmptyParamterHandler(m_client_PunkbusterEndPlayerInfo);
-            this.m_client.PunkbusterPlayerInfo -= new PRoConClient.PunkbusterPlayerInfoHandler(m_prcClient_PunkbusterPlayerInfo);
-            this.m_client.PunkbusterPlayerBanned -= new PRoConClient.PunkbusterBanHandler(m_prcClient_PunkbusterPlayerBanned);
-            this.m_client.PunkbusterPlayerUnbanned -= new PRoConClient.PunkbusterBanHandler(m_prcClient_PunkbusterPlayerUnbanned);
+            ProconClient.PunkbusterBeginPlayerInfo -= new PRoConClient.EmptyParamterHandler(m_client_PunkbusterBeginPlayerInfo);
+            ProconClient.PunkbusterEndPlayerInfo -= new PRoConClient.EmptyParamterHandler(m_client_PunkbusterEndPlayerInfo);
+            ProconClient.PunkbusterPlayerInfo -= new PRoConClient.PunkbusterPlayerInfoHandler(m_prcClient_PunkbusterPlayerInfo);
+            ProconClient.PunkbusterPlayerBanned -= new PRoConClient.PunkbusterBanHandler(m_prcClient_PunkbusterPlayerBanned);
+            ProconClient.PunkbusterPlayerUnbanned -= new PRoConClient.PunkbusterBanHandler(m_prcClient_PunkbusterPlayerUnbanned);
 
-            this.m_client.Layer.AccountPrivileges.AccountPrivilegeAdded -= new AccountPrivilegeDictionary.AccountPrivilegeAlteredHandler(AccountPrivileges_AccountPrivilegeAdded);
-            this.m_client.Layer.AccountPrivileges.AccountPrivilegeRemoved -= new AccountPrivilegeDictionary.AccountPrivilegeAlteredHandler(AccountPrivileges_AccountPrivilegeRemoved);
+            ProconClient.Layer.AccountPrivileges.AccountPrivilegeAdded -= new AccountPrivilegeDictionary.AccountPrivilegeAlteredHandler(AccountPrivileges_AccountPrivilegeAdded);
+            ProconClient.Layer.AccountPrivileges.AccountPrivilegeRemoved -= new AccountPrivilegeDictionary.AccountPrivilegeAlteredHandler(AccountPrivileges_AccountPrivilegeRemoved);
 
-            this.m_client.MapGeometry.MapZoneTrespassed -= new PRoCon.Core.Battlemap.MapGeometry.MapZoneTrespassedHandler(MapGeometry_MapZoneTrespassed);
+            ProconClient.MapGeometry.MapZoneTrespassed -= new MapGeometry.MapZoneTrespassedHandler(MapGeometry_MapZoneTrespassed);
 
             #region Admin actions on players
 
-            this.m_client.Game.PlayerKickedByAdmin -= new FrostbiteClient.PlayerKickedHandler(Game_PlayerKickedByAdmin);
-            this.m_client.Game.PlayerKilledByAdmin -= new FrostbiteClient.PlayerKilledByAdminHandler(Game_PlayerKilledByAdmin);
-            this.m_client.Game.PlayerMovedByAdmin -= new FrostbiteClient.PlayerMovedByAdminHandler(Game_PlayerMovedByAdmin);
+            ProconClient.Game.PlayerKickedByAdmin -= new FrostbiteClient.PlayerKickedHandler(Game_PlayerKickedByAdmin);
+            ProconClient.Game.PlayerKilledByAdmin -= new FrostbiteClient.PlayerKilledByAdminHandler(Game_PlayerKilledByAdmin);
+            ProconClient.Game.PlayerMovedByAdmin -= new FrostbiteClient.PlayerMovedByAdminHandler(Game_PlayerMovedByAdmin);
 
             #endregion
 
             #region Layer Accounts
 
-            foreach (PRoConLayerClient client in this.m_client.Layer.LayerClients) {
-                client.Login -= new PRoConLayerClient.LayerClientHandler(client_LayerClientLogin);
-                client.Logout -= new PRoConLayerClient.LayerClientHandler(client_LayerClientLogout);
+            foreach (ILayerClient client in new List<ILayerClient>(ProconClient.Layer.Clients.Values)) {
+                client.Login -= Layer_LayerClientLogin;
+                client.Logout -= Layer_LayerClientLogout;
             }
-            this.m_client.Layer.ClientConnected -= new Remote.Layer.PRoConLayer.LayerAccountHandler(Layer_ClientConnected);
+            ProconClient.Layer.ClientConnected -= Layer_ClientConnected;
+
+            #region BF4
+
+            ProconClient.Game.SpectatorListCleared -= new FrostbiteClient.EmptyParamterHandler(Game_SpectatorListCleared);
+            ProconClient.Game.SpectatorListList -= new FrostbiteClient.SpectatorListListHandler(Game_SpectatorListList);
+            ProconClient.Game.SpectatorListLoad -= new FrostbiteClient.EmptyParamterHandler(Game_SpectatorListLoad);
+            ProconClient.Game.SpectatorListPlayerAdded -= new FrostbiteClient.SpectatorListPlayerHandler(Game_SpectatorListPlayerAdded);
+            ProconClient.Game.SpectatorListPlayerRemoved -= new FrostbiteClient.SpectatorListPlayerHandler(Game_SpectatorListPlayerRemoved);
+            ProconClient.Game.SpectatorListSave -= new FrostbiteClient.EmptyParamterHandler(Game_SpectatorListSave);
+
+            ProconClient.Game.GameAdminCleared -= new FrostbiteClient.EmptyParamterHandler(Game_GameAdminCleared);
+            ProconClient.Game.GameAdminList -= new FrostbiteClient.GameAdminListHandler(Game_GameAdminList);
+            ProconClient.Game.GameAdminLoad -= new FrostbiteClient.EmptyParamterHandler(Game_GameAdminLoad);
+            ProconClient.Game.GameAdminPlayerAdded -= new FrostbiteClient.GameAdminPlayerHandler(Game_GameAdminPlayerAdded);
+            ProconClient.Game.GameAdminPlayerRemoved -= new FrostbiteClient.GameAdminPlayerHandler(Game_GameAdminPlayerRemoved);
+            ProconClient.Game.GameAdminSave -= new FrostbiteClient.EmptyParamterHandler(Game_GameAdminSave);
+
+            ProconClient.Game.MaxSpectators -= new FrostbiteClient.LimitHandler(Game_MaxSpectators);
+
+            ProconClient.Game.FairFight -= new FrostbiteClient.IsEnabledHandler(Game_FairFight);
+
+            ProconClient.Game.IsHitIndicator -= new FrostbiteClient.IsEnabledHandler(Game_IsHitIndicator);
+
+            ProconClient.Game.IsCommander -= new FrostbiteClient.IsEnabledHandler(Game_IsCommander);
+            ProconClient.Game.AlwaysAllowSpectators -= new FrostbiteClient.IsEnabledHandler(Game_AlwaysAllowSpectators);
+            ProconClient.Game.IsForceReloadWholeMags -= new FrostbiteClient.IsEnabledHandler(Game_IsForceReloadWholeMags);
+            ProconClient.Game.ServerType -= new FrostbiteClient.VarsStringHandler(Game_ServerType);
+
+            #endregion
+
+            #endregion
+
+            #region Battlefield: Hardline
+
+            ProconClient.Game.RoundStartReadyPlayersNeeded -= Game_RoundStartReadyPlayersNeeded;
 
             #endregion
         }
 
         private void AssignEventHandler() {
+            ProconClient.Login += new PRoConClient.EmptyParamterHandler(m_prcClient_CommandLogin);
+            ProconClient.Logout += new PRoConClient.EmptyParamterHandler(m_prcClient_CommandLogout);
+            ProconClient.Game.Quit += new FrostbiteClient.EmptyParamterHandler(m_prcClient_CommandQuit);
 
-            this.m_client.Login += new PRoConClient.EmptyParamterHandler(m_prcClient_CommandLogin);
-            this.m_client.Logout += new PRoConClient.EmptyParamterHandler(m_prcClient_CommandLogout);
-            this.m_client.Game.Quit += new FrostbiteClient.EmptyParamterHandler(m_prcClient_CommandQuit);
+            ProconClient.ConnectionClosed += new PRoConClient.EmptyParamterHandler(m_prcClient_ConnectionClosed);
 
-            this.m_client.ConnectionClosed += new PRoConClient.EmptyParamterHandler(m_prcClient_ConnectionClosed);
+            ProconClient.Game.PlayerJoin += new FrostbiteClient.PlayerEventHandler(m_prcClient_PlayerJoin);
+            ProconClient.Game.PlayerLeft += new FrostbiteClient.PlayerLeaveHandler(m_prcClient_PlayerLeft);
+            ProconClient.Game.PlayerDisconnected += new FrostbiteClient.PlayerDisconnectedHandler(m_prcClient_PlayerDisconnected);
+            ProconClient.Game.PlayerAuthenticated += new FrostbiteClient.PlayerAuthenticatedHandler(m_prcClient_PlayerAuthenticated);
+            ProconClient.Game.PlayerKicked += new FrostbiteClient.PlayerKickedHandler(m_prcClient_PlayerKicked);
+            ProconClient.Game.PlayerChangedTeam += new FrostbiteClient.PlayerTeamChangeHandler(m_prcClient_PlayerChangedTeam);
+            ProconClient.Game.PlayerChangedSquad += new FrostbiteClient.PlayerTeamChangeHandler(m_prcClient_PlayerChangedSquad);
+            ProconClient.PlayerKilled += new PRoConClient.PlayerKilledHandler(m_prcClient_PlayerKilled);
 
-            this.m_client.Game.PlayerJoin += new FrostbiteClient.PlayerEventHandler(m_prcClient_PlayerJoin);
-            this.m_client.Game.PlayerLeft += new FrostbiteClient.PlayerLeaveHandler(m_prcClient_PlayerLeft);
-            this.m_client.Game.PlayerAuthenticated += new FrostbiteClient.PlayerAuthenticatedHandler(m_prcClient_PlayerAuthenticated);
-            this.m_client.Game.PlayerKicked += new FrostbiteClient.PlayerKickedHandler(m_prcClient_PlayerKicked);
-            this.m_client.Game.PlayerChangedTeam += new FrostbiteClient.PlayerTeamChangeHandler(m_prcClient_PlayerChangedTeam);
-            this.m_client.Game.PlayerChangedSquad += new FrostbiteClient.PlayerTeamChangeHandler(m_prcClient_PlayerChangedSquad);
-            this.m_client.PlayerKilled += new PRoConClient.PlayerKilledHandler(m_prcClient_PlayerKilled);
+            ProconClient.Game.GlobalChat += new FrostbiteClient.GlobalChatHandler(m_prcClient_GlobalChat);
+            ProconClient.Game.TeamChat += new FrostbiteClient.TeamChatHandler(m_prcClient_TeamChat);
+            ProconClient.Game.SquadChat += new FrostbiteClient.SquadChatHandler(m_prcClient_SquadChat);
+            ProconClient.Game.PlayerChat += new FrostbiteClient.PlayerChatHandler(m_prcClient_PlayerChat);
+            
+            ProconClient.Game.ResponseError += new FrostbiteClient.ResponseErrorHandler(m_prcClient_ResponseError);
+            ProconClient.Game.Version += new FrostbiteClient.VersionHandler(m_prcClient_Version);
+            ProconClient.Game.Help += new FrostbiteClient.HelpHandler(m_prcClient_Help);
 
-            this.m_client.Game.GlobalChat += new FrostbiteClient.GlobalChatHandler(m_prcClient_GlobalChat);
-            this.m_client.Game.TeamChat += new FrostbiteClient.TeamChatHandler(m_prcClient_TeamChat);
-            this.m_client.Game.SquadChat += new FrostbiteClient.SquadChatHandler(m_prcClient_SquadChat);
+            ProconClient.Game.RunScript += new FrostbiteClient.RunScriptHandler(m_prcClient_RunScript);
+            ProconClient.Game.RunScriptError += new FrostbiteClient.RunScriptErrorHandler(m_prcClient_RunScriptError);
 
-            this.m_client.Game.ResponseError += new FrostbiteClient.ResponseErrorHandler(m_prcClient_ResponseError);
-            this.m_client.Game.Version += new FrostbiteClient.VersionHandler(m_prcClient_Version);
-            this.m_client.Game.Help += new FrostbiteClient.HelpHandler(m_prcClient_Help);
+            ProconClient.Game.PunkbusterMessage += new FrostbiteClient.PunkbusterMessageHandler(m_prcClient_PunkbusterMessage);
+            ProconClient.Game.LoadingLevel += new FrostbiteClient.LoadingLevelHandler(m_prcClient_LoadingLevel);
+            ProconClient.Game.LevelStarted += new FrostbiteClient.EmptyParamterHandler(m_prcClient_LevelStarted);
+            ProconClient.Game.LevelLoaded += new FrostbiteClient.LevelLoadedHandler(m_prcClient_LevelLoaded);
 
-            this.m_client.Game.RunScript += new FrostbiteClient.RunScriptHandler(m_prcClient_RunScript);
-            this.m_client.Game.RunScriptError += new FrostbiteClient.RunScriptErrorHandler(m_prcClient_RunScriptError);
+            ProconClient.Game.ServerInfo += new FrostbiteClient.ServerInfoHandler(m_prcClient_ServerInfo);
+            ProconClient.Game.Yelling += new FrostbiteClient.YellingHandler(m_prcClient_Yelling);
+            ProconClient.Game.Saying += new FrostbiteClient.SayingHandler(m_prcClient_Saying);
 
-            this.m_client.Game.PunkbusterMessage += new FrostbiteClient.PunkbusterMessageHandler(m_prcClient_PunkbusterMessage);
-            this.m_client.Game.LoadingLevel += new FrostbiteClient.LoadingLevelHandler(m_prcClient_LoadingLevel);
-            this.m_client.Game.LevelStarted += new FrostbiteClient.EmptyParamterHandler(m_prcClient_LevelStarted);
-            this.m_client.Game.LevelLoaded += new FrostbiteClient.LevelLoadedHandler(m_prcClient_LevelLoaded);
+            ProconClient.Game.RunNextRound += new FrostbiteClient.EmptyParamterHandler(m_prcClient_RunNextLevel);
+            ProconClient.Game.CurrentLevel += new FrostbiteClient.CurrentLevelHandler(m_prcClient_CurrentLevel);
+            ProconClient.Game.RestartRound += new FrostbiteClient.EmptyParamterHandler(m_prcClient_RestartLevel);
+            ProconClient.Game.SupportedMaps += new FrostbiteClient.SupportedMapsHandler(m_prcClient_SupportedMaps);
 
-            this.m_client.Game.ServerInfo += new FrostbiteClient.ServerInfoHandler(m_prcClient_ServerInfo);
-            this.m_client.Game.Yelling += new FrostbiteClient.YellingHandler(m_prcClient_Yelling);
-            this.m_client.Game.Saying += new FrostbiteClient.SayingHandler(m_prcClient_Saying);
+            ProconClient.Game.PlaylistSet += new FrostbiteClient.PlaylistSetHandler(m_prcClient_PlaylistSet);
+            ProconClient.Game.ListPlaylists += new FrostbiteClient.ListPlaylistsHandler(m_prcClient_ListPlaylists);
 
-            this.m_client.Game.RunNextRound += new FrostbiteClient.EmptyParamterHandler(m_prcClient_RunNextLevel);
-            this.m_client.Game.CurrentLevel += new FrostbiteClient.CurrentLevelHandler(m_prcClient_CurrentLevel);
-            this.m_client.Game.RestartRound += new FrostbiteClient.EmptyParamterHandler(m_prcClient_RestartLevel);
-            this.m_client.Game.SupportedMaps += new FrostbiteClient.SupportedMapsHandler(m_prcClient_SupportedMaps);
+            ProconClient.Game.ListPlayers += new FrostbiteClient.ListPlayersHandler(m_prcClient_ListPlayers);
 
-            this.m_client.Game.PlaylistSet += new FrostbiteClient.PlaylistSetHandler(m_prcClient_PlaylistSet);
-            this.m_client.Game.ListPlaylists += new FrostbiteClient.ListPlaylistsHandler(m_prcClient_ListPlaylists);
+            ProconClient.Game.BanListLoad += new FrostbiteClient.EmptyParamterHandler(m_prcClient_BanListLoad);
+            ProconClient.Game.BanListSave += new FrostbiteClient.EmptyParamterHandler(m_prcClient_BanListSave);
+            ProconClient.Game.BanListAdd += new FrostbiteClient.BanListAddHandler(m_prcClient_BanListAdd);
+            ProconClient.Game.BanListRemove += new FrostbiteClient.BanListRemoveHandler(m_prcClient_BanListRemove);
+            ProconClient.Game.BanListClear += new FrostbiteClient.EmptyParamterHandler(m_prcClient_BanListClear);
+            ProconClient.FullBanListList += new PRoConClient.FullBanListListHandler(m_prcClient_BanListList);
 
-            this.m_client.Game.ListPlayers += new FrostbiteClient.ListPlayersHandler(m_prcClient_ListPlayers);
+            ProconClient.Game.ReservedSlotsConfigFile += new FrostbiteClient.ReserverdSlotsConfigFileHandler(m_prcClient_ReservedSlotsConfigFile);
+            ProconClient.Game.ReservedSlotsLoad += new FrostbiteClient.EmptyParamterHandler(m_prcClient_ReservedSlotsLoad);
+            ProconClient.Game.ReservedSlotsSave += new FrostbiteClient.EmptyParamterHandler(m_prcClient_ReservedSlotsSave);
+            ProconClient.Game.ReservedSlotsPlayerAdded += new FrostbiteClient.ReservedSlotsPlayerHandler(m_prcClient_ReservedSlotsPlayerAdded);
+            ProconClient.Game.ReservedSlotsPlayerRemoved += new FrostbiteClient.ReservedSlotsPlayerHandler(m_prcClient_ReservedSlotsPlayerRemoved);
+            ProconClient.Game.ReservedSlotsCleared += new FrostbiteClient.EmptyParamterHandler(m_prcClient_ReservedSlotsCleared);
+            ProconClient.Game.ReservedSlotsList += new FrostbiteClient.ReservedSlotsListHandler(m_prcClient_ReservedSlotsList);
 
-            this.m_client.Game.BanListLoad += new FrostbiteClient.EmptyParamterHandler(m_prcClient_BanListLoad);
-            this.m_client.Game.BanListSave += new FrostbiteClient.EmptyParamterHandler(m_prcClient_BanListSave);
-            this.m_client.Game.BanListAdd += new FrostbiteClient.BanListAddHandler(m_prcClient_BanListAdd);
-            this.m_client.Game.BanListRemove += new FrostbiteClient.BanListRemoveHandler(m_prcClient_BanListRemove);
-            this.m_client.Game.BanListClear += new FrostbiteClient.EmptyParamterHandler(m_prcClient_BanListClear);
-            this.m_client.FullBanListList += new PRoConClient.FullBanListListHandler(m_prcClient_BanListList);
+            ProconClient.Game.MapListConfigFile += new FrostbiteClient.MapListConfigFileHandler(m_prcClient_MapListConfigFile);
+            ProconClient.Game.MapListLoad += new FrostbiteClient.EmptyParamterHandler(m_prcClient_MapListLoad);
+            ProconClient.Game.MapListSave += new FrostbiteClient.EmptyParamterHandler(m_prcClient_MapListSave);
+            ProconClient.Game.MapListMapAppended += new FrostbiteClient.MapListAppendedHandler(m_prcClient_MapListMapAppended);
+            ProconClient.Game.MapListNextLevelIndex += new FrostbiteClient.MapListLevelIndexHandler(m_prcClient_MapListNextLevelIndex);
+            ProconClient.Game.MapListGetMapIndices += new FrostbiteClient.MapListGetMapIndicesHandler(m_prcClient_MapListGetMapIndices);
+            ProconClient.Game.MapListGetRounds += new FrostbiteClient.MapListGetRoundsHandler(m_prcClient_MapListGetRounds);
+            ProconClient.Game.MapListMapRemoved += new FrostbiteClient.MapListLevelIndexHandler(m_prcClient_MapListMapRemoved);
+            ProconClient.Game.MapListMapInserted += new FrostbiteClient.MapListMapInsertedHandler(m_prcClient_MapListMapInserted);
+            ProconClient.Game.MapListCleared += new FrostbiteClient.EmptyParamterHandler(m_prcClient_MapListCleared);
+            ProconClient.Game.MapListListed += new FrostbiteClient.MapListListedHandler(m_prcClient_MapListListed);
 
-            this.m_client.Game.ReservedSlotsConfigFile += new FrostbiteClient.ReserverdSlotsConfigFileHandler(m_prcClient_ReservedSlotsConfigFile);
-            this.m_client.Game.ReservedSlotsLoad += new FrostbiteClient.EmptyParamterHandler(m_prcClient_ReservedSlotsLoad);
-            this.m_client.Game.ReservedSlotsSave += new FrostbiteClient.EmptyParamterHandler(m_prcClient_ReservedSlotsSave);
-            this.m_client.Game.ReservedSlotsPlayerAdded += new FrostbiteClient.ReservedSlotsPlayerHandler(m_prcClient_ReservedSlotsPlayerAdded);
-            this.m_client.Game.ReservedSlotsPlayerRemoved += new FrostbiteClient.ReservedSlotsPlayerHandler(m_prcClient_ReservedSlotsPlayerRemoved);
-            this.m_client.Game.ReservedSlotsCleared += new FrostbiteClient.EmptyParamterHandler(m_prcClient_ReservedSlotsCleared);
-            this.m_client.Game.ReservedSlotsList += new FrostbiteClient.ReservedSlotsListHandler(m_prcClient_ReservedSlotsList);
+            ProconClient.Game.TextChatModerationListAddPlayer += new FrostbiteClient.TextChatModerationListAddPlayerHandler(Game_TextChatModerationListAddPlayer);
+            ProconClient.Game.TextChatModerationListRemovePlayer += new FrostbiteClient.TextChatModerationListRemovePlayerHandler(Game_TextChatModerationListRemovePlayer);
+            ProconClient.Game.TextChatModerationListClear += new FrostbiteClient.EmptyParamterHandler(Game_TextChatModerationListClear);
+            ProconClient.Game.TextChatModerationListSave += new FrostbiteClient.EmptyParamterHandler(Game_TextChatModerationListSave);
+            ProconClient.Game.TextChatModerationListLoad += new FrostbiteClient.EmptyParamterHandler(Game_TextChatModerationListLoad);
+            ProconClient.FullTextChatModerationListList += new PRoConClient.FullTextChatModerationListListHandler(m_client_FullTextChatModerationListList);
 
-            this.m_client.Game.MapListConfigFile += new FrostbiteClient.MapListConfigFileHandler(m_prcClient_MapListConfigFile);
-            this.m_client.Game.MapListLoad += new FrostbiteClient.EmptyParamterHandler(m_prcClient_MapListLoad);
-            this.m_client.Game.MapListSave += new FrostbiteClient.EmptyParamterHandler(m_prcClient_MapListSave);
-            this.m_client.Game.MapListMapAppended += new FrostbiteClient.MapListAppendedHandler(m_prcClient_MapListMapAppended);
-            this.m_client.Game.MapListNextLevelIndex += new FrostbiteClient.MapListLevelIndexHandler(m_prcClient_MapListNextLevelIndex);
-            this.m_client.Game.MapListGetMapIndices += new FrostbiteClient.MapListGetMapIndicesHandler(m_prcClient_MapListGetMapIndices);
-            this.m_client.Game.MapListGetRounds += new FrostbiteClient.MapListGetRoundsHandler(m_prcClient_MapListGetRounds);
-            this.m_client.Game.MapListMapRemoved += new FrostbiteClient.MapListLevelIndexHandler(m_prcClient_MapListMapRemoved);
-            this.m_client.Game.MapListMapInserted += new FrostbiteClient.MapListMapInsertedHandler(m_prcClient_MapListMapInserted);
-            this.m_client.Game.MapListCleared += new FrostbiteClient.EmptyParamterHandler(m_prcClient_MapListCleared);
-            this.m_client.Game.MapListListed += new FrostbiteClient.MapListListedHandler(m_prcClient_MapListListed);
-
-            this.m_client.Game.TextChatModerationListAddPlayer += new FrostbiteClient.TextChatModerationListAddPlayerHandler(Game_TextChatModerationListAddPlayer);
-            this.m_client.Game.TextChatModerationListRemovePlayer += new FrostbiteClient.TextChatModerationListRemovePlayerHandler(Game_TextChatModerationListRemovePlayer);
-            this.m_client.Game.TextChatModerationListClear += new FrostbiteClient.EmptyParamterHandler(Game_TextChatModerationListClear);
-            this.m_client.Game.TextChatModerationListSave += new FrostbiteClient.EmptyParamterHandler(Game_TextChatModerationListSave);
-            this.m_client.Game.TextChatModerationListLoad += new FrostbiteClient.EmptyParamterHandler(Game_TextChatModerationListLoad);
-            this.m_client.FullTextChatModerationListList += new PRoConClient.FullTextChatModerationListListHandler(m_client_FullTextChatModerationListList);
-
-            this.m_client.Game.GamePassword += new FrostbiteClient.PasswordHandler(m_prcClient_GamePassword);
-            this.m_client.Game.Punkbuster += new FrostbiteClient.IsEnabledHandler(m_prcClient_Punkbuster);
-            this.m_client.Game.Hardcore += new FrostbiteClient.IsEnabledHandler(m_prcClient_Hardcore);
-            this.m_client.Game.Ranked += new FrostbiteClient.IsEnabledHandler(m_prcClient_Ranked);
-            this.m_client.Game.RankLimit += new FrostbiteClient.LimitHandler(m_prcClient_RankLimit);
-            this.m_client.Game.TeamBalance += new FrostbiteClient.IsEnabledHandler(m_prcClient_TeamBalance);
-            this.m_client.Game.FriendlyFire += new FrostbiteClient.IsEnabledHandler(m_prcClient_FriendlyFire);
-            this.m_client.Game.MaxPlayerLimit += new FrostbiteClient.LimitHandler(m_prcClient_MaxPlayerLimit);
-            this.m_client.Game.CurrentPlayerLimit += new FrostbiteClient.LimitHandler(m_prcClient_CurrentPlayerLimit);
-            this.m_client.Game.PlayerLimit += new FrostbiteClient.LimitHandler(m_prcClient_PlayerLimit);
-            this.m_client.Game.BannerUrl += new FrostbiteClient.BannerUrlHandler(m_prcClient_BannerUrl);
-            this.m_client.Game.ServerDescription += new FrostbiteClient.ServerDescriptionHandler(m_prcClient_ServerDescription);
-            this.m_client.Game.ServerMessage += new FrostbiteClient.ServerMessageHandler(m_prcClient_ServerMessage);
-            this.m_client.Game.KillCam += new FrostbiteClient.IsEnabledHandler(m_prcClient_KillCam);
-            this.m_client.Game.MiniMap += new FrostbiteClient.IsEnabledHandler(m_prcClient_MiniMap);
-            this.m_client.Game.CrossHair += new FrostbiteClient.IsEnabledHandler(m_prcClient_CrossHair);
-            this.m_client.Game.ThreeDSpotting += new FrostbiteClient.IsEnabledHandler(m_prcClient_ThreeDSpotting);
-            this.m_client.Game.MiniMapSpotting += new FrostbiteClient.IsEnabledHandler(m_prcClient_MiniMapSpotting);
-            this.m_client.Game.ThirdPersonVehicleCameras += new FrostbiteClient.IsEnabledHandler(m_prcClient_ThirdPersonVehicleCameras);
+            ProconClient.Game.GamePassword += new FrostbiteClient.PasswordHandler(m_prcClient_GamePassword);
+            ProconClient.Game.Punkbuster += new FrostbiteClient.IsEnabledHandler(m_prcClient_Punkbuster);
+            ProconClient.Game.Hardcore += new FrostbiteClient.IsEnabledHandler(m_prcClient_Hardcore);
+            ProconClient.Game.Ranked += new FrostbiteClient.IsEnabledHandler(m_prcClient_Ranked);
+            ProconClient.Game.RankLimit += new FrostbiteClient.LimitHandler(m_prcClient_RankLimit);
+            ProconClient.Game.TeamBalance += new FrostbiteClient.IsEnabledHandler(m_prcClient_TeamBalance);
+            ProconClient.Game.FriendlyFire += new FrostbiteClient.IsEnabledHandler(m_prcClient_FriendlyFire);
+            ProconClient.Game.MaxPlayerLimit += new FrostbiteClient.LimitHandler(m_prcClient_MaxPlayerLimit);
+            ProconClient.Game.CurrentPlayerLimit += new FrostbiteClient.LimitHandler(m_prcClient_CurrentPlayerLimit);
+            ProconClient.Game.PlayerLimit += new FrostbiteClient.LimitHandler(m_prcClient_PlayerLimit);
+            ProconClient.Game.BannerUrl += new FrostbiteClient.BannerUrlHandler(m_prcClient_BannerUrl);
+            ProconClient.Game.ServerDescription += new FrostbiteClient.ServerDescriptionHandler(m_prcClient_ServerDescription);
+            ProconClient.Game.ServerMessage += new FrostbiteClient.ServerMessageHandler(m_prcClient_ServerMessage);
+            ProconClient.Game.KillCam += new FrostbiteClient.IsEnabledHandler(m_prcClient_KillCam);
+            ProconClient.Game.MiniMap += new FrostbiteClient.IsEnabledHandler(m_prcClient_MiniMap);
+            ProconClient.Game.CrossHair += new FrostbiteClient.IsEnabledHandler(m_prcClient_CrossHair);
+            ProconClient.Game.ThreeDSpotting += new FrostbiteClient.IsEnabledHandler(m_prcClient_ThreeDSpotting);
+            ProconClient.Game.MiniMapSpotting += new FrostbiteClient.IsEnabledHandler(m_prcClient_MiniMapSpotting);
+            ProconClient.Game.ThirdPersonVehicleCameras += new FrostbiteClient.IsEnabledHandler(m_prcClient_ThirdPersonVehicleCameras);
 
             // BF3
-            this.m_client.Game.RoundRestartPlayerCount += new FrostbiteClient.LimitHandler(m_prcClient_RoundRestartPlayerCount);
-            this.m_client.Game.RoundStartPlayerCount += new FrostbiteClient.LimitHandler(m_prcClient_RoundStartPlayerCount);
-            this.m_client.Game.GameModeCounter += new FrostbiteClient.LimitHandler(m_prcClient_GameModeCounter);
+            ProconClient.Game.RoundRestartPlayerCount += new FrostbiteClient.LimitHandler(m_prcClient_RoundRestartPlayerCount);
+            ProconClient.Game.RoundStartPlayerCount += new FrostbiteClient.LimitHandler(m_prcClient_RoundStartPlayerCount);
+            ProconClient.Game.GameModeCounter += new FrostbiteClient.LimitHandler(m_prcClient_GameModeCounter);
+            ProconClient.Game.CtfRoundTimeModifier += new FrostbiteClient.LimitHandler(m_prcClient_CtfRoundTimeModifier);
+            ProconClient.Game.RoundTimeLimit += new FrostbiteClient.LimitHandler(m_prcClient_RoundTimeLimit);
+            ProconClient.Game.TicketBleedRate += new FrostbiteClient.LimitHandler(m_prcClient_TicketBleedRate);
 
-            this.m_client.Game.TextChatModerationMode += new FrostbiteClient.TextChatModerationModeHandler(Game_TextChatModerationMode);
-            this.m_client.Game.TextChatSpamCoolDownTime += new FrostbiteClient.LimitHandler(Game_TextChatSpamCoolDownTime);
-            this.m_client.Game.TextChatSpamDetectionTime += new FrostbiteClient.LimitHandler(Game_TextChatSpamDetectionTime);
-            this.m_client.Game.TextChatSpamTriggerCount += new FrostbiteClient.LimitHandler(Game_TextChatSpamTriggerCount);
+            ProconClient.Game.TextChatModerationMode += new FrostbiteClient.TextChatModerationModeHandler(Game_TextChatModerationMode);
+            ProconClient.Game.TextChatSpamCoolDownTime += new FrostbiteClient.LimitHandler(Game_TextChatSpamCoolDownTime);
+            ProconClient.Game.TextChatSpamDetectionTime += new FrostbiteClient.LimitHandler(Game_TextChatSpamDetectionTime);
+            ProconClient.Game.TextChatSpamTriggerCount += new FrostbiteClient.LimitHandler(Game_TextChatSpamTriggerCount);
 
-            this.m_client.Game.UnlockMode += new FrostbiteClient.UnlockModeHandler(m_prcClient_UnlockMode);
+            ProconClient.Game.UnlockMode += new FrostbiteClient.UnlockModeHandler(m_prcClient_UnlockMode);
+            ProconClient.Game.BF4preset += new FrostbiteClient.BF4presetHandler(m_prcClient_BF4preset);
+            ProconClient.Game.GunMasterWeaponsPreset += new FrostbiteClient.GunMasterWeaponsPresetHandler(Game_GunMasterWeaponsPreset);
 
-            this.m_client.Game.ReservedSlotsListAggressiveJoin += new FrostbiteClient.IsEnabledHandler(Game_ReservedSlotsListAggressiveJoin);
-            this.m_client.Game.RoundLockdownCountdown += new FrostbiteClient.LimitHandler(Game_RoundLockdownCountdown);
-            this.m_client.Game.RoundWarmupTimeout += new FrostbiteClient.LimitHandler(Game_RoundWarmupTimeout);
+            ProconClient.Game.ReservedSlotsListAggressiveJoin += new FrostbiteClient.IsEnabledHandler(Game_ReservedSlotsListAggressiveJoin);
+            ProconClient.Game.RoundLockdownCountdown += new FrostbiteClient.LimitHandler(Game_RoundLockdownCountdown);
+            ProconClient.Game.RoundWarmupTimeout += new FrostbiteClient.LimitHandler(Game_RoundWarmupTimeout);
+
+            ProconClient.Game.PremiumStatus += new FrostbiteClient.IsEnabledHandler(Game_PremiumStatus);
+
+            ProconClient.Game.VehicleSpawnAllowed += new FrostbiteClient.IsEnabledHandler(Game_VehicleSpawnAllowed);
+            ProconClient.Game.VehicleSpawnDelay += new FrostbiteClient.LimitHandler(Game_VehicleSpawnDelay);
+            ProconClient.Game.BulletDamage += new FrostbiteClient.LimitHandler(Game_BulletDamage);
+            ProconClient.Game.OnlySquadLeaderSpawn += new FrostbiteClient.IsEnabledHandler(Game_OnlySquadLeaderSpawn);
+            ProconClient.Game.SoldierHealth += new FrostbiteClient.LimitHandler(Game_SoldierHealth);
+            ProconClient.Game.PlayerManDownTime += new FrostbiteClient.LimitHandler(Game_PlayerManDownTime);
+            ProconClient.Game.PlayerRespawnTime += new FrostbiteClient.LimitHandler(Game_PlayerRespawnTime);
+            ProconClient.Game.Hud += new FrostbiteClient.IsEnabledHandler(Game_Hud);
+            ProconClient.Game.NameTag += new FrostbiteClient.IsEnabledHandler(Game_NameTag);
+
+            ProconClient.Game.PlayerIdleState += new FrostbiteClient.PlayerIdleStateHandler(Game_PlayerIdleState);
+            ProconClient.Game.PlayerIsAlive += new FrostbiteClient.PlayerIsAliveHandler(Game_PlayerIsAlive);
+            ProconClient.Game.PlayerPingedByAdmin += new FrostbiteClient.PlayerPingedByAdminHandler(Game_PlayerPingedByAdmin);
+
+            ProconClient.Game.SquadLeader += new FrostbiteClient.SquadLeaderHandler(Game_SquadLeader);
+            ProconClient.Game.SquadListActive += new FrostbiteClient.SquadListActiveHandler(Game_SquadListActive);
+            ProconClient.Game.SquadListPlayers += new FrostbiteClient.SquadListPlayersHandler(Game_SquadListPlayers);
+            ProconClient.Game.SquadIsPrivate += new FrostbiteClient.SquadIsPrivateHandler(Game_SquadIsPrivate);
+
+            #region MoHW
+
+            ProconClient.Game.AllUnlocksUnlocked += new FrostbiteClient.IsEnabledHandler(Game_AllUnlocksUnlocked);
+            ProconClient.Game.BuddyOutline += new FrostbiteClient.IsEnabledHandler(Game_BuddyOutline);
+            ProconClient.Game.HudBuddyInfo += new FrostbiteClient.IsEnabledHandler(Game_HudBuddyInfo);
+            ProconClient.Game.HudClassAbility += new FrostbiteClient.IsEnabledHandler(Game_HudClassAbility);
+            ProconClient.Game.HudCrosshair += new FrostbiteClient.IsEnabledHandler(Game_HudCrosshair);
+            ProconClient.Game.HudEnemyTag += new FrostbiteClient.IsEnabledHandler(Game_HudEnemyTag);
+            ProconClient.Game.HudExplosiveIcons += new FrostbiteClient.IsEnabledHandler(Game_HudExplosiveIcons);
+            ProconClient.Game.HudGameMode += new FrostbiteClient.IsEnabledHandler(Game_HudGameMode);
+            ProconClient.Game.HudHealthAmmo += new FrostbiteClient.IsEnabledHandler(Game_HudHealthAmmo);
+            ProconClient.Game.HudMinimap += new FrostbiteClient.IsEnabledHandler(Game_HudMinimap);
+            ProconClient.Game.HudObiturary += new FrostbiteClient.IsEnabledHandler(Game_HudObiturary);
+            ProconClient.Game.HudPointsTracker += new FrostbiteClient.IsEnabledHandler(Game_HudPointsTracker);
+            ProconClient.Game.HudUnlocks += new FrostbiteClient.IsEnabledHandler(Game_HudUnlocks);
+            ProconClient.Game.Playlist += new FrostbiteClient.PlaylistSetHandler(Game_Playlist);
+
+            #endregion
 
             // R13
-            this.m_client.Game.ServerName += new FrostbiteClient.ServerNameHandler(m_prcClient_ServerName);
-            this.m_client.Game.TeamKillCountForKick += new FrostbiteClient.LimitHandler(m_prcClient_TeamKillCountForKick);
-            this.m_client.Game.TeamKillValueIncrease += new FrostbiteClient.LimitHandler(m_prcClient_TeamKillValueIncrease);
-            this.m_client.Game.TeamKillValueDecreasePerSecond += new FrostbiteClient.LimitHandler(m_prcClient_TeamKillValueDecreasePerSecond);
-            this.m_client.Game.TeamKillValueForKick += new FrostbiteClient.LimitHandler(m_prcClient_TeamKillValueForKick);
-            this.m_client.Game.IdleTimeout += new FrostbiteClient.LimitHandler(m_prcClient_IdleTimeout);
-            this.m_client.Game.IdleBanRounds += new FrostbiteClient.LimitHandler(m_prcClient_IdleBanRounds);
-            this.m_client.Game.ProfanityFilter += new FrostbiteClient.IsEnabledHandler(m_prcClient_ProfanityFilter);
+            ProconClient.Game.ServerName += new FrostbiteClient.ServerNameHandler(m_prcClient_ServerName);
+            ProconClient.Game.TeamKillCountForKick += new FrostbiteClient.LimitHandler(m_prcClient_TeamKillCountForKick);
+            ProconClient.Game.TeamKillKickForBan += new FrostbiteClient.LimitHandler(m_prcClient_TeamKillKickForBan);
+            ProconClient.Game.TeamKillValueIncrease += new FrostbiteClient.LimitHandler(m_prcClient_TeamKillValueIncrease);
+            ProconClient.Game.TeamKillValueDecreasePerSecond += new FrostbiteClient.LimitHandler(m_prcClient_TeamKillValueDecreasePerSecond);
+            ProconClient.Game.TeamKillValueForKick += new FrostbiteClient.LimitHandler(m_prcClient_TeamKillValueForKick);
+            ProconClient.Game.IdleTimeout += new FrostbiteClient.LimitHandler(m_prcClient_IdleTimeout);
+            ProconClient.Game.IdleBanRounds += new FrostbiteClient.LimitHandler(m_prcClient_IdleBanRounds);
+            ProconClient.Game.ProfanityFilter += new FrostbiteClient.IsEnabledHandler(m_prcClient_ProfanityFilter);
 
-            this.m_client.PlayerSpawned += new PRoConClient.PlayerSpawnedHandler(m_prcClient_PlayerSpawned);
-            this.m_client.Game.RoundOver += new FrostbiteClient.RoundOverHandler(m_prcClient_RoundOver);
-            this.m_client.Game.RoundOverPlayers += new FrostbiteClient.RoundOverPlayersHandler(m_prcClient_RoundOverPlayers);
-            this.m_client.Game.RoundOverTeamScores += new FrostbiteClient.RoundOverTeamScoresHandler(m_prcClient_RoundOverTeamScores);
-            this.m_client.Game.EndRound += new FrostbiteClient.EndRoundHandler(m_prcClient_EndRound);
+            ProconClient.PlayerSpawned += new PRoConClient.PlayerSpawnedHandler(m_prcClient_PlayerSpawned);
+            ProconClient.Game.RoundOver += new FrostbiteClient.RoundOverHandler(m_prcClient_RoundOver);
+            ProconClient.Game.RoundOverPlayers += new FrostbiteClient.RoundOverPlayersHandler(m_prcClient_RoundOverPlayers);
+            ProconClient.Game.RoundOverTeamScores += new FrostbiteClient.RoundOverTeamScoresHandler(m_prcClient_RoundOverTeamScores);
+            ProconClient.Game.EndRound += new FrostbiteClient.EndRoundHandler(m_prcClient_EndRound);
 
-            this.m_client.Game.LevelVariablesGet += new FrostbiteClient.LevelVariableGetHandler(m_prcClient_LevelVariablesGet);
-            this.m_client.Game.LevelVariablesSet += new FrostbiteClient.LevelVariableHandler(m_prcClient_LevelVariablesSet);
-            this.m_client.Game.LevelVariablesClear += new FrostbiteClient.LevelVariableHandler(m_prcClient_LevelVariablesClear);
-            this.m_client.Game.LevelVariablesEvaluate += new FrostbiteClient.LevelVariableGetHandler(m_prcClient_LevelVariablesEvaluate);
-            this.m_client.Game.LevelVariablesList += new FrostbiteClient.LevelVariableListHandler(m_prcClient_LevelVariablesList);
+            ProconClient.Game.LevelVariablesGet += new FrostbiteClient.LevelVariableGetHandler(m_prcClient_LevelVariablesGet);
+            ProconClient.Game.LevelVariablesSet += new FrostbiteClient.LevelVariableHandler(m_prcClient_LevelVariablesSet);
+            ProconClient.Game.LevelVariablesClear += new FrostbiteClient.LevelVariableHandler(m_prcClient_LevelVariablesClear);
+            ProconClient.Game.LevelVariablesEvaluate += new FrostbiteClient.LevelVariableGetHandler(m_prcClient_LevelVariablesEvaluate);
+            ProconClient.Game.LevelVariablesList += new FrostbiteClient.LevelVariableListHandler(m_prcClient_LevelVariablesList);
 
-            this.m_client.ReceiveProconVariable += new PRoConClient.ReceiveProconVariableHandler(m_prcClient_ReceiveProconVariable);
+            ProconClient.ReceiveProconVariable += new PRoConClient.ReceiveProconVariableHandler(m_prcClient_ReceiveProconVariable);
 
-            this.m_client.PunkbusterBeginPlayerInfo += new PRoConClient.EmptyParamterHandler(m_client_PunkbusterBeginPlayerInfo);
-            this.m_client.PunkbusterEndPlayerInfo += new PRoConClient.EmptyParamterHandler(m_client_PunkbusterEndPlayerInfo);
-            this.m_client.PunkbusterPlayerInfo += new PRoConClient.PunkbusterPlayerInfoHandler(m_prcClient_PunkbusterPlayerInfo);
-            this.m_client.PunkbusterPlayerBanned += new PRoConClient.PunkbusterBanHandler(m_prcClient_PunkbusterPlayerBanned);
-            this.m_client.PunkbusterPlayerUnbanned += new PRoConClient.PunkbusterBanHandler(m_prcClient_PunkbusterPlayerUnbanned);
+            ProconClient.PunkbusterBeginPlayerInfo += new PRoConClient.EmptyParamterHandler(m_client_PunkbusterBeginPlayerInfo);
+            ProconClient.PunkbusterEndPlayerInfo += new PRoConClient.EmptyParamterHandler(m_client_PunkbusterEndPlayerInfo);
+            ProconClient.PunkbusterPlayerInfo += new PRoConClient.PunkbusterPlayerInfoHandler(m_prcClient_PunkbusterPlayerInfo);
+            ProconClient.PunkbusterPlayerBanned += new PRoConClient.PunkbusterBanHandler(m_prcClient_PunkbusterPlayerBanned);
+            ProconClient.PunkbusterPlayerUnbanned += new PRoConClient.PunkbusterBanHandler(m_prcClient_PunkbusterPlayerUnbanned);
 
-            this.m_client.Layer.AccountPrivileges.AccountPrivilegeAdded += new AccountPrivilegeDictionary.AccountPrivilegeAlteredHandler(AccountPrivileges_AccountPrivilegeAdded);
-            this.m_client.Layer.AccountPrivileges.AccountPrivilegeRemoved += new AccountPrivilegeDictionary.AccountPrivilegeAlteredHandler(AccountPrivileges_AccountPrivilegeRemoved);
+            ProconClient.Layer.AccountPrivileges.AccountPrivilegeAdded += new AccountPrivilegeDictionary.AccountPrivilegeAlteredHandler(AccountPrivileges_AccountPrivilegeAdded);
+            ProconClient.Layer.AccountPrivileges.AccountPrivilegeRemoved += new AccountPrivilegeDictionary.AccountPrivilegeAlteredHandler(AccountPrivileges_AccountPrivilegeRemoved);
 
-            this.m_client.MapGeometry.MapZoneTrespassed += new PRoCon.Core.Battlemap.MapGeometry.MapZoneTrespassedHandler(MapGeometry_MapZoneTrespassed);
+            ProconClient.MapGeometry.MapZoneTrespassed += new MapGeometry.MapZoneTrespassedHandler(MapGeometry_MapZoneTrespassed);
 
             #region Admin actions on players
 
-            this.m_client.Game.PlayerKickedByAdmin += new FrostbiteClient.PlayerKickedHandler(Game_PlayerKickedByAdmin);
-            this.m_client.Game.PlayerKilledByAdmin += new FrostbiteClient.PlayerKilledByAdminHandler(Game_PlayerKilledByAdmin);
-            this.m_client.Game.PlayerMovedByAdmin += new FrostbiteClient.PlayerMovedByAdminHandler(Game_PlayerMovedByAdmin);
+            ProconClient.Game.PlayerKickedByAdmin += new FrostbiteClient.PlayerKickedHandler(Game_PlayerKickedByAdmin);
+            ProconClient.Game.PlayerKilledByAdmin += new FrostbiteClient.PlayerKilledByAdminHandler(Game_PlayerKilledByAdmin);
+            ProconClient.Game.PlayerMovedByAdmin += new FrostbiteClient.PlayerMovedByAdminHandler(Game_PlayerMovedByAdmin);
 
             #endregion
 
             #region Layer Accounts
 
-            foreach (PRoConLayerClient client in this.m_client.Layer.LayerClients) {
-                client.Login += new PRoConLayerClient.LayerClientHandler(client_LayerClientLogin);
-                client.Logout += new PRoConLayerClient.LayerClientHandler(client_LayerClientLogout);
+            foreach (ILayerClient client in new List<ILayerClient>(ProconClient.Layer.Clients.Values)) {
+                client.Login += Layer_LayerClientLogin;
+                client.Logout += Layer_LayerClientLogout;
             }
-            this.m_client.Layer.ClientConnected += new Remote.Layer.PRoConLayer.LayerAccountHandler(Layer_ClientConnected);
+            ProconClient.Layer.ClientConnected += Layer_ClientConnected;
+
+            #endregion
+
+            #region BF4
+
+            ProconClient.Game.SpectatorListCleared += new FrostbiteClient.EmptyParamterHandler(Game_SpectatorListCleared);
+            ProconClient.Game.SpectatorListList += new FrostbiteClient.SpectatorListListHandler(Game_SpectatorListList);
+            ProconClient.Game.SpectatorListLoad += new FrostbiteClient.EmptyParamterHandler(Game_SpectatorListLoad);
+            ProconClient.Game.SpectatorListPlayerAdded += new FrostbiteClient.SpectatorListPlayerHandler(Game_SpectatorListPlayerAdded);
+            ProconClient.Game.SpectatorListPlayerRemoved += new FrostbiteClient.SpectatorListPlayerHandler(Game_SpectatorListPlayerRemoved);
+            ProconClient.Game.SpectatorListSave += new FrostbiteClient.EmptyParamterHandler(Game_SpectatorListSave);
+
+            ProconClient.Game.GameAdminCleared += new FrostbiteClient.EmptyParamterHandler(Game_GameAdminCleared);
+            ProconClient.Game.GameAdminList += new FrostbiteClient.GameAdminListHandler(Game_GameAdminList);
+            ProconClient.Game.GameAdminLoad += new FrostbiteClient.EmptyParamterHandler(Game_GameAdminLoad);
+            ProconClient.Game.GameAdminPlayerAdded += new FrostbiteClient.GameAdminPlayerHandler(Game_GameAdminPlayerAdded);
+            ProconClient.Game.GameAdminPlayerRemoved += new FrostbiteClient.GameAdminPlayerHandler(Game_GameAdminPlayerRemoved);
+            ProconClient.Game.GameAdminSave += new FrostbiteClient.EmptyParamterHandler(Game_GameAdminSave);
+
+            ProconClient.Game.MaxSpectators += new FrostbiteClient.LimitHandler(Game_MaxSpectators);
+
+            ProconClient.Game.FairFight += new FrostbiteClient.IsEnabledHandler(Game_FairFight);
+
+            ProconClient.Game.IsHitIndicator += new FrostbiteClient.IsEnabledHandler(Game_IsHitIndicator);
+
+            ProconClient.Game.IsCommander += new FrostbiteClient.IsEnabledHandler(Game_IsCommander);
+            ProconClient.Game.AlwaysAllowSpectators += new FrostbiteClient.IsEnabledHandler(Game_AlwaysAllowSpectators);
+            ProconClient.Game.IsForceReloadWholeMags += new FrostbiteClient.IsEnabledHandler(Game_IsForceReloadWholeMags);
+            ProconClient.Game.ServerType += new FrostbiteClient.VarsStringHandler(Game_ServerType);
+
+            ProconClient.Game.TeamFactionOverride += new FrostbiteClient.TeamFactionOverrideHandler(Game_TeamFactionOverride);
+
+            #endregion
+
+            #region Battlefield: Hardline
+
+            ProconClient.Game.RoundStartReadyPlayersNeeded += Game_RoundStartReadyPlayersNeeded;
 
             #endregion
         }
@@ -1042,25 +1404,114 @@ namespace PRoCon.Core.Plugin {
 
         #region Events
 
+        #region BF4
+
+        void Game_ServerType(FrostbiteClient sender, string value) {
+            InvokeOnAllEnabled("OnServerType", value);
+        }
+
+        void Game_IsCommander(FrostbiteClient sender, bool isEnabled) {
+            InvokeOnAllEnabled("OnCommander", isEnabled);
+        }
+
+        void Game_AlwaysAllowSpectators(FrostbiteClient sender, bool isEnabled) {
+            InvokeOnAllEnabled("OnAlwaysAllowSpectators", isEnabled);
+        }
+        
+        void Game_IsForceReloadWholeMags(FrostbiteClient sender, bool isEnabled) {
+            InvokeOnAllEnabled("OnForceReloadWholeMags", isEnabled);
+        }
+        
+        void Game_FairFight(FrostbiteClient sender, bool isEnabled) {
+            InvokeOnAllEnabled("OnFairFight", isEnabled);
+        }
+
+        void Game_IsHitIndicator(FrostbiteClient sender, bool isEnabled) {
+            InvokeOnAllEnabled("OnIsHitIndicator", isEnabled);
+        }
+
+        void Game_MaxSpectators(FrostbiteClient sender, int limit) {
+            InvokeOnAllEnabled("OnMaxSpectators", limit);
+        }
+
+        void Game_GameAdminSave(FrostbiteClient sender) {
+            InvokeOnAllEnabled("OnGameAdminSave");
+        }
+
+        void Game_GameAdminPlayerRemoved(FrostbiteClient sender, string soldierName) {
+            InvokeOnAllEnabled("OnGameAdminPlayerRemoved", soldierName);
+        }
+
+        void Game_GameAdminPlayerAdded(FrostbiteClient sender, string soldierName) {
+            InvokeOnAllEnabled("OnGameAdminPlayerAdded", soldierName);
+        }
+
+        void Game_GameAdminLoad(FrostbiteClient sender) {
+            InvokeOnAllEnabled("OnGameAdminLoad");
+        }
+
+        void Game_GameAdminList(FrostbiteClient sender, List<string> soldierNames) {
+            InvokeOnAllEnabled("OnGameAdminList", soldierNames);
+        }
+
+        void Game_GameAdminCleared(FrostbiteClient sender) {
+            InvokeOnAllEnabled("OnGameAdminCleared");
+        }
+
+        void Game_SpectatorListSave(FrostbiteClient sender) {
+            InvokeOnAllEnabled("OnSpectatorListSave");
+        }
+
+        void Game_SpectatorListPlayerRemoved(FrostbiteClient sender, string soldierName) {
+            InvokeOnAllEnabled("OnSpectatorListPlayerRemoved", soldierName);
+        }
+
+        void Game_SpectatorListPlayerAdded(FrostbiteClient sender, string soldierName) {
+            InvokeOnAllEnabled("OnSpectatorListPlayerAdded", soldierName);
+        }
+
+        void Game_SpectatorListLoad(FrostbiteClient sender) {
+            InvokeOnAllEnabled("OnSpectatorListLoad");
+        }
+
+        void Game_SpectatorListList(FrostbiteClient sender, List<string> soldierNames) {
+            InvokeOnAllEnabled("OnSpectatorListList", soldierNames);
+        }
+
+        void Game_SpectatorListCleared(FrostbiteClient sender) {
+            InvokeOnAllEnabled("OnSpectatorListCleared");
+        }
+
+
+        #endregion
+
+        #region Battlefield: Hardline
+        
+        void Game_RoundStartReadyPlayersNeeded(FrostbiteClient sender, int limit) {
+            InvokeOnAllEnabled("OnRoundStartReadyPlayersNeeded", limit);
+        }
+        
+        #endregion
+
         #region Layer Accounts
 
-        private void Layer_ClientConnected(Remote.Layer.PRoConLayerClient client) {
-            client.Login += new Remote.Layer.PRoConLayerClient.LayerClientHandler(client_LayerClientLogin);
-            client.Logout += new Remote.Layer.PRoConLayerClient.LayerClientHandler(client_LayerClientLogout);
+        private void Layer_ClientConnected(ILayerClient client) {
+            client.Login += Layer_LayerClientLogin;
+            client.Logout += Layer_LayerClientLogout;
         }
 
-        private void client_LayerClientLogout(Remote.Layer.PRoConLayerClient sender) {
-            this.InvokeOnAllEnabled("OnAccountLogout", sender.Username, sender.IPPort, sender.Privileges);
+        private void Layer_LayerClientLogout(ILayerClient sender) {
+            InvokeOnAllEnabled("OnAccountLogout", sender.Username, sender.IPPort, sender.Privileges);
         }
 
-        private void client_LayerClientLogin(Remote.Layer.PRoConLayerClient sender) {
-            this.InvokeOnAllEnabled("OnAccountLogin", sender.Username, sender.IPPort, sender.Privileges);
+        private void Layer_LayerClientLogin(ILayerClient sender) {
+            InvokeOnAllEnabled("OnAccountLogin", sender.Username, sender.IPPort, sender.Privileges);
         }
 
         #endregion
 
         private void AccountPrivileges_AccountPrivilegeRemoved(AccountPrivilege item) {
-            this.InvokeOnAllLoaded("OnAccountDeleted", item.Owner.Name);
+            InvokeOnAllLoaded("OnAccountDeleted", item.Owner.Name);
 
             item.AccountPrivilegesChanged -= new AccountPrivilege.AccountPrivilegesChangedHandler(item_AccountPrivilegesChanged);
         }
@@ -1068,147 +1519,146 @@ namespace PRoCon.Core.Plugin {
         private void AccountPrivileges_AccountPrivilegeAdded(AccountPrivilege item) {
             item.AccountPrivilegesChanged += new AccountPrivilege.AccountPrivilegesChangedHandler(item_AccountPrivilegesChanged);
 
-            this.InvokeOnAllLoaded("OnAccountCreated", item.Owner.Name);
+            InvokeOnAllLoaded("OnAccountCreated", item.Owner.Name);
         }
 
-        void item_AccountPrivilegesChanged(AccountPrivilege item) {
-            this.InvokeOnAllLoaded("OnAccountPrivilegesUpdate", item.Owner.Name, item.Privileges);
+        private void item_AccountPrivilegesChanged(AccountPrivilege item) {
+            InvokeOnAllLoaded("OnAccountPrivilegesUpdate", item.Owner.Name, item.Privileges);
         }
 
-        void m_prcClient_PunkbusterPlayerUnbanned(PRoConClient sender, CBanInfo cbiUnbannedPlayer) {
-            this.InvokeOnAllEnabled("OnPunkbusterUnbanInfo", cbiUnbannedPlayer);
+        private void m_prcClient_PunkbusterPlayerUnbanned(PRoConClient sender, CBanInfo cbiUnbannedPlayer) {
+            InvokeOnAllEnabled("OnPunkbusterUnbanInfo", cbiUnbannedPlayer);
         }
 
-        void m_prcClient_PunkbusterPlayerBanned(PRoConClient sender, CBanInfo cbiBannedPlayer) {
-            this.InvokeOnAllEnabled("OnPunkbusterBanInfo", cbiBannedPlayer);
+        private void m_prcClient_PunkbusterPlayerBanned(PRoConClient sender, CBanInfo cbiBannedPlayer) {
+            InvokeOnAllEnabled("OnPunkbusterBanInfo", cbiBannedPlayer);
         }
 
         private void m_prcClient_PunkbusterPlayerInfo(PRoConClient sender, CPunkbusterInfo pbInfo) {
-            this.InvokeOnAllEnabled("OnPunkbusterPlayerInfo", pbInfo);
+            InvokeOnAllEnabled("OnPunkbusterPlayerInfo", pbInfo);
         }
 
         private void m_client_PunkbusterEndPlayerInfo(PRoConClient sender) {
-            this.InvokeOnAllEnabled("OnPunkbusterBeginPlayerInfo");
+            InvokeOnAllEnabled("OnPunkbusterBeginPlayerInfo");
         }
-        
+
         private void m_client_PunkbusterBeginPlayerInfo(PRoConClient sender) {
-            this.InvokeOnAllEnabled("OnPunkbusterEndPlayerInfo");
+            InvokeOnAllEnabled("OnPunkbusterEndPlayerInfo");
         }
 
         private void m_prcClient_ReceiveProconVariable(PRoConClient sender, string strVariable, string strValue) {
-            this.InvokeOnAllEnabled("OnReceiveProconVariable", strVariable, strValue);
+            InvokeOnAllEnabled("OnReceiveProconVariable", strVariable, strValue);
         }
 
         private void m_prcClient_CommandLogin(PRoConClient sender) {
-            this.InvokeOnAllEnabled("OnLogin");
+            InvokeOnAllEnabled("OnLogin");
         }
 
         private void m_prcClient_CommandLogout(PRoConClient sender) {
-            this.InvokeOnAllEnabled("OnLogout");
+            InvokeOnAllEnabled("OnLogout");
         }
 
         private void m_prcClient_CommandQuit(FrostbiteClient sender) {
-            this.InvokeOnAllEnabled("OnQuit");
+            InvokeOnAllEnabled("OnQuit");
         }
 
         private void m_prcClient_ConnectionClosed(PRoConClient sender) {
-            this.InvokeOnAllEnabled("OnConnectionClosed");
+            InvokeOnAllEnabled("OnConnectionClosed");
         }
 
         private void m_prcClient_PlayerJoin(FrostbiteClient sender, string playerName) {
-            this.InvokeOnAllEnabled("OnPlayerJoin", playerName);
+            InvokeOnAllEnabled("OnPlayerJoin", playerName);
         }
 
-        private void m_prcClient_PlayerLeft(FrostbiteClient sender, string playerName, PRoCon.Core.Players.CPlayerInfo cpiPlayer) {
+        private void m_prcClient_PlayerLeft(FrostbiteClient sender, string playerName, CPlayerInfo cpiPlayer) {
             if (cpiPlayer != null) {
-                this.InvokeOnAllEnabled("OnPlayerLeft", cpiPlayer);
+                InvokeOnAllEnabled("OnPlayerLeft", cpiPlayer);
             }
 
             // OBSOLETE
             //this.InvokeOnAllEnabled("OnPlayerLeft", playerName);
         }
 
+        private void m_prcClient_PlayerDisconnected(FrostbiteClient sender, string playerName, string reason) {
+            InvokeOnAllEnabled("OnPlayerDisconnected", playerName, reason);
+        }
+
         private void m_prcClient_PlayerAuthenticated(FrostbiteClient sender, string playerName, string playerGuid) {
-            this.InvokeOnAllEnabled("OnPlayerAuthenticated", playerName, playerGuid);
+            InvokeOnAllEnabled("OnPlayerAuthenticated", playerName, playerGuid);
         }
 
         private void m_prcClient_PlayerKicked(FrostbiteClient sender, string strSoldierName, string strReason) {
-            this.InvokeOnAllEnabled("OnPlayerKicked", strSoldierName, strReason);
+            InvokeOnAllEnabled("OnPlayerKicked", strSoldierName, strReason);
         }
 
         private void m_prcClient_PlayerChangedTeam(FrostbiteClient sender, string strSoldierName, int iTeamID, int iSquadID) {
-            this.InvokeOnAllEnabled("OnPlayerTeamChange", strSoldierName, iTeamID, iSquadID);
+            InvokeOnAllEnabled("OnPlayerTeamChange", strSoldierName, iTeamID, iSquadID);
         }
 
         private void m_prcClient_PlayerChangedSquad(FrostbiteClient sender, string strSoldierName, int iTeamID, int iSquadID) {
-            this.InvokeOnAllEnabled("OnPlayerSquadChange", strSoldierName, iTeamID, iSquadID);
+            InvokeOnAllEnabled("OnPlayerSquadChange", strSoldierName, iTeamID, iSquadID);
         }
 
         private void m_prcClient_PlayerKilled(PRoConClient sender, Kill kKillerVictimDetails) {
-            this.InvokeOnAllEnabled("OnPlayerKilled", new object[] { kKillerVictimDetails });
+            InvokeOnAllEnabled("OnPlayerKilled", new object[] {kKillerVictimDetails});
 
-            // DEPRECATED
-            this.InvokeOnAllEnabled("OnPlayerKilled", new object[] { kKillerVictimDetails.Killer.SoldierName, kKillerVictimDetails.Victim.SoldierName });
+            // Obsolete. This was deprecated for BF3, it's now being taken away from BF4.
+            // InvokeOnAllEnabled("OnPlayerKilled", new object[] {kKillerVictimDetails.Killer.SoldierName, kKillerVictimDetails.Victim.SoldierName});
         }
 
         /// <summary>
-        /// This will check from the dictionary of registered commands to see if some text is matched
-        /// against a registered command.  The return is prioritized for whatever command matches more
-        /// arguments.
+        ///     This will check from the dictionary of registered commands to see if some text is matched
+        ///     against a registered command.  The return is prioritized for whatever command matches more
+        ///     arguments.
         /// </summary>
         /// <param name="playerName">Who executed the command</param>
         /// <param name="message">The message they sent</param>
-        private bool CheckInGameCommands(string playerName, string message, out MatchCommand mtcMatchedCommand, out CapturedCommand capReturnCommand) {
-
+        /// <param name="matchedCommand"></param>
+        /// <param name="returnCommand"></param>
+        private bool CheckInGameCommands(string playerName, string message, out MatchCommand matchedCommand, out CapturedCommand returnCommand) {
             bool isMatch = false;
-            capReturnCommand = null;
-            mtcMatchedCommand = null;
+            returnCommand = null;
+            matchedCommand = null;
 
-            lock (this.m_objMatchedInGameCommandsLocker) {
-                
+            lock (MatchedInGameCommandsLocker) {
                 CapturedCommand capMatched = null;
 
                 // If this player has a command stored that requires confirmation.
-                if (this.CommandsNeedingConfirmation.Contains(playerName) == true) {
-                    if ((capMatched = this.CommandsNeedingConfirmation[playerName].MatchedCommand.Requirements.ConfirmationCommand.Matches(message)) != null) {
+                if (CommandsNeedingConfirmation.Contains(playerName) == true) {
+                    if ((capMatched = CommandsNeedingConfirmation[playerName].MatchedCommand.Requirements.ConfirmationCommand.Matches(message)) != null) {
                         //capReturnCommand = capMatched;
-                        capReturnCommand = this.CommandsNeedingConfirmation[playerName].ConfirmationDetails;
-                        mtcMatchedCommand = this.CommandsNeedingConfirmation[playerName].MatchedCommand;
-                        capReturnCommand.IsConfirmed = true;
+                        returnCommand = CommandsNeedingConfirmation[playerName].ConfirmationDetails;
+                        matchedCommand = CommandsNeedingConfirmation[playerName].MatchedCommand;
+                        returnCommand.IsConfirmed = true;
                         isMatch = true;
                     }
                 }
 
                 // If it was not a confirmation to a previously matched command.
                 if (isMatch == false) {
-
-                    foreach (KeyValuePair<string, MatchCommand> kvpCommand in this.MatchedInGameCommands) {
-
+                    foreach (var kvpCommand in MatchedInGameCommands) {
                         // Only care if the plugin is enabled.
-                        if (this.Plugins.IsEnabled(kvpCommand.Value.RegisteredClassname) == true) {
-
+                        if (Plugins.IsEnabled(kvpCommand.Value.RegisteredClassname) == true) {
                             capMatched = kvpCommand.Value.Matches(message);
 
                             if (capMatched != null) {
-
-                                if (kvpCommand.Value.Requirements.HasValidPermissions(this.m_client.GetAccountPrivileges(playerName)) == true) {
-
+                                if (kvpCommand.Value.Requirements.HasValidPermissions(ProconClient.GetAccountPrivileges(playerName)) == true) {
                                     // if (this.ValidateRequirements(playerName, kvpCommand.Value.Requirements) == true) {
 
                                     // If it's the first match we've found
-                                    if (capReturnCommand == null) {
-                                        capReturnCommand = capMatched;
-                                        mtcMatchedCommand = kvpCommand.Value;
+                                    if (returnCommand == null) {
+                                        returnCommand = capMatched;
+                                        matchedCommand = kvpCommand.Value;
                                         isMatch = true;
                                     }
-                                    else if (capReturnCommand != null && capMatched.CompareTo(capReturnCommand) > 0) {
+                                    else if (capMatched.CompareTo(returnCommand) > 0) {
                                         // We've found a command with that is a closer match to its arguments
-                                        capReturnCommand = capMatched;
-                                        mtcMatchedCommand = kvpCommand.Value;
+                                        returnCommand = capMatched;
+                                        matchedCommand = kvpCommand.Value;
                                         isMatch = true;
                                     }
-                                    
-                                        /*
+
+                                    /*
                                     // If we've found a better match than before (more arguments matched)
                                     else if (capReturnCommand != null && capMatched.MatchedArguments.Count > capReturnCommand.MatchedArguments.Count) {
                                         capReturnCommand = capMatched;
@@ -1224,7 +1674,7 @@ namespace PRoCon.Core.Plugin {
                                     }*/
                                 }
                                 else {
-                                    this.m_client.Game.SendAdminSayPacket(kvpCommand.Value.Requirements.FailedRequirementsMessage, new CPlayerSubset(CPlayerSubset.PlayerSubsetType.Player, playerName));
+                                    ProconClient.Game.SendAdminSayPacket(kvpCommand.Value.Requirements.FailedRequirementsMessage, new CPlayerSubset(CPlayerSubset.PlayerSubsetType.Player, playerName));
                                     // this.m_prcClient.SendRequest(new List<string>() { "admin.say", kvpCommand.Value.Requirements.FailedRequirementsMessage, "player", playerName });
                                 }
                             }
@@ -1237,7 +1687,6 @@ namespace PRoCon.Core.Plugin {
         }
 
         private void DispatchMatchedCommand(string playerName, string message, MatchCommand mtcCommand, CapturedCommand capCommand, CPlayerSubset subset) {
-
             bool isConfirmationRequired = false;
 
             if (capCommand.IsConfirmed == false) {
@@ -1251,514 +1700,665 @@ namespace PRoCon.Core.Plugin {
             }
 
             if (isConfirmationRequired == true && capCommand.IsConfirmed == false) {
-                if (this.CommandsNeedingConfirmation.Contains(playerName) == true) {
-                    this.CommandsNeedingConfirmation.Remove(playerName);
+                if (CommandsNeedingConfirmation.Contains(playerName) == true) {
+                    CommandsNeedingConfirmation.Remove(playerName);
                 }
 
-                this.CommandsNeedingConfirmation.Add(new ConfirmationEntry(playerName, message, mtcCommand, capCommand, subset));
+                CommandsNeedingConfirmation.Add(new ConfirmationEntry(playerName, message, mtcCommand, capCommand, subset));
 
-                #region BF3 Player -> Squad chat hack
-
-                if (this.m_client.Game is BF3Client && this.m_client.PlayerList.Contains(playerName) == true) {
-                    this.m_client.Game.SendAdminSayPacket(String.Format("Did you mean {0}?", capCommand.ToString()), new CPlayerSubset(CPlayerSubset.PlayerSubsetType.Squad, this.m_client.PlayerList[playerName].TeamID, this.m_client.PlayerList[playerName].SquadID));
-                }
-                else {
-                    this.m_client.Game.SendAdminSayPacket(String.Format("Did you mean {0}?", capCommand.ToString()), new CPlayerSubset(CPlayerSubset.PlayerSubsetType.Player, playerName));
-                }
-                #endregion
-
-                // this.m_prcClient.SendRequest(new List<string>() { "admin.say", String.Format("Did you mean {0}?", capCommand.ToString()), "player", playerName });
+                ProconClient.Game.SendAdminSayPacket(String.Format("Did you mean {0}?", capCommand), new CPlayerSubset(CPlayerSubset.PlayerSubsetType.Player, playerName));
             }
             else {
-                this.InvokeOnEnabled(mtcCommand.RegisteredClassname, mtcCommand.RegisteredMethodName, playerName, message, mtcCommand, capCommand, new CPlayerSubset(CPlayerSubset.PlayerSubsetType.All));
+                InvokeOnEnabled(mtcCommand.RegisteredClassname, mtcCommand.RegisteredMethodName, playerName, message, mtcCommand, capCommand, new CPlayerSubset(CPlayerSubset.PlayerSubsetType.All));
 
-                this.InvokeOnAllEnabled("OnAnyMatchRegisteredCommand", playerName, message, mtcCommand, capCommand, new CPlayerSubset(CPlayerSubset.PlayerSubsetType.All));
+                InvokeOnAllEnabled("OnAnyMatchRegisteredCommand", playerName, message, mtcCommand, capCommand, new CPlayerSubset(CPlayerSubset.PlayerSubsetType.All));
             }
         }
 
         private void m_prcClient_GlobalChat(FrostbiteClient sender, string playerName, string message) {
-            this.InvokeOnAllEnabled("OnGlobalChat", playerName, message);
+            InvokeOnAllEnabled("OnGlobalChat", playerName, message);
 
             CapturedCommand capCommand = null;
             MatchCommand mtcCommand = null;
 
-            if (String.Compare(playerName, "server", true) != 0 && this.CheckInGameCommands(playerName, message, out mtcCommand, out capCommand) == true) {
-                this.DispatchMatchedCommand(playerName, message, mtcCommand, capCommand, new CPlayerSubset(CPlayerSubset.PlayerSubsetType.All));
+            if (String.Compare(playerName, "server", StringComparison.OrdinalIgnoreCase) != 0 && CheckInGameCommands(playerName, message, out mtcCommand, out capCommand) == true) {
+                DispatchMatchedCommand(playerName, message, mtcCommand, capCommand, new CPlayerSubset(CPlayerSubset.PlayerSubsetType.All));
                 //this.InvokeOnEnabled(mtcCommand.RegisteredClassname, "OnMatchRegisteredCommand", playerName, message, mtcCommand, capCommand, new CPlayerSubset(CPlayerSubset.PlayerSubsetType.All));
             }
         }
 
         private void m_prcClient_TeamChat(FrostbiteClient sender, string playerName, string message, int teamId) {
-            this.InvokeOnAllEnabled("OnTeamChat", playerName, message, teamId);
+            InvokeOnAllEnabled("OnTeamChat", playerName, message, teamId);
 
             CapturedCommand capCommand = null;
             MatchCommand mtcCommand = null;
 
-            if (String.Compare(playerName, "server", true) != 0 && this.CheckInGameCommands(playerName, message, out mtcCommand, out capCommand) == true) {
-                this.DispatchMatchedCommand(playerName, message, mtcCommand, capCommand, new CPlayerSubset(CPlayerSubset.PlayerSubsetType.Team, teamId));
+            if (String.Compare(playerName, "server", StringComparison.OrdinalIgnoreCase) != 0 && CheckInGameCommands(playerName, message, out mtcCommand, out capCommand) == true) {
+                DispatchMatchedCommand(playerName, message, mtcCommand, capCommand, new CPlayerSubset(CPlayerSubset.PlayerSubsetType.Team, teamId));
                 //this.InvokeOnEnabled(mtcCommand.RegisteredClassname, "OnMatchRegisteredCommand", playerName, message, mtcCommand, capCommand, new CPlayerSubset(CPlayerSubset.PlayerSubsetType.Team, teamId));
             }
         }
 
         private void m_prcClient_SquadChat(FrostbiteClient sender, string playerName, string message, int teamId, int squadId) {
-            this.InvokeOnAllEnabled("OnSquadChat", playerName, message, teamId, squadId);
+            InvokeOnAllEnabled("OnSquadChat", playerName, message, teamId, squadId);
 
             CapturedCommand capCommand = null;
             MatchCommand mtcCommand = null;
 
-            if (String.Compare(playerName, "server", true) != 0 && this.CheckInGameCommands(playerName, message, out mtcCommand, out capCommand) == true) {
-                this.DispatchMatchedCommand(playerName, message, mtcCommand, capCommand, new CPlayerSubset(CPlayerSubset.PlayerSubsetType.Squad, teamId, squadId));
+            if (String.Compare(playerName, "server", StringComparison.OrdinalIgnoreCase) != 0 && CheckInGameCommands(playerName, message, out mtcCommand, out capCommand) == true) {
+                DispatchMatchedCommand(playerName, message, mtcCommand, capCommand, new CPlayerSubset(CPlayerSubset.PlayerSubsetType.Squad, teamId, squadId));
+                //this.InvokeOnEnabled(mtcCommand.RegisteredClassname, "OnMatchRegisteredCommand", playerName, message, mtcCommand, capCommand, new CPlayerSubset(CPlayerSubset.PlayerSubsetType.Squad, teamId, squadId));
+            }
+        }
+
+        private void m_prcClient_PlayerChat(FrostbiteClient sender, string playerName, string message, string targetPlayer) {
+            InvokeOnAllEnabled("OnPlayerChat", playerName, message, targetPlayer);
+
+            CapturedCommand capCommand = null;
+            MatchCommand mtcCommand = null;
+
+            if (String.Compare(playerName, "server", StringComparison.OrdinalIgnoreCase) != 0 && CheckInGameCommands(playerName, message, out mtcCommand, out capCommand) == true)
+            {
+                DispatchMatchedCommand(playerName, message, mtcCommand, capCommand, new CPlayerSubset(CPlayerSubset.PlayerSubsetType.Player, targetPlayer));
                 //this.InvokeOnEnabled(mtcCommand.RegisteredClassname, "OnMatchRegisteredCommand", playerName, message, mtcCommand, capCommand, new CPlayerSubset(CPlayerSubset.PlayerSubsetType.Squad, teamId, squadId));
             }
         }
 
         private void m_prcClient_ResponseError(FrostbiteClient sender, Packet originalRequest, string errorMessage) {
-            this.InvokeOnAllEnabled("OnResponseError", new List<string>(originalRequest.Words), errorMessage);
+            InvokeOnAllEnabled("OnResponseError", new List<string>(originalRequest.Words), errorMessage);
         }
 
         private void m_prcClient_Version(FrostbiteClient sender, string serverType, string serverVersion) {
-            this.InvokeOnAllEnabled("OnVersion", serverType, serverVersion);
+            InvokeOnAllEnabled("OnVersion", serverType, serverVersion);
         }
 
         private void m_prcClient_Help(FrostbiteClient sender, List<string> lstCommands) {
-            this.InvokeOnAllEnabled("OnHelp", lstCommands);
+            InvokeOnAllEnabled("OnHelp", lstCommands);
         }
 
         private void m_prcClient_RunScript(FrostbiteClient sender, string scriptFileName) {
-            this.InvokeOnAllEnabled("OnRunScript", scriptFileName);
+            InvokeOnAllEnabled("OnRunScript", scriptFileName);
         }
 
         private void m_prcClient_RunScriptError(FrostbiteClient sender, string strScriptFileName, int iLineError, string strErrorDescription) {
-            this.InvokeOnAllEnabled("OnRunScriptError", strScriptFileName, iLineError, strErrorDescription);
+            InvokeOnAllEnabled("OnRunScriptError", strScriptFileName, iLineError, strErrorDescription);
         }
 
         private void m_prcClient_PunkbusterMessage(FrostbiteClient sender, string punkbusterMessage) {
-            this.InvokeOnAllEnabled("OnPunkbusterMessage", punkbusterMessage);
+            InvokeOnAllEnabled("OnPunkbusterMessage", punkbusterMessage);
         }
 
         private void m_prcClient_LoadingLevel(FrostbiteClient sender, string mapFileName, int roundsPlayed, int roundsTotal) {
-
-            this.InvokeOnAllEnabled("OnLoadingLevel", mapFileName, roundsPlayed, roundsTotal);
+            InvokeOnAllEnabled("OnLoadingLevel", mapFileName, roundsPlayed, roundsTotal);
 
             // DEPRECATED
-            this.InvokeOnAllEnabled("OnLoadingLevel", mapFileName);
+            InvokeOnAllEnabled("OnLoadingLevel", mapFileName);
         }
 
         private void m_prcClient_LevelStarted(FrostbiteClient sender) {
-            this.InvokeOnAllEnabled("OnLevelStarted");
+            InvokeOnAllEnabled("OnLevelStarted");
         }
 
-        private void m_prcClient_LevelLoaded(FrostbiteClient sender, string mapFileName, string Gamemode, int roundsPlayed, int roundsTotal)
-        {
-            this.InvokeOnAllEnabled("OnLevelLoaded", mapFileName, Gamemode, roundsPlayed, roundsTotal);
+        private void m_prcClient_LevelLoaded(FrostbiteClient sender, string mapFileName, string gamemode, int roundsPlayed, int roundsTotal) {
+            InvokeOnAllEnabled("OnLevelLoaded", mapFileName, gamemode, roundsPlayed, roundsTotal);
         }
 
         private void m_prcClient_ServerInfo(FrostbiteClient sender, CServerInfo csiServerInfo) {
-            this.InvokeOnAllEnabled("OnServerInfo", csiServerInfo);
+            InvokeOnAllEnabled("OnServerInfo", csiServerInfo);
         }
 
         private void m_prcClient_Yelling(FrostbiteClient sender, string strMessage, int iMessageDuration, List<string> lstSubsetWords) {
-            this.InvokeOnAllEnabled("OnYelling", strMessage, iMessageDuration, new CPlayerSubset(lstSubsetWords));
+            InvokeOnAllEnabled("OnYelling", strMessage, iMessageDuration, new CPlayerSubset(lstSubsetWords));
         }
 
         private void m_prcClient_Saying(FrostbiteClient sender, string strMessage, List<string> lstSubsetWords) {
-            this.InvokeOnAllEnabled("OnSaying", strMessage, new CPlayerSubset(lstSubsetWords));
+            InvokeOnAllEnabled("OnSaying", strMessage, new CPlayerSubset(lstSubsetWords));
         }
 
         private void m_prcClient_RunNextLevel(FrostbiteClient sender) {
-            this.InvokeOnAllEnabled("OnRunNextLevel");
+            InvokeOnAllEnabled("OnRunNextLevel");
         }
 
         private void m_prcClient_CurrentLevel(FrostbiteClient sender, string currentLevel) {
-            this.InvokeOnAllEnabled("OnCurrentLevel", currentLevel);
+            InvokeOnAllEnabled("OnCurrentLevel", currentLevel);
         }
 
         private void m_prcClient_RestartLevel(FrostbiteClient sender) {
-            this.InvokeOnAllEnabled("OnRestartLevel");
+            InvokeOnAllEnabled("OnRestartLevel");
         }
 
         private void m_prcClient_SupportedMaps(FrostbiteClient sender, string strPlaylist, List<string> lstSupportedMaps) {
-            this.InvokeOnAllEnabled("OnSupportedMaps", strPlaylist, lstSupportedMaps);
+            InvokeOnAllEnabled("OnSupportedMaps", strPlaylist, lstSupportedMaps);
         }
 
         private void m_prcClient_PlaylistSet(FrostbiteClient sender, string playlist) {
-            this.InvokeOnAllEnabled("OnPlaylistSet", playlist);
+            InvokeOnAllEnabled("OnPlaylistSet", playlist);
         }
 
         private void m_prcClient_ListPlaylists(FrostbiteClient sender, List<string> lstPlaylists) {
-            this.InvokeOnAllEnabled("OnListPlaylists", lstPlaylists);
+            InvokeOnAllEnabled("OnListPlaylists", lstPlaylists);
         }
 
-        private void m_prcClient_ListPlayers(FrostbiteClient sender, List<PRoCon.Core.Players.CPlayerInfo> lstPlayers, CPlayerSubset cpsSubset) {
-            this.InvokeOnAllEnabled("OnListPlayers", lstPlayers, cpsSubset);
+        private void m_prcClient_ListPlayers(FrostbiteClient sender, List<CPlayerInfo> lstPlayers, CPlayerSubset cpsSubset) {
+            InvokeOnAllEnabled("OnListPlayers", lstPlayers, cpsSubset);
         }
+
+        private void m_prcClient_ReservedSlotsConfigFile(FrostbiteClient sender, string configFilename) {
+            InvokeOnAllEnabled("OnReservedSlotsConfigFile", configFilename);
+        }
+
+        private void m_prcClient_ReservedSlotsLoad(FrostbiteClient sender) {
+            InvokeOnAllEnabled("OnReservedSlotsLoad");
+        }
+
+        private void m_prcClient_ReservedSlotsSave(FrostbiteClient sender) {
+            InvokeOnAllEnabled("OnReservedSlotsSave");
+        }
+
+        private void m_prcClient_ReservedSlotsPlayerAdded(FrostbiteClient sender, string strSoldierName) {
+            InvokeOnAllEnabled("OnReservedSlotsPlayerAdded", strSoldierName);
+        }
+
+        private void m_prcClient_ReservedSlotsPlayerRemoved(FrostbiteClient sender, string strSoldierName) {
+            InvokeOnAllEnabled("OnReservedSlotsPlayerRemoved", strSoldierName);
+        }
+
+        private void m_prcClient_ReservedSlotsCleared(FrostbiteClient sender) {
+            InvokeOnAllEnabled("OnReservedSlotsCleared");
+        }
+
+        private void m_prcClient_ReservedSlotsList(FrostbiteClient sender, List<string> soldierNames) {
+            InvokeOnAllEnabled("OnReservedSlotsList", soldierNames);
+        }
+
+        private void m_prcClient_MapListConfigFile(FrostbiteClient sender, string strConfigFilename) {
+            InvokeOnAllEnabled("OnMaplistConfigFile", strConfigFilename);
+        }
+
+        private void m_prcClient_MapListLoad(FrostbiteClient sender) {
+            InvokeOnAllEnabled("OnMaplistLoad");
+        }
+
+        private void m_prcClient_MapListSave(FrostbiteClient sender) {
+            InvokeOnAllEnabled("OnMaplistSave");
+        }
+
+        private void m_prcClient_MapListMapAppended(FrostbiteClient sender, MaplistEntry mapEntry) {
+            InvokeOnAllEnabled("OnMaplistMapAppended", mapEntry.MapFileName);
+        }
+
+        private void m_prcClient_MapListNextLevelIndex(FrostbiteClient sender, int mapIndex) {
+            InvokeOnAllEnabled("OnMaplistNextLevelIndex", mapIndex);
+        }
+
+        private void m_prcClient_MapListGetMapIndices(FrostbiteClient sender, int mapIndex, int nextIndex) {
+            InvokeOnAllEnabled("OnMaplistGetMapIndices", mapIndex, nextIndex);
+        }
+
+        private void m_prcClient_MapListGetRounds(FrostbiteClient sender, int currentRound, int totalRounds) {
+            InvokeOnAllEnabled("OnMaplistGetRounds", currentRound, totalRounds);
+        }
+
+        private void m_prcClient_MapListMapRemoved(FrostbiteClient sender, int mapIndex) {
+            InvokeOnAllEnabled("OnMaplistMapRemoved", mapIndex);
+        }
+
+        private void m_prcClient_MapListMapInserted(FrostbiteClient sender, MaplistEntry mapEntry) {
+            // int mapIndex, string mapFileName, int rounds) {
+            InvokeOnAllEnabled("OnMaplistMapInserted", mapEntry.Index, mapEntry.MapFileName, mapEntry.Rounds);
+        }
+
+        private void m_prcClient_MapListCleared(FrostbiteClient sender) {
+            InvokeOnAllEnabled("OnMaplistCleared");
+        }
+
+        private void m_prcClient_MapListListed(FrostbiteClient sender, List<MaplistEntry> lstMaplist) {
+            InvokeOnAllEnabled("OnMaplistList", lstMaplist);
+
+            // OBSOLETE
+            //var lstMapFileNames = new List<string>();
+            //foreach (MaplistEntry mleEntry in lstMaplist) {
+            //    lstMapFileNames.Add(mleEntry.MapFileName);
+            //}
+
+            // OBSOLETE
+            //InvokeOnAllEnabled("OnMaplistList", lstMapFileNames);
+        }
+
+        private void m_prcClient_GamePassword(FrostbiteClient sender, string password) {
+            InvokeOnAllEnabled("OnGamePassword", password);
+        }
+
+        private void m_prcClient_Punkbuster(FrostbiteClient sender, bool isEnabled) {
+            InvokeOnAllEnabled("OnPunkbuster", isEnabled);
+        }
+
+        private void m_prcClient_Hardcore(FrostbiteClient sender, bool isEnabled) {
+            InvokeOnAllEnabled("OnHardcore", isEnabled);
+        }
+
+        private void m_prcClient_Ranked(FrostbiteClient sender, bool isEnabled) {
+            InvokeOnAllEnabled("OnRanked", isEnabled);
+        }
+
+        private void m_prcClient_RankLimit(FrostbiteClient sender, int limit) {
+            InvokeOnAllEnabled("OnRankLimit", limit);
+        }
+
+        private void m_prcClient_TeamBalance(FrostbiteClient sender, bool isEnabled) {
+            InvokeOnAllEnabled("OnTeamBalance", isEnabled);
+        }
+
+        private void m_prcClient_FriendlyFire(FrostbiteClient sender, bool isEnabled) {
+            InvokeOnAllEnabled("OnFriendlyFire", isEnabled);
+        }
+
+        private void m_prcClient_MaxPlayerLimit(FrostbiteClient sender, int limit) {
+            InvokeOnAllEnabled("OnMaxPlayerLimit", limit);
+        }
+
+        private void m_prcClient_CurrentPlayerLimit(FrostbiteClient sender, int limit) {
+            InvokeOnAllEnabled("OnCurrentPlayerLimit", limit);
+        }
+
+        private void m_prcClient_PlayerLimit(FrostbiteClient sender, int limit) {
+            InvokeOnAllEnabled("OnPlayerLimit", limit);
+            InvokeOnAllEnabled("OnMaxPlayers", limit);
+        }
+
+        private void m_prcClient_BannerUrl(FrostbiteClient sender, string url) {
+            InvokeOnAllEnabled("OnBannerURL", url);
+        }
+
+        private void m_prcClient_ServerDescription(FrostbiteClient sender, string serverDescription) {
+            InvokeOnAllEnabled("OnServerDescription", serverDescription);
+        }
+
+        private void m_prcClient_ServerMessage(FrostbiteClient sender, string serverMessage) {
+            InvokeOnAllEnabled("OnServerMessage", serverMessage);
+        }
+
+        private void m_prcClient_KillCam(FrostbiteClient sender, bool isEnabled) {
+            InvokeOnAllEnabled("OnKillCam", isEnabled);
+        }
+
+        private void m_prcClient_MiniMap(FrostbiteClient sender, bool isEnabled) {
+            InvokeOnAllEnabled("OnMiniMap", isEnabled);
+        }
+
+        private void m_prcClient_CrossHair(FrostbiteClient sender, bool isEnabled) {
+            InvokeOnAllEnabled("OnCrossHair", isEnabled);
+        }
+
+        private void m_prcClient_ThreeDSpotting(FrostbiteClient sender, bool isEnabled) {
+            InvokeOnAllEnabled("On3dSpotting", isEnabled);
+        }
+
+        private void m_prcClient_MiniMapSpotting(FrostbiteClient sender, bool isEnabled) {
+            InvokeOnAllEnabled("OnMiniMapSpotting", isEnabled);
+        }
+
+        private void m_prcClient_ThirdPersonVehicleCameras(FrostbiteClient sender, bool isEnabled) {
+            InvokeOnAllEnabled("OnThirdPersonVehicleCameras", isEnabled);
+        }
+
+        private void m_prcClient_ProfanityFilter(FrostbiteClient sender, bool isEnabled) {
+            InvokeOnAllEnabled("OnProfanityFilter", new object[] {isEnabled});
+        }
+
+        private void m_prcClient_IdleTimeout(FrostbiteClient sender, int limit) {
+            InvokeOnAllEnabled("OnIdleTimeout", new object[] {limit});
+        }
+
+        private void m_prcClient_IdleBanRounds(FrostbiteClient sender, int limit) {
+            InvokeOnAllEnabled("OnIdleBanRounds", new object[] {limit});
+        }
+
+        private void m_prcClient_TeamKillValueForKick(FrostbiteClient sender, int limit) {
+            InvokeOnAllEnabled("OnTeamKillValueForKick", new object[] {limit});
+        }
+
+        private void m_prcClient_TeamKillKickForBan(FrostbiteClient sender, int limit) {
+            InvokeOnAllEnabled("OnTeamKillKickForBan", new object[] { limit });
+        }
+
+        private void m_prcClient_TeamKillValueDecreasePerSecond(FrostbiteClient sender, int limit) {
+            InvokeOnAllEnabled("OnTeamKillValueDecreasePerSecond", new object[] {limit});
+        }
+
+        private void m_prcClient_TeamKillValueIncrease(FrostbiteClient sender, int limit) {
+            InvokeOnAllEnabled("OnTeamKillValueIncrease", new object[] {limit});
+        }
+
+        private void m_prcClient_TeamKillCountForKick(FrostbiteClient sender, int limit) {
+            InvokeOnAllEnabled("OnTeamKillCountForKick", new object[] {limit});
+        }
+
+        // BF3
+        private void m_prcClient_GameModeCounter(FrostbiteClient sender, int limit) {
+            InvokeOnAllEnabled("OnGameModeCounter", new object[] {limit});
+        }
+
+        private void m_prcClient_CtfRoundTimeModifier(FrostbiteClient sender, int limit) {
+            InvokeOnAllEnabled("OnCtfRoundTimeModifier", new object[] {limit});
+        }
+
+        private void m_prcClient_RoundTimeLimit(FrostbiteClient sender, int limit) {
+            InvokeOnAllEnabled("OnRoundTimeLimit", new object[] { limit });
+        }
+
+        private void m_prcClient_TicketBleedRate(FrostbiteClient sender, int limit) {
+            InvokeOnAllEnabled("OnTicketBleedRate", new object[] { limit });
+        }
+
+        private void m_prcClient_RoundRestartPlayerCount(FrostbiteClient sender, int limit)
+        {
+            InvokeOnAllEnabled("OnRoundRestartPlayerCount", new object[] {limit});
+        }
+
+        private void m_prcClient_RoundStartPlayerCount(FrostbiteClient sender, int limit) {
+            InvokeOnAllEnabled("OnRoundStartPlayerCount", new object[] {limit});
+        }
+
+        private void m_prcClient_UnlockMode(FrostbiteClient sender, string mode) {
+            InvokeOnAllEnabled("OnUnlockMode", new object[] {mode});
+        }
+
+        private void m_prcClient_BF4preset(FrostbiteClient sender, string mode, bool isLocked) {
+            InvokeOnAllEnabled("OnPreset", new object[] { mode, isLocked });
+        }
+
+        private void Game_TeamFactionOverride(FrostbiteClient sender, int teamId, int faction) {
+            InvokeOnAllEnabled("OnTeamFactionOverride", new object[] { teamId, faction });
+        }
+
+        private void Game_GunMasterWeaponsPreset(FrostbiteClient sender, int preset)
+        {
+            InvokeOnAllEnabled("OnGunMasterWeaponsPreset", new object[] {preset});
+        }
+
+        private void Game_ReservedSlotsListAggressiveJoin(FrostbiteClient sender, bool isEnabled) {
+            InvokeOnAllEnabled("OnReservedSlotsListAggressiveJoin", isEnabled);
+        }
+
+        private void Game_RoundLockdownCountdown(FrostbiteClient sender, int limit) {
+            InvokeOnAllEnabled("OnRoundLockdownCountdown", new object[] {limit});
+        }
+
+        private void Game_RoundWarmupTimeout(FrostbiteClient sender, int limit) {
+            InvokeOnAllEnabled("OnRoundWarmupTimeout", new object[] {limit});
+        }
+
+        private void Game_PremiumStatus(FrostbiteClient sender, bool isEnabled) {
+            InvokeOnAllEnabled("OnPremiumStatus", isEnabled);
+        }
+
+        private void Game_VehicleSpawnAllowed(FrostbiteClient sender, bool isEnabled) {
+            InvokeOnAllEnabled("OnVehicleSpawnAllowed", isEnabled);
+        }
+
+        private void Game_VehicleSpawnDelay(FrostbiteClient sender, int limit) {
+            InvokeOnAllEnabled("OnVehicleSpawnDelay", new object[] {limit});
+        }
+
+        private void Game_BulletDamage(FrostbiteClient sender, int limit) {
+            InvokeOnAllEnabled("OnBulletDamage", new object[] {limit});
+        }
+
+        private void Game_OnlySquadLeaderSpawn(FrostbiteClient sender, bool isEnabled) {
+            InvokeOnAllEnabled("OnOnlySquadLeaderSpawn", isEnabled);
+        }
+
+        private void Game_SoldierHealth(FrostbiteClient sender, int limit) {
+            InvokeOnAllEnabled("OnSoldierHealth", new object[] {limit});
+        }
+
+        private void Game_PlayerManDownTime(FrostbiteClient sender, int limit) {
+            InvokeOnAllEnabled("OnPlayerManDownTime", new object[] {limit});
+        }
+
+        private void Game_PlayerRespawnTime(FrostbiteClient sender, int limit) {
+            InvokeOnAllEnabled("OnPlayerRespawnTime", new object[] {limit});
+        }
+
+        private void Game_Hud(FrostbiteClient sender, bool isEnabled) {
+            InvokeOnAllEnabled("OnHud", isEnabled);
+        }
+
+        private void Game_NameTag(FrostbiteClient sender, bool isEnabled) {
+            InvokeOnAllEnabled("OnNameTag", isEnabled);
+        }
+
+        private void m_prcClient_ServerName(FrostbiteClient sender, string strServerName) {
+            InvokeOnAllEnabled("OnServerName", new object[] {strServerName});
+        }
+
+        private void m_prcClient_EndRound(FrostbiteClient sender, int iWinningTeamID) {
+            InvokeOnAllEnabled("OnEndRound", new object[] {iWinningTeamID});
+        }
+
+        private void m_prcClient_RoundOverTeamScores(FrostbiteClient sender, List<TeamScore> lstTeamScores) {
+            InvokeOnAllEnabled("OnRoundOverTeamScores", new object[] {lstTeamScores});
+        }
+
+        private void m_prcClient_RoundOverPlayers(FrostbiteClient sender, List<CPlayerInfo> lstPlayers) {
+            InvokeOnAllEnabled("OnRoundOverPlayers", new object[] {lstPlayers});
+        }
+
+        private void m_prcClient_RoundOver(FrostbiteClient sender, int iWinningTeamID) {
+            InvokeOnAllEnabled("OnRoundOver", new object[] {iWinningTeamID});
+        }
+
+        private void m_prcClient_PlayerSpawned(PRoConClient sender, string soldierName, Inventory spawnedInventory) {
+            InvokeOnAllEnabled("OnPlayerSpawned", new object[] {soldierName, spawnedInventory});
+        }
+
+        private void m_prcClient_LevelVariablesList(FrostbiteClient sender, LevelVariable lvRequestedContext, List<LevelVariable> lstReturnedValues) {
+            InvokeOnAllEnabled("OnLevelVariablesList", new object[] {lvRequestedContext, lstReturnedValues});
+        }
+
+        private void m_prcClient_LevelVariablesEvaluate(FrostbiteClient sender, LevelVariable lvRequestedContext, LevelVariable lvReturnedValue) {
+            InvokeOnAllEnabled("OnLevelVariablesEvaluate", new object[] {lvRequestedContext, lvReturnedValue});
+        }
+
+        private void m_prcClient_LevelVariablesClear(FrostbiteClient sender, LevelVariable lvRequestedContext) {
+            InvokeOnAllEnabled("OnLevelVariablesClear", new object[] {lvRequestedContext});
+        }
+
+        private void m_prcClient_LevelVariablesSet(FrostbiteClient sender, LevelVariable lvRequestedContext) {
+            InvokeOnAllEnabled("OnLevelVariablesSet", new object[] {lvRequestedContext});
+        }
+
+        private void m_prcClient_LevelVariablesGet(FrostbiteClient sender, LevelVariable lvRequestedContext, LevelVariable lvReturnedValue) {
+            InvokeOnAllEnabled("OnLevelVariablesGet", new object[] {lvRequestedContext, lvReturnedValue});
+        }
+
+        private void MapGeometry_MapZoneTrespassed(CPlayerInfo cpiSoldier, ZoneAction action, MapZone sender, Point3D pntTresspassLocation, float flTresspassPercentage, object trespassState) {
+            InvokeOnAllEnabled("OnZoneTrespass", new[] {cpiSoldier, action, sender, pntTresspassLocation, flTresspassPercentage, trespassState});
+        }
+
+        #region Admin actions on players
+
+        private void Game_PlayerKilledByAdmin(FrostbiteClient sender, string soldierName) {
+            InvokeOnAllEnabled("OnPlayerKilledByAdmin", soldierName);
+        }
+
+        private void Game_PlayerKickedByAdmin(FrostbiteClient sender, string strSoldierName, string strReason) {
+            InvokeOnAllEnabled("OnPlayerKickedByAdmin", strSoldierName, strReason);
+        }
+
+        private void Game_PlayerMovedByAdmin(FrostbiteClient sender, string soldierName, int destinationTeamId, int destinationSquadId, bool forceKilled) {
+            InvokeOnAllEnabled("OnPlayerMovedByAdmin", soldierName, destinationTeamId, destinationSquadId, forceKilled);
+        }
+
+        #endregion
+
+        #region player/squad cmds
+
+        private void Game_PlayerIdleState(FrostbiteClient sender, string soldierName, int idleTime) {
+            InvokeOnAllEnabled("OnPlayerIdleDuration", soldierName, idleTime);
+        }
+
+        private void Game_PlayerIsAlive(FrostbiteClient sender, string soldierName, bool isAlive) {
+            InvokeOnAllEnabled("OnPlayerIsAlive", soldierName, isAlive);
+        }
+
+        private void Game_PlayerPingedByAdmin(FrostbiteClient sender, string soldierName, int ping) {
+            InvokeOnAllEnabled("OnPlayerPingedByAdmin", soldierName, ping);
+        }
+
+        private void Game_SquadLeader(FrostbiteClient sender, int teamId, int squadId, string soldierName) {
+            InvokeOnAllEnabled("OnSquadLeader", teamId, squadId, soldierName);
+        }
+
+        private void Game_SquadListActive(FrostbiteClient sender, int teamId, int squadCount, List<int> squadList) {
+            InvokeOnAllEnabled("OnSquadListActive", teamId, squadCount, squadList);
+        }
+
+        private void Game_SquadListPlayers(FrostbiteClient sender, int teamId, int squadId, int playerCount, List<string> playersInSquad) {
+            InvokeOnAllEnabled("OnSquadListPlayers", teamId, squadId, playerCount, playersInSquad);
+        }
+
+        private void Game_SquadIsPrivate(FrostbiteClient sender, int teamId, int squadId, bool isPrivate) {
+            InvokeOnAllEnabled("OnSquadIsPrivate", teamId, squadId, isPrivate);
+        }
+
+        #endregion
+
+        #region MoHW vars setting events
+
+        private void Game_AllUnlocksUnlocked(FrostbiteClient sender, bool isEnabled) {
+            InvokeOnAllEnabled("OnAllUnlocksUnlocked", isEnabled);
+        }
+
+        private void Game_BuddyOutline(FrostbiteClient sender, bool isEnabled) {
+            InvokeOnAllEnabled("OnBuddyOutline", isEnabled);
+        }
+
+        private void Game_HudBuddyInfo(FrostbiteClient sender, bool isEnabled) {
+            InvokeOnAllEnabled("OnHudBuddyInfo", isEnabled);
+        }
+
+        private void Game_HudClassAbility(FrostbiteClient sender, bool isEnabled) {
+            InvokeOnAllEnabled("OnHudClassAbility", isEnabled);
+        }
+
+        private void Game_HudCrosshair(FrostbiteClient sender, bool isEnabled) {
+            InvokeOnAllEnabled("OnCrosshair", isEnabled);
+            InvokeOnAllEnabled("OnHudCrosshair", isEnabled);
+        }
+
+        private void Game_HudEnemyTag(FrostbiteClient sender, bool isEnabled) {
+            InvokeOnAllEnabled("OnHudEnemyTag", isEnabled);
+        }
+
+        private void Game_HudExplosiveIcons(FrostbiteClient sender, bool isEnabled) {
+            InvokeOnAllEnabled("OnHudExplosiveIcons", isEnabled);
+        }
+
+        private void Game_HudGameMode(FrostbiteClient sender, bool isEnabled) {
+            InvokeOnAllEnabled("OnHudGameMode", isEnabled);
+        }
+
+        private void Game_HudHealthAmmo(FrostbiteClient sender, bool isEnabled) {
+            InvokeOnAllEnabled("OnHudHealthAmmo", isEnabled);
+        }
+
+        private void Game_HudMinimap(FrostbiteClient sender, bool isEnabled) {
+            InvokeOnAllEnabled("OnHudMinimap", isEnabled);
+        }
+
+        private void Game_HudObiturary(FrostbiteClient sender, bool isEnabled) {
+            InvokeOnAllEnabled("OnHudObiturary", isEnabled);
+        }
+
+        private void Game_HudPointsTracker(FrostbiteClient sender, bool isEnabled) {
+            InvokeOnAllEnabled("OnHudPointsTracker", isEnabled);
+        }
+
+        private void Game_HudUnlocks(FrostbiteClient sender, bool isEnabled) {
+            InvokeOnAllEnabled("OnHudUnlocks", isEnabled);
+        }
+
+        private void Game_Playlist(FrostbiteClient sender, string playlist) {
+            InvokeOnAllEnabled("OnPlaylistSet", playlist);
+            InvokeOnAllEnabled("OnPlaylist", playlist);
+        }
+
+        #endregion
+
+        #region Text Chat Moderation Settings
+
+        private void Game_TextChatSpamTriggerCount(FrostbiteClient sender, int limit) {
+            InvokeOnAllEnabled("OnTextChatSpamTriggerCount", limit);
+        }
+
+        private void Game_TextChatSpamDetectionTime(FrostbiteClient sender, int limit) {
+            InvokeOnAllEnabled("OnTextChatSpamDetectionTime", limit);
+        }
+
+        private void Game_TextChatSpamCoolDownTime(FrostbiteClient sender, int limit) {
+            InvokeOnAllEnabled("OnTextChatSpamCoolDownTime", limit);
+        }
+
+        private void Game_TextChatModerationMode(FrostbiteClient sender, ServerModerationModeType mode) {
+            InvokeOnAllEnabled("OnTextChatModerationMode", mode);
+        }
+
+        #endregion
 
         #region Banlist
 
         private void m_prcClient_BanListLoad(FrostbiteClient sender) {
-            this.InvokeOnAllEnabled("OnBanListLoad");
+            InvokeOnAllEnabled("OnBanListLoad");
         }
 
         private void m_prcClient_BanListSave(FrostbiteClient sender) {
-            this.InvokeOnAllEnabled("OnBanListSave");
+            InvokeOnAllEnabled("OnBanListSave");
         }
 
         private void m_prcClient_BanListAdd(FrostbiteClient sender, CBanInfo cbiAddedBan) {
-            this.InvokeOnAllEnabled("OnBanAdded", cbiAddedBan);
+            InvokeOnAllEnabled("OnBanAdded", cbiAddedBan);
         }
 
         private void m_prcClient_BanListRemove(FrostbiteClient sender, CBanInfo cbiRemovedBan) {
-            this.InvokeOnAllEnabled("OnBanRemoved", cbiRemovedBan);
+            InvokeOnAllEnabled("OnBanRemoved", cbiRemovedBan);
         }
 
         private void m_prcClient_BanListClear(FrostbiteClient sender) {
-            this.InvokeOnAllEnabled("OnBanListClear");
+            InvokeOnAllEnabled("OnBanListClear");
         }
 
         private void m_prcClient_BanListList(PRoConClient sender, List<CBanInfo> lstBans) {
-            this.InvokeOnAllEnabled("OnBanList", lstBans);
+            InvokeOnAllEnabled("OnBanList", lstBans);
         }
 
         #endregion
 
         #region Text Chat Moderation
 
-        private void m_client_FullTextChatModerationListList(PRoConClient sender, TextChatModeration.TextChatModerationDictionary moderationList) {
-            this.InvokeOnAllEnabled("OnTextChatModerationList", moderationList);
+        private void m_client_FullTextChatModerationListList(PRoConClient sender, TextChatModerationDictionary moderationList) {
+            InvokeOnAllEnabled("OnTextChatModerationList", moderationList);
         }
 
         private void Game_TextChatModerationListLoad(FrostbiteClient sender) {
-            this.InvokeOnAllEnabled("OnTextChatModerationLoad");
+            InvokeOnAllEnabled("OnTextChatModerationLoad");
         }
 
         private void Game_TextChatModerationListClear(FrostbiteClient sender) {
-            this.InvokeOnAllEnabled("OnTextChatModerationClear");
+            InvokeOnAllEnabled("OnTextChatModerationClear");
         }
 
         private void Game_TextChatModerationListSave(FrostbiteClient sender) {
-            this.InvokeOnAllEnabled("OnTextChatModerationSave");
+            InvokeOnAllEnabled("OnTextChatModerationSave");
         }
 
-        private void Game_TextChatModerationListRemovePlayer(FrostbiteClient sender, TextChatModeration.TextChatModerationEntry playerEntry) {
-            this.InvokeOnAllEnabled("OnTextChatModerationRemovePlayer", playerEntry);
+        private void Game_TextChatModerationListRemovePlayer(FrostbiteClient sender, TextChatModerationEntry playerEntry) {
+            InvokeOnAllEnabled("OnTextChatModerationRemovePlayer", playerEntry);
         }
 
-        private void Game_TextChatModerationListAddPlayer(FrostbiteClient sender, TextChatModeration.TextChatModerationEntry playerEntry) {
-            this.InvokeOnAllEnabled("OnTextChatModerationAddPlayer", playerEntry);
-        }
-
-        #endregion
-
-
-        private void m_prcClient_ReservedSlotsConfigFile(FrostbiteClient sender, string configFilename) {
-            this.InvokeOnAllEnabled("OnReservedSlotsConfigFile", configFilename);
-        }
-
-        private void m_prcClient_ReservedSlotsLoad(FrostbiteClient sender) {
-            this.InvokeOnAllEnabled("OnReservedSlotsLoad");
-        }
-
-        private void m_prcClient_ReservedSlotsSave(FrostbiteClient sender) {
-            this.InvokeOnAllEnabled("OnReservedSlotsSave");
-        }
-
-        private void m_prcClient_ReservedSlotsPlayerAdded(FrostbiteClient sender, string strSoldierName) {
-            this.InvokeOnAllEnabled("OnReservedSlotsPlayerAdded", strSoldierName);
-        }
-
-        private void m_prcClient_ReservedSlotsPlayerRemoved(FrostbiteClient sender, string strSoldierName) {
-            this.InvokeOnAllEnabled("OnReservedSlotsPlayerRemoved", strSoldierName);
-        }
-
-        private void m_prcClient_ReservedSlotsCleared(FrostbiteClient sender) {
-            this.InvokeOnAllEnabled("OnReservedSlotsCleared");
-        }
-
-        private void m_prcClient_ReservedSlotsList(FrostbiteClient sender, List<string> soldierNames) {
-            this.InvokeOnAllEnabled("OnReservedSlotsList", soldierNames);
-        }
-
-        private void m_prcClient_MapListConfigFile(FrostbiteClient sender, string strConfigFilename) {
-            this.InvokeOnAllEnabled("OnMaplistConfigFile", strConfigFilename);
-        }
-
-        private void m_prcClient_MapListLoad(FrostbiteClient sender) {
-            this.InvokeOnAllEnabled("OnMaplistLoad");
-        }
-
-        private void m_prcClient_MapListSave(FrostbiteClient sender) {
-            this.InvokeOnAllEnabled("OnMaplistSave");
-        }
-
-        private void m_prcClient_MapListMapAppended(FrostbiteClient sender, MaplistEntry mapEntry) {
-            this.InvokeOnAllEnabled("OnMaplistMapAppended", mapEntry.MapFileName);
-        }
-
-        private void m_prcClient_MapListNextLevelIndex(FrostbiteClient sender, int mapIndex) {
-            this.InvokeOnAllEnabled("OnMaplistNextLevelIndex", mapIndex);
-        }
-
-        private void m_prcClient_MapListGetMapIndices(FrostbiteClient sender, int mapIndex, int nextIndex)
-        {
-            this.InvokeOnAllEnabled("OnMaplistGetMapIndices", mapIndex, nextIndex);
-        }
-
-        private void m_prcClient_MapListGetRounds(FrostbiteClient sender, int currentRound, int totalRounds)
-        {
-            this.InvokeOnAllEnabled("OnMaplistGetRounds", currentRound, totalRounds);
-        }
-        
-        private void m_prcClient_MapListMapRemoved(FrostbiteClient sender, int mapIndex)
-        {
-            this.InvokeOnAllEnabled("OnMaplistMapRemoved", mapIndex);
-        }
-
-        private void m_prcClient_MapListMapInserted(FrostbiteClient sender, MaplistEntry mapEntry) { // int mapIndex, string mapFileName, int rounds) {
-            this.InvokeOnAllEnabled("OnMaplistMapInserted", mapEntry.Index, mapEntry.MapFileName, mapEntry.Rounds);
-        }
-
-        private void m_prcClient_MapListCleared(FrostbiteClient sender) {
-            this.InvokeOnAllEnabled("OnMaplistCleared");
-        }
-
-        private void m_prcClient_MapListListed(FrostbiteClient sender, List<MaplistEntry> lstMaplist) {
-
-            this.InvokeOnAllEnabled("OnMaplistList", lstMaplist);
-
-            // DEPRECATED
-            List<string> lstMapFileNames = new List<string>();
-            foreach (MaplistEntry mleEntry in lstMaplist) {
-                lstMapFileNames.Add(mleEntry.MapFileName);
-            }
-
-            // DEPRECATED
-            this.InvokeOnAllEnabled("OnMaplistList", lstMapFileNames);
-        }
-
-        private void m_prcClient_GamePassword(FrostbiteClient sender, string password) {
-            this.InvokeOnAllEnabled("OnGamePassword", password);
-        }
-
-        private void m_prcClient_Punkbuster(FrostbiteClient sender, bool isEnabled) {
-            this.InvokeOnAllEnabled("OnPunkbuster", isEnabled);
-        }
-
-        private void m_prcClient_Hardcore(FrostbiteClient sender, bool isEnabled) {
-            this.InvokeOnAllEnabled("OnHardcore", isEnabled);
-        }
-
-        private void m_prcClient_Ranked(FrostbiteClient sender, bool isEnabled) {
-            this.InvokeOnAllEnabled("OnRanked", isEnabled);
-        }
-
-        private void m_prcClient_RankLimit(FrostbiteClient sender, int limit) {
-            this.InvokeOnAllEnabled("OnRankLimit", limit);
-        }
-
-        private void m_prcClient_TeamBalance(FrostbiteClient sender, bool isEnabled) {
-            this.InvokeOnAllEnabled("OnTeamBalance", isEnabled);
-        }
-
-        private void m_prcClient_FriendlyFire(FrostbiteClient sender, bool isEnabled) {
-            this.InvokeOnAllEnabled("OnFriendlyFire", isEnabled);
-        }
-
-        private void m_prcClient_MaxPlayerLimit(FrostbiteClient sender, int limit) {
-            this.InvokeOnAllEnabled("OnMaxPlayerLimit", limit);
-        }
-
-        private void m_prcClient_CurrentPlayerLimit(FrostbiteClient sender, int limit) {
-            this.InvokeOnAllEnabled("OnCurrentPlayerLimit", limit);
-        }
-
-        private void m_prcClient_PlayerLimit(FrostbiteClient sender, int limit) {
-            this.InvokeOnAllEnabled("OnPlayerLimit", limit);
-            this.InvokeOnAllEnabled("OnMaxPlayers", limit);
-        }
-
-        private void m_prcClient_BannerUrl(FrostbiteClient sender, string url) {
-            this.InvokeOnAllEnabled("OnBannerURL", url);
-        }
-
-        private void m_prcClient_ServerDescription(FrostbiteClient sender, string serverDescription) {
-            this.InvokeOnAllEnabled("OnServerDescription", serverDescription);
-        }
-
-        private void m_prcClient_ServerMessage(FrostbiteClient sender, string serverMessage)
-        {
-            this.InvokeOnAllEnabled("OnServerMessage", serverMessage);
-        }
-
-        private void m_prcClient_KillCam(FrostbiteClient sender, bool isEnabled) {
-            this.InvokeOnAllEnabled("OnKillCam", isEnabled);
-        }
-
-        private void m_prcClient_MiniMap(FrostbiteClient sender, bool isEnabled) {
-            this.InvokeOnAllEnabled("OnMiniMap", isEnabled);
-        }
-
-        private void m_prcClient_CrossHair(FrostbiteClient sender, bool isEnabled) {
-            this.InvokeOnAllEnabled("OnCrossHair", isEnabled);
-        }
-
-        private void m_prcClient_ThreeDSpotting(FrostbiteClient sender, bool isEnabled) {
-            this.InvokeOnAllEnabled("On3dSpotting", isEnabled);
-        }
-
-        private void m_prcClient_MiniMapSpotting(FrostbiteClient sender, bool isEnabled) {
-            this.InvokeOnAllEnabled("OnMiniMapSpotting", isEnabled);
-        }
-
-        private void m_prcClient_ThirdPersonVehicleCameras(FrostbiteClient sender, bool isEnabled) {
-            this.InvokeOnAllEnabled("OnThirdPersonVehicleCameras", isEnabled);
-        }
-
-        private void m_prcClient_ProfanityFilter(FrostbiteClient sender, bool isEnabled) {
-            this.InvokeOnAllEnabled("OnProfanityFilter", new object[] { isEnabled });
-        }
-
-        private void m_prcClient_IdleTimeout(FrostbiteClient sender, int limit) {
-            this.InvokeOnAllEnabled("OnIdleTimeout", new object[] { limit });
-        }
-
-        private void m_prcClient_IdleBanRounds(FrostbiteClient sender, int limit)
-        {
-            this.InvokeOnAllEnabled("OnIdleBanRounds", new object[] { limit });
-        }
-
-        private void m_prcClient_TeamKillValueForKick(FrostbiteClient sender, int limit)
-        {
-            this.InvokeOnAllEnabled("OnTeamKillValueForKick", new object[] { limit });
-        }
-
-        private void m_prcClient_TeamKillValueDecreasePerSecond(FrostbiteClient sender, int limit) {
-            this.InvokeOnAllEnabled("OnTeamKillValueDecreasePerSecond", new object[] { limit });
-        }
-
-        private void m_prcClient_TeamKillValueIncrease(FrostbiteClient sender, int limit) {
-            this.InvokeOnAllEnabled("OnTeamKillValueIncrease", new object[] { limit });
-        }
-
-        private void m_prcClient_TeamKillCountForKick(FrostbiteClient sender, int limit) {
-            this.InvokeOnAllEnabled("OnTeamKillCountForKick", new object[] { limit });
-        }
-
-        // BF3
-        private void m_prcClient_GameModeCounter(FrostbiteClient sender, int limit)
-        {
-            this.InvokeOnAllEnabled("OnGameModeCounter", new object[] { limit });
-        }
-
-        private void m_prcClient_RoundRestartPlayerCount(FrostbiteClient sender, int limit)
-        {
-            this.InvokeOnAllEnabled("OnRoundRestartPlayerCount", new object[] { limit });
-        }
-
-        private void m_prcClient_RoundStartPlayerCount(FrostbiteClient sender, int limit)
-        {
-            this.InvokeOnAllEnabled("OnRoundStartPlayerCount", new object[] { limit });
-        }
-
-        private void m_prcClient_UnlockMode(FrostbiteClient sender, string mode)
-        {
-            this.InvokeOnAllEnabled("OnUnlockMode", new object[] { mode });
-        }
-
-        private void Game_ReservedSlotsListAggressiveJoin(FrostbiteClient sender, bool isEnabled)
-        {
-            this.InvokeOnAllEnabled("OnReservedSlotsListAggressiveJoin", isEnabled);
-        }
-
-        private void Game_RoundLockdownCountdown(FrostbiteClient sender, int limit)
-        {
-            this.InvokeOnAllEnabled("OnRoundLockdownCountdown", new object[] { limit });
-        }
-
-        private void Game_RoundWarmupTimeout(FrostbiteClient sender, int limit)
-        {
-            this.InvokeOnAllEnabled("OnRoundWarmupTimeout", new object[] { limit });
-        }
-
-        #region Text Chat Moderation Settings
-
-        private void Game_TextChatSpamTriggerCount(FrostbiteClient sender, int limit) {
-            this.InvokeOnAllEnabled("OnTextChatSpamTriggerCount", limit);
-        }
-
-        private void Game_TextChatSpamDetectionTime(FrostbiteClient sender, int limit) {
-            this.InvokeOnAllEnabled("OnTextChatSpamDetectionTime", limit);
-        }
-
-        private void Game_TextChatSpamCoolDownTime(FrostbiteClient sender, int limit) {
-            this.InvokeOnAllEnabled("OnTextChatSpamCoolDownTime", limit);
-        }
-
-        private void Game_TextChatModerationMode(FrostbiteClient sender, TextChatModeration.ServerModerationModeType mode) {
-            this.InvokeOnAllEnabled("OnTextChatModerationMode", mode);
-        }
-
-        #endregion
-
-        private void m_prcClient_ServerName(FrostbiteClient sender, string strServerName) {
-            this.InvokeOnAllEnabled("OnServerName", new object[] { strServerName });
-        }
-
-        private void m_prcClient_EndRound(FrostbiteClient sender, int iWinningTeamID) {
-            this.InvokeOnAllEnabled("OnEndRound", new object[] { iWinningTeamID });
-        }
-
-        private void m_prcClient_RoundOverTeamScores(FrostbiteClient sender, List<TeamScore> lstTeamScores) {
-            this.InvokeOnAllEnabled("OnRoundOverTeamScores", new object[] { lstTeamScores });
-        }
-
-        private void m_prcClient_RoundOverPlayers(FrostbiteClient sender, List<CPlayerInfo> lstPlayers) {
-            this.InvokeOnAllEnabled("OnRoundOverPlayers", new object[] { lstPlayers });
-        }
-
-        private void m_prcClient_RoundOver(FrostbiteClient sender, int iWinningTeamID) {
-            this.InvokeOnAllEnabled("OnRoundOver", new object[] { iWinningTeamID });
-        }
-
-        private void m_prcClient_PlayerSpawned(PRoConClient sender, string soldierName, Inventory spawnedInventory) {
-            this.InvokeOnAllEnabled("OnPlayerSpawned", new object[] { soldierName, spawnedInventory });
-        }
-
-        private void m_prcClient_LevelVariablesList(FrostbiteClient sender, LevelVariable lvRequestedContext, List<LevelVariable> lstReturnedValues) {
-            this.InvokeOnAllEnabled("OnLevelVariablesList", new object[] { lvRequestedContext, lstReturnedValues });
-        }
-
-        private void m_prcClient_LevelVariablesEvaluate(FrostbiteClient sender, LevelVariable lvRequestedContext, LevelVariable lvReturnedValue) {
-            this.InvokeOnAllEnabled("OnLevelVariablesEvaluate", new object[] { lvRequestedContext, lvReturnedValue });
-        }
-
-        private void m_prcClient_LevelVariablesClear(FrostbiteClient sender, LevelVariable lvRequestedContext) {
-            this.InvokeOnAllEnabled("OnLevelVariablesClear", new object[] { lvRequestedContext });
-        }
-
-        private void m_prcClient_LevelVariablesSet(FrostbiteClient sender, LevelVariable lvRequestedContext) {
-            this.InvokeOnAllEnabled("OnLevelVariablesSet", new object[] { lvRequestedContext });
-        }
-
-        private void m_prcClient_LevelVariablesGet(FrostbiteClient sender, LevelVariable lvRequestedContext, LevelVariable lvReturnedValue) {
-            this.InvokeOnAllEnabled("OnLevelVariablesGet", new object[] { lvRequestedContext, lvReturnedValue });
-        }
-
-        private void MapGeometry_MapZoneTrespassed(CPlayerInfo cpiSoldier, PRoCon.Core.Battlemap.ZoneAction action, PRoCon.Core.Battlemap.MapZone sender, Point3D pntTresspassLocation, float flTresspassPercentage, object trespassState) {
-            this.InvokeOnAllEnabled("OnZoneTrespass", new object[] { cpiSoldier, action, sender, pntTresspassLocation, flTresspassPercentage, trespassState });
-        }
-
-        #region Admin actions on players
-
-        private void Game_PlayerKilledByAdmin(FrostbiteClient sender, string soldierName) {
-            this.InvokeOnAllEnabled("OnPlayerKilledByAdmin", soldierName);
-        }
-
-        private void Game_PlayerKickedByAdmin(FrostbiteClient sender, string strSoldierName, string strReason) {
-            this.InvokeOnAllEnabled("OnPlayerKickedByAdmin", strSoldierName, strReason);
-        }
-
-        private void Game_PlayerMovedByAdmin(FrostbiteClient sender, string soldierName, int destinationTeamId, int destinationSquadId, bool forceKilled) {
-            this.InvokeOnAllEnabled("OnPlayerMovedByAdmin", soldierName, destinationTeamId, destinationSquadId, forceKilled);
+        private void Game_TextChatModerationListAddPlayer(FrostbiteClient sender, TextChatModerationEntry playerEntry) {
+            InvokeOnAllEnabled("OnTextChatModerationAddPlayer", playerEntry);
         }
 
         #endregion

@@ -1,0 +1,378 @@
+/////////////////////////////////////////////
+// This definitions file will be overwritten during an update.
+//  (2013-02-09.01)
+// This file contains the standard defintions required to run procon 
+// connected to a MoHW server
+/////////////////////////////////////////////
+
+procon.protected.serverversions.clear MOHW
+procon.protected.serverversions.add MOHW "319074" "R-1"
+procon.protected.serverversions.add MOHW "319319" "R-2"
+procon.protected.serverversions.add MOHW "319968" "R-3"
+procon.protected.serverversions.add MOHW "320729" "R-4"
+procon.protected.serverversions.add MOHW "321866" "R-5"
+procon.protected.serverversions.add MOHW "322948" "R-6"
+procon.protected.serverversions.add MOHW "323083" "R-7"
+procon.protected.serverversions.add MOHW "323174" "R-8"
+procon.protected.serverversions.add MOHW "323409" "R-9"
+procon.protected.serverversions.add MOHW "323544" "R-10"
+
+procon.protected.specialization.clear
+
+procon.protected.weapons.clear
+// MoHW weapons
+procon.protected.weapons.add None "Death" Primary None
+procon.protected.weapons.add None "HK416_MP" Primary AssaultRifle
+procon.protected.weapons.add None "Melee" Secondary Melee
+procon.protected.weapons.add None "MOHW/Weapons/ASSAULT/AK_BULLPUP/AK_BULLPUP" Primary AssaultRifle
+procon.protected.weapons.add None "MOHW/Weapons/ASSAULT/DD_M4/DD_M4" Primary AssaultRifle
+procon.protected.weapons.add None "MOHW/Weapons/Assault/Mk18/Mk18" Primary AssaultRifle
+procon.protected.weapons.add None "MOHW/Weapons/Assault/SCAR_H/SCAR_H" Primary AssaultRifle
+procon.protected.weapons.add None "MOHW/Weapons/Assault/SCAR_PDW/SCAR_PDW" Primary AssaultRifle
+procon.protected.weapons.add None "MOHW/Weapons/ASSAULT/AK103/AK103" Primary AssaultRifle
+procon.protected.weapons.add None "MOHW/Weapons/ASSAULT/HK416_MOHW/HK416_MOHW" Primary AssaultRifle
+procon.protected.weapons.add None "MOHW/Weapons/Assault/OBR_556/OBR_556" Primary AssaultRifle
+procon.protected.weapons.add None "MOHW/Weapons/ASSAULT/SUCHKA/SUCHKA" Primary AssaultRifle
+procon.protected.weapons.add None "MOHW/Weapons/EXPLOSIVES_CHARGES/C4/C4" Auxiliary Explosive
+procon.protected.weapons.add None "MOHW/Weapons/EXPLOSIVES_CHARGES/C4Remote/C4Remote" Auxiliary Explosive
+procon.protected.weapons.add None "MOHW/Weapons/EXPLOSIVES_MINES/PROXIMITY_MINE/proximity_mine" Auxiliary Explosive
+procon.protected.weapons.add None "MOHW/Weapons/EXPLOSIVES_ROCKETS/SMAW/SMAW" Auxiliary ProjectileExplosive
+procon.protected.weapons.add None "MOHW/Weapons/GrenadeLaunchers/M32/W_GL_M32_A_NP" Auxiliary ProjectileExplosive
+procon.protected.weapons.add None "MOHW/Weapons/GrenadeLaunchers/RPG7/RPG7" Auxiliary ProjectileExplosive
+procon.protected.weapons.add None "MOHW/Weapons/GrenadeLaunchers/W_GL_M79s"  Auxiliary ProjectileExplosive
+procon.protected.weapons.add None "MOHW/Weapons/GRENADES/M18_SMOKE/M18_SMOKE"  Auxiliary Explosive
+procon.protected.weapons.add None "MOHW/Weapons/GRENADES/M67_FRAG/M67_FRAG"  Auxiliary Explosive
+procon.protected.weapons.add None "MOHW/Weapons/GRENADES/M84_FlashBang/M84_FlashBang"  Auxiliary Explosive
+procon.protected.weapons.add None "MOHW/Weapons/GRENADES/V40_MINIFRAG/V40_MINIFRAG"  Auxiliary Explosive
+procon.protected.weapons.add None "MOHW/Weapons/LMG/M249/M249" Primary LMG
+procon.protected.weapons.add None "MOHW/Weapons/LMG/MG4/MG4" Primary LMG
+procon.protected.weapons.add None "MOHW/Weapons/LMG/M60/M60" Primary LMG
+procon.protected.weapons.add None "MOHW/Weapons/LMG/PKP/PKP" Primary LMG
+procon.protected.weapons.add None "MOHW/Weapons/MELEE/Tomohawk/Tomohawk" Secondary Melee
+procon.protected.weapons.add None "MOHW/Weapons/MELEE/KNIFE/KNIFE" Secondary Melee
+procon.protected.weapons.add None "MOHW/Weapons/MP_Weapons/AA12_MP" Primary AssaultRifle
+procon.protected.weapons.add None "MOHW/Weapons/MP_Weapons/AK103_MP" Primary AssaultRifle
+procon.protected.weapons.add None "MOHW/Weapons/MP_Weapons/AK5C_MP" Primary AssaultRifle
+procon.protected.weapons.add None "MOHW/Weapons/MP_Weapons/CS5_MP" Primary AssaultRifle
+procon.protected.weapons.add None "MOHW/Weapons/MP_Weapons/DDM4_MP" Primary AssaultRifle
+procon.protected.weapons.add None "MOHW/Weapons/MP_Weapons/EBR_MP" Primary AssaultRifle
+procon.protected.weapons.add None "MOHW/Weapons/MP_Weapons/F88_MP" Primary AssaultRifle
+procon.protected.weapons.add None "MOHW/Weapons/MP_Weapons/G36C_MP" Primary AssaultRifle
+procon.protected.weapons.add None "MOHW/Weapons/MP_Weapons/G3_MP" Primary AssaultRifle
+procon.protected.weapons.add None "MOHW/Weapons/MP_Weapons/HK416C_MP" Primary AssaultRifle
+procon.protected.weapons.add None "MOHW/Weapons/MP_Weapons/M240B_MP" Primary AssaultRifle
+procon.protected.weapons.add None "MOHW/Weapons/MP_Weapons/M249_MP" Primary AssaultRifle
+procon.protected.weapons.add None "MOHW/Weapons/MP_Weapons/M870_MP" Primary AssaultRifle
+procon.protected.weapons.add None "MOHW/Weapons/MP_Weapons/MG4_MP" Primary AssaultRifle
+procon.protected.weapons.add None "MOHW/Weapons/MP_Weapons/MK18_MP" Primary AssaultRifle
+procon.protected.weapons.add None "MOHW/Weapons/MP_Weapons/MP7_MP" Primary AssaultRifle
+procon.protected.weapons.add None "MOHW/Weapons/MP_Weapons/OBR556_MP" Primary AssaultRifle
+procon.protected.weapons.add None "MOHW/Weapons/MP_Weapons/OBR762_MP" Primary AssaultRifle
+procon.protected.weapons.add None "MOHW/Weapons/MP_Weapons/PKP_MP" Primary AssaultRifle
+procon.protected.weapons.add None "MOHW/Weapons/MP_Weapons/SCARPDW_MP" Primary AssaultRifle
+procon.protected.weapons.add None "MOHW/Weapons/MP_Weapons/SUCHKA_MP" Primary AssaultRifle
+procon.protected.weapons.add None "MOHW/Weapons/MP_Weapons/TAC300_MP" Primary AssaultRifle
+procon.protected.weapons.add None "MOHW/Weapons/MP_Weapons/TAC50_MP" Primary AssaultRifle
+procon.protected.weapons.add None "MOHW/Weapons/PISTOL/GLOCK/Glock17" Secondary Handgun
+procon.protected.weapons.add None "MOHW/Weapons/PISTOL/GLOCK18/GLOCK18" Secondary Handgun
+procon.protected.weapons.add None "MOHW/Weapons/PISTOL/Glock23/Glock23" Secondary Handgun
+procon.protected.weapons.add None "MOHW/Weapons/PISTOL/HK45C/HK45C" Secondary Handgun
+procon.protected.weapons.add None "MOHW/Weapons/PISTOL/M1911/M1911" Secondary Handgun
+procon.protected.weapons.add None "MOHW/Weapons/PISTOL/P226/P226" Secondary Handgun
+procon.protected.weapons.add None "MOHW/Weapons/SHOTGUN/M870/M870" Secondary Shotgun
+procon.protected.weapons.add None "MOHW/Weapons/SHOTGUN/AA12/AA12" Secondary Shotgun
+procon.protected.weapons.add None "MOHW/Weapons/SMG/MP7/MP7" Secondary SMG
+procon.protected.weapons.add None "MOHW/Weapons/SNIPER/CS5/CS5" Secondary SniperRifle
+procon.protected.weapons.add None "MOHW/Weapons/SNIPER/OBR_762/OBR_762" Secondary SniperRifle
+procon.protected.weapons.add None "MOHW/Weapons/SNIPER/TAC300/TAC300" Secondary SniperRifle
+procon.protected.weapons.add None "MOHW/Weapons/SPECIAL_SUPPORT_ACTIONS/MBITR_Radio/MBITR_Radio_Weapon" Secondary Nonlethal
+procon.protected.weapons.add None "MOHW/Weapons/SPECIAL_SUPPORT_ACTIONS/MK19/MK19_Weapon" Secondary ProjectileExplosive
+procon.protected.weapons.add None "MOHW/Weapons/SPECIAL_SUPPORT_ACTIONS/RQ11/RQ11" Secondary Nonlethal
+procon.protected.weapons.add None "MOHW/Weapons/SPECIAL_SUPPORT_ACTIONS/RADAR_JAMMER/RADAR_JAMMER_Weapon" Secondary Nonlethal
+procon.protected.weapons.add None "MOHW/Weapons/SPECIAL_SUPPORT_ACTIONS/SwitchBlade_Launcher/SwitchBlade_Launcher" Secondary ProjectileExplosive
+procon.protected.weapons.add None "RoadKill" Primary None
+procon.protected.weapons.add None "SoldierCollision" Primary Suicide
+procon.protected.weapons.add None "Suicide" Primary Suicide
+procon.protected.weapons.add None "TargetDesignator" Secondary ProjectileExplosive
+
+procon.protected.maps.clear
+// CombatMission
+procon.protected.maps.add "CombatMission" "MP_03" "CombatMission" "Somalia Stronghold" 0
+procon.protected.maps.add "CombatMission" "MP_05" "CombatMission" "Novi Grad Warzone" 0
+procon.protected.maps.add "CombatMission" "MP_10" "CombatMission" "Sarajevo Stadium" 0
+procon.protected.maps.add "CombatMission" "MP_12" "CombatMission" "Basilan Aftermatch" 0
+procon.protected.maps.add "CombatMission" "MP_13" "CombatMission" "Hara Dunes" 0
+procon.protected.maps.add "CombatMission" "MP_16" "CombatMission" "Al Fara Cliffside" 0
+procon.protected.maps.add "CombatMission" "MP_18" "CombatMission" "Shogore Valley" 0
+procon.protected.maps.add "CombatMission" "MP_19" "CombatMission" "Tungunan Jungle" 0
+procon.protected.maps.add "CombatMission" "MP_20" "CombatMission" "Darra Gun Market" 0
+procon.protected.maps.add "CombatMission" "MP_21" "CombatMission" "Chitrail Compound" 0
+
+// Home Run
+procon.protected.maps.add "Sport" "MP_03" "Home Run" "Somalia Stronghold" 0
+procon.protected.maps.add "Sport" "MP_10" "Home Run" "Sarajevo Stadium" 0
+procon.protected.maps.add "Sport" "MP_12" "Home Run" "Basilan Aftermatch" 0
+procon.protected.maps.add "Sport" "MP_16" "Home Run" "Al Fara Cliffside" 0
+procon.protected.maps.add "Sport" "MP_18" "Home Run" "Shogore Valley" 0
+procon.protected.maps.add "Sport" "MP_19" "Home Run" "Tungunan Jungle" 0
+procon.protected.maps.add "Sport" "MP_20" "Home Run" "Darra Gun Market" 0
+procon.protected.maps.add "Sport" "MP_21" "Home Run" "Chitrail Compound" 0
+
+// Sector Control
+procon.protected.maps.add "SectorControl" "MP_03" "Sector Control" "Somalia Stronghold" 0
+procon.protected.maps.add "SectorControl" "MP_05" "Sector Control" "Novi Grad Warzone" 0
+procon.protected.maps.add "SectorControl" "MP_10" "Sector Control" "Sarajevo Stadium" 0
+procon.protected.maps.add "SectorControl" "MP_12" "Sector Control" "Basilan Aftermatch" 0
+procon.protected.maps.add "SectorControl" "MP_13" "Sector Control" "Hara Dunes" 0
+procon.protected.maps.add "SectorControl" "MP_16" "Sector Control" "Al Fara Cliffside" 0
+procon.protected.maps.add "SectorControl" "MP_18" "Sector Control" "Shogore Valley" 0
+procon.protected.maps.add "SectorControl" "MP_19" "Sector Control" "Tungunan Jungle" 0
+procon.protected.maps.add "SectorControl" "MP_20" "Sector Control" "Darra Gun Market" 0
+procon.protected.maps.add "SectorControl" "MP_21" "Sector Control" "Chitrail Compound" 0
+
+// TDM
+procon.protected.maps.add "TeamDeathMatch" "MP_03" "TDM" "Somalia Stronghold" 0
+procon.protected.maps.add "TeamDeathMatch" "MP_05" "TDM" "Novi Grad Warzone" 0
+procon.protected.maps.add "TeamDeathMatch" "MP_10" "TDM" "Sarajevo Stadium" 0
+procon.protected.maps.add "TeamDeathMatch" "MP_12" "TDM" "Basilan Aftermatch" 0
+procon.protected.maps.add "TeamDeathMatch" "MP_13" "TDM" "Hara Dunes" 0
+procon.protected.maps.add "TeamDeathMatch" "MP_16" "TDM" "Al Fara Cliffside" 0
+procon.protected.maps.add "TeamDeathMatch" "MP_18" "TDM" "Shogore Valley" 0
+procon.protected.maps.add "TeamDeathMatch" "MP_19" "TDM" "Tungunan Jungle" 0
+procon.protected.maps.add "TeamDeathMatch" "MP_20" "TDM" "Darra Gun Market" 0
+procon.protected.maps.add "TeamDeathMatch" "MP_21" "TDM" "Chitrail Compound" 0
+
+// Hot Spot
+procon.protected.maps.add "BombSquad" "MP_03" "Hot Spot" "Somalia Stronghold" 0
+procon.protected.maps.add "BombSquad" "MP_05" "Hot Spot" "Novi Grad Warzone" 0
+procon.protected.maps.add "BombSquad" "MP_10" "Hot Spot" "Sarajevo Stadium" 0
+procon.protected.maps.add "BombSquad" "MP_13" "Hot Spot" "Hara Dunes" 0
+procon.protected.maps.add "BombSquad" "MP_16" "Hot Spot" "Al Fara Cliffside" 0
+procon.protected.maps.add "BombSquad" "MP_18" "Hot Spot" "Shogore Valley" 0
+procon.protected.maps.add "BombSquad" "MP_19" "Hot Spot" "Tungunan Jungle" 0
+procon.protected.maps.add "BombSquad" "MP_20" "Hot Spot" "Darra Gun Market" 0
+procon.protected.maps.add "BombSquad" "MP_21" "Hot Spot" "Chitrail Compound" 0
+
+ 
+procon.protected.teamnames.clear
+
+// CombatMission
+///////////////////////////////////////////////////////////////////////////////
+procon.protected.teamnames.add "MP_03" 0 "global.mohw.neutral" "" "CombatMission"
+procon.protected.teamnames.add "MP_03" 1 "global.mohw.away" "us.png" "CombatMission"
+procon.protected.teamnames.add "MP_03" 2 "global.mohw.home" "tal.png" "CombatMission"
+
+procon.protected.teamnames.add "MP_05" 0 "global.mohw.neutral" "" "CombatMission"
+procon.protected.teamnames.add "MP_05" 1 "global.mohw.away" "us.png" "CombatMission"
+procon.protected.teamnames.add "MP_05" 2 "global.mohw.home" "tal.png" "CombatMission"
+
+procon.protected.teamnames.add "MP_10" 0 "global.mohw.neutral" "" "CombatMission"
+procon.protected.teamnames.add "MP_10" 1 "global.mohw.away" "us.png" "CombatMission"
+procon.protected.teamnames.add "MP_10" 2 "global.mohw.home" "tal.png" "CombatMission"
+
+procon.protected.teamnames.add "MP_12" 0 "global.mohw.neutral" "" "CombatMission"
+procon.protected.teamnames.add "MP_12" 1 "global.mohw.away" "us.png" "CombatMission"
+procon.protected.teamnames.add "MP_12" 2 "global.mohw.home" "tal.png" "CombatMission"
+
+procon.protected.teamnames.add "MP_13" 0 "global.mohw.neutral" "" "CombatMission"
+procon.protected.teamnames.add "MP_13" 1 "global.mohw.away" "us.png" "CombatMission"
+procon.protected.teamnames.add "MP_13" 2 "global.mohw.home" "tal.png" "CombatMission"
+
+procon.protected.teamnames.add "MP_16" 0 "global.mohw.neutral" "" "CombatMission"
+procon.protected.teamnames.add "MP_16" 1 "global.mohw.away" "us.png" "CombatMission"
+procon.protected.teamnames.add "MP_16" 2 "global.mohw.home" "tal.png" "CombatMission"
+
+procon.protected.teamnames.add "MP_18" 0 "global.mohw.neutral" "" "CombatMission"
+procon.protected.teamnames.add "MP_18" 1 "global.mohw.away" "us.png" "CombatMission"
+procon.protected.teamnames.add "MP_18" 2 "global.mohw.home" "tal.png" "CombatMission"
+
+procon.protected.teamnames.add "MP_19" 0 "global.mohw.neutral" "" "CombatMission"
+procon.protected.teamnames.add "MP_19" 1 "global.mohw.away" "us.png" "CombatMission"
+procon.protected.teamnames.add "MP_19" 2 "global.mohw.home" "tal.png" "CombatMission"
+
+procon.protected.teamnames.add "MP_20" 0 "global.mohw.neutral" "" "CombatMission"
+procon.protected.teamnames.add "MP_20" 1 "global.mohw.away" "us.png" "CombatMission"
+procon.protected.teamnames.add "MP_20" 2 "global.mohw.home" "tal.png" "CombatMission"
+
+procon.protected.teamnames.add "MP_21" 0 "global.mohw.neutral" "" "CombatMission"
+procon.protected.teamnames.add "MP_21" 1 "global.mohw.away" "us.png" "CombatMission"
+procon.protected.teamnames.add "MP_21" 2 "global.mohw.home" "tal.png" "CombatMission"
+
+// HomeRun
+///////////////////////////////////////////////////////////////////////////////
+procon.protected.teamnames.add "MP_03" 0 "global.mohw.neutral" "" "Sport"
+procon.protected.teamnames.add "MP_03" 1 "global.mohw.away" "us.png" "Sport"
+procon.protected.teamnames.add "MP_03" 2 "global.mohw.home" "tal.png" "Sport"
+ 
+procon.protected.teamnames.add "MP_10" 0 "global.mohw.neutral" "" "Sport"
+procon.protected.teamnames.add "MP_10" 1 "global.mohw.away" "us.png" "Sport"
+procon.protected.teamnames.add "MP_10" 2 "global.mohw.home" "tal.png" "Sport"
+
+procon.protected.teamnames.add "MP_12" 0 "global.mohw.neutral" "" "Sport"
+procon.protected.teamnames.add "MP_12" 1 "global.mohw.away" "us.png" "Sport"
+procon.protected.teamnames.add "MP_12" 2 "global.mohw.home" "tal.png" "Sport"
+
+procon.protected.teamnames.add "MP_16" 0 "global.mohw.neutral" "" "Sport"
+procon.protected.teamnames.add "MP_16" 1 "global.mohw.away" "us.png" "Sport"
+procon.protected.teamnames.add "MP_16" 2 "global.mohw.home" "tal.png" "Sport"
+
+procon.protected.teamnames.add "MP_18" 0 "global.mohw.neutral" "" "Sport"
+procon.protected.teamnames.add "MP_18" 1 "global.mohw.away" "us.png" "Sport"
+procon.protected.teamnames.add "MP_18" 2 "global.mohw.home" "tal.png" "Sport"
+
+procon.protected.teamnames.add "MP_19" 0 "global.mohw.neutral" "" "Sport"
+procon.protected.teamnames.add "MP_19" 1 "global.mohw.away" "us.png" "Sport"
+procon.protected.teamnames.add "MP_19" 2 "global.mohw.home" "tal.png" "Sport"
+
+procon.protected.teamnames.add "MP_20" 0 "global.mohw.neutral" "" "Sport"
+procon.protected.teamnames.add "MP_20" 1 "global.mohw.away" "us.png" "Sport"
+procon.protected.teamnames.add "MP_20" 2 "global.mohw.home" "tal.png" "Sport"
+
+procon.protected.teamnames.add "MP_21" 0 "global.mohw.neutral" "" "Sport"
+procon.protected.teamnames.add "MP_21" 1 "global.mohw.away" "us.png" "Sport"
+procon.protected.teamnames.add "MP_21" 2 "global.mohw.home" "tal.png" "Sport"
+
+// SectorControl
+///////////////////////////////////////////////////////////////////////////////
+procon.protected.teamnames.add "MP_03" 0 "global.mohw.neutral" "" "SectorControl"
+procon.protected.teamnames.add "MP_03" 1 "global.mohw.away" "us.png" "SectorControl"
+procon.protected.teamnames.add "MP_03" 2 "global.mohw.home" "tal.png" "SectorControl"
+
+procon.protected.teamnames.add "MP_05" 0 "global.mohw.neutral" "" "SectorControl"
+procon.protected.teamnames.add "MP_05" 1 "global.mohw.away" "us.png" "SectorControl"
+procon.protected.teamnames.add "MP_05" 2 "global.mohw.home" "tal.png" "SectorControl"
+
+procon.protected.teamnames.add "MP_10" 0 "global.mohw.neutral" "" "SectorControl"
+procon.protected.teamnames.add "MP_10" 1 "global.mohw.away" "us.png" "SectorControl"
+procon.protected.teamnames.add "MP_10" 2 "global.mohw.home" "tal.png" "SectorControl"
+
+procon.protected.teamnames.add "MP_12" 0 "global.mohw.neutral" "" "SectorControl"
+procon.protected.teamnames.add "MP_12" 1 "global.mohw.away" "us.png" "SectorControl"
+procon.protected.teamnames.add "MP_12" 2 "global.mohw.home" "tal.png" "SectorControl"
+
+procon.protected.teamnames.add "MP_13" 0 "global.mohw.neutral" "" "SectorControl"
+procon.protected.teamnames.add "MP_13" 1 "global.mohw.away" "us.png" "SectorControl"
+procon.protected.teamnames.add "MP_13" 2 "global.mohw.home" "tal.png" "SectorControl"
+
+procon.protected.teamnames.add "MP_16" 0 "global.mohw.neutral" "" "SectorControl"
+procon.protected.teamnames.add "MP_16" 1 "global.mohw.away" "us.png" "SectorControl"
+procon.protected.teamnames.add "MP_16" 2 "global.mohw.home" "tal.png" "SectorControl"
+
+procon.protected.teamnames.add "MP_18" 0 "global.mohw.neutral" "" "SectorControl"
+procon.protected.teamnames.add "MP_18" 1 "global.mohw.away" "us.png" "SectorControl"
+procon.protected.teamnames.add "MP_18" 2 "global.mohw.home" "tal.png" "SectorControl"
+
+procon.protected.teamnames.add "MP_19" 0 "global.mohw.neutral" "" "SectorControl"
+procon.protected.teamnames.add "MP_19" 1 "global.mohw.away" "us.png" "SectorControl"
+procon.protected.teamnames.add "MP_19" 2 "global.mohw.home" "tal.png" "SectorControl"
+
+procon.protected.teamnames.add "MP_20" 0 "global.mohw.neutral" "" "SectorControl"
+procon.protected.teamnames.add "MP_20" 1 "global.mohw.away" "us.png" "SectorControl"
+procon.protected.teamnames.add "MP_20" 2 "global.mohw.home" "tal.png" "SectorControl"
+
+procon.protected.teamnames.add "MP_21" 0 "global.mohw.neutral" "" "SectorControl"
+procon.protected.teamnames.add "MP_21" 1 "global.mohw.away" "us.png" "SectorControl"
+procon.protected.teamnames.add "MP_21" 2 "global.mohw.home" "tal.png" "SectorControl"
+
+//TDM
+///////////////////////////////////////////////////////////////////////////////
+procon.protected.teamnames.add "MP_03" 0 "global.mohw.neutral" "" "TeamDeathMatch"
+procon.protected.teamnames.add "MP_03" 1 "global.mohw.away" "us.png" "TeamDeathMatch"
+procon.protected.teamnames.add "MP_03" 2 "global.mohw.home" "tal.png" "TeamDeathMatch"
+
+procon.protected.teamnames.add "MP_05" 0 "global.mohw.neutral" "" "TeamDeathMatch"
+procon.protected.teamnames.add "MP_05" 1 "global.mohw.away" "us.png" "TeamDeathMatch"
+procon.protected.teamnames.add "MP_05" 2 "global.mohw.home" "tal.png" "TeamDeathMatch"
+
+procon.protected.teamnames.add "MP_10" 0 "global.mohw.neutral" "" "TeamDeathMatch"
+procon.protected.teamnames.add "MP_10" 1 "global.mohw.away" "us.png" "TeamDeathMatch"
+procon.protected.teamnames.add "MP_10" 2 "global.mohw.home" "tal.png" "TeamDeathMatch"
+
+procon.protected.teamnames.add "MP_12" 0 "global.mohw.neutral" "" "TeamDeathMatch"
+procon.protected.teamnames.add "MP_12" 1 "global.mohw.away" "us.png" "TeamDeathMatch"
+procon.protected.teamnames.add "MP_12" 2 "global.mohw.home" "tal.png" "TeamDeathMatch"
+
+procon.protected.teamnames.add "MP_13" 0 "global.mohw.neutral" "" "TeamDeathMatch"
+procon.protected.teamnames.add "MP_13" 1 "global.mohw.away" "us.png" "TeamDeathMatch"
+procon.protected.teamnames.add "MP_13" 2 "global.mohw.home" "tal.png" "TeamDeathMatch"
+
+procon.protected.teamnames.add "MP_16" 0 "global.mohw.neutral" "" "TeamDeathMatch"
+procon.protected.teamnames.add "MP_16" 1 "global.mohw.away" "us.png" "TeamDeathMatch"
+procon.protected.teamnames.add "MP_16" 2 "global.mohw.home" "tal.png" "TeamDeathMatch"
+
+procon.protected.teamnames.add "MP_18" 0 "global.mohw.neutral" "" "TeamDeathMatch"
+procon.protected.teamnames.add "MP_18" 1 "global.mohw.away" "us.png" "TeamDeathMatch"
+procon.protected.teamnames.add "MP_18" 2 "global.mohw.home" "tal.png" "TeamDeathMatch"
+
+procon.protected.teamnames.add "MP_19" 0 "global.mohw.neutral" "" "TeamDeathMatch"
+procon.protected.teamnames.add "MP_19" 1 "global.mohw.away" "us.png" "TeamDeathMatch"
+procon.protected.teamnames.add "MP_19" 2 "global.mohw.home" "tal.png" "TeamDeathMatch"
+
+procon.protected.teamnames.add "MP_20" 0 "global.mohw.neutral" "" "TeamDeathMatch"
+procon.protected.teamnames.add "MP_20" 1 "global.mohw.away" "us.png" "TeamDeathMatch"
+procon.protected.teamnames.add "MP_20" 2 "global.mohw.home" "tal.png" "TeamDeathMatch"
+
+procon.protected.teamnames.add "MP_21" 0 "global.mohw.neutral" "" "TeamDeathMatch"
+procon.protected.teamnames.add "MP_21" 1 "global.mohw.away" "us.png" "TeamDeathMatch"
+procon.protected.teamnames.add "MP_21" 2 "global.mohw.home" "tal.png" "TeamDeathMatch"
+
+// HotSpot
+///////////////////////////////////////////////////////////////////////////////
+procon.protected.teamnames.add "MP_03" 0 "global.mohw.neutral" "" "BombSquad"
+procon.protected.teamnames.add "MP_03" 1 "global.mohw.away" "us.png" "BombSquad"
+procon.protected.teamnames.add "MP_03" 2 "global.mohw.home" "tal.png" "BombSquad"
+
+procon.protected.teamnames.add "MP_05" 0 "global.mohw.neutral" "" "BombSquad"
+procon.protected.teamnames.add "MP_05" 1 "global.mohw.away" "us.png" "BombSquad"
+procon.protected.teamnames.add "MP_05" 2 "global.mohw.home" "tal.png" "BombSquad"
+
+procon.protected.teamnames.add "MP_10" 0 "global.mohw.neutral" "" "BombSquad"
+procon.protected.teamnames.add "MP_10" 1 "global.mohw.away" "us.png" "BombSquad"
+procon.protected.teamnames.add "MP_10" 2 "global.mohw.home" "tal.png" "BombSquad"
+
+procon.protected.teamnames.add "MP_13" 0 "global.mohw.neutral" "" "BombSquad"
+procon.protected.teamnames.add "MP_13" 1 "global.mohw.away" "us.png" "BombSquad"
+procon.protected.teamnames.add "MP_13" 2 "global.mohw.home" "tal.png" "BombSquad"
+
+procon.protected.teamnames.add "MP_16" 0 "global.mohw.neutral" "" "BombSquad"
+procon.protected.teamnames.add "MP_16" 1 "global.mohw.away" "us.png" "BombSquad"
+procon.protected.teamnames.add "MP_16" 2 "global.mohw.home" "tal.png" "BombSquad"
+
+procon.protected.teamnames.add "MP_18" 0 "global.mohw.neutral" "" "BombSquad"
+procon.protected.teamnames.add "MP_18" 1 "global.mohw.away" "us.png" "BombSquad"
+procon.protected.teamnames.add "MP_18" 2 "global.mohw.home" "tal.png" "BombSquad"
+
+procon.protected.teamnames.add "MP_19" 0 "global.mohw.neutral" "" "BombSquad"
+procon.protected.teamnames.add "MP_19" 1 "global.mohw.away" "us.png" "BombSquad"
+procon.protected.teamnames.add "MP_19" 2 "global.mohw.home" "tal.png" "BombSquad"
+
+procon.protected.teamnames.add "MP_20" 0 "global.mohw.neutral" "" "BombSquad"
+procon.protected.teamnames.add "MP_20" 1 "global.mohw.away" "us.png" "BombSquad"
+procon.protected.teamnames.add "MP_20" 2 "global.mohw.home" "tal.png" "BombSquad"
+
+procon.protected.teamnames.add "MP_21" 0 "global.mohw.neutral" "" "BombSquad"
+procon.protected.teamnames.add "MP_21" 1 "global.mohw.away" "us.png" "BombSquad"
+procon.protected.teamnames.add "MP_21" 2 "global.mohw.home" "tal.png" "BombSquad"
+
+
+///////////////////////////////////////////////////////////////////////////////
+procon.protected.tasks.clear
+procon.protected.tasks.add "procon" 0 30 -1 procon.protected.send serverInfo
+procon.protected.tasks.add "procon" 0 30 -1 procon.protected.send admin.listPlayers all
+procon.protected.tasks.add "procon" 0 60 -1 procon.protected.send mapList.getMapIndices
+procon.protected.tasks.add "procon" 0 90 -1 procon.protected.send punkBuster.pb_sv_command pb_sv_plist
+
+procon.protected.vars.set TEMP_BAN_CEILING 3600
+procon.protected.vars.set MAX_CONSOLE_LINES 100
+procon.protected.vars.set MAX_PLUGINCONSOLE_LINES 100
+procon.protected.vars.set MAX_CHAT_LINES 100
+procon.protected.vars.set MAX_PUNKBUSTERCONSOLE_LINES 200
+procon.protected.vars.set TEXT_COLOUR_1 "Maroon"
+procon.protected.vars.set TEXT_COLOUR_2 "MediumSeaGreen"
+procon.protected.vars.set TEXT_COLOUR_3 "DarkOrange"
+procon.protected.vars.set TEXT_COLOUR_4 "RoyalBlue"
+procon.protected.vars.set TEXT_COLOUR_5 "CornflowerBlue"
+procon.protected.vars.set TEXT_COLOUR_6 "DarkViolet"
+procon.protected.vars.set TEXT_COLOUR_7 "DeepPink"
+procon.protected.vars.set TEXT_COLOUR_8 "Red"
+procon.protected.vars.set TEXT_COLOUR_9 "Gray"

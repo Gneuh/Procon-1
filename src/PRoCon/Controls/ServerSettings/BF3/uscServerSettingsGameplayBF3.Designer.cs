@@ -94,6 +94,14 @@
             this.picSettingsWarmupTimeout = new System.Windows.Forms.PictureBox();
             this.numSettingsWarmupTimeout = new System.Windows.Forms.NumericUpDown();
             this.lblSettingsWarmupTimeout = new System.Windows.Forms.Label();
+            this.picSettingsGunMasterWeaponsPreset = new System.Windows.Forms.PictureBox();
+            this.lnkSettingsGunMasterWeaponsPreset = new System.Windows.Forms.LinkLabel();
+            this.lblSettingsGunMasterWeaponsPreset = new System.Windows.Forms.Label();
+            this.cboSettingsGunMasterWeaponsPreset = new System.Windows.Forms.ComboBox();
+            this.lnkSettingsCtfRoundTimeModifier = new System.Windows.Forms.LinkLabel();
+            this.picSettingsCtfRoundTimeModifier = new System.Windows.Forms.PictureBox();
+            this.numSettingsCtfRoundTimeModifier = new System.Windows.Forms.NumericUpDown();
+            this.lblSettingsCtfRoundTimeModifier = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsFriendlyFire)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsHardcore)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsThirdPersonVehicleCameras)).BeginInit();
@@ -129,6 +137,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.numSettingsLockdownCountdown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsWarmupTimeout)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numSettingsWarmupTimeout)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picSettingsGunMasterWeaponsPreset)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picSettingsCtfRoundTimeModifier)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numSettingsCtfRoundTimeModifier)).BeginInit();
             this.SuspendLayout();
             // 
             // chkSettingsThirdPersonVehicleCameras
@@ -577,7 +588,7 @@
             0,
             0});
             this.numSettingsRoundStartPlayerCount.Minimum = new decimal(new int[] {
-            1,
+            4,
             0,
             0,
             0});
@@ -785,17 +796,15 @@
             // 
             // cboGameplayPresets
             // 
-            this.cboGameplayPresets.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.cboGameplayPresets.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboGameplayPresets.FormattingEnabled = true;
-            this.cboGameplayPresets.Location = new System.Drawing.Point(580, 28);
+            this.cboGameplayPresets.Location = new System.Drawing.Point(578, 28);
             this.cboGameplayPresets.Name = "cboGameplayPresets";
             this.cboGameplayPresets.Size = new System.Drawing.Size(144, 23);
             this.cboGameplayPresets.TabIndex = 278;
             // 
             // btnGameplayPresets
             // 
-            this.btnGameplayPresets.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnGameplayPresets.Location = new System.Drawing.Point(730, 27);
             this.btnGameplayPresets.Name = "btnGameplayPresets";
             this.btnGameplayPresets.Size = new System.Drawing.Size(75, 23);
@@ -806,9 +815,8 @@
             // 
             // lblGameplayPresets
             // 
-            this.lblGameplayPresets.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lblGameplayPresets.AutoSize = true;
-            this.lblGameplayPresets.Location = new System.Drawing.Point(577, 10);
+            this.lblGameplayPresets.Location = new System.Drawing.Point(575, 10);
             this.lblGameplayPresets.Name = "lblGameplayPresets";
             this.lblGameplayPresets.Size = new System.Drawing.Size(100, 15);
             this.lblGameplayPresets.TabIndex = 280;
@@ -820,7 +828,7 @@
             this.lnkSettingsGameModeCounter.AutoSize = true;
             this.lnkSettingsGameModeCounter.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
             this.lnkSettingsGameModeCounter.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(220)))));
-            this.lnkSettingsGameModeCounter.Location = new System.Drawing.Point(108, 496);
+            this.lnkSettingsGameModeCounter.Location = new System.Drawing.Point(642, 301);
             this.lnkSettingsGameModeCounter.Name = "lnkSettingsGameModeCounter";
             this.lnkSettingsGameModeCounter.Size = new System.Drawing.Size(38, 15);
             this.lnkSettingsGameModeCounter.TabIndex = 284;
@@ -830,7 +838,7 @@
             // 
             // picSettingsGameModeCounter
             // 
-            this.picSettingsGameModeCounter.Location = new System.Drawing.Point(16, 475);
+            this.picSettingsGameModeCounter.Location = new System.Drawing.Point(550, 280);
             this.picSettingsGameModeCounter.Name = "picSettingsGameModeCounter";
             this.picSettingsGameModeCounter.Size = new System.Drawing.Size(16, 16);
             this.picSettingsGameModeCounter.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -845,7 +853,7 @@
             0,
             0,
             0});
-            this.numSettingsGameModeCounter.Location = new System.Drawing.Point(46, 494);
+            this.numSettingsGameModeCounter.Location = new System.Drawing.Point(580, 299);
             this.numSettingsGameModeCounter.Maximum = new decimal(new int[] {
             10000,
             0,
@@ -869,7 +877,7 @@
             // 
             this.lblSettingsGameModeCounter.AutoSize = true;
             this.lblSettingsGameModeCounter.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSettingsGameModeCounter.Location = new System.Drawing.Point(43, 476);
+            this.lblSettingsGameModeCounter.Location = new System.Drawing.Point(577, 281);
             this.lblSettingsGameModeCounter.Name = "lblSettingsGameModeCounter";
             this.lblSettingsGameModeCounter.Size = new System.Drawing.Size(115, 15);
             this.lblSettingsGameModeCounter.TabIndex = 281;
@@ -1019,14 +1027,119 @@
             this.lblSettingsWarmupTimeout.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblSettingsWarmupTimeout.Location = new System.Drawing.Point(577, 213);
             this.lblSettingsWarmupTimeout.Name = "lblSettingsWarmupTimeout";
-            this.lblSettingsWarmupTimeout.Size = new System.Drawing.Size(128, 15);
+            this.lblSettingsWarmupTimeout.Size = new System.Drawing.Size(101, 15);
             this.lblSettingsWarmupTimeout.TabIndex = 295;
-            this.lblSettingsWarmupTimeout.Text = "Lockdown Countdown";
+            this.lblSettingsWarmupTimeout.Text = "Warmup Timeout";
+            // 
+            // picSettingsGunMasterWeaponsPreset
+            // 
+            this.picSettingsGunMasterWeaponsPreset.Location = new System.Drawing.Point(551, 81);
+            this.picSettingsGunMasterWeaponsPreset.Name = "picSettingsGunMasterWeaponsPreset";
+            this.picSettingsGunMasterWeaponsPreset.Size = new System.Drawing.Size(16, 16);
+            this.picSettingsGunMasterWeaponsPreset.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.picSettingsGunMasterWeaponsPreset.TabIndex = 302;
+            this.picSettingsGunMasterWeaponsPreset.TabStop = false;
+            // 
+            // lnkSettingsGunMasterWeaponsPreset
+            // 
+            this.lnkSettingsGunMasterWeaponsPreset.ActiveLinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(220)))));
+            this.lnkSettingsGunMasterWeaponsPreset.AutoSize = true;
+            this.lnkSettingsGunMasterWeaponsPreset.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
+            this.lnkSettingsGunMasterWeaponsPreset.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(220)))));
+            this.lnkSettingsGunMasterWeaponsPreset.Location = new System.Drawing.Point(750, 105);
+            this.lnkSettingsGunMasterWeaponsPreset.Name = "lnkSettingsGunMasterWeaponsPreset";
+            this.lnkSettingsGunMasterWeaponsPreset.Size = new System.Drawing.Size(38, 15);
+            this.lnkSettingsGunMasterWeaponsPreset.TabIndex = 301;
+            this.lnkSettingsGunMasterWeaponsPreset.TabStop = true;
+            this.lnkSettingsGunMasterWeaponsPreset.Text = "Apply";
+            this.lnkSettingsGunMasterWeaponsPreset.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkSettingsGunMasterWeaponsPreset_LinkClicked);
+            // 
+            // lblSettingsGunMasterWeaponsPreset
+            // 
+            this.lblSettingsGunMasterWeaponsPreset.AutoSize = true;
+            this.lblSettingsGunMasterWeaponsPreset.Location = new System.Drawing.Point(575, 81);
+            this.lblSettingsGunMasterWeaponsPreset.Name = "lblSettingsGunMasterWeaponsPreset";
+            this.lblSettingsGunMasterWeaponsPreset.Size = new System.Drawing.Size(157, 15);
+            this.lblSettingsGunMasterWeaponsPreset.TabIndex = 300;
+            this.lblSettingsGunMasterWeaponsPreset.Text = "GunMaster Weapons presets";
+            // 
+            // cboSettingsGunMasterWeaponsPreset
+            // 
+            this.cboSettingsGunMasterWeaponsPreset.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboSettingsGunMasterWeaponsPreset.FormattingEnabled = true;
+            this.cboSettingsGunMasterWeaponsPreset.Location = new System.Drawing.Point(578, 102);
+            this.cboSettingsGunMasterWeaponsPreset.Name = "cboSettingsGunMasterWeaponsPreset";
+            this.cboSettingsGunMasterWeaponsPreset.Size = new System.Drawing.Size(166, 23);
+            this.cboSettingsGunMasterWeaponsPreset.TabIndex = 299;
+            // 
+            // lnkSettingsCtfRoundTimeModifier
+            // 
+            this.lnkSettingsCtfRoundTimeModifier.ActiveLinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(220)))));
+            this.lnkSettingsCtfRoundTimeModifier.AutoSize = true;
+            this.lnkSettingsCtfRoundTimeModifier.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
+            this.lnkSettingsCtfRoundTimeModifier.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(220)))));
+            this.lnkSettingsCtfRoundTimeModifier.Location = new System.Drawing.Point(642, 366);
+            this.lnkSettingsCtfRoundTimeModifier.Name = "lnkSettingsCtfRoundTimeModifier";
+            this.lnkSettingsCtfRoundTimeModifier.Size = new System.Drawing.Size(38, 15);
+            this.lnkSettingsCtfRoundTimeModifier.TabIndex = 306;
+            this.lnkSettingsCtfRoundTimeModifier.TabStop = true;
+            this.lnkSettingsCtfRoundTimeModifier.Text = "Apply";
+            this.lnkSettingsCtfRoundTimeModifier.LinkClicked +=new System.Windows.Forms.LinkLabelLinkClickedEventHandler(lnkSettingsCtfRoundTimeModifier_LinkClicked);
+            // 
+            // picSettingsCtfRoundTimeModifier
+            // 
+            this.picSettingsCtfRoundTimeModifier.Location = new System.Drawing.Point(550, 345);
+            this.picSettingsCtfRoundTimeModifier.Name = "picSettingsCtfRoundTimeModifier";
+            this.picSettingsCtfRoundTimeModifier.Size = new System.Drawing.Size(16, 16);
+            this.picSettingsCtfRoundTimeModifier.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.picSettingsCtfRoundTimeModifier.TabIndex = 305;
+            this.picSettingsCtfRoundTimeModifier.TabStop = false;
+            // 
+            // numSettingsCtfRoundTimeModifier
+            // 
+            this.numSettingsCtfRoundTimeModifier.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.numSettingsCtfRoundTimeModifier.Increment = new decimal(new int[] {
+            15,
+            0,
+            0,
+            0});
+            this.numSettingsCtfRoundTimeModifier.Location = new System.Drawing.Point(580, 364);
+            this.numSettingsCtfRoundTimeModifier.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.numSettingsCtfRoundTimeModifier.Name = "numSettingsCtfRoundTimeModifier";
+            this.numSettingsCtfRoundTimeModifier.Size = new System.Drawing.Size(56, 23);
+            this.numSettingsCtfRoundTimeModifier.TabIndex = 304;
+            this.numSettingsCtfRoundTimeModifier.Value = new decimal(new int[] {
+            50,
+            0,
+            0,
+            0});
+            // 
+            // lblSettingsCtfRoundTimeModifier
+            // 
+            this.lblSettingsCtfRoundTimeModifier.AutoSize = true;
+            this.lblSettingsCtfRoundTimeModifier.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblSettingsCtfRoundTimeModifier.Location = new System.Drawing.Point(577, 346);
+            this.lblSettingsCtfRoundTimeModifier.Name = "lblSettingsCtfRoundTimeModifier";
+            this.lblSettingsCtfRoundTimeModifier.Size = new System.Drawing.Size(144, 15);
+            this.lblSettingsCtfRoundTimeModifier.TabIndex = 303;
+            this.lblSettingsCtfRoundTimeModifier.Text = "CTF Round Time Modifier";
             // 
             // uscServerSettingsGameplayBF3
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.lnkSettingsCtfRoundTimeModifier);
+            this.Controls.Add(this.picSettingsCtfRoundTimeModifier);
+            this.Controls.Add(this.numSettingsCtfRoundTimeModifier);
+            this.Controls.Add(this.lblSettingsCtfRoundTimeModifier);
+            this.Controls.Add(this.picSettingsGunMasterWeaponsPreset);
+            this.Controls.Add(this.lnkSettingsGunMasterWeaponsPreset);
+            this.Controls.Add(this.lblSettingsGunMasterWeaponsPreset);
+            this.Controls.Add(this.cboSettingsGunMasterWeaponsPreset);
             this.Controls.Add(this.lnkSettingsWarmupTimeout);
             this.Controls.Add(this.picSettingsWarmupTimeout);
             this.Controls.Add(this.numSettingsWarmupTimeout);
@@ -1175,6 +1288,14 @@
             this.Controls.SetChildIndex(this.numSettingsWarmupTimeout, 0);
             this.Controls.SetChildIndex(this.picSettingsWarmupTimeout, 0);
             this.Controls.SetChildIndex(this.lnkSettingsWarmupTimeout, 0);
+            this.Controls.SetChildIndex(this.cboSettingsGunMasterWeaponsPreset, 0);
+            this.Controls.SetChildIndex(this.lblSettingsGunMasterWeaponsPreset, 0);
+            this.Controls.SetChildIndex(this.lnkSettingsGunMasterWeaponsPreset, 0);
+            this.Controls.SetChildIndex(this.picSettingsGunMasterWeaponsPreset, 0);
+            this.Controls.SetChildIndex(this.lblSettingsCtfRoundTimeModifier, 0);
+            this.Controls.SetChildIndex(this.numSettingsCtfRoundTimeModifier, 0);
+            this.Controls.SetChildIndex(this.picSettingsCtfRoundTimeModifier, 0);
+            this.Controls.SetChildIndex(this.lnkSettingsCtfRoundTimeModifier, 0);
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsFriendlyFire)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsHardcore)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsThirdPersonVehicleCameras)).EndInit();
@@ -1210,6 +1331,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.numSettingsLockdownCountdown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picSettingsWarmupTimeout)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numSettingsWarmupTimeout)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picSettingsGunMasterWeaponsPreset)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picSettingsCtfRoundTimeModifier)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numSettingsCtfRoundTimeModifier)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1288,5 +1412,13 @@
         private System.Windows.Forms.PictureBox picSettingsWarmupTimeout;
         private System.Windows.Forms.NumericUpDown numSettingsWarmupTimeout;
         private System.Windows.Forms.Label lblSettingsWarmupTimeout;
+        private System.Windows.Forms.PictureBox picSettingsGunMasterWeaponsPreset;
+        private System.Windows.Forms.LinkLabel lnkSettingsGunMasterWeaponsPreset;
+        private System.Windows.Forms.Label lblSettingsGunMasterWeaponsPreset;
+        private System.Windows.Forms.ComboBox cboSettingsGunMasterWeaponsPreset;
+        private System.Windows.Forms.LinkLabel lnkSettingsCtfRoundTimeModifier;
+        private System.Windows.Forms.PictureBox picSettingsCtfRoundTimeModifier;
+        private System.Windows.Forms.NumericUpDown numSettingsCtfRoundTimeModifier;
+        private System.Windows.Forms.Label lblSettingsCtfRoundTimeModifier;
     }
 }

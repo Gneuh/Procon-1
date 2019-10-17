@@ -18,87 +18,45 @@
     along with PRoCon Frostbite.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
 using System.Collections.Generic;
-using System.Text;
-using System.IO;
-using System.Drawing;
+using PRoCon.Core.Players;
+using PRoCon.Core.Remote;
 
 namespace PRoCon.Core.Battlemap {
-    using Core.Players;
-    using Core.Remote;
-
     public class MapGeometry {
+        public delegate void MapZoneTrespassedHandler(CPlayerInfo soldier, ZoneAction action, MapZone sender, Point3D tresspassLocation, float tresspassPercentage, object trespassState);
 
-        private PRoConClient m_prcClient;
-        private string m_currentMapFileName;
-
-        // public delegate void MapLoadedHandler(string strMapName);
-        // public event MapLoadedHandler MapLoaded;
-
-        public delegate void MapZoneTrespassedHandler(CPlayerInfo cpiSoldier, ZoneAction action, MapZone sender, Point3D pntTresspassLocation, float flTresspassPercentage, object trespassState);
-        public event MapZoneTrespassedHandler MapZoneTrespassed;
-
-        //public string MapPath {
-        //    get;
-        //    private set;
-        //}
-
-        //public MapImagePackDictionary MapImagePacks {
-        //    get;
-        //    private set;
-        //}
-
-        //public MapImagePack LoadedMapImagePack {
-        //    get;
-        //    private set;
-        //}
-
-        public MapZoneDictionary MapZones {
-            get;
-            private set;
-        }
+        protected readonly PRoConClient Client;
+        protected string CurrentMapFileName;
 
         public MapGeometry(PRoConClient prcClient) {
-            // this.MapImagePacks = new MapImagePackDictionary();
-            // this.MapPath = Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Media"), "Maps");
+            MapZones = new MapZoneDictionary();
 
-            //this.LoadMapImagePacks();
-
-            this.MapZones = new MapZoneDictionary();
-
-            //if (this.MapImagePacks.Count > 0) {
-            //    this.LoadedMapImagePack = this.MapImagePacks[0];
-            //}
-
-            if ((this.m_prcClient = prcClient) != null) {
-                this.m_prcClient.Game.ServerInfo += new FrostbiteClient.ServerInfoHandler(m_prcClient_ServerInfo);
-                this.m_prcClient.Game.LoadingLevel += new FrostbiteClient.LoadingLevelHandler(m_prcClient_LoadingLevel);
-                this.m_prcClient.Game.LevelLoaded += new FrostbiteClient.LevelLoadedHandler(m_prcClient_LevelLoaded);
-                this.m_prcClient.PlayerKilled += new PRoConClient.PlayerKilledHandler(m_prcClient_PlayerKilled);
-
-            //    this.m_prcClient.LoadingLevel += new FrostbiteConnection.LoadingLevelHandler(m_prcClient_LoadingLevel);
+            if ((Client = prcClient) != null) {
+                Client.Game.ServerInfo += new FrostbiteClient.ServerInfoHandler(m_prcClient_ServerInfo);
+                Client.Game.LoadingLevel += new FrostbiteClient.LoadingLevelHandler(m_prcClient_LoadingLevel);
+                Client.Game.LevelLoaded += new FrostbiteClient.LevelLoadedHandler(m_prcClient_LevelLoaded);
+                Client.PlayerKilled += new PRoConClient.PlayerKilledHandler(m_prcClient_PlayerKilled);
             }
-
         }
 
+        public MapZoneDictionary MapZones { get; private set; }
+        public event MapZoneTrespassedHandler MapZoneTrespassed;
+
         private void m_prcClient_PlayerKilled(PRoConClient sender, Kill kKillerVictimDetails) {
+            float trespassArea = 0.0F;
 
-            float flTrespassArea = 0.0F;
-
-            foreach (MapZoneDrawing zone in new List<MapZoneDrawing>(this.MapZones)) {
-
-                if (String.Compare(this.m_currentMapFileName, zone.LevelFileName, true) == 0) {
-
-                    if ((flTrespassArea = zone.TrespassArea(kKillerVictimDetails.KillerLocation, 14.14F)) > 0.0F) {
-                        if (this.MapZoneTrespassed != null) {
-                            FrostbiteConnection.RaiseEvent(this.MapZoneTrespassed.GetInvocationList(), kKillerVictimDetails.Killer, ZoneAction.Kill, new MapZone(zone.UID, zone.LevelFileName, zone.Tags.ToString(), zone.ZonePolygon, true), kKillerVictimDetails.KillerLocation, flTrespassArea, kKillerVictimDetails);
+            foreach (MapZoneDrawing zone in new List<MapZoneDrawing>(MapZones)) {
+                if (System.String.Compare(CurrentMapFileName, zone.LevelFileName, System.StringComparison.OrdinalIgnoreCase) == 0) {
+                    if ((trespassArea = zone.TrespassArea(kKillerVictimDetails.KillerLocation, 14.14F)) > 0.0F) {
+                        if (MapZoneTrespassed != null) {
+                            this.MapZoneTrespassed(kKillerVictimDetails.Killer, ZoneAction.Kill, new MapZone(zone.UID, zone.LevelFileName, zone.Tags.ToString(), zone.ZonePolygon, true), kKillerVictimDetails.KillerLocation, trespassArea, kKillerVictimDetails);
                         }
                     }
 
-                    if ((flTrespassArea = zone.TrespassArea(kKillerVictimDetails.VictimLocation, 14.14F)) > 0.0F) {
-                        if (this.MapZoneTrespassed != null) {
-                            FrostbiteConnection.RaiseEvent(this.MapZoneTrespassed.GetInvocationList(), kKillerVictimDetails.Victim, ZoneAction.Death, new MapZone(zone.UID, zone.LevelFileName, zone.Tags.ToString(), zone.ZonePolygon, true), kKillerVictimDetails.VictimLocation, flTrespassArea, kKillerVictimDetails);
+                    if ((trespassArea = zone.TrespassArea(kKillerVictimDetails.VictimLocation, 14.14F)) > 0.0F) {
+                        if (MapZoneTrespassed != null) {
+                            this.MapZoneTrespassed(kKillerVictimDetails.Victim, ZoneAction.Death, new MapZone(zone.UID, zone.LevelFileName, zone.Tags.ToString(), zone.ZonePolygon, true), kKillerVictimDetails.VictimLocation, trespassArea, kKillerVictimDetails);
                         }
                     }
                 }
@@ -106,75 +64,15 @@ namespace PRoCon.Core.Battlemap {
         }
 
         private void m_prcClient_LoadingLevel(FrostbiteClient sender, string mapFileName, int roundsPlayed, int roundsTotal) {
-            this.m_currentMapFileName = mapFileName;
+            CurrentMapFileName = mapFileName;
         }
 
-        private void m_prcClient_LevelLoaded(FrostbiteClient sender, string mapFileName, string Gamemode, int roundsPlayed, int roundsTotal)
-        {
-            this.m_currentMapFileName = mapFileName;
+        private void m_prcClient_LevelLoaded(FrostbiteClient sender, string mapFileName, string gamemode, int roundsPlayed, int roundsTotal) {
+            CurrentMapFileName = mapFileName;
         }
 
-        private void m_prcClient_ServerInfo(FrostbiteClient sender, CServerInfo csiServerInfo)
-        {
-
-            this.m_currentMapFileName = csiServerInfo.Map;
-
-            /*
-            if (this.LoadedMapImagePack != null) {
-
-                if (this.LoadedMapImagePack.LoadedMapFileName.Length == 0 && String.Compare(this.LoadedMapImagePack.LoadedMapFileName, csiServerInfo.Map, true) != 0) {
-                    // Load new map.
-                    //this.CurrentMapFilename = csiServerInfo.Map.ToLower();
-
-                    if (this.LoadedMapImagePack != null) {
-                        this.LoadedMapImagePack.LoadMap(csiServerInfo.Map.ToLower());
-
-                        if (this.MapLoaded != null) {
-                            FrostbiteConnection.RaiseEvent(this.MapLoaded.GetInvocationList(), csiServerInfo.Map.ToLower());
-                        }
-                    }
-
-                }
-            }
-            */
-            //this.CurrentMapFilename = csiServerInfo.Map.ToLower();
+        private void m_prcClient_ServerInfo(FrostbiteClient sender, CServerInfo csiServerInfo) {
+            CurrentMapFileName = csiServerInfo.Map;
         }
-
-        /*
-        private void LoadMapImagePacks() {
-
-            this.MapImagePacks.Clear();
-
-            if (Directory.Exists(this.MapPath) == true) {
-                string[] a_strMapImagePacks = Directory.GetDirectories(this.MapPath);
-
-                foreach (string strMapImagePack in a_strMapImagePacks) {
-                    if (File.Exists(Path.Combine(Path.Combine(this.MapPath, strMapImagePack), "data.map")) == true) {
-                        this.MapImagePacks.Add(new MapImagePack(Path.Combine(this.MapPath, strMapImagePack), new CLocalization(Path.Combine(Path.Combine(this.MapPath, strMapImagePack), "data.map"), "data.map")));
-                    }
-                }
-            }
-        }
-        
-
-        public void SetMapPack(MapImagePack mpiPack) {
-
-            string strCurrentMapFileName = String.Empty;
-
-            if (this.LoadedMapImagePack != null) {
-                strCurrentMapFileName = this.LoadedMapImagePack.LoadedMapFileName;
-            }
-
-            this.LoadedMapImagePack = mpiPack;
-
-            if (strCurrentMapFileName.Length > 0) {
-                this.LoadedMapImagePack.LoadMap(strCurrentMapFileName);
-
-                if (this.MapLoaded != null) {
-                    FrostbiteConnection.RaiseEvent(this.MapLoaded.GetInvocationList(), strCurrentMapFileName);
-                }
-            }
-        }
-         * */
     }
 }

@@ -21,6 +21,9 @@ namespace PRoCon.Core.Events {
         public delegate void MaximumDisplayedEventsChangeHandler(int maximumDisplayedEvents);
         public event MaximumDisplayedEventsChangeHandler MaximumDisplayedEventsChange;
 
+        public delegate void ScrollingEnabledChangeHandler(bool isEnabled);
+        public event ScrollingEnabledChangeHandler ScrollingEnabledChange;
+
         public NotificationList<CapturableEvents> CapturedEvents {
             get;
             private set;
@@ -40,7 +43,7 @@ namespace PRoCon.Core.Events {
                 this.m_isOptionsVisible = value;
 
                 if (this.OptionsVisibleChange != null) {
-                    FrostbiteConnection.RaiseEvent(this.OptionsVisibleChange.GetInvocationList(), this.m_isOptionsVisible);
+                    this.OptionsVisibleChange(this.m_isOptionsVisible);
                 }
             }
         }
@@ -56,7 +59,20 @@ namespace PRoCon.Core.Events {
                 this.m_iMaximumDisplayedEvents = value;
 
                 if (this.MaximumDisplayedEventsChange != null) {
-                    FrostbiteConnection.RaiseEvent(this.MaximumDisplayedEventsChange.GetInvocationList(), this.m_iMaximumDisplayedEvents);
+                    this.MaximumDisplayedEventsChange(this.m_iMaximumDisplayedEvents);
+                }
+            }
+        }
+
+        private bool m_blScrollingEnabled;
+
+        public bool ScrollingEnabled {
+            get { return this.m_blScrollingEnabled; }
+            set {
+                this.m_blScrollingEnabled = value;
+
+                if (this.ScrollingEnabledChange != null) {
+                    this.ScrollingEnabledChange(this.m_blScrollingEnabled);
                 }
             }
         }
@@ -67,6 +83,7 @@ namespace PRoCon.Core.Events {
                 lstReturnSettings.Add(this.OptionsVisible.ToString());
                 lstReturnSettings.Add(this.MaximumDisplayedEvents.ToString());
                 lstReturnSettings.Add(this.IsListModified.ToString());
+                lstReturnSettings.Add(this.ScrollingEnabled.ToString());
 
                 if (this.IsListModified == true) {
                     foreach (CapturableEvents ceEvent in this.CapturedEvents) {
@@ -80,25 +97,30 @@ namespace PRoCon.Core.Events {
                 int iMaximumCaptures = 200;
                 bool isCollapsed = false;
                 bool isModified = false;
+                bool scrollingEnabled = false;
 
-                if (value.Count >= 3) {
+                if (value.Count > 0) {
 
-                    if (bool.TryParse(value[0], out isCollapsed) == true) {
+                    if (value.Count >= 1 && bool.TryParse(value[0], out isCollapsed) == true) {
                         this.OptionsVisible = isCollapsed;
                     }
 
-                    if (int.TryParse(value[1], out iMaximumCaptures) == true) {
+                    if (value.Count >= 2 && int.TryParse(value[1], out iMaximumCaptures) == true) {
                         this.MaximumDisplayedEvents = iMaximumCaptures;
                     }
 
-                    if (bool.TryParse(value[2], out isModified) == true) {
+                    if (value.Count >= 3 && bool.TryParse(value[2], out isModified) == true) {
                         this.IsListModified = isModified;
+                    }
+
+                    if (value.Count >= 4 && bool.TryParse(value[3], out scrollingEnabled) == true) {
+                        this.ScrollingEnabled = scrollingEnabled;
                     }
 
                     if (this.IsListModified == true) {
                         this.CapturedEvents.Clear();
 
-                        for (int i = 3; i < value.Count; i++) {
+                        for (int i = 4; i < value.Count; i++) {
                             if (Enum.IsDefined(typeof(CapturableEvents), value[i]) == true && this.m_prcClient.EventsLogging.CapturedEvents.Contains((CapturableEvents)Enum.Parse(typeof(CapturableEvents), value[i])) == false) {
                                 this.CapturedEvents.Add((CapturableEvents)Enum.Parse(typeof(CapturableEvents), value[i]));
                             }
@@ -145,6 +167,7 @@ namespace PRoCon.Core.Events {
 
                 this.m_prcClient.Game.PlayerJoin += new FrostbiteClient.PlayerEventHandler(m_prcClient_PlayerJoin);
                 this.m_prcClient.Game.PlayerLeft += new FrostbiteClient.PlayerLeaveHandler(m_prcClient_PlayerLeft);
+                this.m_prcClient.Game.PlayerDisconnected += new FrostbiteClient.PlayerDisconnectedHandler(m_prcClient_PlayerDisconnected);
                 this.m_prcClient.Game.PlayerKicked += new FrostbiteClient.PlayerKickedHandler(m_prcClient_PlayerKicked);
 
                 this.m_prcClient.Game.PlayerKickedByAdmin += new FrostbiteClient.PlayerKickedHandler(Game_PlayerKickedByAdmin);
@@ -360,6 +383,10 @@ namespace PRoCon.Core.Events {
             this.ProcessEvent(EventType.Playerlist, CapturableEvents.PlayerJoin, playerName);
         }
 
+        private void m_prcClient_PlayerDisconnected(FrostbiteClient sender, string playerName, string reason) {
+            this.ProcessEvent(EventType.Playerlist, CapturableEvents.PlayerDisconnected, playerName, m_prcClient.Language.GetDefaultLocalized(reason, String.Format("uscChatPanel.{0}", reason)));
+        }
+
         private void m_prcClient_CommandLoginFailure(PRoConClient sender, string strError) {
             this.ProcessEvent(EventType.Connection, CapturableEvents.LoginFailure);
         }
@@ -413,9 +440,9 @@ namespace PRoCon.Core.Events {
         {
 
             if (this.CapturedEvents.Contains(capture.Event) == true) {
-                capture.LoggedTime = capture.LoggedTime.ToUniversalTime().AddHours(m_prcClient.Game.UTCoffset).ToLocalTime();
+                capture.LoggedTime = capture.LoggedTime.ToUniversalTime().AddHours(m_prcClient.Game.UtcOffset).ToLocalTime();
                 if (this.Logging == true) {
-                    this.WriteLogLine(String.Format("{0}\t{1}\t{2}\t{3}\t{4}", capture.eType.ToString(), capture.LoggedTime.ToString("MM/dd/yyyy HH:mm:ss"), capture.InstigatingAdmin, capture.Event.ToString(), capture.EventText.Replace("{", "{{").Replace("}", "}}")));
+                    this.WriteLogLine(String.Format("{0}\t{1}\t{2}\t{3}\t{4}", capture.EventType.ToString(), capture.LoggedTime.ToString("MM/dd/yyyy HH:mm:ss"), capture.InstigatingAdmin, capture.Event.ToString(), capture.EventText.Replace("{", "{{").Replace("}", "}}")));
                 }
 
                 this.LogEntries.Enqueue(capture);
@@ -425,7 +452,7 @@ namespace PRoCon.Core.Events {
                 }
 
                 if (this.LoggedEvent != null) {
-                    FrostbiteConnection.RaiseEvent(this.LoggedEvent.GetInvocationList(), capture);
+                    this.LoggedEvent(capture);
                 }
             }
         }

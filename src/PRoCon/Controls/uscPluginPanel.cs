@@ -22,23 +22,18 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Text;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
-using System.ComponentModel.Design;
-
 using System.Threading;
 using System.Reflection;
 using System.Reflection.Emit;
+using PRoCon.Controls.ControlsEx;
+using PRoCon.Core;
+using PRoCon.Core.Plugin;
+using PRoCon.Core.Remote;
+using PRoCon.Forms;
 
-namespace PRoCon {
-    using Core;
-    using Core.Plugin;
-    using Core.Remote;
-    using PRoCon.Forms;
-    using PRoCon.Controls.ControlsEx;
-
+namespace PRoCon.Controls {
     public partial class uscPluginPanel : UserControl {
 
         private uscServerConnection m_uscParent;
@@ -136,7 +131,7 @@ table.nostyle td,table.nostyle th,table.nostyle tr.even td,table.nostyle tr:hove
         #endregion
 
         private bool m_blLocalPlugins;
-        [CategoryAttribute("PRoCon Settings"), DescriptionAttribute("The control is used for local plugins or remote")]
+        [Category("PRoCon Settings"), Description("The control is used for local plugins or remote")]
         public bool LocalPlugins {
             set {
                 //this.spltPlugins.Panel2Collapsed = value;
@@ -172,6 +167,8 @@ table.nostyle td,table.nostyle th,table.nostyle tr.even td,table.nostyle tr:hove
             this.m_cscPluginVariables = new CustomClass();
 
             this.m_blLocalPlugins = true;
+
+            this.rtbScriptConsole.Flushed += new Action<object, EventArgs>(rtbScriptConsole_Flushed);
 
             this.lsvLoadedPlugins.CreateGraphics();
         }
@@ -258,38 +255,13 @@ table.nostyle td,table.nostyle th,table.nostyle tr.even td,table.nostyle tr:hove
         }
 
         public void Write(DateTime dtLoggedTime, string strPluginConsoleOutput) {
+            this.rtbScriptConsole.AppendText(String.Format("[{0}] {1}{2}", dtLoggedTime.ToString("HH:mm:ss ff"), strPluginConsoleOutput, "\n"));
+        }
 
-            this.rtbScriptConsole.AppendText(String.Format("[{0}] {1}{2}", dtLoggedTime.ToString("HH:mm:ss ff"), strPluginConsoleOutput, Environment.NewLine));
-
+        private void rtbScriptConsole_Flushed(object arg1, EventArgs arg2) {
             this.rtbScriptConsole.ScrollToCaret();
 
             this.rtbScriptConsole.TrimLines(this.m_prcClient.Variables.GetVariable<int>("MAX_PLUGINCONSOLE_LINES", 75));
-
-            /*
-            this.rtbScriptConsole.ReadOnly = false;
-
-            int iMaxConsoleLines = this.m_prcClient.Variables.GetVariable<int>("MAX_PLUGINCONSOLE_LINES", 75);
-            int iConsoleBoxLines = this.rtbScriptConsole.LineLength;
-
-            if ((iConsoleBoxLines > iMaxConsoleLines && this.rtbScriptConsole.Focused == false) || iConsoleBoxLines > 3000) {
-
-                for (int i = 0; i < iConsoleBoxLines - iMaxConsoleLines; i++) {
-
-                    this.rtbScriptConsole.Select(0, this.rtbScriptConsole.PopFirstLine() + 1);
-
-                    this.rtbScriptConsole.SelectedText = String.Empty;
-                }
-            }
-            this.rtbScriptConsole.ReadOnly = true;
-
-            /*
-            while (this.rtbScriptConsole.Lines.Length > this.m_prcClient.Variables.GetVariable<int>("MAX_PLUGINCONSOLE_LINES", 75)) {
-                this.rtbScriptConsole.Select(0, this.rtbScriptConsole.Lines[0].Length + 1);
-                this.rtbScriptConsole.ReadOnly = false;
-                this.rtbScriptConsole.SelectedText = String.Empty;
-                this.rtbScriptConsole.ReadOnly = true;
-            }
-            */
         }
 
         public ListViewItem IsLoadedPlugin(string strClassName) {
@@ -400,9 +372,10 @@ table.nostyle td,table.nostyle th,table.nostyle tr.even td,table.nostyle tr:hove
 
             if (lstVariables != null) {
                 foreach (CPluginVariable cpvVariable in lstVariables) {
-                    
+
                     string strCategoryName = strPluginName;
                     string strVariableName = cpvVariable.Name;
+                    bool blVariableReadOnly = cpvVariable.ReadOnly;
 
                     string[] a_strVariable = cpvVariable.Name.Split(new char[] { '|' }, 2);
                     if (a_strVariable.Length == 2) {
@@ -426,7 +399,7 @@ table.nostyle td,table.nostyle th,table.nostyle tr.even td,table.nostyle tr:hove
 
                             if (Enum.IsDefined(generatedEnum.GetType(), variableValue) == true) {
                                 if (this.m_cscPluginVariables.ContainsKey(cpvVariable.Name) == false) {
-                                    this.m_cscPluginVariables.Add(new CustomProperty(strVariableName, strCategoryName, strClassName, Enum.Parse(generatedEnum.GetType(), variableValue), generatedEnum.GetType(), false, true));
+                                    this.m_cscPluginVariables.Add(new CustomProperty(strVariableName, strCategoryName, strClassName, Enum.Parse(generatedEnum.GetType(), variableValue), generatedEnum.GetType(), blVariableReadOnly, true));
                                 }
                                 else {
                                     this.m_cscPluginVariables[cpvVariable.Name].Value = Enum.Parse(generatedEnum.GetType(), variableValue);
@@ -443,7 +416,7 @@ table.nostyle td,table.nostyle th,table.nostyle tr.even td,table.nostyle tr:hove
                                 bool blTryBool;
                                 if (bool.TryParse(cpvVariable.Value, out blTryBool) == true) {
                                     if (this.m_cscPluginVariables.ContainsKey(cpvVariable.Name) == false) {
-                                        this.m_cscPluginVariables.Add(new CustomProperty(strVariableName, strCategoryName, strClassName, blTryBool, typeof(bool), false, true));
+                                        this.m_cscPluginVariables.Add(new CustomProperty(strVariableName, strCategoryName, strClassName, blTryBool, typeof(bool), blVariableReadOnly, true));
                                     }
                                     else {
                                         this.m_cscPluginVariables[cpvVariable.Name].Value = blTryBool;
@@ -454,7 +427,7 @@ table.nostyle td,table.nostyle th,table.nostyle tr.even td,table.nostyle tr:hove
                                 if (Enum.IsDefined(typeof(enumBoolOnOff), cpvVariable.Value) == true) {
 
                                     if (this.m_cscPluginVariables.ContainsKey(cpvVariable.Name) == false) {
-                                        this.m_cscPluginVariables.Add(new CustomProperty(strVariableName, strCategoryName, strClassName, Enum.Parse(typeof(enumBoolOnOff), cpvVariable.Value), typeof(enumBoolOnOff), false, true));
+                                        this.m_cscPluginVariables.Add(new CustomProperty(strVariableName, strCategoryName, strClassName, Enum.Parse(typeof(enumBoolOnOff), cpvVariable.Value), typeof(enumBoolOnOff), blVariableReadOnly, true));
                                     }
                                     else {
                                         this.m_cscPluginVariables[cpvVariable.Name].Value = Enum.Parse(typeof(enumBoolOnOff), cpvVariable.Value);
@@ -464,7 +437,7 @@ table.nostyle td,table.nostyle th,table.nostyle tr.even td,table.nostyle tr:hove
                             case "yesno":
                                 if (Enum.IsDefined(typeof(enumBoolYesNo), cpvVariable.Value) == true) {
                                     if (this.m_cscPluginVariables.ContainsKey(cpvVariable.Name) == false) {
-                                        this.m_cscPluginVariables.Add(new CustomProperty(strVariableName, strCategoryName, strClassName, Enum.Parse(typeof(enumBoolYesNo), cpvVariable.Value), typeof(enumBoolYesNo), false, true));
+                                        this.m_cscPluginVariables.Add(new CustomProperty(strVariableName, strCategoryName, strClassName, Enum.Parse(typeof(enumBoolYesNo), cpvVariable.Value), typeof(enumBoolYesNo), blVariableReadOnly, true));
                                     }
                                     else {
                                         this.m_cscPluginVariables[cpvVariable.Name].Value = Enum.Parse(typeof(enumBoolYesNo), cpvVariable.Value);
@@ -475,7 +448,7 @@ table.nostyle td,table.nostyle th,table.nostyle tr.even td,table.nostyle tr:hove
                                 int iTryInt;
                                 if (int.TryParse(cpvVariable.Value, out iTryInt) == true) {
                                     if (this.m_cscPluginVariables.ContainsKey(cpvVariable.Name) == false) {
-                                        this.m_cscPluginVariables.Add(new CustomProperty(strVariableName, strCategoryName, strClassName, iTryInt, typeof(int), false, true));
+                                        this.m_cscPluginVariables.Add(new CustomProperty(strVariableName, strCategoryName, strClassName, iTryInt, typeof(int), blVariableReadOnly, true));
                                     }
                                     else {
                                         this.m_cscPluginVariables[cpvVariable.Name].Value = iTryInt;
@@ -486,7 +459,7 @@ table.nostyle td,table.nostyle th,table.nostyle tr.even td,table.nostyle tr:hove
                                 double dblTryDouble;
                                 if (double.TryParse(cpvVariable.Value, out dblTryDouble) == true) {
                                     if (this.m_cscPluginVariables.ContainsKey(cpvVariable.Name) == false) {
-                                        this.m_cscPluginVariables.Add(new CustomProperty(strVariableName, strCategoryName, strClassName, dblTryDouble, typeof(double), false, true));
+                                        this.m_cscPluginVariables.Add(new CustomProperty(strVariableName, strCategoryName, strClassName, dblTryDouble, typeof(double), blVariableReadOnly, true));
                                     }
                                     else {
                                         this.m_cscPluginVariables[cpvVariable.Name].Value = dblTryDouble;
@@ -495,7 +468,7 @@ table.nostyle td,table.nostyle th,table.nostyle tr.even td,table.nostyle tr:hove
                                 break;
                             case "string":
                                 if (this.m_cscPluginVariables.ContainsKey(cpvVariable.Name) == false) {
-                                    this.m_cscPluginVariables.Add(new CustomProperty(strVariableName, strCategoryName, strClassName, CPluginVariable.Decode(cpvVariable.Value), typeof(String), false, true));
+                                    this.m_cscPluginVariables.Add(new CustomProperty(strVariableName, strCategoryName, strClassName, CPluginVariable.Decode(cpvVariable.Value), typeof(String), blVariableReadOnly, true));
                                 }
                                 else {
 
@@ -504,7 +477,7 @@ table.nostyle td,table.nostyle th,table.nostyle tr.even td,table.nostyle tr:hove
                                 break;
                             case "multiline":
                                 if (this.m_cscPluginVariables.ContainsKey(cpvVariable.Name) == false) {
-                                    CustomProperty cptNewProperty = new CustomProperty(strVariableName, strCategoryName, strClassName, CPluginVariable.Decode(cpvVariable.Value), typeof(String), false, true);
+                                    CustomProperty cptNewProperty = new CustomProperty(strVariableName, strCategoryName, strClassName, CPluginVariable.Decode(cpvVariable.Value), typeof(String), blVariableReadOnly, true);
 
                                     cptNewProperty.Attributes = new AttributeCollection( new EditorAttribute(typeof(System.ComponentModel.Design.MultilineStringEditor), typeof(System.Drawing.Design.UITypeEditor)), new TypeConverterAttribute(typeof(System.ComponentModel.Design.MultilineStringEditor)) );
                                     this.m_cscPluginVariables.Add(cptNewProperty);
@@ -515,7 +488,7 @@ table.nostyle td,table.nostyle th,table.nostyle tr.even td,table.nostyle tr:hove
                                 break;
                             case "stringarray":
                                 if (this.m_cscPluginVariables.ContainsKey(cpvVariable.Name) == false) {
-                                    this.m_cscPluginVariables.Add(new CustomProperty(strVariableName, strCategoryName, strClassName, CPluginVariable.DecodeStringArray(cpvVariable.Value), typeof(string[]), false, true));
+                                    this.m_cscPluginVariables.Add(new CustomProperty(strVariableName, strCategoryName, strClassName, CPluginVariable.DecodeStringArray(cpvVariable.Value), typeof(string[]), blVariableReadOnly, true));
 
                                     //this.m_cscPluginVariables.Add(new CustomProperty(cpvVariable.Name, strPluginName, strClassName, "Alaska", typeof(StatesList), false, true));
                                 }
@@ -735,7 +708,7 @@ table.nostyle td,table.nostyle th,table.nostyle tr.even td,table.nostyle tr:hove
         }
 
         private void lnkMorePlugins_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
-            System.Diagnostics.Process.Start("http://phogue.net/procon/moreplugins.php");
+            System.Diagnostics.Process.Start("https://forum.myrcon.com/forumdisplay.php?13-Plugins");
         }
 
         private void uscPluginPanel_Resize(object sender, EventArgs e) {

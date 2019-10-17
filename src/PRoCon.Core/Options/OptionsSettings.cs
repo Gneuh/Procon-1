@@ -20,6 +20,7 @@ namespace PRoCon.Core.Options {
         public event OptionsEnabledHandler ChatLoggingChanged;
         public event OptionsEnabledHandler AutoCheckDownloadUpdatesChanged;
         public event OptionsEnabledHandler AutoApplyUpdatesChanged;
+        public event OptionsEnabledHandler AutoCheckGameConfigsForUpdatesChanged;
         public event OptionsEnabledHandler ShowTrayIconChanged;
         public event OptionsEnabledHandler CloseToTrayChanged;
         public event OptionsEnabledHandler MinimizeToTrayChanged;
@@ -30,13 +31,20 @@ namespace PRoCon.Core.Options {
 
         public event OptionsEnabledHandler AdminMoveMessageChanged;
         public event OptionsEnabledHandler ChatDisplayAdminNameChanged;
+        public event OptionsEnabledHandler EnableAdminReasonChanged;
 
         public event OptionsEnabledHandler LayerHideLocalPluginsChanged;
         public event OptionsEnabledHandler LayerHideLocalAccountsChanged;
 
         public event OptionsEnabledHandler ShowRoundTimerConstantlyChanged;
+        public event OptionsEnabledHandler ShowCfmMsgRoundRestartNextChanged;
+        public event OptionsEnabledHandler ShowDICESpecialOptionsChanged;
 
         public event OptionsEnabledHandler AllowAnonymousUsageDataChanged;
+
+        public event OptionsEnabledHandler UsePluginOldStyleLoadChanged;
+
+        public event OptionsEnabledHandler EnablePluginDebuggingChanged;
 
         private bool m_isConsoleLoggingEnabled;
         public bool ConsoleLogging {
@@ -48,7 +56,7 @@ namespace PRoCon.Core.Options {
                 this.m_praApplication.SaveMainConfig();
 
                 if (this.ConsoleLoggingChanged != null) {
-                    FrostbiteConnection.RaiseEvent(this.ConsoleLoggingChanged.GetInvocationList(), value);
+                    this.ConsoleLoggingChanged(value);
                 }
             }
         }
@@ -63,7 +71,7 @@ namespace PRoCon.Core.Options {
                 this.m_praApplication.SaveMainConfig();
 
                 if (this.EventsLoggingChanged != null) {
-                    FrostbiteConnection.RaiseEvent(this.EventsLoggingChanged.GetInvocationList(), value);
+                    this.EventsLoggingChanged(value);
                 }
             }
         }
@@ -78,7 +86,7 @@ namespace PRoCon.Core.Options {
                 this.m_praApplication.SaveMainConfig();
 
                 if (this.PluginsLoggingChanged != null) {
-                    FrostbiteConnection.RaiseEvent(this.PluginsLoggingChanged.GetInvocationList(), value);
+                    this.PluginsLoggingChanged(value);
                 }
             }
         }
@@ -93,7 +101,7 @@ namespace PRoCon.Core.Options {
                 this.m_praApplication.SaveMainConfig();
 
                 if (this.ChatLoggingChanged != null) {
-                    FrostbiteConnection.RaiseEvent(this.ChatLoggingChanged.GetInvocationList(), value);
+                    this.ChatLoggingChanged(value);
                 }
             }
         }
@@ -114,7 +122,7 @@ namespace PRoCon.Core.Options {
                 this.m_praApplication.SaveMainConfig();
 
                 if (this.AutoCheckDownloadUpdatesChanged != null) {
-                    FrostbiteConnection.RaiseEvent(this.AutoCheckDownloadUpdatesChanged.GetInvocationList(), value);
+                    this.AutoCheckDownloadUpdatesChanged(value);
                 }
             }
         }
@@ -129,7 +137,29 @@ namespace PRoCon.Core.Options {
                 this.m_praApplication.SaveMainConfig();
 
                 if (this.AutoApplyUpdatesChanged != null) {
-                    FrostbiteConnection.RaiseEvent(this.AutoApplyUpdatesChanged.GetInvocationList(), value);
+                    this.AutoApplyUpdatesChanged(value);
+                }
+            }
+        }
+
+        private bool m_isAutoCheckGameConfigsForUpdatesEnabled;
+        public bool AutoCheckGameConfigsForUpdates
+        {
+            get {
+                return this.m_isAutoCheckGameConfigsForUpdatesEnabled;
+            }
+            set {
+                if (this.m_praApplication.BlockUpdateChecks == true) {
+                    this.m_isAutoCheckGameConfigsForUpdatesEnabled = false;
+                }
+                else {
+                    this.m_isAutoCheckGameConfigsForUpdatesEnabled = value;
+                }
+
+                this.m_praApplication.SaveMainConfig();
+
+                if (this.AutoCheckDownloadUpdatesChanged != null) {
+                    this.AutoCheckGameConfigsForUpdatesChanged(value);
                 }
             }
         }
@@ -144,7 +174,7 @@ namespace PRoCon.Core.Options {
                 this.m_praApplication.SaveMainConfig();
 
                 if (this.ShowTrayIconChanged != null) {
-                    FrostbiteConnection.RaiseEvent(this.ShowTrayIconChanged.GetInvocationList(), value);
+                    this.ShowTrayIconChanged(value);
                 }
             }
         }
@@ -159,7 +189,7 @@ namespace PRoCon.Core.Options {
                 this.m_praApplication.SaveMainConfig();
 
                 if (this.CloseToTrayChanged != null) {
-                    FrostbiteConnection.RaiseEvent(this.CloseToTrayChanged.GetInvocationList(), value);
+                    this.CloseToTrayChanged(value);
                 }
             }
         }
@@ -174,7 +204,7 @@ namespace PRoCon.Core.Options {
                 this.m_praApplication.SaveMainConfig();
 
                 if (this.MinimizeToTrayChanged != null) {
-                    FrostbiteConnection.RaiseEvent(this.MinimizeToTrayChanged.GetInvocationList(), value);
+                    this.MinimizeToTrayChanged(value);
                 }
             }
         }
@@ -189,7 +219,7 @@ namespace PRoCon.Core.Options {
                 this.m_praApplication.SaveMainConfig();
 
                 if (this.RunPluginsInTrustedSandboxChanged != null) {
-                    FrostbiteConnection.RaiseEvent(this.RunPluginsInTrustedSandboxChanged.GetInvocationList(), value);
+                    this.RunPluginsInTrustedSandboxChanged(value);
                 }
             }
         }
@@ -204,7 +234,7 @@ namespace PRoCon.Core.Options {
                 this.m_praApplication.SaveMainConfig();
 
                 if (this.AdminMoveMessageChanged != null) {
-                    FrostbiteConnection.RaiseEvent(this.AdminMoveMessageChanged.GetInvocationList(), value);
+                    this.AdminMoveMessageChanged(value);
                 }
             }
         }
@@ -220,11 +250,28 @@ namespace PRoCon.Core.Options {
                 this.m_praApplication.SaveMainConfig();
 
                 if (this.ChatDisplayAdminNameChanged != null) {
-                    FrostbiteConnection.RaiseEvent(this.ChatDisplayAdminNameChanged.GetInvocationList(), value);
+                    this.ChatDisplayAdminNameChanged(value);
                 }
             }
         }
-        
+
+        // EnableAdminReason
+        private bool m_isEnableAdminReasonEnabled = true;
+        public bool EnableAdminReason
+        {
+            get {
+                return this.m_isEnableAdminReasonEnabled;
+            }
+            set {
+                this.m_isEnableAdminReasonEnabled = value;
+                this.m_praApplication.SaveMainConfig();
+
+                if (this.EnableAdminReasonChanged != null) {
+                    this.EnableAdminReasonChanged(value);
+                }
+            }
+        }
+
         private bool m_isLayerHideLocalPluginsEnabled = true;
         public bool LayerHideLocalPlugins {
             get {
@@ -235,7 +282,7 @@ namespace PRoCon.Core.Options {
                 this.m_praApplication.SaveMainConfig();
 
                 if (this.LayerHideLocalPluginsChanged != null) {
-                    FrostbiteConnection.RaiseEvent(this.LayerHideLocalPluginsChanged.GetInvocationList(), value);
+                    this.LayerHideLocalPluginsChanged(value);
                 }
             }
         }
@@ -250,7 +297,7 @@ namespace PRoCon.Core.Options {
                 this.m_praApplication.SaveMainConfig();
 
                 if (this.LayerHideLocalAccountsChanged != null) {
-                    FrostbiteConnection.RaiseEvent(this.LayerHideLocalAccountsChanged.GetInvocationList(), value);
+                    this.LayerHideLocalAccountsChanged(value);
                 }
             }
         }
@@ -270,7 +317,47 @@ namespace PRoCon.Core.Options {
 
                 if (this.ShowRoundTimerConstantlyChanged != null)
                 {
-                    FrostbiteConnection.RaiseEvent(this.ShowRoundTimerConstantlyChanged.GetInvocationList(), value);
+                    this.ShowRoundTimerConstantlyChanged(value);
+                }
+            }
+        }
+
+        // ShowCfmMsgRoundRestartNext
+        private bool m_isShowCfmMsgRoundRestartNextEnabled;
+        public bool ShowCfmMsgRoundRestartNext
+        {
+            get
+            {
+                return this.m_isShowCfmMsgRoundRestartNextEnabled;
+            }
+            set
+            {
+                this.m_isShowCfmMsgRoundRestartNextEnabled = value;
+                this.m_praApplication.SaveMainConfig();
+
+                if (this.ShowCfmMsgRoundRestartNextChanged != null)
+                {
+                    this.ShowCfmMsgRoundRestartNextChanged(value);
+                }
+            }
+        }
+        
+        // ShowDICESpecialOptions
+        private bool m_isShowDICESpecialOptionsEnabled;
+        public bool ShowDICESpecialOptions
+        {
+            get
+            {
+                return this.m_isShowDICESpecialOptionsEnabled;
+            }
+            set
+            {
+                this.m_isShowDICESpecialOptionsEnabled = value;
+                this.m_praApplication.SaveMainConfig();
+
+                if (this.ShowDICESpecialOptionsChanged != null)
+                {
+                    this.ShowDICESpecialOptionsChanged(value);
                 }
             }
         }
@@ -285,7 +372,7 @@ namespace PRoCon.Core.Options {
                 this.m_praApplication.SaveMainConfig();
 
                 if (this.AllowAllODBCConnectionsChanged != null) {
-                    FrostbiteConnection.RaiseEvent(this.AllowAllODBCConnectionsChanged.GetInvocationList(), value);
+                    this.AllowAllODBCConnectionsChanged(value);
                 }
             }
         }
@@ -304,7 +391,7 @@ namespace PRoCon.Core.Options {
 
                 if (this.AllowAllSmtpConnectionsChanged != null)
                 {
-                    FrostbiteConnection.RaiseEvent(this.AllowAllSmtpConnectionsChanged.GetInvocationList(), value);
+                    this.AllowAllSmtpConnectionsChanged(value);
                 }
             }
         }
@@ -319,7 +406,7 @@ namespace PRoCon.Core.Options {
                 this.m_praApplication.SaveMainConfig();
 
                 if (this.AllowAnonymousUsageDataChanged != null) {
-                    FrostbiteConnection.RaiseEvent(this.AllowAnonymousUsageDataChanged.GetInvocationList(), value);
+                    this.AllowAnonymousUsageDataChanged(value);
                 }
             }
         }
@@ -329,8 +416,87 @@ namespace PRoCon.Core.Options {
             private set;
         }
 
+        public NotificationList<StatsLinkNameUrl> StatsLinkNameUrl {
+            get;
+            private set;
+        }
 
-        public PermissionSet PluginPermissions {
+        public int StatsLinksMaxNum {
+            get;
+            set;
+        }
+
+        private int m_PluginMaxRuntime_s;
+        public int PluginMaxRuntime_s {
+            get {
+                return this.m_PluginMaxRuntime_s;
+            }
+            set {
+                if (value <= 0) { value = 10; }
+                if (value >= 60) { value = 59; }
+                this.m_PluginMaxRuntime_s = value;
+                this.m_praApplication.SaveMainConfig();
+            }
+        }
+
+        private int m_PluginMaxRuntime_m;
+        public int PluginMaxRuntime_m {
+            get {
+                return this.m_PluginMaxRuntime_m;
+            }
+            set {
+                if (value < 0) { value = 0; }
+                if (value >= 60) { value = 59; }
+                this.m_PluginMaxRuntime_m = value;
+                this.m_praApplication.SaveMainConfig();
+            }
+        }
+
+        private bool m_isPluginMaxRuntimeLocked;
+        public bool PluginMaxRuntimeLocked {
+            get {
+                return m_isPluginMaxRuntimeLocked;
+            }
+            set {
+                this.m_isPluginMaxRuntimeLocked = value;
+            }
+        }
+
+        private bool m_isUsePluginOldStyleLoadEnabled;
+        public bool UsePluginOldStyleLoad {
+            get {
+                return this.m_isUsePluginOldStyleLoadEnabled;
+            }
+            set {
+                this.m_isUsePluginOldStyleLoadEnabled = value;
+                this.m_praApplication.SaveMainConfig();
+
+                if (this.UsePluginOldStyleLoadChanged != null) {
+                    this.UsePluginOldStyleLoadChanged(value);
+                }
+            }
+        }
+
+        private bool m_isPluginDebuggingEnabled;
+        public bool EnablePluginDebugging {
+            get
+            {
+                return this.m_isPluginDebuggingEnabled;
+            }
+            set
+            {
+                this.m_isPluginDebuggingEnabled = value;
+                this.m_praApplication.SaveMainConfig();
+
+                if (this.EnablePluginDebuggingChanged != null)
+                {
+                    this.EnablePluginDebuggingChanged(value);
+                }
+            }
+        }
+
+        public PermissionSet PluginPermissions
+        {
 
             get {
 
@@ -352,8 +518,11 @@ namespace PRoCon.Core.Options {
                         psetPluginPermissions.AddPermission(new UIPermission(PermissionState.Unrestricted));
                         psetPluginPermissions.AddPermission(new System.Net.DnsPermission(PermissionState.Unrestricted));
 
+                        // TO DO: rename to something like "Allow all database connections"
                         if (this.AllowAllODBCConnections == true) {
                             psetPluginPermissions.AddPermission(new System.Data.Odbc.OdbcPermission(PermissionState.Unrestricted));
+                            // Also allow all MySQL connections when ODBC is enabled, allowing the .NET MySQL connector to work with sandbox enabled
+                            psetPluginPermissions.AddPermission(new MySql.Data.MySqlClient.MySqlClientPermission(PermissionState.Unrestricted));
                         }
 
                         if (this.AllowAllSmtpConnections == true)
@@ -372,17 +541,19 @@ namespace PRoCon.Core.Options {
 
                         try {
                             Regex rxHostRegex;
+                            string strSocketHost="*";
                             if (trusted.HostWebsite == "*" || trusted.HostWebsite == "*.*.*.*") {
                                 rxHostRegex = new Regex(@".*/.*");
                             } else {
                                 rxHostRegex = new Regex(trusted.HostWebsite.Replace(".", @"\.") + ".*", RegexOptions.IgnoreCase);
+                                strSocketHost = Regex.Replace(trusted.HostWebsite, "^(.*:\\/\\/)", "", RegexOptions.IgnoreCase);
                             }
                             //psetPluginPermissions.AddPermission(new System.Net.WebPermission(System.Net.NetworkAccess.Connect, new Regex(trusted.HostWebsite.Replace(".", @"\.") + ".*", RegexOptions.IgnoreCase)));
                             psetPluginPermissions.AddPermission(new System.Net.WebPermission(System.Net.NetworkAccess.Connect, rxHostRegex));
                             if (trusted.Port == (UInt16)0) {
-                                psetPluginPermissions.AddPermission(new System.Net.SocketPermission(System.Net.NetworkAccess.Connect, System.Net.TransportType.All, trusted.HostWebsite, System.Net.SocketPermission.AllPorts));
+                                psetPluginPermissions.AddPermission(new System.Net.SocketPermission(System.Net.NetworkAccess.Connect, System.Net.TransportType.All, strSocketHost, System.Net.SocketPermission.AllPorts));
                             } else {
-                                psetPluginPermissions.AddPermission(new System.Net.SocketPermission(System.Net.NetworkAccess.Connect, System.Net.TransportType.All, trusted.HostWebsite, trusted.Port));
+                                psetPluginPermissions.AddPermission(new System.Net.SocketPermission(System.Net.NetworkAccess.Connect, System.Net.TransportType.All, strSocketHost, trusted.Port));
                             }
                         }
                         catch (Exception) {
@@ -401,14 +572,30 @@ namespace PRoCon.Core.Options {
         public OptionsSettings(PRoConApplication praApplication) {
             this.m_praApplication = praApplication;
             this.AutoCheckDownloadUpdates = true;
+            this.AutoCheckGameConfigsForUpdates = true;
             this.AllowAnonymousUsageData = true;
+
+            this.EnableAdminReason = false;
 
             this.LayerHideLocalAccounts = true;
             this.LayerHideLocalPlugins = true;
 
+            this.ShowCfmMsgRoundRestartNext = true;
+            this.ShowDICESpecialOptions = false;
+
             this.ShowTrayIcon = true;
 
             this.TrustedHostsWebsitesPorts = new NotificationList<TrustedHostWebsitePort>();
+
+            this.StatsLinksMaxNum = 4;
+            this.StatsLinkNameUrl = new NotificationList<StatsLinkNameUrl>();
+            this.StatsLinkNameUrl.Add(new StatsLinkNameUrl("Metabans", "http://metabans.com/search/%player_name%"));
+
+            this.PluginMaxRuntime_s = 59;
+            this.PluginMaxRuntime_m = 0;
+
+            this.UsePluginOldStyleLoad = false;
+            this.EnablePluginDebugging = false;
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace PRoCon {
+﻿namespace PRoCon.Controls {
     partial class uscPlayerListPanel {
         /// <summary> 
         /// Required designer variable.
@@ -94,6 +94,7 @@
             System.Windows.Forms.ListViewGroup listViewGroup68 = new System.Windows.Forms.ListViewGroup("Team: 16", System.Windows.Forms.HorizontalAlignment.Left);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(uscPlayerListPanel));
             this.spltListAdditionalInfo = new System.Windows.Forms.SplitContainer();
+            this.cboEndRound = new System.Windows.Forms.ComboBox();
             this.spltFourSplit = new System.Windows.Forms.SplitContainer();
             this.spltTwoSplit = new System.Windows.Forms.SplitContainer();
             this.lsvTeamOnePlayers = new PRoCon.Controls.ControlsEx.ListViewNF();
@@ -159,9 +160,9 @@
             this.lblGUID = new System.Windows.Forms.Label();
             this.tbcCourtMartial = new System.Windows.Forms.TabControl();
             this.tabCourtMartialBFBC = new System.Windows.Forms.TabPage();
-            this.kbpBfbcPunishPanel = new PRoCon.uscPlayerPunishPanel();
+            this.kbpBfbcPunishPanel = new uscPlayerPunishPanel();
             this.tabCourtMartialPunkbuster = new System.Windows.Forms.TabPage();
-            this.kbpPunkbusterPunishPanel = new PRoCon.uscPlayerPunishPanel();
+            this.kbpPunkbusterPunishPanel = new uscPlayerPunishPanel();
             this.tmrKillDeathHighlight = new System.Windows.Forms.Timer(this.components);
             this.ctxPlayerOptions = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.moveToSquadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -178,9 +179,26 @@
             this.voiceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.adminToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.reservedSlotToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.spectatorListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
             this.statsLookupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.statsLookupToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.statsLookupToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.statsLookupToolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
+            this.statsLookupToolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
             this.punkBusterScreenshotToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.colRank1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colRank2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colRank3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colRank4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colTime1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colTime2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colTime3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colTime4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colType1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colType2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colType3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colType4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.spltListAdditionalInfo.Panel1.SuspendLayout();
             this.spltListAdditionalInfo.Panel2.SuspendLayout();
             this.spltListAdditionalInfo.SuspendLayout();
@@ -215,6 +233,7 @@
             // 
             // spltListAdditionalInfo.Panel1
             // 
+            this.spltListAdditionalInfo.Panel1.Controls.Add(this.cboEndRound);
             this.spltListAdditionalInfo.Panel1.Controls.Add(this.spltFourSplit);
             this.spltListAdditionalInfo.Panel1.Controls.Add(this.btnSplitTeams);
             this.spltListAdditionalInfo.Panel1.Controls.Add(this.btnCloseAdditionalInfo);
@@ -226,6 +245,25 @@
             this.spltListAdditionalInfo.Size = new System.Drawing.Size(896, 708);
             this.spltListAdditionalInfo.SplitterDistance = 509;
             this.spltListAdditionalInfo.TabIndex = 20;
+            // 
+            // cboEndRound
+            // 
+            this.cboEndRound.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.cboEndRound.CausesValidation = false;
+            this.cboEndRound.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboEndRound.FormattingEnabled = true;
+            this.cboEndRound.Items.AddRange(new object[] {
+            "Select winning team to end round:",
+            "Team 1",
+            "Team 2",
+            "Team 3",
+            "Team 4"});
+            this.cboEndRound.Location = new System.Drawing.Point(332, 484);
+            this.cboEndRound.MaxDropDownItems = 5;
+            this.cboEndRound.Name = "cboEndRound";
+            this.cboEndRound.Size = new System.Drawing.Size(300, 23);
+            this.cboEndRound.TabIndex = 33;
+            this.cboEndRound.SelectedIndexChanged += new System.EventHandler(this.cboEndRound_SelectedIndexChanged);
             // 
             // spltFourSplit
             // 
@@ -279,7 +317,10 @@
             this.colKills1,
             this.colDeaths1,
             this.colKdr1,
-            this.colPing1});
+            this.colPing1,
+            this.colRank1,
+            this.colTime1,
+            this.colType1});
             this.lsvTeamOnePlayers.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lsvTeamOnePlayers.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.lsvTeamOnePlayers.FullRowSelect = true;
@@ -350,6 +391,7 @@
             this.lsvTeamOnePlayers.DragDrop += new System.Windows.Forms.DragEventHandler(this.lsvPlayers_DragDrop);
             this.lsvTeamOnePlayers.DragEnter += new System.Windows.Forms.DragEventHandler(this.lsvPlayers_DragEnter);
             this.lsvTeamOnePlayers.DragOver += new System.Windows.Forms.DragEventHandler(this.lsvPlayers_DragOver);
+            this.lsvTeamOnePlayers.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.lsvPlayers_MouseDoubleClick);
             this.lsvTeamOnePlayers.MouseDown += new System.Windows.Forms.MouseEventHandler(this.lsvPlayers_MouseDown);
             // 
             // colSlotID1
@@ -393,6 +435,18 @@
             // 
             this.colPing1.Text = "Ping";
             // 
+            // colRank1
+            // 
+            this.colRank1.Text = "Rank";
+            // 
+            // colTime1
+            // 
+            this.colTime1.Text = "PlayTime";
+            // 
+            // colType1
+            // 
+            this.colType1.Text = "Type";
+            // 
             // lsvTeamTwoPlayers
             // 
             this.lsvTeamTwoPlayers.AllowDrop = true;
@@ -406,7 +460,10 @@
             this.colKills2,
             this.colDeaths2,
             this.colKdr2,
-            this.colPing2});
+            this.colPing2,
+            this.colRank2,
+            this.colTime2,
+            this.colType2});
             this.lsvTeamTwoPlayers.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lsvTeamTwoPlayers.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.lsvTeamTwoPlayers.FullRowSelect = true;
@@ -477,6 +534,7 @@
             this.lsvTeamTwoPlayers.DragDrop += new System.Windows.Forms.DragEventHandler(this.lsvPlayers_DragDrop);
             this.lsvTeamTwoPlayers.DragEnter += new System.Windows.Forms.DragEventHandler(this.lsvPlayers_DragEnter);
             this.lsvTeamTwoPlayers.DragOver += new System.Windows.Forms.DragEventHandler(this.lsvPlayers_DragOver);
+            this.lsvTeamTwoPlayers.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.lsvPlayers_MouseDoubleClick);
             this.lsvTeamTwoPlayers.MouseDown += new System.Windows.Forms.MouseEventHandler(this.lsvPlayers_MouseDown);
             // 
             // colSlotID2
@@ -520,6 +578,18 @@
             // 
             this.colPing2.Text = "Ping";
             // 
+            // colRank2
+            // 
+            this.colRank2.Text = "Rank";
+            // 
+            // colTime2
+            // 
+            this.colTime2.Text = "PlayTime";
+            // 
+            // colType2
+            // 
+            this.colType2.Text = "Type";
+            // 
             // spltBottomTwoSplit
             // 
             this.spltBottomTwoSplit.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -551,7 +621,10 @@
             this.colKills3,
             this.colDeaths3,
             this.colKdr3,
-            this.colPing3});
+            this.colPing3,
+            this.colRank3,
+            this.colTime3,
+            this.colType3});
             this.lsvTeamThreePlayers.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lsvTeamThreePlayers.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.lsvTeamThreePlayers.FullRowSelect = true;
@@ -622,6 +695,7 @@
             this.lsvTeamThreePlayers.DragDrop += new System.Windows.Forms.DragEventHandler(this.lsvPlayers_DragDrop);
             this.lsvTeamThreePlayers.DragEnter += new System.Windows.Forms.DragEventHandler(this.lsvPlayers_DragEnter);
             this.lsvTeamThreePlayers.DragOver += new System.Windows.Forms.DragEventHandler(this.lsvPlayers_DragOver);
+            this.lsvTeamThreePlayers.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.lsvPlayers_MouseDoubleClick);
             this.lsvTeamThreePlayers.MouseDown += new System.Windows.Forms.MouseEventHandler(this.lsvPlayers_MouseDown);
             // 
             // colSlotID3
@@ -665,6 +739,17 @@
             // 
             this.colPing3.Text = "Ping";
             // 
+            // colRank3
+            // 
+            this.colRank3.Text = "Rank";
+            // 
+            // colTime3
+            // 
+            this.colTime3.Text = "PlayTime";
+            //
+            // colType3
+            this.colType3.Text = "Type";
+            // 
             // lsvTeamFourPlayers
             // 
             this.lsvTeamFourPlayers.AllowDrop = true;
@@ -678,7 +763,10 @@
             this.colKills4,
             this.colDeaths4,
             this.colKdr4,
-            this.colPing4});
+            this.colPing4,
+            this.colRank4,
+            this.colTime4,
+            this.colType4});
             this.lsvTeamFourPlayers.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lsvTeamFourPlayers.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.lsvTeamFourPlayers.FullRowSelect = true;
@@ -749,6 +837,7 @@
             this.lsvTeamFourPlayers.DragDrop += new System.Windows.Forms.DragEventHandler(this.lsvPlayers_DragDrop);
             this.lsvTeamFourPlayers.DragEnter += new System.Windows.Forms.DragEventHandler(this.lsvPlayers_DragEnter);
             this.lsvTeamFourPlayers.DragOver += new System.Windows.Forms.DragEventHandler(this.lsvPlayers_DragOver);
+            this.lsvTeamFourPlayers.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.lsvPlayers_MouseDoubleClick);
             this.lsvTeamFourPlayers.MouseDown += new System.Windows.Forms.MouseEventHandler(this.lsvPlayers_MouseDown);
             // 
             // colSlotID4
@@ -791,6 +880,18 @@
             // colPing4
             // 
             this.colPing4.Text = "Ping";
+            // 
+            // colRank4
+            // 
+            this.colRank4.Text = "Rank";
+            // 
+            // colTime4
+            // 
+            this.colTime4.Text = "PlayTime";
+            // 
+            // colType4
+            // 
+            this.colType4.Text = "Type";
             // 
             // btnSplitTeams
             // 
@@ -1052,13 +1153,14 @@
             this.moveToSquadToolStripMenuItem,
             this.textChatModerationToolStripMenuItem,
             this.reservedSlotToolStripMenuItem,
+            this.spectatorListToolStripMenuItem,
             this.toolStripMenuItem2,
             this.statsLookupToolStripMenuItem,
             this.punkBusterScreenshotToolStripMenuItem});
             this.ctxPlayerOptions.Name = "ctxPlayerOptions";
             this.ctxPlayerOptions.ShowCheckMargin = true;
             this.ctxPlayerOptions.ShowImageMargin = false;
-            this.ctxPlayerOptions.Size = new System.Drawing.Size(196, 142);
+            this.ctxPlayerOptions.Size = new System.Drawing.Size(196, 120);
             // 
             // moveToSquadToolStripMenuItem
             // 
@@ -1161,6 +1263,13 @@
             this.reservedSlotToolStripMenuItem.Text = "Reserved Slot";
             this.reservedSlotToolStripMenuItem.Click += new System.EventHandler(this.reservedSlotToolStripMenuItem_Click);
             // 
+            // spectatorListToolStripMenuItem
+            // 
+            this.spectatorListToolStripMenuItem.Name = "spectatorListToolStripMenuItem";
+            this.spectatorListToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
+            this.spectatorListToolStripMenuItem.Text = "Spectator list";
+            this.spectatorListToolStripMenuItem.Click += new System.EventHandler(this.spectatorListToolStripMenuItem_Click);
+            // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
@@ -1168,17 +1277,46 @@
             // 
             // statsLookupToolStripMenuItem
             // 
+            this.statsLookupToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.statsLookupToolStripMenuItem1,
+            this.statsLookupToolStripMenuItem2,
+            this.statsLookupToolStripMenuItem3,
+            this.statsLookupToolStripMenuItem4});
             this.statsLookupToolStripMenuItem.Name = "statsLookupToolStripMenuItem";
             this.statsLookupToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
             this.statsLookupToolStripMenuItem.Text = "Stats Lookup";
             this.statsLookupToolStripMenuItem.Click += new System.EventHandler(this.statsLookupToolStripMenuItem_Click);
+            // 
+            // statsLookupToolStripMenuItem1
+            // 
+            this.statsLookupToolStripMenuItem1.Name = "statsLookupToolStripMenuItem1";
+            this.statsLookupToolStripMenuItem1.Size = new System.Drawing.Size(127, 22);
+            this.statsLookupToolStripMenuItem1.Text = "Metabans";
+            // 
+            // statsLookupToolStripMenuItem2
+            // 
+            this.statsLookupToolStripMenuItem2.Name = "statsLookupToolStripMenuItem2";
+            this.statsLookupToolStripMenuItem2.Size = new System.Drawing.Size(127, 22);
+            this.statsLookupToolStripMenuItem2.Text = "Custom-2";
+            // 
+            // statsLookupToolStripMenuItem3
+            // 
+            this.statsLookupToolStripMenuItem3.Name = "statsLookupToolStripMenuItem3";
+            this.statsLookupToolStripMenuItem3.Size = new System.Drawing.Size(127, 22);
+            this.statsLookupToolStripMenuItem3.Text = "Custum-3";
+            // 
+            // statsLookupToolStripMenuItem4
+            // 
+            this.statsLookupToolStripMenuItem4.Name = "statsLookupToolStripMenuItem4";
+            this.statsLookupToolStripMenuItem4.Size = new System.Drawing.Size(127, 22);
+            this.statsLookupToolStripMenuItem4.Text = "Custom-4";
             // 
             // punkBusterScreenshotToolStripMenuItem
             // 
             this.punkBusterScreenshotToolStripMenuItem.Name = "punkBusterScreenshotToolStripMenuItem";
             this.punkBusterScreenshotToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
             this.punkBusterScreenshotToolStripMenuItem.Text = "PunkBuster Screenshot";
-            this.punkBusterScreenshotToolStripMenuItem.Click += new System.EventHandler(punkBusterScreenshotToolStripMenuItem_Click);
+            this.punkBusterScreenshotToolStripMenuItem.Click += new System.EventHandler(this.punkBusterScreenshotToolStripMenuItem_Click);
             // 
             // uscPlayerListPanel
             // 
@@ -1248,6 +1386,9 @@
         private System.Windows.Forms.ColumnHeader colDeaths2;
         private System.Windows.Forms.ColumnHeader colKdr2;
         private System.Windows.Forms.ColumnHeader colPing2;
+        private System.Windows.Forms.ColumnHeader colRank2;
+        private System.Windows.Forms.ColumnHeader colTime2;
+        private System.Windows.Forms.ColumnHeader colType2;
         private PRoCon.Controls.ControlsEx.ListViewNF lsvTeamOnePlayers;
         private System.Windows.Forms.ColumnHeader colSlotID1;
         private System.Windows.Forms.ColumnHeader colTags1;
@@ -1258,6 +1399,9 @@
         private System.Windows.Forms.ColumnHeader colDeaths1;
         private System.Windows.Forms.ColumnHeader colKdr1;
         private System.Windows.Forms.ColumnHeader colPing1;
+        private System.Windows.Forms.ColumnHeader colRank1;
+        private System.Windows.Forms.ColumnHeader colTime1;
+        private System.Windows.Forms.ColumnHeader colType1;
         private System.Windows.Forms.Button btnSplitTeams;
         private System.Windows.Forms.SplitContainer spltTwoSplit;
         private System.Windows.Forms.SplitContainer spltFourSplit;
@@ -1272,6 +1416,9 @@
         private System.Windows.Forms.ColumnHeader colDeaths3;
         private System.Windows.Forms.ColumnHeader colKdr3;
         private System.Windows.Forms.ColumnHeader colPing3;
+        private System.Windows.Forms.ColumnHeader colRank3;
+        private System.Windows.Forms.ColumnHeader colTime3;
+        private System.Windows.Forms.ColumnHeader colType3;
         private PRoCon.Controls.ControlsEx.ListViewNF lsvTeamFourPlayers;
         private System.Windows.Forms.ColumnHeader colSlotID4;
         private System.Windows.Forms.ColumnHeader colTags4;
@@ -1282,6 +1429,9 @@
         private System.Windows.Forms.ColumnHeader colDeaths4;
         private System.Windows.Forms.ColumnHeader colKdr4;
         private System.Windows.Forms.ColumnHeader colPing4;
+        private System.Windows.Forms.ColumnHeader colRank4;
+        private System.Windows.Forms.ColumnHeader colTime4;
+        private System.Windows.Forms.ColumnHeader colType4;
         private System.Windows.Forms.Timer tmrKillDeathHighlight;
         private System.Windows.Forms.ColumnHeader colKit1;
         private System.Windows.Forms.ColumnHeader colKit2;
@@ -1299,6 +1449,7 @@
         private System.Windows.Forms.ToolStripMenuItem betaToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem charlieToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem reservedSlotToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem spectatorListToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem textChatModerationToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem mutedToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem normalToolStripMenuItem;
@@ -1306,6 +1457,11 @@
         private System.Windows.Forms.ToolStripMenuItem adminToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
         private System.Windows.Forms.ToolStripMenuItem statsLookupToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem statsLookupToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem statsLookupToolStripMenuItem2;
+        private System.Windows.Forms.ToolStripMenuItem statsLookupToolStripMenuItem3;
+        private System.Windows.Forms.ToolStripMenuItem statsLookupToolStripMenuItem4;
         private System.Windows.Forms.ToolStripMenuItem punkBusterScreenshotToolStripMenuItem;
+        private System.Windows.Forms.ComboBox cboEndRound;
     }
 }

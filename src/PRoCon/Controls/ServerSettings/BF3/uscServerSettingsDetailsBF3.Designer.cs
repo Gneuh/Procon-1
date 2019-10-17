@@ -162,7 +162,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtSettingsBannerURL.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtSettingsBannerURL.Location = new System.Drawing.Point(34, 275);
-            this.txtSettingsBannerURL.MaxLength = 64;
+            this.txtSettingsBannerURL.MaxLength = 255;
             this.txtSettingsBannerURL.Name = "txtSettingsBannerURL";
             this.txtSettingsBannerURL.Size = new System.Drawing.Size(948, 23);
             this.txtSettingsBannerURL.TabIndex = 205;

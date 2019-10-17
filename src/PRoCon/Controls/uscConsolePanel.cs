@@ -20,19 +20,13 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Text;
 using System.Windows.Forms;
-using System.IO;
 using System.Text.RegularExpressions;
+using PRoCon.Core;
+using PRoCon.Core.Remote;
+using PRoCon.Forms;
 
-namespace PRoCon {
-    using Core;
-    using Core.Remote;
-    using PRoCon.Forms;
-
+namespace PRoCon.Controls {
     public partial class uscConsolePanel : UserControl {
 
         private frmMain m_frmMainWindow;
@@ -61,49 +55,6 @@ namespace PRoCon {
 
         private Regex m_regRemoveCaretCodes;
 
-        /*
-        public bool ShowConsoleDebug {
-            get {
-                return this.chkDebug.Checked;
-            }
-        }
-
-        public bool ShowConsoleEvents {
-            get {
-                return this.chkEvents.Checked;
-            }
-        }
-        */
-
-        /*
-        public List<string> SetConsoleSettings {
-            set {
-                bool blChecked = true;
-
-                if (value.Count >= 1 && bool.TryParse(value[0], out blChecked) == true) {
-                    this.chkEnableOutput.Checked = blChecked;
-                }
-
-                if (value.Count >= 2 && bool.TryParse(value[1], out blChecked) == true) {
-                    this.chkEvents.Checked = blChecked;
-                }
-
-                if (value.Count >= 3 && bool.TryParse(value[2], out blChecked) == true) {
-                    this.chkDebug.Checked = blChecked;
-                }
-
-                if (value.Count >= 4 && bool.TryParse(value[3], out blChecked) == true) {
-                    this.chkEnablePunkbusterOutput.Checked = blChecked;
-                }
-            }
-        }
-
-        public string ConsoleSettings {
-            get {
-                return String.Format("{0} {1} {2} {3}", this.chkEnableOutput.Checked, this.chkEvents.Checked, this.chkDebug.Checked, this.chkEnablePunkbusterOutput.Checked);
-            }
-        }
-        */
         public uscConsolePanel() {
             InitializeComponent();
 
@@ -113,6 +64,9 @@ namespace PRoCon {
             this.m_llPunkbusterCommandsHistory = new LinkedList<string>();
 
             this.m_regRemoveCaretCodes = new Regex(@"\^[0-9]|\^b|\^i|\^n", RegexOptions.Compiled);
+
+            this.rtbConsoleBox.Flushed += new Action<object, EventArgs>(rtbConsoleBox_Flushed);
+            this.rtbPunkbusterBox.Flushed += new Action<object, EventArgs>(rtbPunkbusterBox_Flushed);
         }
 
         private void uscConsolePanel_Load(object sender, EventArgs e) {
@@ -148,28 +102,28 @@ namespace PRoCon {
         }
 
         private void m_prcClient_GameTypeDiscovered(PRoConClient sender) {
-            this.m_prcClient.Console.WriteConsole += new PRoCon.Core.Logging.Loggable.WriteConsoleHandler(Console_WriteConsole);
-            this.m_prcClient.Console.LogEventsConnectionChanged += new PRoCon.Core.Consoles.ConnectionConsole.IsEnabledHandler(Console_LogEventsConnectionChanged);
-            this.m_prcClient.Console.DisplayConnectionChanged += new PRoCon.Core.Consoles.ConnectionConsole.IsEnabledHandler(Console_DisplayConnectionChanged);
-            this.m_prcClient.Console.DisplayPunkbusterChanged += new PRoCon.Core.Consoles.ConnectionConsole.IsEnabledHandler(Console_DisplayPunkbusterChanged);
+            this.InvokeIfRequired(() => {
+                this.m_prcClient.Console.WriteConsole += new PRoCon.Core.Logging.Loggable.WriteConsoleHandler(Console_WriteConsole);
+                this.m_prcClient.Console.LogEventsConnectionChanged += new PRoCon.Core.Consoles.ConnectionConsole.IsEnabledHandler(Console_LogEventsConnectionChanged);
+                this.m_prcClient.Console.DisplayConnectionChanged += new PRoCon.Core.Consoles.ConnectionConsole.IsEnabledHandler(Console_DisplayConnectionChanged);
+                this.m_prcClient.Console.DisplayPunkbusterChanged += new PRoCon.Core.Consoles.ConnectionConsole.IsEnabledHandler(Console_DisplayPunkbusterChanged);
 
-            this.m_prcClient.Console.LogDebugDetailsChanged += new PRoCon.Core.Consoles.ConnectionConsole.IsEnabledHandler(Console_LogDebugDetailsChanged);
+                this.m_prcClient.Console.LogDebugDetailsChanged += new PRoCon.Core.Consoles.ConnectionConsole.IsEnabledHandler(Console_LogDebugDetailsChanged);
 
-            this.m_prcClient.PunkbusterConsole.WriteConsole += new PRoCon.Core.Logging.Loggable.WriteConsoleHandler(PunkbusterConsole_WriteConsole);
+                this.m_prcClient.PunkbusterConsole.WriteConsole += new PRoCon.Core.Logging.Loggable.WriteConsoleHandler(PunkbusterConsole_WriteConsole);
 
-            this.m_prcClient.Console.ConScrollingChanged += new PRoCon.Core.Consoles.ConnectionConsole.IsEnabledHandler(Console_ConEnableScrollingChanged);
-            this.m_prcClient.Console.PBScrollingChanged += new PRoCon.Core.Consoles.ConnectionConsole.IsEnabledHandler(Console_PBEnableScrollingChanged);
+                this.m_prcClient.Console.ConScrollingChanged += new PRoCon.Core.Consoles.ConnectionConsole.IsEnabledHandler(Console_ConEnableScrollingChanged);
+                this.m_prcClient.Console.PBScrollingChanged += new PRoCon.Core.Consoles.ConnectionConsole.IsEnabledHandler(Console_PBEnableScrollingChanged);
 
-            this.m_prcClient.Game.Help += new FrostbiteClient.HelpHandler(Game_Help);
+                this.m_prcClient.Game.Help += new FrostbiteClient.HelpHandler(Game_Help);
+            });
         }
 
         void Game_Help(FrostbiteClient sender, List<string> lstCommands) {
-            this.txtConsoleCommand.AutoCompleteCustomSource.Clear();
-            this.txtConsoleCommand.AutoCompleteCustomSource.AddRange(lstCommands.ToArray());
-        }
-
-        private void RefreshSentRecvCounters() {
-            //this.lblOutputKiBs.Text = String.Format("D: {0:0.00} KiB's, U: {1:0.00} KiB's", (float)this.m_prcClient.Console.BytesRecieved / 1024F, (float)this.m_prcClient.Console.BytesSent / 1024F);
+            this.InvokeIfRequired(() => {
+                this.txtConsoleCommand.AutoCompleteCustomSource.Clear();
+                this.txtConsoleCommand.AutoCompleteCustomSource.AddRange(lstCommands.ToArray());
+            });
         }
 
         public void SetColour(string strVariable, string strValue) {
@@ -209,125 +163,36 @@ namespace PRoCon {
         }
 
         private void Console_WriteConsole(DateTime dtLoggedTime, string strLoggedText) {
-
-            this.RefreshSentRecvCounters();
-
             if (this.chkEnableOutput.Checked == true) {
-
-                string strFormattedConsoleOutput = String.Format("[{0}] {1}{2}", dtLoggedTime.ToString("HH:mm:ss"), strLoggedText, Environment.NewLine);
-
-                this.rtbConsoleBox.AppendText(strFormattedConsoleOutput);
-                //this.rtbConsoleBox.AppendText(String.Format("[{0}] {1}\n", DateTime.Now.ToString("HH:mm:ss"), strConsoleOutput));
-
-                // We only pass the length of the original text to exclude the time from being formatted.
-                //this.ColourizeConsoleOutput(strConsoleOutput.Length);
-
-                if (this.rtbConsoleBox.Focused == false) {
-                    if (this.m_prcClient.Console.ConScrolling == true)
-                    {
-                        this.rtbConsoleBox.ScrollToCaret();
-                    }
-                }
-
-                this.rtbConsoleBox.TrimLines(this.m_prcClient.Variables.GetVariable<int>("MAX_CONSOLE_LINES", 75));
-                /*
-                this.rtbConsoleBox.ReadOnly = false;
-
-                int iMaxConsoleLines = this.m_prcClient.Variables.GetVariable<int>("MAX_CONSOLE_LINES", 75);
-                //int iConsoleBoxLines = this.rtbConsoleBox.Lines.Length;
-                int iConsoleBoxLines = this.rtbConsoleBox.LineLength;
-
-                if ((iConsoleBoxLines > iMaxConsoleLines && this.rtbConsoleBox.Focused == false) || iConsoleBoxLines > 3000) {
-                    
-                    for (int i = 0; i < iConsoleBoxLines - iMaxConsoleLines; i++) {
-
-                        //while (this.rtbPunkbusterBox.Lines.Length > iMaxPunkbusterLines) {
-
-                        this.rtbConsoleBox.Select(0, this.rtbConsoleBox.PopFirstLine() + 1);
-
-                        // this.rtbConsoleBox.Select(0, this.rtbConsoleBox.Lines[0].Length + 1);
-                        this.rtbConsoleBox.SelectedText = String.Empty;
-                    }
-                }
-                this.rtbConsoleBox.ReadOnly = true;
-                */
+                this.rtbConsoleBox.AppendText(String.Format("[{0}] {1}{2}", dtLoggedTime.ToString("HH:mm:ss"), strLoggedText, "\n"));
             }
+        }
+
+        private void rtbConsoleBox_Flushed(object sender, EventArgs args) {
+            if (this.rtbConsoleBox.Focused == false) {
+                if (this.m_prcClient.Console.ConScrolling == true) {
+                    this.rtbConsoleBox.ScrollToCaret();
+                }
+            }
+
+            this.rtbConsoleBox.TrimLines(this.m_prcClient.Variables.GetVariable<int>("MAX_CONSOLE_LINES", 75));
         }
 
         private void PunkbusterConsole_WriteConsole(DateTime dtLoggedTime, string strLoggedText) {
-            
             if (this.chkEnablePunkbusterOutput.Checked == true) {
-
-                string strFormattedConsoleOutput = String.Format("{0}{1}", strLoggedText, Environment.NewLine);
-
-                this.rtbPunkbusterBox.AppendText(strFormattedConsoleOutput);
-                //this.rtbConsoleBox.AppendText(String.Format("[{0}] {1}\n", DateTime.Now.ToString("HH:mm:ss"), strConsoleOutput));
-
-                // We only pass the length of the original text to exclude the time from being formatted.
-                //this.ColourizeConsoleOutput(strConsoleOutput.Length);
-
-                if (this.rtbPunkbusterBox.Focused == false) {
-                    if (this.m_prcClient.Console.PBScrolling == true) {
-                        this.rtbPunkbusterBox.ScrollToCaret();
-                    }
-                }
-
-                this.rtbPunkbusterBox.TrimLines(this.m_prcClient.Variables.GetVariable<int>("MAX_PUNKBUSTERCONSOLE_LINES", 200));
-
-                /*
-                this.rtbPunkbusterBox.ReadOnly = false;
-
-                int iMaxPunkbusterLines = this.m_prcClient.Variables.GetVariable<int>("MAX_PUNKBUSTERCONSOLE_LINES", 200);
-                int iPunkbusterBoxLines = this.rtbPunkbusterBox.Lines.Length;
-
-                if ((iPunkbusterBoxLines > iMaxPunkbusterLines && this.rtbPunkbusterBox.Focused == false) || iPunkbusterBoxLines > 3000) {
-                    for (int i = 0; i < iPunkbusterBoxLines - iMaxPunkbusterLines; i++) {
-
-                        //while (this.rtbPunkbusterBox.Lines.Length > iMaxPunkbusterLines) {
-
-                        this.rtbPunkbusterBox.Select(0, this.rtbPunkbusterBox.Lines[0].Length + 1);
-                        this.rtbPunkbusterBox.SelectedText = String.Empty;
-                    }
-                }
-                this.rtbPunkbusterBox.ReadOnly = true;
-                */
+                this.rtbPunkbusterBox.AppendText(String.Format("{0}{1}", strLoggedText, "\n"));
             }
         }
 
-        /*
-        public void PunkbusterWrite(string strConsoleOutput) {
-
-            //string strFormattedConsoleOutput = String.Format("[{0}] {1}\r\n", DateTime.Now.ToString("HH:mm:ss"), strConsoleOutput);
-
-            string strFormattedConsoleOutput = String.Format("{0}{1}", strConsoleOutput, Environment.NewLine);
-
-            if (this.chkEnablePunkbusterOutput.Checked == true) {
-
-                this.rtbPunkbusterBox.AppendText(strFormattedConsoleOutput);
-                //this.rtbConsoleBox.AppendText(String.Format("[{0}] {1}\n", DateTime.Now.ToString("HH:mm:ss"), strConsoleOutput));
-
-                // We only pass the length of the original text to exclude the time from being formatted.
-                //this.ColourizeConsoleOutput(strConsoleOutput.Length);
-
-                this.rtbPunkbusterBox.ScrollToCaret();
-                this.rtbPunkbusterBox.ReadOnly = false;
-
-                int iMaxPunkbusterLines = this.m_uscParent.GetVariableInt("MAX_PUNKBUSTERCONSOLE_LINES", 200);
-                int iPunkbusterBoxLines = this.rtbPunkbusterBox.Lines.Length;
-
-                if (iPunkbusterBoxLines > iMaxPunkbusterLines) {
-                    for (int i = 0; i < iPunkbusterBoxLines - iMaxPunkbusterLines; i++) {
-
-                        //while (this.rtbPunkbusterBox.Lines.Length > iMaxPunkbusterLines) {
-
-                        this.rtbPunkbusterBox.Select(0, this.rtbPunkbusterBox.Lines[0].Length + 1);
-                        this.rtbPunkbusterBox.SelectedText = String.Empty;
-                    }
+        private void rtbPunkbusterBox_Flushed(object sender, EventArgs args) {
+            if (this.rtbPunkbusterBox.Focused == false) {
+                if (this.m_prcClient.Console.PBScrolling == true) {
+                    this.rtbPunkbusterBox.ScrollToCaret();
                 }
-                this.rtbPunkbusterBox.ReadOnly = true;
             }
+
+            this.rtbPunkbusterBox.TrimLines(this.m_prcClient.Variables.GetVariable<int>("MAX_PUNKBUSTERCONSOLE_LINES", 200));
         }
-        */
 
         private void btnPunkbusterSend_Click(object sender, EventArgs e) {
             if (this.SendListCommand != null) {
@@ -460,7 +325,7 @@ namespace PRoCon {
         }
 
         private void Console_DisplayConnectionChanged(bool isEnabled) {
-            this.chkEnableOutput.Checked = isEnabled;
+            this.InvokeIfRequired(() => { this.chkEnableOutput.Checked = isEnabled; });
         }
 
 
@@ -471,33 +336,27 @@ namespace PRoCon {
         }
 
         void Console_DisplayPunkbusterChanged(bool isEnabled) {
-            this.chkEnablePunkbusterOutput.Checked = isEnabled;
+            this.InvokeIfRequired(() => { this.chkEnablePunkbusterOutput.Checked = isEnabled; });
         }
 
-        private void chkConEnableScrolling_CheckedChanged(object sender, EventArgs e)
-        {
-            if (this.m_prcClient != null)
-            {
+        private void chkConEnableScrolling_CheckedChanged(object sender, EventArgs e) {
+            if (this.m_prcClient != null) {
                 this.m_prcClient.Console.ConScrolling = this.chkConEnableScrolling.Checked;
             }
         }
 
-        void Console_ConEnableScrollingChanged(bool isEnabled)
-        {
-            this.chkConEnableScrolling.Checked = isEnabled;
+        void Console_ConEnableScrollingChanged(bool isEnabled) {
+            this.InvokeIfRequired(() => { this.chkConEnableScrolling.Checked = isEnabled; });
         }
 
-        private void chkPBEnableScrolling_CheckedChanged(object sender, EventArgs e)
-        {
-            if (this.m_prcClient != null)
-            {
+        private void chkPBEnableScrolling_CheckedChanged(object sender, EventArgs e) {
+            if (this.m_prcClient != null) {
                 this.m_prcClient.Console.PBScrolling = this.chkPBEnableScrolling.Checked;
             }
         }
 
-        void Console_PBEnableScrollingChanged(bool isEnabled)
-        {
-            this.chkPBEnableScrolling.Checked = isEnabled;
+        void Console_PBEnableScrollingChanged(bool isEnabled) {
+            this.InvokeIfRequired(() => { this.chkPBEnableScrolling.Checked = isEnabled; });
         }
 
         private void chkDebug_CheckedChanged(object sender, EventArgs e) {
@@ -507,7 +366,7 @@ namespace PRoCon {
         }
 
         private void Console_LogDebugDetailsChanged(bool isEnabled) {
-            this.chkDebug.Checked = isEnabled;
+            this.InvokeIfRequired(() => { this.chkDebug.Checked = isEnabled; });
         }
 
         private void chkEvents_CheckedChanged(object sender, EventArgs e) {
@@ -517,7 +376,7 @@ namespace PRoCon {
         }
 
         private void Console_LogEventsConnectionChanged(bool isEnabled) {
-            this.chkEvents.Checked = isEnabled;
+            this.InvokeIfRequired(() => { this.chkEvents.Checked = isEnabled; });
         }
     }
 }

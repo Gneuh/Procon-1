@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace PRoCon.Core.Events {
+﻿namespace PRoCon.Core.Events {
     public enum EventType {
         None,
         Game,

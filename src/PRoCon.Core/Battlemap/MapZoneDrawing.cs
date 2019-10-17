@@ -19,31 +19,25 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using PRoCon.Core.Remote;
 
 namespace PRoCon.Core.Battlemap {
-    using Core.Remote;
-
     [Serializable]
     public class MapZoneDrawing : MapZone {
-
         public delegate void TagsEditedHandler(MapZoneDrawing sender);
-        public event TagsEditedHandler TagsEdited;
 
-        public MapZoneDrawing(string strUid, string strLevelFileName, string strTagList, Point3D[] a_pntZonePolygon, bool blInclusive)
-            : base(strUid, strLevelFileName, strTagList, a_pntZonePolygon, blInclusive) {
-            this.Tags.TagsEdited += new ZoneTagList.TagsEditedHandler(Tags_TagsEdited);
+        public MapZoneDrawing(string strUid, string strLevelFileName, string strTagList, Point3D[] zonePolygon, bool blInclusive) : base(strUid, strLevelFileName, strTagList, zonePolygon, blInclusive) {
+            Tags.TagsEdited += new ZoneTagList.TagsEditedHandler(Tags_TagsEdited);
         }
 
         public GraphicsPath ZoneGraphicsPath {
             get {
-                GraphicsPath gpReturn = new GraphicsPath();
-                PointF[] pntPolygon = new PointF[this.ZonePolygon.Length];
-                for (int i = 0; i < this.ZonePolygon.Length; i++) {
-                    pntPolygon[i] = new PointF(this.ZonePolygon[i].X, this.ZonePolygon[i].Y);
+                var gpReturn = new GraphicsPath();
+                var pntPolygon = new PointF[ZonePolygon.Length];
+                for (int i = 0; i < ZonePolygon.Length; i++) {
+                    pntPolygon[i] = new PointF(ZonePolygon[i].X, ZonePolygon[i].Y);
                 }
                 gpReturn.AddPolygon(pntPolygon);
                 gpReturn.CloseFigure();
@@ -52,36 +46,35 @@ namespace PRoCon.Core.Battlemap {
             }
         }
 
+        public event TagsEditedHandler TagsEdited;
+
         // Returns a percentage of the ErrorArea circle trespassing on the zone.
         // If anyone knows calculus better than me I'd welcome you to clean up this function =)
         public float TrespassArea(Point3D pntLocation, float flErrorRadius) {
+            float returnPercentage = 0.0F;
+            var errorArea = (float) (flErrorRadius * flErrorRadius * Math.PI);
 
-            float flReturnPercentage = 0.0F;
-            float flErrorArea = (float)(flErrorRadius * flErrorRadius * Math.PI);
-
-            GraphicsPath gpLocationError = new GraphicsPath();
+            var gpLocationError = new GraphicsPath();
             gpLocationError.AddEllipse(new RectangleF(pntLocation.X - flErrorRadius, pntLocation.Y - flErrorRadius, flErrorRadius * 2, flErrorRadius * 2));
             gpLocationError.CloseAllFigures();
 
-            Region regZone = new Region(this.ZoneGraphicsPath);
+            var regZone = new Region(ZoneGraphicsPath);
             regZone.Intersect(gpLocationError);
-            RectangleF[] a_recScans = regZone.GetRegionScans(new Matrix());
-            Rectangle recIntersection = new Rectangle(int.MaxValue, int.MaxValue, 0, 0);
+            RectangleF[] scans = regZone.GetRegionScans(new Matrix());
+            var recIntersection = new Rectangle(int.MaxValue, int.MaxValue, 0, 0);
 
             int iPixelCount = 0;
 
-            if (a_recScans.Length > 0) {
+            if (scans.Length > 0) {
+                for (int i = 0; i < scans.Length; i++) {
+                    recIntersection.X = scans[i].X < recIntersection.X ? (int) scans[i].X : recIntersection.X;
+                    recIntersection.Y = scans[i].Y < recIntersection.Y ? (int) scans[i].Y : recIntersection.Y;
 
-                for (int i = 0; i < a_recScans.Length; i++) {
-                    recIntersection.X = a_recScans[i].X < recIntersection.X ? (int)a_recScans[i].X : recIntersection.X;
-                    recIntersection.Y = a_recScans[i].Y < recIntersection.Y ? (int)a_recScans[i].Y : recIntersection.Y;
-
-                    recIntersection.Width = a_recScans[i].Right > recIntersection.Right ? (int)a_recScans[i].Right - recIntersection.X : recIntersection.Width;
-                    recIntersection.Height = a_recScans[i].Bottom > recIntersection.Bottom ? (int)a_recScans[i].Bottom - recIntersection.Y : recIntersection.Height;
+                    recIntersection.Width = scans[i].Right > recIntersection.Right ? (int) scans[i].Right - recIntersection.X : recIntersection.Width;
+                    recIntersection.Height = scans[i].Bottom > recIntersection.Bottom ? (int) scans[i].Bottom - recIntersection.Y : recIntersection.Height;
                 }
 
-                //recIntersection = this.RecFtoRec(regZone.GetBounds(this.CreateGraphics()));
-                Point pntVisible = new Point(recIntersection.X, recIntersection.Y);
+                var pntVisible = new Point(recIntersection.X, recIntersection.Y);
 
                 for (pntVisible.X = recIntersection.X; pntVisible.X <= recIntersection.Right; pntVisible.X++) {
                     for (pntVisible.Y = recIntersection.Y; pntVisible.Y <= recIntersection.Bottom; pntVisible.Y++) {
@@ -92,22 +85,21 @@ namespace PRoCon.Core.Battlemap {
                 }
             }
 
-            flReturnPercentage = (float)iPixelCount / flErrorArea;
+            returnPercentage = iPixelCount / errorArea;
 
             // Accounts for low error when using this method. (98.4% should be 100%)
             // but using regZone.GetRegionScans is slightly lossy.
-            if (flReturnPercentage > 0.0F) {
-                flReturnPercentage = (float)Math.Min(1.0F, flReturnPercentage + 0.02);
+            if (returnPercentage > 0.0F) {
+                returnPercentage = (float) Math.Min(1.0F, returnPercentage + 0.02);
             }
 
-            return flReturnPercentage;
+            return returnPercentage;
         }
 
         private void Tags_TagsEdited(ZoneTagList sender) {
-            if (this.TagsEdited != null) {
-                FrostbiteConnection.RaiseEvent(this.TagsEdited.GetInvocationList(), this);
+            if (TagsEdited != null) {
+                this.TagsEdited(this);
             }
         }
-
     }
 }

@@ -19,19 +19,17 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace PRoCon.Core.Plugin {
 
     public class PluginDetails {
 
-        // TO DO: Change these to attributes once the plugin api has been updated.
-        public string ClassName;
-        public string Name;
-        public string Version;
-        public string Author;
-        public string Website;
-        public string Description;
+        public String ClassName { get; set; }
+        public String Name { get; set; }
+        public String Version { get; set; }
+        public String Author { get; set; }
+        public String Website { get; set; }
+        public String Description { get; set; }
 
         public List<CPluginVariable> DisplayPluginVariables;
         public List<CPluginVariable> PluginVariables;
@@ -39,9 +37,5 @@ namespace PRoCon.Core.Plugin {
         public PluginDetails() {
 
         }
-
-
-
     }
-
 }

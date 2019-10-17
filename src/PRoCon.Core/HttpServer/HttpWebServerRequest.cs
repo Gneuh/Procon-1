@@ -18,108 +18,93 @@
 // along with PRoCon Frostbite.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Web;
-using System.Net;
 using System.Net.Sockets;
-using System.Collections.Specialized;
-using System.IO;
+using System.Text;
+using PRoCon.Core.Remote;
 
 namespace PRoCon.Core.HttpServer {
-
-    using Core.Remote;
-
     public class HttpWebServerRequest {
+        public delegate void ClientShutdownHandler(HttpWebServerRequest sender);
 
         public delegate void ResponseSentHandler(HttpWebServerRequest request, HttpWebServerResponseData response);
-        public event ResponseSentHandler ResponseSent;
 
-        public delegate void ClientShutdownHandler(HttpWebServerRequest sender);
+        protected readonly byte[] RecievedPacket;
+        protected byte[] CompletedPacket;
+
+        public HttpWebServerRequest(NetworkStream stream) {
+            Stream = stream;
+            RecievedPacket = new byte[4096];
+
+            Stream.BeginRead(RecievedPacket, 0, RecievedPacket.Length, ReadWebRequests, null);
+        }
+
+        public NetworkStream Stream { get; private set; }
+
+        public HttpWebServerRequestData Data { get; private set; }
+        public event ResponseSentHandler ResponseSent;
         public event ClientShutdownHandler ClientShutdown;
 
         public event HttpWebServer.ProcessResponseHandler ProcessRequest;
 
-        private byte[] ma_completedPacket;
-        private byte[] ma_recievedPacket;
-
-        public NetworkStream Stream {
-            get;
-            private set;
-        }
-
-        public HttpWebServerRequestData Data {
-            get;
-            private set;
-        }
-
-        public HttpWebServerRequest(NetworkStream stream) {
-            this.Stream = stream;
-            this.ma_recievedPacket = new byte[4096];
-
-            this.Stream.BeginRead(this.ma_recievedPacket, 0, this.ma_recievedPacket.Length, this.ReadWebRequests, null);
-        }
-
         public void ProcessPacket() {
+            if (CompletedPacket != null) {
+                string packet = Encoding.ASCII.GetString(CompletedPacket);
 
-            if (this.ma_completedPacket != null) {
+                Data = new HttpWebServerRequestData(packet);
 
-                string packet = Encoding.ASCII.GetString(this.ma_completedPacket);
-
-                this.Data = new HttpWebServerRequestData(packet);
-
-                if (this.ProcessRequest != null) {
-                    FrostbiteConnection.RaiseEvent(this.ProcessRequest.GetInvocationList(), this);
+                if (ProcessRequest != null) {
+                    this.ProcessRequest(this);
                 }
             }
+        }
+
+        public override string ToString() {
+            return Data.Request;
         }
 
         #region Reading packet
 
         private void CompilePacket(int recievedData) {
-            if (this.ma_completedPacket == null) {
-                this.ma_completedPacket = new byte[recievedData];
+            if (CompletedPacket == null) {
+                CompletedPacket = new byte[recievedData];
             }
             else {
-                Array.Resize(ref this.ma_completedPacket, this.ma_completedPacket.Length + recievedData);
+                Array.Resize(ref CompletedPacket, CompletedPacket.Length + recievedData);
             }
 
-            Array.Copy(this.ma_recievedPacket, 0, this.ma_completedPacket, this.ma_completedPacket.Length - recievedData, recievedData);
+            Array.Copy(RecievedPacket, 0, CompletedPacket, CompletedPacket.Length - recievedData, recievedData);
         }
 
         private void ReadWebRequests(IAsyncResult ar) {
-
             try {
                 //HttpWebServerRequest client = (HttpWebServerRequest)ar.AsyncState;
 
-                int iBytesRead = this.Stream.EndRead(ar);
+                int iBytesRead = Stream.EndRead(ar);
 
                 if (iBytesRead > 0) {
-                    this.CompilePacket(iBytesRead);
+                    CompilePacket(iBytesRead);
 
-                    if (this.Stream.DataAvailable == true) {
-                        this.Stream.BeginRead(this.ma_recievedPacket, 0, this.ma_recievedPacket.Length, this.ReadWebRequests, null);
+                    if (Stream.DataAvailable == true) {
+                        Stream.BeginRead(RecievedPacket, 0, RecievedPacket.Length, ReadWebRequests, null);
                     }
                     else {
-                        this.ProcessPacket();
+                        ProcessPacket();
                     }
                 }
             }
             catch (Exception) {
-                
             }
 
-            this.Shutdown();
+            Shutdown();
         }
 
         public void Shutdown() {
-            if (this.Stream != null) {
-                this.Stream.Close();
-                this.Stream = null;
+            if (Stream != null) {
+                Stream.Close();
+                Stream = null;
 
-                if (this.ClientShutdown != null) {
-                    FrostbiteConnection.RaiseEvent(this.ClientShutdown.GetInvocationList(), this);
+                if (ClientShutdown != null) {
+                    this.ClientShutdown(this);
                 }
             }
         }
@@ -129,30 +114,23 @@ namespace PRoCon.Core.HttpServer {
         #region Sending Packet
 
         public void Respond(HttpWebServerResponseData response) {
-
             try {
-                if (this.Stream != null) {
-
+                if (Stream != null) {
                     byte[] bData = Encoding.UTF8.GetBytes(response.ToString());
 
-                    this.Stream.Write(bData, 0, bData.Length);
+                    Stream.Write(bData, 0, bData.Length);
 
-                    if (this.ResponseSent != null) {
-                        FrostbiteConnection.RaiseEvent(this.ResponseSent.GetInvocationList(), this, response);
+                    if (ResponseSent != null) {
+                        this.ResponseSent(this, response);
                     }
 
-                    this.Shutdown();
+                    Shutdown();
                 }
             }
             catch (Exception e) {
-
             }
         }
 
         #endregion
-
-        public override string ToString() {
-            return this.Data.Request;
-        }
     }
 }

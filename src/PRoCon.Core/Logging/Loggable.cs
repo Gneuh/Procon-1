@@ -65,7 +65,7 @@ namespace PRoCon.Core.Logging {
                                 this.m_blLogging = true;
 
                                 if ((this.m_stmFile = new FileStream(Path.Combine(Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"Logs"),this.FileHostNamePort),DateTime.Now.ToString("yyyyMMdd") + "_" + this.FileNameSuffix + ".log"), FileMode.Append)) != null) {
-                                    if ((this.m_stwFileWriter = new StreamWriter(this.m_stmFile, Encoding.Unicode)) != null) {
+                                    if ((this.m_stwFileWriter = new StreamWriter(this.m_stmFile, Encoding.UTF8)) != null) {
 
                                         this.WriteLogLine("{0}: {1}", this.LoggingStartedPrefix, DateTime.Now.ToString("dddd, d MMMM yyyy HH:mm:ss"));
                                     }

@@ -1,4 +1,4 @@
-﻿namespace PRoCon {
+﻿namespace PRoCon.Controls {
     partial class uscEventsPanel {
         /// <summary> 
         /// Required designer variable.
@@ -26,12 +26,8 @@
             this.picOpenCloseCaptures = new System.Windows.Forms.PictureBox();
             this.lnkShowHide = new System.Windows.Forms.LinkLabel();
             this.spltEvents = new System.Windows.Forms.SplitContainer();
-            this.lsvEvents = new PRoCon.Controls.ControlsEx.ListViewNF();
-            this.colSource = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.colTime = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.colEvent = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.colMessage = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.gpbCaptures = new System.Windows.Forms.GroupBox();
+            this.chkEventsEnableScrolling = new System.Windows.Forms.CheckBox();
             this.lsvCapturedEvents = new System.Windows.Forms.ListView();
             this.colCapturedList = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.numMaximumEvents = new System.Windows.Forms.NumericUpDown();
@@ -43,7 +39,12 @@
             this.lnkAddCapture = new System.Windows.Forms.LinkLabel();
             this.lblCapturingEvents = new System.Windows.Forms.Label();
             this.cboEvents = new System.Windows.Forms.ComboBox();
+            this.lsvEvents = new PRoCon.Controls.ControlsEx.ListViewNF();
+            this.colSource = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colTime = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colAdmin = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colEvent = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colMessage = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             ((System.ComponentModel.ISupportInitialize)(this.picOpenCloseCaptures)).BeginInit();
             this.spltEvents.Panel1.SuspendLayout();
             this.spltEvents.Panel2.SuspendLayout();
@@ -80,9 +81,9 @@
             // 
             // spltEvents
             // 
-            this.spltEvents.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.spltEvents.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.spltEvents.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
             this.spltEvents.Location = new System.Drawing.Point(3, 20);
             this.spltEvents.Name = "spltEvents";
@@ -98,43 +99,9 @@
             this.spltEvents.SplitterDistance = 533;
             this.spltEvents.TabIndex = 27;
             // 
-            // lsvEvents
-            // 
-            this.lsvEvents.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.colSource,
-            this.colTime,
-            this.colAdmin,
-            this.colEvent,
-            this.colMessage});
-            this.lsvEvents.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lsvEvents.FullRowSelect = true;
-            this.lsvEvents.GridLines = true;
-            this.lsvEvents.Location = new System.Drawing.Point(0, 0);
-            this.lsvEvents.Name = "lsvEvents";
-            this.lsvEvents.Size = new System.Drawing.Size(533, 560);
-            this.lsvEvents.TabIndex = 1;
-            this.lsvEvents.UseCompatibleStateImageBehavior = false;
-            this.lsvEvents.View = System.Windows.Forms.View.Details;
-            this.lsvEvents.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lsvEvents_ColumnClick);
-            // 
-            // colSource
-            // 
-            this.colSource.Text = "Source";
-            // 
-            // colTime
-            // 
-            this.colTime.Text = "Date and Time";
-            // 
-            // colEvent
-            // 
-            this.colEvent.Text = "Event";
-            // 
-            // colMessage
-            // 
-            this.colMessage.Text = "Message";
-            // 
             // gpbCaptures
             // 
+            this.gpbCaptures.Controls.Add(this.chkEventsEnableScrolling);
             this.gpbCaptures.Controls.Add(this.lsvCapturedEvents);
             this.gpbCaptures.Controls.Add(this.numMaximumEvents);
             this.gpbCaptures.Controls.Add(this.btncleareventbox);
@@ -154,11 +121,23 @@
             this.gpbCaptures.TabStop = false;
             this.gpbCaptures.Text = "Captures";
             // 
+            // chkEventsEnableScrolling
+            // 
+            this.chkEventsEnableScrolling.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.chkEventsEnableScrolling.Location = new System.Drawing.Point(15, 532);
+            this.chkEventsEnableScrolling.Name = "chkEventsEnableScrolling";
+            this.chkEventsEnableScrolling.Size = new System.Drawing.Size(195, 19);
+            this.chkEventsEnableScrolling.TabIndex = 33;
+            this.chkEventsEnableScrolling.Text = "Enable scrolling";
+            this.chkEventsEnableScrolling.UseVisualStyleBackColor = true;
+            this.chkEventsEnableScrolling.CheckedChanged += new System.EventHandler(this.chkEventsEnableScrolling_CheckedChanged);
+            // 
             // lsvCapturedEvents
             // 
-            this.lsvCapturedEvents.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.lsvCapturedEvents.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.lsvCapturedEvents.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.colCapturedList});
             this.lsvCapturedEvents.FullRowSelect = true;
@@ -166,7 +145,7 @@
             this.lsvCapturedEvents.Location = new System.Drawing.Point(15, 143);
             this.lsvCapturedEvents.MultiSelect = false;
             this.lsvCapturedEvents.Name = "lsvCapturedEvents";
-            this.lsvCapturedEvents.Size = new System.Drawing.Size(195, 377);
+            this.lsvCapturedEvents.Size = new System.Drawing.Size(195, 354);
             this.lsvCapturedEvents.TabIndex = 32;
             this.lsvCapturedEvents.UseCompatibleStateImageBehavior = false;
             this.lsvCapturedEvents.View = System.Windows.Forms.View.Details;
@@ -179,8 +158,8 @@
             // 
             // numMaximumEvents
             // 
-            this.numMaximumEvents.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.numMaximumEvents.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.numMaximumEvents.Increment = new decimal(new int[] {
             10,
             0,
@@ -209,9 +188,9 @@
             // 
             // btncleareventbox
             // 
-            this.btncleareventbox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.btncleareventbox.Location = new System.Drawing.Point(14, 526);
+            this.btncleareventbox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.btncleareventbox.Location = new System.Drawing.Point(15, 503);
             this.btncleareventbox.Name = "btncleareventbox";
             this.btncleareventbox.Size = new System.Drawing.Size(197, 23);
             this.btncleareventbox.TabIndex = 30;
@@ -289,8 +268,8 @@
             // 
             // cboEvents
             // 
-            this.cboEvents.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.cboEvents.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.cboEvents.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboEvents.FormattingEnabled = true;
             this.cboEvents.Location = new System.Drawing.Point(14, 93);
@@ -299,9 +278,44 @@
             this.cboEvents.TabIndex = 0;
             this.cboEvents.SelectedIndexChanged += new System.EventHandler(this.cboEvents_SelectedIndexChanged);
             // 
+            // lsvEvents
+            // 
+            this.lsvEvents.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.colSource,
+            this.colTime,
+            this.colAdmin,
+            this.colEvent,
+            this.colMessage});
+            this.lsvEvents.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lsvEvents.FullRowSelect = true;
+            this.lsvEvents.GridLines = true;
+            this.lsvEvents.Location = new System.Drawing.Point(0, 0);
+            this.lsvEvents.Name = "lsvEvents";
+            this.lsvEvents.Size = new System.Drawing.Size(533, 560);
+            this.lsvEvents.TabIndex = 1;
+            this.lsvEvents.UseCompatibleStateImageBehavior = false;
+            this.lsvEvents.View = System.Windows.Forms.View.Details;
+            this.lsvEvents.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lsvEvents_ColumnClick);
+            // 
+            // colSource
+            // 
+            this.colSource.Text = "Source";
+            // 
+            // colTime
+            // 
+            this.colTime.Text = "Date and Time";
+            // 
             // colAdmin
             // 
             this.colAdmin.Text = "Admin";
+            // 
+            // colEvent
+            // 
+            this.colEvent.Text = "Event";
+            // 
+            // colMessage
+            // 
+            this.colMessage.Text = "Message";
             // 
             // uscEventsPanel
             // 
@@ -348,6 +362,7 @@
         private System.Windows.Forms.ListView lsvCapturedEvents;
         private System.Windows.Forms.ColumnHeader colCapturedList;
         private System.Windows.Forms.ColumnHeader colAdmin;
+        private System.Windows.Forms.CheckBox chkEventsEnableScrolling;
 
 
     }

@@ -86,44 +86,48 @@ namespace PRoCon.Controls.ServerSettings.BF3 {
 
 
         private void Client_GameTypeDiscovered(PRoConClient sender) {
-
-            this.Client.Game.ServerName += new FrostbiteClient.ServerNameHandler(m_prcClient_ServerName);
-            this.Client.Game.BannerUrl += new FrostbiteClient.BannerUrlHandler(m_prcClient_BannerUrl);
-            this.Client.Game.ServerDescription += new FrostbiteClient.ServerDescriptionHandler(m_prcClient_ServerDescription);
-            this.Client.Game.ServerMessage += new FrostbiteClient.ServerMessageHandler(m_prcClient_ServerMessage);
-            
+            this.InvokeIfRequired(() => {
+                this.Client.Game.ServerName += new FrostbiteClient.ServerNameHandler(m_prcClient_ServerName);
+                this.Client.Game.BannerUrl += new FrostbiteClient.BannerUrlHandler(m_prcClient_BannerUrl);
+                this.Client.Game.ServerDescription += new FrostbiteClient.ServerDescriptionHandler(m_prcClient_ServerDescription);
+                this.Client.Game.ServerMessage += new FrostbiteClient.ServerMessageHandler(m_prcClient_ServerMessage);
+            });
         }
 
         #region Banner URL
 
         private void m_prcClient_BannerUrl(FrostbiteClient sender, string url) {
-            this.OnSettingResponse("vars.bannerurl", url, true);
+            this.InvokeIfRequired(() => {
+                this.OnSettingResponse("vars.bannerurl", url, true);
 
-            if (String.Compare(this.m_strPreviousSuccessBannerURL, url) != 0) {
+                if (String.Compare(this.m_strPreviousSuccessBannerURL, url) != 0) {
 
-                if (String.IsNullOrEmpty(url) == false) {
-                    this.DownloadBannerURL(url);
+                    if (String.IsNullOrEmpty(url) == false) {
+                        this.DownloadBannerURL(url);
+                    }
+                    else {
+                        this.cdfBanner_DownloadComplete(null);
+                    }
                 }
-                else {
-                    this.cdfBanner_DownloadComplete(null);
-                }
-            }
 
-            this.m_strPreviousSuccessBannerURL = url;
+                this.m_strPreviousSuccessBannerURL = url;
+            });
         }
 
         public void OnSettingsBannerURLSuccess(FrostbiteClient sender, string strSuccessBannerURL) {
-            if (String.Compare(this.m_strPreviousSuccessBannerURL, strSuccessBannerURL) != 0) {
+            this.InvokeIfRequired(() => {
+                if (String.Compare(this.m_strPreviousSuccessBannerURL, strSuccessBannerURL) != 0) {
 
-                if (String.IsNullOrEmpty(strSuccessBannerURL) == false) {
-                    this.DownloadBannerURL(strSuccessBannerURL);
+                    if (String.IsNullOrEmpty(strSuccessBannerURL) == false) {
+                        this.DownloadBannerURL(strSuccessBannerURL);
+                    }
+                    else {
+                        this.cdfBanner_DownloadComplete(null);
+                    }
                 }
-                else {
-                    this.cdfBanner_DownloadComplete(null);
-                }
-            }
 
-            this.m_strPreviousSuccessBannerURL = strSuccessBannerURL;
+                this.m_strPreviousSuccessBannerURL = strSuccessBannerURL;
+            });
         }
 
         private void lnkSettingsSetBannerURL_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
@@ -149,13 +153,15 @@ namespace PRoCon.Controls.ServerSettings.BF3 {
         #region Server Description
 
         private void m_prcClient_ServerDescription(FrostbiteClient sender, string serverDescription) {
-            this.m_strPreviousSuccessServerDescription = serverDescription.Replace("|", Environment.NewLine);
+            this.InvokeIfRequired(() => {
+                this.m_strPreviousSuccessServerDescription = serverDescription.Replace("|", Environment.NewLine);
 
-            if (this.m_strPreviousSuccessServerDescription.Length >= 255) {
-                this.m_strPreviousSuccessServerDescription = this.m_strPreviousSuccessServerDescription.Substring(0, 255);
-            }
-            
-            this.OnSettingResponse("vars.serverdescription", this.m_strPreviousSuccessServerDescription, true);
+                if (this.m_strPreviousSuccessServerDescription.Length >= 255) {
+                    this.m_strPreviousSuccessServerDescription = this.m_strPreviousSuccessServerDescription.Substring(0, 255);
+                }
+
+                this.OnSettingResponse("vars.serverdescription", this.m_strPreviousSuccessServerDescription, true);
+            });
 
         }
 
@@ -173,17 +179,16 @@ namespace PRoCon.Controls.ServerSettings.BF3 {
 
         #region Server Message
 
-        private void m_prcClient_ServerMessage(FrostbiteClient sender, string serverMessage)
-        {
-            this.m_strPreviousSuccessServerMessage = serverMessage.Replace("|", Environment.NewLine);
+        private void m_prcClient_ServerMessage(FrostbiteClient sender, string serverMessage) {
+            this.InvokeIfRequired(() => {
+                this.m_strPreviousSuccessServerMessage = serverMessage.Replace("|", Environment.NewLine);
 
-            if (this.m_strPreviousSuccessServerMessage.Length >= 255)
-            {
-                this.m_strPreviousSuccessServerMessage = this.m_strPreviousSuccessServerMessage.Substring(0, 255);
-            }
+                if (this.m_strPreviousSuccessServerMessage.Length >= 255) {
+                    this.m_strPreviousSuccessServerMessage = this.m_strPreviousSuccessServerMessage.Substring(0, 255);
+                }
 
-            this.OnSettingResponse("vars.servermessage", this.m_strPreviousSuccessServerMessage, true);
-
+                this.OnSettingResponse("vars.servermessage", this.m_strPreviousSuccessServerMessage, true);
+            });
         }
 
         private void lnkSettingsSetMessage_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

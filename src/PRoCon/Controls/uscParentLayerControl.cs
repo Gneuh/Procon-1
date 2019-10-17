@@ -20,19 +20,13 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Text;
 using System.Windows.Forms;
+using PRoCon.Core;
+using PRoCon.Core.Plugin;
+using PRoCon.Core.Remote;
+using PRoCon.Forms;
 
-
-namespace PRoCon {
-    using Core;
-    using Core.Plugin;
-    using Core.Remote;
-    using PRoCon.Forms;
-
+namespace PRoCon.Controls {
     public partial class uscParentLayerControl : UserControl {
 
         private frmMain m_frmMain;
@@ -180,12 +174,14 @@ namespace PRoCon {
         #region Remote Plugins
 
         private void m_prcClient_RemoteLoadedPlugins(PRoConClient sender, Dictionary<string, PluginDetails> loadedPlugins) {
-            this.m_dicRemotePlugins = loadedPlugins;
-            this.m_blUpdatingPlugins = true;
+            this.InvokeIfRequired(() => {
+                this.m_dicRemotePlugins = loadedPlugins;
+                this.m_blUpdatingPlugins = true;
 
-            this.uscPlugins.SetLoadedPlugins(new List<string>(this.m_dicRemotePlugins.Keys));
+                this.uscPlugins.SetLoadedPlugins(new List<string>(this.m_dicRemotePlugins.Keys));
 
-            this.m_blUpdatingPlugins = false;
+                this.m_blUpdatingPlugins = false;
+            });
         }
         /*
         public void SetRemoteLoadedPlugins(Dictionary<string, SPluginDetails> dicRemotePlugins) {
@@ -213,19 +209,21 @@ namespace PRoCon {
         }
 
         void m_prcClient_RemoteEnabledPlugins(PRoConClient sender, List<string> enabledPluginClasses) {
-            this.m_blUpdatingPlugins = true;
+            this.InvokeIfRequired(() => {
+                this.m_blUpdatingPlugins = true;
 
-            foreach (ListViewItem lviPlugin in this.uscPlugins.LoadedPlugins) {
+                foreach (ListViewItem lviPlugin in this.uscPlugins.LoadedPlugins) {
 
-                if (enabledPluginClasses.Contains(lviPlugin.Name) == true) {
-                    lviPlugin.Checked = true;
+                    if (enabledPluginClasses.Contains(lviPlugin.Name) == true) {
+                        lviPlugin.Checked = true;
+                    }
+                    else {
+                        lviPlugin.Checked = false;
+                    }
                 }
-                else {
-                    lviPlugin.Checked = false;
-                }
-            }
 
-            this.m_blUpdatingPlugins = false;
+                this.m_blUpdatingPlugins = false;
+            });
         }
 
         /*
@@ -236,17 +234,19 @@ namespace PRoCon {
         */
 
         private void m_prcClient_RemotePluginLoaded(PRoConClient sender, PluginDetails spdDetails) {
+            this.InvokeIfRequired(() => {
 
-            if (this.m_dicRemotePlugins.ContainsKey(spdDetails.ClassName) == true) {
-                this.m_dicRemotePlugins[spdDetails.ClassName] = spdDetails;
-            }
-            else {
-                this.m_dicRemotePlugins.Add(spdDetails.ClassName, spdDetails);
-            }
+                if (this.m_dicRemotePlugins.ContainsKey(spdDetails.ClassName) == true) {
+                    this.m_dicRemotePlugins[spdDetails.ClassName] = spdDetails;
+                }
+                else {
+                    this.m_dicRemotePlugins.Add(spdDetails.ClassName, spdDetails);
+                }
 
-            this.m_blUpdatingPlugins = true;
-            this.uscPlugins.SetLoadedPlugins(new List<string>(this.m_dicRemotePlugins.Keys));
-            this.m_blUpdatingPlugins = false;
+                this.m_blUpdatingPlugins = true;
+                this.uscPlugins.SetLoadedPlugins(new List<string>(this.m_dicRemotePlugins.Keys));
+                this.m_blUpdatingPlugins = false;
+            });
         }
 
         /*
@@ -256,13 +256,15 @@ namespace PRoCon {
         */
 
         private void m_prcClient_RemotePluginEnabled(PRoConClient sender, string strClassName, bool isEnabled) {
-            this.m_blUpdatingPlugins = true;
+            this.InvokeIfRequired(() => {
+                this.m_blUpdatingPlugins = true;
 
-            if (this.uscPlugins.LoadedPlugins.ContainsKey(strClassName) == true) {
-                this.uscPlugins.LoadedPlugins[strClassName].Checked = isEnabled;
-            }
+                if (this.uscPlugins.LoadedPlugins.ContainsKey(strClassName) == true) {
+                    this.uscPlugins.LoadedPlugins[strClassName].Checked = isEnabled;
+                }
 
-            this.m_blUpdatingPlugins = false;
+                this.m_blUpdatingPlugins = false;
+            });
         }
 
         /*
@@ -272,15 +274,17 @@ namespace PRoCon {
         */
 
         private void m_prcClient_RemotePluginVariables(PRoConClient sender, string strClassName, List<CPluginVariable> lstVariables) {
-            if (this.m_dicRemotePlugins.ContainsKey(strClassName) == true) {
-                PluginDetails spdUpdatedDetails = this.m_dicRemotePlugins[strClassName];
-                spdUpdatedDetails.DisplayPluginVariables = lstVariables;
-                this.m_dicRemotePlugins[strClassName] = spdUpdatedDetails;
+            this.InvokeIfRequired(() => {
+                if (this.m_dicRemotePlugins.ContainsKey(strClassName) == true) {
+                    PluginDetails spdUpdatedDetails = this.m_dicRemotePlugins[strClassName];
+                    spdUpdatedDetails.DisplayPluginVariables = lstVariables;
+                    this.m_dicRemotePlugins[strClassName] = spdUpdatedDetails;
 
-                this.m_blUpdatingPlugins = true;
-                this.uscPlugins.SetLoadedPlugins(new List<string>(this.m_dicRemotePlugins.Keys));
-                this.m_blUpdatingPlugins = false;
-            }
+                    this.m_blUpdatingPlugins = true;
+                    this.uscPlugins.SetLoadedPlugins(new List<string>(this.m_dicRemotePlugins.Keys));
+                    this.m_blUpdatingPlugins = false;
+                }
+            });
         }
 
         private void uscPlugins_SetPluginVariable(string strClassName, string strVariable, string strValue) {
@@ -299,7 +303,7 @@ namespace PRoCon {
         }
 
         private void m_prcClient_ReadRemotePluginConsole(PRoConClient sender, DateTime loggedTime, string text) {
-            this.uscPlugins.Write(loggedTime, text);
+            this.InvokeIfRequired(() => this.uscPlugins.Write(loggedTime, text));
         }
 
         #endregion
@@ -498,29 +502,31 @@ namespace PRoCon {
         }
 
         private void m_prcClient_RemoteAccountCreated(PRoConClient sender, string accountName) {
-            if (this.lsvLayerAccounts.Items.ContainsKey(accountName) == false) {
+            this.InvokeIfRequired(() => {
+                if (this.lsvLayerAccounts.Items.ContainsKey(accountName) == false) {
 
-                this.OnSettingResponse("procon.account.create", true);
+                    this.OnSettingResponse("procon.account.create", true);
 
-                ListViewItem lviNewAccount = new ListViewItem(accountName);
-                lviNewAccount.Name = accountName;
-                lviNewAccount.ImageKey = "status_offline.png";
+                    ListViewItem lviNewAccount = new ListViewItem(accountName);
+                    lviNewAccount.Name = accountName;
+                    lviNewAccount.ImageKey = "status_offline.png";
 
-                ListViewItem.ListViewSubItem lsviNewSubitem = new ListViewItem.ListViewSubItem();
-                //lsviNewSubitem.Text = "none";
-                lsviNewSubitem.Name = "rconaccess";
-                lsviNewSubitem.Tag = new CPrivileges();
-                lviNewAccount.SubItems.Add(lsviNewSubitem);
+                    ListViewItem.ListViewSubItem lsviNewSubitem = new ListViewItem.ListViewSubItem();
+                    //lsviNewSubitem.Text = "none";
+                    lsviNewSubitem.Name = "rconaccess";
+                    lsviNewSubitem.Tag = new CPrivileges();
+                    lviNewAccount.SubItems.Add(lsviNewSubitem);
 
-                lsviNewSubitem = new ListViewItem.ListViewSubItem();
-                //lsviNewSubitem.Text = "none";
-                lsviNewSubitem.Name = "localaccess";
-                lviNewAccount.SubItems.Add(lsviNewSubitem);
+                    lsviNewSubitem = new ListViewItem.ListViewSubItem();
+                    //lsviNewSubitem.Text = "none";
+                    lsviNewSubitem.Name = "localaccess";
+                    lviNewAccount.SubItems.Add(lsviNewSubitem);
 
-                this.lsvLayerAccounts.Items.Add(lviNewAccount);
+                    this.lsvLayerAccounts.Items.Add(lviNewAccount);
 
-                this.RefreshLayerPrivilegesPanel();
-            }
+                    this.RefreshLayerPrivilegesPanel();
+                }
+            });
         }
         /*
         public void OnAccountCreated(string strAccountName) {
@@ -536,10 +542,12 @@ namespace PRoCon {
         //}
 
         private void m_prcClient_RemoteAccountDeleted(PRoConClient sender, string accountName) {
-            if (this.lsvLayerAccounts.Items.ContainsKey(accountName) == true) {
-                this.OnSettingResponse("procon.account.delete", true);
-                this.lsvLayerAccounts.Items.Remove(this.lsvLayerAccounts.Items[accountName]);
-            }
+            this.InvokeIfRequired(() => {
+                if (this.lsvLayerAccounts.Items.ContainsKey(accountName) == true) {
+                    this.OnSettingResponse("procon.account.delete", true);
+                    this.lsvLayerAccounts.Items.Remove(this.lsvLayerAccounts.Items[accountName]);
+                }
+            });
         }
 
         //public void OnAccountDeleted(string strAccountName) {
@@ -547,12 +555,14 @@ namespace PRoCon {
         //}
 
         private void m_prcClient_RemoteAccountAltered(PRoConClient sender, string accountName, CPrivileges accountPrivileges) {
-            if (this.lsvLayerAccounts.Items.ContainsKey(accountName) == true) {
-                this.OnSettingResponse("procon.layer.setPrivileges", true);
-                this.lsvLayerAccounts.Items[accountName].SubItems["rconaccess"].Tag = accountPrivileges;
+            this.InvokeIfRequired(() => {
+                if (this.lsvLayerAccounts.Items.ContainsKey(accountName) == true) {
+                    this.OnSettingResponse("procon.layer.setPrivileges", true);
+                    this.lsvLayerAccounts.Items[accountName].SubItems["rconaccess"].Tag = accountPrivileges;
 
-                this.RefreshLayerPrivilegesPanel();
-            }
+                    this.RefreshLayerPrivilegesPanel();
+                }
+            });
         }
 
         //public void OnAccountAltered(string strAccountName, CPrivileges spPrivs) {
@@ -560,14 +570,11 @@ namespace PRoCon {
         //}
 
         private void m_prcClient_RemoteAccountLoggedIn(PRoConClient sender, string accountName, bool isOnline) {
-            if (this.lsvLayerAccounts.Items.ContainsKey(accountName) == true) {
-                if (isOnline == true) {
-                    this.lsvLayerAccounts.Items[accountName].ImageKey = "status_online.png";
+            this.InvokeIfRequired(() => {
+                if (this.lsvLayerAccounts.Items.ContainsKey(accountName) == true) {
+                    this.lsvLayerAccounts.Items[accountName].ImageKey = isOnline == true ? "status_online.png" : "status_offline.png";
                 }
-                else {
-                    this.lsvLayerAccounts.Items[accountName].ImageKey = "status_offline.png";
-                }
-            }
+            });
         }
 
         private void uscPrivileges_OnUpdatePrivileges(string strAccountName, CPrivileges spUpdatedPrivs) {
@@ -746,8 +753,10 @@ namespace PRoCon {
         }
 
         void m_prcClient_ProconPrivileges(PRoConClient sender, CPrivileges spPrivs) {
-            this.m_isConnectionValid = true;
-            this.RequestInitialSettings();
+            this.InvokeIfRequired(() => {
+                this.m_isConnectionValid = true;
+                this.RequestInitialSettings();
+            });
         }
 
         private void uscParentLayerControl_Load(object sender, EventArgs e) {

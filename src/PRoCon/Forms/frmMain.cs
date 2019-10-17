@@ -1,51 +1,14 @@
-﻿/*  Copyright 2010 Geoffrey 'Phogue' Green
-
-    http://www.phogue.net
- 
-    This file is part of PRoCon Frostbite.
-
-    PRoCon Frostbite is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    PRoCon Frostbite is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with PRoCon Frostbite.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Drawing.Imaging;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.IO;
-using System.Net;
-using System.Reflection;
-using System.Xml;
-
-using MaxMind;
-using Ionic.Zip;
-
-using System.Threading;
-using System.Security.Cryptography;
 
 namespace PRoCon.Forms {
     using Core;
-    using Core.Players;
-    using Core.Variables;
     using Core.AutoUpdates;
     using Core.Remote;
     using PRoCon.Controls;
-    using Controls.ControlsEx;
 
     public partial class frmMain : Form {
 
@@ -93,20 +56,23 @@ namespace PRoCon.Forms {
 
             this.m_cnmNotificationMenu = new ContextMenu();
 
-            this.m_mnuHideTrayIcon = new MenuItem();
-            this.m_mnuHideTrayIcon.Index = 0;
-            this.m_mnuHideTrayIcon.Text = "Hide Tray Icon";
+            this.m_mnuHideTrayIcon = new MenuItem {
+                Index = 0,
+                Text = @"Hide Tray Icon"
+            };
             this.m_mnuHideTrayIcon.Click += new System.EventHandler(this.m_mnuHideTrayIcon_Click);
             this.m_cnmNotificationMenu.MenuItems.Add(this.m_mnuHideTrayIcon);
 
-            this.m_mnuSeparator = new MenuItem();
-            this.m_mnuSeparator.Index = 1;
-            this.m_mnuSeparator.Text = "-";
+            this.m_mnuSeparator = new MenuItem {
+                Index = 1,
+                Text = @"-"
+            };
             this.m_cnmNotificationMenu.MenuItems.Add(this.m_mnuSeparator);
 
-            this.m_mnuExit = new MenuItem();
-            this.m_mnuExit.Index = 2;
-            this.m_mnuExit.Text = "Exit";
+            this.m_mnuExit = new MenuItem {
+                Index = 2,
+                Text = @"Exit"
+            };
             this.m_mnuExit.Click += new System.EventHandler(this.m_mnuExit_Click);
             this.m_cnmNotificationMenu.MenuItems.Add(this.m_mnuExit);
 
@@ -257,7 +223,7 @@ namespace PRoCon.Forms {
         #region Manage accounts and options events
 
         private void m_paProcon_CurrentLanguageChanged(CLocalization language) {
-            this.SetLocalization(language);
+            this.InvokeIfRequired(() => this.SetLocalization(language));
         }
 
         void OptionsSettings_ShowTrayIconChanged(bool blEnabled) {
@@ -268,58 +234,59 @@ namespace PRoCon.Forms {
         #endregion
 
         private void Connections_ConnectionAdded(PRoConClient item) {
-            uscServerConnection uscNewConnectionPanel = null;
+            this.InvokeIfRequired(() => {
+                uscServerConnection uscNewConnectionPanel = null;
 
-            uscNewConnectionPanel = new uscServerConnection(this.m_paProcon, item, this, this.m_frmManageAccounts);
-            uscNewConnectionPanel.Dock = DockStyle.Fill;
-            //uscNewConnectionPanel.SetLocalization(this.m_clocLanguage);
-            //uscNewConnectionPanel.BFBC2Connection.Connect();
+                uscNewConnectionPanel = new uscServerConnection(this.m_paProcon, item, this, this.m_frmManageAccounts);
+                uscNewConnectionPanel.Dock = DockStyle.Fill;
+                //uscNewConnectionPanel.SetLocalization(this.m_clocLanguage);
+                //uscNewConnectionPanel.BFBC2Connection.Connect();
 
-            uscNewConnectionPanel.ManageAccountsRequest += new uscServerConnection.ManageAccountsRequestDelegate(uscServerConnection_ManageAccountsRequest);
-            uscNewConnectionPanel.OnTabChange += new uscServerConnection.OnTabChangeDelegate(uscNewConnectionPanel_OnTabChange);
+                uscNewConnectionPanel.ManageAccountsRequest += new uscServerConnection.ManageAccountsRequestDelegate(uscServerConnection_ManageAccountsRequest);
+                uscNewConnectionPanel.OnTabChange += new uscServerConnection.OnTabChangeDelegate(uscNewConnectionPanel_OnTabChange);
 
-            this.pnlWindows.Controls.Add(uscNewConnectionPanel);
-            this.m_dicPages.Add(item.HostNamePort, uscNewConnectionPanel);
+                this.pnlWindows.Controls.Add(uscNewConnectionPanel);
+                this.m_dicPages.Add(item.HostNamePort, uscNewConnectionPanel);
 
-            this.cboServerList.ComboBox.Items.Add(uscNewConnectionPanel);
-            if (this.cboServerList.SelectedItem == null) {
-                this.cboServerList.SelectedItem = uscNewConnectionPanel;
-            }
+                this.cboServerList.ComboBox.Items.Add(uscNewConnectionPanel);
+                if (this.cboServerList.SelectedItem == null) {
+                    this.cboServerList.SelectedItem = uscNewConnectionPanel;
+                }
 
-            item.ConnectionClosed += new PRoConClient.EmptyParamterHandler(item_ConnectionClosed);
-            item.ConnectionFailure += new PRoConClient.FailureHandler(item_ConnectionFailure);
-            item.ConnectSuccess += new PRoConClient.EmptyParamterHandler(item_ConnectSuccess);
-            item.Login += new PRoConClient.EmptyParamterHandler(item_Login);
-            item.ConnectAttempt += new PRoConClient.EmptyParamterHandler(item_ConnectAttempt);
-            item.GameTypeDiscovered += new PRoConClient.EmptyParamterHandler(item_GameTypeDiscovered);
-            item.AutomaticallyConnectChanged += new PRoConClient.AutomaticallyConnectHandler(item_AutomaticallyConnectChanged);
+                item.ConnectionClosed += new PRoConClient.EmptyParamterHandler(item_ConnectionClosed);
+                item.ConnectionFailure += new PRoConClient.FailureHandler(item_ConnectionFailure);
+                item.ConnectSuccess += new PRoConClient.EmptyParamterHandler(item_ConnectSuccess);
+                item.Login += new PRoConClient.EmptyParamterHandler(item_Login);
+                item.ConnectAttempt += new PRoConClient.EmptyParamterHandler(item_ConnectAttempt);
+                item.GameTypeDiscovered += new PRoConClient.EmptyParamterHandler(item_GameTypeDiscovered);
+                item.AutomaticallyConnectChanged += new PRoConClient.AutomaticallyConnectHandler(item_AutomaticallyConnectChanged);
 
-            this.RefreshServerListing();
+                this.RefreshServerListing();
+            });
         }
         
         private void Connections_ConnectionRemoved(PRoConClient item) {
+            this.InvokeIfRequired(() => {
 
-            if (this.m_dicPages.ContainsKey(item.HostNamePort) == true) {
+                if (this.m_dicPages.ContainsKey(item.HostNamePort) == true) {
 
-                if (this.cboServerList.Items.Contains(this.m_dicPages[item.HostNamePort]) == true) {
+                    if (this.cboServerList.Items.Contains(this.m_dicPages[item.HostNamePort]) == true) {
 
-                    if (this.cboServerList.SelectedItem == this.m_dicPages[item.HostNamePort]) {
-                        this.cboServerList.SelectedIndex = 0;
+                        if (this.cboServerList.SelectedItem == this.m_dicPages[item.HostNamePort]) {
+                            this.cboServerList.SelectedIndex = 0;
+                        }
+
+                        this.cboServerList.Items.Remove(this.m_dicPages[item.HostNamePort]);
                     }
 
-                    this.cboServerList.Items.Remove(this.m_dicPages[item.HostNamePort]);
+                    this.m_dicPages.Remove(item.HostNamePort);
                 }
 
-                this.m_dicPages.Remove(item.HostNamePort);
-            }
-
-            this.RefreshServerListing();
+                this.RefreshServerListing();
+            });
         }
 
         private void AddServer(string strHost, UInt16 iu16Port, string strUsername, string strPassword, bool blConnect) {
-
-            //uscServerConnection uscNewConnectionPanel = null;
-
             PRoConClient prcClient = this.m_paProcon.AddConnection(strHost, iu16Port, strUsername, strPassword);
 
             if (blConnect == true && prcClient != null) {
@@ -368,12 +335,14 @@ namespace PRoCon.Forms {
         }
 
         private void changelogToolStripMenuItem_Click(object sender, EventArgs e) {
-            System.Diagnostics.Process.Start("http://phogue.net/procon/changelog.php");
+            //System.Diagnostics.Process.Start("http://phogue.net/procon/changelog.php");
+            System.Diagnostics.Process.Start("https://repo.myrcon.com/procon1/changelog.php");
 
         }
 
         private void pRoConHostingProvidersToolStripMenuItem_Click(object sender, EventArgs e) {
-            System.Diagnostics.Process.Start("http://phogue.net/procon/proconhosting.php");
+            //System.Diagnostics.Process.Start("http://phogue.net/procon/proconhosting.php");
+            System.Diagnostics.Process.Start("https://repo.myrcon.com/procon1/proconhosting.php");
         }
 
         private void optionsToolStripMenuItem1_Click(object sender, EventArgs e) {
@@ -485,87 +454,102 @@ namespace PRoCon.Forms {
         private bool m_blPopupGcCheckResults = false;
 
         private void m_paProcon_CheckingUpdates() {
-            this.toolStripDownloading.ForeColor = SystemColors.WindowText;
-            this.toolStripDownloading.IsLink = false;
-            this.toolStripDownloading.Text = this.m_clocLanguage.GetLocalized("frmMain.toolStripDownloading.Checking");
-            this.toolStripDownloading.Image = picAjaxStyleLoading.Image;
-            this.toolStripDownloading.Visible = true;
+            this.InvokeIfRequired(() => {
+                this.toolStripDownloading.ForeColor = SystemColors.WindowText;
+                this.toolStripDownloading.IsLink = false;
+                this.toolStripDownloading.Text = this.m_clocLanguage.GetLocalized("frmMain.toolStripDownloading.Checking");
+                this.toolStripDownloading.Image = picAjaxStyleLoading.Image;
+                this.toolStripDownloading.Visible = true;
+            });
         }
 
         void m_paProcon_NoVersionAvailable() {
-            if (this.m_blPopupVersionResults == true) {
-                MessageBox.Show(this.m_clocLanguage.GetLocalized("frmMain.MessageBox.NoUpdateAvailable", null), "PRoCon Frostbite", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                this.m_blPopupVersionResults = false;
-            }
+            this.InvokeIfRequired(() => {
+                if (this.m_blPopupVersionResults == true) {
+                    MessageBox.Show(this.m_clocLanguage.GetLocalized("frmMain.MessageBox.NoUpdateAvailable", null), "PRoCon Frostbite", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    this.m_blPopupVersionResults = false;
+                }
 
-            this.toolStripDownloading.Visible = false;
+                this.toolStripDownloading.Visible = false;
+            });
         }
 
-        void m_paProcon_GameConfigUpdated()
-        {
-            if (this.m_blPopupGcCheckResults == true)
-            {
-                MessageBox.Show(this.m_clocLanguage.GetLocalized("frmMain.MessageBox.GameConfigUpdated", null), "PRoCon Frostbite", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                this.m_blPopupGcCheckResults = false;
-            }
+        void m_paProcon_GameConfigUpdated() {
+            this.InvokeIfRequired(() => {
+                if (this.m_blPopupGcCheckResults == true) {
+                    MessageBox.Show(this.m_clocLanguage.GetLocalized("frmMain.MessageBox.GameConfigUpdated", null), "PRoCon Frostbite", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    this.m_blPopupGcCheckResults = false;
+                }
+            });
         }
 
         void VersionChecker_DownloadError(CDownloadFile cdfSender) {
-            this.toolStripDownloadProgress.Visible = false;
+            this.InvokeIfRequired(() => {
+                this.toolStripDownloadProgress.Visible = false;
 
-            this.toolStripDownloading.ForeColor = Color.Maroon;
-            this.toolStripDownloading.Image = null;
-            this.toolStripDownloading.Text = this.m_clocLanguage.GetLocalized("frmMain.toolStripDownloading.Error", cdfSender.Error);
+                this.toolStripDownloading.ForeColor = Color.Maroon;
+                this.toolStripDownloading.Image = null;
+                this.toolStripDownloading.Text = this.m_clocLanguage.GetLocalized("frmMain.toolStripDownloading.Error", cdfSender.Error);
+            });
         }
 
         void AutoUpdater_CustomDownloadError(string strError) {
-            this.toolStripDownloadProgress.Visible = false;
+            this.InvokeIfRequired(() => {
+                this.toolStripDownloadProgress.Visible = false;
 
-            this.toolStripDownloading.ForeColor = Color.Maroon;
-            this.toolStripDownloading.Image = null;
-            this.toolStripDownloading.Text = this.m_clocLanguage.GetLocalized("frmMain.toolStripDownloading.Error", strError);
+                this.toolStripDownloading.ForeColor = Color.Maroon;
+                this.toolStripDownloading.Image = null;
+                this.toolStripDownloading.Text = this.m_clocLanguage.GetLocalized("frmMain.toolStripDownloading.Error", strError);
+            });
         }
 
 
         private void m_paProcon_UpdateDownloading(CDownloadFile cdfDownloading) {
-            cdfDownloading.DownloadProgressUpdate += new CDownloadFile.DownloadFileEventDelegate(cdfDownloading_DownloadProgressUpdate);
-            cdfDownloading.DownloadError += new CDownloadFile.DownloadFileEventDelegate(cdfDownloading_DownloadError);
-            cdfDownloading.DownloadDiscoveredFileSize += new CDownloadFile.DownloadFileEventDelegate(cdfDownloading_DownloadDiscoveredFileSize);
+            this.InvokeIfRequired(() => {
+                cdfDownloading.DownloadProgressUpdate += new CDownloadFile.DownloadFileEventDelegate(cdfDownloading_DownloadProgressUpdate);
+                cdfDownloading.DownloadError += new CDownloadFile.DownloadFileEventDelegate(cdfDownloading_DownloadError);
+                cdfDownloading.DownloadDiscoveredFileSize += new CDownloadFile.DownloadFileEventDelegate(cdfDownloading_DownloadDiscoveredFileSize);
+            });
         }
 
         private void cdfDownloading_DownloadDiscoveredFileSize(CDownloadFile cdfSender) {
-            this.toolStripDownloading.ForeColor = SystemColors.WindowText;
-            this.toolStripDownloading.Image = picAjaxStyleLoading.Image;
-            this.toolStripDownloadProgress.Visible = true;
+            this.InvokeIfRequired(() => {
+                this.toolStripDownloading.ForeColor = SystemColors.WindowText;
+                this.toolStripDownloading.Image = picAjaxStyleLoading.Image;
+                this.toolStripDownloadProgress.Visible = true;
 
-            this.toolStripDownloadProgress.Maximum = cdfSender.FileSize;
+                this.toolStripDownloadProgress.Maximum = cdfSender.FileSize;
+            });
         }
 
         private void cdfDownloading_DownloadError(CDownloadFile cdfSender) {
-            this.toolStripDownloadProgress.Visible = false;
+            this.InvokeIfRequired(() => {
+                this.toolStripDownloadProgress.Visible = false;
 
-            this.toolStripDownloading.ForeColor = Color.Maroon;
-            this.toolStripDownloading.Image = null;
-            this.toolStripDownloading.Text = this.m_clocLanguage.GetLocalized("frmMain.toolStripDownloading.Error", cdfSender.Error);
+                this.toolStripDownloading.ForeColor = Color.Maroon;
+                this.toolStripDownloading.Image = null;
+                this.toolStripDownloading.Text = this.m_clocLanguage.GetLocalized("frmMain.toolStripDownloading.Error", cdfSender.Error);
+            });
         }
 
         private void cdfDownloading_DownloadProgressUpdate(CDownloadFile cdfSender) {
-            this.toolStripDownloadProgress.Value = cdfSender.BytesDownloaded;
-            this.toolStripDownloading.Text = String.Format("{0} {1}", this.m_clocLanguage.GetLocalized("frmMain.toolStripDownloading", null), cdfSender.GetLabelProgress());
+            this.InvokeIfRequired(() => {
+                this.toolStripDownloadProgress.Value = cdfSender.BytesDownloaded;
+                this.toolStripDownloading.Text = String.Format("{0} {1}", this.m_clocLanguage.GetLocalized("frmMain.toolStripDownloading", null), cdfSender.GetLabelProgress());
+            });
         }
 
 
 
         private void AutoUpdater_DownloadUnzipComplete() {
+            this.InvokeIfRequired(() => {
+                this.toolStripDownloading.IsLink = true;
+                this.toolStripDownloading.Image = this.iglIcons.Images["star.png"];
+                this.toolStripDownloadProgress.Visible = false;
 
-            this.toolStripDownloading.IsLink = true;
-            this.toolStripDownloading.Image = this.iglIcons.Images["star.png"];
-            this.toolStripDownloadProgress.Visible = false;
-
-            this.toolStripDownloading.Text = this.m_clocLanguage.GetLocalized("frmMain.toolStripDownloading.Complete");
-            this.tltpUpdateComplete.Show(this.m_clocLanguage.GetLocalized("frmMain.toolStripDownloading.Complete"), this, this.toolStripDownloading.Bounds.X + (this.toolStripDownloading.Bounds.Width / 2), this.stsMain.Bounds.Y, 5000);
-
-
+                this.toolStripDownloading.Text = this.m_clocLanguage.GetLocalized("frmMain.toolStripDownloading.Complete");
+                this.tltpUpdateComplete.Show(this.m_clocLanguage.GetLocalized("frmMain.toolStripDownloading.Complete"), this, this.toolStripDownloading.Bounds.X + (this.toolStripDownloading.Bounds.Width / 2), this.stsMain.Bounds.Y, 5000);
+            });
         }
 
         private void toolStripDownloading_Click(object sender, EventArgs e) {
@@ -615,7 +599,7 @@ namespace PRoCon.Forms {
 
         private void cboServerList_SelectedIndexChanged(object sender, EventArgs e) {
 
-            if (this.cboServerList.SelectedItem != null) {
+            if (this.cboServerList.IsDisposed == false && this.cboServerList.SelectedItem != null) {
 
                 uscPage selectedServer = (uscPage)this.cboServerList.SelectedItem;
 
@@ -707,7 +691,12 @@ namespace PRoCon.Forms {
                             e.Graphics.DrawImage(this.iglIcons.Images["exclamation-button.png"], e.Bounds.Left + 2, e.Bounds.Top + 1, this.iglIcons.ImageSize.Width, this.iglIcons.ImageSize.Height);
                         }
 
-                        e.Graphics.DrawString(drawItem.Client.HostNamePort, this.cboServerList.Font, SystemBrushes.WindowText, e.Bounds.Left + 21, e.Bounds.Top);
+                        if (drawItem.Client.ConnectionServerName != String.Empty) {
+                            e.Graphics.DrawString(String.Format("{0} [{1}]", drawItem.Client.ConnectionServerName, drawItem.Client.HostNamePort), this.cboServerList.Font, SystemBrushes.WindowText, e.Bounds.Left + 21, e.Bounds.Top);
+                        }
+                        else {
+                            e.Graphics.DrawString(drawItem.Client.HostNamePort, this.cboServerList.Font, SystemBrushes.WindowText, e.Bounds.Left + 21, e.Bounds.Top);
+                        }
                     }
                     
                 }
@@ -808,93 +797,71 @@ namespace PRoCon.Forms {
         }
 
         private void RefreshServerListing() {
-            //this.cboServerList.BeginUpdate();
+            if (this.IsDisposed == false) {
+                this.cboServerList_SelectedIndexChanged(null, null);
 
-            this.cboServerList_SelectedIndexChanged(null, null);
+                Point cursor = this.PointToClient(Cursor.Position);
 
-            Point cursor = this.PointToClient(Cursor.Position);
-            //cursor.Y -= this.mnuMain.Height;
+                uscServerConnection item = this.cboServerList.SelectedItem as uscServerConnection;
 
-            if (this.cboServerList.SelectedItem != null && this.cboServerList.SelectedItem is uscServerConnection) {
+                if (item != null) {
+                    uscServerConnection selectedServer = item;
 
-                uscServerConnection selectedServer = (uscServerConnection)this.cboServerList.SelectedItem;
-                object b = this.cboServerList.ComboBox.SelectedItem;
-                if (selectedServer.Client.State == ConnectionState.Connecting || (selectedServer.Client.State == ConnectionState.Connected && selectedServer.Client.IsLoggedIn == false)) {
-                    if (this.btnConnectDisconnect.Bounds.Contains(cursor) == true) {
-                        this.btnConnectDisconnect_MouseEnter(null, null);
+                    if (selectedServer.Client.State == ConnectionState.Connecting || (selectedServer.Client.State == ConnectionState.Connected && selectedServer.Client.IsLoggedIn == false)) {
+                        if (this.btnConnectDisconnect.Bounds.Contains(cursor) == true) {
+                            this.btnConnectDisconnect_MouseEnter(null, null);
+                        }
                     }
                 }
             }
-
-
-            //this.cboServerList.Invalidate();
-            //this.cboServerList.EndUpdate();
         }
 
         private void item_ConnectAttempt(PRoConClient sender) {
-            this.RefreshServerListing();
+            this.InvokeIfRequired(this.RefreshServerListing);
         }
 
         private void item_ConnectSuccess(PRoConClient sender) {
-            this.RefreshServerListing();
+            this.InvokeIfRequired(this.RefreshServerListing);
         }
 
         private void item_Login(PRoConClient sender) {
-            this.RefreshServerListing();
+            this.InvokeIfRequired(this.RefreshServerListing);
         }
 
         private void item_ConnectionFailure(PRoConClient sender, Exception exception) {
-            this.RefreshServerListing();
+            this.InvokeIfRequired(this.RefreshServerListing);
         }
 
         private void item_ConnectionClosed(PRoConClient sender) {
-            this.RefreshServerListing();
+            this.InvokeIfRequired(this.RefreshServerListing);
         }
 
         private void item_AutomaticallyConnectChanged(PRoConClient sender, bool isEnabled) {
-            this.RefreshServerListing();
+            this.InvokeIfRequired(this.RefreshServerListing);
         }
 
         private void item_GameTypeDiscovered(PRoConClient sender) {
-            if (sender.Game != null) {
-                sender.Game.ServerInfo += new FrostbiteClient.ServerInfoHandler(Game_ServerInfo);
-            }
+            this.InvokeIfRequired(() => {
+                if (sender.Game != null) {
+                    sender.Game.ServerInfo += new FrostbiteClient.ServerInfoHandler(Game_ServerInfo);
+                }
 
-            this.RefreshServerListing();
+                this.RefreshServerListing();
+            });
         }
 
         private void Game_ServerInfo(FrostbiteClient sender, CServerInfo csiServerInfo) {
-            
-            if (this.cboServerList.SelectedItem is uscServerConnection) {
+            this.InvokeIfRequired(() => {
 
-                if (((uscServerConnection)this.cboServerList.SelectedItem).Client.Game == sender) {
-                    this.cboServerList.ComboBox.Refresh();
-                }
-            }
-        }
+                if (this.cboServerList.SelectedItem is uscServerConnection) {
 
-        /*
-        private void tmrConnectingLoop_Tick(object sender, EventArgs e) {
-            Image gifImage = this.picAjaxStyleLoading.Image;
-            FrameDimension dimension = new FrameDimension(gifImage.FrameDimensionsList[0]);
-            int frameCount = gifImage.GetFrameCount(dimension);
-
-            foreach (KeyValuePair<string, uscServerConnection> kvpPanel in this.m_dicConnectionPages) {
-                if ((kvpPanel.Value.BFBC2Connection.IsConnected == false && kvpPanel.Value.BFBC2Connection.IsConnecting == true) || (kvpPanel.Value.BFBC2Connection.IsConnected == true && kvpPanel.Value.BFBC2Connection.IsLoggedIn == false)) {
-                    kvpPanel.Value.ConnectingFrame = (kvpPanel.Value.ConnectingFrame + 1) % frameCount;
-
-                    if ((kvpPanel.Value.BFBC2Connection.IsConnected == false && kvpPanel.Value.BFBC2Connection.IsConnecting == true) || (kvpPanel.Value.BFBC2Connection.IsConnected == true && kvpPanel.Value.BFBC2Connection.IsLoggedIn == false)) {
-
-                        gifImage.SelectActiveFrame(dimension, kvpPanel.Value.ConnectingFrame);
-
-                        this.btnConnectDisconnect.Image = gifImage;
-                        this.btnConnectDisconnect.Text = "Connecting";
+                    if (((uscServerConnection) this.cboServerList.SelectedItem).Client.Game == sender) {
+                        this.cboServerList.ComboBox.Refresh();
                     }
                 }
-            }
+            });
         }
-        */
-        
+
         private void m_frmConfirmation_ConfirmationSuccess() {
             if (this.cboServerList.SelectedItem != null) {
                 uscServerConnection selectedServer = (uscServerConnection)this.cboServerList.SelectedItem;

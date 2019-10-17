@@ -1,0 +1,2298 @@
+/////////////////////////////////////////////
+// This definitions file will be overwritten during an update.
+//  (2017-08-03.01)
+// This file contains the standard defintions required to run procon 
+// connected to a BF4 server
+/////////////////////////////////////////////
+
+procon.protected.serverversions.clear BF4
+procon.protected.serverversions.add BF4 "70517" "OB-R2"
+procon.protected.serverversions.add BF4 "72879" "OB-R3"
+procon.protected.serverversions.add BF4 "77582" "OB-R4"
+procon.protected.serverversions.add BF4 "87884" "R4"
+procon.protected.serverversions.add BF4 "88031" "R5"
+procon.protected.serverversions.add BF4 "88058" "R6"
+procon.protected.serverversions.add BF4 "88472" "R7"
+procon.protected.serverversions.add BF4 "89702" "R8"
+procon.protected.serverversions.add BF4 "90165" "R9"
+procon.protected.serverversions.add BF4 "90519" "R10"
+procon.protected.serverversions.add BF4 "91697" "R11"
+procon.protected.serverversions.add BF4 "93111" "R12"
+procon.protected.serverversions.add BF4 "94318" "R13"
+procon.protected.serverversions.add BF4 "95851" "R14"
+procon.protected.serverversions.add BF4 "96245" "R15"
+procon.protected.serverversions.add BF4 "97870" "R16"
+procon.protected.serverversions.add BF4 "99392" "R17"
+procon.protected.serverversions.add BF4 "101684" "R18"
+procon.protected.serverversions.add BF4 "102560" "R19"
+procon.protected.serverversions.add BF4 "103064" "R20"
+procon.protected.serverversions.add BF4 "106318" "R21"
+procon.protected.serverversions.add BF4 "106533" "R22"
+procon.protected.serverversions.add BF4 "107145" "R23"
+procon.protected.serverversions.add BF4 "107436" "R24"
+procon.protected.serverversions.add BF4 "108751" "R25"
+procon.protected.serverversions.add BF4 "109758" "R26"
+procon.protected.serverversions.add BF4 "111118" "R27"
+procon.protected.serverversions.add BF4 "112943" "R28"
+procon.protected.serverversions.add BF4 "114240" "R29"
+procon.protected.serverversions.add BF4 "115397" "R30"
+procon.protected.serverversions.add BF4 "117719" "R31"
+procon.protected.serverversions.add BF4 "120511" "R32"
+procon.protected.serverversions.add BF4 "125871" "R33"
+procon.protected.serverversions.add BF4 "126936" "R34"
+procon.protected.serverversions.add BF4 "130790" "R35"
+procon.protected.serverversions.add BF4 "133337" "R36"
+procon.protected.serverversions.add BF4 "135082" "R37"
+procon.protected.serverversions.add BF4 "136921" "R38"
+procon.protected.serverversions.add BF4 "138571" "R39"
+procon.protected.serverversions.add BF4 "139796" "R40"
+procon.protected.serverversions.add BF4 "140136" "R41"
+procon.protected.serverversions.add BF4 "147837" "R42"
+procon.protected.serverversions.add BF4 "150767" "R43"
+procon.protected.serverversions.add BF4 "154100" "R44"
+procon.protected.serverversions.add BF4 "154793" "R45"
+procon.protected.serverversions.add BF4 "155011" "R46"
+procon.protected.serverversions.add BF4 "157186" "R48"
+procon.protected.serverversions.add BF4 "158113" "R49"
+procon.protected.serverversions.add BF4 "162016" "R50"
+procon.protected.serverversions.add BF4 "165241" "R51"
+procon.protected.serverversions.add BF4 "166185" "R52"
+procon.protected.serverversions.add BF4 "171730" "R53"
+procon.protected.serverversions.add BF4 "176744" "R55"
+procon.protected.serverversions.add BF4 "177035" "R56"
+
+procon.protected.specialization.clear
+
+procon.protected.weapons.clear
+procon.protected.weapons.add None "DamageArea" Primary Suicide
+procon.protected.weapons.add None "Death" Primary None
+procon.protected.weapons.add None "Melee" Secondary Melee
+procon.protected.weapons.add None "RoadKill" Primary None
+procon.protected.weapons.add None "SoldierCollision" Primary Suicide
+procon.protected.weapons.add None "Suicide" Primary Suicide
+procon.protected.weapons.add None "VehicleUpsideDown" Primary Suicide
+procon.protected.weapons.add None "U_870" Primary Shotgun
+procon.protected.weapons.add Demolition "AA Mine" Secondary Explosive
+procon.protected.weapons.add None "U_A91" Primary Carbine
+procon.protected.weapons.add None "U_ACR" Primary Carbine
+procon.protected.weapons.add Assault "U_AEK971" Primary AssaultRifle
+procon.protected.weapons.add Assault "U_AEK971_M26_Buck" Secondary Shotgun
+procon.protected.weapons.add Assault "U_AEK971_M26_Flechette" Secondary Shotgun
+procon.protected.weapons.add Assault "U_AEK971_M26_Frag" Secondary Shotgun
+procon.protected.weapons.add Assault "U_AEK971_M26_Slug" Secondary Shotgun
+procon.protected.weapons.add Assault "U_AEK971_M320_3GL" Secondary ProjectileExplosive
+procon.protected.weapons.add Assault "U_AEK971_M320_FLASH" Secondary ProjectileExplosive
+procon.protected.weapons.add Assault "U_AEK971_M320_HE" Secondary ProjectileExplosive
+procon.protected.weapons.add Assault "U_AEK971_M320_LVG" Secondary ProjectileExplosive
+procon.protected.weapons.add Assault "U_AEK971_M320_SHG" Secondary Shotgun
+procon.protected.weapons.add Assault "U_AEK971_M320_SMK" Secondary Impact
+procon.protected.weapons.add Assault "U_AK12" Primary AssaultRifle
+procon.protected.weapons.add Assault "U_AK12_M26_Buck" Secondary Shotgun
+procon.protected.weapons.add Assault "U_AK12_M26_Flechette" Secondary Shotgun
+procon.protected.weapons.add Assault "U_AK12_M26_Frag" Secondary Shotgun
+procon.protected.weapons.add Assault "U_AK12_M26_Slug" Secondary Shotgun
+procon.protected.weapons.add Assault "U_AK12_M320_3GL" Secondary ProjectileExplosive
+procon.protected.weapons.add Assault "U_AK12_M320_FLASH" Secondary ProjectileExplosive
+procon.protected.weapons.add Assault "U_AK12_M320_HE" Secondary ProjectileExplosive
+procon.protected.weapons.add Assault "U_AK12_M320_LVG" Secondary ProjectileExplosive
+procon.protected.weapons.add Assault "U_AK12_M320_SHG" Secondary Shotgun
+procon.protected.weapons.add Assault "U_AK12_M320_SMK" Secondary Impact
+procon.protected.weapons.add None "U_AK5C" Primary Carbine
+procon.protected.weapons.add None "U_AKU12" Primary Carbine
+procon.protected.weapons.add None "U_Ammobag" Auxiliary Nonlethal
+procon.protected.weapons.add None "U_AMR2" Primary SniperRifle
+procon.protected.weapons.add None "U_AMR2_CQB" Primary SniperRifle
+procon.protected.weapons.add None "U_AMR2_MED" Primary SniperRifle
+procon.protected.weapons.add Assault "U_AR160" Primary AssaultRifle
+procon.protected.weapons.add Assault "U_AR160_M26_Buck" Secondary Shotgun
+procon.protected.weapons.add Assault "U_AR160_M26_Flechette" Secondary Shotgun
+procon.protected.weapons.add Assault "U_AR160_M26_Frag" Secondary Shotgun
+procon.protected.weapons.add Assault "U_AR160_M26_Slug" Secondary Shotgun
+procon.protected.weapons.add Assault "U_AR160_M320_3GL" Secondary ProjectileExplosive
+procon.protected.weapons.add Assault "U_AR160_M320_FLASH" Secondary ProjectileExplosive
+procon.protected.weapons.add Assault "U_AR160_M320_HE" Secondary ProjectileExplosive
+procon.protected.weapons.add Assault "U_AR160_M320_LVG" Secondary ProjectileExplosive
+procon.protected.weapons.add Assault "U_AR160_M320_SHG" Secondary Shotgun
+procon.protected.weapons.add Assault "U_AR160_M320_SMK" Secondary Impact
+procon.protected.weapons.add Demolition "U_ASVAL" Primary SMG
+procon.protected.weapons.add None "U_AT4" Secondary ProjectileExplosive
+procon.protected.weapons.add Support "U_AWS" Primary LMG
+procon.protected.weapons.add Support "U_BallisticShield" Secondary Impact
+procon.protected.weapons.add Assault "U_Bulldog" Primary AssaultRifle
+procon.protected.weapons.add Recon "U_C4" Secondary Explosive
+procon.protected.weapons.add Support "U_C4_Support" Secondary Explosive
+procon.protected.weapons.add Demolition "U_CBJ-MS" Primary SMG
+procon.protected.weapons.add Support "U_Claymore" Secondary Explosive
+procon.protected.weapons.add Recon "U_Claymore_Recon" Secondary Explosive
+procon.protected.weapons.add Recon "U_SP_Claymore" Secondary Explosive
+procon.protected.weapons.add Recon "U_CS-LR4" Primary SniperRifle
+procon.protected.weapons.add Recon "U_CS5" Primary SniperRifle
+procon.protected.weapons.add Assault "U_CZ805" Primary AssaultRifle
+procon.protected.weapons.add Assault "U_CZ805_M26_Buck" Secondary Shotgun
+procon.protected.weapons.add Assault "U_CZ805_M26_Flechette" Secondary Shotgun
+procon.protected.weapons.add Assault "U_CZ805_M26_Frag" Secondary Shotgun
+procon.protected.weapons.add Assault "U_CZ805_M26_Slug" Secondary Shotgun
+procon.protected.weapons.add Assault "U_CZ805_M320_3GL" Secondary ProjectileExplosive
+procon.protected.weapons.add Assault "U_CZ805_M320_FLASH" Secondary ProjectileExplosive
+procon.protected.weapons.add Assault "U_CZ805_M320_HE" Secondary ProjectileExplosive
+procon.protected.weapons.add Assault "U_CZ805_M320_LVG" Secondary ProjectileExplosive
+procon.protected.weapons.add Assault "U_CZ805_M320_SHG" Secondary Shotgun
+procon.protected.weapons.add Assault "U_CZ805_M320_SMK" Secondary Impact
+procon.protected.weapons.add None "U_CZ75" Auxiliary Handgun
+procon.protected.weapons.add None "U_DAO12" Primary Shotgun
+procon.protected.weapons.add None "U_DBV12" Primary Shotgun
+procon.protected.weapons.add None "U_DesertEagle" Auxiliary Handgun
+procon.protected.weapons.add Assault "U_Defib" Secondary Melee
+procon.protected.weapons.add None "dlSHTR" Primary None
+procon.protected.weapons.add Demolition "EODBot" Secondary Impact
+procon.protected.weapons.add Demolition "Weapons/Gadgets/EODBot/EODBot_PDA" Auxiliary Nonlethal
+procon.protected.weapons.add Assault "U_F2000" Primary AssaultRifle
+procon.protected.weapons.add Assault "U_FAMAS" Primary AssaultRifle
+procon.protected.weapons.add Demolition "U_FGM148" Secondary ProjectileExplosive
+procon.protected.weapons.add Demolition "U_FIM92" Secondary ProjectileExplosive
+procon.protected.weapons.add None "U_Flashbang" Auxiliary Explosive
+procon.protected.weapons.add None "U_FN57" Auxiliary Handgun
+procon.protected.weapons.add Recon "U_FY-JS" Primary SniperRifle
+procon.protected.weapons.add None "U_G36C" Primary Carbine
+procon.protected.weapons.add None "U_GalilACE" Primary Carbine
+procon.protected.weapons.add Assault "U_GalilACE23" Primary AssaultRifle
+procon.protected.weapons.add None "U_GalilACE52" Primary Carbine
+procon.protected.weapons.add None "U_GalilACE53" Primary DMR
+procon.protected.weapons.add None "U_Glock18" Auxiliary Handgun
+procon.protected.weapons.add Recon "U_GOL" Primary SniperRifle
+procon.protected.weapons.add None "U_Grenade_RGO" Auxiliary Explosive
+procon.protected.weapons.add None "U_Handflare" Auxiliary Nonlethal
+procon.protected.weapons.add None "U_HAWK" Primary Shotgun
+procon.protected.weapons.add None "U_HK45C" Auxiliary Handgun
+procon.protected.weapons.add Recon "U_JNG90" Primary SniperRifle
+procon.protected.weapons.add Demolition "U_JS2" Primary SMG
+procon.protected.weapons.add None "U_Knife" Secondary Melee
+procon.protected.weapons.add Assault "U_L85A2" Primary AssaultRifle
+procon.protected.weapons.add Assault "U_L85A2_M320_3GL_V2" Secondary ProjectileExplosive
+procon.protected.weapons.add Assault "U_L85A2_M320_FLASH_V2" Secondary Impact
+procon.protected.weapons.add Assault "U_L85A2_M320_HE_V2" Secondary ProjectileExplosive
+procon.protected.weapons.add Assault "U_L85A2_M320_LVG_V2" Secondary ProjectileExplosive
+procon.protected.weapons.add Assault "U_L85A2_M320_SHG_V2" Secondary Shotgun
+procon.protected.weapons.add Assault "U_L85A2_M320_SMK_V2" Secondary Impact
+procon.protected.weapons.add Recon "U_L96A1" Primary SniperRifle
+procon.protected.weapons.add Support "U_LSAT" Primary LMG
+procon.protected.weapons.add None "U_M1014" Primary Shotgun
+procon.protected.weapons.add Demolition "U_M15" Secondary Explosive
+procon.protected.weapons.add Assault "U_M16A4" Primary AssaultRifle
+procon.protected.weapons.add Assault "U_M16A4_M26_Buck" Secondary Shotgun
+procon.protected.weapons.add Assault "U_M16A4_M26_Flechette" Secondary Shotgun
+procon.protected.weapons.add Assault "U_M16A4_M26_Frag" Secondary Shotgun
+procon.protected.weapons.add Assault "U_M16A4_M26_Slug" Secondary Shotgun
+procon.protected.weapons.add Assault "U_M16A4_M320_3GL" Secondary ProjectileExplosive
+procon.protected.weapons.add Assault "U_M16A4_M320_FLASH" Secondary ProjectileExplosive
+procon.protected.weapons.add Assault "U_M16A4_M320_HE" Secondary ProjectileExplosive
+procon.protected.weapons.add Assault "U_M16A4_M320_LVG" Secondary ProjectileExplosive
+procon.protected.weapons.add Assault "U_M16A4_M320_SHG" Secondary Shotgun
+procon.protected.weapons.add Assault "U_M16A4_M320_SMK" Secondary Impact
+procon.protected.weapons.add None "U_M18" Auxiliary Nonlethal
+procon.protected.weapons.add None "U_M1911" Auxiliary Handgun
+procon.protected.weapons.add Recon "U_M200" Primary SniperRifle
+procon.protected.weapons.add Support "M224" Secondary ProjectileExplosive
+procon.protected.weapons.add Support "U_M224" Secondary ProjectileExplosive
+procon.protected.weapons.add Support "U_M240" Primary LMG
+procon.protected.weapons.add Support "U_M249" Primary LMG
+procon.protected.weapons.add Assault "U_M26Mass" Secondary Shotgun
+procon.protected.weapons.add Assault "U_M26Mass_Flechette" Secondary Shotgun
+procon.protected.weapons.add Assault "U_M26Mass_Frag" Secondary Shotgun
+procon.protected.weapons.add Assault "U_M26Mass_Slug" Secondary Shotgun
+procon.protected.weapons.add Assault "U_M320_3GL" Secondary ProjectileExplosive
+procon.protected.weapons.add Assault "U_M320_FLASH" Secondary ProjectileExplosive
+procon.protected.weapons.add Assault "U_M320_HE" Secondary ProjectileExplosive
+procon.protected.weapons.add Assault "U_M320_LVG" Secondary ProjectileExplosive
+procon.protected.weapons.add Assault "U_M320_SHG" Secondary Shotgun
+procon.protected.weapons.add Assault "U_M320_SMK" Secondary Impact
+procon.protected.weapons.add None "U_M34" Auxiliary Explosive
+procon.protected.weapons.add None "U_M39EBR" Primary DMR
+procon.protected.weapons.add Recon "U_M40A5" Primary SniperRifle
+procon.protected.weapons.add Assault "U_M416" Primary AssaultRifle
+procon.protected.weapons.add Assault "U_M416_M26_Buck" Secondary Shotgun
+procon.protected.weapons.add Assault "U_M416_M26_Flechette" Secondary Shotgun
+procon.protected.weapons.add Assault "U_M416_M26_Frag" Secondary Shotgun
+procon.protected.weapons.add Assault "U_M416_M26_Slug" Secondary Shotgun
+procon.protected.weapons.add Assault "U_M416_M320_3GL" Secondary ProjectileExplosive
+procon.protected.weapons.add Assault "U_M416_M320_FLASH" Secondary ProjectileExplosive
+procon.protected.weapons.add Assault "U_M416_M320_HE" Secondary ProjectileExplosive
+procon.protected.weapons.add Assault "U_M416_M320_LVG" Secondary ProjectileExplosive
+procon.protected.weapons.add Assault "U_M416_M320_SHG" Secondary Shotgun
+procon.protected.weapons.add Assault "U_M416_M320_SMK" Secondary Impact
+procon.protected.weapons.add None "U_M4A1" Primary Carbine
+procon.protected.weapons.add Support "U_M60E4" Primary LMG
+procon.protected.weapons.add None "U_M60ULT" Primary LMG
+procon.protected.weapons.add None "U_M67" Auxiliary Explosive
+procon.protected.weapons.add None "U_M82A3" Primary SniperRifle
+procon.protected.weapons.add None "U_M82A3_CQB" Primary SniperRifle
+procon.protected.weapons.add None "U_M82A3_MED" Primary SniperRifle
+procon.protected.weapons.add None "U_M82A3_SP" Primary SniperRifle
+procon.protected.weapons.add None "U_M9" Auxiliary Handgun
+procon.protected.weapons.add None "U_M93R" Auxiliary Handgun
+procon.protected.weapons.add Recon "U_M98B" Primary SniperRifle
+procon.protected.weapons.add Demolition "U_MagpulPDR" Primary SMG
+procon.protected.weapons.add Recon "Gameplay/Gadgets/MAV/MAV" Secondary Impact
+procon.protected.weapons.add Assault "U_Medkit" Auxiliary Nonlethal
+procon.protected.weapons.add Support "U_MG4" Primary LMG
+procon.protected.weapons.add None "U_MGL" Primary ProjectileExplosive
+procon.protected.weapons.add None "U_MK11" Primary DMR
+procon.protected.weapons.add None "XP4/Gameplay/Gadgets/MKV/MKV" Secondary Impact
+procon.protected.weapons.add Demolition "U_MP7" Primary SMG
+procon.protected.weapons.add None "U_MP412Rex" Auxiliary Handgun
+procon.protected.weapons.add None "U_MP443" Auxiliary Handgun
+procon.protected.weapons.add None "U_MTAR21" Primary Carbine
+procon.protected.weapons.add Demolition "U_MPX" Primary SMG
+procon.protected.weapons.add Demolition "U_MX4" Primary SMG
+procon.protected.weapons.add Demolition "U_NLAW" Secondary ProjectileExplosive
+procon.protected.weapons.add None "U_P226" Auxiliary Handgun
+procon.protected.weapons.add Demolition "U_P90" Primary SMG
+procon.protected.weapons.add Support "U_Pecheneg" Primary LMG
+procon.protected.weapons.add Assault "U_PortableMedicpack" Auxiliary Nonlethal
+procon.protected.weapons.add Demolition "U_PP2000" Primary SMG
+procon.protected.weapons.add Support "U_QBB95" Primary LMG
+procon.protected.weapons.add None "U_QBS09" Primary Shotgun
+procon.protected.weapons.add None "U_QBU88" Primary DMR
+procon.protected.weapons.add Assault "U_QBZ951" Primary AssaultRifle
+procon.protected.weapons.add Assault "U_QBZ951_M26_Buck" Secondary Shotgun
+procon.protected.weapons.add Assault "U_QBZ951_M26_Flechette" Secondary Shotgun
+procon.protected.weapons.add Assault "U_QBZ951_M26_Frag" Secondary Shotgun
+procon.protected.weapons.add Assault "U_QBZ951_M26_Slug" Secondary Shotgun
+procon.protected.weapons.add Assault "U_QBZ951_M320_3GL" Secondary ProjectileExplosive
+procon.protected.weapons.add Assault "U_QBZ951_M320_FLASH" Secondary ProjectileExplosive
+procon.protected.weapons.add Assault "U_QBZ951_M320_HE" Secondary ProjectileExplosive
+procon.protected.weapons.add Assault "U_QBZ951_M320_LVG" Secondary ProjectileExplosive
+procon.protected.weapons.add Assault "U_QBZ951_M320_SHG" Secondary Shotgun
+procon.protected.weapons.add Assault "U_QBZ951_M320_SMK" Secondary Impact
+procon.protected.weapons.add None "U_QSZ92" Auxiliary Handgun
+procon.protected.weapons.add None "XP3/Gameplay/Vehicles/RAWR/RAWR" Secondary Explosive
+procon.protected.weapons.add None "U_Railgun" Primary ProjectileExplosive
+procon.protected.weapons.add Demolition "U_Repairtool" Secondary Melee
+procon.protected.weapons.add None "U_RFB" Primary DMR
+procon.protected.weapons.add Demolition "U_RPG7" Secondary ProjectileExplosive
+procon.protected.weapons.add Support "U_RPK12" Primary LMG
+procon.protected.weapons.add Support "U_RPK-74" Primary LMG
+procon.protected.weapons.add Demolition "U_Sa18IGLA" Secondary ProjectileExplosive
+procon.protected.weapons.add None "U_SAIGA_20K" Primary Shotgun
+procon.protected.weapons.add Assault "U_SAR21" Primary AssaultRifle
+procon.protected.weapons.add Assault "U_SAR21_M26_Buck" Secondary Shotgun
+procon.protected.weapons.add Assault "U_SAR21_M26_Flechette" Secondary Shotgun
+procon.protected.weapons.add Assault "U_SAR21_M26_Frag" Secondary Shotgun
+procon.protected.weapons.add Assault "U_SAR21_M26_Slug" Secondary Shotgun
+procon.protected.weapons.add Assault "U_SAR21_M320_3GL" Secondary ProjectileExplosive
+procon.protected.weapons.add Assault "U_SAR21_M320_FLASH" Secondary ProjectileExplosive
+procon.protected.weapons.add Assault "U_SAR21_M320_HE" Secondary ProjectileExplosive
+procon.protected.weapons.add Assault "U_SAR21_M320_LVG" Secondary ProjectileExplosive
+procon.protected.weapons.add Assault "U_SAR21_M320_SHG" Secondary Shotgun
+procon.protected.weapons.add Assault "U_SAR21_M320_SMK" Secondary Impact
+procon.protected.weapons.add Assault "U_SCAR-H" Primary AssaultRifle
+procon.protected.weapons.add Assault "U_SCAR-H_M26_Buck" Secondary Shotgun
+procon.protected.weapons.add Assault "U_SCAR-H_M26_Flechette" Secondary Shotgun
+procon.protected.weapons.add Assault "U_SCAR-H_M26_Frag" Secondary Shotgun
+procon.protected.weapons.add Assault "U_SCAR-H_M26_Slug" Secondary Shotgun
+procon.protected.weapons.add Assault "U_SCAR-H_M320_3GL" Secondary ProjectileExplosive
+procon.protected.weapons.add Assault "U_SCAR-H_M320_FLASH" Secondary ProjectileExplosive
+procon.protected.weapons.add Assault "U_SCAR-H_M320_HE" Secondary ProjectileExplosive
+procon.protected.weapons.add Assault "U_SCAR-H_M320_LVG" Secondary ProjectileExplosive
+procon.protected.weapons.add Assault "U_SCAR-H_M320_SHG" Secondary Shotgun
+procon.protected.weapons.add Assault "U_SCAR-H_M320_SMK" Secondary Impact
+procon.protected.weapons.add None "U_SCAR-HSV" Primary DMR
+procon.protected.weapons.add Demolition "U_Scorpion" Primary SMG
+procon.protected.weapons.add Recon "U_Scout" Primary SniperRifle
+procon.protected.weapons.add None "U_SerbuShorty" Auxiliary Shotgun
+procon.protected.weapons.add None "U_SG553LB" Primary Carbine
+procon.protected.weapons.add None "U_SKS" Primary DMR
+procon.protected.weapons.add Demolition "U_SLAM" Auxiliary Explosive
+procon.protected.weapons.add Demolition "U_SMAW" Secondary ProjectileExplosive
+procon.protected.weapons.add Recon "Weapons/Gadgets/SOFLAM/SOFLAM_PDA" Auxiliary Nonlethal
+procon.protected.weapons.add Recon "Gameplay/Gadgets/SOFLAM/SOFLAM_Projectile" Auxiliary Nonlethal
+procon.protected.weapons.add None "U_SPAS12" Primary Shotgun
+procon.protected.weapons.add Demolition "U_SR2" Primary SMG
+procon.protected.weapons.add Demolition "U_SRAW" Secondary ProjectileExplosive
+procon.protected.weapons.add Recon "U_SR338" Primary DMR
+procon.protected.weapons.add Recon "U_SRS" Primary SniperRifle
+procon.protected.weapons.add None "U_Starstreak" Secondary ProjectileExplosive
+procon.protected.weapons.add Assault "U_SteyrAug" Primary AssaultRifle
+procon.protected.weapons.add Assault "U_SteyrAug_M26_Buck" Secondary Shotgun
+procon.protected.weapons.add Assault "U_SteyrAug_M26_Flechette" Secondary Shotgun
+procon.protected.weapons.add Assault "U_SteyrAug_M26_Frag" Secondary Shotgun
+procon.protected.weapons.add Assault "U_SteyrAug_M26_Slug" Secondary Shotgun
+procon.protected.weapons.add Assault "U_SteyrAug_M320_3GL" Secondary ProjectileExplosive
+procon.protected.weapons.add Assault "U_SteyrAug_M320_FLASH" Secondary ProjectileExplosive
+procon.protected.weapons.add Assault "U_SteyrAug_M320_HE" Secondary ProjectileExplosive
+procon.protected.weapons.add Assault "U_SteyrAug_M320_LVG" Secondary ProjectileExplosive
+procon.protected.weapons.add Assault "U_SteyrAug_M320_SHG" Secondary Shotgun
+procon.protected.weapons.add Assault "U_SteyrAug_M320_SMK" Secondary Impact
+procon.protected.weapons.add Support "U_SUAV" Secondary Impact
+procon.protected.weapons.add Recon "U_SV98" Primary SniperRifle
+procon.protected.weapons.add None "U_SVD12" Primary DMR
+procon.protected.weapons.add None "U_SW40" Auxiliary Handgun
+procon.protected.weapons.add None "U_Taurus44" Auxiliary Handgun
+procon.protected.weapons.add None "U_Tomahawk" Primary ProjectileExplosive
+procon.protected.weapons.add Support "U_Type88" Primary LMG
+procon.protected.weapons.add None "U_Type95B" Primary Carbine
+procon.protected.weapons.add Support "UCAV" Secondary Explosive
+procon.protected.weapons.add Support "XP1/Gameplay/Gadgets/UCAV/UCAV_Launcher" Secondary Explosive
+procon.protected.weapons.add Recon "U_UGS" Auxiliary Nonlethal
+procon.protected.weapons.add Support "U_Ultimax" Primary LMG
+procon.protected.weapons.add Demolition "U_UMP9" Primary SMG
+procon.protected.weapons.add Demolition "U_UMP45" Primary SMG
+procon.protected.weapons.add None "U_Unica6" Auxiliary Handgun
+procon.protected.weapons.add None "U_USAS-12" Primary Shotgun
+procon.protected.weapons.add None "U_USAS-12_Nightvision" Primary Shotgun
+procon.protected.weapons.add None "U_USAS-12_SP" Primary Shotgun
+procon.protected.weapons.add None "U_UTAS" Primary Shotgun
+procon.protected.weapons.add None "U_V40" Auxiliary Explosive
+procon.protected.weapons.add Support "U_XM25" Secondary ProjectileExplosive
+procon.protected.weapons.add Support "U_XM25_Flechette" Secondary Shotgun
+procon.protected.weapons.add Support "U_XM25_Smoke" Secondary Impact
+procon.protected.weapons.add Assault "U_AN94" Primary AssaultRifle
+procon.protected.weapons.add Assault "U_AN94_M26_Buck" Secondary Shotgun
+procon.protected.weapons.add Assault "U_AN94_M26_Flechette" Secondary Shotgun
+procon.protected.weapons.add Assault "U_AN94_M26_Frag" Secondary Shotgun
+procon.protected.weapons.add Assault "U_AN94_M26_Slug" Secondary Shotgun
+procon.protected.weapons.add Assault "U_AN94_M320_3GL_v1" Secondary ProjectileExplosive
+procon.protected.weapons.add Assault "U_AN94_M320_FLASH_v1" Secondary ProjectileExplosive
+procon.protected.weapons.add Assault "U_AN94_M320_HE_v1" Secondary ProjectileExplosive
+procon.protected.weapons.add Assault "U_AN94_M320_LVG_v1" Secondary ProjectileExplosive
+procon.protected.weapons.add Assault "U_AN94_M320_SHG_v1" Secondary Shotgun
+procon.protected.weapons.add Assault "U_AN94_M320_SMK_v1" Secondary Impact
+procon.protected.weapons.add Support "U_L86A1" Primary LMG
+procon.protected.weapons.add None "U_Groza-1" Primary Carbine
+procon.protected.weapons.add Demolition "U_Groza-4" Primary SMG
+procon.protected.weapons.add None "U_SaddlegunSnp" Secondary Handgun
+
+// Personal vehicles
+procon.protected.weapons.add None "XP1/Gameplay/Vehicles/KLR650/KLR650" Primary VehiclePersonal
+procon.protected.weapons.add None "XP2/Gameplay/Vehicles/PatrolHovercraft/PatrolHovercraft" Primary VehiclePersonal
+procon.protected.weapons.add None "XP4/Gameplay/Vehicles/PodLauncher/Launcher_Pod_Platform" Primary VehiclePersonal
+procon.protected.weapons.add None "Gameplay/Vehicles/PWC_JetSki/PWC_JetSki" Primary VehiclePersonal
+procon.protected.weapons.add None "Gameplay/Vehicles/QuadBike/QUADBIKE" Primary VehiclePersonal
+procon.protected.weapons.add None "Gameplay/Vehicles/QuadBike/spec/QUADBIKE_Night" Primary VehiclePersonal
+procon.protected.weapons.add None "XP0/Gameplay/Vehicles/SkidLoader/SkidLoader" Primary VehiclePersonal
+procon.protected.weapons.add None "XP4/Gameplay/Vehicles/Snowmobile/Snowmobile" Primary VehiclePersonal
+
+// Transport vehicles
+procon.protected.weapons.add None "Gameplay/Vehicles/AAV-7A1/AAV-7A1" Primary VehicleTransport
+procon.protected.weapons.add None "DPV" Primary VehicleTransport
+procon.protected.weapons.add None "Gameplay/Vehicles/CH_LTHE_Z-9/CH_LTHE_Z-9" Primary VehicleTransport
+procon.protected.weapons.add None "Gameplay/Vehicles/CH_FAV_LYT2021/CH_FAV_LYT2021" Primary VehicleTransport
+procon.protected.weapons.add None "Gameplay/Vehicles/GrowlerITV/GrowlerITV" Primary VehicleTransport
+procon.protected.weapons.add None "Ka-60" Primary VehicleTransport
+procon.protected.weapons.add None "Gameplay/Vehicles/CH_MRAP-ZFB-05/CH_MRAP-ZFB-05" Primary VehicleTransport
+procon.protected.weapons.add None "Gameplay/Vehicles/RU_MRAP_SPM3/RU_MRAP_SPM3" Primary VehicleTransport
+procon.protected.weapons.add None "Gameplay/Vehicles/RU_MRAP_SPM3/spec/RU_MRAP_SPM3_Night" Primary VehicleTransport
+procon.protected.weapons.add None "Gameplay/Vehicles/US_MRAP-COUGAR/US_MRAP-COUGAR" Primary VehicleTransport
+procon.protected.weapons.add None "Gameplay/Vehicles/US_MRAP-COUGAR/spec/US_MRAP-COUGAR_Night" Primary VehicleTransport
+procon.protected.weapons.add None "Gameplay/Vehicles/Train_01/Train_01" Primary VehicleTransport
+procon.protected.weapons.add None "VDV Buggy" Primary VehicleTransport
+procon.protected.weapons.add None "Gameplay/Vehicles/Venom/Venom" Primary VehicleTransport
+procon.protected.weapons.add None "Gameplay/Vehicles/Venom/spec/Venom_Night" Primary VehicleTransport
+procon.protected.weapons.add None "Gameplay/Vehicles/Venom/spec/Venom_CMP" Primary VehicleTransport
+
+// Light armored vehicles
+procon.protected.weapons.add None "Gameplay/Vehicles/CH_AA_PGZ-95/CH_AA_PGZ-95" Primary VehicleLight
+procon.protected.weapons.add None "Gameplay/Vehicles/BTR-90/BTR90" Primary VehicleLight
+procon.protected.weapons.add None "Gameplay/Vehicles/BTR-90/spec/BTR90_Night" Primary VehicleLight
+procon.protected.weapons.add None "Gameplay/Vehicles/CH_IFV_ZBD09/CH_IFV_ZBD09" Primary VehicleLight
+procon.protected.weapons.add None "Gameplay/Vehicles/HIMARS/HIMARS" Primary VehicleLight
+procon.protected.weapons.add None "Gameplay/Vehicles/HIMARS/spec/HIMARS_Night" Primary VehicleLight
+procon.protected.weapons.add None "Gameplay/Vehicles/LAV25/LAV_AD" Primary VehicleLight
+procon.protected.weapons.add None "Gameplay/Vehicles/LAV25/LAV25" Primary VehicleLight
+procon.protected.weapons.add None "Gameplay/Vehicles/LAV25/spec/LAV25_Night" Primary VehicleLight
+procon.protected.weapons.add None "Gameplay/Vehicles/9K22_Tunguska_M/9K22_Tunguska_M" Primary VehicleLight
+
+// Heavy armored vehicles
+procon.protected.weapons.add None "Gameplay/Vehicles/M1A2/M1Abrams" Primary VehicleHeavy
+procon.protected.weapons.add None "Gameplay/Vehicles/M1A2/spec/M1Abrams_Night" Primary VehicleHeavy
+procon.protected.weapons.add None "T90" Primary VehicleHeavy
+procon.protected.weapons.add None "Gameplay/Vehicles/CH_MBT_Type99/CH_MBT_Type99" Primary VehicleHeavy
+procon.protected.weapons.add None "XP4/Gameplay/Vehicles/HoverTank/XP4_HoverTank" Primary VehicleHeavy
+
+// Air vehicles
+procon.protected.weapons.add None "Gameplay/Vehicles/A-10_THUNDERBOLT/A10_THUNDERBOLT" Primary VehicleAir
+procon.protected.weapons.add None "Gameplay/Vehicles/AC130/AC130_Gunship" Primary VehicleAir
+procon.protected.weapons.add None "Gameplay/Vehicles/AH1Z/AH1Z" Primary VehicleAir
+procon.protected.weapons.add None "Gameplay/Vehicles/AH6/AH6_Littlebird" Primary VehicleAir
+procon.protected.weapons.add None "XP1/Gameplay/Vehicles/B1Lancer/B1Lancer" Primary VehicleAir
+procon.protected.weapons.add None "Gameplay/Vehicles/F35/F35B" Primary VehicleAir
+procon.protected.weapons.add None "Gameplay/Vehicles/Ch_FJET_J-20/CH_FJET_J-20" Primary VehicleAir
+procon.protected.weapons.add None "XP1/Gameplay/Vehicles/H6K/H6K" Primary VehicleAir
+procon.protected.weapons.add None "Gameplay/Vehicles/Mi28/Mi28" Primary VehicleAir
+procon.protected.weapons.add None "Gameplay/Vehicles/SU-25TM/SU-25TM" Primary VehicleAir
+procon.protected.weapons.add None "Gameplay/Vehicles/RU_FJET_T-50_Pak_FA/RU_FJET_T-50_Pak_FA" Primary VehicleAir
+procon.protected.weapons.add None "Gameplay/Vehicles/UAV_GlobalHawk/UAV_GlobalHawk" Primary VehicleAir
+procon.protected.weapons.add None "Gameplay/Vehicles/CH_JET_Qiang-5-fantan/CH_JET_Q5_FANTAN" Primary VehicleAir
+procon.protected.weapons.add None "Z-10w" Primary VehicleAir
+procon.protected.weapons.add None "Gameplay/Vehicles/Z11W/Z-11w" Primary VehicleAir
+procon.protected.weapons.add None "Gameplay/Vehicles/Z11W/spec/Z-11w_CH" Primary VehicleAir
+
+// Water vehicles
+procon.protected.weapons.add None "Gameplay/Vehicles/US_FAC-CB90/US_FAC-CB90" Primary VehicleWater
+procon.protected.weapons.add None "Gameplay/Vehicles/CH_FAC_DV15/CH_FAC_DV15" Primary VehicleWater
+procon.protected.weapons.add None "Gameplay/Vehicles/CH_FAC_DV15/spec/CH_FAC_DV15_RU" Primary VehicleWater
+procon.protected.weapons.add None "RHIB" Primary VehicleWater
+
+// Stationary vehicles
+procon.protected.weapons.add None "XP1/Gameplay/Vehicles/Bomber/Bombing_Station" Primary VehicleStationary
+procon.protected.weapons.add None "Gameplay/Vehicles/Centurion_C-RAM/Centurion_C-RAM" Primary VehicleStationary
+procon.protected.weapons.add None "Gameplay/Vehicles/Centurion_C-RAM/Centurion_C-RAM_MP_Naval" Primary VehicleStationary
+procon.protected.weapons.add None "Gameplay/Vehicles/CH_ATGM_HJ-8/CH_ATGM_HJ-8" Primary VehicleStationary
+procon.protected.weapons.add None "Gameplay/Vehicles/CH_CIWS-LD-2000/CH_CIWS-LD-2000" Primary VehicleStationary
+procon.protected.weapons.add None "Gameplay/Vehicles/GunShieldAndTripod/GunShieldTripod" Primary VehicleStationary
+procon.protected.weapons.add None "Gameplay/Vehicles/GunShieldAndTripod/GunShieldTripod_Night" Primary VehicleStationary
+procon.protected.weapons.add None "Gameplay/Vehicles/GunShieldAndTripod/specs/GunShieldTripod_NoShield" Primary VehicleStationary
+procon.protected.weapons.add None "Kornet" Primary VehicleStationary
+procon.protected.weapons.add None "XP4/Gameplay/Vehicles/MetalStorm/XP4_MetalStorm" Primary VehicleStationary
+procon.protected.weapons.add None "XP2/Gameplay/Vehicles/OldCannon/OldCannon" Primary VehicleStationary
+procon.protected.weapons.add None "Gameplay/Vehicles/Pantsir/Pantsir-S1" Primary VehicleStationary
+procon.protected.weapons.add None "Gameplay/Vehicles/TOW2/TOW2" Primary VehicleStationary
+
+procon.protected.maps.clear
+procon.protected.maps.add "ConquestLarge0" "MP_Abandoned" "Conquest Large" "Zavod 311" 0
+procon.protected.maps.add "ConquestLarge0" "MP_Damage" "Conquest Large" "Lancang Dam" 0
+procon.protected.maps.add "ConquestLarge0" "MP_Flooded" "Conquest Large" "Flood Zone" 0
+procon.protected.maps.add "ConquestLarge0" "MP_Journey" "Conquest Large" "Golmud Railway" 0
+procon.protected.maps.add "ConquestLarge0" "MP_Naval" "Conquest Large" "Paracel Storm" 0
+procon.protected.maps.add "ConquestLarge0" "MP_Prison" "Conquest Large" "Operation Locker" 0
+procon.protected.maps.add "ConquestLarge0" "MP_Resort" "Conquest Large" "Hainan Resort" 0
+procon.protected.maps.add "ConquestLarge0" "MP_Siege" "Conquest Large" "Siege of Shanghai" 0
+procon.protected.maps.add "ConquestLarge0" "MP_TheDish" "Conquest Large" "Rogue Transmission" 0
+procon.protected.maps.add "ConquestLarge0" "MP_Tremors" "Conquest Large" "Dawnbreaker" 0
+
+procon.protected.maps.add "ConquestSmall0" "MP_Abandoned" "Conquest Small" "Zavod 311" 0
+procon.protected.maps.add "ConquestSmall0" "MP_Damage" "Conquest Small" "Lancang Dam" 0
+procon.protected.maps.add "ConquestSmall0" "MP_Flooded" "Conquest Small" "Flood Zone" 0
+procon.protected.maps.add "ConquestSmall0" "MP_Journey" "Conquest Small" "Golmud Railway" 0
+procon.protected.maps.add "ConquestSmall0" "MP_Naval" "Conquest Small" "Paracel Storm" 0
+procon.protected.maps.add "ConquestSmall0" "MP_Prison" "Conquest Small" "Operation Locker" 0
+procon.protected.maps.add "ConquestSmall0" "MP_Resort" "Conquest Small" "Hainan Resort" 0
+procon.protected.maps.add "ConquestSmall0" "MP_Siege" "Conquest Small" "Siege of Shanghai" 0
+procon.protected.maps.add "ConquestSmall0" "MP_TheDish" "Conquest Small" "Rogue Transmission" 0
+procon.protected.maps.add "ConquestSmall0" "MP_Tremors" "Conquest Small" "Dawnbreaker" 0
+
+procon.protected.maps.add "Domination0" "MP_Abandoned" "Domination" "Zavod 311" 0
+procon.protected.maps.add "Domination0" "MP_Damage" "Domination" "Lancang Dam" 0
+procon.protected.maps.add "Domination0" "MP_Flooded" "Domination" "Flood Zone" 0
+procon.protected.maps.add "Domination0" "MP_Journey" "Domination" "Golmud Railway" 0
+procon.protected.maps.add "Domination0" "MP_Naval" "Domination" "Paracel Storm" 0
+procon.protected.maps.add "Domination0" "MP_Prison" "Domination" "Operation Locker" 0
+procon.protected.maps.add "Domination0" "MP_Resort" "Domination" "Hainan Resort" 0
+procon.protected.maps.add "Domination0" "MP_Siege" "Domination" "Siege of Shanghai" 0
+procon.protected.maps.add "Domination0" "MP_TheDish" "Domination" "Rogue Transmission" 0
+procon.protected.maps.add "Domination0" "MP_Tremors" "Domination" "Dawnbreaker" 0
+
+procon.protected.maps.add "Elimination0" "MP_Abandoned" "Defuse" "Zavod 311" 0
+procon.protected.maps.add "Elimination0" "MP_Damage" "Defuse" "Lancang Dam" 0
+procon.protected.maps.add "Elimination0" "MP_Flooded" "Defuse" "Flood Zone" 0
+procon.protected.maps.add "Elimination0" "MP_Journey" "Defuse" "Golmud Railway" 0
+procon.protected.maps.add "Elimination0" "MP_Naval" "Defuse" "Paracel Storm" 0
+procon.protected.maps.add "Elimination0" "MP_Prison" "Defuse" "Operation Locker" 0
+procon.protected.maps.add "Elimination0" "MP_Resort" "Defuse" "Hainan Resort" 0
+procon.protected.maps.add "Elimination0" "MP_Siege" "Defuse" "Siege of Shanghai" 0
+procon.protected.maps.add "Elimination0" "MP_TheDish" "Defuse" "Rogue Transmission" 0
+procon.protected.maps.add "Elimination0" "MP_Tremors" "Defuse" "Dawnbreaker" 0
+
+procon.protected.maps.add "Obliteration" "MP_Abandoned" "Obliteration" "Zavod 311" 0
+procon.protected.maps.add "Obliteration" "MP_Damage" "Obliteration" "Lancang Dam" 0
+procon.protected.maps.add "Obliteration" "MP_Flooded" "Obliteration" "Flood Zone" 0
+procon.protected.maps.add "Obliteration" "MP_Journey" "Obliteration" "Golmud Railway" 0
+procon.protected.maps.add "Obliteration" "MP_Naval" "Obliteration" "Paracel Storm" 0
+procon.protected.maps.add "Obliteration" "MP_Prison" "Obliteration" "Operation Locker" 0
+procon.protected.maps.add "Obliteration" "MP_Resort" "Obliteration" "Hainan Resort" 0
+procon.protected.maps.add "Obliteration" "MP_Siege" "Obliteration" "Siege of Shanghai" 0
+procon.protected.maps.add "Obliteration" "MP_TheDish" "Obliteration" "Rogue Transmission" 0
+procon.protected.maps.add "Obliteration" "MP_Tremors" "Obliteration" "Dawnbreaker" 0
+
+procon.protected.maps.add "RushLarge0" "MP_Abandoned" "Rush" "Zavod 311" 0
+procon.protected.maps.add "RushLarge0" "MP_Damage" "Rush" "Lancang Dam" 0
+procon.protected.maps.add "RushLarge0" "MP_Flooded" "Rush" "Flood Zone" 0
+procon.protected.maps.add "RushLarge0" "MP_Journey" "Rush" "Golmud Railway" 0
+procon.protected.maps.add "RushLarge0" "MP_Naval" "Rush" "Paracel Storm" 0
+procon.protected.maps.add "RushLarge0" "MP_Prison" "Rush" "Operation Locker" 0
+procon.protected.maps.add "RushLarge0" "MP_Resort" "Rush" "Hainan Resort" 0
+procon.protected.maps.add "RushLarge0" "MP_Siege" "Rush" "Siege of Shanghai" 0
+procon.protected.maps.add "RushLarge0" "MP_TheDish" "Rush" "Rogue Transmission" 0
+procon.protected.maps.add "RushLarge0" "MP_Tremors" "Rush" "Dawnbreaker" 0
+
+procon.protected.maps.add "SquadDeathMatch0" "MP_Abandoned" "Squad Deathmatch" "Zavod 311" 0
+procon.protected.maps.add "SquadDeathMatch0" "MP_Damage" "Squad Deathmatch" "Lancang Dam" 0
+procon.protected.maps.add "SquadDeathMatch0" "MP_Flooded" "Squad Deathmatch" "Flood Zone" 0
+procon.protected.maps.add "SquadDeathMatch0" "MP_Journey" "Squad Deathmatch" "Golmud Railway" 0
+procon.protected.maps.add "SquadDeathMatch0" "MP_Naval" "Squad Deathmatch" "Paracel Storm" 0
+procon.protected.maps.add "SquadDeathMatch0" "MP_Prison" "Squad Deathmatch" "Operation Locker" 0
+procon.protected.maps.add "SquadDeathMatch0" "MP_Resort" "Squad Deathmatch" "Hainan Resort" 0
+procon.protected.maps.add "SquadDeathMatch0" "MP_Siege" "Squad Deathmatch" "Siege of Shanghai" 0
+procon.protected.maps.add "SquadDeathMatch0" "MP_TheDish" "Squad Deathmatch" "Rogue Transmission" 0
+procon.protected.maps.add "SquadDeathMatch0" "MP_Tremors" "Squad Deathmatch" "Dawnbreaker" 0
+
+procon.protected.maps.add "TeamDeathMatch0" "MP_Abandoned" "Team Deathmatch" "Zavod 311" 0
+procon.protected.maps.add "TeamDeathMatch0" "MP_Damage" "Team Deathmatch" "Lancang Dam" 0
+procon.protected.maps.add "TeamDeathMatch0" "MP_Flooded" "Team Deathmatch" "Flood Zone" 0
+procon.protected.maps.add "TeamDeathMatch0" "MP_Journey" "Team Deathmatch" "Golmud Railway" 0
+procon.protected.maps.add "TeamDeathMatch0" "MP_Naval" "Team Deathmatch" "Paracel Storm" 0
+procon.protected.maps.add "TeamDeathMatch0" "MP_Prison" "Team Deathmatch" "Operation Locker" 0
+procon.protected.maps.add "TeamDeathMatch0" "MP_Resort" "Team Deathmatch" "Hainan Resort" 0
+procon.protected.maps.add "TeamDeathMatch0" "MP_Siege" "Team Deathmatch" "Siege of Shanghai" 0
+procon.protected.maps.add "TeamDeathMatch0" "MP_TheDish" "Team Deathmatch" "Rogue Transmission" 0
+procon.protected.maps.add "TeamDeathMatch0" "MP_Tremors" "Team Deathmatch" "Dawnbreaker" 0
+
+// XP1 (China Rising)
+procon.protected.maps.add "ConquestLarge0" "XP1_001" "Conquest Large" "Silk Road" 0
+procon.protected.maps.add "ConquestLarge0" "XP1_002" "Conquest Large" "Altai Range" 0
+procon.protected.maps.add "ConquestLarge0" "XP1_003" "Conquest Large" "Guilin Peaks" 0
+procon.protected.maps.add "ConquestLarge0" "XP1_004" "Conquest Large" "Dragon Pass" 0
+
+procon.protected.maps.add "ConquestSmall0" "XP1_001" "Conquest Small" "Silk Road" 0
+procon.protected.maps.add "ConquestSmall0" "XP1_002" "Conquest Small" "Altai Range" 0
+procon.protected.maps.add "ConquestSmall0" "XP1_003" "Conquest Small" "Guilin Peaks" 0
+procon.protected.maps.add "ConquestSmall0" "XP1_004" "Conquest Small" "Dragon Pass" 0
+
+procon.protected.maps.add "Domination0" "XP1_001" "Domination" "Silk Road" 0
+procon.protected.maps.add "Domination0" "XP1_002" "Domination" "Altai Range" 0
+procon.protected.maps.add "Domination0" "XP1_003" "Domination" "Guilin Peaks" 0
+procon.protected.maps.add "Domination0" "XP1_004" "Domination" "Dragon Pass" 0
+
+procon.protected.maps.add "Elimination0" "XP1_001" "Defuse" "Silk Road" 0
+procon.protected.maps.add "Elimination0" "XP1_002" "Defuse" "Altai Range" 0
+procon.protected.maps.add "Elimination0" "XP1_003" "Defuse" "Guilin Peaks" 0
+procon.protected.maps.add "Elimination0" "XP1_004" "Defuse" "Dragon Pass" 0
+
+procon.protected.maps.add "Obliteration" "XP1_001" "Obliteration" "Silk Road" 0
+procon.protected.maps.add "Obliteration" "XP1_002" "Obliteration" "Altai Range" 0
+procon.protected.maps.add "Obliteration" "XP1_003" "Obliteration" "Guilin Peaks" 0
+procon.protected.maps.add "Obliteration" "XP1_004" "Obliteration" "Dragon Pass" 0
+
+procon.protected.maps.add "RushLarge0" "XP1_001" "Rush" "Silk Road" 0
+procon.protected.maps.add "RushLarge0" "XP1_002" "Rush" "Altai Range" 0
+procon.protected.maps.add "RushLarge0" "XP1_003" "Rush" "Guilin Peaks" 0
+procon.protected.maps.add "RushLarge0" "XP1_004" "Rush" "Dragon Pass" 0
+
+procon.protected.maps.add "SquadDeathMatch0" "XP1_001" "Squad Deathmatch" "Silk Road" 0
+procon.protected.maps.add "SquadDeathMatch0" "XP1_002" "Squad Deathmatch" "Altai Range" 0
+procon.protected.maps.add "SquadDeathMatch0" "XP1_003" "Squad Deathmatch" "Guilin Peaks" 0
+procon.protected.maps.add "SquadDeathMatch0" "XP1_004" "Squad Deathmatch" "Dragon Pass" 0
+
+procon.protected.maps.add "TeamDeathMatch0" "XP1_001" "Team Deathmatch" "Silk Road" 0
+procon.protected.maps.add "TeamDeathMatch0" "XP1_002" "Team Deathmatch" "Altai Range" 0
+procon.protected.maps.add "TeamDeathMatch0" "XP1_003" "Team Deathmatch" "Guilin Peaks" 0
+procon.protected.maps.add "TeamDeathMatch0" "XP1_004" "Team Deathmatch" "Dragon Pass" 0
+
+procon.protected.maps.add "AirSuperiority0" "XP1_001" "Air Superiority" "Silk Road" 0
+procon.protected.maps.add "AirSuperiority0" "XP1_002" "Air Superiority" "Altai Range" 0
+procon.protected.maps.add "AirSuperiority0" "XP1_003" "Air Superiority" "Guilin Peaks" 0
+procon.protected.maps.add "AirSuperiority0" "XP1_004" "Air Superiority" "Dragon Pass" 0
+
+// XP0 (Second Assault)
+procon.protected.maps.add "ConquestLarge0" "XP0_Caspian" "Conquest Large" "Caspian Border 2014" 0
+procon.protected.maps.add "ConquestLarge0" "XP0_Firestorm" "Conquest Large" "Operation Firestorm 2014" 0
+procon.protected.maps.add "ConquestLarge0" "XP0_Metro" "Conquest Large" "Operation Metro 2014" 0
+procon.protected.maps.add "ConquestLarge0" "XP0_Oman" "Conquest Large" "Gulf of Oman 2014" 0
+
+procon.protected.maps.add "ConquestSmall0" "XP0_Caspian" "Conquest Small" "Caspian Border 2014" 0
+procon.protected.maps.add "ConquestSmall0" "XP0_Firestorm" "Conquest Small" "Operation Firestorm 2014" 0
+procon.protected.maps.add "ConquestSmall0" "XP0_Metro" "Conquest Small" "Operation Metro 2014" 0
+procon.protected.maps.add "ConquestSmall0" "XP0_Oman" "Conquest Small" "Gulf of Oman 2014" 0
+
+procon.protected.maps.add "Domination0" "XP0_Caspian" "Domination" "Caspian Border 2014" 0
+procon.protected.maps.add "Domination0" "XP0_Firestorm" "Domination" "Operation Firestorm 2014" 0
+procon.protected.maps.add "Domination0" "XP0_Metro" "Domination" "Operation Metro 2014" 0
+procon.protected.maps.add "Domination0" "XP0_Oman" "Domination" "Gulf of Oman 2014" 0
+
+procon.protected.maps.add "Elimination0" "XP0_Caspian" "Defuse" "Caspian Border 2014" 0
+procon.protected.maps.add "Elimination0" "XP0_Firestorm" "Defuse" "Operation Firestorm 2014" 0
+procon.protected.maps.add "Elimination0" "XP0_Metro" "Defuse" "Operation Metro 2014" 0
+procon.protected.maps.add "Elimination0" "XP0_Oman" "Defuse" "Gulf of Oman 2014" 0
+
+procon.protected.maps.add "Obliteration" "XP0_Caspian" "Obliteration" "Caspian Border 2014" 0
+procon.protected.maps.add "Obliteration" "XP0_Firestorm" "Obliteration" "Operation Firestorm 2014" 0
+procon.protected.maps.add "Obliteration" "XP0_Metro" "Obliteration" "Operation Metro 2014" 0
+procon.protected.maps.add "Obliteration" "XP0_Oman" "Obliteration" "Gulf of Oman 2014" 0
+
+procon.protected.maps.add "RushLarge0" "XP0_Caspian" "Rush" "Caspian Border 2014" 0
+procon.protected.maps.add "RushLarge0" "XP0_Firestorm" "Rush" "Operation Firestorm 2014" 0
+procon.protected.maps.add "RushLarge0" "XP0_Metro" "Rush" "Operation Metro 2014" 0
+procon.protected.maps.add "RushLarge0" "XP0_Oman" "Rush" "Gulf of Oman 2014" 0
+
+procon.protected.maps.add "SquadDeathMatch0" "XP0_Caspian" "Squad Deathmatch" "Caspian Border 2014" 0
+procon.protected.maps.add "SquadDeathMatch0" "XP0_Firestorm" "Squad Deathmatch" "Operation Firestorm 2014" 0
+procon.protected.maps.add "SquadDeathMatch0" "XP0_Metro" "Squad Deathmatch" "Operation Metro 2014" 0
+procon.protected.maps.add "SquadDeathMatch0" "XP0_Oman" "Squad Deathmatch" "Gulf of Oman 2014" 0
+
+procon.protected.maps.add "TeamDeathMatch0" "XP0_Caspian" "Team Deathmatch" "Caspian Border 2014" 0
+procon.protected.maps.add "TeamDeathMatch0" "XP0_Firestorm" "Team Deathmatch" "Operation Firestorm 2014" 0
+procon.protected.maps.add "TeamDeathMatch0" "XP0_Metro" "Team Deathmatch" "Operation Metro 2014" 0
+procon.protected.maps.add "TeamDeathMatch0" "XP0_Oman" "Team Deathmatch" "Gulf of Oman 2014" 0
+
+procon.protected.maps.add "CaptureTheFlag0" "XP0_Caspian" "CTF" "Caspian Border 2014" 0
+procon.protected.maps.add "CaptureTheFlag0" "XP0_Firestorm" "CTF" "Operation Firestorm 2014" 0
+procon.protected.maps.add "CaptureTheFlag0" "XP0_Metro" "CTF" "Operation Metro 2014" 0
+procon.protected.maps.add "CaptureTheFlag0" "XP0_Oman" "CTF" "Gulf of Oman 2014" 0
+
+// XP2 (Naval Strike)
+procon.protected.maps.add "ConquestLarge0" "XP2_001" "Conquest Large" "Lost Islands" 0
+procon.protected.maps.add "ConquestLarge0" "XP2_002" "Conquest Large" "Nansha Strike" 0
+procon.protected.maps.add "ConquestLarge0" "XP2_003" "Conquest Large" "Wavebreaker" 0
+procon.protected.maps.add "ConquestLarge0" "XP2_004" "Conquest Large" "Operation Mortar" 0
+
+procon.protected.maps.add "ConquestSmall0" "XP2_001" "Conquest Small" "Lost Islands" 0
+procon.protected.maps.add "ConquestSmall0" "XP2_002" "Conquest Small" "Nansha Strike" 0
+procon.protected.maps.add "ConquestSmall0" "XP2_003" "Conquest Small" "Wavebreaker" 0
+procon.protected.maps.add "ConquestSmall0" "XP2_004" "Conquest Small" "Operation Mortar" 0
+
+procon.protected.maps.add "Domination0" "XP2_001" "Domination" "Lost Islands" 0
+procon.protected.maps.add "Domination0" "XP2_002" "Domination" "Nansha Strike" 0
+procon.protected.maps.add "Domination0" "XP2_003" "Domination" "Wavebreaker" 0
+procon.protected.maps.add "Domination0" "XP2_004" "Domination" "Operation Mortar" 0
+
+procon.protected.maps.add "Elimination0" "XP2_001" "Defuse" "Lost Islands" 0
+procon.protected.maps.add "Elimination0" "XP2_002" "Defuse" "Nansha Strike" 0
+procon.protected.maps.add "Elimination0" "XP2_003" "Defuse" "Wavebreaker" 0
+procon.protected.maps.add "Elimination0" "XP2_004" "Defuse" "Operation Mortar" 0
+
+procon.protected.maps.add "Obliteration" "XP2_001" "Obliteration" "Lost Islands" 0
+procon.protected.maps.add "Obliteration" "XP2_002" "Obliteration" "Nansha Strike" 0
+procon.protected.maps.add "Obliteration" "XP2_003" "Obliteration" "Wavebreaker" 0
+procon.protected.maps.add "Obliteration" "XP2_004" "Obliteration" "Operation Mortar" 0
+
+procon.protected.maps.add "RushLarge0" "XP2_001" "Rush" "Lost Islands" 0
+procon.protected.maps.add "RushLarge0" "XP2_002" "Rush" "Nansha Strike" 0
+procon.protected.maps.add "RushLarge0" "XP2_003" "Rush" "Wavebreaker" 0
+procon.protected.maps.add "RushLarge0" "XP2_004" "Rush" "Operation Mortar" 0
+
+procon.protected.maps.add "SquadDeathMatch0" "XP2_001" "Squad Deathmatch" "Lost Islands" 0
+procon.protected.maps.add "SquadDeathMatch0" "XP2_002" "Squad Deathmatch" "Nansha Strike" 0
+procon.protected.maps.add "SquadDeathMatch0" "XP2_003" "Squad Deathmatch" "Wavebreaker" 0
+procon.protected.maps.add "SquadDeathMatch0" "XP2_004" "Squad Deathmatch" "Operation Mortar" 0
+
+procon.protected.maps.add "TeamDeathMatch0" "XP2_001" "Team Deathmatch" "Lost Islands" 0
+procon.protected.maps.add "TeamDeathMatch0" "XP2_002" "Team Deathmatch" "Nansha Strike" 0
+procon.protected.maps.add "TeamDeathMatch0" "XP2_003" "Team Deathmatch" "Wavebreaker" 0
+procon.protected.maps.add "TeamDeathMatch0" "XP2_004" "Team Deathmatch" "Operation Mortar" 0
+
+procon.protected.maps.add "CarrierAssaultLarge0" "XP2_001" "Carrier Assault Large" "Lost Islands" 0
+procon.protected.maps.add "CarrierAssaultLarge0" "XP2_002" "Carrier Assault Large" "Nansha Strike" 0
+procon.protected.maps.add "CarrierAssaultLarge0" "XP2_003" "Carrier Assault Large" "Wavebreaker" 0
+procon.protected.maps.add "CarrierAssaultLarge0" "XP2_004" "Carrier Assault Large" "Operation Mortar" 0
+
+procon.protected.maps.add "CarrierAssaultSmall0" "XP2_001" "Carrier Assault Small" "Lost Islands" 0
+procon.protected.maps.add "CarrierAssaultSmall0" "XP2_002" "Carrier Assault Small" "Nansha Strike" 0
+procon.protected.maps.add "CarrierAssaultSmall0" "XP2_003" "Carrier Assault Small" "Wavebreaker" 0
+procon.protected.maps.add "CarrierAssaultSmall0" "XP2_004" "Carrier Assault Small" "Operation Mortar" 0
+
+// XP3 (Dragons Teeth)
+procon.protected.maps.add "ConquestLarge0" "XP3_MarketPl" "Conquest Large" "Pearl Market" 0
+procon.protected.maps.add "ConquestLarge0" "XP3_Prpganda" "Conquest Large" "Propaganda" 0
+procon.protected.maps.add "ConquestLarge0" "XP3_UrbanGdn" "Conquest Large" "Lumphini Garden" 0
+procon.protected.maps.add "ConquestLarge0" "XP3_WtrFront" "Conquest Large" "Sunken Dragon" 0
+
+procon.protected.maps.add "ConquestSmall0" "XP3_MarketPl" "Conquest Small" "Pearl Market" 0
+procon.protected.maps.add "ConquestSmall0" "XP3_Prpganda" "Conquest Small" "Propaganda" 0
+procon.protected.maps.add "ConquestSmall0" "XP3_UrbanGdn" "Conquest Small" "Lumphini Garden" 0
+procon.protected.maps.add "ConquestSmall0" "XP3_WtrFront" "Conquest Small" "Sunken Dragon" 0
+
+procon.protected.maps.add "Domination0" "XP3_MarketPl" "Domination" "Pearl Market" 0
+procon.protected.maps.add "Domination0" "XP3_Prpganda" "Domination" "Propaganda" 0
+procon.protected.maps.add "Domination0" "XP3_UrbanGdn" "Domination" "Lumphini Garden" 0
+procon.protected.maps.add "Domination0" "XP3_WtrFront" "Domination" "Sunken Dragon" 0
+
+procon.protected.maps.add "Elimination0" "XP3_MarketPl" "Defuse" "Pearl Market" 0
+procon.protected.maps.add "Elimination0" "XP3_Prpganda" "Defuse" "Propaganda" 0
+procon.protected.maps.add "Elimination0" "XP3_UrbanGdn" "Defuse" "Lumphini Garden" 0
+procon.protected.maps.add "Elimination0" "XP3_WtrFront" "Defuse" "Sunken Dragon" 0
+
+procon.protected.maps.add "Obliteration" "XP3_MarketPl" "Obliteration" "Pearl Market" 0
+procon.protected.maps.add "Obliteration" "XP3_Prpganda" "Obliteration" "Propaganda" 0
+procon.protected.maps.add "Obliteration" "XP3_UrbanGdn" "Obliteration" "Lumphini Garden" 0
+procon.protected.maps.add "Obliteration" "XP3_WtrFront" "Obliteration" "Sunken Dragon" 0
+
+procon.protected.maps.add "RushLarge0" "XP3_MarketPl" "Rush" "Pearl Market" 0
+procon.protected.maps.add "RushLarge0" "XP3_Prpganda" "Rush" "Propaganda" 0
+procon.protected.maps.add "RushLarge0" "XP3_UrbanGdn" "Rush" "Lumphini Garden" 0
+procon.protected.maps.add "RushLarge0" "XP3_WtrFront" "Rush" "Sunken Dragon" 0
+
+procon.protected.maps.add "SquadDeathMatch0" "XP3_MarketPl" "Squad Deathmatch" "Pearl Market" 0
+procon.protected.maps.add "SquadDeathMatch0" "XP3_Prpganda" "Squad Deathmatch" "Propaganda" 0
+procon.protected.maps.add "SquadDeathMatch0" "XP3_UrbanGdn" "Squad Deathmatch" "Lumphini Garden" 0
+procon.protected.maps.add "SquadDeathMatch0" "XP3_WtrFront" "Squad Deathmatch" "Sunken Dragon" 0
+
+procon.protected.maps.add "TeamDeathMatch0" "XP3_MarketPl" "Team Deathmatch" "Pearl Market" 0
+procon.protected.maps.add "TeamDeathMatch0" "XP3_Prpganda" "Team Deathmatch" "Propaganda" 0
+procon.protected.maps.add "TeamDeathMatch0" "XP3_UrbanGdn" "Team Deathmatch" "Lumphini Garden" 0
+procon.protected.maps.add "TeamDeathMatch0" "XP3_WtrFront" "Team Deathmatch" "Sunken Dragon" 0
+
+procon.protected.maps.add "CaptureTheFlag0" "XP3_MarketPl" "CTF" "Pearl Market" 0
+procon.protected.maps.add "CaptureTheFlag0" "XP3_Prpganda" "CTF" "Propaganda" 0
+procon.protected.maps.add "CaptureTheFlag0" "XP3_UrbanGdn" "CTF" "Lumphini Garden" 0
+procon.protected.maps.add "CaptureTheFlag0" "XP3_WtrFront" "CTF" "Sunken Dragon" 0
+
+procon.protected.maps.add "Chainlink0" "XP3_MarketPl" "Chain Link" "Pearl Market" 0
+procon.protected.maps.add "Chainlink0" "XP3_Prpganda" "Chain Link" "Propaganda" 0
+procon.protected.maps.add "Chainlink0" "XP3_UrbanGdn" "Chain Link" "Lumphini Garden" 0
+procon.protected.maps.add "Chainlink0" "XP3_WtrFront" "Chain Link" "Sunken Dragon" 0
+
+// XP4 (Final Stand)
+procon.protected.maps.add "ConquestLarge0" "XP4_Arctic" "Conquest Large" "Operation Whiteout" 0
+procon.protected.maps.add "ConquestLarge0" "XP4_SubBase" "Conquest Large" "Hammerhead" 0
+procon.protected.maps.add "ConquestLarge0" "XP4_Titan" "Conquest Large" "Hangar 21" 0
+procon.protected.maps.add "ConquestLarge0" "XP4_WlkrFtry" "Conquest Large" "Giants Of Karelia" 0
+
+procon.protected.maps.add "ConquestSmall0" "XP4_Arctic" "Conquest Small" "Operation Whiteout" 0
+procon.protected.maps.add "ConquestSmall0" "XP4_SubBase" "Conquest Small" "Hammerhead" 0
+procon.protected.maps.add "ConquestSmall0" "XP4_Titan" "Conquest Small" "Hangar 21" 0
+procon.protected.maps.add "ConquestSmall0" "XP4_WlkrFtry" "Conquest Small" "Giants Of Karelia" 0
+
+procon.protected.maps.add "Domination0" "XP4_Arctic" "Domination" "Operation Whiteout" 0
+procon.protected.maps.add "Domination0" "XP4_SubBase" "Domination" "Hammerhead" 0
+procon.protected.maps.add "Domination0" "XP4_Titan" "Domination" "Hangar 21" 0
+procon.protected.maps.add "Domination0" "XP4_WlkrFtry" "Domination" "Giants Of Karelia" 0
+
+procon.protected.maps.add "Elimination0" "XP4_Arctic" "Defuse" "Operation Whiteout" 0
+procon.protected.maps.add "Elimination0" "XP4_SubBase" "Defuse" "Hammerhead" 0
+procon.protected.maps.add "Elimination0" "XP4_Titan" "Defuse" "Hangar 21" 0
+procon.protected.maps.add "Elimination0" "XP4_WlkrFtry" "Defuse" "Giants Of Karelia" 0
+
+procon.protected.maps.add "Obliteration" "XP4_Arctic" "Obliteration" "Operation Whiteout" 0
+procon.protected.maps.add "Obliteration" "XP4_SubBase" "Obliteration" "Hammerhead" 0
+procon.protected.maps.add "Obliteration" "XP4_Titan" "Obliteration" "Hangar 21" 0
+procon.protected.maps.add "Obliteration" "XP4_WlkrFtry" "Obliteration" "Giants Of Karelia" 0
+
+procon.protected.maps.add "RushLarge0" "XP4_Arctic" "Rush" "Operation Whiteout" 0
+procon.protected.maps.add "RushLarge0" "XP4_SubBase" "Rush" "Hammerhead" 0
+procon.protected.maps.add "RushLarge0" "XP4_Titan" "Rush" "Hangar 21" 0
+procon.protected.maps.add "RushLarge0" "XP4_WlkrFtry" "Rush" "Giants Of Karelia" 0
+
+procon.protected.maps.add "SquadDeathMatch0" "XP4_Arctic" "Squad Deathmatch" "Operation Whiteout" 0
+procon.protected.maps.add "SquadDeathMatch0" "XP4_SubBase" "Squad Deathmatch" "Hammerhead" 0
+procon.protected.maps.add "SquadDeathMatch0" "XP4_Titan" "Squad Deathmatch" "Hangar 21" 0
+procon.protected.maps.add "SquadDeathMatch0" "XP4_WlkrFtry" "Squad Deathmatch" "Giants Of Karelia" 0
+
+procon.protected.maps.add "TeamDeathMatch0" "XP4_Arctic" "Team Deathmatch" "Operation Whiteout" 0
+procon.protected.maps.add "TeamDeathMatch0" "XP4_SubBase" "Team Deathmatch" "Hammerhead" 0
+procon.protected.maps.add "TeamDeathMatch0" "XP4_Titan" "Team Deathmatch" "Hangar 21" 0
+procon.protected.maps.add "TeamDeathMatch0" "XP4_WlkrFtry" "Team Deathmatch" "Giants Of Karelia" 0
+
+procon.protected.maps.add "CaptureTheFlag0" "XP4_Arctic" "CTF" "Operation Whiteout" 0
+procon.protected.maps.add "CaptureTheFlag0" "XP4_SubBase" "CTF" "Hammerhead" 0
+procon.protected.maps.add "CaptureTheFlag0" "XP4_Titan" "CTF" "Hangar 21" 0
+procon.protected.maps.add "CaptureTheFlag0" "XP4_WlkrFtry" "CTF" "Giants Of Karelia" 0
+
+// R48
+procon.protected.maps.add "SquadObliteration0" "MP_Abandoned" "Squad Obliteration" "Zavod 311" 0
+procon.protected.maps.add "SquadObliteration0" "MP_Journey" "Squad Obliteration" "Golmud Railway" 0
+procon.protected.maps.add "SquadObliteration0" "MP_Naval" "Squad Obliteration" "Paracel Storm" 0
+procon.protected.maps.add "SquadObliteration0" "MP_Prison" "Squad Obliteration" "Operation Locker" 0
+procon.protected.maps.add "SquadObliteration0" "MP_Resort" "Squad Obliteration" "Hainan Resort" 0
+procon.protected.maps.add "SquadObliteration0" "MP_Siege" "Squad Obliteration" "Siege of Shanghai" 0
+procon.protected.maps.add "SquadObliteration0" "MP_Tremors" "Squad Obliteration" "Dawnbreaker" 0
+
+// R50 Gun Master
+procon.protected.maps.add "GunMaster0" "MP_Abandoned" "Gun Master" "Zavod 311" 0
+procon.protected.maps.add "GunMaster0" "MP_Damage" "Gun Master" "Lancang Dam" 0
+procon.protected.maps.add "GunMaster0" "MP_Flooded" "Gun Master" "Flood Zone" 0
+procon.protected.maps.add "GunMaster0" "MP_Journey" "Gun Master" "Golmud Railway" 0
+procon.protected.maps.add "GunMaster0" "MP_Naval" "Gun Master" "Paracel Storm" 0
+procon.protected.maps.add "GunMaster0" "MP_Prison" "Gun Master" "Operation Locker" 0
+procon.protected.maps.add "GunMaster0" "MP_Resort" "Gun Master" "Hainan Resort" 0
+procon.protected.maps.add "GunMaster0" "MP_Siege" "Gun Master" "Siege of Shanghai" 0
+procon.protected.maps.add "GunMaster0" "MP_TheDish" "Gun Master" "Rogue Transmission" 0
+procon.protected.maps.add "GunMaster0" "MP_Tremors" "Gun Master" "Dawnbreaker" 0
+
+// R51 - XP5
+procon.protected.maps.add "ConquestLarge0" "XP5_Night_01" "Conquest Large" "Zavod:Graveyard Shift" 0
+procon.protected.maps.add "ConquestSmall0" "XP5_Night_01" "Conquest Small" "Zavod:Graveyard Shift" 0
+procon.protected.maps.add "Domination0" "XP5_Night_01" "Domination" "Zavod:Graveyard Shift" 0
+procon.protected.maps.add "Obliteration" "XP5_Night_01" "Obliteration" "Zavod:Graveyard Shift" 0
+procon.protected.maps.add "RushLarge0" "XP5_Night_01" "Rush" "Zavod:Graveyard Shift" 0
+procon.protected.maps.add "TeamDeathMatch0" "XP5_Night_01" "Team Deathmatch" "Zavod:Graveyard Shift" 0
+procon.protected.maps.add "GunMaster0" "XP5_Night_01" "Gun Master" "Zavod:Graveyard Shift" 0
+procon.protected.maps.add "GunMaster1" "XP5_Night_01" "Gun Master" "Zavod:Graveyard Shift v2" 0
+
+// XP6 - Community Map
+procon.protected.maps.add "ConquestLarge0" "XP6_CMP" "Conquest Large" "Operation Outbreak" 0
+procon.protected.maps.add "ConquestSmall0" "XP6_CMP" "Conquest Small" "Operation Outbreak" 0
+procon.protected.maps.add "Domination0" "XP6_CMP" "Domination" "Operation Outbreak" 0
+procon.protected.maps.add "Obliteration" "XP6_CMP" "Obliteration" "Operation Outbreak" 0
+procon.protected.maps.add "RushLarge0" "XP6_CMP" "Rush" "Operation Outbreak" 0
+procon.protected.maps.add "SquadDeathMatch0" "XP6_CMP" "Squad Deathmatch" "Operation Outbreak" 0
+procon.protected.maps.add "SquadDeathMatch1" "XP6_CMP" "Squad Deathmatch" "Operation Outbreak v2" 0
+procon.protected.maps.add "TeamDeathMatch0" "XP6_CMP" "Team Deathmatch" "Operation Outbreak" 0
+procon.protected.maps.add "TeamDeathMatch1" "XP6_CMP" "Team Deathmatch" "Operation Outbreak v2" 0
+procon.protected.maps.add "CaptureTheFlag0" "XP6_CMP" "CTF" "Operation Outbreak" 0
+procon.protected.maps.add "Chainlink0" "XP6_CMP" "Chain Link" "Operation Outbreak" 0
+procon.protected.maps.add "GunMaster0" "XP6_CMP" "Gun Master" "Operation Outbreak" 0
+procon.protected.maps.add "GunMaster1" "XP6_CMP" "Gun Master" "Operation Outbreak v2" 0
+
+//XP7 - Legacy Operations
+procon.protected.maps.add "ConquestLarge0" "XP7_Valley" "Conquest Large" "Dragon Valley 2015" 0
+procon.protected.maps.add "ConquestSmall0" "XP7_Valley" "Conquest Small" "Dragon Valley 2015" 0
+procon.protected.maps.add "Domination0" "XP7_Valley" "Domination" "Dragon Valley 2015" 0
+procon.protected.maps.add "Obliteration" "XP7_Valley" "Obliteration" "Dragon Valley 2015" 0
+procon.protected.maps.add "RushLarge0" "XP7_Valley" "Rush" "Dragon Valley 2015" 0
+procon.protected.maps.add "SquadDeathMatch0" "XP7_Valley" "Squad Deathmatch" "Dragon Valley 2015" 0
+procon.protected.maps.add "TeamDeathMatch0" "XP7_Valley" "Team Deathmatch" "Dragon Valley 2015" 0
+procon.protected.maps.add "GunMaster0" "XP7_Valley" "Gun Master" "Dragon Valley 2015" 0
+procon.protected.maps.add "AirSuperiority0" "XP7_Valley" "Air Superiority" "Dragon Valley 2015" 0
+
+procon.protected.teamnames.clear
+
+// Conquest Large
+///////////////////////////////////////////////////////////////////////////////
+
+procon.protected.teamnames.add "MP_Abandoned" 0 "global.conquest.neutral" "" "ConquestLarge0"
+procon.protected.teamnames.add "MP_Abandoned" 1 "global.conquest.ru" "ru.png" "ConquestLarge0"
+procon.protected.teamnames.add "MP_Abandoned" 2 "global.conquest.us" "us.png" "ConquestLarge0"
+
+procon.protected.teamnames.add "MP_Damage" 0 "global.conquest.neutral" "" "ConquestLarge0"
+procon.protected.teamnames.add "MP_Damage" 1 "global.conquest.ru" "ru.png" "ConquestLarge0"
+procon.protected.teamnames.add "MP_Damage" 2 "global.conquest.cn" "cn.png" "ConquestLarge0"
+
+procon.protected.teamnames.add "MP_Flooded" 0 "global.conquest.neutral" "" "ConquestLarge0"
+procon.protected.teamnames.add "MP_Flooded" 1 "global.conquest.us" "us.png" "ConquestLarge0"
+procon.protected.teamnames.add "MP_Flooded" 2 "global.conquest.cn" "cn.png" "ConquestLarge0"
+
+procon.protected.teamnames.add "MP_Journey" 0 "global.conquest.neutral" "" "ConquestLarge0"
+procon.protected.teamnames.add "MP_Journey" 1 "global.conquest.ru" "ru.png" "ConquestLarge0"
+procon.protected.teamnames.add "MP_Journey" 2 "global.conquest.cn" "cn.png" "ConquestLarge0"
+
+procon.protected.teamnames.add "MP_Naval" 0 "global.conquest.neutral" "" "ConquestLarge0"
+procon.protected.teamnames.add "MP_Naval" 1 "global.conquest.us" "us.png" "ConquestLarge0"
+procon.protected.teamnames.add "MP_Naval" 2 "global.conquest.cn" "cn.png" "ConquestLarge0"
+
+procon.protected.teamnames.add "MP_Prison" 0 "global.conquest.neutral" "" "ConquestLarge0"
+procon.protected.teamnames.add "MP_Prison" 1 "global.conquest.us" "us.png" "ConquestLarge0"
+procon.protected.teamnames.add "MP_Prison" 2 "global.conquest.ru" "ru.png" "ConquestLarge0"
+
+procon.protected.teamnames.add "MP_Resort" 0 "global.conquest.neutral" "" "ConquestLarge0"
+procon.protected.teamnames.add "MP_Resort" 1 "global.conquest.us" "us.png" "ConquestLarge0"
+procon.protected.teamnames.add "MP_Resort" 2 "global.conquest.cn" "cn.png" "ConquestLarge0"
+
+procon.protected.teamnames.add "MP_Siege" 0 "global.conquest.neutral" "" "ConquestLarge0"
+procon.protected.teamnames.add "MP_Siege" 1 "global.conquest.us" "us.png" "ConquestLarge0"
+procon.protected.teamnames.add "MP_Siege" 2 "global.conquest.cn" "cn.png" "ConquestLarge0"
+
+procon.protected.teamnames.add "MP_TheDish" 0 "global.conquest.neutral" "" "ConquestLarge0"
+procon.protected.teamnames.add "MP_TheDish" 1 "global.conquest.ru" "ru.png" "ConquestLarge0"
+procon.protected.teamnames.add "MP_TheDish" 2 "global.conquest.cn" "cn.png" "ConquestLarge0"
+
+procon.protected.teamnames.add "MP_Tremors" 0 "global.conquest.neutral" "" "ConquestLarge0"
+procon.protected.teamnames.add "MP_Tremors" 1 "global.conquest.us" "us.png" "ConquestLarge0"
+procon.protected.teamnames.add "MP_Tremors" 2 "global.conquest.cn" "cn.png" "ConquestLarge0"
+
+// XP1 (China Rising)
+procon.protected.teamnames.add "XP1_001" 0 "global.conquest.neutral" "" "ConquestLarge0"
+procon.protected.teamnames.add "XP1_001" 1 "global.conquest.us" "us.png" "ConquestLarge0"
+procon.protected.teamnames.add "XP1_001" 2 "global.conquest.cn" "cn.png" "ConquestLarge0"
+
+procon.protected.teamnames.add "XP1_002" 0 "global.conquest.neutral" "" "ConquestLarge0"
+procon.protected.teamnames.add "XP1_002" 1 "global.conquest.us" "us.png" "ConquestLarge0"
+procon.protected.teamnames.add "XP1_002" 2 "global.conquest.cn" "cn.png" "ConquestLarge0"
+
+procon.protected.teamnames.add "XP1_003" 0 "global.conquest.neutral" "" "ConquestLarge0"
+procon.protected.teamnames.add "XP1_003" 1 "global.conquest.us" "us.png" "ConquestLarge0"
+procon.protected.teamnames.add "XP1_003" 2 "global.conquest.cn" "cn.png" "ConquestLarge0"
+
+procon.protected.teamnames.add "XP1_004" 0 "global.conquest.neutral" "" "ConquestLarge0"
+procon.protected.teamnames.add "XP1_004" 1 "global.conquest.us" "us.png" "ConquestLarge0"
+procon.protected.teamnames.add "XP1_004" 2 "global.conquest.cn" "cn.png" "ConquestLarge0"
+
+// XP0 (Second Assault)
+procon.protected.teamnames.add "XP0_Caspian" 0 "global.conquest.neutral" "" "ConquestLarge0"
+procon.protected.teamnames.add "XP0_Caspian" 1 "global.conquest.us" "us.png" "ConquestLarge0"
+procon.protected.teamnames.add "XP0_Caspian" 2 "global.conquest.ru" "ru.png" "ConquestLarge0"
+
+procon.protected.teamnames.add "XP0_Firestorm" 0 "global.conquest.neutral" "" "ConquestLarge0"
+procon.protected.teamnames.add "XP0_Firestorm" 1 "global.conquest.us" "us.png" "ConquestLarge0"
+procon.protected.teamnames.add "XP0_Firestorm" 2 "global.conquest.ru" "ru.png" "ConquestLarge0"
+
+procon.protected.teamnames.add "XP0_Metro" 0 "global.conquest.neutral" "" "ConquestLarge0"
+procon.protected.teamnames.add "XP0_Metro" 1 "global.conquest.us" "us.png" "ConquestLarge0"
+procon.protected.teamnames.add "XP0_Metro" 2 "global.conquest.ru" "ru.png" "ConquestLarge0"
+
+procon.protected.teamnames.add "XP0_Oman" 0 "global.conquest.neutral" "" "ConquestLarge0"
+procon.protected.teamnames.add "XP0_Oman" 1 "global.conquest.us" "us.png" "ConquestLarge0"
+procon.protected.teamnames.add "XP0_Oman" 2 "global.conquest.ru" "ru.png" "ConquestLarge0"
+
+// XP2 (Naval Strike)
+procon.protected.teamnames.add "XP2_001" 0 "global.conquest.neutral" "" "ConquestLarge0"
+procon.protected.teamnames.add "XP2_001" 1 "global.conquest.us" "us.png" "ConquestLarge0"
+procon.protected.teamnames.add "XP2_001" 2 "global.conquest.ru" "ru.png" "ConquestLarge0"
+
+procon.protected.teamnames.add "XP2_002" 0 "global.conquest.neutral" "" "ConquestLarge0"
+procon.protected.teamnames.add "XP2_002" 1 "global.conquest.us" "us.png" "ConquestLarge0"
+procon.protected.teamnames.add "XP2_002" 2 "global.conquest.ru" "ru.png" "ConquestLarge0"
+
+procon.protected.teamnames.add "XP2_003" 0 "global.conquest.neutral" "" "ConquestLarge0"
+procon.protected.teamnames.add "XP2_003" 1 "global.conquest.us" "us.png" "ConquestLarge0"
+procon.protected.teamnames.add "XP2_003" 2 "global.conquest.ru" "ru.png" "ConquestLarge0"
+
+procon.protected.teamnames.add "XP2_004" 0 "global.conquest.neutral" "" "ConquestLarge0"
+procon.protected.teamnames.add "XP2_004" 1 "global.conquest.us" "us.png" "ConquestLarge0"
+procon.protected.teamnames.add "XP2_004" 2 "global.conquest.ru" "ru.png" "ConquestLarge0"
+
+// XP3 (Dragons Teeth)
+procon.protected.teamnames.add "XP3_MarketPl" 0 "global.conquest.neutral" "" "ConquestLarge0"
+procon.protected.teamnames.add "XP3_MarketPl" 1 "global.conquest.us" "us.png" "ConquestLarge0"
+procon.protected.teamnames.add "XP3_MarketPl" 2 "global.conquest.cn" "cn.png" "ConquestLarge0"
+
+procon.protected.teamnames.add "XP3_Prpganda" 0 "global.conquest.neutral" "" "ConquestLarge0"
+procon.protected.teamnames.add "XP3_Prpganda" 1 "global.conquest.us" "us.png" "ConquestLarge0"
+procon.protected.teamnames.add "XP3_Prpganda" 2 "global.conquest.cn" "cn.png" "ConquestLarge0"
+
+procon.protected.teamnames.add "XP3_UrbanGdn" 0 "global.conquest.neutral" "" "ConquestLarge0"
+procon.protected.teamnames.add "XP3_UrbanGdn" 1 "global.conquest.us" "us.png" "ConquestLarge0"
+procon.protected.teamnames.add "XP3_UrbanGdn" 2 "global.conquest.cn" "cn.png" "ConquestLarge0"
+
+procon.protected.teamnames.add "XP3_WtrFront" 0 "global.conquest.neutral" "" "ConquestLarge0"
+procon.protected.teamnames.add "XP3_WtrFront" 1 "global.conquest.us" "us.png" "ConquestLarge0"
+procon.protected.teamnames.add "XP3_WtrFront" 2 "global.conquest.cn" "cn.png" "ConquestLarge0"
+
+// XP4 (Final Stand)
+procon.protected.teamnames.add "XP4_Arctic" 0 "global.conquest.neutral" "" "ConquestLarge0"
+procon.protected.teamnames.add "XP4_Arctic" 1 "global.conquest.us" "us.png" "ConquestLarge0"
+procon.protected.teamnames.add "XP4_Arctic" 2 "global.conquest.ru" "ru.png" "ConquestLarge0"
+
+procon.protected.teamnames.add "XP4_SubBase" 0 "global.conquest.neutral" "" "ConquestLarge0"
+procon.protected.teamnames.add "XP4_SubBase" 1 "global.conquest.us" "us.png" "ConquestLarge0"
+procon.protected.teamnames.add "XP4_SubBase" 2 "global.conquest.ru" "ru.png" "ConquestLarge0"
+
+procon.protected.teamnames.add "XP4_Titan" 0 "global.conquest.neutral" "" "ConquestLarge0"
+procon.protected.teamnames.add "XP4_Titan" 1 "global.conquest.us" "us.png" "ConquestLarge0"
+procon.protected.teamnames.add "XP4_Titan" 2 "global.conquest.ru" "ru.png" "ConquestLarge0"
+
+procon.protected.teamnames.add "XP4_WlkrFtry" 0 "global.conquest.neutral" "" "ConquestLarge0"
+procon.protected.teamnames.add "XP4_WlkrFtry" 1 "global.conquest.us" "us.png" "ConquestLarge0"
+procon.protected.teamnames.add "XP4_WlkrFtry" 2 "global.conquest.ru" "ru.png" "ConquestLarge0"
+
+// XP5 (Night Maps)
+procon.protected.teamnames.add "XP5_Night_01" 0 "global.conquest.neutral" "" "ConquestLarge0"
+procon.protected.teamnames.add "XP5_Night_01" 1 "global.conquest.ru" "ru.png" "ConquestLarge0"
+procon.protected.teamnames.add "XP5_Night_01" 2 "global.conquest.us" "us.png" "ConquestLarge0"
+
+// XP6 (Community Map)
+procon.protected.teamnames.add "XP6_CMP" 0 "global.conquest.neutral" "" "ConquestLarge0"
+procon.protected.teamnames.add "XP6_CMP" 1 "global.conquest.us" "us.png" "ConquestLarge0"
+procon.protected.teamnames.add "XP6_CMP" 2 "global.conquest.cn" "cn.png" "ConquestLarge0"
+
+// XP7 (Legacy Operations)
+procon.protected.teamnames.add "XP7_Valley" 0 "global.conquest.neutral" "" "ConquestLarge0"
+procon.protected.teamnames.add "XP7_Valley" 1 "global.conquest.us" "us.png" "ConquestLarge0"
+procon.protected.teamnames.add "XP7_Valley" 2 "global.conquest.cn" "cn.png" "ConquestLarge0"
+
+// Conquest Small
+///////////////////////////////////////////////////////////////////////////////
+
+procon.protected.teamnames.add "MP_Abandoned" 0 "global.conquest.neutral" "" "ConquestSmall0"
+procon.protected.teamnames.add "MP_Abandoned" 1 "global.conquest.ru" "ru.png" "ConquestSmall0"
+procon.protected.teamnames.add "MP_Abandoned" 2 "global.conquest.us" "us.png" "ConquestSmall0"
+
+procon.protected.teamnames.add "MP_Damage" 0 "global.conquest.neutral" "" "ConquestSmall0"
+procon.protected.teamnames.add "MP_Damage" 1 "global.conquest.ru" "ru.png" "ConquestSmall0"
+procon.protected.teamnames.add "MP_Damage" 2 "global.conquest.cn" "cn.png" "ConquestSmall0"
+
+procon.protected.teamnames.add "MP_Flooded" 0 "global.conquest.neutral" "" "ConquestSmall0"
+procon.protected.teamnames.add "MP_Flooded" 1 "global.conquest.us" "us.png" "ConquestSmall0"
+procon.protected.teamnames.add "MP_Flooded" 2 "global.conquest.cn" "cn.png" "ConquestSmall0"
+
+procon.protected.teamnames.add "MP_Journey" 0 "global.conquest.neutral" "" "ConquestSmall0"
+procon.protected.teamnames.add "MP_Journey" 1 "global.conquest.ru" "ru.png" "ConquestSmall0"
+procon.protected.teamnames.add "MP_Journey" 2 "global.conquest.cn" "cn.png" "ConquestSmall0"
+
+procon.protected.teamnames.add "MP_Naval" 0 "global.conquest.neutral" "" "ConquestSmall0"
+procon.protected.teamnames.add "MP_Naval" 1 "global.conquest.us" "us.png" "ConquestSmall0"
+procon.protected.teamnames.add "MP_Naval" 2 "global.conquest.cn" "cn.png" "ConquestSmall0"
+
+procon.protected.teamnames.add "MP_Prison" 0 "global.conquest.neutral" "" "ConquestSmall0"
+procon.protected.teamnames.add "MP_Prison" 1 "global.conquest.us" "us.png" "ConquestSmall0"
+procon.protected.teamnames.add "MP_Prison" 2 "global.conquest.ru" "ru.png" "ConquestSmall0"
+
+procon.protected.teamnames.add "MP_Resort" 0 "global.conquest.neutral" "" "ConquestSmall0"
+procon.protected.teamnames.add "MP_Resort" 1 "global.conquest.us" "us.png" "ConquestSmall0"
+procon.protected.teamnames.add "MP_Resort" 2 "global.conquest.cn" "cn.png" "ConquestSmall0"
+
+procon.protected.teamnames.add "MP_Siege" 0 "global.conquest.neutral" "" "ConquestSmall0"
+procon.protected.teamnames.add "MP_Siege" 1 "global.conquest.us" "us.png" "ConquestSmall0"
+procon.protected.teamnames.add "MP_Siege" 2 "global.conquest.cn" "cn.png" "ConquestSmall0"
+
+procon.protected.teamnames.add "MP_TheDish" 0 "global.conquest.neutral" "" "ConquestSmall0"
+procon.protected.teamnames.add "MP_TheDish" 1 "global.conquest.ru" "ru.png" "ConquestSmall0"
+procon.protected.teamnames.add "MP_TheDish" 2 "global.conquest.cn" "cn.png" "ConquestSmall0"
+
+procon.protected.teamnames.add "MP_Tremors" 0 "global.conquest.neutral" "" "ConquestSmall0"
+procon.protected.teamnames.add "MP_Tremors" 1 "global.conquest.us" "us.png" "ConquestSmall0"
+procon.protected.teamnames.add "MP_Tremors" 2 "global.conquest.cn" "cn.png" "ConquestSmall0"
+
+// XP1 (China Rising)
+procon.protected.teamnames.add "XP1_001" 0 "global.conquest.neutral" "" "ConquestSmall0"
+procon.protected.teamnames.add "XP1_001" 1 "global.conquest.us" "us.png" "ConquestSmall0"
+procon.protected.teamnames.add "XP1_001" 2 "global.conquest.cn" "cn.png" "ConquestSmall0"
+
+procon.protected.teamnames.add "XP1_002" 0 "global.conquest.neutral" "" "ConquestSmall0"
+procon.protected.teamnames.add "XP1_002" 1 "global.conquest.us" "us.png" "ConquestSmall0"
+procon.protected.teamnames.add "XP1_002" 2 "global.conquest.cn" "cn.png" "ConquestSmall0"
+
+procon.protected.teamnames.add "XP1_003" 0 "global.conquest.neutral" "" "ConquestSmall0"
+procon.protected.teamnames.add "XP1_003" 1 "global.conquest.us" "us.png" "ConquestSmall0"
+procon.protected.teamnames.add "XP1_003" 2 "global.conquest.cn" "cn.png" "ConquestSmall0"
+
+procon.protected.teamnames.add "XP1_004" 0 "global.conquest.neutral" "" "ConquestSmall0"
+procon.protected.teamnames.add "XP1_004" 1 "global.conquest.us" "us.png" "ConquestSmall0"
+procon.protected.teamnames.add "XP1_004" 2 "global.conquest.cn" "cn.png" "ConquestSmall0"
+
+// XP0 (Second Assault)
+procon.protected.teamnames.add "XP0_Caspian" 0 "global.conquest.neutral" "" "ConquestSmall0"
+procon.protected.teamnames.add "XP0_Caspian" 1 "global.conquest.us" "us.png" "ConquestSmall0"
+procon.protected.teamnames.add "XP0_Caspian" 2 "global.conquest.ru" "ru.png" "ConquestSmall0"
+
+procon.protected.teamnames.add "XP0_Firestorm" 0 "global.conquest.neutral" "" "ConquestSmall0"
+procon.protected.teamnames.add "XP0_Firestorm" 1 "global.conquest.us" "us.png" "ConquestSmall0"
+procon.protected.teamnames.add "XP0_Firestorm" 2 "global.conquest.ru" "ru.png" "ConquestSmall0"
+
+procon.protected.teamnames.add "XP0_Metro" 0 "global.conquest.neutral" "" "ConquestSmall0"
+procon.protected.teamnames.add "XP0_Metro" 1 "global.conquest.us" "us.png" "ConquestSmall0"
+procon.protected.teamnames.add "XP0_Metro" 2 "global.conquest.ru" "ru.png" "ConquestSmall0"
+
+procon.protected.teamnames.add "XP0_Oman" 0 "global.conquest.neutral" "" "ConquestSmall0"
+procon.protected.teamnames.add "XP0_Oman" 1 "global.conquest.us" "us.png" "ConquestSmall0"
+procon.protected.teamnames.add "XP0_Oman" 2 "global.conquest.ru" "ru.png" "ConquestSmall0"
+
+// XP2 (Naval Strike)
+procon.protected.teamnames.add "XP2_001" 0 "global.conquest.neutral" "" "ConquestSmall0"
+procon.protected.teamnames.add "XP2_001" 1 "global.conquest.us" "us.png" "ConquestSmall0"
+procon.protected.teamnames.add "XP2_001" 2 "global.conquest.ru" "ru.png" "ConquestSmall0"
+
+procon.protected.teamnames.add "XP2_002" 0 "global.conquest.neutral" "" "ConquestSmall0"
+procon.protected.teamnames.add "XP2_002" 1 "global.conquest.us" "us.png" "ConquestSmall0"
+procon.protected.teamnames.add "XP2_002" 2 "global.conquest.ru" "ru.png" "ConquestSmall0"
+
+procon.protected.teamnames.add "XP2_003" 0 "global.conquest.neutral" "" "ConquestSmall0"
+procon.protected.teamnames.add "XP2_003" 1 "global.conquest.us" "us.png" "ConquestSmall0"
+procon.protected.teamnames.add "XP2_003" 2 "global.conquest.ru" "ru.png" "ConquestSmall0"
+
+procon.protected.teamnames.add "XP2_004" 0 "global.conquest.neutral" "" "ConquestSmall0"
+procon.protected.teamnames.add "XP2_004" 1 "global.conquest.us" "us.png" "ConquestSmall0"
+procon.protected.teamnames.add "XP2_004" 2 "global.conquest.ru" "ru.png" "ConquestSmall0"
+
+// XP3 (Dragons Teeth)
+procon.protected.teamnames.add "XP3_MarketPl" 0 "global.conquest.neutral" "" "ConquestSmall0"
+procon.protected.teamnames.add "XP3_MarketPl" 1 "global.conquest.us" "us.png" "ConquestSmall0"
+procon.protected.teamnames.add "XP3_MarketPl" 2 "global.conquest.cn" "cn.png" "ConquestSmall0"
+
+procon.protected.teamnames.add "XP3_Prpganda" 0 "global.conquest.neutral" "" "ConquestSmall0"
+procon.protected.teamnames.add "XP3_Prpganda" 1 "global.conquest.us" "us.png" "ConquestSmall0"
+procon.protected.teamnames.add "XP3_Prpganda" 2 "global.conquest.cn" "cn.png" "ConquestSmall0"
+
+procon.protected.teamnames.add "XP3_UrbanGdn" 0 "global.conquest.neutral" "" "ConquestSmall0"
+procon.protected.teamnames.add "XP3_UrbanGdn" 1 "global.conquest.us" "us.png" "ConquestSmall0"
+procon.protected.teamnames.add "XP3_UrbanGdn" 2 "global.conquest.cn" "cn.png" "ConquestSmall0"
+
+procon.protected.teamnames.add "XP3_WtrFront" 0 "global.conquest.neutral" "" "ConquestSmall0"
+procon.protected.teamnames.add "XP3_WtrFront" 1 "global.conquest.us" "us.png" "ConquestSmall0"
+procon.protected.teamnames.add "XP3_WtrFront" 2 "global.conquest.cn" "cn.png" "ConquestSmall0"
+
+// XP4 (Final Stand)
+procon.protected.teamnames.add "XP4_Arctic" 0 "global.conquest.neutral" "" "ConquestSmall0"
+procon.protected.teamnames.add "XP4_Arctic" 1 "global.conquest.us" "us.png" "ConquestSmall0"
+procon.protected.teamnames.add "XP4_Arctic" 2 "global.conquest.ru" "ru.png" "ConquestSmall0"
+
+procon.protected.teamnames.add "XP4_SubBase" 0 "global.conquest.neutral" "" "ConquestSmall0"
+procon.protected.teamnames.add "XP4_SubBase" 1 "global.conquest.us" "us.png" "ConquestSmall0"
+procon.protected.teamnames.add "XP4_SubBase" 2 "global.conquest.ru" "ru.png" "ConquestSmall0"
+
+procon.protected.teamnames.add "XP4_Titan" 0 "global.conquest.neutral" "" "ConquestSmall0"
+procon.protected.teamnames.add "XP4_Titan" 1 "global.conquest.us" "us.png" "ConquestSmall0"
+procon.protected.teamnames.add "XP4_Titan" 2 "global.conquest.ru" "ru.png" "ConquestSmall0"
+
+procon.protected.teamnames.add "XP4_WlkrFtry" 0 "global.conquest.neutral" "" "ConquestSmall0"
+procon.protected.teamnames.add "XP4_WlkrFtry" 1 "global.conquest.us" "us.png" "ConquestSmall0"
+procon.protected.teamnames.add "XP4_WlkrFtry" 2 "global.conquest.ru" "ru.png" "ConquestSmall0"
+
+// XP5 (Night Maps)
+procon.protected.teamnames.add "XP5_Night_01" 0 "global.conquest.neutral" "" "ConquestSmall0"
+procon.protected.teamnames.add "XP5_Night_01" 1 "global.conquest.ru" "ru.png" "ConquestSmall0"
+procon.protected.teamnames.add "XP5_Night_01" 2 "global.conquest.us" "us.png" "ConquestSmall0"
+
+// XP6 (Community Map)
+procon.protected.teamnames.add "XP6_CMP" 0 "global.conquest.neutral" "" "ConquestSmall0"
+procon.protected.teamnames.add "XP6_CMP" 1 "global.conquest.us" "us.png" "ConquestSmall0"
+procon.protected.teamnames.add "XP6_CMP" 2 "global.conquest.cn" "cn.png" "ConquestSmall0"
+
+// XP7 (Legacy Operations)
+procon.protected.teamnames.add "XP7_Valley" 0 "global.conquest.neutral" "" "ConquestSmall0"
+procon.protected.teamnames.add "XP7_Valley" 1 "global.conquest.us" "us.png" "ConquestSmall0"
+procon.protected.teamnames.add "XP7_Valley" 2 "global.conquest.cn" "cn.png" "ConquestSmall0"
+
+// Domination
+///////////////////////////////////////////////////////////////////////////////
+
+procon.protected.teamnames.add "MP_Abandoned" 0 "global.conquest.neutral" "" "Domination0"
+procon.protected.teamnames.add "MP_Abandoned" 1 "global.conquest.ru" "ru.png" "Domination0"
+procon.protected.teamnames.add "MP_Abandoned" 2 "global.conquest.us" "us.png" "Domination0"
+
+procon.protected.teamnames.add "MP_Damage" 0 "global.conquest.neutral" "" "Domination0"
+procon.protected.teamnames.add "MP_Damage" 1 "global.conquest.ru" "ru.png" "Domination0"
+procon.protected.teamnames.add "MP_Damage" 2 "global.conquest.cn" "cn.png" "Domination0"
+
+procon.protected.teamnames.add "MP_Flooded" 0 "global.conquest.neutral" "" "Domination0"
+procon.protected.teamnames.add "MP_Flooded" 1 "global.conquest.us" "us.png" "Domination0"
+procon.protected.teamnames.add "MP_Flooded" 2 "global.conquest.cn" "cn.png" "Domination0"
+
+procon.protected.teamnames.add "MP_Journey" 0 "global.conquest.neutral" "" "Domination0"
+procon.protected.teamnames.add "MP_Journey" 1 "global.conquest.ru" "ru.png" "Domination0"
+procon.protected.teamnames.add "MP_Journey" 2 "global.conquest.cn" "cn.png" "Domination0"
+
+procon.protected.teamnames.add "MP_Naval" 0 "global.conquest.neutral" "" "Domination0"
+procon.protected.teamnames.add "MP_Naval" 1 "global.conquest.us" "us.png" "Domination0"
+procon.protected.teamnames.add "MP_Naval" 2 "global.conquest.cn" "cn.png" "Domination0"
+
+procon.protected.teamnames.add "MP_Prison" 0 "global.conquest.neutral" "" "Domination0"
+procon.protected.teamnames.add "MP_Prison" 1 "global.conquest.us" "us.png" "Domination0"
+procon.protected.teamnames.add "MP_Prison" 2 "global.conquest.ru" "ru.png" "Domination0"
+
+procon.protected.teamnames.add "MP_Resort" 0 "global.conquest.neutral" "" "Domination0"
+procon.protected.teamnames.add "MP_Resort" 1 "global.conquest.us" "us.png" "Domination0"
+procon.protected.teamnames.add "MP_Resort" 2 "global.conquest.cn" "cn.png" "Domination0"
+
+procon.protected.teamnames.add "MP_Siege" 0 "global.conquest.neutral" "" "Domination0"
+procon.protected.teamnames.add "MP_Siege" 1 "global.conquest.us" "us.png" "Domination0"
+procon.protected.teamnames.add "MP_Siege" 2 "global.conquest.cn" "cn.png" "Domination0"
+
+procon.protected.teamnames.add "MP_TheDish" 0 "global.conquest.neutral" "" "Domination0"
+procon.protected.teamnames.add "MP_TheDish" 1 "global.conquest.ru" "ru.png" "Domination0"
+procon.protected.teamnames.add "MP_TheDish" 2 "global.conquest.cn" "cn.png" "Domination0"
+
+procon.protected.teamnames.add "MP_Tremors" 0 "global.conquest.neutral" "" "Domination0"
+procon.protected.teamnames.add "MP_Tremors" 1 "global.conquest.us" "us.png" "Domination0"
+procon.protected.teamnames.add "MP_Tremors" 2 "global.conquest.cn" "cn.png" "Domination0"
+
+// XP1 (China Rising)
+procon.protected.teamnames.add "XP1_001" 0 "global.conquest.neutral" "" "Domination0"
+procon.protected.teamnames.add "XP1_001" 1 "global.conquest.us" "us.png" "Domination0"
+procon.protected.teamnames.add "XP1_001" 2 "global.conquest.cn" "cn.png" "Domination0"
+
+procon.protected.teamnames.add "XP1_002" 0 "global.conquest.neutral" "" "Domination0"
+procon.protected.teamnames.add "XP1_002" 1 "global.conquest.us" "us.png" "Domination0"
+procon.protected.teamnames.add "XP1_002" 2 "global.conquest.cn" "cn.png" "Domination0"
+
+procon.protected.teamnames.add "XP1_003" 0 "global.conquest.neutral" "" "Domination0"
+procon.protected.teamnames.add "XP1_003" 1 "global.conquest.us" "us.png" "Domination0"
+procon.protected.teamnames.add "XP1_003" 2 "global.conquest.cn" "cn.png" "Domination0"
+
+procon.protected.teamnames.add "XP1_004" 0 "global.conquest.neutral" "" "Domination0"
+procon.protected.teamnames.add "XP1_004" 1 "global.conquest.us" "us.png" "Domination0"
+procon.protected.teamnames.add "XP1_004" 2 "global.conquest.cn" "cn.png" "Domination0"
+
+// XP0 (Second Assault)
+procon.protected.teamnames.add "XP0_Caspian" 0 "global.conquest.neutral" "" "Domination0"
+procon.protected.teamnames.add "XP0_Caspian" 1 "global.conquest.us" "us.png" "Domination0"
+procon.protected.teamnames.add "XP0_Caspian" 2 "global.conquest.ru" "ru.png" "Domination0"
+
+procon.protected.teamnames.add "XP0_Firestorm" 0 "global.conquest.neutral" "" "Domination0"
+procon.protected.teamnames.add "XP0_Firestorm" 1 "global.conquest.us" "us.png" "Domination0"
+procon.protected.teamnames.add "XP0_Firestorm" 2 "global.conquest.ru" "ru.png" "Domination0"
+
+procon.protected.teamnames.add "XP0_Metro" 0 "global.conquest.neutral" "" "Domination0"
+procon.protected.teamnames.add "XP0_Metro" 1 "global.conquest.us" "us.png" "Domination0"
+procon.protected.teamnames.add "XP0_Metro" 2 "global.conquest.ru" "ru.png" "Domination0"
+
+procon.protected.teamnames.add "XP0_Oman" 0 "global.conquest.neutral" "" "Domination0"
+procon.protected.teamnames.add "XP0_Oman" 1 "global.conquest.us" "us.png" "Domination0"
+procon.protected.teamnames.add "XP0_Oman" 2 "global.conquest.ru" "ru.png" "Domination0"
+
+// XP2 (Naval Strike)
+procon.protected.teamnames.add "XP2_001" 0 "global.conquest.neutral" "" "Domination0"
+procon.protected.teamnames.add "XP2_001" 1 "global.conquest.us" "us.png" "Domination0"
+procon.protected.teamnames.add "XP2_001" 2 "global.conquest.ru" "ru.png" "Domination0"
+
+procon.protected.teamnames.add "XP2_002" 0 "global.conquest.neutral" "" "Domination0"
+procon.protected.teamnames.add "XP2_002" 1 "global.conquest.us" "us.png" "Domination0"
+procon.protected.teamnames.add "XP2_002" 2 "global.conquest.ru" "ru.png" "Domination0"
+
+procon.protected.teamnames.add "XP2_003" 0 "global.conquest.neutral" "" "Domination0"
+procon.protected.teamnames.add "XP2_003" 1 "global.conquest.us" "us.png" "Domination0"
+procon.protected.teamnames.add "XP2_003" 2 "global.conquest.ru" "ru.png" "Domination0"
+
+procon.protected.teamnames.add "XP2_004" 0 "global.conquest.neutral" "" "Domination0"
+procon.protected.teamnames.add "XP2_004" 1 "global.conquest.us" "us.png" "Domination0"
+procon.protected.teamnames.add "XP2_004" 2 "global.conquest.ru" "ru.png" "Domination0"
+
+// XP3 (Dragons Teeth)
+procon.protected.teamnames.add "XP3_MarketPl" 0 "global.conquest.neutral" "" "Domination0"
+procon.protected.teamnames.add "XP3_MarketPl" 1 "global.conquest.us" "us.png" "Domination0"
+procon.protected.teamnames.add "XP3_MarketPl" 2 "global.conquest.cn" "cn.png" "Domination0"
+
+procon.protected.teamnames.add "XP3_Prpganda" 0 "global.conquest.neutral" "" "Domination0"
+procon.protected.teamnames.add "XP3_Prpganda" 1 "global.conquest.us" "us.png" "Domination0"
+procon.protected.teamnames.add "XP3_Prpganda" 2 "global.conquest.cn" "cn.png" "Domination0"
+
+procon.protected.teamnames.add "XP3_UrbanGdn" 0 "global.conquest.neutral" "" "Domination0"
+procon.protected.teamnames.add "XP3_UrbanGdn" 1 "global.conquest.us" "us.png" "Domination0"
+procon.protected.teamnames.add "XP3_UrbanGdn" 2 "global.conquest.cn" "cn.png" "Domination0"
+
+procon.protected.teamnames.add "XP3_WtrFront" 0 "global.conquest.neutral" "" "Domination0"
+procon.protected.teamnames.add "XP3_WtrFront" 1 "global.conquest.us" "us.png" "Domination0"
+procon.protected.teamnames.add "XP3_WtrFront" 2 "global.conquest.cn" "cn.png" "Domination0"
+
+// XP4 (Final Stand)
+procon.protected.teamnames.add "XP4_Arctic" 0 "global.conquest.neutral" "" "Domination0"
+procon.protected.teamnames.add "XP4_Arctic" 1 "global.conquest.us" "us.png" "Domination0"
+procon.protected.teamnames.add "XP4_Arctic" 2 "global.conquest.ru" "ru.png" "Domination0"
+
+procon.protected.teamnames.add "XP4_SubBase" 0 "global.conquest.neutral" "" "Domination0"
+procon.protected.teamnames.add "XP4_SubBase" 1 "global.conquest.us" "us.png" "Domination0"
+procon.protected.teamnames.add "XP4_SubBase" 2 "global.conquest.ru" "ru.png" "Domination0"
+
+procon.protected.teamnames.add "XP4_Titan" 0 "global.conquest.neutral" "" "Domination0"
+procon.protected.teamnames.add "XP4_Titan" 1 "global.conquest.us" "us.png" "Domination0"
+procon.protected.teamnames.add "XP4_Titan" 2 "global.conquest.ru" "ru.png" "Domination0"
+
+procon.protected.teamnames.add "XP4_WlkrFtry" 0 "global.conquest.neutral" "" "Domination0"
+procon.protected.teamnames.add "XP4_WlkrFtry" 1 "global.conquest.us" "us.png" "Domination0"
+procon.protected.teamnames.add "XP4_WlkrFtry" 2 "global.conquest.ru" "ru.png" "Domination0"
+
+// XP5 (Night Maps)
+procon.protected.teamnames.add "XP5_Night_01" 0 "global.conquest.neutral" "" "Domination0"
+procon.protected.teamnames.add "XP5_Night_01" 1 "global.conquest.us" "us.png" "Domination0"
+procon.protected.teamnames.add "XP5_Night_01" 2 "global.conquest.ru" "ru.png" "Domination0"
+
+// XP6 (Community Map)
+procon.protected.teamnames.add "XP6_CMP" 0 "global.conquest.neutral" "" "Domination0"
+procon.protected.teamnames.add "XP6_CMP" 1 "global.conquest.us" "us.png" "Domination0"
+procon.protected.teamnames.add "XP6_CMP" 2 "global.conquest.cn" "cn.png" "Domination0"
+
+// XP7 (Legacy Operations)
+procon.protected.teamnames.add "XP7_Valley" 0 "global.conquest.neutral" "" "Domination0"
+procon.protected.teamnames.add "XP7_Valley" 1 "global.conquest.us" "us.png" "Domination0"
+procon.protected.teamnames.add "XP7_Valley" 2 "global.conquest.cn" "cn.png" "Domination0"
+
+// Defuse
+///////////////////////////////////////////////////////////////////////////////
+
+procon.protected.teamnames.add "MP_Abandoned" 0 "global.conquest.neutral" "" "Elimination0"
+procon.protected.teamnames.add "MP_Abandoned" 1 "global.conquest.ru" "ru.png" "Elimination0"
+procon.protected.teamnames.add "MP_Abandoned" 2 "global.conquest.us" "us.png" "Elimination0"
+
+procon.protected.teamnames.add "MP_Damage" 0 "global.conquest.neutral" "" "Elimination0"
+procon.protected.teamnames.add "MP_Damage" 1 "global.conquest.ru" "ru.png" "Elimination0"
+procon.protected.teamnames.add "MP_Damage" 2 "global.conquest.cn" "cn.png" "Elimination0"
+
+procon.protected.teamnames.add "MP_Flooded" 0 "global.conquest.neutral" "" "Elimination0"
+procon.protected.teamnames.add "MP_Flooded" 1 "global.conquest.us" "us.png" "Elimination0"
+procon.protected.teamnames.add "MP_Flooded" 2 "global.conquest.cn" "cn.png" "Elimination0"
+
+procon.protected.teamnames.add "MP_Journey" 0 "global.conquest.neutral" "" "Elimination0"
+procon.protected.teamnames.add "MP_Journey" 1 "global.conquest.ru" "ru.png" "Elimination0"
+procon.protected.teamnames.add "MP_Journey" 2 "global.conquest.cn" "cn.png" "Elimination0"
+
+procon.protected.teamnames.add "MP_Naval" 0 "global.conquest.neutral" "" "Elimination0"
+procon.protected.teamnames.add "MP_Naval" 1 "global.conquest.us" "us.png" "Elimination0"
+procon.protected.teamnames.add "MP_Naval" 2 "global.conquest.cn" "cn.png" "Elimination0"
+
+procon.protected.teamnames.add "MP_Prison" 0 "global.conquest.neutral" "" "Elimination0"
+procon.protected.teamnames.add "MP_Prison" 1 "global.conquest.us" "us.png" "Elimination0"
+procon.protected.teamnames.add "MP_Prison" 2 "global.conquest.ru" "ru.png" "Elimination0"
+
+procon.protected.teamnames.add "MP_Resort" 0 "global.conquest.neutral" "" "Elimination0"
+procon.protected.teamnames.add "MP_Resort" 1 "global.conquest.us" "us.png" "Elimination0"
+procon.protected.teamnames.add "MP_Resort" 2 "global.conquest.cn" "cn.png" "Elimination0"
+
+procon.protected.teamnames.add "MP_Siege" 0 "global.conquest.neutral" "" "Elimination0"
+procon.protected.teamnames.add "MP_Siege" 1 "global.conquest.us" "us.png" "Elimination0"
+procon.protected.teamnames.add "MP_Siege" 2 "global.conquest.cn" "cn.png" "Elimination0"
+
+procon.protected.teamnames.add "MP_TheDish" 0 "global.conquest.neutral" "" "Elimination0"
+procon.protected.teamnames.add "MP_TheDish" 1 "global.conquest.ru" "ru.png" "Elimination0"
+procon.protected.teamnames.add "MP_TheDish" 2 "global.conquest.cn" "cn.png" "Elimination0"
+
+procon.protected.teamnames.add "MP_Tremors" 0 "global.conquest.neutral" "" "Elimination0"
+procon.protected.teamnames.add "MP_Tremors" 1 "global.conquest.us" "us.png" "Elimination0"
+procon.protected.teamnames.add "MP_Tremors" 2 "global.conquest.cn" "cn.png" "Elimination0"
+
+// XP1 (China Rising)
+procon.protected.teamnames.add "XP1_001" 0 "global.conquest.neutral" "" "Elimination0"
+procon.protected.teamnames.add "XP1_001" 1 "global.conquest.us" "us.png" "Elimination0"
+procon.protected.teamnames.add "XP1_001" 2 "global.conquest.cn" "cn.png" "Elimination0"
+
+procon.protected.teamnames.add "XP1_002" 0 "global.conquest.neutral" "" "Elimination0"
+procon.protected.teamnames.add "XP1_002" 1 "global.conquest.us" "us.png" "Elimination0"
+procon.protected.teamnames.add "XP1_002" 2 "global.conquest.cn" "cn.png" "Elimination0"
+
+procon.protected.teamnames.add "XP1_003" 0 "global.conquest.neutral" "" "Elimination0"
+procon.protected.teamnames.add "XP1_003" 1 "global.conquest.us" "us.png" "Elimination0"
+procon.protected.teamnames.add "XP1_003" 2 "global.conquest.cn" "cn.png" "Elimination0"
+
+procon.protected.teamnames.add "XP1_004" 0 "global.conquest.neutral" "" "Elimination0"
+procon.protected.teamnames.add "XP1_004" 1 "global.conquest.us" "us.png" "Elimination0"
+procon.protected.teamnames.add "XP1_004" 2 "global.conquest.cn" "cn.png" "Elimination0"
+
+// XP0 (Second Assault)
+procon.protected.teamnames.add "XP0_Caspian" 0 "global.conquest.neutral" "" "Elimination0"
+procon.protected.teamnames.add "XP0_Caspian" 1 "global.conquest.us" "us.png" "Elimination0"
+procon.protected.teamnames.add "XP0_Caspian" 2 "global.conquest.ru" "ru.png" "Elimination0"
+
+procon.protected.teamnames.add "XP0_Firestorm" 0 "global.conquest.neutral" "" "Elimination0"
+procon.protected.teamnames.add "XP0_Firestorm" 1 "global.conquest.us" "us.png" "Elimination0"
+procon.protected.teamnames.add "XP0_Firestorm" 2 "global.conquest.ru" "ru.png" "Elimination0"
+
+procon.protected.teamnames.add "XP0_Metro" 0 "global.conquest.neutral" "" "Elimination0"
+procon.protected.teamnames.add "XP0_Metro" 1 "global.conquest.us" "us.png" "Elimination0"
+procon.protected.teamnames.add "XP0_Metro" 2 "global.conquest.ru" "ru.png" "Elimination0"
+
+procon.protected.teamnames.add "XP0_Oman" 0 "global.conquest.neutral" "" "Elimination0"
+procon.protected.teamnames.add "XP0_Oman" 1 "global.conquest.us" "us.png" "Elimination0"
+procon.protected.teamnames.add "XP0_Oman" 2 "global.conquest.ru" "ru.png" "Elimination0"
+
+// XP2 (Naval Strike)
+procon.protected.teamnames.add "XP2_001" 0 "global.conquest.neutral" "" "Elimination0"
+procon.protected.teamnames.add "XP2_001" 1 "global.conquest.us" "us.png" "Elimination0"
+procon.protected.teamnames.add "XP2_001" 2 "global.conquest.ru" "ru.png" "Elimination0"
+
+procon.protected.teamnames.add "XP2_002" 0 "global.conquest.neutral" "" "Elimination0"
+procon.protected.teamnames.add "XP2_002" 1 "global.conquest.us" "us.png" "Elimination0"
+procon.protected.teamnames.add "XP2_002" 2 "global.conquest.ru" "ru.png" "Elimination0"
+
+procon.protected.teamnames.add "XP2_003" 0 "global.conquest.neutral" "" "Elimination0"
+procon.protected.teamnames.add "XP2_003" 1 "global.conquest.us" "us.png" "Elimination0"
+procon.protected.teamnames.add "XP2_003" 2 "global.conquest.ru" "ru.png" "Elimination0"
+
+procon.protected.teamnames.add "XP2_004" 0 "global.conquest.neutral" "" "Elimination0"
+procon.protected.teamnames.add "XP2_004" 1 "global.conquest.us" "us.png" "Elimination0"
+procon.protected.teamnames.add "XP2_004" 2 "global.conquest.ru" "ru.png" "Elimination0"
+
+// XP3 (Dragons Teeth)
+procon.protected.teamnames.add "XP3_MarketPl" 0 "global.conquest.neutral" "" "Elimination0"
+procon.protected.teamnames.add "XP3_MarketPl" 1 "global.conquest.us" "us.png" "Elimination0"
+procon.protected.teamnames.add "XP3_MarketPl" 2 "global.conquest.cn" "cn.png" "Elimination0"
+
+procon.protected.teamnames.add "XP3_Prpganda" 0 "global.conquest.neutral" "" "Elimination0"
+procon.protected.teamnames.add "XP3_Prpganda" 1 "global.conquest.us" "us.png" "Elimination0"
+procon.protected.teamnames.add "XP3_Prpganda" 2 "global.conquest.cn" "cn.png" "Elimination0"
+
+procon.protected.teamnames.add "XP3_UrbanGdn" 0 "global.conquest.neutral" "" "Elimination0"
+procon.protected.teamnames.add "XP3_UrbanGdn" 1 "global.conquest.us" "us.png" "Elimination0"
+procon.protected.teamnames.add "XP3_UrbanGdn" 2 "global.conquest.cn" "cn.png" "Elimination0"
+
+procon.protected.teamnames.add "XP3_WtrFront" 0 "global.conquest.neutral" "" "Elimination0"
+procon.protected.teamnames.add "XP3_WtrFront" 1 "global.conquest.us" "us.png" "Elimination0"
+procon.protected.teamnames.add "XP3_WtrFront" 2 "global.conquest.cn" "cn.png" "Elimination0"
+
+// XP4 (Final Stand)
+procon.protected.teamnames.add "XP4_Arctic" 0 "global.conquest.neutral" "" "Elimination0"
+procon.protected.teamnames.add "XP4_Arctic" 1 "global.conquest.us" "us.png" "Elimination0"
+procon.protected.teamnames.add "XP4_Arctic" 2 "global.conquest.ru" "ru.png" "Elimination0"
+
+procon.protected.teamnames.add "XP4_SubBase" 0 "global.conquest.neutral" "" "Elimination0"
+procon.protected.teamnames.add "XP4_SubBase" 1 "global.conquest.us" "us.png" "Elimination0"
+procon.protected.teamnames.add "XP4_SubBase" 2 "global.conquest.ru" "ru.png" "Elimination0"
+
+procon.protected.teamnames.add "XP4_Titan" 0 "global.conquest.neutral" "" "Elimination0"
+procon.protected.teamnames.add "XP4_Titan" 1 "global.conquest.us" "us.png" "Elimination0"
+procon.protected.teamnames.add "XP4_Titan" 2 "global.conquest.ru" "ru.png" "Elimination0"
+
+procon.protected.teamnames.add "XP4_WlkrFtry" 0 "global.conquest.neutral" "" "Elimination0"
+procon.protected.teamnames.add "XP4_WlkrFtry" 1 "global.conquest.us" "us.png" "Elimination0"
+procon.protected.teamnames.add "XP4_WlkrFtry" 2 "global.conquest.ru" "ru.png" "Elimination0"
+
+// Obliteration
+///////////////////////////////////////////////////////////////////////////////
+
+procon.protected.teamnames.add "MP_Abandoned" 0 "global.conquest.neutral" "" "Obliteration"
+procon.protected.teamnames.add "MP_Abandoned" 1 "global.conquest.ru" "ru.png" "Obliteration"
+procon.protected.teamnames.add "MP_Abandoned" 2 "global.conquest.us" "us.png" "Obliteration"
+
+procon.protected.teamnames.add "MP_Damage" 0 "global.conquest.neutral" "" "Obliteration"
+procon.protected.teamnames.add "MP_Damage" 1 "global.conquest.ru" "ru.png" "Obliteration"
+procon.protected.teamnames.add "MP_Damage" 2 "global.conquest.cn" "cn.png" "Obliteration"
+
+procon.protected.teamnames.add "MP_Flooded" 0 "global.conquest.neutral" "" "Obliteration"
+procon.protected.teamnames.add "MP_Flooded" 1 "global.conquest.us" "us.png" "Obliteration"
+procon.protected.teamnames.add "MP_Flooded" 2 "global.conquest.cn" "cn.png" "Obliteration"
+
+procon.protected.teamnames.add "MP_Journey" 0 "global.conquest.neutral" "" "Obliteration"
+procon.protected.teamnames.add "MP_Journey" 1 "global.conquest.ru" "ru.png" "Obliteration"
+procon.protected.teamnames.add "MP_Journey" 2 "global.conquest.cn" "cn.png" "Obliteration"
+
+procon.protected.teamnames.add "MP_Naval" 0 "global.conquest.neutral" "" "Obliteration"
+procon.protected.teamnames.add "MP_Naval" 1 "global.conquest.us" "us.png" "Obliteration"
+procon.protected.teamnames.add "MP_Naval" 2 "global.conquest.cn" "cn.png" "Obliteration"
+
+procon.protected.teamnames.add "MP_Prison" 0 "global.conquest.neutral" "" "Obliteration"
+procon.protected.teamnames.add "MP_Prison" 1 "global.conquest.us" "us.png" "Obliteration"
+procon.protected.teamnames.add "MP_Prison" 2 "global.conquest.ru" "ru.png" "Obliteration"
+
+procon.protected.teamnames.add "MP_Resort" 0 "global.conquest.neutral" "" "Obliteration"
+procon.protected.teamnames.add "MP_Resort" 1 "global.conquest.us" "us.png" "Obliteration"
+procon.protected.teamnames.add "MP_Resort" 2 "global.conquest.cn" "cn.png" "Obliteration"
+
+procon.protected.teamnames.add "MP_Siege" 0 "global.conquest.neutral" "" "Obliteration"
+procon.protected.teamnames.add "MP_Siege" 1 "global.conquest.us" "us.png" "Obliteration"
+procon.protected.teamnames.add "MP_Siege" 2 "global.conquest.cn" "cn.png" "Obliteration"
+
+procon.protected.teamnames.add "MP_TheDish" 0 "global.conquest.neutral" "" "Obliteration"
+procon.protected.teamnames.add "MP_TheDish" 1 "global.conquest.ru" "ru.png" "Obliteration"
+procon.protected.teamnames.add "MP_TheDish" 2 "global.conquest.cn" "cn.png" "Obliteration"
+
+procon.protected.teamnames.add "MP_Tremors" 0 "global.conquest.neutral" "" "Obliteration"
+procon.protected.teamnames.add "MP_Tremors" 1 "global.conquest.us" "us.png" "Obliteration"
+procon.protected.teamnames.add "MP_Tremors" 2 "global.conquest.cn" "cn.png" "Obliteration"
+
+// XP1 (China Rising)
+procon.protected.teamnames.add "XP1_001" 0 "global.conquest.neutral" "" "Obliteration"
+procon.protected.teamnames.add "XP1_001" 1 "global.conquest.us" "us.png" "Obliteration"
+procon.protected.teamnames.add "XP1_001" 2 "global.conquest.cn" "cn.png" "Obliteration"
+
+procon.protected.teamnames.add "XP1_002" 0 "global.conquest.neutral" "" "Obliteration"
+procon.protected.teamnames.add "XP1_002" 1 "global.conquest.us" "us.png" "Obliteration"
+procon.protected.teamnames.add "XP1_002" 2 "global.conquest.cn" "cn.png" "Obliteration"
+
+procon.protected.teamnames.add "XP1_003" 0 "global.conquest.neutral" "" "Obliteration"
+procon.protected.teamnames.add "XP1_003" 1 "global.conquest.us" "us.png" "Obliteration"
+procon.protected.teamnames.add "XP1_003" 2 "global.conquest.cn" "cn.png" "Obliteration"
+
+procon.protected.teamnames.add "XP1_004" 0 "global.conquest.neutral" "" "Obliteration"
+procon.protected.teamnames.add "XP1_004" 1 "global.conquest.us" "us.png" "Obliteration"
+procon.protected.teamnames.add "XP1_004" 2 "global.conquest.cn" "cn.png" "Obliteration"
+
+// XP0 (Second Assault)
+procon.protected.teamnames.add "XP0_Caspian" 0 "global.conquest.neutral" "" "Obliteration"
+procon.protected.teamnames.add "XP0_Caspian" 1 "global.conquest.us" "us.png" "Obliteration"
+procon.protected.teamnames.add "XP0_Caspian" 2 "global.conquest.ru" "ru.png" "Obliteration"
+
+procon.protected.teamnames.add "XP0_Firestorm" 0 "global.conquest.neutral" "" "Obliteration"
+procon.protected.teamnames.add "XP0_Firestorm" 1 "global.conquest.us" "us.png" "Obliteration"
+procon.protected.teamnames.add "XP0_Firestorm" 2 "global.conquest.ru" "ru.png" "Obliteration"
+
+procon.protected.teamnames.add "XP0_Metro" 0 "global.conquest.neutral" "" "Obliteration"
+procon.protected.teamnames.add "XP0_Metro" 1 "global.conquest.us" "us.png" "Obliteration"
+procon.protected.teamnames.add "XP0_Metro" 2 "global.conquest.ru" "ru.png" "Obliteration"
+
+procon.protected.teamnames.add "XP0_Oman" 0 "global.conquest.neutral" "" "Obliteration"
+procon.protected.teamnames.add "XP0_Oman" 1 "global.conquest.us" "us.png" "Obliteration"
+procon.protected.teamnames.add "XP0_Oman" 2 "global.conquest.ru" "ru.png" "Obliteration"
+
+// XP2 (Naval Strike)
+procon.protected.teamnames.add "XP2_001" 0 "global.conquest.neutral" "" "Obliteration"
+procon.protected.teamnames.add "XP2_001" 1 "global.conquest.us" "us.png" "Obliteration"
+procon.protected.teamnames.add "XP2_001" 2 "global.conquest.ru" "ru.png" "Obliteration"
+
+procon.protected.teamnames.add "XP2_002" 0 "global.conquest.neutral" "" "Obliteration"
+procon.protected.teamnames.add "XP2_002" 1 "global.conquest.us" "us.png" "Obliteration"
+procon.protected.teamnames.add "XP2_002" 2 "global.conquest.ru" "ru.png" "Obliteration"
+
+procon.protected.teamnames.add "XP2_003" 0 "global.conquest.neutral" "" "Obliteration"
+procon.protected.teamnames.add "XP2_003" 1 "global.conquest.us" "us.png" "Obliteration"
+procon.protected.teamnames.add "XP2_003" 2 "global.conquest.ru" "ru.png" "Obliteration"
+
+procon.protected.teamnames.add "XP2_004" 0 "global.conquest.neutral" "" "Obliteration"
+procon.protected.teamnames.add "XP2_004" 1 "global.conquest.us" "us.png" "Obliteration"
+procon.protected.teamnames.add "XP2_004" 2 "global.conquest.ru" "ru.png" "Obliteration"
+
+// XP3 (Dragons Teeth)
+procon.protected.teamnames.add "XP3_MarketPl" 0 "global.conquest.neutral" "" "Obliteration"
+procon.protected.teamnames.add "XP3_MarketPl" 1 "global.conquest.us" "us.png" "Obliteration"
+procon.protected.teamnames.add "XP3_MarketPl" 2 "global.conquest.cn" "cn.png" "Obliteration"
+
+procon.protected.teamnames.add "XP3_Prpganda" 0 "global.conquest.neutral" "" "Obliteration"
+procon.protected.teamnames.add "XP3_Prpganda" 1 "global.conquest.us" "us.png" "Obliteration"
+procon.protected.teamnames.add "XP3_Prpganda" 2 "global.conquest.cn" "cn.png" "Obliteration"
+
+procon.protected.teamnames.add "XP3_UrbanGdn" 0 "global.conquest.neutral" "" "Obliteration"
+procon.protected.teamnames.add "XP3_UrbanGdn" 1 "global.conquest.us" "us.png" "Obliteration"
+procon.protected.teamnames.add "XP3_UrbanGdn" 2 "global.conquest.cn" "cn.png" "Obliteration"
+
+procon.protected.teamnames.add "XP3_WtrFront" 0 "global.conquest.neutral" "" "Obliteration"
+procon.protected.teamnames.add "XP3_WtrFront" 1 "global.conquest.us" "us.png" "Obliteration"
+procon.protected.teamnames.add "XP3_WtrFront" 2 "global.conquest.cn" "cn.png" "Obliteration"
+
+// XP4 (Final Stand)
+procon.protected.teamnames.add "XP4_Arctic" 0 "global.conquest.neutral" "" "Obliteration"
+procon.protected.teamnames.add "XP4_Arctic" 1 "global.conquest.us" "us.png" "Obliteration"
+procon.protected.teamnames.add "XP4_Arctic" 2 "global.conquest.ru" "ru.png" "Obliteration"
+
+procon.protected.teamnames.add "XP4_SubBase" 0 "global.conquest.neutral" "" "Obliteration"
+procon.protected.teamnames.add "XP4_SubBase" 1 "global.conquest.us" "us.png" "Obliteration"
+procon.protected.teamnames.add "XP4_SubBase" 2 "global.conquest.ru" "ru.png" "Obliteration"
+
+procon.protected.teamnames.add "XP4_Titan" 0 "global.conquest.neutral" "" "Obliteration"
+procon.protected.teamnames.add "XP4_Titan" 1 "global.conquest.us" "us.png" "Obliteration"
+procon.protected.teamnames.add "XP4_Titan" 2 "global.conquest.ru" "ru.png" "Obliteration"
+
+procon.protected.teamnames.add "XP4_WlkrFtry" 0 "global.conquest.neutral" "" "Obliteration"
+procon.protected.teamnames.add "XP4_WlkrFtry" 1 "global.conquest.us" "us.png" "Obliteration"
+procon.protected.teamnames.add "XP4_WlkrFtry" 2 "global.conquest.ru" "ru.png" "Obliteration"
+
+// XP5 (Night Maps)
+procon.protected.teamnames.add "XP5_Night_01" 0 "global.conquest.neutral" "" "Obliteration"
+procon.protected.teamnames.add "XP5_Night_01" 1 "global.conquest.us" "us.png" "Obliteration"
+procon.protected.teamnames.add "XP5_Night_01" 2 "global.conquest.ru" "ru.png" "Obliteration"
+
+// XP6 (Community Map)
+procon.protected.teamnames.add "XP6_CMP" 0 "global.conquest.neutral" "" "Obliteration"
+procon.protected.teamnames.add "XP6_CMP" 1 "global.conquest.us" "us.png" "Obliteration"
+procon.protected.teamnames.add "XP6_CMP" 2 "global.conquest.cn" "cn.png" "Obliteration"
+
+// XP7 (Legacy Operations)
+procon.protected.teamnames.add "XP7_Valley" 0 "global.conquest.neutral" "" "Obliteration"
+procon.protected.teamnames.add "XP7_Valley" 1 "global.conquest.us" "us.png" "Obliteration"
+procon.protected.teamnames.add "XP7_Valley" 2 "global.conquest.cn" "cn.png" "Obliteration"
+
+// Rush
+///////////////////////////////////////////////////////////////////////////////
+
+procon.protected.teamnames.add "MP_Abandoned" 0 "global.rush.neutral" "" "RushLarge0"
+procon.protected.teamnames.add "MP_Abandoned" 1 "global.rush.attackers" "us.png" "RushLarge0"
+procon.protected.teamnames.add "MP_Abandoned" 2 "global.rush.defenders" "cn.png" "RushLarge0"
+
+procon.protected.teamnames.add "MP_Damage" 0 "global.rush.neutral" "" "RushLarge0"
+procon.protected.teamnames.add "MP_Damage" 1 "global.rush.attackers" "us.png" "RushLarge0"
+procon.protected.teamnames.add "MP_Damage" 2 "global.rush.defenders" "cn.png" "RushLarge0"
+
+procon.protected.teamnames.add "MP_Flooded" 0 "global.rush.neutral" "" "RushLarge0"
+procon.protected.teamnames.add "MP_Flooded" 1 "global.rush.attackers" "us.png" "RushLarge0"
+procon.protected.teamnames.add "MP_Flooded" 2 "global.rush.defenders" "cn.png" "RushLarge0"
+
+procon.protected.teamnames.add "MP_Journey" 0 "global.rush.neutral" "" "RushLarge0"
+procon.protected.teamnames.add "MP_Journey" 1 "global.rush.attackers" "us.png" "RushLarge0"
+procon.protected.teamnames.add "MP_Journey" 2 "global.rush.defenders" "cn.png" "RushLarge0"
+
+procon.protected.teamnames.add "MP_Naval" 0 "global.rush.neutral" "" "RushLarge0"
+procon.protected.teamnames.add "MP_Naval" 1 "global.rush.attackers" "us.png" "RushLarge0"
+procon.protected.teamnames.add "MP_Naval" 2 "global.rush.defenders" "cn.png" "RushLarge0"
+
+procon.protected.teamnames.add "MP_Prison" 0 "global.rush.neutral" "" "RushLarge0"
+procon.protected.teamnames.add "MP_Prison" 1 "global.rush.attackers" "us.png" "RushLarge0"
+procon.protected.teamnames.add "MP_Prison" 2 "global.rush.defenders" "cn.png" "RushLarge0"
+
+procon.protected.teamnames.add "MP_Resort" 0 "global.rush.neutral" "" "RushLarge0"
+procon.protected.teamnames.add "MP_Resort" 1 "global.rush.attackers" "us.png" "RushLarge0"
+procon.protected.teamnames.add "MP_Resort" 2 "global.rush.defenders" "cn.png" "RushLarge0"
+
+procon.protected.teamnames.add "MP_Siege" 0 "global.rush.neutral" "" "RushLarge0"
+procon.protected.teamnames.add "MP_Siege" 1 "global.rush.attackers" "us.png" "RushLarge0"
+procon.protected.teamnames.add "MP_Siege" 2 "global.rush.defenders" "cn.png" "RushLarge0"
+
+procon.protected.teamnames.add "MP_TheDish" 0 "global.rush.neutral" "" "RushLarge0"
+procon.protected.teamnames.add "MP_TheDish" 1 "global.rush.attackers" "us.png" "RushLarge0"
+procon.protected.teamnames.add "MP_TheDish" 2 "global.rush.defenders" "cn.png" "RushLarge0"
+
+procon.protected.teamnames.add "MP_Tremors" 0 "global.rush.neutral" "" "RushLarge0"
+procon.protected.teamnames.add "MP_Tremors" 1 "global.rush.attackers" "us.png" "RushLarge0"
+procon.protected.teamnames.add "MP_Tremors" 2 "global.rush.defenders" "cn.png" "RushLarge0"
+
+// XP1 (China Rising)
+procon.protected.teamnames.add "XP1_001" 0 "global.rush.neutral" "" "RushLarge0"
+procon.protected.teamnames.add "XP1_001" 1 "global.rush.attackers" "us.png" "RushLarge0"
+procon.protected.teamnames.add "XP1_001" 2 "global.rush.defenders" "cn.png" "RushLarge0"
+
+procon.protected.teamnames.add "XP1_002" 0 "global.rush.neutral" "" "RushLarge0"
+procon.protected.teamnames.add "XP1_002" 1 "global.rush.attackers" "us.png" "RushLarge0"
+procon.protected.teamnames.add "XP1_002" 2 "global.rush.defenders" "cn.png" "RushLarge0"
+
+procon.protected.teamnames.add "XP1_003" 0 "global.rush.neutral" "" "RushLarge0"
+procon.protected.teamnames.add "XP1_003" 1 "global.rush.attackers" "us.png" "RushLarge0"
+procon.protected.teamnames.add "XP1_003" 2 "global.rush.defenders" "cn.png" "RushLarge0"
+
+procon.protected.teamnames.add "XP1_004" 0 "global.rush.neutral" "" "RushLarge0"
+procon.protected.teamnames.add "XP1_004" 1 "global.rush.attackers" "us.png" "RushLarge0"
+procon.protected.teamnames.add "XP1_004" 2 "global.rush.defenders" "cn.png" "RushLarge0"
+
+// XP0 (Second Assault)
+procon.protected.teamnames.add "XP0_Caspian" 0 "global.rush.neutral" "" "RushLarge0"
+procon.protected.teamnames.add "XP0_Caspian" 1 "global.rush.attackers" "us.png" "RushLarge0"
+procon.protected.teamnames.add "XP0_Caspian" 2 "global.rush.defenders" "ru.png" "RushLarge0"
+
+procon.protected.teamnames.add "XP0_Firestorm" 0 "global.rush.neutral" "" "RushLarge0"
+procon.protected.teamnames.add "XP0_Firestorm" 1 "global.rush.attackers" "us.png" "RushLarge0"
+procon.protected.teamnames.add "XP0_Firestorm" 2 "global.rush.defenders" "ru.png" "RushLarge0"
+
+procon.protected.teamnames.add "XP0_Metro" 0 "global.rush.neutral" "" "RushLarge0"
+procon.protected.teamnames.add "XP0_Metro" 1 "global.rush.attackers" "us.png" "RushLarge0"
+procon.protected.teamnames.add "XP0_Metro" 2 "global.rush.defenders" "ru.png" "RushLarge0"
+
+procon.protected.teamnames.add "XP0_Oman" 0 "global.rush.neutral" "" "RushLarge0"
+procon.protected.teamnames.add "XP0_Oman" 1 "global.rush.attackers" "us.png" "RushLarge0"
+procon.protected.teamnames.add "XP0_Oman" 2 "global.rush.defenders" "ru.png" "RushLarge0"
+
+// XP2 (Naval Strike)
+procon.protected.teamnames.add "XP2_001" 0 "global.rush.neutral" "" "RushLarge0"
+procon.protected.teamnames.add "XP2_001" 1 "global.rush.attackers" "us.png" "RushLarge0"
+procon.protected.teamnames.add "XP2_001" 2 "global.rush.defenders" "ru.png" "RushLarge0"
+
+procon.protected.teamnames.add "XP2_002" 0 "global.rush.neutral" "" "RushLarge0"
+procon.protected.teamnames.add "XP2_002" 1 "global.rush.attackers" "us.png" "RushLarge0"
+procon.protected.teamnames.add "XP2_002" 2 "global.rush.defenders" "ru.png" "RushLarge0"
+
+procon.protected.teamnames.add "XP2_003" 0 "global.rush.neutral" "" "RushLarge0"
+procon.protected.teamnames.add "XP2_003" 1 "global.rush.attackers" "us.png" "RushLarge0"
+procon.protected.teamnames.add "XP2_003" 2 "global.rush.defenders" "ru.png" "RushLarge0"
+
+procon.protected.teamnames.add "XP2_004" 0 "global.rush.neutral" "" "RushLarge0"
+procon.protected.teamnames.add "XP2_004" 1 "global.rush.attackers" "us.png" "RushLarge0"
+procon.protected.teamnames.add "XP2_004" 2 "global.rush.defenders" "ru.png" "RushLarge0"
+
+// XP3 (Dragons Teeth)
+procon.protected.teamnames.add "XP3_MarketPl" 0 "global.rush.neutral" "" "RushLarge0"
+procon.protected.teamnames.add "XP3_MarketPl" 1 "global.rush.attackers" "us.png" "RushLarge0"
+procon.protected.teamnames.add "XP3_MarketPl" 2 "global.rush.defenders" "cn.png" "RushLarge0"
+
+procon.protected.teamnames.add "XP3_Prpganda" 0 "global.rush.neutral" "" "RushLarge0"
+procon.protected.teamnames.add "XP3_Prpganda" 1 "global.rush.attackers" "us.png" "RushLarge0"
+procon.protected.teamnames.add "XP3_Prpganda" 2 "global.rush.defenders" "cn.png" "RushLarge0"
+
+procon.protected.teamnames.add "XP3_UrbanGdn" 0 "global.rush.neutral" "" "RushLarge0"
+procon.protected.teamnames.add "XP3_UrbanGdn" 1 "global.rush.attackers" "us.png" "RushLarge0"
+procon.protected.teamnames.add "XP3_UrbanGdn" 2 "global.rush.defenders" "cn.png" "RushLarge0"
+
+procon.protected.teamnames.add "XP3_WtrFront" 0 "global.rush.neutral" "" "RushLarge0"
+procon.protected.teamnames.add "XP3_WtrFront" 1 "global.rush.attackers" "us.png" "RushLarge0"
+procon.protected.teamnames.add "XP3_WtrFront" 2 "global.rush.defenders" "cn.png" "RushLarge0"
+
+// XP4 (Final Stand)
+procon.protected.teamnames.add "XP4_Arctic" 0 "global.rush.neutral" "" "RushLarge0"
+procon.protected.teamnames.add "XP4_Arctic" 1 "global.rush.attackers" "us.png" "RushLarge0"
+procon.protected.teamnames.add "XP4_Arctic" 2 "global.rush.defenders" "ru.png" "RushLarge0"
+
+procon.protected.teamnames.add "XP4_SubBase" 0 "global.rush.neutral" "" "RushLarge0"
+procon.protected.teamnames.add "XP4_SubBase" 1 "global.rush.attackers" "us.png" "RushLarge0"
+procon.protected.teamnames.add "XP4_SubBase" 2 "global.rush.defenders" "ru.png" "RushLarge0"
+
+procon.protected.teamnames.add "XP4_Titan" 0 "global.rush.neutral" "" "RushLarge0"
+procon.protected.teamnames.add "XP4_Titan" 1 "global.rush.attackers" "us.png" "RushLarge0"
+procon.protected.teamnames.add "XP4_Titan" 2 "global.rush.defenders" "ru.png" "RushLarge0"
+
+procon.protected.teamnames.add "XP4_WlkrFtry" 0 "global.rush.neutral" "" "RushLarge0"
+procon.protected.teamnames.add "XP4_WlkrFtry" 1 "global.rush.attackers" "us.png" "RushLarge0"
+procon.protected.teamnames.add "XP4_WlkrFtry" 2 "global.rush.defenders" "ru.png" "RushLarge0"
+
+// XP5 (Night Maps)
+procon.protected.teamnames.add "XP5_Night_01" 0 "global.rush.neutral" "" "RushLarge0"
+procon.protected.teamnames.add "XP5_Night_01" 1 "global.rush.attackers" "us.png" "RushLarge0"
+procon.protected.teamnames.add "XP5_Night_01" 2 "global.rush.defenders" "ru.png" "RushLarge0"
+
+// XP6 (Community Map)
+procon.protected.teamnames.add "XP6_CMP" 0 "global.rush.neutral" "" "RushLarge0"
+procon.protected.teamnames.add "XP6_CMP" 1 "global.rush.attackers" "us.png" "RushLarge0"
+procon.protected.teamnames.add "XP6_CMP" 2 "global.rush.defenders" "cn.png" "RushLarge0"
+
+// XP7 (Legacy Operations)
+procon.protected.teamnames.add "XP7_Valley" 0 "global.rush.neutral" "" "RushLarge0"
+procon.protected.teamnames.add "XP7_Valley" 1 "global.rush.attackers" "us.png" "RushLarge0"
+procon.protected.teamnames.add "XP7_Valley" 2 "global.rush.defenders" "cn.png" "RushLarge0"
+
+// Squad Deathmatch
+///////////////////////////////////////////////////////////////////////////////
+
+procon.protected.teamnames.add "MP_Abandoned" 0 "global.conquest.neutral" "" "SquadDeathMatch0"
+procon.protected.teamnames.add "MP_Abandoned" 1 "global.Squad1" "ru.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "MP_Abandoned" 2 "global.Squad2" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "MP_Abandoned" 3 "global.Squad3" "ru.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "MP_Abandoned" 4 "global.Squad4" "us.png" "SquadDeathMatch0"
+
+procon.protected.teamnames.add "MP_Damage" 0 "global.conquest.neutral" "" "SquadDeathMatch0"
+procon.protected.teamnames.add "MP_Damage" 1 "global.Squad1" "ru.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "MP_Damage" 2 "global.Squad2" "cn.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "MP_Damage" 3 "global.Squad3" "ru.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "MP_Damage" 4 "global.Squad4" "cn.png" "SquadDeathMatch0"
+
+procon.protected.teamnames.add "MP_Flooded" 0 "global.conquest.neutral" "" "SquadDeathMatch0"
+procon.protected.teamnames.add "MP_Flooded" 1 "global.Squad1" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "MP_Flooded" 2 "global.Squad2" "cn.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "MP_Flooded" 3 "global.Squad3" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "MP_Flooded" 4 "global.Squad4" "cn.png" "SquadDeathMatch0"
+
+procon.protected.teamnames.add "MP_Journey" 0 "global.conquest.neutral" "" "SquadDeathMatch0"
+procon.protected.teamnames.add "MP_Journey" 1 "global.Squad1" "ru.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "MP_Journey" 2 "global.Squad2" "cn.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "MP_Journey" 3 "global.Squad3" "ru.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "MP_Journey" 4 "global.Squad4" "cn.png" "SquadDeathMatch0"
+
+procon.protected.teamnames.add "MP_Naval" 0 "global.conquest.neutral" "" "SquadDeathMatch0"
+procon.protected.teamnames.add "MP_Naval" 1 "global.Squad1" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "MP_Naval" 2 "global.Squad2" "cn.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "MP_Naval" 3 "global.Squad3" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "MP_Naval" 4 "global.Squad4" "cn.png" "SquadDeathMatch0"
+
+procon.protected.teamnames.add "MP_Prison" 0 "global.conquest.neutral" "" "SquadDeathMatch0"
+procon.protected.teamnames.add "MP_Prison" 1 "global.Squad1" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "MP_Prison" 2 "global.Squad2" "ru.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "MP_Prison" 3 "global.Squad3" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "MP_Prison" 4 "global.Squad4" "ru.png" "SquadDeathMatch0"
+
+procon.protected.teamnames.add "MP_Resort" 0 "global.conquest.neutral" "" "SquadDeathMatch0"
+procon.protected.teamnames.add "MP_Resort" 1 "global.Squad1" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "MP_Resort" 2 "global.Squad2" "cn.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "MP_Resort" 3 "global.Squad3" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "MP_Resort" 4 "global.Squad4" "cn.png" "SquadDeathMatch0"
+
+procon.protected.teamnames.add "MP_Siege" 0 "global.conquest.neutral" "" "SquadDeathMatch0"
+procon.protected.teamnames.add "MP_Siege" 1 "global.Squad1" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "MP_Siege" 2 "global.Squad2" "cn.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "MP_Siege" 3 "global.Squad3" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "MP_Siege" 4 "global.Squad4" "cn.png" "SquadDeathMatch0"
+
+procon.protected.teamnames.add "MP_TheDish" 0 "global.conquest.neutral" "" "SquadDeathMatch0"
+procon.protected.teamnames.add "MP_TheDish" 1 "global.Squad1" "ru.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "MP_TheDish" 2 "global.Squad2" "cn.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "MP_TheDish" 3 "global.Squad3" "ru.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "MP_TheDish" 4 "global.Squad4" "cn.png" "SquadDeathMatch0"
+
+procon.protected.teamnames.add "MP_Tremors" 0 "global.conquest.neutral" "" "SquadDeathMatch0"
+procon.protected.teamnames.add "MP_Tremors" 1 "global.Squad1" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "MP_Tremors" 2 "global.Squad2" "cn.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "MP_Tremors" 3 "global.Squad3" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "MP_Tremors" 4 "global.Squad4" "cn.png" "SquadDeathMatch0"
+
+// XP1 (China Rising)
+procon.protected.teamnames.add "XP1_001" 0 "global.conquest.neutral" "" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP1_001" 1 "global.Squad1" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP1_001" 2 "global.Squad2" "cn.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP1_001" 3 "global.Squad3" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP1_001" 4 "global.Squad4" "cn.png" "SquadDeathMatch0"
+
+procon.protected.teamnames.add "XP1_002" 0 "global.conquest.neutral" "" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP1_002" 1 "global.Squad1" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP1_002" 2 "global.Squad2" "cn.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP1_002" 3 "global.Squad3" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP1_002" 4 "global.Squad4" "cn.png" "SquadDeathMatch0"
+
+procon.protected.teamnames.add "XP1_003" 0 "global.conquest.neutral" "" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP1_003" 1 "global.Squad1" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP1_003" 2 "global.Squad2" "cn.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP1_003" 3 "global.Squad3" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP1_003" 4 "global.Squad4" "cn.png" "SquadDeathMatch0"
+
+procon.protected.teamnames.add "XP1_004" 0 "global.conquest.neutral" "" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP1_004" 1 "global.Squad1" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP1_004" 2 "global.Squad2" "cn.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP1_004" 3 "global.Squad3" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP1_004" 4 "global.Squad4" "cn.png" "SquadDeathMatch0"
+
+// XP0 (Second Assault)
+procon.protected.teamnames.add "XP0_Caspian" 0 "global.conquest.neutral" "" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP0_Caspian" 1 "global.Squad1" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP0_Caspian" 2 "global.Squad2" "ru.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP0_Caspian" 3 "global.Squad3" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP0_Caspian" 4 "global.Squad4" "ru.png" "SquadDeathMatch0"
+
+procon.protected.teamnames.add "XP0_Firestorm" 0 "global.conquest.neutral" "" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP0_Firestorm" 1 "global.Squad1" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP0_Firestorm" 2 "global.Squad2" "ru.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP0_Firestorm" 3 "global.Squad3" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP0_Firestorm" 4 "global.Squad4" "ru.png" "SquadDeathMatch0"
+
+procon.protected.teamnames.add "XP0_Metro" 0 "global.conquest.neutral" "" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP0_Metro" 1 "global.Squad1" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP0_Metro" 2 "global.Squad2" "ru.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP0_Metro" 3 "global.Squad3" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP0_Metro" 4 "global.Squad4" "ru.png" "SquadDeathMatch0"
+
+procon.protected.teamnames.add "XP0_Oman" 0 "global.conquest.neutral" "" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP0_Oman" 1 "global.Squad1" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP0_Oman" 2 "global.Squad2" "ru.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP0_Oman" 3 "global.Squad3" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP0_Oman" 4 "global.Squad4" "ru.png" "SquadDeathMatch0"
+
+// XP2 (Naval Strike)
+procon.protected.teamnames.add "XP2_001" 0 "global.conquest.neutral" "" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP2_001" 1 "global.Squad1" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP2_001" 2 "global.Squad2" "ru.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP2_001" 3 "global.Squad3" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP2_001" 4 "global.Squad4" "ru.png" "SquadDeathMatch0"
+
+procon.protected.teamnames.add "XP2_002" 0 "global.conquest.neutral" "" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP2_002" 1 "global.Squad1" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP2_002" 2 "global.Squad2" "ru.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP2_002" 3 "global.Squad3" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP2_002" 4 "global.Squad4" "ru.png" "SquadDeathMatch0"
+
+procon.protected.teamnames.add "XP2_003" 0 "global.conquest.neutral" "" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP2_003" 1 "global.Squad1" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP2_003" 2 "global.Squad2" "ru.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP2_003" 3 "global.Squad3" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP2_003" 4 "global.Squad4" "ru.png" "SquadDeathMatch0"
+
+procon.protected.teamnames.add "XP2_004" 0 "global.conquest.neutral" "" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP2_004" 1 "global.Squad1" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP2_004" 2 "global.Squad2" "ru.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP2_004" 3 "global.Squad3" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP2_004" 4 "global.Squad4" "ru.png" "SquadDeathMatch0"
+
+// XP3 (Dragons Teeth)
+procon.protected.teamnames.add "XP3_MarketPl" 0 "global.conquest.neutral" "" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP3_MarketPl" 1 "global.Squad1" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP3_MarketPl" 2 "global.Squad2" "cn.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP3_MarketPl" 3 "global.Squad3" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP3_MarketPl" 4 "global.Squad4" "cn.png" "SquadDeathMatch0"
+
+procon.protected.teamnames.add "XP3_Prpganda" 0 "global.conquest.neutral" "" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP3_Prpganda" 1 "global.Squad1" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP3_Prpganda" 2 "global.Squad2" "cn.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP3_Prpganda" 3 "global.Squad3" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP3_Prpganda" 4 "global.Squad4" "cn.png" "SquadDeathMatch0"
+
+procon.protected.teamnames.add "XP3_UrbanGdn" 0 "global.conquest.neutral" "" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP3_UrbanGdn" 1 "global.Squad1" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP3_UrbanGdn" 2 "global.Squad2" "cn.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP3_UrbanGdn" 3 "global.Squad3" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP3_UrbanGdn" 4 "global.Squad4" "cn.png" "SquadDeathMatch0"
+
+procon.protected.teamnames.add "XP3_WtrFront" 0 "global.conquest.neutral" "" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP3_WtrFront" 1 "global.Squad1" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP3_WtrFront" 2 "global.Squad2" "cn.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP3_WtrFront" 3 "global.Squad3" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP3_WtrFront" 4 "global.Squad4" "cn.png" "SquadDeathMatch0"
+
+// XP4 (Final Stand)
+procon.protected.teamnames.add "XP4_Arctic" 0 "global.conquest.neutral" "" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP4_Arctic" 1 "global.Squad1" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP4_Arctic" 2 "global.Squad2" "ru.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP4_Arctic" 3 "global.Squad3" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP4_Arctic" 4 "global.Squad4" "ru.png" "SquadDeathMatch0"
+
+procon.protected.teamnames.add "XP4_SubBase" 0 "global.conquest.neutral" "" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP4_SubBase" 1 "global.Squad1" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP4_SubBase" 2 "global.Squad2" "ru.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP4_SubBase" 3 "global.Squad3" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP4_SubBase" 4 "global.Squad4" "ru.png" "SquadDeathMatch0"
+
+procon.protected.teamnames.add "XP4_Titan" 0 "global.conquest.neutral" "" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP4_Titan" 1 "global.Squad1" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP4_Titan" 2 "global.Squad2" "ru.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP4_Titan" 3 "global.Squad3" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP4_Titan" 4 "global.Squad4" "ru.png" "SquadDeathMatch0"
+
+procon.protected.teamnames.add "XP4_WlkrFtry" 0 "global.conquest.neutral" "" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP4_WlkrFtry" 1 "global.Squad1" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP4_WlkrFtry" 2 "global.Squad2" "ru.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP4_WlkrFtry" 3 "global.Squad3" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP4_WlkrFtry" 4 "global.Squad4" "ru.png" "SquadDeathMatch0"
+
+// XP6 (Community Map)
+procon.protected.teamnames.add "XP6_CMP" 1 "global.Squad1" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP6_CMP" 2 "global.Squad2" "cn.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP6_CMP" 3 "global.Squad3" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP6_CMP" 4 "global.Squad4" "cn.png" "SquadDeathMatch0"
+
+procon.protected.teamnames.add "XP6_CMP" 1 "global.Squad1" "us.png" "SquadDeathMatch1"
+procon.protected.teamnames.add "XP6_CMP" 2 "global.Squad2" "cn.png" "SquadDeathMatch1"
+procon.protected.teamnames.add "XP6_CMP" 3 "global.Squad3" "us.png" "SquadDeathMatch1"
+procon.protected.teamnames.add "XP6_CMP" 4 "global.Squad4" "cn.png" "SquadDeathMatch1"
+
+// XP7 (Legacy Operations)
+procon.protected.teamnames.add "XP7_Valley" 1 "global.Squad1" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP7_Valley" 2 "global.Squad2" "cn.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP7_Valley" 3 "global.Squad3" "us.png" "SquadDeathMatch0"
+procon.protected.teamnames.add "XP7_Valley" 4 "global.Squad4" "cn.png" "SquadDeathMatch0"
+
+// Team Deathmatch
+///////////////////////////////////////////////////////////////////////////////
+
+procon.protected.teamnames.add "MP_Abandoned" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
+procon.protected.teamnames.add "MP_Abandoned" 1 "global.tdm.ru" "ru.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "MP_Abandoned" 2 "global.tdm.us" "us.png" "TeamDeathMatch0"
+
+procon.protected.teamnames.add "MP_Damage" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
+procon.protected.teamnames.add "MP_Damage" 1 "global.tdm.ru" "ru.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "MP_Damage" 2 "global.tdm.cn" "cn.png" "TeamDeathMatch0"
+
+procon.protected.teamnames.add "MP_Flooded" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
+procon.protected.teamnames.add "MP_Flooded" 1 "global.tdm.us" "us.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "MP_Flooded" 2 "global.tdm.cn" "cn.png" "TeamDeathMatch0"
+
+procon.protected.teamnames.add "MP_Journey" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
+procon.protected.teamnames.add "MP_Journey" 1 "global.tdm.ru" "ru.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "MP_Journey" 2 "global.tdm.cn" "cn.png" "TeamDeathMatch0"
+
+procon.protected.teamnames.add "MP_Naval" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
+procon.protected.teamnames.add "MP_Naval" 1 "global.tdm.us" "us.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "MP_Naval" 2 "global.tdm.cn" "cn.png" "TeamDeathMatch0"
+
+procon.protected.teamnames.add "MP_Prison" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
+procon.protected.teamnames.add "MP_Prison" 1 "global.tdm.us" "us.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "MP_Prison" 2 "global.tdm.ru" "ru.png" "TeamDeathMatch0"
+
+procon.protected.teamnames.add "MP_Resort" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
+procon.protected.teamnames.add "MP_Resort" 1 "global.tdm.us" "us.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "MP_Resort" 2 "global.tdm.cn" "cn.png" "TeamDeathMatch0"
+
+procon.protected.teamnames.add "MP_Siege" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
+procon.protected.teamnames.add "MP_Siege" 1 "global.tdm.us" "us.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "MP_Siege" 2 "global.tdm.cn" "cn.png" "TeamDeathMatch0"
+
+procon.protected.teamnames.add "MP_TheDish" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
+procon.protected.teamnames.add "MP_TheDish" 1 "global.tdm.ru" "ru.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "MP_TheDish" 2 "global.tdm.cn" "cn.png" "TeamDeathMatch0"
+
+procon.protected.teamnames.add "MP_Tremors" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
+procon.protected.teamnames.add "MP_Tremors" 1 "global.tdm.us" "us.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "MP_Tremors" 2 "global.tdm.cn" "cn.png" "TeamDeathMatch0"
+
+// XP1 (China Rising)
+procon.protected.teamnames.add "XP1_001" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP1_001" 1 "global.tdm.us" "us.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP1_001" 2 "global.tdm.cn" "cn.png" "TeamDeathMatch0"
+
+procon.protected.teamnames.add "XP1_002" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP1_002" 1 "global.tdm.us" "us.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP1_002" 2 "global.tdm.cn" "cn.png" "TeamDeathMatch0"
+
+procon.protected.teamnames.add "XP1_003" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP1_003" 1 "global.tdm.us" "us.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP1_003" 2 "global.tdm.cn" "cn.png" "TeamDeathMatch0"
+
+procon.protected.teamnames.add "XP1_004" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP1_004" 1 "global.tdm.us" "us.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP1_004" 2 "global.tdm.cn" "cn.png" "TeamDeathMatch0"
+
+// XP0 (Second Assault)
+procon.protected.teamnames.add "XP0_Caspian" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP0_Caspian" 1 "global.tdm.us" "us.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP0_Caspian" 2 "global.tdm.ru" "ru.png" "TeamDeathMatch0"
+
+procon.protected.teamnames.add "XP0_Firestorm" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP0_Firestorm" 1 "global.tdm.us" "us.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP0_Firestorm" 2 "global.tdm.ru" "ru.png" "TeamDeathMatch0"
+
+procon.protected.teamnames.add "XP0_Metro" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP0_Metro" 1 "global.tdm.us" "us.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP0_Metro" 2 "global.tdm.ru" "ru.png" "TeamDeathMatch0"
+
+procon.protected.teamnames.add "XP0_Oman" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP0_Oman" 1 "global.tdm.us" "us.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP0_Oman" 2 "global.tdm.ru" "ru.png" "TeamDeathMatch0"
+
+// XP2 (Naval Strike)
+procon.protected.teamnames.add "XP2_001" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP2_001" 1 "global.tdm.us" "us.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP2_001" 2 "global.tdm.ru" "ru.png" "TeamDeathMatch0"
+
+procon.protected.teamnames.add "XP2_002" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP2_002" 1 "global.tdm.us" "us.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP2_002" 2 "global.tdm.ru" "ru.png" "TeamDeathMatch0"
+
+procon.protected.teamnames.add "XP2_003" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP2_003" 1 "global.tdm.us" "us.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP2_003" 2 "global.tdm.ru" "ru.png" "TeamDeathMatch0"
+
+procon.protected.teamnames.add "XP2_004" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP2_004" 1 "global.tdm.us" "us.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP2_004" 2 "global.tdm.ru" "ru.png" "TeamDeathMatch0"
+
+// XP3 (Dragons Teeth)
+procon.protected.teamnames.add "XP3_MarketPl" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP3_MarketPl" 1 "global.tdm.us" "us.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP3_MarketPl" 2 "global.tdm.cn" "cn.png" "TeamDeathMatch0"
+
+procon.protected.teamnames.add "XP3_Prpganda" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP3_Prpganda" 1 "global.tdm.us" "us.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP3_Prpganda" 2 "global.tdm.cn" "cn.png" "TeamDeathMatch0"
+
+procon.protected.teamnames.add "XP3_UrbanGdn" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP3_UrbanGdn" 1 "global.tdm.us" "us.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP3_UrbanGdn" 2 "global.tdm.cn" "cn.png" "TeamDeathMatch0"
+
+procon.protected.teamnames.add "XP3_WtrFront" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP3_WtrFront" 1 "global.tdm.us" "us.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP3_WtrFront" 2 "global.tdm.cn" "cn.png" "TeamDeathMatch0"
+
+// XP4 (Final Stand)
+procon.protected.teamnames.add "XP4_Arctic" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP4_Arctic" 1 "global.tdm.us" "us.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP4_Arctic" 2 "global.tdm.ru" "ru.png" "TeamDeathMatch0"
+
+procon.protected.teamnames.add "XP4_SubBase" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP4_SubBase" 1 "global.tdm.us" "us.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP4_SubBase" 2 "global.tdm.ru" "ru.png" "TeamDeathMatch0"
+
+procon.protected.teamnames.add "XP4_Titan" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP4_Titan" 1 "global.tdm.us" "us.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP4_Titan" 2 "global.tdm.ru" "ru.png" "TeamDeathMatch0"
+
+procon.protected.teamnames.add "XP4_WlkrFtry" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP4_WlkrFtry" 1 "global.tdm.us" "us.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP4_WlkrFtry" 2 "global.tdm.ru" "ru.png" "TeamDeathMatch0"
+
+// XP5 (Night Maps)
+procon.protected.teamnames.add "XP5_Night_01" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP5_Night_01" 1 "global.tdm.us" "us.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP5_Night_01" 2 "global.tdm.ru" "ru.png" "TeamDeathMatch0"
+
+// XP6 (Community Map)
+procon.protected.teamnames.add "XP6_CMP" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP6_CMP" 1 "global.tdm.us" "us.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP6_CMP" 2 "global.tdm.cn" "cn.png" "TeamDeathMatch0"
+
+procon.protected.teamnames.add "XP6_CMP" 0 "global.tdm.neutral" "" "TeamDeathMatch1"
+procon.protected.teamnames.add "XP6_CMP" 1 "global.tdm.us" "us.png" "TeamDeathMatch1"
+procon.protected.teamnames.add "XP6_CMP" 2 "global.tdm.cn" "cn.png" "TeamDeathMatch1"
+
+// XP7 (Legacy Operations)
+procon.protected.teamnames.add "XP7_Valley" 0 "global.tdm.neutral" "" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP7_Valley" 1 "global.tdm.us" "us.png" "TeamDeathMatch0"
+procon.protected.teamnames.add "XP7_Valley" 2 "global.tdm.cn" "cn.png" "TeamDeathMatch0"
+
+// Air Superiority (XP1 - China Rising)
+///////////////////////////////////////////////////////////////////////////////
+
+procon.protected.teamnames.add "XP1_001" 0 "global.conquest.neutral" "" "AirSuperiority0"
+procon.protected.teamnames.add "XP1_001" 1 "global.conquest.us" "us.png" "AirSuperiority0"
+procon.protected.teamnames.add "XP1_001" 2 "global.conquest.cn" "cn.png" "AirSuperiority0"
+
+procon.protected.teamnames.add "XP1_002" 0 "global.conquest.neutral" "" "AirSuperiority0"
+procon.protected.teamnames.add "XP1_002" 1 "global.conquest.us" "us.png" "AirSuperiority0"
+procon.protected.teamnames.add "XP1_002" 2 "global.conquest.cn" "cn.png" "AirSuperiority0"
+
+procon.protected.teamnames.add "XP1_003" 0 "global.conquest.neutral" "" "AirSuperiority0"
+procon.protected.teamnames.add "XP1_003" 1 "global.conquest.us" "us.png" "AirSuperiority0"
+procon.protected.teamnames.add "XP1_003" 2 "global.conquest.cn" "cn.png" "AirSuperiority0"
+
+procon.protected.teamnames.add "XP1_004" 0 "global.conquest.neutral" "" "AirSuperiority0"
+procon.protected.teamnames.add "XP1_004" 1 "global.conquest.us" "us.png" "AirSuperiority0"
+procon.protected.teamnames.add "XP1_004" 2 "global.conquest.cn" "cn.png" "AirSuperiority0"
+
+// XP7 (Legacy Operations)
+procon.protected.teamnames.add "XP7_Valley" 0 "global.conquest.neutral" "" "AirSuperiority0"
+procon.protected.teamnames.add "XP7_Valley" 1 "global.conquest.us" "us.png" "AirSuperiority0"
+procon.protected.teamnames.add "XP7_Valley" 2 "global.conquest.cn" "cn.png" "AirSuperiority0"
+
+
+// Carrier Assault (XP2 - Naval Strike)
+///////////////////////////////////////////////////////////////////////////////
+
+procon.protected.teamnames.add "XP2_001" 0 "global.conquest.neutral" "" "CarrierAssaultLarge0"
+procon.protected.teamnames.add "XP2_001" 1 "global.conquest.us" "us.png" "CarrierAssaultLarge0"
+procon.protected.teamnames.add "XP2_001" 2 "global.conquest.cn" "cn.png" "CarrierAssaultLarge0"
+
+procon.protected.teamnames.add "XP2_002" 0 "global.conquest.neutral" "" "CarrierAssaultLarge0"
+procon.protected.teamnames.add "XP2_002" 1 "global.conquest.us" "us.png" "CarrierAssaultLarge0"
+procon.protected.teamnames.add "XP2_002" 2 "global.conquest.cn" "cn.png" "CarrierAssaultLarge0"
+
+procon.protected.teamnames.add "XP2_003" 0 "global.conquest.neutral" "" "CarrierAssaultLarge0"
+procon.protected.teamnames.add "XP2_003" 1 "global.conquest.us" "us.png" "CarrierAssaultLarge0"
+procon.protected.teamnames.add "XP2_003" 2 "global.conquest.cn" "cn.png" "CarrierAssaultLarge0"
+
+procon.protected.teamnames.add "XP2_004" 0 "global.conquest.neutral" "" "CarrierAssaultLarge0"
+procon.protected.teamnames.add "XP2_004" 1 "global.conquest.us" "us.png" "CarrierAssaultLarge0"
+procon.protected.teamnames.add "XP2_004" 2 "global.conquest.cn" "cn.png" "CarrierAssaultLarge0"
+
+procon.protected.teamnames.add "XP2_001" 0 "global.conquest.neutral" "" "CarrierAssaultSmall0"
+procon.protected.teamnames.add "XP2_001" 1 "global.conquest.us" "us.png" "CarrierAssaultSmall0"
+procon.protected.teamnames.add "XP2_001" 2 "global.conquest.cn" "cn.png" "CarrierAssaultSmall0"
+
+procon.protected.teamnames.add "XP2_002" 0 "global.conquest.neutral" "" "CarrierAssaultSmall0"
+procon.protected.teamnames.add "XP2_002" 1 "global.conquest.us" "us.png" "CarrierAssaultSmall0"
+procon.protected.teamnames.add "XP2_002" 2 "global.conquest.cn" "cn.png" "CarrierAssaultSmall0"
+
+procon.protected.teamnames.add "XP2_003" 0 "global.conquest.neutral" "" "CarrierAssaultSmall0"
+procon.protected.teamnames.add "XP2_003" 1 "global.conquest.us" "us.png" "CarrierAssaultSmall0"
+procon.protected.teamnames.add "XP2_003" 2 "global.conquest.cn" "cn.png" "CarrierAssaultSmall0"
+
+procon.protected.teamnames.add "XP2_004" 0 "global.conquest.neutral" "" "CarrierAssaultSmall0"
+procon.protected.teamnames.add "XP2_004" 1 "global.conquest.us" "us.png" "CarrierAssaultSmall0"
+procon.protected.teamnames.add "XP2_004" 2 "global.conquest.cn" "cn.png" "CarrierAssaultSmall0"
+
+
+// Capture The Flag
+///////////////////////////////////////////////////////////////////////////////
+
+// XP0 (Second Assault)
+procon.protected.teamnames.add "XP0_Caspian" 0 "global.conquest.neutral" "" "CaptureTheFlag0"
+procon.protected.teamnames.add "XP0_Caspian" 1 "global.conquest.us" "us.png" "CaptureTheFlag0"
+procon.protected.teamnames.add "XP0_Caspian" 2 "global.conquest.ru" "ru.png" "CaptureTheFlag0"
+
+procon.protected.teamnames.add "XP0_Firestorm" 0 "global.conquest.neutral" "" "CaptureTheFlag0"
+procon.protected.teamnames.add "XP0_Firestorm" 1 "global.conquest.us" "us.png" "CaptureTheFlag0"
+procon.protected.teamnames.add "XP0_Firestorm" 2 "global.conquest.ru" "ru.png" "CaptureTheFlag0"
+
+procon.protected.teamnames.add "XP0_Metro" 0 "global.conquest.neutral" "" "CaptureTheFlag0"
+procon.protected.teamnames.add "XP0_Metro" 1 "global.conquest.us" "us.png" "CaptureTheFlag0"
+procon.protected.teamnames.add "XP0_Metro" 2 "global.conquest.ru" "ru.png" "CaptureTheFlag0"
+
+procon.protected.teamnames.add "XP0_Oman" 0 "global.conquest.neutral" "" "CaptureTheFlag0"
+procon.protected.teamnames.add "XP0_Oman" 1 "global.conquest.us" "us.png" "CaptureTheFlag0"
+procon.protected.teamnames.add "XP0_Oman" 2 "global.conquest.ru" "ru.png" "CaptureTheFlag0"
+
+// XP3 (Dragons Teeth)
+procon.protected.teamnames.add "XP3_MarketPl" 0 "global.conquest.neutral" "" "CaptureTheFlag0"
+procon.protected.teamnames.add "XP3_MarketPl" 1 "global.conquest.us" "us.png" "CaptureTheFlag0"
+procon.protected.teamnames.add "XP3_MarketPl" 2 "global.conquest.cn" "cn.png" "CaptureTheFlag0"
+
+procon.protected.teamnames.add "XP3_Prpganda" 0 "global.conquest.neutral" "" "CaptureTheFlag0"
+procon.protected.teamnames.add "XP3_Prpganda" 1 "global.conquest.us" "us.png" "CaptureTheFlag0"
+procon.protected.teamnames.add "XP3_Prpganda" 2 "global.conquest.cn" "cn.png" "CaptureTheFlag0"
+
+procon.protected.teamnames.add "XP3_UrbanGdn" 0 "global.conquest.neutral" "" "CaptureTheFlag0"
+procon.protected.teamnames.add "XP3_UrbanGdn" 1 "global.conquest.us" "us.png" "CaptureTheFlag0"
+procon.protected.teamnames.add "XP3_UrbanGdn" 2 "global.conquest.cn" "cn.png" "CaptureTheFlag0"
+
+procon.protected.teamnames.add "XP3_WtrFront" 0 "global.conquest.neutral" "" "CaptureTheFlag0"
+procon.protected.teamnames.add "XP3_WtrFront" 1 "global.conquest.us" "us.png" "CaptureTheFlag0"
+procon.protected.teamnames.add "XP3_WtrFront" 2 "global.conquest.cn" "cn.png" "CaptureTheFlag0"
+
+// XP4 (Final Stand)
+procon.protected.teamnames.add "XP4_Arctic" 0 "global.conquest.neutral" "" "CaptureTheFlag0"
+procon.protected.teamnames.add "XP4_Arctic" 1 "global.conquest.us" "us.png" "CaptureTheFlag0"
+procon.protected.teamnames.add "XP4_Arctic" 2 "global.conquest.ru" "ru.png" "CaptureTheFlag0"
+
+procon.protected.teamnames.add "XP4_SubBase" 0 "global.conquest.neutral" "" "CaptureTheFlag0"
+procon.protected.teamnames.add "XP4_SubBase" 1 "global.conquest.us" "us.png" "CaptureTheFlag0"
+procon.protected.teamnames.add "XP4_SubBase" 2 "global.conquest.ru" "ru.png" "CaptureTheFlag0"
+
+procon.protected.teamnames.add "XP4_Titan" 0 "global.conquest.neutral" "" "CaptureTheFlag0"
+procon.protected.teamnames.add "XP4_Titan" 1 "global.conquest.us" "us.png" "CaptureTheFlag0"
+procon.protected.teamnames.add "XP4_Titan" 2 "global.conquest.ru" "ru.png" "CaptureTheFlag0"
+
+procon.protected.teamnames.add "XP4_WlkrFtry" 0 "global.conquest.neutral" "" "CaptureTheFlag0"
+procon.protected.teamnames.add "XP4_WlkrFtry" 1 "global.conquest.us" "us.png" "CaptureTheFlag0"
+procon.protected.teamnames.add "XP4_WlkrFtry" 2 "global.conquest.ru" "ru.png" "CaptureTheFlag0"
+
+// XP6 (Community Map)
+procon.protected.teamnames.add "XP6_CMP" 0 "global.conquest.neutral" "" "CaptureTheFlag0"
+procon.protected.teamnames.add "XP6_CMP" 1 "global.conquest.us" "us.png" "CaptureTheFlag0"
+procon.protected.teamnames.add "XP6_CMP" 2 "global.conquest.cn" "cn.png" "CaptureTheFlag0"
+
+// Chain Link
+///////////////////////////////////////////////////////////////////////////////
+
+// XP3 (Dragons Teeth)
+procon.protected.teamnames.add "XP3_MarketPl" 0 "global.conquest.neutral" "" "Chainlink0"
+procon.protected.teamnames.add "XP3_MarketPl" 1 "global.conquest.us" "us.png" "Chainlink0"
+procon.protected.teamnames.add "XP3_MarketPl" 2 "global.conquest.cn" "cn.png" "Chainlink0"
+
+procon.protected.teamnames.add "XP3_Prpganda" 0 "global.conquest.neutral" "" "Chainlink0"
+procon.protected.teamnames.add "XP3_Prpganda" 1 "global.conquest.us" "us.png" "Chainlink0"
+procon.protected.teamnames.add "XP3_Prpganda" 2 "global.conquest.cn" "cn.png" "Chainlink0"
+
+procon.protected.teamnames.add "XP3_UrbanGdn" 0 "global.conquest.neutral" "" "Chainlink0"
+procon.protected.teamnames.add "XP3_UrbanGdn" 1 "global.conquest.us" "us.png" "Chainlink0"
+procon.protected.teamnames.add "XP3_UrbanGdn" 2 "global.conquest.cn" "cn.png" "Chainlink0"
+
+procon.protected.teamnames.add "XP3_WtrFront" 0 "global.conquest.neutral" "" "Chainlink0"
+procon.protected.teamnames.add "XP3_WtrFront" 1 "global.conquest.us" "us.png" "Chainlink0"
+procon.protected.teamnames.add "XP3_WtrFront" 2 "global.conquest.cn" "cn.png" "Chainlink0"
+
+// XP6 (Community Map)
+procon.protected.teamnames.add "XP6_CMP" 0 "global.conquest.neutral" "" "Chainlink0"
+procon.protected.teamnames.add "XP6_CMP" 1 "global.conquest.us" "us.png" "Chainlink0"
+procon.protected.teamnames.add "XP6_CMP" 2 "global.conquest.cn" "cn.png" "Chainlink0"
+
+// Squad Obliteration
+///////////////////////////////////////////////////////////////////////////////
+
+// R48
+procon.protected.teamnames.add "MP_Abandoned" 0 "global.conquest.neutral" "" "SquadObliteration0"
+procon.protected.teamnames.add "MP_Abandoned" 1 "global.conquest.us" "us.png" "SquadObliteration0"
+procon.protected.teamnames.add "MP_Abandoned" 2 "global.conquest.cn" "cn.png" "SquadObliteration0"
+
+procon.protected.teamnames.add "MP_Journey" 0 "global.conquest.neutral" "" "SquadObliteration0"
+procon.protected.teamnames.add "MP_Journey" 1 "global.conquest.us" "us.png" "SquadObliteration0"
+procon.protected.teamnames.add "MP_Journey" 2 "global.conquest.cn" "cn.png" "SquadObliteration0"
+
+procon.protected.teamnames.add "MP_Naval" 0 "global.conquest.neutral" "" "SquadObliteration0"
+procon.protected.teamnames.add "MP_Naval" 1 "global.conquest.us" "us.png" "SquadObliteration0"
+procon.protected.teamnames.add "MP_Naval" 2 "global.conquest.cn" "cn.png" "SquadObliteration0"
+
+procon.protected.teamnames.add "MP_Prison" 0 "global.conquest.neutral" "" "SquadObliteration0"
+procon.protected.teamnames.add "MP_Prison" 1 "global.conquest.us" "us.png" "SquadObliteration0"
+procon.protected.teamnames.add "MP_Prison" 2 "global.conquest.cn" "cn.png" "SquadObliteration0"
+
+procon.protected.teamnames.add "MP_Resort" 0 "global.conquest.neutral" "" "SquadObliteration0"
+procon.protected.teamnames.add "MP_Resort" 1 "global.conquest.us" "us.png" "SquadObliteration0"
+procon.protected.teamnames.add "MP_Resort" 2 "global.conquest.cn" "cn.png" "SquadObliteration0"
+
+procon.protected.teamnames.add "MP_Siege" 0 "global.conquest.neutral" "" "SquadObliteration0"
+procon.protected.teamnames.add "MP_Siege" 1 "global.conquest.us" "us.png" "SquadObliteration0"
+procon.protected.teamnames.add "MP_Siege" 2 "global.conquest.cn" "cn.png" "SquadObliteration0"
+
+procon.protected.teamnames.add "MP_Tremors" 0 "global.conquest.neutral" "" "SquadObliteration0"
+procon.protected.teamnames.add "MP_Tremors" 1 "global.conquest.us" "us.png" "SquadObliteration0"
+procon.protected.teamnames.add "MP_Tremors" 2 "global.conquest.cn" "cn.png" "SquadObliteration0"
+
+
+// Gun Master
+///////////////////////////////////////////////////////////////////////////////
+
+procon.protected.teamnames.add "MP_Abandoned" 0 "global.conquest.neutral" "" "GunMaster0"
+procon.protected.teamnames.add "MP_Abandoned" 1 "global.conquest.ru" "ru.png" "GunMaster0"
+procon.protected.teamnames.add "MP_Abandoned" 2 "global.conquest.us" "us.png" "GunMaster0"
+
+procon.protected.teamnames.add "MP_Damage" 0 "global.conquest.neutral" "" "GunMaster0"
+procon.protected.teamnames.add "MP_Damage" 1 "global.conquest.ru" "ru.png" "GunMaster0"
+procon.protected.teamnames.add "MP_Damage" 2 "global.conquest.cn" "cn.png" "GunMaster0"
+
+procon.protected.teamnames.add "MP_Flooded" 0 "global.conquest.neutral" "" "GunMaster0"
+procon.protected.teamnames.add "MP_Flooded" 1 "global.conquest.us" "us.png" "GunMaster0"
+procon.protected.teamnames.add "MP_Flooded" 2 "global.conquest.cn" "cn.png" "GunMaster0"
+
+procon.protected.teamnames.add "MP_Journey" 0 "global.conquest.neutral" "" "GunMaster0"
+procon.protected.teamnames.add "MP_Journey" 1 "global.conquest.ru" "ru.png" "GunMaster0"
+procon.protected.teamnames.add "MP_Journey" 2 "global.conquest.cn" "cn.png" "GunMaster0"
+
+procon.protected.teamnames.add "MP_Naval" 0 "global.conquest.neutral" "" "GunMaster0"
+procon.protected.teamnames.add "MP_Naval" 1 "global.conquest.us" "us.png" "GunMaster0"
+procon.protected.teamnames.add "MP_Naval" 2 "global.conquest.cn" "cn.png" "GunMaster0"
+
+procon.protected.teamnames.add "MP_Prison" 0 "global.conquest.neutral" "" "GunMaster0"
+procon.protected.teamnames.add "MP_Prison" 1 "global.conquest.us" "us.png" "GunMaster0"
+procon.protected.teamnames.add "MP_Prison" 2 "global.conquest.ru" "ru.png" "GunMaster0"
+
+procon.protected.teamnames.add "MP_Resort" 0 "global.conquest.neutral" "" "GunMaster0"
+procon.protected.teamnames.add "MP_Resort" 1 "global.conquest.us" "us.png" "GunMaster0"
+procon.protected.teamnames.add "MP_Resort" 2 "global.conquest.cn" "cn.png" "GunMaster0"
+
+procon.protected.teamnames.add "MP_Siege" 0 "global.conquest.neutral" "" "GunMaster0"
+procon.protected.teamnames.add "MP_Siege" 1 "global.conquest.us" "us.png" "GunMaster0"
+procon.protected.teamnames.add "MP_Siege" 2 "global.conquest.cn" "cn.png" "GunMaster0"
+
+procon.protected.teamnames.add "MP_TheDish" 0 "global.conquest.neutral" "" "GunMaster0"
+procon.protected.teamnames.add "MP_TheDish" 1 "global.conquest.ru" "ru.png" "GunMaster0"
+procon.protected.teamnames.add "MP_TheDish" 2 "global.conquest.cn" "cn.png" "GunMaster0"
+
+procon.protected.teamnames.add "MP_Tremors" 0 "global.conquest.neutral" "" "GunMaster0"
+procon.protected.teamnames.add "MP_Tremors" 1 "global.conquest.us" "us.png" "GunMaster0"
+procon.protected.teamnames.add "MP_Tremors" 2 "global.conquest.cn" "cn.png" "GunMaster0"
+
+// XP5 (Night Maps)
+procon.protected.teamnames.add "XP5_Night_01" 0 "global.conquest.neutral" "" "GunMaster0"
+procon.protected.teamnames.add "XP5_Night_01" 1 "global.conquest.us" "us.png" "GunMaster0"
+procon.protected.teamnames.add "XP5_Night_01" 2 "global.conquest.ru" "ru.png" "GunMaster0"
+
+procon.protected.teamnames.add "XP5_Night_01" 0 "global.conquest.neutral" "" "GunMaster1"
+procon.protected.teamnames.add "XP5_Night_01" 1 "global.conquest.us" "us.png" "GunMaster1"
+procon.protected.teamnames.add "XP5_Night_01" 2 "global.conquest.ru" "ru.png" "GunMaster1"
+
+// XP6 (Community Map)
+procon.protected.teamnames.add "XP6_CMP" 0 "global.conquest.neutral" "" "GunMaster0"
+procon.protected.teamnames.add "XP6_CMP" 1 "global.conquest.us" "us.png" "GunMaster0"
+procon.protected.teamnames.add "XP6_CMP" 2 "global.conquest.cn" "cn.png" "GunMaster0"
+
+procon.protected.teamnames.add "XP6_CMP" 0 "global.conquest.neutral" "" "GunMaster1"
+procon.protected.teamnames.add "XP6_CMP" 1 "global.conquest.us" "us.png" "GunMaster1"
+procon.protected.teamnames.add "XP6_CMP" 2 "global.conquest.cn" "cn.png" "GunMaster1"
+
+// XP7 (Legacy Operations)
+procon.protected.teamnames.add "XP7_Valley" 0 "global.conquest.neutral" "" "GunMaster0"
+procon.protected.teamnames.add "XP7_Valley" 1 "global.conquest.us" "us.png" "GunMaster0"
+procon.protected.teamnames.add "XP7_Valley" 2 "global.conquest.cn" "cn.png" "GunMaster0"
+
+///////////////////////////////////////////////////////////////////////////////
+procon.protected.tasks.clear
+procon.protected.tasks.add "procon" 0 30 -1 procon.protected.send serverInfo
+procon.protected.tasks.add "procon" 0 30 -1 procon.protected.send admin.listPlayers all
+procon.protected.tasks.add "procon" 0 60 -1 procon.protected.send mapList.getMapIndices
+procon.protected.tasks.add "procon" 0 90 -1 procon.protected.send punkBuster.pb_sv_command pb_sv_plist
+
+procon.protected.vars.set TEMP_BAN_CEILING 3600
+procon.protected.vars.set MAX_CONSOLE_LINES 100
+procon.protected.vars.set MAX_PLUGINCONSOLE_LINES 100
+procon.protected.vars.set MAX_CHAT_LINES 100
+procon.protected.vars.set MAX_PUNKBUSTERCONSOLE_LINES 200
+procon.protected.vars.set TEXT_COLOUR_1 "Maroon"
+procon.protected.vars.set TEXT_COLOUR_2 "MediumSeaGreen"
+procon.protected.vars.set TEXT_COLOUR_3 "DarkOrange"
+procon.protected.vars.set TEXT_COLOUR_4 "RoyalBlue"
+procon.protected.vars.set TEXT_COLOUR_5 "CornflowerBlue"
+procon.protected.vars.set TEXT_COLOUR_6 "DarkViolet"
+procon.protected.vars.set TEXT_COLOUR_7 "DeepPink"
+procon.protected.vars.set TEXT_COLOUR_8 "Red"
+procon.protected.vars.set TEXT_COLOUR_9 "Gray"

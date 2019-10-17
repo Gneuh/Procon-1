@@ -38,6 +38,8 @@
             this.lnkTimmsy = new System.Windows.Forms.LinkLabel();
             this.tabCopyright = new System.Windows.Forms.TabPage();
             this.pnlCopyright = new System.Windows.Forms.Panel();
+            this.lnkMySQLconnector = new System.Windows.Forms.LinkLabel();
+            this.lblMySQLconnector = new System.Windows.Forms.Label();
             this.lnlDotNetLibLibrary = new System.Windows.Forms.LinkLabel();
             this.lblDotNetZipLibrary = new System.Windows.Forms.Label();
             this.lnkMaxMind = new System.Windows.Forms.LinkLabel();
@@ -257,6 +259,8 @@
             // pnlCopyright
             // 
             this.pnlCopyright.AutoScroll = true;
+            this.pnlCopyright.Controls.Add(this.lnkMySQLconnector);
+            this.pnlCopyright.Controls.Add(this.lblMySQLconnector);
             this.pnlCopyright.Controls.Add(this.lnlDotNetLibLibrary);
             this.pnlCopyright.Controls.Add(this.lblDotNetZipLibrary);
             this.pnlCopyright.Controls.Add(this.lnkMaxMind);
@@ -268,15 +272,40 @@
             this.pnlCopyright.Size = new System.Drawing.Size(468, 193);
             this.pnlCopyright.TabIndex = 0;
             // 
+            // lnkMySQLconnector
+            // 
+            this.lnkMySQLconnector.ActiveLinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(220)))));
+            this.lnkMySQLconnector.LinkArea = new System.Windows.Forms.LinkArea(40, 14);
+            this.lnkMySQLconnector.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
+            this.lnkMySQLconnector.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(220)))));
+            this.lnkMySQLconnector.Location = new System.Drawing.Point(8, 154);
+            this.lnkMySQLconnector.Name = "lnkMySQLconnector";
+            this.lnkMySQLconnector.Size = new System.Drawing.Size(346, 26);
+            this.lnkMySQLconnector.TabIndex = 5;
+            this.lnkMySQLconnector.TabStop = true;
+            this.lnkMySQLconnector.Text = "PRoCon utilises the MySQL Connector/Net available here.";
+            this.lnkMySQLconnector.UseCompatibleTextRendering = true;
+            this.lnkMySQLconnector.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkMySQLconnector_LinkClicked);
+            // 
+            // lblMySQLconnector
+            // 
+            this.lblMySQLconnector.AutoSize = true;
+            this.lblMySQLconnector.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblMySQLconnector.Location = new System.Drawing.Point(5, 133);
+            this.lblMySQLconnector.Name = "lblMySQLconnector";
+            this.lblMySQLconnector.Size = new System.Drawing.Size(178, 18);
+            this.lblMySQLconnector.TabIndex = 4;
+            this.lblMySQLconnector.Text = "MySQL Connector/Net";
+            // 
             // lnlDotNetLibLibrary
             // 
             this.lnlDotNetLibLibrary.ActiveLinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(220)))));
             this.lnlDotNetLibLibrary.LinkArea = new System.Windows.Forms.LinkArea(44, 14);
             this.lnlDotNetLibLibrary.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
             this.lnlDotNetLibLibrary.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(220)))));
-            this.lnlDotNetLibLibrary.Location = new System.Drawing.Point(8, 126);
+            this.lnlDotNetLibLibrary.Location = new System.Drawing.Point(8, 107);
             this.lnlDotNetLibLibrary.Name = "lnlDotNetLibLibrary";
-            this.lnlDotNetLibLibrary.Size = new System.Drawing.Size(346, 36);
+            this.lnlDotNetLibLibrary.Size = new System.Drawing.Size(346, 26);
             this.lnlDotNetLibLibrary.TabIndex = 3;
             this.lnlDotNetLibLibrary.TabStop = true;
             this.lnlDotNetLibLibrary.Text = "PRoConUpdate utilises the DotNetLib Library available here.";
@@ -287,7 +316,7 @@
             // 
             this.lblDotNetZipLibrary.AutoSize = true;
             this.lblDotNetZipLibrary.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDotNetZipLibrary.Location = new System.Drawing.Point(5, 100);
+            this.lblDotNetZipLibrary.Location = new System.Drawing.Point(5, 86);
             this.lblDotNetZipLibrary.Name = "lblDotNetZipLibrary";
             this.lblDotNetZipLibrary.Size = new System.Drawing.Size(140, 18);
             this.lblDotNetZipLibrary.TabIndex = 2;
@@ -299,7 +328,7 @@
             this.lnkMaxMind.LinkArea = new System.Windows.Forms.LinkArea(70, 19);
             this.lnkMaxMind.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
             this.lnkMaxMind.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(220)))));
-            this.lnkMaxMind.Location = new System.Drawing.Point(8, 54);
+            this.lnkMaxMind.Location = new System.Drawing.Point(8, 41);
             this.lnkMaxMind.Name = "lnkMaxMind";
             this.lnkMaxMind.Size = new System.Drawing.Size(346, 36);
             this.lnkMaxMind.TabIndex = 1;
@@ -312,7 +341,7 @@
             // picMaxMind
             // 
             this.picMaxMind.Image = ((System.Drawing.Image)(resources.GetObject("picMaxMind.Image")));
-            this.picMaxMind.Location = new System.Drawing.Point(8, 16);
+            this.picMaxMind.Location = new System.Drawing.Point(8, 3);
             this.picMaxMind.Name = "picMaxMind";
             this.picMaxMind.Size = new System.Drawing.Size(117, 35);
             this.picMaxMind.TabIndex = 0;
@@ -369,10 +398,10 @@
             this.linkLabel1.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(220)))));
             this.linkLabel1.Location = new System.Drawing.Point(94, 254);
             this.linkLabel1.Name = "linkLabel1";
-            this.linkLabel1.Size = new System.Drawing.Size(194, 21);
+            this.linkLabel1.Size = new System.Drawing.Size(148, 21);
             this.linkLabel1.TabIndex = 2;
             this.linkLabel1.TabStop = true;
-            this.linkLabel1.Text = "Copyright © 2011 Myrcon Pty. Ltd.";
+            this.linkLabel1.Text = "Copyright © 2015 Myrcon";
             this.linkLabel1.UseCompatibleTextRendering = true;
             this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
             // 
@@ -441,5 +470,7 @@
         private System.Windows.Forms.LinkLabel lnkSinex;
         private System.Windows.Forms.LinkLabel lnkTimmsy;
         private System.Windows.Forms.LinkLabel lnkZboss;
+        private System.Windows.Forms.Label lblMySQLconnector;
+        private System.Windows.Forms.LinkLabel lnkMySQLconnector;
     }
 }

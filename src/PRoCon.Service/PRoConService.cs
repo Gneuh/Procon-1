@@ -44,6 +44,16 @@ namespace PRoCon.Service
             //because Windows changes it to c://windows/system32 when running as service.
             Environment.CurrentDirectory = AppDomain.CurrentDomain.BaseDirectory;
 			System.Console.WriteLine(Environment.CurrentDirectory);
+
+            int iValue;
+            if (args != null && args.Length >= 2) {
+                for (int i = 0; i < args.Length; i = i + 2) {
+                    if (String.Compare("-use_core", args[i], true) == 0 && int.TryParse(args[i + 1], out iValue) == true && iValue > 0) {
+                        System.Diagnostics.Process.GetCurrentProcess().ProcessorAffinity = (System.IntPtr)iValue;
+                    }
+                }
+            }
+
             if (PRoConApplication.IsProcessOpen() == false) 
             {
                 try 

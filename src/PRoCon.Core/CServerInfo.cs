@@ -128,6 +128,13 @@ namespace PRoCon.Core {
         public string PunkBusterVersion { get; set; }
         public bool JoinQueueEnabled { get; set; }
         public string ServerRegion { get; set; }
+        public string PingSite { get; set; }
+        public string ServerCountry { get; set; }
+        public bool QuickMatch { get; set; }
+
+        // BF4
+        public int BlazePlayerCount { get; set; }
+        public string BlazeGameState { get; set; }
 
         public List<TeamScore> TeamScores {
             get;

@@ -11,6 +11,9 @@
 
             this.TeamID = -1;
             this.SquadID = -1;
+
+            this.JoinTime = 0;
+            this.SessionTime = 0;
         }
 
         public CPlayerInfo(IList<string> lstParameters, IList<string> lstVariables) {
@@ -44,7 +47,17 @@
                     this.Score = iValue;
                 }
                 else if (String.Compare(lstParameters[i], "ping", true) == 0 && int.TryParse(lstVariables[i], out iValue)) {
+                    if (iValue > 5000) {
+                        iValue = -1;
+                    }
+
                     this.Ping = iValue;
+                }
+                else if (String.Compare(lstParameters[i], "rank", true) == 0 && int.TryParse(lstVariables[i], out iValue)) {
+                    this.Rank = iValue;
+                }
+                else if (String.Compare(lstParameters[i], "type", true) == 0 && int.TryParse(lstVariables[i], out iValue)) {
+                    this.Type = iValue;
                 }
             }
 
@@ -64,12 +77,23 @@
             this.TeamID = iTeamId;
             this.SquadID = iSquadId;
         }
-        
-        public string ClanTag { get; private set; }
 
-        public string SoldierName { get; private set; }
+        public CPlayerInfo(string strSoldierName, string strClanTag, int iTeamId, int iSquadId, int iJoinTime, int iSessionTime) {
+            this.SoldierName = strSoldierName;
+            this.ClanTag = strClanTag;
 
-        public string GUID { get; private set; }
+            this.TeamID = iTeamId;
+            this.SquadID = iSquadId;
+
+            this.JoinTime = iJoinTime;
+            this.SessionTime = iSessionTime;
+        }
+
+        public string ClanTag { get; set; }
+
+        public string SoldierName { get; set; }
+
+        public string GUID { get; set; }
 
         public int TeamID { get; set; }
 
@@ -83,7 +107,15 @@
 
         public int Ping { get; set; }
 
+        public int Rank { get; set; }
+
+        public int Type { get; set; }
+
         public float Kdr { get; set; }
+
+        public int JoinTime { get; set; }
+
+        public int SessionTime { get; set; }
 
         //  Player list is needed in OnPlayerList, OnPlayerLeave and server.onRoundOverPlayers
         public static List<CPlayerInfo> GetPlayerList(List<string> lstWords) {

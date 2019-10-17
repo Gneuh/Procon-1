@@ -69,6 +69,12 @@ namespace PRoCon.Controls {
         private RectangleF m_recSource;
         private RectangleF m_recDestination;
 
+        // Font
+        private FontFamily family = new FontFamily("Arial");
+        private int fontStyle = (int)FontStyle.Regular;
+        private int emSize = 12;
+        private StringFormat format = StringFormat.GenericDefault;
+
         //private Size m_ApparentImageSize = new Size(0, 0);
 
         private int m_DrawWidth;
@@ -515,16 +521,16 @@ namespace PRoCon.Controls {
 
         private void DrawCoordinates(Graphics g) {
             // Move to class so they are not declared every paint.
-            FontFamily family = new FontFamily("Arial");
+            /* FontFamily family = new FontFamily("Arial");
             int fontStyle = (int)FontStyle.Regular;
             int emSize = 12;
             StringFormat format = StringFormat.GenericDefault;
-
+            */
             GraphicsPath gpCoordinates = new GraphicsPath();
 
             Point pntCoords = this.ClientPointToGame(this.PointToClient(Cursor.Position));
 
-            gpCoordinates.AddString(String.Format("{0}, {1}", pntCoords.X, pntCoords.Y), family, fontStyle, emSize, new Point((int)g.ClipBounds.Width - 75, (int)g.ClipBounds.Height - 20), format);
+            gpCoordinates.AddString(String.Format("{0}, {1}", pntCoords.X, pntCoords.Y), this.family, this.fontStyle, this.emSize, new Point((int)g.ClipBounds.Width - 75, (int)g.ClipBounds.Height - 20), this.format);
             this.DrawBwShape(g, gpCoordinates, 1.0F);
 
             gpCoordinates.Dispose();
@@ -535,11 +541,11 @@ namespace PRoCon.Controls {
             if (this.LoadedMapImagePack != null) {
 
                 // Move to class so they are not declared every paint.
-                FontFamily family = new FontFamily("Arial");
+                /* FontFamily family = new FontFamily("Arial");
                 int fontStyle = (int)FontStyle.Regular;
                 int emSize = 12;
                 StringFormat format = StringFormat.GenericDefault;
-
+                */
                 //double dblMetrePixels = this.ZoomFactor;
 
                 if (this.LoadedMapImagePack.MapScale.X != 0.0F && this.LoadedMapImagePack.MapScale.Y != 0.0F && this.ZoomFactor != 0.0F && (this.m_pntStart.X != this.m_pntEnd.X || this.m_pntStart.Y != this.m_pntEnd.Y)) {
@@ -555,10 +561,11 @@ namespace PRoCon.Controls {
                     gpMeasuringResultsLine.Dispose();
 
                     GraphicsPath gpMeasuringResults = new GraphicsPath();
-                    gpMeasuringResults.AddString(String.Format("{0:0.0} m\n{1:0.0} yd", dblMetresDistance, dblMetresDistance * 1.0936133D), family, fontStyle, emSize, new PointF(this.m_pntEnd.X, this.m_pntEnd.Y - 25), format);
+                    gpMeasuringResults.AddString(String.Format("{0:0.0} m\n{1:0.0} yd", dblMetresDistance, dblMetresDistance * 1.0936133D), this.family, this.fontStyle, this.emSize, new PointF(this.m_pntEnd.X, this.m_pntEnd.Y - 25), this.format);
                     this.DrawBwShape(g, gpMeasuringResults, 1.0F);
                     gpMeasuringResults.Dispose();
                 }
+                //family.Dispose();
             }
         }
 
@@ -567,11 +574,11 @@ namespace PRoCon.Controls {
             if (this.LoadedMapImagePack != null) {
 
                 // Move to class so they are not declared every paint.
-                FontFamily family = new FontFamily("Arial");
+                /* FontFamily family = new FontFamily("Arial");
                 int fontStyle = (int)FontStyle.Regular;
                 int emSize = 12;
                 StringFormat format = StringFormat.GenericDefault;
-
+                */
                 GraphicsPath gpScale = new GraphicsPath();
                 GraphicsPath gpScaleUnits = new GraphicsPath();
 
@@ -579,8 +586,8 @@ namespace PRoCon.Controls {
                 gpScale.AddLine(new Point(10, (int)g.ClipBounds.Height - 40), new Point(200, (int)g.ClipBounds.Height - 40));
                 gpScale.Widen(this.m_pOneWidth);
 
-                gpScaleUnits.AddString("m", family, fontStyle, emSize, new Point(4, (int)g.ClipBounds.Height - 65), format);
-                gpScaleUnits.AddString("yd", family, fontStyle, emSize, new Point(1, (int)g.ClipBounds.Height - 30), format);
+                gpScaleUnits.AddString("m", this.family, this.fontStyle, this.emSize, new Point(4, (int)g.ClipBounds.Height - 65), this.format);
+                gpScaleUnits.AddString("yd", this.family, this.fontStyle, this.emSize, new Point(1, (int)g.ClipBounds.Height - 30), this.format);
 
                 // Only interested in horizontal
                 double dblMetrePixels = this.LoadedMapImagePack.MapScale.X * this.ZoomFactor;
@@ -598,7 +605,7 @@ namespace PRoCon.Controls {
                         GraphicsPath gpScaleMarkerLine = new GraphicsPath();
                         GraphicsPath gpScaleMarker = new GraphicsPath();
 
-                        gpScaleMarker.AddString(String.Format("{0:0}", dblMetres), family, fontStyle, emSize, new Point(4 + iOffset, (int)g.ClipBounds.Height - 60), format);
+                        gpScaleMarker.AddString(String.Format("{0:0}", dblMetres), this.family, this.fontStyle, this.emSize, new Point(4 + iOffset, (int)g.ClipBounds.Height - 60), this.format);
                         gpScaleMarkerLine.AddLine(new Point(10 + iOffset, (int)g.ClipBounds.Height - 45), new Point(10 + iOffset, (int)g.ClipBounds.Height - 40));
                         gpScaleMarkerLine.Widen(this.m_pOneWidth);
 
@@ -618,7 +625,7 @@ namespace PRoCon.Controls {
                         GraphicsPath gpScaleMarkerLine = new GraphicsPath();
                         GraphicsPath gpScaleMarker = new GraphicsPath();
 
-                        gpScaleMarker.AddString(String.Format("{0:0}", dblMetres), family, fontStyle, emSize, new Point(4 + iOffset, (int)g.ClipBounds.Height - 32), format);
+                        gpScaleMarker.AddString(String.Format("{0:0}", dblMetres), this.family, this.fontStyle, this.emSize, new Point(4 + iOffset, (int)g.ClipBounds.Height - 32), this.format);
                         gpScaleMarkerLine.AddLine(new Point(10 + iOffset, (int)g.ClipBounds.Height - 35), new Point(10 + iOffset, (int)g.ClipBounds.Height - 40));
                         gpScaleMarkerLine.Widen(this.m_pOneWidth);
 
@@ -693,7 +700,8 @@ namespace PRoCon.Controls {
 
             GraphicsPath gpKillOutline = (GraphicsPath)gpKill.Clone();
             //GraphicsPath gpKillOutline = new GraphicsPath(gpKill.PathPoints, gpKill.PathTypes);
-            gpKillOutline.Widen(this.m_pTwoWidth, new Matrix(), 0.01F);
+            Matrix gpKillMatrix = new Matrix();
+            gpKillOutline.Widen(this.m_pTwoWidth, gpKillMatrix, 0.01F);
 
             Region reKillOutline = new Region(gpKillOutline);
             reKillOutline.Exclude(gpKill);
@@ -754,12 +762,13 @@ namespace PRoCon.Controls {
             gpKillCircles.Dispose();
             gpKill.Dispose();
             gpKillOutline.Dispose();
+            gpKillMatrix.Dispose();
             reKill.Dispose();
         }
 
         private void DrawText(Graphics g, string strText, Point pntLocation, int iSize, float flOpacity) {
             GraphicsPath gpKillerName = new GraphicsPath();
-            gpKillerName.AddString(strText, new FontFamily("Arial"), (int)FontStyle.Regular, iSize, new PointF(pntLocation.X, pntLocation.Y), StringFormat.GenericDefault);
+            gpKillerName.AddString(strText, this.family, this.fontStyle, iSize, new PointF(pntLocation.X, pntLocation.Y), this.format);
             this.DrawBwShape(g, gpKillerName, flOpacity);
             gpKillerName.Dispose();
         }

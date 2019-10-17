@@ -46,11 +46,11 @@ function fnUpdateConnectionsList(jsonConnectionData) {
 					jQuery('<tr>')
 					.unbind().mouseenter(
 						function() {
-							jQuery(this).find('.connectionOptions').fadeIn('fast');
+							jQuery(this).find('.connectionOptions').show();
 						}
 					).mouseleave(
 						function() {
-							jQuery(this).find('.connectionOptions').fadeOut('fast');
+							jQuery(this).find('.connectionOptions').hide();
 						}
 					)
 					.append(
@@ -281,7 +281,7 @@ function UpdatePromotions(sPromotionsList) {
 		var aPackageList = eval(sPromotionsList);
 
 		for (var i = 0; i < aPackageList.length; i++) {
-			jQuery('.newsticker-jcarousellite ul').append('<li><a onClick="window.external.HREF(\'' + aPackageList[i].link + '\')"><img src="' + aPackageList[i].image + '" alt="' + aPackageList[i].name + '"></a></li>');
+		    jQuery('.newsticker-jcarousellite ul').prepend('<li><a onClick="window.external.HREF(\'' + aPackageList[i].link + '\')"><img src="' + aPackageList[i].image + '" alt="' + aPackageList[i].name + '"></a></li>');
 		}
 
 		jQuery('.newsticker-jcarousellite').jCarouselLite({

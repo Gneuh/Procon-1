@@ -1,4 +1,4 @@
-﻿namespace PRoCon {
+﻿namespace PRoCon.Controls {
     partial class uscAccountsPanel {
         /// <summary> 
         /// Required designer variable.
@@ -24,7 +24,7 @@
         /// </summary>
         private void InitializeComponent() {
             this.pnlAccountPrivileges = new System.Windows.Forms.Panel();
-            this.uscPrivileges = new PRoCon.uscPrivilegesSelection();
+            this.uscPrivileges = new uscPrivilegesSelection();
             this.pnlStartPRoConLayer = new System.Windows.Forms.Panel();
             this.btnInsertName = new System.Windows.Forms.Button();
             this.lblBindingExplanation = new System.Windows.Forms.Label();
@@ -42,22 +42,16 @@
             this.panel5 = new System.Windows.Forms.Panel();
             this.pnlMainLayerServer = new System.Windows.Forms.Panel();
             this.spltLayerSetupPrivs = new System.Windows.Forms.SplitContainer();
-            this.pnlLayerServerTester = new System.Windows.Forms.Panel();
-            this.picLayerForwardedTestStatus = new System.Windows.Forms.PictureBox();
-            this.lblLayerForwardedTestStatus = new System.Windows.Forms.Label();
-            this.lnkLayerForwardedTest = new System.Windows.Forms.LinkLabel();
             this.lblLayerServerSetupTitle = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.lnkWhatIsPRoConLayer = new System.Windows.Forms.LinkLabel();
             this.lnkStartStopLayer = new System.Windows.Forms.LinkLabel();
             this.picLayerServerStatus = new System.Windows.Forms.PictureBox();
             this.lblLayerServerStatus = new System.Windows.Forms.Label();
             this.lnkManageAccounts = new System.Windows.Forms.LinkLabel();
             this.lsvLayerAccounts = new PRoCon.Controls.ControlsEx.ListViewNF();
-            this.colAccounts = new System.Windows.Forms.ColumnHeader();
-            this.colRConAccess = new System.Windows.Forms.ColumnHeader();
-            this.colPrivileges = new System.Windows.Forms.ColumnHeader();
-            this.colIPPort = new System.Windows.Forms.ColumnHeader();
+            this.colAccounts = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colRConAccess = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colPrivileges = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.lblLayerAssignAccountPrivilegesTitle = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.pnlAccountPrivileges.SuspendLayout();
@@ -66,8 +60,6 @@
             this.spltLayerSetupPrivs.Panel1.SuspendLayout();
             this.spltLayerSetupPrivs.Panel2.SuspendLayout();
             this.spltLayerSetupPrivs.SuspendLayout();
-            this.pnlLayerServerTester.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picLayerForwardedTestStatus)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picLayerServerStatus)).BeginInit();
             this.SuspendLayout();
             // 
@@ -272,10 +264,8 @@
             // 
             // spltLayerSetupPrivs.Panel1
             // 
-            this.spltLayerSetupPrivs.Panel1.Controls.Add(this.pnlLayerServerTester);
             this.spltLayerSetupPrivs.Panel1.Controls.Add(this.lblLayerServerSetupTitle);
             this.spltLayerSetupPrivs.Panel1.Controls.Add(this.panel1);
-            this.spltLayerSetupPrivs.Panel1.Controls.Add(this.lnkWhatIsPRoConLayer);
             this.spltLayerSetupPrivs.Panel1.Controls.Add(this.lnkStartStopLayer);
             this.spltLayerSetupPrivs.Panel1.Controls.Add(this.picLayerServerStatus);
             this.spltLayerSetupPrivs.Panel1.Controls.Add(this.lblLayerServerStatus);
@@ -287,56 +277,8 @@
             this.spltLayerSetupPrivs.Panel2.Controls.Add(this.lblLayerAssignAccountPrivilegesTitle);
             this.spltLayerSetupPrivs.Panel2.Controls.Add(this.panel2);
             this.spltLayerSetupPrivs.Size = new System.Drawing.Size(567, 513);
-            this.spltLayerSetupPrivs.SplitterDistance = 195;
+            this.spltLayerSetupPrivs.SplitterDistance = 140;
             this.spltLayerSetupPrivs.TabIndex = 21;
-            // 
-            // pnlLayerServerTester
-            // 
-            this.pnlLayerServerTester.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.pnlLayerServerTester.Controls.Add(this.picLayerForwardedTestStatus);
-            this.pnlLayerServerTester.Controls.Add(this.lblLayerForwardedTestStatus);
-            this.pnlLayerServerTester.Controls.Add(this.lnkLayerForwardedTest);
-            this.pnlLayerServerTester.Location = new System.Drawing.Point(45, 101);
-            this.pnlLayerServerTester.Name = "pnlLayerServerTester";
-            this.pnlLayerServerTester.Size = new System.Drawing.Size(513, 66);
-            this.pnlLayerServerTester.TabIndex = 27;
-            this.pnlLayerServerTester.Visible = false;
-            // 
-            // picLayerForwardedTestStatus
-            // 
-            this.picLayerForwardedTestStatus.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.picLayerForwardedTestStatus.Location = new System.Drawing.Point(13, 8);
-            this.picLayerForwardedTestStatus.Name = "picLayerForwardedTestStatus";
-            this.picLayerForwardedTestStatus.Size = new System.Drawing.Size(32, 32);
-            this.picLayerForwardedTestStatus.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.picLayerForwardedTestStatus.TabIndex = 9;
-            this.picLayerForwardedTestStatus.TabStop = false;
-            // 
-            // lblLayerForwardedTestStatus
-            // 
-            this.lblLayerForwardedTestStatus.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.lblLayerForwardedTestStatus.ForeColor = System.Drawing.Color.Maroon;
-            this.lblLayerForwardedTestStatus.Location = new System.Drawing.Point(57, 28);
-            this.lblLayerForwardedTestStatus.Name = "lblLayerForwardedTestStatus";
-            this.lblLayerForwardedTestStatus.Size = new System.Drawing.Size(453, 38);
-            this.lblLayerForwardedTestStatus.TabIndex = 12;
-            this.lblLayerForwardedTestStatus.Text = "Port 5555 is closed to incomming connections";
-            // 
-            // lnkLayerForwardedTest
-            // 
-            this.lnkLayerForwardedTest.ActiveLinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(220)))));
-            this.lnkLayerForwardedTest.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.lnkLayerForwardedTest.AutoSize = true;
-            this.lnkLayerForwardedTest.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
-            this.lnkLayerForwardedTest.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(220)))));
-            this.lnkLayerForwardedTest.Location = new System.Drawing.Point(57, 8);
-            this.lnkLayerForwardedTest.Name = "lnkLayerForwardedTest";
-            this.lnkLayerForwardedTest.Size = new System.Drawing.Size(214, 15);
-            this.lnkLayerForwardedTest.TabIndex = 2;
-            this.lnkLayerForwardedTest.TabStop = true;
-            this.lnkLayerForwardedTest.Text = "Test connection to PRoCon layer server";
-            this.lnkLayerForwardedTest.VisitedLinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(220)))));
-            this.lnkLayerForwardedTest.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkLayerForwardedTest_LinkClicked);
             // 
             // lblLayerServerSetupTitle
             // 
@@ -357,21 +299,6 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(495, 1);
             this.panel1.TabIndex = 25;
-            // 
-            // lnkWhatIsPRoConLayer
-            // 
-            this.lnkWhatIsPRoConLayer.ActiveLinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(220)))));
-            this.lnkWhatIsPRoConLayer.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.lnkWhatIsPRoConLayer.AutoSize = true;
-            this.lnkWhatIsPRoConLayer.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
-            this.lnkWhatIsPRoConLayer.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(220)))));
-            this.lnkWhatIsPRoConLayer.Location = new System.Drawing.Point(54, 173);
-            this.lnkWhatIsPRoConLayer.Name = "lnkWhatIsPRoConLayer";
-            this.lnkWhatIsPRoConLayer.Size = new System.Drawing.Size(134, 15);
-            this.lnkWhatIsPRoConLayer.TabIndex = 23;
-            this.lnkWhatIsPRoConLayer.TabStop = true;
-            this.lnkWhatIsPRoConLayer.Text = "What is a PRoCon layer?";
-            this.lnkWhatIsPRoConLayer.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkWhatIsPRoConLayer_LinkClicked);
             // 
             // lnkStartStopLayer
             // 
@@ -416,7 +343,7 @@
             this.lnkManageAccounts.AutoSize = true;
             this.lnkManageAccounts.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
             this.lnkManageAccounts.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(220)))));
-            this.lnkManageAccounts.Location = new System.Drawing.Point(52, 256);
+            this.lnkManageAccounts.Location = new System.Drawing.Point(52, 311);
             this.lnkManageAccounts.Name = "lnkManageAccounts";
             this.lnkManageAccounts.Size = new System.Drawing.Size(103, 15);
             this.lnkManageAccounts.TabIndex = 23;
@@ -430,14 +357,13 @@
             this.lsvLayerAccounts.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.colAccounts,
             this.colRConAccess,
-            this.colPrivileges,
-            this.colIPPort});
+            this.colPrivileges});
             this.lsvLayerAccounts.FullRowSelect = true;
             this.lsvLayerAccounts.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.lsvLayerAccounts.Location = new System.Drawing.Point(56, 33);
             this.lsvLayerAccounts.MultiSelect = false;
             this.lsvLayerAccounts.Name = "lsvLayerAccounts";
-            this.lsvLayerAccounts.Size = new System.Drawing.Size(472, 220);
+            this.lsvLayerAccounts.Size = new System.Drawing.Size(472, 275);
             this.lsvLayerAccounts.TabIndex = 20;
             this.lsvLayerAccounts.UseCompatibleStateImageBehavior = false;
             this.lsvLayerAccounts.View = System.Windows.Forms.View.Details;
@@ -459,12 +385,6 @@
             this.colPrivileges.Tag = "colPrivileges";
             this.colPrivileges.Text = "Local Privileges";
             this.colPrivileges.Width = 108;
-            // 
-            // colIPPort
-            // 
-            this.colIPPort.Tag = "colIPPort";
-            this.colIPPort.Text = "IpAddress:Port";
-            this.colIPPort.Width = 118;
             // 
             // lblLayerAssignAccountPrivilegesTitle
             // 
@@ -506,9 +426,6 @@
             this.spltLayerSetupPrivs.Panel2.ResumeLayout(false);
             this.spltLayerSetupPrivs.Panel2.PerformLayout();
             this.spltLayerSetupPrivs.ResumeLayout(false);
-            this.pnlLayerServerTester.ResumeLayout(false);
-            this.pnlLayerServerTester.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picLayerForwardedTestStatus)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picLayerServerStatus)).EndInit();
             this.ResumeLayout(false);
 
@@ -534,13 +451,8 @@
         private System.Windows.Forms.Label lblBindingExplanation;
         private System.Windows.Forms.Button btnInsertName;
         private System.Windows.Forms.SplitContainer spltLayerSetupPrivs;
-        private System.Windows.Forms.Panel pnlLayerServerTester;
-        private System.Windows.Forms.PictureBox picLayerForwardedTestStatus;
-        private System.Windows.Forms.Label lblLayerForwardedTestStatus;
-        private System.Windows.Forms.LinkLabel lnkLayerForwardedTest;
         private System.Windows.Forms.Label lblLayerServerSetupTitle;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.LinkLabel lnkWhatIsPRoConLayer;
         private System.Windows.Forms.LinkLabel lnkStartStopLayer;
         private System.Windows.Forms.PictureBox picLayerServerStatus;
         private System.Windows.Forms.Label lblLayerServerStatus;
@@ -549,7 +461,6 @@
         private System.Windows.Forms.ColumnHeader colAccounts;
         private System.Windows.Forms.ColumnHeader colRConAccess;
         private System.Windows.Forms.ColumnHeader colPrivileges;
-        private System.Windows.Forms.ColumnHeader colIPPort;
         private System.Windows.Forms.Label lblLayerAssignAccountPrivilegesTitle;
         private System.Windows.Forms.Panel panel2;
         private uscPrivilegesSelection uscPrivileges;

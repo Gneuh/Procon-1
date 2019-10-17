@@ -56,8 +56,6 @@ namespace PRoCon.Forms {
             this.tabCopyright.Text = this.m_clocLanguage.GetLocalized("frmAbout.tabCopyright.Title", null);
         }
 
-        #region Assembly Attribute Accessors
-
         public string AssemblyTitle {
             get {
                 object[] attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyTitleAttribute), false);
@@ -116,14 +114,13 @@ namespace PRoCon.Forms {
                 return ((AssemblyCompanyAttribute)attributes[0]).Company;
             }
         }
-        #endregion
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
-            System.Diagnostics.Process.Start("http://www.phogue.net");
+            System.Diagnostics.Process.Start("https://myrcon.com/");
         }
 
         private void linkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
-            System.Diagnostics.Process.Start("http://www.phogue.net/forum/");
+            System.Diagnostics.Process.Start("https://forum.myrcon.com/");
         }
 
         private void okButton_Click(object sender, EventArgs e) {
@@ -142,7 +139,12 @@ namespace PRoCon.Forms {
             System.Diagnostics.Process.Start("http://dotnetzip.codeplex.com/");
         }
 
-        private void lnkTimmsy_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
+        private void lnkMySQLconnector_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
+            System.Diagnostics.Process.Start("http://dev.mysql.com/downloads/connector/net/");
+        }
+
+        private void lnkTimmsy_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
             System.Diagnostics.Process.Start("http://www.u3.net.au");
         }
 

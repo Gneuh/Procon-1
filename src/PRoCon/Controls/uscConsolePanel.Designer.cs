@@ -1,4 +1,6 @@
-﻿namespace PRoCon {
+﻿using PRoCon.Controls.ControlsEx;
+
+namespace PRoCon.Controls {
     partial class uscConsolePanel {
         /// <summary> 
         /// Required designer variable.
@@ -25,6 +27,7 @@
         private void InitializeComponent() {
             this.tbcConsoles = new System.Windows.Forms.TabControl();
             this.tabConsole = new System.Windows.Forms.TabPage();
+            this.chkConEnableScrolling = new System.Windows.Forms.CheckBox();
             this.chkEnableOutput = new System.Windows.Forms.CheckBox();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.chkDebug = new System.Windows.Forms.CheckBox();
@@ -33,15 +36,14 @@
             this.btnConsoleSend = new System.Windows.Forms.Button();
             this.txtConsoleCommand = new System.Windows.Forms.TextBox();
             this.pnlConsoleEnclosure = new System.Windows.Forms.Panel();
+            this.rtbConsoleBox = new CodRichTextBox();
             this.tabPunkbuster = new System.Windows.Forms.TabPage();
+            this.chkPBEnableScrolling = new System.Windows.Forms.CheckBox();
             this.chkEnablePunkbusterOutput = new System.Windows.Forms.CheckBox();
             this.btnPunkbusterSend = new System.Windows.Forms.Button();
             this.txtPunkbusterCommand = new System.Windows.Forms.TextBox();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.chkConEnableScrolling = new System.Windows.Forms.CheckBox();
-            this.rtbConsoleBox = new PRoCon.CodRichTextBox();
-            this.rtbPunkbusterBox = new PRoCon.CodRichTextBox();
-            this.chkPBEnableScrolling = new System.Windows.Forms.CheckBox();
+            this.rtbPunkbusterBox = new CodRichTextBox();
             this.tbcConsoles.SuspendLayout();
             this.tabConsole.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
@@ -79,6 +81,20 @@
             this.tabConsole.Text = "Console";
             this.tabConsole.UseVisualStyleBackColor = true;
             // 
+            // chkConEnableScrolling
+            // 
+            this.chkConEnableScrolling.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.chkConEnableScrolling.AutoSize = true;
+            this.chkConEnableScrolling.Checked = true;
+            this.chkConEnableScrolling.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkConEnableScrolling.Location = new System.Drawing.Point(188, 480);
+            this.chkConEnableScrolling.Name = "chkConEnableScrolling";
+            this.chkConEnableScrolling.Size = new System.Drawing.Size(109, 19);
+            this.chkConEnableScrolling.TabIndex = 30;
+            this.chkConEnableScrolling.Text = "Enable scrolling";
+            this.chkConEnableScrolling.UseVisualStyleBackColor = true;
+            this.chkConEnableScrolling.CheckedChanged += new System.EventHandler(this.chkConEnableScrolling_CheckedChanged);
+            // 
             // chkEnableOutput
             // 
             this.chkEnableOutput.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -95,8 +111,8 @@
             // 
             // flowLayoutPanel1
             // 
-            this.flowLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.flowLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.flowLayoutPanel1.Controls.Add(this.chkDebug);
             this.flowLayoutPanel1.Controls.Add(this.chkEvents);
             this.flowLayoutPanel1.Controls.Add(this.lblOutputKiBs);
@@ -154,8 +170,8 @@
             // 
             // txtConsoleCommand
             // 
-            this.txtConsoleCommand.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtConsoleCommand.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.txtConsoleCommand.AutoCompleteCustomSource.AddRange(new string[] {
             "punkBuster.pb_sv_command ",
             "punkBuster.pb_sv_command pb_sv_plist",
@@ -243,15 +259,29 @@
             // 
             // pnlConsoleEnclosure
             // 
-            this.pnlConsoleEnclosure.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.pnlConsoleEnclosure.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.pnlConsoleEnclosure.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pnlConsoleEnclosure.Controls.Add(this.rtbConsoleBox);
             this.pnlConsoleEnclosure.Location = new System.Drawing.Point(11, 14);
             this.pnlConsoleEnclosure.Name = "pnlConsoleEnclosure";
             this.pnlConsoleEnclosure.Size = new System.Drawing.Size(736, 460);
             this.pnlConsoleEnclosure.TabIndex = 22;
+            // 
+            // rtbConsoleBox
+            // 
+            this.rtbConsoleBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.rtbConsoleBox.DetectUrls = false;
+            this.rtbConsoleBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rtbConsoleBox.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rtbConsoleBox.Location = new System.Drawing.Point(0, 0);
+            this.rtbConsoleBox.Name = "rtbConsoleBox";
+            this.rtbConsoleBox.ReadOnly = true;
+            this.rtbConsoleBox.Size = new System.Drawing.Size(734, 458);
+            this.rtbConsoleBox.TabIndex = 0;
+            this.rtbConsoleBox.Text = "";
+            this.rtbConsoleBox.WordWrap = false;
             // 
             // tabPunkbuster
             // 
@@ -268,6 +298,20 @@
             this.tabPunkbuster.TabIndex = 1;
             this.tabPunkbuster.Text = "PunkBuster";
             this.tabPunkbuster.UseVisualStyleBackColor = true;
+            // 
+            // chkPBEnableScrolling
+            // 
+            this.chkPBEnableScrolling.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.chkPBEnableScrolling.AutoSize = true;
+            this.chkPBEnableScrolling.Checked = true;
+            this.chkPBEnableScrolling.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkPBEnableScrolling.Location = new System.Drawing.Point(188, 482);
+            this.chkPBEnableScrolling.Name = "chkPBEnableScrolling";
+            this.chkPBEnableScrolling.Size = new System.Drawing.Size(109, 19);
+            this.chkPBEnableScrolling.TabIndex = 34;
+            this.chkPBEnableScrolling.Text = "Enable scrolling";
+            this.chkPBEnableScrolling.UseVisualStyleBackColor = true;
+            this.chkPBEnableScrolling.CheckedChanged += new System.EventHandler(this.chkPBEnableScrolling_CheckedChanged);
             // 
             // chkEnablePunkbusterOutput
             // 
@@ -296,8 +340,8 @@
             // 
             // txtPunkbusterCommand
             // 
-            this.txtPunkbusterCommand.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtPunkbusterCommand.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.txtPunkbusterCommand.AutoCompleteCustomSource.AddRange(new string[] {
             "pb_sv_autoupdban ",
             "pb_sv_badname ",
@@ -365,42 +409,15 @@
             // 
             // panel1
             // 
-            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel1.Controls.Add(this.rtbPunkbusterBox);
             this.panel1.Location = new System.Drawing.Point(11, 14);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(736, 462);
             this.panel1.TabIndex = 28;
-            // 
-            // chkConEnableScrolling
-            // 
-            this.chkConEnableScrolling.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.chkConEnableScrolling.AutoSize = true;
-            this.chkConEnableScrolling.Checked = true;
-            this.chkConEnableScrolling.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkConEnableScrolling.Location = new System.Drawing.Point(188, 480);
-            this.chkConEnableScrolling.Name = "chkConEnableScrolling";
-            this.chkConEnableScrolling.Size = new System.Drawing.Size(109, 19);
-            this.chkConEnableScrolling.TabIndex = 30;
-            this.chkConEnableScrolling.Text = "Enable scrolling";
-            this.chkConEnableScrolling.UseVisualStyleBackColor = true;
-            this.chkConEnableScrolling.CheckedChanged += new System.EventHandler(this.chkConEnableScrolling_CheckedChanged);
-            // 
-            // rtbConsoleBox
-            // 
-            this.rtbConsoleBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.rtbConsoleBox.DetectUrls = false;
-            this.rtbConsoleBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rtbConsoleBox.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.rtbConsoleBox.Location = new System.Drawing.Point(0, 0);
-            this.rtbConsoleBox.Name = "rtbConsoleBox";
-            this.rtbConsoleBox.ReadOnly = true;
-            this.rtbConsoleBox.Size = new System.Drawing.Size(734, 458);
-            this.rtbConsoleBox.TabIndex = 0;
-            this.rtbConsoleBox.Text = "";
             // 
             // rtbPunkbusterBox
             // 
@@ -415,20 +432,7 @@
             this.rtbPunkbusterBox.Size = new System.Drawing.Size(734, 460);
             this.rtbPunkbusterBox.TabIndex = 0;
             this.rtbPunkbusterBox.Text = "";
-            // 
-            // chkPBEnableScrolling
-            // 
-            this.chkPBEnableScrolling.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.chkPBEnableScrolling.AutoSize = true;
-            this.chkPBEnableScrolling.Checked = true;
-            this.chkPBEnableScrolling.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkPBEnableScrolling.Location = new System.Drawing.Point(188, 482);
-            this.chkPBEnableScrolling.Name = "chkPBEnableScrolling";
-            this.chkPBEnableScrolling.Size = new System.Drawing.Size(109, 19);
-            this.chkPBEnableScrolling.TabIndex = 34;
-            this.chkPBEnableScrolling.Text = "Enable scrolling";
-            this.chkPBEnableScrolling.UseVisualStyleBackColor = true;
-            this.chkPBEnableScrolling.CheckedChanged += new System.EventHandler(this.chkPBEnableScrolling_CheckedChanged);
+            this.rtbPunkbusterBox.WordWrap = false;
             // 
             // uscConsolePanel
             // 

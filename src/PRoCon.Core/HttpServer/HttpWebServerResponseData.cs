@@ -18,14 +18,8 @@
 // along with PRoCon Frostbite.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
-using System.Collections.Generic;
 using System.Text;
-using System.Text.RegularExpressions;
-using System.Web;
 using System.Net;
-using System.Net.Sockets;
-using System.Collections.Specialized;
-using System.IO;
 
 namespace PRoCon.Core.HttpServer {
     using PRoCon.Core.HttpServer.Cache;

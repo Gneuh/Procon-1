@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>PRoCon.Core</RootNamespace>
     <AssemblyName>PRoCon.Core</AssemblyName>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <StartupObject>
     </StartupObject>
@@ -65,14 +65,23 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\ziplib\Ionic.Zip.Reduced.dll</HintPath>
     </Reference>
+    <Reference Include="MySql.data, Version=6.6.4.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\mysql\connector\6.4.4\MySql.Data.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\VersionInfo.cs">
+      <Link>Properties\VersionInfo.cs</Link>
+    </Compile>
     <Compile Include="Accounts\Account.cs" />
     <Compile Include="Accounts\AccountDictionary.cs" />
     <Compile Include="Accounts\AccountPrivilege.cs" />
@@ -86,6 +95,29 @@
     <Compile Include="Battlemap\ZoneTagList.cs" />
     <Compile Include="CBanInfo.cs" />
     <Compile Include="CDownloadFile.cs" />
+    <Compile Include="BF4preset.cs" />
+    <Compile Include="GunMasterWeaponsPreset.cs" />
+    <Compile Include="PlaylistMOHW.cs" />
+    <Compile Include="Options\StatsLinkNameUrl.cs" />
+    <Compile Include="Plugin\PluginCache.cs" />
+    <Compile Include="Plugin\PluginCacheEntry.cs" />
+    <Compile Include="Plugin\PluginInvocation.cs" />
+    <Compile Include="Remote\BF4Client.cs" />
+    <Compile Include="Remote\BFHLClient.cs" />
+    <Compile Include="Remote\Cache\CacheManager.cs" />
+    <Compile Include="Remote\Cache\ICacheManager.cs" />
+    <Compile Include="Remote\Cache\IPacketCache.cs" />
+    <Compile Include="Remote\Cache\IPacketCacheConfiguration.cs" />
+    <Compile Include="Remote\Cache\PacketCache.cs" />
+    <Compile Include="Remote\Cache\PacketCacheConfiguration.cs" />
+    <Compile Include="Remote\Layer\ILayerClient.cs" />
+    <Compile Include="Remote\Layer\ILayerInstance.cs" />
+    <Compile Include="Remote\Layer\ILayerPacketDispatcher.cs" />
+    <Compile Include="Remote\Layer\PacketDispatchers\BfhlPacketDispatcher.cs" />
+    <Compile Include="Remote\Layer\PacketDispatchers\Bf4PacketDispatcher.cs" />
+    <Compile Include="Remote\Layer\ILayerConnection.cs" />
+    <Compile Include="Remote\Layer\PacketDispatchers\MohwPacketDispatcher.cs" />
+    <Compile Include="Remote\MOHWClient.cs" />
     <Compile Include="UnlockMode.cs" />
     <Compile Include="ConnectionDictionary.cs" />
     <Compile Include="Consoles\ChatConsole.cs" />
@@ -108,10 +140,6 @@
     <Compile Include="HttpServer\HttpWebServerRequestData.cs" />
     <Compile Include="HttpServer\HttpWebServerResponseData.cs" />
     <Compile Include="JSON.cs" />
-    <Compile Include="Packages\Package.cs" />
-    <Compile Include="Packages\PackageDictionary.cs" />
-    <Compile Include="Packages\PackageManager.cs" />
-    <Compile Include="Packages\PackageType.cs" />
     <Compile Include="Plugin\PRoConPluginAPI.cs" />
     <Compile Include="Plugin\Plugin.cs" />
     <Compile Include="Plugin\PluginDetails.cs" />
@@ -120,12 +148,12 @@
     <Compile Include="Players\BF3PlayerInfo.cs" />
     <Compile Include="Remote\BFClient.cs" />
     <Compile Include="Remote\ConnectionState.cs" />
-    <Compile Include="Remote\Layer\BF3LayerClient.cs" />
+    <Compile Include="Remote\Layer\PacketDispatchers\Bf3PacketDispatcher.cs" />
     <Compile Include="TextChatModeration\PlayerModerationLevelType.cs" />
-    <Compile Include="Remote\Layer\BFBC2LayerClient.cs" />
-    <Compile Include="Remote\Layer\FrostbiteLayerClient.cs" />
-    <Compile Include="Remote\Layer\MoHLayerClient.cs" />
-    <Compile Include="Remote\Layer\FrostbiteLayerConnection.cs" />
+    <Compile Include="Remote\Layer\PacketDispatchers\Bfbc2PacketDispatcher.cs" />
+    <Compile Include="Remote\Layer\LayerPacketDispatcher.cs" />
+    <Compile Include="Remote\Layer\PacketDispatchers\MohPacketDispatcher.cs" />
+    <Compile Include="Remote\Layer\LayerConnection.cs" />
     <Compile Include="Logging\LogEntry.cs" />
     <Compile Include="Battlemap\MapGeometry.cs" />
     <Compile Include="Maps\MaplistEntry.cs" />
@@ -150,9 +178,8 @@
     <Compile Include="Plugin\IPRoConPluginInterface2.cs" />
     <Compile Include="Kill.cs" />
     <Compile Include="Players\Inventory.cs" />
-    <Compile Include="Remote\Layer\PRoConLayerClient.cs" />
-    <Compile Include="Remote\Layer\LayerClientDictionary.cs" />
-    <Compile Include="Remote\Layer\PRoConLayer.cs" />
+    <Compile Include="Remote\Layer\LayerClient.cs" />
+    <Compile Include="Remote\Layer\LayerInstance.cs" />
     <Compile Include="LevelVariable.cs" />
     <Compile Include="LevelVariableContext.cs" />
     <Compile Include="LevelVariableContextType.cs" />
@@ -200,12 +227,13 @@
     <Compile Include="CustomClass.cs" />
     <Compile Include="CustomProperty.cs" />
     <Compile Include="CustomPropertyDescriptor.cs" />
-    <Compile Include="enumBoolOnOff.cs" />
-    <Compile Include="enumBoolYesNo.cs" />
+    <Compile Include="EnumBoolOnOff.cs" />
+    <Compile Include="EnumBoolYesNo.cs" />
     <Compile Include="Plugin\IPRoConPluginInterface.cs" />
     <Compile Include="Remote\Packet.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Battlemap\MapZone.cs" />
+    <Compile Include="Utils\MD5.cs" />
     <Compile Include="Variables\Variable.cs" />
     <Compile Include="Variables\VariableDictionary.cs" />
   </ItemGroup>

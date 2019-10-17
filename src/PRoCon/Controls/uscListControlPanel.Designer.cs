@@ -1,4 +1,4 @@
-﻿namespace PRoCon {
+﻿namespace PRoCon.Controls {
     partial class uscListControlPanel {
         /// <summary> 
         /// Required designer variable.
@@ -30,6 +30,9 @@
             this.tbcLists = new System.Windows.Forms.TabControl();
             this.tabBanlist = new System.Windows.Forms.TabPage();
             this.spltBanlistManualBans = new System.Windows.Forms.SplitContainer();
+            this.picBansFilterMagnifier = new System.Windows.Forms.PictureBox();
+            this.BansFilter = new System.Windows.Forms.TextBox();
+            this.pagination1 = new PRoCon.Controls.ControlsEx.Pagination();
             this.btnBanlistRefresh = new System.Windows.Forms.Button();
             this.picCloseOpenManualBans = new System.Windows.Forms.PictureBox();
             this.lnkCloseOpenManualBans = new System.Windows.Forms.LinkLabel();
@@ -86,17 +89,36 @@
             this.colSoldierNames = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tabTextChatModeration = new System.Windows.Forms.TabPage();
             this.uscTextChatModerationListcs1 = new PRoCon.Controls.TextChatModeration.uscTextChatModerationListcs();
+            this.tabSpectatorSlots = new System.Windows.Forms.TabPage();
+            this.label1 = new System.Windows.Forms.Label();
+            this.pnlSpectatorPanel = new System.Windows.Forms.Panel();
+            this.lblSpectatorCurrent = new System.Windows.Forms.Label();
+            this.pnlSpectatorAddSoldierName = new System.Windows.Forms.Panel();
+            this.txtSpectatorAddSoldierName = new System.Windows.Forms.TextBox();
+            this.picSpectatorAddSoldierName = new System.Windows.Forms.PictureBox();
+            this.lblSpectatorAddSoldierName = new System.Windows.Forms.Label();
+            this.lnkSpectatorAddSoldierName = new System.Windows.Forms.LinkLabel();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.btnSpectatorSlotsListRefresh = new System.Windows.Forms.Button();
+            this.btnSpectatorRemoveSoldier = new System.Windows.Forms.Button();
+            this.panel4 = new System.Windows.Forms.Panel();
+            this.picSpectatorList = new System.Windows.Forms.PictureBox();
+            this.panel5 = new System.Windows.Forms.Panel();
+            this.lsvSpectatorList = new PRoCon.Controls.ControlsEx.ListViewNF();
+            this.colSpectatorSoldierNames = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tmrTimeoutCheck = new System.Windows.Forms.Timer(this.components);
             this.tmrRefreshBanlist = new System.Windows.Forms.Timer(this.components);
             this.ctxBanlistMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.unbanToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.colOffset = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tbcLists.SuspendLayout();
             this.tabBanlist.SuspendLayout();
             this.spltBanlistManualBans.Panel1.SuspendLayout();
             this.spltBanlistManualBans.Panel2.SuspendLayout();
             this.spltBanlistManualBans.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picBansFilterMagnifier)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picCloseOpenManualBans)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picClearLists)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picUnbanPlayer)).BeginInit();
@@ -113,6 +135,12 @@
             this.panel8.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picReservedList)).BeginInit();
             this.tabTextChatModeration.SuspendLayout();
+            this.tabSpectatorSlots.SuspendLayout();
+            this.pnlSpectatorPanel.SuspendLayout();
+            this.pnlSpectatorAddSoldierName.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picSpectatorAddSoldierName)).BeginInit();
+            this.panel3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picSpectatorList)).BeginInit();
             this.ctxBanlistMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -122,6 +150,7 @@
             this.tbcLists.Controls.Add(this.tabMaplist);
             this.tbcLists.Controls.Add(this.tabReservedSlots);
             this.tbcLists.Controls.Add(this.tabTextChatModeration);
+            this.tbcLists.Controls.Add(this.tabSpectatorSlots);
             this.tbcLists.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tbcLists.Location = new System.Drawing.Point(0, 0);
             this.tbcLists.Name = "tbcLists";
@@ -152,6 +181,9 @@
             // 
             // spltBanlistManualBans.Panel1
             // 
+            this.spltBanlistManualBans.Panel1.Controls.Add(this.picBansFilterMagnifier);
+            this.spltBanlistManualBans.Panel1.Controls.Add(this.BansFilter);
+            this.spltBanlistManualBans.Panel1.Controls.Add(this.pagination1);
             this.spltBanlistManualBans.Panel1.Controls.Add(this.btnBanlistRefresh);
             this.spltBanlistManualBans.Panel1.Controls.Add(this.picCloseOpenManualBans);
             this.spltBanlistManualBans.Panel1.Controls.Add(this.lnkCloseOpenManualBans);
@@ -182,6 +214,37 @@
             this.spltBanlistManualBans.Size = new System.Drawing.Size(1022, 812);
             this.spltBanlistManualBans.SplitterDistance = 690;
             this.spltBanlistManualBans.TabIndex = 94;
+            // 
+            // picBansFilterMagnifier
+            // 
+            this.picBansFilterMagnifier.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.picBansFilterMagnifier.Location = new System.Drawing.Point(292, 634);
+            this.picBansFilterMagnifier.Name = "picBansFilterMagnifier";
+            this.picBansFilterMagnifier.Size = new System.Drawing.Size(16, 16);
+            this.picBansFilterMagnifier.TabIndex = 110;
+            this.picBansFilterMagnifier.TabStop = false;
+            // 
+            // BansFilter
+            // 
+            this.BansFilter.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.BansFilter.Location = new System.Drawing.Point(314, 630);
+            this.BansFilter.Name = "BansFilter";
+            this.BansFilter.Size = new System.Drawing.Size(280, 23);
+            this.BansFilter.TabIndex = 109;
+            this.BansFilter.TextChanged += new System.EventHandler(this.BansFilter_TextChanged);
+            // 
+            // pagination1
+            // 
+            this.pagination1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.pagination1.CurrentPage = 1;
+            this.pagination1.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.pagination1.ItemsPerPage = 0;
+            this.pagination1.Location = new System.Drawing.Point(44, 630);
+            this.pagination1.Name = "pagination1";
+            this.pagination1.Size = new System.Drawing.Size(242, 23);
+            this.pagination1.Source = null;
+            this.pagination1.TabIndex = 108;
             // 
             // btnBanlistRefresh
             // 
@@ -267,10 +330,11 @@
             // lsvBanlist
             // 
             this.lsvBanlist.AllowColumnReorder = true;
-            this.lsvBanlist.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.lsvBanlist.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.lsvBanlist.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.colOffset,
             this.colName,
             this.colIP,
             this.colGUID,
@@ -299,6 +363,7 @@
             this.lsvBanlist.TabIndex = 99;
             this.lsvBanlist.UseCompatibleStateImageBehavior = false;
             this.lsvBanlist.View = System.Windows.Forms.View.Details;
+            this.lsvBanlist.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lsvBanlist_ColumnClick);
             this.lsvBanlist.SelectedIndexChanged += new System.EventHandler(this.lsvBanlist_SelectedIndexChanged);
             this.lsvBanlist.MouseUp += new System.Windows.Forms.MouseEventHandler(this.lsvBanlist_MouseUp);
             // 
@@ -332,7 +397,7 @@
             this.rdoBanlistBc2GUID.AutoSize = true;
             this.rdoBanlistBc2GUID.Location = new System.Drawing.Point(278, 6);
             this.rdoBanlistBc2GUID.Name = "rdoBanlistBc2GUID";
-            this.rdoBanlistBc2GUID.Size = new System.Drawing.Size(74, 19);
+            this.rdoBanlistBc2GUID.Size = new System.Drawing.Size(67, 19);
             this.rdoBanlistBc2GUID.TabIndex = 116;
             this.rdoBanlistBc2GUID.Text = "EA Guid";
             this.rdoBanlistBc2GUID.UseVisualStyleBackColor = true;
@@ -340,9 +405,9 @@
             // 
             // lblBanlistConfirmation
             // 
-            this.lblBanlistConfirmation.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblBanlistConfirmation.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.lblBanlistConfirmation.Location = new System.Drawing.Point(313, 57);
             this.lblBanlistConfirmation.Name = "lblBanlistConfirmation";
             this.lblBanlistConfirmation.Size = new System.Drawing.Size(497, 41);
@@ -489,14 +554,15 @@
             // 
             // cboBanlistReason
             // 
-            this.cboBanlistReason.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.cboBanlistReason.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.cboBanlistReason.FormattingEnabled = true;
             this.cboBanlistReason.Items.AddRange(new object[] {
             "Team Killing",
             "Hacking/Cheating",
             "Admin abuse"});
             this.cboBanlistReason.Location = new System.Drawing.Point(525, 28);
+            this.cboBanlistReason.MaxLength = 80;
             this.cboBanlistReason.Name = "cboBanlistReason";
             this.cboBanlistReason.Size = new System.Drawing.Size(492, 23);
             this.cboBanlistReason.TabIndex = 64;
@@ -790,6 +856,192 @@
             this.uscTextChatModerationListcs1.Size = new System.Drawing.Size(1032, 822);
             this.uscTextChatModerationListcs1.TabIndex = 0;
             // 
+            // tabSpectatorSlots
+            // 
+            this.tabSpectatorSlots.Controls.Add(this.label1);
+            this.tabSpectatorSlots.Controls.Add(this.pnlSpectatorPanel);
+            this.tabSpectatorSlots.Location = new System.Drawing.Point(4, 24);
+            this.tabSpectatorSlots.Name = "tabSpectatorSlots";
+            this.tabSpectatorSlots.Padding = new System.Windows.Forms.Padding(3);
+            this.tabSpectatorSlots.Size = new System.Drawing.Size(1038, 828);
+            this.tabSpectatorSlots.TabIndex = 4;
+            this.tabSpectatorSlots.Text = "Spectator Slots";
+            this.tabSpectatorSlots.UseVisualStyleBackColor = true;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.ForeColor = System.Drawing.Color.Maroon;
+            this.label1.Location = new System.Drawing.Point(167, 182);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(0, 17);
+            this.label1.TabIndex = 30;
+            this.label1.Visible = false;
+            // 
+            // pnlSpectatorPanel
+            // 
+            this.pnlSpectatorPanel.Controls.Add(this.lblSpectatorCurrent);
+            this.pnlSpectatorPanel.Controls.Add(this.pnlSpectatorAddSoldierName);
+            this.pnlSpectatorPanel.Controls.Add(this.panel3);
+            this.pnlSpectatorPanel.Controls.Add(this.panel4);
+            this.pnlSpectatorPanel.Controls.Add(this.picSpectatorList);
+            this.pnlSpectatorPanel.Controls.Add(this.panel5);
+            this.pnlSpectatorPanel.Controls.Add(this.lsvSpectatorList);
+            this.pnlSpectatorPanel.Location = new System.Drawing.Point(229, 31);
+            this.pnlSpectatorPanel.Name = "pnlSpectatorPanel";
+            this.pnlSpectatorPanel.Size = new System.Drawing.Size(486, 445);
+            this.pnlSpectatorPanel.TabIndex = 29;
+            // 
+            // lblSpectatorCurrent
+            // 
+            this.lblSpectatorCurrent.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.lblSpectatorCurrent.AutoSize = true;
+            this.lblSpectatorCurrent.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblSpectatorCurrent.Location = new System.Drawing.Point(32, 17);
+            this.lblSpectatorCurrent.Name = "lblSpectatorCurrent";
+            this.lblSpectatorCurrent.Size = new System.Drawing.Size(134, 15);
+            this.lblSpectatorCurrent.TabIndex = 14;
+            this.lblSpectatorCurrent.Text = "Current spectator slots";
+            // 
+            // pnlSpectatorAddSoldierName
+            // 
+            this.pnlSpectatorAddSoldierName.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.pnlSpectatorAddSoldierName.Controls.Add(this.txtSpectatorAddSoldierName);
+            this.pnlSpectatorAddSoldierName.Controls.Add(this.picSpectatorAddSoldierName);
+            this.pnlSpectatorAddSoldierName.Controls.Add(this.lblSpectatorAddSoldierName);
+            this.pnlSpectatorAddSoldierName.Controls.Add(this.lnkSpectatorAddSoldierName);
+            this.pnlSpectatorAddSoldierName.Location = new System.Drawing.Point(35, 305);
+            this.pnlSpectatorAddSoldierName.Name = "pnlSpectatorAddSoldierName";
+            this.pnlSpectatorAddSoldierName.Size = new System.Drawing.Size(430, 60);
+            this.pnlSpectatorAddSoldierName.TabIndex = 2;
+            // 
+            // txtSpectatorAddSoldierName
+            // 
+            this.txtSpectatorAddSoldierName.Location = new System.Drawing.Point(34, 27);
+            this.txtSpectatorAddSoldierName.Name = "txtSpectatorAddSoldierName";
+            this.txtSpectatorAddSoldierName.Size = new System.Drawing.Size(280, 23);
+            this.txtSpectatorAddSoldierName.TabIndex = 1;
+            this.txtSpectatorAddSoldierName.TextChanged += new System.EventHandler(this.txtSpectatorAddSoldierName_TextChanged);
+            this.txtSpectatorAddSoldierName.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtSpectatorAddSoldierName_KeyDown);
+            // 
+            // picSpectatorAddSoldierName
+            // 
+            this.picSpectatorAddSoldierName.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.picSpectatorAddSoldierName.Location = new System.Drawing.Point(12, 8);
+            this.picSpectatorAddSoldierName.Name = "picSpectatorAddSoldierName";
+            this.picSpectatorAddSoldierName.Size = new System.Drawing.Size(16, 16);
+            this.picSpectatorAddSoldierName.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.picSpectatorAddSoldierName.TabIndex = 102;
+            this.picSpectatorAddSoldierName.TabStop = false;
+            // 
+            // lblSpectatorAddSoldierName
+            // 
+            this.lblSpectatorAddSoldierName.AutoSize = true;
+            this.lblSpectatorAddSoldierName.Location = new System.Drawing.Point(31, 9);
+            this.lblSpectatorAddSoldierName.Name = "lblSpectatorAddSoldierName";
+            this.lblSpectatorAddSoldierName.Size = new System.Drawing.Size(161, 15);
+            this.lblSpectatorAddSoldierName.TabIndex = 93;
+            this.lblSpectatorAddSoldierName.Text = "Add a soldier name to the list";
+            // 
+            // lnkSpectatorAddSoldierName
+            // 
+            this.lnkSpectatorAddSoldierName.ActiveLinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(220)))));
+            this.lnkSpectatorAddSoldierName.AutoSize = true;
+            this.lnkSpectatorAddSoldierName.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
+            this.lnkSpectatorAddSoldierName.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(220)))));
+            this.lnkSpectatorAddSoldierName.Location = new System.Drawing.Point(320, 30);
+            this.lnkSpectatorAddSoldierName.Name = "lnkSpectatorAddSoldierName";
+            this.lnkSpectatorAddSoldierName.Size = new System.Drawing.Size(67, 15);
+            this.lnkSpectatorAddSoldierName.TabIndex = 2;
+            this.lnkSpectatorAddSoldierName.TabStop = true;
+            this.lnkSpectatorAddSoldierName.Text = "Add soldier";
+            this.lnkSpectatorAddSoldierName.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkSpectatorAddSoldierName_LinkClicked);
+            // 
+            // panel3
+            // 
+            this.panel3.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.panel3.Controls.Add(this.btnSpectatorSlotsListRefresh);
+            this.panel3.Controls.Add(this.btnSpectatorRemoveSoldier);
+            this.panel3.Location = new System.Drawing.Point(424, 120);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(41, 100);
+            this.panel3.TabIndex = 1;
+            // 
+            // btnSpectatorSlotsListRefresh
+            // 
+            this.btnSpectatorSlotsListRefresh.FlatAppearance.BorderSize = 0;
+            this.btnSpectatorSlotsListRefresh.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSpectatorSlotsListRefresh.Location = new System.Drawing.Point(3, 74);
+            this.btnSpectatorSlotsListRefresh.Name = "btnSpectatorSlotsListRefresh";
+            this.btnSpectatorSlotsListRefresh.Size = new System.Drawing.Size(35, 23);
+            this.btnSpectatorSlotsListRefresh.TabIndex = 109;
+            this.btnSpectatorSlotsListRefresh.UseVisualStyleBackColor = true;
+            this.btnSpectatorSlotsListRefresh.Click += new System.EventHandler(this.btnSpectatorSlotsListRefresh_Click);
+            // 
+            // btnSpectatorRemoveSoldier
+            // 
+            this.btnSpectatorRemoveSoldier.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.btnSpectatorRemoveSoldier.Enabled = false;
+            this.btnSpectatorRemoveSoldier.FlatAppearance.BorderSize = 0;
+            this.btnSpectatorRemoveSoldier.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSpectatorRemoveSoldier.Location = new System.Drawing.Point(3, 32);
+            this.btnSpectatorRemoveSoldier.Name = "btnSpectatorRemoveSoldier";
+            this.btnSpectatorRemoveSoldier.Size = new System.Drawing.Size(35, 23);
+            this.btnSpectatorRemoveSoldier.TabIndex = 1;
+            this.btnSpectatorRemoveSoldier.UseVisualStyleBackColor = true;
+            this.btnSpectatorRemoveSoldier.Click += new System.EventHandler(this.btnSpectatorRemoveSoldier_Click);
+            // 
+            // panel4
+            // 
+            this.panel4.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.panel4.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.panel4.Location = new System.Drawing.Point(35, 289);
+            this.panel4.Name = "panel4";
+            this.panel4.Size = new System.Drawing.Size(424, 1);
+            this.panel4.TabIndex = 95;
+            // 
+            // picSpectatorList
+            // 
+            this.picSpectatorList.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.picSpectatorList.Location = new System.Drawing.Point(47, 41);
+            this.picSpectatorList.Name = "picSpectatorList";
+            this.picSpectatorList.Size = new System.Drawing.Size(16, 16);
+            this.picSpectatorList.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.picSpectatorList.TabIndex = 91;
+            this.picSpectatorList.TabStop = false;
+            // 
+            // panel5
+            // 
+            this.panel5.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.panel5.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.panel5.Location = new System.Drawing.Point(35, 25);
+            this.panel5.Name = "panel5";
+            this.panel5.Size = new System.Drawing.Size(424, 1);
+            this.panel5.TabIndex = 16;
+            // 
+            // lsvSpectatorList
+            // 
+            this.lsvSpectatorList.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
+            this.lsvSpectatorList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.colSpectatorSoldierNames});
+            this.lsvSpectatorList.FullRowSelect = true;
+            this.lsvSpectatorList.HideSelection = false;
+            this.lsvSpectatorList.Location = new System.Drawing.Point(69, 41);
+            this.lsvSpectatorList.MultiSelect = false;
+            this.lsvSpectatorList.Name = "lsvSpectatorList";
+            this.lsvSpectatorList.Size = new System.Drawing.Size(349, 232);
+            this.lsvSpectatorList.TabIndex = 0;
+            this.lsvSpectatorList.UseCompatibleStateImageBehavior = false;
+            this.lsvSpectatorList.View = System.Windows.Forms.View.Details;
+            this.lsvSpectatorList.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lsvSpectatorList_ColumnClick);
+            this.lsvSpectatorList.SelectedIndexChanged += new System.EventHandler(this.lsvSpectatorList_SelectedIndexChanged);
+            // 
+            // colSpectatorSoldierNames
+            // 
+            this.colSpectatorSoldierNames.Text = "Soldier Names";
+            this.colSpectatorSoldierNames.Width = 317;
+            // 
             // tmrTimeoutCheck
             // 
             this.tmrTimeoutCheck.Tick += new System.EventHandler(this.tmrSettingsAnimator_Tick);
@@ -828,6 +1080,10 @@
             this.unbanToolStripMenuItem.Text = "Unban";
             this.unbanToolStripMenuItem.Click += new System.EventHandler(this.unbanToolStripMenuItem_Click);
             // 
+            // colOffset
+            // 
+            this.colOffset.Text = "#";
+            // 
             // uscListControlPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -844,6 +1100,7 @@
             this.spltBanlistManualBans.Panel2.ResumeLayout(false);
             this.spltBanlistManualBans.Panel2.PerformLayout();
             this.spltBanlistManualBans.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.picBansFilterMagnifier)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picCloseOpenManualBans)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picClearLists)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picUnbanPlayer)).EndInit();
@@ -865,6 +1122,15 @@
             this.panel8.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.picReservedList)).EndInit();
             this.tabTextChatModeration.ResumeLayout(false);
+            this.tabSpectatorSlots.ResumeLayout(false);
+            this.tabSpectatorSlots.PerformLayout();
+            this.pnlSpectatorPanel.ResumeLayout(false);
+            this.pnlSpectatorPanel.PerformLayout();
+            this.pnlSpectatorAddSoldierName.ResumeLayout(false);
+            this.pnlSpectatorAddSoldierName.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picSpectatorAddSoldierName)).EndInit();
+            this.panel3.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.picSpectatorList)).EndInit();
             this.ctxBanlistMenuStrip.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -937,5 +1203,26 @@
         private Controls.TextChatModeration.uscTextChatModerationListcs uscTextChatModerationListcs1;
         private System.Windows.Forms.Label lblMohNotice;
         private System.Windows.Forms.Button btnReservedSlotsListRefresh;
+        private System.Windows.Forms.TabPage tabSpectatorSlots;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Panel pnlSpectatorPanel;
+        private System.Windows.Forms.Label lblSpectatorCurrent;
+        private System.Windows.Forms.Panel pnlSpectatorAddSoldierName;
+        private System.Windows.Forms.TextBox txtSpectatorAddSoldierName;
+        private System.Windows.Forms.PictureBox picSpectatorAddSoldierName;
+        private System.Windows.Forms.Label lblSpectatorAddSoldierName;
+        private System.Windows.Forms.LinkLabel lnkSpectatorAddSoldierName;
+        private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.Button btnSpectatorSlotsListRefresh;
+        private System.Windows.Forms.Button btnSpectatorRemoveSoldier;
+        private System.Windows.Forms.Panel panel4;
+        private System.Windows.Forms.PictureBox picSpectatorList;
+        private System.Windows.Forms.Panel panel5;
+        private Controls.ControlsEx.ListViewNF lsvSpectatorList;
+        private System.Windows.Forms.ColumnHeader colSpectatorSoldierNames;
+        private ControlsEx.Pagination pagination1;
+        private System.Windows.Forms.TextBox BansFilter;
+        private System.Windows.Forms.PictureBox picBansFilterMagnifier;
+        private System.Windows.Forms.ColumnHeader colOffset;
     }
 }

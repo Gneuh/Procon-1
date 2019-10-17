@@ -18,85 +18,80 @@
 // along with PRoCon Frostbite.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace PRoCon.Core.Remote {
-    using Core.Players;
-    using Core.Maps;
-
     public class BFBC2Client : BFClient {
-
-        public override string GameType {
-            get {
-                return "BFBC2";
-            }
-        }
-
-        public BFBC2Client(FrostbiteConnection connection)
-            : base(connection) {
-
+        public BFBC2Client(FrostbiteConnection connection) : base(connection) {
             #region Map list functions
 
-            this.m_responseDelegates.Add("admin.getPlaylist", this.DispatchAdminGetPlaylistResponse);
-            this.m_responseDelegates.Add("admin.setPlaylist", this.DispatchAdminSetPlaylistResponse);
+            ResponseDelegates.Add("admin.getPlaylist", DispatchAdminGetPlaylistResponse);
+            ResponseDelegates.Add("admin.setPlaylist", DispatchAdminSetPlaylistResponse);
 
             // Note: These delegates point to methods in FrostbiteClient.
-            this.m_responseDelegates.Add("admin.runNextLevel", this.DispatchAdminRunNextRoundResponse);
-            this.m_responseDelegates.Add("admin.currentLevel", this.DispatchAdminCurrentLevelResponse);
+            ResponseDelegates.Add("admin.runNextLevel", DispatchAdminRunNextRoundResponse);
+            ResponseDelegates.Add("admin.currentLevel", DispatchAdminCurrentLevelResponse);
 
             #endregion
 
             //this.m_responseDelegates.Add("vars.rankLimit", this.DispatchVarsRankLimitResponse);
 
             // Note: These delegates point to methods in FrostbiteClient.
-            this.m_responseDelegates.Add("reservedSlots.configFile", this.DispatchReservedSlotsConfigFileResponse);
-            this.m_responseDelegates.Add("reservedSlots.load", this.DispatchReservedSlotsLoadResponse);
-            this.m_responseDelegates.Add("reservedSlots.save", this.DispatchReservedSlotsSaveResponse);
-            this.m_responseDelegates.Add("reservedSlots.addPlayer", this.DispatchReservedSlotsAddPlayerResponse);
-            this.m_responseDelegates.Add("reservedSlots.removePlayer", this.DispatchReservedSlotsRemovePlayerResponse);
-            this.m_responseDelegates.Add("reservedSlots.clear", this.DispatchReservedSlotsClearResponse);
-            this.m_responseDelegates.Add("reservedSlots.list", this.DispatchReservedSlotsListResponse);
+            ResponseDelegates.Add("reservedSlots.configFile", DispatchReservedSlotsConfigFileResponse);
+            ResponseDelegates.Add("reservedSlots.load", DispatchReservedSlotsLoadResponse);
+            ResponseDelegates.Add("reservedSlots.save", DispatchReservedSlotsSaveResponse);
+            ResponseDelegates.Add("reservedSlots.addPlayer", DispatchReservedSlotsAddPlayerResponse);
+            ResponseDelegates.Add("reservedSlots.removePlayer", DispatchReservedSlotsRemovePlayerResponse);
+            ResponseDelegates.Add("reservedSlots.clear", DispatchReservedSlotsClearResponse);
+            ResponseDelegates.Add("reservedSlots.list", DispatchReservedSlotsListResponse);
 
-            this.GetPacketsPattern = new Regex(this.GetPacketsPattern.ToString() + "|^admin.getPlaylist|^reservedSlots.list", RegexOptions.Compiled);
+            GetPacketsPattern = new Regex(GetPacketsPattern + "|^admin.getPlaylist|^reservedSlots.list", RegexOptions.Compiled);
+        }
+
+        public override string GameType {
+            get { return "BFBC2"; }
         }
 
         public override void FetchStartupVariables() {
             base.FetchStartupVariables();
 
-            this.SendTextChatModerationListListPacket();
+            SendGetVarsBannerUrlPacket();
 
-            this.SendGetVarsHardCorePacket();
-            this.SendGetVarsProfanityFilterPacket();
+            SendGetVarsRankLimitPacket();
+            SendGetVarsCrossHairPacket();
 
-            this.SendGetVarsRankedPacket();
-            this.SendGetVarsPunkBusterPacket();
+            SendTextChatModerationListListPacket();
 
-            this.SendGetVarsMaxPlayerLimitPacket();
+            SendGetVarsHardCorePacket();
+            SendGetVarsProfanityFilterPacket();
 
-            this.SendGetVarsCurrentPlayerLimitPacket();
-            this.SendGetVarsPlayerLimitPacket();
+            SendGetVarsRankedPacket();
+            SendGetVarsPunkBusterPacket();
 
-            this.SendAdminGetPlaylistPacket();
+            SendGetVarsMaxPlayerLimitPacket();
 
-            this.SendGetVarsRankLimitPacket();
+            SendGetVarsCurrentPlayerLimitPacket();
+            SendGetVarsPlayerLimitPacket();
+
+            SendAdminGetPlaylistPacket();
+
+            SendGetVarsRankLimitPacket();
 
 
             // Text Chat Moderation
-            this.SendGetVarsTextChatModerationModePacket();
-            this.SendGetVarsTextChatSpamCoolDownTimePacket();
-            this.SendGetVarsTextChatSpamDetectionTimePacket();
-            this.SendGetVarsTextChatSpamTriggerCountPacket();
+            SendGetVarsTextChatModerationModePacket();
+            SendGetVarsTextChatSpamCoolDownTimePacket();
+            SendGetVarsTextChatSpamDetectionTimePacket();
+            SendGetVarsTextChatSpamTriggerCountPacket();
         }
 
         #region Overridden Events
 
-        public override event FrostbiteClient.LimitHandler RankLimit;
+        public override event LimitHandler RankLimit;
 
-        public override event FrostbiteClient.PlaylistSetHandler PlaylistSet;
+        public override event PlaylistSetHandler PlaylistSet;
 
-        public override event FrostbiteClient.PlayerSpawnedHandler PlayerSpawned;
+        public override event PlayerSpawnedHandler PlayerSpawned;
 
         #endregion
 
@@ -104,42 +99,41 @@ namespace PRoCon.Core.Remote {
 
         protected override void DispatchPlayerOnSpawnRequest(FrostbiteConnection sender, Packet cpRequestPacket) {
             if (cpRequestPacket.Words.Count >= 9) {
-                if (this.PlayerSpawned != null) {
-                    FrostbiteConnection.RaiseEvent(this.PlayerSpawned.GetInvocationList(), this, cpRequestPacket.Words[1], cpRequestPacket.Words[2], cpRequestPacket.Words.GetRange(3, 3), cpRequestPacket.Words.GetRange(6, 3)); // new Inventory(cpRequestPacket.Words[3], cpRequestPacket.Words[4], cpRequestPacket.Words[5], cpRequestPacket.Words[6], cpRequestPacket.Words[7], cpRequestPacket.Words[8]));
+                if (PlayerSpawned != null) {
+                    this.PlayerSpawned(this, cpRequestPacket.Words[1], cpRequestPacket.Words[2], cpRequestPacket.Words.GetRange(3, 3), cpRequestPacket.Words.GetRange(6, 3)); // new Inventory(cpRequestPacket.Words[3], cpRequestPacket.Words[4], cpRequestPacket.Words[5], cpRequestPacket.Words[6], cpRequestPacket.Words[7], cpRequestPacket.Words[8]));
                 }
             }
         }
 
-        protected virtual void DispatchAdminSetPlaylistResponse(FrostbiteConnection sender, Packet cpRecievedPacket, Packet cpRequestPacket) {
+        protected override void DispatchAdminSetPlaylistResponse(FrostbiteConnection sender, Packet cpRecievedPacket, Packet cpRequestPacket) {
             if (cpRequestPacket.Words.Count >= 2) {
-                if (this.PlaylistSet != null) {
-                    FrostbiteConnection.RaiseEvent(this.PlaylistSet.GetInvocationList(), this, cpRequestPacket.Words[1]);
+                if (PlaylistSet != null) {
+                    this.PlaylistSet(this, cpRequestPacket.Words[1]);
                 }
             }
         }
 
-        protected virtual void DispatchAdminGetPlaylistResponse(FrostbiteConnection sender, Packet cpRecievedPacket, Packet cpRequestPacket) {
+        protected override void DispatchAdminGetPlaylistResponse(FrostbiteConnection sender, Packet cpRecievedPacket, Packet cpRequestPacket) {
             if (cpRequestPacket.Words.Count >= 1 && cpRecievedPacket.Words.Count >= 2) {
-                if (this.PlaylistSet != null) {
-                    FrostbiteConnection.RaiseEvent(this.PlaylistSet.GetInvocationList(), this, cpRecievedPacket.Words[1]);
+                if (PlaylistSet != null) {
+                    this.PlaylistSet(this, cpRecievedPacket.Words[1]);
                 }
             }
         }
 
-        protected virtual void DispatchVarsRankLimitResponse(FrostbiteConnection sender, Packet cpRecievedPacket, Packet cpRequestPacket) {
+        protected override void DispatchVarsRankLimitResponse(FrostbiteConnection sender, Packet cpRecievedPacket, Packet cpRequestPacket) {
             if (cpRequestPacket.Words.Count >= 1) {
-                if (this.RankLimit != null) {
+                if (RankLimit != null) {
                     if (cpRecievedPacket.Words.Count == 2) {
-                        FrostbiteConnection.RaiseEvent(this.RankLimit.GetInvocationList(), this, Convert.ToInt32(cpRecievedPacket.Words[1]));
+                        this.RankLimit(this, Convert.ToInt32(cpRecievedPacket.Words[1]));
                     }
                     else if (cpRequestPacket.Words.Count >= 2) {
-                        FrostbiteConnection.RaiseEvent(this.RankLimit.GetInvocationList(), this, Convert.ToInt32(cpRequestPacket.Words[1]));
+                        this.RankLimit(this, Convert.ToInt32(cpRequestPacket.Words[1]));
                     }
                 }
             }
         }
 
         #endregion
-
     }
 }

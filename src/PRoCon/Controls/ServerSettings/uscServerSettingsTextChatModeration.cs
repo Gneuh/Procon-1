@@ -83,12 +83,14 @@ namespace PRoCon.Controls.ServerSettings {
         }
 
         private void m_prcClient_GameTypeDiscovered(PRoConClient sender) {
-            this.Client.Game.TextChatModerationMode += new FrostbiteClient.TextChatModerationModeHandler(Game_TextChatModerationMode);
-            this.Client.Game.TextChatSpamTriggerCount += new FrostbiteClient.LimitHandler(Game_TextChatSpamTriggerCount);
-            this.Client.Game.TextChatSpamDetectionTime += new FrostbiteClient.LimitHandler(Game_TextChatSpamDetectionTime);
-            this.Client.Game.TextChatSpamCoolDownTime += new FrostbiteClient.LimitHandler(Game_TextChatSpamCoolDownTime);
+            this.InvokeIfRequired(() => {
+                this.Client.Game.TextChatModerationMode += new FrostbiteClient.TextChatModerationModeHandler(Game_TextChatModerationMode);
+                this.Client.Game.TextChatSpamTriggerCount += new FrostbiteClient.LimitHandler(Game_TextChatSpamTriggerCount);
+                this.Client.Game.TextChatSpamDetectionTime += new FrostbiteClient.LimitHandler(Game_TextChatSpamDetectionTime);
+                this.Client.Game.TextChatSpamCoolDownTime += new FrostbiteClient.LimitHandler(Game_TextChatSpamCoolDownTime);
 
-            this.Client.Game.ResponseError += new FrostbiteClient.ResponseErrorHandler(Game_ResponseError);
+                this.Client.Game.ResponseError += new FrostbiteClient.ResponseErrorHandler(Game_ResponseError);
+            });
         }
 
         private void Game_ResponseError(FrostbiteClient sender, Packet originalRequest, string errorMessage) {
@@ -134,25 +136,26 @@ namespace PRoCon.Controls.ServerSettings {
         }
 
         private void Game_TextChatModerationMode(FrostbiteClient sender, ServerModerationModeType mode) {
-            
-            this.OnSettingResponse("vars.textChatModerationMode", null, true);
+            this.InvokeIfRequired(() => {
+                this.OnSettingResponse("vars.textChatModerationMode", null, true);
 
-            this.IgnoreEvents = true;
+                this.IgnoreEvents = true;
 
-            if (mode == ServerModerationModeType.Free) {
-                this.rdoSettingsModerationModeFree.Checked = true;
-            }
-            else if (mode == ServerModerationModeType.Moderated) {
-                this.rdoSettingsModerationModeModerated.Checked = true;
-            }
-            else if (mode == ServerModerationModeType.Muted) {
-                this.rdoSettingsModerationModeMuted.Checked = true;
-            }
-            else {
-                this.rdoSettingsModerationModeFree.Checked = this.rdoSettingsModerationModeModerated.Checked = this.rdoSettingsModerationModeMuted.Checked = false;
-            }
+                if (mode == ServerModerationModeType.Free) {
+                    this.rdoSettingsModerationModeFree.Checked = true;
+                }
+                else if (mode == ServerModerationModeType.Moderated) {
+                    this.rdoSettingsModerationModeModerated.Checked = true;
+                }
+                else if (mode == ServerModerationModeType.Muted) {
+                    this.rdoSettingsModerationModeMuted.Checked = true;
+                }
+                else {
+                    this.rdoSettingsModerationModeFree.Checked = this.rdoSettingsModerationModeModerated.Checked = this.rdoSettingsModerationModeMuted.Checked = false;
+                }
 
-            this.IgnoreEvents = false;
+                this.IgnoreEvents = false;
+            });
         }
 
         #endregion

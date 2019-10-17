@@ -21,6 +21,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 
 namespace PRoCon.Core.Plugin {
     using Core.Remote;
@@ -29,15 +30,41 @@ namespace PRoCon.Core.Plugin {
 
     // Factory class to create objects exposing IPRoConPluginInterface
     public class CPRoConPluginLoaderFactory : MarshalByRefObject {
+        protected List<IPRoConPluginInterface> LoadedPlugins; 
 
         public override object InitializeLifetimeService() {
             return null;
         }
 
-        public CPRoConPluginLoaderFactory() { }
+        public CPRoConPluginLoaderFactory() {
+            this.LoadedPlugins = new List<IPRoConPluginInterface>();
+        }
 
-        public IPRoConPluginInterface Create(string strAssemblyFile, string strTypeName, object[] a_objConstructArgs) {
-            return (IPRoConPluginInterface)Activator.CreateInstanceFrom(strAssemblyFile, strTypeName, false, BindingFlags.Instance | BindingFlags.Public | BindingFlags.CreateInstance, null, a_objConstructArgs, null, null, null).Unwrap();
+        public IPRoConPluginInterface Create(string assemblyFile, string typeName, object[] constructArguments) {
+            IPRoConPluginInterface loadedPlugin = (IPRoConPluginInterface) Activator.CreateInstanceFrom(
+                assemblyFile, 
+                typeName, 
+                false, 
+                BindingFlags.Instance | BindingFlags.Public | BindingFlags.CreateInstance, 
+                null,
+                constructArguments,
+                null, 
+                null, 
+                null).Unwrap();
+
+            this.LoadedPlugins.Add(loadedPlugin);
+
+            return loadedPlugin;
+        }
+
+        public Object ConditionallyInvokeOn(List<String> types, String methodName, params object[] parameters) {
+            Object returnValue = null;
+
+            foreach (IPRoConPluginInterface plugin in this.LoadedPlugins.Where(plugin => types.Contains(plugin.ClassName) == true)) {
+                returnValue = plugin.Invoke(methodName, parameters);
+            }
+
+            return returnValue;
         }
     }
 }

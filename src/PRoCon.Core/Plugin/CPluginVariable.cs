@@ -28,6 +28,7 @@ namespace PRoCon.Core {
         private string m_strVariableName;
         private string m_strVariableType;
         private string m_strVariableValue;
+        private bool m_blVariableReadonly = false;
 
         public CPluginVariable(string strVariableName, string strVariable, string strValue) {
             this.m_strVariableName = strVariableName;
@@ -80,6 +81,61 @@ namespace PRoCon.Core {
             }
         }
 
+        public CPluginVariable(string strVariableName, string strVariable, string strValue, bool isReadOnly)         {
+            this.m_strVariableName = strVariableName;
+            this.m_strVariableType = strVariable;
+            this.m_strVariableValue = strValue;
+            this.m_blVariableReadonly = isReadOnly;
+        }
+
+        public CPluginVariable(string strVariableName, Type tyVariable, object objValue, bool isReadOnly)
+        {
+            this.m_strVariableName = strVariableName;
+            this.m_blVariableReadonly = isReadOnly;
+
+            if (tyVariable == typeof(bool)) {
+                this.m_strVariableType = "bool";
+                this.m_strVariableValue = objValue.ToString();
+            }
+            else if (tyVariable == typeof(enumBoolOnOff)) {
+                this.m_strVariableType = "onoff";
+                this.m_strVariableValue = Enum.GetName(tyVariable, (enumBoolOnOff)objValue);
+            }
+            else if (tyVariable == typeof(enumBoolYesNo)) {
+                this.m_strVariableType = "yesno";
+                this.m_strVariableValue = Enum.GetName(tyVariable, (enumBoolYesNo)objValue);
+            }
+            else if (tyVariable == typeof(int)) {
+                this.m_strVariableType = "int";
+                this.m_strVariableValue = objValue.ToString();
+            }
+            else if (tyVariable == typeof(double)) {
+                this.m_strVariableType = "double";
+                this.m_strVariableValue = objValue.ToString();
+            }
+            else if (tyVariable == typeof(string)) {
+                if (objValue != null)
+                {
+                    this.m_strVariableType = "multiline";
+                    this.m_strVariableValue = objValue.ToString();
+                }
+                else {
+                    this.m_strVariableType = "multiline";
+                    this.m_strVariableValue = String.Empty;
+                }
+            }
+            else if (tyVariable == typeof(string[])) {
+                if (objValue != null) {
+                    this.m_strVariableType = "stringarray";
+                    this.m_strVariableValue = EncodeStringArray((string[])objValue);
+                }
+                else {
+                    this.m_strVariableType = "stringarray";
+                    this.m_strVariableValue = String.Empty;
+                }
+            }
+        }
+
         public string Name {
             get { return this.m_strVariableName; }
         }
@@ -90,6 +146,10 @@ namespace PRoCon.Core {
 
         public string Value {
             get { return this.m_strVariableValue; }
+        }
+
+        public bool ReadOnly {
+            get { return this.m_blVariableReadonly; }
         }
 
         // Yes I know.  I got lazy..

@@ -1,43 +1,36 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using PRoCon.Core.Remote;
 
 namespace PRoCon.Core.Accounts {
-    using Core.Remote;
     public class Account {
-
         public delegate void AccountPasswordChangedHandler(Account item);
-        public event AccountPasswordChangedHandler AccountPasswordChanged;
-        /*
-        public AccountPrivilegeDictionary AccountPrivileges {
-            get;
-            private set;
-        }
-        */
-        public string Name {
-            get;
-            private set;
+
+        private string _password;
+
+        public Account(string strName, string strPassword) {
+            Name = strName;
+            Password = strPassword;
         }
 
-        private string m_strPassword;
+        /// <summary>
+        /// The name of this account
+        /// </summary>
+        public String Name { get; private set; }
+
+        /// <summary>
+        /// The password to login to this account.
+        /// </summary>
         public string Password {
-            get {
-                return this.m_strPassword;
-            }
+            get { return _password; }
             set {
-                this.m_strPassword = value;
-
-                if (this.AccountPasswordChanged != null) {
-                    FrostbiteConnection.RaiseEvent(this.AccountPasswordChanged.GetInvocationList(), this);
+                _password = value;
+                
+                if (AccountPasswordChanged != null) {
+                    this.AccountPasswordChanged(this);
                 }
             }
         }
 
-        public Account(string strName, string strPassword) {
-            //this.AccountPrivileges = new AccountPrivilegeDictionary();
-
-            this.Name = strName;
-            this.Password = strPassword;
-        }
+        public event AccountPasswordChangedHandler AccountPasswordChanged;
     }
 }

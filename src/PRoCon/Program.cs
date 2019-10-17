@@ -1,67 +1,22 @@
-﻿/*  Copyright 2010 Geoffrey 'Phogue' Green
-
-    http://www.phogue.net
- 
-    This file is part of PRoCon Frostbite.
-
-    PRoCon Frostbite is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    PRoCon Frostbite is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with PRoCon Frostbite.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-// TO DO: Cleanup..
-using System;
-using System.Collections.Generic;
+﻿using System;
+using System.Linq;
 using System.Windows.Forms;
-
-using System.Collections;
-using System.Globalization;
-
-using System.CodeDom.Compiler;
-using System.Reflection;
-using Microsoft.CSharp;
 using System.IO;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Drawing;
-using System.Security;
-using System.Security.Permissions;
-using System.Runtime.InteropServices;
-
 using System.Threading;
-using System.Security.Policy;
-using System.Net;
-using System.Web;
-using System.Xml;
-
-using System.Security.Cryptography;
-using PRoCon.Core.Events;
-
-using System.ComponentModel;
+using Microsoft.Win32;
 
 namespace PRoCon {
     using Core.AutoUpdates;
     using Forms;
     using Core;
-    using Core.Plugin.Commands;
-    using Core.Battlemap;
     using Core.Remote;
     
     public static class Program {
 
         // This is a simple test for me to look into TFS's source control stuff..
 
-        public static PRoConApplication m_application;
-        public static string[] m_Args;
+        public static PRoConApplication ProconApplication;
+        public static string[] Args;
 
         /// <summary>
         /// The main entry point for the application.
@@ -69,44 +24,47 @@ namespace PRoCon {
         [STAThread]
         static void Main(string[] args) {
 
-            Program.m_Args = args;
+            Program.Args = args;
 
-            if (PRoConApplication.IsProcessOpen() == false) {
+            bool dotNetCheck = CheckNetVersion("3.5");
+
+            if (PRoConApplication.IsProcessOpen() == false && dotNetCheck == true) {
 
                 if (Directory.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Updates")) == true) {
-                    AutoUpdater.m_strArgs = args;
+                    AutoUpdater.Arguments = args;
                     AutoUpdater.BeginUpdateProcess(null);
                 }
                 else {
-                    //PRoConApplication paProcon = null;
-
                     try {
 
-                        bool blBasicConsole = false;
-                        bool blGspUpdater = false;
+                        bool isBasicConsole = false;
+                        bool isGspUpdater = false;
 
-                        int iValue;
                         if (args != null && args.Length >= 2) {
                             for (int i = 0; i < args.Length; i = i + 2) {
-                                if (String.Compare("-console", args[i], true) == 0 && int.TryParse(args[i + 1], out iValue) == true && iValue == 1) {
-                                    blBasicConsole = true;
+                                int value;
+
+                                if (String.Compare("-console", args[i], System.StringComparison.OrdinalIgnoreCase) == 0 && int.TryParse(args[i + 1], out value) == true && value == 1) {
+                                    isBasicConsole = true;
                                 }
-                                if (String.Compare("-gspupdater", args[i], true) == 0 && int.TryParse(args[i + 1], out iValue) == true && iValue == 1) {
-                                    blGspUpdater = true;
+                                if (String.Compare("-gspupdater", args[i], System.StringComparison.OrdinalIgnoreCase) == 0 && int.TryParse(args[i + 1], out value) == true && value == 1) {
+                                    isGspUpdater = true;
+                                }
+                                if (String.Compare("-use_core", args[i], System.StringComparison.OrdinalIgnoreCase) == 0 && int.TryParse(args[i + 1], out value) == true && value > 0) {
+                                    System.Diagnostics.Process.GetCurrentProcess().ProcessorAffinity = (System.IntPtr)value;
                                 }
                             }
                         }
 
-                        //Thread.Sleep(5000);
                         Application.EnableVisualStyles();
                         Application.SetCompatibleTextRenderingDefault(false);
 
-                        if (blGspUpdater == true) {
+                        if (isGspUpdater == true) {
                             Application.Run(new GspUpdater());
                         }
                         else {
 
-                            if (blBasicConsole == true) {
+                            if (isBasicConsole == true) {
                                 BasicConsole basicWindow = new BasicConsole();
                                 basicWindow.WindowLoaded += new BasicConsole.WindowLoadedHandler(procon_WindowLoaded);
 
@@ -123,11 +81,11 @@ namespace PRoCon {
                     }
                     catch (Exception e) {
                         FrostbiteConnection.LogError("Application error", String.Empty, e);
-                        MessageBox.Show("PRoCon ran into a critical error, but hopefully it logged that error in DEBUG.txt.  Please post/pm/email this to phogue at www.phogue.net.");
+                        MessageBox.Show("Procon ran into a critical error, but hopefully it logged that error in DEBUG.txt.  Please post/pm/email this to phogue at forum.myrcon.com");
                     }
                     finally {
-                        if (Program.m_application != null) {
-                            Program.m_application.Shutdown();
+                        if (Program.ProconApplication != null) {
+                            Program.ProconApplication.Shutdown();
                         }
                     }
                 }
@@ -145,13 +103,39 @@ namespace PRoCon {
         }
         
         static PRoConApplication procon_WindowLoaded(bool execute) {
-            Program.m_application = new PRoConApplication(false, Program.m_Args);
+            Program.ProconApplication = new PRoConApplication(false, Program.Args);
 
             if (execute == true) {
-                Program.m_application.Execute();
+                Program.ProconApplication.Execute();
             }
 
-            return Program.m_application;
+            return Program.ProconApplication;
+        }
+
+        private static bool CheckNetVersion(string sExpectedVersion) {
+
+            bool neededNetFound = false;
+
+            string neededVersion = "v" + sExpectedVersion;
+
+            RegistryKey installedVersions = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\NET Framework Setup\NDP");
+
+            if (installedVersions != null) {
+                string[] versionNames = installedVersions.GetSubKeyNames();
+                installedVersions.Close();
+
+                // versions include v
+                if (versionNames.Any(t => t.IndexOf(neededVersion, System.StringComparison.Ordinal) > -1)) {
+                    neededNetFound = true;
+                }
+
+                if (neededNetFound == false) {
+                    MessageBox.Show("You need at least .NET " + sExpectedVersion + " installed!", "Procon Frostbite .NET Check", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return false;
+                }
+            }
+
+            return true;
         }
 
     }

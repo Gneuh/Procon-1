@@ -19,30 +19,19 @@
  */
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Drawing;
 using System.Windows.Forms;
-using System.Net;
-using System.Net.Sockets;
-using System.Threading;
-using System.IO;
-using MaxMind;
-using System.Media;
+using PRoCon.Controls.ControlsEx;
+using PRoCon.Core;
+using PRoCon.Core.Players;
+using PRoCon.Core.Plugin;
+using PRoCon.Core.Logging;
+using PRoCon.Core.Remote;
+using PRoCon.Forms;
 
-namespace PRoCon {
-    using Core;
-    using Core.Players;
-    using Core.Accounts;
-    using Core.Plugin;
-    using Core.Logging;
-    using Core.Remote;
-    using PRoCon.Forms;
-    using PRoCon.Controls.ControlsEx;
-
+namespace PRoCon.Controls {
     public partial class uscServerConnection : uscPage {
 
         private frmMain m_frmParent = null;
@@ -195,71 +184,76 @@ namespace PRoCon {
         }
 
         void m_prcConnection_GameTypeDiscovered(PRoConClient sender) {
+            this.InvokeIfRequired(() => {
+                this.uscPlayers.Initialize(this.m_frmParent, this);
+                this.uscLists.Initialize(this.m_frmParent, this);
+                this.uscChat.Initialize(this);
+                this.uscEvents.Initalize(this.m_frmParent, this);
+                this.uscMap.Initalize(this.m_frmParent);
+                this.uscSettings.Initialize(this.m_frmParent);
 
-            this.uscPlayers.Initialize(this.m_frmParent, this);
-            this.uscLists.Initialize(this.m_frmParent, this);
-            this.uscChat.Initialize(this);
-            this.uscEvents.Initalize(this.m_frmParent, this);
-            this.uscMap.Initalize(this.m_frmParent);
-            this.uscSettings.Initialize(this.m_frmParent);
-            
-            this.uscAccounts.Initalize(this.m_frmParent, this);
-            this.uscServerConsole.Initialize(this.m_frmParent, this);
+                this.uscAccounts.Initalize(this.m_frmParent, this);
+                this.uscServerConsole.Initialize(this.m_frmParent, this);
 
-            //this.m_prcConnection = new ProConClient(paProcon, strHost, iu16Port, strUsername, strPassword);
-            //paProcon.Connections.Add(this.m_prcConnection);
+                //this.m_prcConnection = new ProConClient(paProcon, strHost, iu16Port, strUsername, strPassword);
+                //paProcon.Connections.Add(this.m_prcConnection);
 
-            this.m_prcConnection.ProconPrivileges += new PRoConClient.ProconPrivilegesHandler(m_prcConnection_ProconPrivileges);
-            this.m_prcConnection.ProconVersion += new PRoConClient.ProconVersionHandler(m_prcConnection_ProconVersion);
+                this.m_prcConnection.ProconPrivileges += new PRoConClient.ProconPrivilegesHandler(m_prcConnection_ProconPrivileges);
+                this.m_prcConnection.ProconVersion += new PRoConClient.ProconVersionHandler(m_prcConnection_ProconVersion);
 
-            this.m_prcConnection.PluginConsole.WriteConsole += new PRoCon.Core.Logging.Loggable.WriteConsoleHandler(PluginConsole_WriteConsole);
+                this.m_prcConnection.PluginConsole.WriteConsole += new PRoCon.Core.Logging.Loggable.WriteConsoleHandler(PluginConsole_WriteConsole);
 
-            this.m_prcConnection.Game.ServerInfo += new FrostbiteClient.ServerInfoHandler(m_prcConnection_ServerInfo);
-            this.m_prcConnection.Game.LoadingLevel += new FrostbiteClient.LoadingLevelHandler(m_prcConnection_LoadingLevel);
-            this.m_prcConnection.Game.LevelStarted += new FrostbiteClient.EmptyParamterHandler(Game_LevelStarted);
-            this.m_prcConnection.Game.LevelLoaded += new FrostbiteClient.LevelLoadedHandler(m_prcConnection_LevelLoaded);
+                this.m_prcConnection.Game.ServerInfo += new FrostbiteClient.ServerInfoHandler(m_prcConnection_ServerInfo);
+                this.m_prcConnection.Game.LoadingLevel += new FrostbiteClient.LoadingLevelHandler(m_prcConnection_LoadingLevel);
+                this.m_prcConnection.Game.LevelStarted += new FrostbiteClient.EmptyParamterHandler(Game_LevelStarted);
+                this.m_prcConnection.Game.LevelLoaded += new FrostbiteClient.LevelLoadedHandler(m_prcConnection_LevelLoaded);
 
-            //this.m_prcConnection.Game.PlayerJoin += new FrostbiteClient.PlayerEventHandler(m_prcConnection_PlayerJoin);
-            //this.m_prcConnection.Game.PlayerLeft += new FrostbiteClient.PlayerLeaveHandler(m_prcConnection_PlayerLeft);
-            this.m_prcConnection.Game.Version += new FrostbiteClient.VersionHandler(Game_Version);
+                //this.m_prcConnection.Game.PlayerJoin += new FrostbiteClient.PlayerEventHandler(m_prcConnection_PlayerJoin);
+                //this.m_prcConnection.Game.PlayerLeft += new FrostbiteClient.PlayerLeaveHandler(m_prcConnection_PlayerLeft);
+                this.m_prcConnection.Game.Version += new FrostbiteClient.VersionHandler(Game_Version);
 
-            this.m_prcConnection.Game.RunNextRound += new FrostbiteClient.EmptyParamterHandler(Game_RunNextLevel);
-            this.m_prcConnection.Game.RestartRound += new FrostbiteClient.EmptyParamterHandler(Game_RestartLevel);
-            this.m_prcConnection.Game.ResponseError += new FrostbiteClient.ResponseErrorHandler(Game_ResponseError);
+                this.m_prcConnection.Game.RunNextRound += new FrostbiteClient.EmptyParamterHandler(Game_RunNextLevel);
+                this.m_prcConnection.Game.RestartRound += new FrostbiteClient.EmptyParamterHandler(Game_RestartLevel);
+                this.m_prcConnection.Game.ResponseError += new FrostbiteClient.ResponseErrorHandler(Game_ResponseError);
 
-            this.m_prcConnection.PluginsCompiled += new PRoConClient.EmptyParamterHandler(m_prcConnection_PluginsCompiled);
+                this.m_prcConnection.PluginsCompiled += new PRoConClient.EmptyParamterHandler(m_prcConnection_PluginsCompiled);
 
-            if (this.m_prcConnection.PluginsManager != null) {
-                this.m_prcConnection.PluginsManager.PluginVariableAltered += new PluginManager.PluginVariableAlteredHandler(Plugins_PluginVariableAltered);
-                this.m_prcConnection.PluginsManager.PluginEnabled += new PluginManager.PluginEmptyParameterHandler(Plugins_PluginEnabled);
-                this.m_prcConnection.PluginsManager.PluginDisabled += new PluginManager.PluginEmptyParameterHandler(Plugins_PluginDisabled);
-            }
-
-            if (this.m_prcConnection.PluginsManager != null) {
-                this.uscPlugins.SetLoadedPlugins(this.m_prcConnection.PluginsManager.Plugins.LoadedClassNames);
-                this.uscPlugins.SetEnabledPlugins(this.m_prcConnection.PluginsManager.Plugins.EnabledClassNames);
-            }
-
-            if (this.m_prcConnection.PluginConsole != null) {
-                foreach (LogEntry leEntry in this.m_prcConnection.PluginConsole.LogEntries) {
-                    this.PluginConsole_WriteConsole(leEntry.Logged, leEntry.Text);
+                if (this.m_prcConnection.PluginsManager != null) {
+                    this.m_prcConnection.PluginsManager.PluginVariableAltered += new PluginManager.PluginVariableAlteredHandler(Plugins_PluginVariableAltered);
+                    this.m_prcConnection.PluginsManager.PluginEnabled += new PluginManager.PluginEmptyParameterHandler(Plugins_PluginEnabled);
+                    this.m_prcConnection.PluginsManager.PluginDisabled += new PluginManager.PluginEmptyParameterHandler(Plugins_PluginDisabled);
                 }
-            }
 
-            if (this.m_prcConnection.CurrentServerInfo.ServerName.Length > 0) {
-                this.m_prcConnection_ServerInfo(this.m_prcConnection.Game, this.m_prcConnection.CurrentServerInfo);
-            }
+                if (this.m_prcConnection.PluginsManager != null) {
+                    this.uscPlugins.SetLoadedPlugins(this.m_prcConnection.PluginsManager.Plugins.LoadedClassNames);
+                    this.uscPlugins.SetEnabledPlugins(this.m_prcConnection.PluginsManager.Plugins.EnabledClassNames);
+                }
 
-            this.SetLocalization(this.m_prcConnection.Language);
+                if (this.m_prcConnection.PluginConsole != null) {
+                    foreach (LogEntry leEntry in this.m_prcConnection.PluginConsole.LogEntries) {
+                        this.PluginConsole_WriteConsole(leEntry.Logged, leEntry.Text);
+                    }
+                }
 
-            this.SetVersionInfoLabels(this.m_prcConnection.Game);
+                if (this.m_prcConnection.CurrentServerInfo.ServerName.Length > 0) {
+                    this.m_prcConnection_ServerInfo(this.m_prcConnection.Game, this.m_prcConnection.CurrentServerInfo);
+                }
+
+                if (this.m_prcConnection.GameType == "BF3" || this.m_prcConnection.GameType == "BF4" || this.m_prcConnection.GameType == "BFHL" || this.m_prcConnection.GameType == "MOHW") {
+                    this.tbcClientTabs.TabPages.Remove(this.tabMapView);
+                }
+
+                this.SetLocalization(this.m_prcConnection.Language);
+
+                this.SetVersionInfoLabels(this.m_prcConnection.Game);
+            });
         }
 
         // Minimizing to tray, then maximizing from tray will fire the Load event again.
         //private bool m_blFormLoaded = false;
         private void uscServerConnection_Load(object sender, EventArgs e) {
 
-            if (Program.m_application.OptionsSettings.ShowRoundTimerConstantly) {
+            if (Program.ProconApplication.OptionsSettings.ShowRoundTimerConstantly) {
                 this.lblRoundTime.Visible = true;
             } 
             else {
@@ -454,9 +448,11 @@ namespace PRoCon {
         #region ServerInfo updates and simulators
 
         private void m_prcConnection_ServerInfo(FrostbiteClient sender, CServerInfo csiServerInfo) {
-            this.SetServerInfoLabels(csiServerInfo);
+            this.InvokeIfRequired(() => {
+                this.SetServerInfoLabels(csiServerInfo);
 
-            this.SetVersionInfoLabels(sender);
+                this.SetVersionInfoLabels(sender);
+            });
         }
 
         private void SetServerInfoLabels(CServerInfo csiServerInfo) {
@@ -464,12 +460,13 @@ namespace PRoCon {
             this.uscAccounts.ServerName = csiServerInfo.ServerName;
             //this.lblCurrentMapName.Text = String.Format("{0} - {1}", this.m_prcConnection.GetFriendlyGamemode(csiServerInfo.GameMode), this.m_prcConnection.GetFriendlyMapname(csiServerInfo.Map));
             // add enhanced detection
-            CMap tmpMap = null;
-            tmpMap = this.m_prcConnection.GetFriendlyMapByFilenamePlayList(csiServerInfo.Map, csiServerInfo.GameMode);
-            this.lblCurrentMapName.Text = String.Format("{0} - {1}", tmpMap.GameMode, tmpMap.PublicLevelName);
+            CMap tmpMap = this.m_prcConnection.GetFriendlyMapByFilenamePlayList(csiServerInfo.Map, csiServerInfo.GameMode);
+
+            this.lblCurrentMapName.Text = tmpMap != null ? String.Format("{0} - {1}", tmpMap.GameMode, tmpMap.PublicLevelName) : String.Empty;
+
             this.toolTipMapControls.SetToolTip(this.lblCurrentMapName, csiServerInfo.Map);
 
-            if (this.Client.Game is BF3Client) {
+            if ((this.Client.Game is BFHLClient || this.Client.Game is BF4Client || this.Client.Game is BF3Client || this.Client.Game is MOHWClient) && (csiServerInfo.CurrentRound != csiServerInfo.TotalRounds)) {
                 this.lblCurrentRound.Text = this.m_clocLanguage.GetLocalized("uscServerConnection.lblCurrentRound", (csiServerInfo.CurrentRound + 1).ToString(), csiServerInfo.TotalRounds.ToString());
             }
             else {
@@ -516,132 +513,211 @@ namespace PRoCon {
                     default: break;
                 }
             }
+            // BF3 & MOHW goes here cause it has ConnectionState parameter is empty
+            if (this.Client.Game is BF3Client) {
+                this.toolTipPlasma.SetToolTip(this.lblPlasmaStatus,
+                    this.m_clocLanguage.GetLocalized("uscServerConnection.lblPlasmaStatus.AcceptingPlayers.ToolTip")
+                        + Environment.NewLine + Environment.NewLine +
+                    this.m_clocLanguage.GetLocalized("uscServerConnection.extServerInfo.ExternalGameIpandPort.ToolTip") + "\t" + csiServerInfo.ExternalGameIpandPort
+                    + Environment.NewLine +
+                    this.m_clocLanguage.GetLocalized("uscServerConnection.extServerInfo.JoinQueueEnabled.ToolTip") + "\t"
+                    + this.m_clocLanguage.GetLocalized(String.Format("uscServerConnection.extServerInfo.JoinQueueEnabled.{0}.ToolTip", csiServerInfo.JoinQueueEnabled))
+                    + Environment.NewLine +
+                    this.m_clocLanguage.GetDefaultLocalized("QuickMatch Detected:", "uscServerConnection.extServerInfo.QuickMatch.ToolTip") + "\t"
+                    + this.m_clocLanguage.GetDefaultLocalized(csiServerInfo.QuickMatch.ToString(), String.Format("uscServerConnection.extServerInfo.QuickMatch.{0}.ToolTip", csiServerInfo.QuickMatch.ToString()))
+                    + Environment.NewLine + Environment.NewLine +
+                    this.m_clocLanguage.GetLocalized("uscServerConnection.extServerInfo.ServerRegion.ToolTip") + "\t\t"
+                    + this.m_clocLanguage.GetLocalized(String.Format("uscServerConnection.extServerInfo.ServerRegion.{0}.ToolTip", csiServerInfo.ServerRegion))
+                    + Environment.NewLine +
+                    this.m_clocLanguage.GetDefaultLocalized("Server Country:", "uscServerConnection.extServerInfo.ServerCountry.ToolTip") + "\t\t" + csiServerInfo.ServerCountry
+                    + Environment.NewLine +
+                    this.m_clocLanguage.GetDefaultLocalized("Closest Ping Site:", "uscServerConnection.extServerInfo.PingSite.ToolTip") + "\t\t" +
+                    this.m_clocLanguage.GetDefaultLocalized(csiServerInfo.PingSite, String.Format("uscServerConnection.extServerInfo.PingSite.{0}.ToolTip", csiServerInfo.PingSite))
+                    + Environment.NewLine + Environment.NewLine +
+                    this.m_clocLanguage.GetLocalized("uscServerConnection.extServerInfo.PunkBusterVersion.ToolTip") + "\t" + csiServerInfo.PunkBusterVersion
+                    + Environment.NewLine
+                    + Environment.NewLine
+                );
+            }
+            if (this.Client.Game is BFHLClient || this.Client.Game is BF4Client) {
+                this.toolTipPlasma.SetToolTip(this.lblPlasmaStatus,
+                    this.m_clocLanguage.GetLocalized("uscServerConnection.lblPlasmaStatus.AcceptingPlayers.ToolTip")
+                        + Environment.NewLine + Environment.NewLine +
+                    this.m_clocLanguage.GetLocalized("uscServerConnection.extServerInfo.ExternalGameIpandPort.ToolTip") + "\t" + csiServerInfo.ExternalGameIpandPort
+                    + Environment.NewLine +
+                    this.m_clocLanguage.GetLocalized("uscServerConnection.extServerInfo.JoinQueueEnabled.ToolTip") + "\t"
+                    + this.m_clocLanguage.GetLocalized(String.Format("uscServerConnection.extServerInfo.JoinQueueEnabled.{0}.ToolTip", csiServerInfo.JoinQueueEnabled))
+                    + Environment.NewLine +
+                    this.m_clocLanguage.GetDefaultLocalized("MatchMaking Enabled:", "uscServerConnection.extServerInfo.MatchMaking.ToolTip") + "\t"
+                    + this.m_clocLanguage.GetDefaultLocalized(csiServerInfo.QuickMatch.ToString(), String.Format("uscServerConnection.extServerInfo.QuickMatch.{0}.ToolTip", csiServerInfo.QuickMatch.ToString()))
+                    + Environment.NewLine + Environment.NewLine +
+                    this.m_clocLanguage.GetLocalized("uscServerConnection.extServerInfo.ServerRegion.ToolTip") + "\t\t"
+                    + this.m_clocLanguage.GetLocalized(String.Format("uscServerConnection.extServerInfo.ServerRegion.{0}.ToolTip", csiServerInfo.ServerRegion))
+                    + Environment.NewLine +
+                    this.m_clocLanguage.GetDefaultLocalized("Server Country:", "uscServerConnection.extServerInfo.ServerCountry.ToolTip") + "\t\t" + csiServerInfo.ServerCountry
+                    + Environment.NewLine +
+                    this.m_clocLanguage.GetDefaultLocalized("Closest Ping Site:", "uscServerConnection.extServerInfo.PingSite.ToolTip") + "\t\t" +
+                    this.m_clocLanguage.GetDefaultLocalized(csiServerInfo.PingSite, String.Format("uscServerConnection.extServerInfo.PingSite.{0}.ToolTip", csiServerInfo.PingSite))
+                    + Environment.NewLine + Environment.NewLine +
+                    this.m_clocLanguage.GetLocalized("uscServerConnection.extServerInfo.PunkBusterVersion.ToolTip") + "\t" + csiServerInfo.PunkBusterVersion
+                    + Environment.NewLine + Environment.NewLine +
+                    this.m_clocLanguage.GetDefaultLocalized("Blaze Player Count:", "uscServerConnection.extServerInfo.BlazePlayerCount.ToolTip") + "\t\t" + csiServerInfo.BlazePlayerCount
+                    + Environment.NewLine +
+                    this.m_clocLanguage.GetDefaultLocalized("Blaze Game State:", "uscServerConnection.extServerInfo.BlazeGameState.ToolTip") + "\t\t" + csiServerInfo.BlazeGameState
+                    + Environment.NewLine
+                    + Environment.NewLine
+                );
+            }
+            // MoHW is way different to BF3 R-33
+            if (this.Client.Game is MOHWClient) {
+                this.toolTipPlasma.SetToolTip(this.lblPlasmaStatus,
+                    this.m_clocLanguage.GetLocalized("uscServerConnection.lblPlasmaStatus.AcceptingPlayers.ToolTip")
+                        + Environment.NewLine + Environment.NewLine +
+                    this.m_clocLanguage.GetLocalized("uscServerConnection.extServerInfo.ServerRegion.ToolTip") + "\t\t"
+                        + this.m_clocLanguage.GetLocalized(String.Format("uscServerConnection.extServerInfo.ServerRegion.{0}.ToolTip", csiServerInfo.ServerRegion))
+                    + Environment.NewLine +
+                    this.m_clocLanguage.GetDefaultLocalized("Server Country:", "uscServerConnection.extServerInfo.ServerCountry.ToolTip") + "\t\t" + csiServerInfo.ServerCountry
+                    + Environment.NewLine +
+                    this.m_clocLanguage.GetDefaultLocalized("Closest Ping Site:", "uscServerConnection.extServerInfo.PingSite.ToolTip") + "\t\t" +
+                    this.m_clocLanguage.GetDefaultLocalized(csiServerInfo.PingSite, String.Format("uscServerConnection.extServerInfo.PingSite.{0}.ToolTip", csiServerInfo.PingSite))
+                    + Environment.NewLine + Environment.NewLine +
+                    this.m_clocLanguage.GetLocalized("uscServerConnection.extServerInfo.PunkBusterVersion.ToolTip") + "\t" + csiServerInfo.PunkBusterVersion
+                    + Environment.NewLine
+                    + Environment.NewLine
+                );
+            }
+
         }
 
         private void m_prcConnection_LoadingLevel(FrostbiteClient sender, string mapFileName, int roundsPlayed, int roundsTotal) {
-            if (String.Compare(this.Client.GameType, "MOH", true) == 0) {
-                this.SetServerInfoLabels(new CServerInfo(this.m_prcConnection.CurrentServerInfo.ServerName,
-                                                        mapFileName,
-                                                        this.m_prcConnection.GetPlaylistByMapname(mapFileName),
-                                                        this.m_prcConnection.CurrentServerInfo.PlayerCount,
-                                                        this.m_prcConnection.CurrentServerInfo.MaxPlayerCount,
-                                                        roundsPlayed + 1,
-                                                        this.m_prcConnection.CurrentServerInfo.TotalRounds,
-                                                        this.m_prcConnection.CurrentServerInfo.TeamScores,
-                                                        this.m_prcConnection.CurrentServerInfo.ConnectionState));
-            }
-            else {
-                this.SetServerInfoLabels(new CServerInfo(this.m_prcConnection.CurrentServerInfo.ServerName,
-                                                        mapFileName,
-                                                        this.m_prcConnection.GetPlaylistByMapname(mapFileName),
-                                                        this.m_prcConnection.CurrentServerInfo.PlayerCount,
-                                                        this.m_prcConnection.CurrentServerInfo.MaxPlayerCount,
-                                                        roundsPlayed,
-                                                        this.m_prcConnection.CurrentServerInfo.TotalRounds,
-                                                        this.m_prcConnection.CurrentServerInfo.TeamScores,
-                                                        this.m_prcConnection.CurrentServerInfo.ConnectionState));
-            }
-            this.m_prcConnection.Game.SendGetMaplistNextLevelIndexPacket();
+            this.InvokeIfRequired(() => {
+                if (String.Compare(this.Client.GameType, "MOH", true) == 0) {
+                    this.SetServerInfoLabels(new CServerInfo(this.m_prcConnection.CurrentServerInfo.ServerName,
+                                                            mapFileName,
+                                                            this.m_prcConnection.GetPlaylistByMapname(mapFileName),
+                                                            this.m_prcConnection.CurrentServerInfo.PlayerCount,
+                                                            this.m_prcConnection.CurrentServerInfo.MaxPlayerCount,
+                                                            roundsPlayed + 1,
+                                                            this.m_prcConnection.CurrentServerInfo.TotalRounds,
+                                                            this.m_prcConnection.CurrentServerInfo.TeamScores,
+                                                            this.m_prcConnection.CurrentServerInfo.ConnectionState));
+                }
+                else {
+                    this.SetServerInfoLabels(new CServerInfo(this.m_prcConnection.CurrentServerInfo.ServerName,
+                                                            mapFileName,
+                                                            this.m_prcConnection.GetPlaylistByMapname(mapFileName),
+                                                            this.m_prcConnection.CurrentServerInfo.PlayerCount,
+                                                            this.m_prcConnection.CurrentServerInfo.MaxPlayerCount,
+                                                            roundsPlayed,
+                                                            this.m_prcConnection.CurrentServerInfo.TotalRounds,
+                                                            this.m_prcConnection.CurrentServerInfo.TeamScores,
+                                                            this.m_prcConnection.CurrentServerInfo.ConnectionState));
+                }
+                this.m_prcConnection.Game.SendGetMaplistNextLevelIndexPacket();
+            });
         }
 
         private void Game_LevelStarted(FrostbiteClient sender) {
             sender.SendServerinfoPacket();
         }
 
-        private void m_prcConnection_LevelLoaded(FrostbiteClient sender, string mapFileName, string Gamemode, int roundsPlayed, int roundsTotal)
-        {
-            if (String.Compare(this.Client.GameType, "BF3", true) == 0)
-            {
-                this.SetServerInfoLabels(new CServerInfo(this.m_prcConnection.CurrentServerInfo.ServerName,
-                                                        mapFileName,
-                                                        Gamemode,
-                                                        this.m_prcConnection.CurrentServerInfo.PlayerCount,
-                                                        this.m_prcConnection.CurrentServerInfo.MaxPlayerCount,
-                                                        roundsPlayed,
-                                                        this.m_prcConnection.CurrentServerInfo.TotalRounds,
-                                                        this.m_prcConnection.CurrentServerInfo.TeamScores,
-                                                        this.m_prcConnection.CurrentServerInfo.ConnectionState));
-                this.m_prcConnection.Game.SendGetMaplistGetMapIndicesPacket();
-            }
-
+        private void m_prcConnection_LevelLoaded(FrostbiteClient sender, string mapFileName, string Gamemode, int roundsPlayed, int roundsTotal) {
+            this.InvokeIfRequired(() => {
+                if (String.Compare(this.Client.GameType, "BF3", true) == 0 || String.Compare(this.Client.GameType, "MOHW", true) == 0) {
+                    this.SetServerInfoLabels(new CServerInfo(this.m_prcConnection.CurrentServerInfo.ServerName,
+                                                            mapFileName,
+                                                            Gamemode,
+                                                            this.m_prcConnection.CurrentServerInfo.PlayerCount,
+                                                            this.m_prcConnection.CurrentServerInfo.MaxPlayerCount,
+                                                            roundsPlayed,
+                                                            this.m_prcConnection.CurrentServerInfo.TotalRounds,
+                                                            this.m_prcConnection.CurrentServerInfo.TeamScores,
+                                                            this.m_prcConnection.CurrentServerInfo.ConnectionState));
+                    this.m_prcConnection.Game.SendGetMaplistGetMapIndicesPacket();
+                }
+            });
         }
 
         #endregion
 
         private void SetVersionInfoLabels(FrostbiteClient sender) {
+            this.InvokeIfRequired(() => {
+                string version = sender.VersionNumber;
 
-            string version = sender.VersionNumber;
+                if (sender.FriendlyVersionNumber.Length > 0) {
+                    version = String.Format("{0} ({1})", sender.VersionNumber, sender.FriendlyVersionNumber);
+                }
 
-            if (sender.FriendlyVersionNumber.Length > 0) {
-                version = String.Format("{0} ({1})", sender.VersionNumber, sender.FriendlyVersionNumber);
-            }
-
-            this.lblVersion.Text = this.m_clocLanguage.GetLocalized("uscServerConnection.lblVersion", version);
+                this.lblVersion.Text = this.m_clocLanguage.GetLocalized("uscServerConnection.lblVersion", version);
+            });
         }
 
         private void Game_Version(FrostbiteClient sender, string serverType, string serverVersion) {
-            this.SetVersionInfoLabels(sender);
+            this.InvokeIfRequired(() => this.SetVersionInfoLabels(sender));
         }
 
         private void m_prcConnection_ProconVersion(PRoConClient sender, Version version) {
+            this.InvokeIfRequired(() => {
+                this.lblLayerVersion.Text = version.ToString();
+                this.lblLayerVersion.Visible = true;
 
-            this.lblLayerVersion.Text = version.ToString();
-            this.lblLayerVersion.Visible =  true;
-            
-            if (sender.ConnectedLayerVersion != null) {
+                if (sender.ConnectedLayerVersion != null) {
 
-                Version assemblyVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
-                int comparedVersions = assemblyVersion.CompareTo(sender.ConnectedLayerVersion);
+                    Version assemblyVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+                    int comparedVersions = assemblyVersion.CompareTo(sender.ConnectedLayerVersion);
 
-                if (comparedVersions > 0) {
-                    // Older.
-                    this.lblLayerVersion.ForeColor = Color.Maroon;
-                    this.toolTipPlasma.SetToolTip(this.lblLayerVersion, this.m_clocLanguage.GetLocalized("uscServerConnection.lblLayerVersion.Older.ToolTip"));
+                    if (comparedVersions > 0) {
+                        // Older.
+                        this.lblLayerVersion.ForeColor = Color.Maroon;
+                        this.toolTipPlasma.SetToolTip(this.lblLayerVersion, this.m_clocLanguage.GetLocalized("uscServerConnection.lblLayerVersion.Older.ToolTip"));
+                    }
+                    else if (comparedVersions < 0) {
+                        // Newer.
+                        this.lblLayerVersion.ForeColor = Color.Maroon;
+                        this.toolTipPlasma.SetToolTip(this.lblLayerVersion, this.m_clocLanguage.GetLocalized("uscServerConnection.lblLayerVersion.Newer.ToolTip"));
+                    }
+                    else {
+                        // Same.
+                        this.lblLayerVersion.ForeColor = Color.MediumSeaGreen;
+                        this.toolTipPlasma.SetToolTip(this.lblLayerVersion, this.m_clocLanguage.GetLocalized("uscServerConnection.lblLayerVersion.Same.ToolTip"));
+                    }
                 }
-                else if (comparedVersions < 0) {
-                    // Newer.
-                    this.lblLayerVersion.ForeColor = Color.Maroon;
-                    this.toolTipPlasma.SetToolTip(this.lblLayerVersion, this.m_clocLanguage.GetLocalized("uscServerConnection.lblLayerVersion.Newer.ToolTip"));
-                }
-                else {
-                    // Same.
-                    this.lblLayerVersion.ForeColor = Color.MediumSeaGreen;
-                    this.toolTipPlasma.SetToolTip(this.lblLayerVersion, this.m_clocLanguage.GetLocalized("uscServerConnection.lblLayerVersion.Same.ToolTip"));
-                }
-            }
+            });
         }
 
         private void m_prcConnection_ProconPrivileges(PRoConClient sender, CPrivileges spPrivs) {
-            if (spPrivs.CanIssueLimitedProconPluginCommands == true && this.tbcClientTabs.TabPages.Contains(this.m_tabParentLayerControl) == false) {
-                this.tbcClientTabs.TabPages.Add(this.m_tabParentLayerControl);
-                this.m_tabParentLayerControl.ImageKey = "sitemap_color.png";
+            this.InvokeIfRequired(() => {
+                if (spPrivs.CanIssueLimitedProconPluginCommands == true && this.tbcClientTabs.TabPages.Contains(this.m_tabParentLayerControl) == false) {
+                    this.tbcClientTabs.TabPages.Add(this.m_tabParentLayerControl);
+                    this.m_tabParentLayerControl.ImageKey = "sitemap_color.png";
 
-                /*
+                    /*
                 this.m_prcConnection.SendCommand(new List<string> { "procon.account.listAccounts" });
                 this.m_prcConnection.SendCommand(new List<string> { "procon.account.listLoggedIn" });
 
                 this.m_prcConnection.SendCommand(new List<string> { "procon.plugin.listLoaded" });
                 this.m_prcConnection.SendCommand(new List<string> { "procon.plugin.listEnabled" });
                 */
-            }
-            else if (spPrivs.CanIssueLimitedProconCommands == false && this.tbcClientTabs.TabPages.Contains(this.m_tabParentLayerControl) == true) {
-                this.tbcClientTabs.TabPages.Remove(this.m_tabParentLayerControl);
-            }
+                }
+                else if (spPrivs.CanIssueLimitedProconCommands == false && this.tbcClientTabs.TabPages.Contains(this.m_tabParentLayerControl) == true) {
+                    this.tbcClientTabs.TabPages.Remove(this.m_tabParentLayerControl);
+                }
 
-            if (this.m_praApplication.OptionsSettings.LayerHideLocalPlugins == true) {
-                this.tbcClientTabs.TabPages.Remove(this.tabPlugins);
-                // this.tabPlugins.Hide();
-            }
+                if (this.m_praApplication.OptionsSettings.LayerHideLocalPlugins == true) {
+                    this.tbcClientTabs.TabPages.Remove(this.tabPlugins);
+                    // this.tabPlugins.Hide();
+                }
 
-            if (this.m_praApplication.OptionsSettings.LayerHideLocalAccounts == true) {
-                this.tbcClientTabs.TabPages.Remove(this.tabAccounts);
-                // this.tabAccounts.Hide();
-            }
+                if (this.m_praApplication.OptionsSettings.LayerHideLocalAccounts == true) {
+                    this.tbcClientTabs.TabPages.Remove(this.tabAccounts);
+                    // this.tabAccounts.Hide();
+                }
 
-            this.pnlMapControls.Visible = spPrivs.CanUseMapFunctions;
+                this.pnlMapControls.Visible = spPrivs.CanUseMapFunctions;
 
-            this.m_prcConnection.SendGetProconVarsPacket("TEMP_BAN_CEILING");
-            //this.m_prcConnection.SendRequest(new List<string> { "procon.vars", "TEMP_BAN_CEILING" });
+                this.m_prcConnection.SendGetProconVarsPacket("TEMP_BAN_CEILING");
+                //this.m_prcConnection.SendRequest(new List<string> { "procon.vars", "TEMP_BAN_CEILING" });
+            });
         }
 
         #endregion
@@ -704,14 +780,16 @@ namespace PRoCon {
         }
 
         private void m_prcConnection_PluginsCompiled(PRoConClient sender) {
-            this.uscPlugins.SetLoadedPlugins(this.m_prcConnection.PluginsManager.Plugins.LoadedClassNames);
-            this.m_prcConnection.PluginsManager.PluginVariableAltered += new PluginManager.PluginVariableAlteredHandler(Plugins_PluginVariableAltered);
-            this.m_prcConnection.PluginsManager.PluginEnabled += new PluginManager.PluginEmptyParameterHandler(Plugins_PluginEnabled);
-            this.m_prcConnection.PluginsManager.PluginDisabled += new PluginManager.PluginEmptyParameterHandler(Plugins_PluginDisabled);
+            this.InvokeIfRequired(() => {
+                this.uscPlugins.SetLoadedPlugins(this.m_prcConnection.PluginsManager.Plugins.LoadedClassNames);
+                this.m_prcConnection.PluginsManager.PluginVariableAltered += new PluginManager.PluginVariableAlteredHandler(Plugins_PluginVariableAltered);
+                this.m_prcConnection.PluginsManager.PluginEnabled += new PluginManager.PluginEmptyParameterHandler(Plugins_PluginEnabled);
+                this.m_prcConnection.PluginsManager.PluginDisabled += new PluginManager.PluginEmptyParameterHandler(Plugins_PluginDisabled);
+            });
         }
 
         private void Plugins_PluginVariableAltered(PluginDetails spdNewDetails) {
-            this.uscPlugins.RefreshPlugin();
+            this.InvokeIfRequired(() => this.uscPlugins.RefreshPlugin());
         }
 
         private void uscPlugins_PluginVariablesAltered(PluginDetails spdPlugin) {
@@ -723,23 +801,27 @@ namespace PRoCon {
         }
 
         private void Plugins_PluginDisabled(string strClassName) {
-            this.m_blUpdatingPlugins = true;
+            this.InvokeIfRequired(() => {
+                this.m_blUpdatingPlugins = true;
 
-            if (this.uscPlugins.LoadedPlugins.ContainsKey(strClassName) == true) {
-                this.uscPlugins.LoadedPlugins[strClassName].Checked = false;
-            }
+                if (this.uscPlugins.LoadedPlugins.ContainsKey(strClassName) == true) {
+                    this.uscPlugins.LoadedPlugins[strClassName].Checked = false;
+                }
 
-            this.m_blUpdatingPlugins = false;
+                this.m_blUpdatingPlugins = false;
+            });
         }
 
         private void Plugins_PluginEnabled(string strClassName) {
-            this.m_blUpdatingPlugins = true;
+            this.InvokeIfRequired(() => {
+                this.m_blUpdatingPlugins = true;
 
-            if (this.uscPlugins.LoadedPlugins.ContainsKey(strClassName) == true) {
-                this.uscPlugins.LoadedPlugins[strClassName].Checked = true;
-            }
+                if (this.uscPlugins.LoadedPlugins.ContainsKey(strClassName) == true) {
+                    this.uscPlugins.LoadedPlugins[strClassName].Checked = true;
+                }
 
-            this.m_blUpdatingPlugins = false;
+                this.m_blUpdatingPlugins = false;
+            });
         }
 
         private void uscPlugins_PluginEnabled(string strClassName, bool blEnabled) {
@@ -774,7 +856,7 @@ namespace PRoCon {
         }
 
         private void PluginConsole_WriteConsole(DateTime dtLoggedTime, string strLoggedText) {
-            this.uscPlugins.Write(dtLoggedTime, strLoggedText);
+            this.InvokeIfRequired(() => this.uscPlugins.Write(dtLoggedTime, strLoggedText));
         }
 
         #endregion
@@ -825,11 +907,17 @@ namespace PRoCon {
         #region Map Controls
 
         private void Game_RestartLevel(FrostbiteClient sender) {
-            this.OnSettingResponse("admin.restartRound", true);
+            this.InvokeIfRequired(() => this.OnSettingResponse("admin.restartRound", true));
         }
 
         private void btnRestartRound_Click(object sender, EventArgs e) {
             if (this.m_prcConnection != null && this.m_prcConnection.Game != null) {
+                if (this.m_praApplication.OptionsSettings.ShowCfmMsgRoundRestartNext == true) {
+                    DialogResult cfmRestartRound = MessageBox.Show(this.m_clocLanguage.GetLocalized("uscServerConnection.MessageBox.RestartRound"), "PRoCon Frostbite", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    if (cfmRestartRound == DialogResult.No) {
+                        return;
+                    }
+                }
                 this.WaitForSettingResponse("admin.restartRound");
                 this.m_prcConnection.Game.SendAdminRestartRoundPacket();
                 //this.m_prcConnection.Game.SendServerinfoPacket();
@@ -837,11 +925,17 @@ namespace PRoCon {
         }
 
         private void Game_RunNextLevel(FrostbiteClient sender) {
-            this.OnSettingResponse("admin.runNextRound", true);
+            this.InvokeIfRequired(() => this.OnSettingResponse("admin.runNextRound", true));
         }
 
         private void btnNextRound_Click(object sender, EventArgs e) {
             if (this.m_prcConnection != null && this.m_prcConnection.Game != null) {
+                if (this.m_praApplication.OptionsSettings.ShowCfmMsgRoundRestartNext == true) {
+                    DialogResult cfmRestartLevel = MessageBox.Show(this.m_clocLanguage.GetLocalized("uscServerConnection.MessageBox.NextRound"), "PRoCon Frostbite", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    if (cfmRestartLevel == DialogResult.No) {
+                        return;
+                    }
+                }
                 this.WaitForSettingResponse("admin.runNextRound");
                 this.m_prcConnection.Game.SendAdminRunNextRoundPacket();
                 //this.m_prcConnection.Game.SendServerinfoPacket();
@@ -849,9 +943,11 @@ namespace PRoCon {
         }
 
         private void Game_ResponseError(FrostbiteClient sender, Packet originalRequest, string errorMessage) {
-            if (originalRequest.Words.Count >= 1) {
-                this.OnSettingResponse(originalRequest.Words[0].ToLower(), null, false);
-            }
+            this.InvokeIfRequired(() => {
+                if (originalRequest.Words.Count >= 1) {
+                    this.OnSettingResponse(originalRequest.Words[0].ToLower(), null, false);
+                }
+            });
         }
 
         #endregion
@@ -885,7 +981,7 @@ namespace PRoCon {
         private void lblCurrentRound_MouseLeave(object sender, EventArgs e) {
             if (this.m_prcConnection != null) {
                 if (this.m_prcConnection.CurrentServerInfo != null && this.m_prcConnection.CurrentServerInfo.RoundTime >= 0) {
-                    if (!Program.m_application.OptionsSettings.ShowRoundTimerConstantly)
+                    if (!Program.ProconApplication.OptionsSettings.ShowRoundTimerConstantly)
                     {
                         this.lblRoundTime.Visible = false;
                     }

@@ -20,11 +20,9 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace PRoCon.Core.Plugin {
     using Core.Players;
-    using Core.Players.Items;
     using Core.Plugin.Commands;
     using Core.Battlemap;
     using Core.Maps;
@@ -32,6 +30,8 @@ namespace PRoCon.Core.Plugin {
     using Core.TextChatModeration;
 
     public class PRoConPluginAPI : CPRoConMarshalByRefObject {
+
+        public String ClassName { get; set; }
 
         #region Properties
 
@@ -106,6 +106,22 @@ namespace PRoCon.Core.Plugin {
                         this.FrostbitePlayerInfoList.Add(player.SoldierName, player);
                     }
                 }
+
+                foreach (var fpi_player in this.FrostbitePlayerInfoList.Keys) {
+                    bool blFoundPlayer = false;
+
+                    foreach (CPlayerInfo iPlayer in players) {
+                        if (String.Compare(iPlayer.SoldierName, this.FrostbitePlayerInfoList[fpi_player].SoldierName) == 0) {
+                            blFoundPlayer = true;
+                            break;
+                        }
+                    }
+
+                    if (blFoundPlayer == false) {
+                        this.FrostbitePlayerInfoList.Remove(fpi_player);
+                        this.PunkbusterPlayerInfoList.Remove(fpi_player);
+                    }
+                }
             }
         }
 
@@ -122,6 +138,35 @@ namespace PRoCon.Core.Plugin {
         #region BFBC2
 
         public virtual void OnPlaylistSet(string playlist) { }
+
+        #endregion
+
+        #region BF4
+
+        public virtual void OnSpectatorListLoad() { }
+        public virtual void OnSpectatorListSave() { }
+        public virtual void OnSpectatorListPlayerAdded(string soldierName) { }
+        public virtual void OnSpectatorListPlayerRemoved(string soldierName) { }
+        public virtual void OnSpectatorListCleared() { }
+        public virtual void OnSpectatorListList(List<string> soldierNames) { }
+
+        public virtual void OnGameAdminLoad() { }
+        public virtual void OnGameAdminSave() { }
+        public virtual void OnGameAdminPlayerAdded(string soldierName) { }
+        public virtual void OnGameAdminPlayerRemoved(string soldierName) { }
+        public virtual void OnGameAdminCleared() { }
+        public virtual void OnGameAdminList(List<string> soldierNames) { }
+
+        public virtual void OnFairFight(bool isEnabled) { }
+
+        public virtual void OnIsHitIndicator(bool isEnabled) { }
+        
+        public virtual void OnCommander(bool isEnabled) { }
+        public virtual void OnAlwaysAllowSpectators(bool isEnabled) { }
+        public virtual void OnForceReloadWholeMags(bool isEnabled) { }
+        public virtual void OnServerType(string value) { }
+
+        public virtual void OnMaxSpectators(int limit) { }
 
         #endregion
 
@@ -169,6 +214,19 @@ namespace PRoCon.Core.Plugin {
 
         #endregion
 
+        #region player/squad cmds BF3
+
+        public virtual void OnPlayerIdleDuration(string soldierName, int idleTime) { }
+        public virtual void OnPlayerIsAlive(string soldierName, bool isAlive) { }
+        public virtual void OnPlayerPingedByAdmin(string soldierName, int ping) { }
+
+        public virtual void OnSquadLeader(int teamId, int squadId, string soldierName) { }
+        public virtual void OnSquadListActive(int teamId, int squadCount, List<int> squadList) { }
+        public virtual void OnSquadListPlayers(int teamId, int squadId, int playerCount, List<string> playersInSquad) { }
+        public virtual void OnSquadIsPrivate(int teamId, int squadId, bool isPrivate) { }
+
+        #endregion
+
         #region Variables
 
         #region Details
@@ -196,8 +254,44 @@ namespace PRoCon.Core.Plugin {
         public virtual void OnRoundRestartPlayerCount(int limit) { }
         public virtual void OnRoundStartPlayerCount(int limit) { }
         public virtual void OnGameModeCounter(int limit) { }
+        public virtual void OnCtfRoundTimeModifier(int limit) { }
+        public virtual void OnRoundTimeLimit(int limit) { }
+        public virtual void OnTicketBleedRate(int limit) { }
         public virtual void OnRoundLockdownCountdown(int limit) { }
         public virtual void OnRoundWarmupTimeout(int limit) { }
+        public virtual void OnPremiumStatus(bool isEnabled) { }
+        
+        public virtual void OnGunMasterWeaponsPreset(int preset) { }
+        
+        public virtual void OnVehicleSpawnAllowed(bool isEnabled) { }
+        public virtual void OnVehicleSpawnDelay(int limit) { }
+        public virtual void OnBulletDamage(int limit) { }
+        public virtual void OnOnlySquadLeaderSpawn(bool isEnabled) { }
+        public virtual void OnSoldierHealth(int limit) { }
+        public virtual void OnPlayerManDownTime(int limit) { }
+        public virtual void OnPlayerRespawnTime(int limit) { }
+        public virtual void OnHud(bool isEnabled) { }
+        public virtual void OnNameTag(bool isEnabled) { }
+
+        public virtual void OnTeamFactionOverride(int teamId, int faction) { }
+
+
+        #region MoHW
+        public virtual void OnAllUnlocksUnlocked(bool isEnabled) { }
+        public virtual void OnBuddyOutline(bool isEnabled) { }
+        public virtual void OnHudBuddyInfo(bool isEnabled) { }
+        public virtual void OnHudClassAbility(bool isEnabled) { }
+        public virtual void OnHudCrosshair(bool isEnabled) { }
+        public virtual void OnHudEnemyTag(bool isEnabled) { }
+        public virtual void OnHudExplosiveIcons(bool isEnabled) { }
+        public virtual void OnHudGameMode(bool isEnabled) { }
+        public virtual void OnHudHealthAmmo(bool isEnabled) { }
+        public virtual void OnHudMinimap(bool isEnabled) { }
+        public virtual void OnHudObiturary(bool isEnabled) { }
+        public virtual void OnHudPointsTracker(bool isEnabled) { }
+        public virtual void OnHudUnlocks(bool isEnabled) { }
+        public virtual void OnPlaylist(string playlist) { }
+        #endregion
 
         #endregion
 
@@ -207,16 +301,23 @@ namespace PRoCon.Core.Plugin {
         public virtual void OnHardcore(bool isEnabled) { }
 
         public virtual void OnUnlockMode(string mode) { } //BF3
+        public virtual void OnPreset(string mode, bool isLocked) { } // BF4
 
         #region BFBC2
 
-        public virtual void OnTeamBalance(bool isEnabled) { }
+        public virtual void OnTeamBalance(bool isEnabled) { } // vars.autoBalance too
         public virtual void OnKillCam(bool isEnabled) { }
         public virtual void OnMiniMap(bool isEnabled) { }
         public virtual void OnCrossHair(bool isEnabled) { }
         public virtual void On3dSpotting(bool isEnabled) { }
         public virtual void OnMiniMapSpotting(bool isEnabled) { }
         public virtual void OnThirdPersonVehicleCameras(bool isEnabled) { }
+
+        #endregion
+
+        #region Battlefield: Hardline
+
+        public virtual void OnRoundStartReadyPlayersNeeded(int limit) { }
 
         #endregion
 
@@ -297,6 +398,18 @@ namespace PRoCon.Core.Plugin {
             }
         }
 
+        public virtual void OnPlayerDisconnected(string soldierName, string reason) {
+            if (this.PunkbusterPlayerInfoList.ContainsKey(soldierName) == true)
+            {
+                this.PunkbusterPlayerInfoList.Remove(soldierName);
+            }
+
+            if (this.FrostbitePlayerInfoList.ContainsKey(soldierName) == true)
+            {
+                this.FrostbitePlayerInfoList.Remove(soldierName);
+            }
+        }
+
         public virtual void OnPlayerAuthenticated(string soldierName, string guid) { }
         public virtual void OnPlayerKilled(Kill kKillerVictimDetails) { }
         public virtual void OnPlayerKicked(string soldierName, string reason) { }
@@ -312,6 +425,7 @@ namespace PRoCon.Core.Plugin {
         public virtual void OnGlobalChat(string speaker, string message) { }
         public virtual void OnTeamChat(string speaker, string message, int teamId) { }
         public virtual void OnSquadChat(string speaker, string message, int teamId, int squadId) { }
+        public virtual void OnPlayerChat(string speaker, string message, string targetPlayer) { }
 
         #endregion
 
@@ -339,7 +453,7 @@ namespace PRoCon.Core.Plugin {
         /// <param name="roundsTotal"></param>
         public virtual void OnLoadingLevel(string mapFileName, int roundsPlayed, int roundsTotal) { }
         public virtual void OnLevelStarted() { }
-        public virtual void OnLevelLoaded(string mapFileName, string Gamemode, int roundsPlayed, int roundsTotal) { } // BF3
+        public virtual void OnLevelLoaded(string mapFileName, string gamemode, int roundsPlayed, int roundsTotal) { } // BF3
 
         #endregion
 
@@ -409,10 +523,10 @@ namespace PRoCon.Core.Plugin {
         /// speaker has met the required privliege and has confirmed the command as correct.
         /// </summary>
         /// <param name="speaker">The player that issued the command</param>
-        /// <param name="strText">The text that was matched to the MatchCommand object</param>
-        /// <param name="mtcCommand">The registered command object</param>
-        /// <param name="capCommand">The captured command details</param>
-        /// <param name="subMatchedScope">The scope the message was sent by the player (squad chat, team chat etc)</param>
+        /// <param name="text">The text that was matched to the MatchCommand object</param>
+        /// <param name="matchedCommand">The registered command object</param>
+        /// <param name="capturedCommand">The captured command details</param>
+        /// <param name="matchedScope">The scope the message was sent by the player (squad chat, team chat etc)</param>
         /// Note: This method was not included, instead you delegate a method when creating a MatchCommand object.
         public virtual void OnAnyMatchRegisteredCommand(string speaker, string text, MatchCommand matchedCommand, CapturedCommand capturedCommand, CPlayerSubset matchedScope) { }
 
@@ -421,13 +535,13 @@ namespace PRoCon.Core.Plugin {
         /// Care should be taken not to enter an endless loop with this function by setting a command
         /// inside of the event.
         /// </summary>
-        /// <param name="mtcCommand">The registered command object</param>
+        /// <param name="command">The registered command object</param>
         public virtual void OnRegisteredCommand(MatchCommand command) { }
 
         /// <summary>
         /// Fires whenever a command is unregisted from procon from any plugin.
         /// </summary>
-        /// <param name="mtcCommand"></param>
+        /// <param name="command"></param>
         public virtual void OnUnregisteredCommand(MatchCommand command) { }
 
         #endregion
@@ -437,11 +551,11 @@ namespace PRoCon.Core.Plugin {
         /// <summary>
         /// Fires when a player takes [ZoneAction] and [flTresspassPercentage] > 0.0F
         /// </summary>
-        /// <param name="cpiSoldier">The PlayerInfo object procon has on the player.</param>
+        /// <param name="playerInfo">The PlayerInfo object procon has on the player.</param>
         /// <param name="action">The action the player has taken on the zone</param>
         /// <param name="sender">The mapzone object that has fired the event</param>
-        /// <param name="pntTresspassLocation">The location, reported by the game, that the action has taken place</param>
-        /// <param name="flTresspassPercentage">The percentage (0.0F to 1.0F) that the circle created by the error radius (default 14m) that
+        /// <param name="tresspassLocation">The location, reported by the game, that the action has taken place</param>
+        /// <param name="tresspassPercentage">The percentage (0.0F to 1.0F) that the circle created by the error radius (default 14m) that
         /// this player has tresspased on the zone at point [pntTresspassLocation].</param>
         /// <param name="trespassState">Additional information about the event.  If the ZoneAction is Kill/Death then this object is type "Kill".</param>
         public virtual void OnZoneTrespass(CPlayerInfo playerInfo, ZoneAction action, MapZone sender, Point3D tresspassLocation, float tresspassPercentage, object trespassState) { }

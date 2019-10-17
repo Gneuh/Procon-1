@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace PRoCon.Core.Events {
+﻿namespace PRoCon.Core.Events {
     public enum CapturableEvents {
-
         // BFBC2 Server events
         PlayerJoin,
         PlayerLeave,
+        PlayerDisconnected,
         PlayerKilled,
         PlayerKicked,
         IPKicked,
@@ -67,6 +63,5 @@ namespace PRoCon.Core.Events {
         LayerOffline,
         AccountLogin,
         AccountLogout,
-
     }
 }
